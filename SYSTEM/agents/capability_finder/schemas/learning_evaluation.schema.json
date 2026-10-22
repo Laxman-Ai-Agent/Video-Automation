@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LearningEvaluation",
+  "type": "object",
+  "required": [
+    "evaluation_id",
+    "proposal_id",
+    "benchmark_version",
+    "timestamp",
+    "baseline_metrics",
+    "candidate_metrics",
+    "passed_gate"
+  ],
+  "properties": {
+    "evaluation_id": {
+      "type": "string"
+    },
+    "proposal_id": {
+      "type": "string"
+    },
+    "benchmark_version": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "baseline_metrics": {
+      "type": "object",
+      "required": ["recommendation_accuracy", "false_reuse_rate", "false_creation_rate"],
+      "properties": {
+        "recommendation_accuracy": { "type": "number" },
+        "action_accuracy": { "type": "number" },
+        "delegate_accuracy": { "type": "number" },
+        "false_reuse_rate": { "type": "number" },
+        "false_creation_rate": { "type": "number" },
+        "total_cases": { "type": "integer" }
+      }
+    },
+    "candidate_metrics": {
+      "type": "object",
+      "required": ["recommendation_accuracy", "false_reuse_rate", "false_creation_rate"],
+      "properties": {
+        "recommendation_accuracy": { "type": "number" },
+        "action_accuracy": { "type": "number" },
+        "delegate_accuracy": { "type": "number" },
+        "false_reuse_rate": { "type": "number" },
+        "false_creation_rate": { "type": "number" },
+        "total_cases": { "type": "integer" }
+      }
+    },
+    "accuracy_delta": {
+      "type": "number"
+    },
+    "action_accuracy_delta": {
+      "type": "number"
+    },
+    "delegate_accuracy_delta": {
+      "type": "number"
+    },
+    "has_regression": {
+      "type": "boolean"
+    },
+    "passed_gate": {
+      "type": "boolean"
+    },
+    "rejection_reason": {
+      "type": ["string", "null"]
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,32 @@
+{
+  "agent_id": "timeline_build",
+  "stage_id": "timeline",
+  "version": "2.0.0",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "store",
+    "composition_builder",
+    "audio_ducking_engine",
+    "cinematic_transition_selector",
+    "scene_continuity_assessor",
+    "timeline_recovery_coordinator"
+  ],
+  "capabilities": [
+    "timeline-assembly",
+    "audio-sync-lock",
+    "composition-generation",
+    "intelligent-audio-ducking",
+    "cinematic-transition-selection",
+    "scene-continuity-assessment",
+    "bounded-autonomous-recovery"
+  ],
+  "ducking_settings": {
+    "default_speech_gain": 0.15,
+    "default_pause_gain": 0.40,
+    "ramp_duration_seconds": 0.15,
+    "min_pause_for_boost": 0.50
+  },
+  "auto_repair_enabled": true,
+  "max_repair_attempts": 2
+}

@@ -1,0 +1,124 @@
+"""Project store: projects/<id>/project.json = {id, name, created, state, aspect?, audio?}. All path logic goes through config.
+aspect is the output shape chosen at creation ("9:16" or "16:9"); use_images is always false (Motion-Only); audio is the reference to the uploaded file {file, original_name, size_bytes, format}."""
+import json
+import os
+import re
+import secrets
+import shutil
+import threading
+import time
+from pathlib import Path
+
+try:
+    from backend import config
+except ImportError:
+    import config
+from SYSTEM.core.errors import ApiError
+
+ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$")     # slugs made here are lowercase; CLI projects (e.g. demo) also fit
+MAX_IMAGE_BYTES = 50 * 1024 * 1024
+MAX_AUDIO_BYTES = 500 * 1024 * 1024
+AUDIO_EXTS = {".mp3", ".wav", ".m4a", ".flac", ".ogg", ".aac"}
+IMAGE_EXTS = set(config.IMAGE_EXTS)
+
+
+def slug(name: str) -> str:
+    base = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")[:24] or "project"
+    return f"{base}-{secrets.token_hex(2)}"
+
+
+def project_dir(pid: str) -> Path:
+    """Validated project folder; unknown or malformed ids give a 404 (never a path outside projects/)."""
+    pdir = config.PROJECTS_DIR / pid
+    if not ID_RE.match(pid) or not pdir.is_dir():
+        raise ApiError(404, "project_not_found", "project not found", "list projects with GET /projects")
+    return pdir
+
+
+_locks: dict[Path, threading.RLock] = {}
+_locks_guard = threading.Lock()
+
+
+def _info_lock(pdir: Path) -> threading.RLock:
+    """One lock per project.json. On Windows os.replace fails a concurrent read of the target with PermissionError, and two writers share one .tmp file, so every read and write of the
+    file (the API threads and the job threads of this one server process) takes it; other projects and other files are never blocked."""
+    with _locks_guard:
+        return _locks.setdefault(pdir.resolve(), threading.RLock())
+
+
+def read_info(pdir: Path) -> dict:
+    f = pdir / "project.json"
+    with _info_lock(pdir):
+        if f.exists():
+            return json.loads(f.read_text(encoding="utf-8"))
+    created = time.strftime("%Y-%m-%dT%H:%M:%S", time.localtime(pdir.stat().st_mtime))   # folder made by the CLI
+    return {"id": pdir.name, "name": pdir.name, "created": created, "state": "legacy"}
+
+
+def write_info(pdir: Path, info: dict) -> None:
+    tmp = pdir / "project.json.tmp"                       # atomic: readers never see a half-written file
+    with _info_lock(pdir):
+        tmp.write_text(json.dumps(info, indent=1), encoding="utf-8")
+        os.replace(tmp, pdir / "project.json")
+
+
+ASPECTS = ("9:16", "16:9")
+
+
+def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False) -> Path:
+    pid = slug(name)
+    while (config.PROJECTS_DIR / pid).exists():
+        pid = slug(name)
+    pdir = config.PROJECTS_DIR / pid
+    pdir.mkdir(parents=True)
+    info = {"id": pid, "name": name.strip()[:80] or pid, "created": time.strftime("%Y-%m-%dT%H:%M:%S"), "state": "created"}
+    if aspect:
+        info["aspect"] = aspect
+    info["use_images"] = False                            # Motion-Only: kept in project.json for the readers and fingerprints that include it
+    info["motion_branch"] = True                          # new projects run the Motion Planning -> Motion Generation branch
+    info["reusable_motion_templates"] = bool(reusable_motion_templates)
+    write_info(pdir, info)
+    return pdir
+
+
+def motion_branch(pdir: Path) -> bool:
+    """Does this run have the motion branch (Motion Planning -> Motion Generation)? Always active in Motion-Only mode."""
+    return True
+
+
+def uses_images(pdir: Path) -> bool:
+    """Motion-Only is the sole supported video generation mode. Images are permanently disabled."""
+    return False
+
+
+def reusable_motion_templates(pdir: Path) -> bool:
+    """Reusable Motion Templates (per project): False = Custom Code Mode (generate original scene-specific executable TSX code)."""
+    return read_info(pdir).get("reusable_motion_templates", False) is True
+
+
+def set_reusable_motion_templates(pdir: Path, enabled: bool) -> bool:
+    with _info_lock(pdir):
+        info = read_info(pdir)
+        info["reusable_motion_templates"] = bool(enabled)
+        write_info(pdir, info)
+    return info["reusable_motion_templates"]
+
+
+def list_projects() -> list[dict]:
+    if not config.PROJECTS_DIR.exists():
+        return []
+    dirs = [d for d in sorted(config.PROJECTS_DIR.iterdir()) if d.is_dir() and not d.name.startswith(("_", "."))]
+    return sorted((read_info(d) for d in dirs), key=lambda i: i["created"], reverse=True)
+
+
+def set_state(pid: str, state: str) -> None:
+    pdir = config.PROJECTS_DIR / pid
+    if pdir.is_dir():
+        with _info_lock(pdir):                            # read-modify-write: two state changes must not lose one another
+            info = read_info(pdir)
+            info["state"] = state
+            write_info(pdir, info)
+
+
+def delete(pdir: Path) -> None:
+    shutil.rmtree(pdir)

@@ -1,0 +1,21 @@
+{
+ "id": "20261015-154437-21d1",
+ "kind": "refresh",
+ "state": "done",
+ "started_at": "2026-10-15T15:44:37",
+ "finished_at": "2026-10-15T15:44:38",
+ "progress": [],
+ "result": {
+  "local": {
+   "registered": [],
+   "total": 12
+  },
+  "stale": [],
+  "bundle_resources": 55,
+  "staged_fonts": [
+   "HindGuntur-Regular.ttf",
+   "HindGuntur-Bold.ttf"
+  ]
+ },
+ "error": null
+}

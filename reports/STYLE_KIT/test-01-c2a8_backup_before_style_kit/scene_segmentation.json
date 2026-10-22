@@ -1,0 +1,277 @@
+{
+ "schema_version": "1.1",
+ "timing_rules": 2,
+ "source_fingerprint": "4bc84b6309314820fac39beed99395991f5d661a",
+ "source_audio_analysis": "audio_analysis.json",
+ "language": "te",
+ "audio_duration_seconds": 20.428,
+ "segmentation_method": "llm_semantic_grouping",
+ "semantic_confidence": "supported_by_llm",
+ "needs_review": false,
+ "llm": {
+  "status": "applied",
+  "error": null,
+  "model": null,
+  "attempts": 1,
+  "problems": [],
+  "calls": [
+   {
+    "attempt": 1,
+    "source": "claude",
+    "prompt_chars": 2235,
+    "lookup_s": 0.0001,
+    "claude_s": 9.34,
+    "check_s": 0.0003,
+    "problems": []
+   }
+  ]
+ },
+ "config": {
+  "pause_min": 0.35,
+  "pause_scene": 0.5,
+  "pause_clause": 0.15,
+  "soft_min": 3.0,
+  "soft_max": 12.0,
+  "long_unit": 6.0,
+  "min_split": 1.5
+ },
+ "source_segments": 4,
+ "timings_seconds": {
+  "1_read_input": 0.003,
+  "2_units_and_cuts": 0.001,
+  "3-5_grouping": 9.345,
+  "6_assemble": 0.001,
+  "7_validate": 0.001
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_001",
+   "scene_index": 1,
+   "start_time": 0.0,
+   "end_time": 8.79,
+   "source_segment_ids": [
+    0,
+    1
+   ],
+   "source_sentence_ids": [
+    "sentence_001",
+    "sentence_002"
+   ],
+   "source_word_ids": [
+    "w001",
+    "w002",
+    "w003",
+    "w004",
+    "w005",
+    "w006",
+    "w007",
+    "w008",
+    "w009",
+    "w010",
+    "w011",
+    "w012",
+    "w013",
+    "w014",
+    "w015",
+    "w016",
+    "w017",
+    "w018",
+    "w019",
+    "w020",
+    "w021"
+   ],
+   "word_range": [
+    0,
+    20
+   ],
+   "transcript": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power",
+   "semantic_beat": "Smart glass as a superpower changing life, vision, world",
+   "scene_objective": "Show smart glass as more than a device: a world-changing superpower.",
+   "boundary_after": {
+    "type": "concept_change",
+    "reason": "Shifts from what smart glass is to the future journey.",
+    "evidence": [
+     "sentence_boundary",
+     "pause",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.685,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "start",
+    "reason": "first scene",
+    "evidence": [
+     "sentence_boundary"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_002",
+   "scene_index": 2,
+   "start_time": 9.475,
+   "end_time": 13.61,
+   "source_segment_ids": [
+    2
+   ],
+   "source_sentence_ids": [
+    "sentence_003"
+   ],
+   "source_word_ids": [
+    "w022",
+    "w023",
+    "w024",
+    "w025",
+    "w026",
+    "w027",
+    "w028",
+    "w029",
+    "w030"
+   ],
+   "word_range": [
+    21,
+    29
+   ],
+   "transcript": "భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు",
+   "semantic_beat": "The future unfolding before our eyes, journey not ending",
+   "scene_objective": "Convey that this future journey is ongoing and continues.",
+   "boundary_after": {
+    "type": "conclusion",
+    "reason": "Moves to concluding vision of an amazing futuristic world.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.19,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "concept_change",
+    "reason": "Shifts from what smart glass is to the future journey.",
+    "evidence": [
+     "sentence_boundary",
+     "pause",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_003",
+   "scene_index": 3,
+   "start_time": 13.8,
+   "end_time": 20.06,
+   "source_segment_ids": [
+    3
+   ],
+   "source_sentence_ids": [
+    "sentence_004"
+   ],
+   "source_word_ids": [
+    "w031",
+    "w032",
+    "w033",
+    "w034",
+    "w035",
+    "w036",
+    "w037",
+    "w038"
+   ],
+   "word_range": [
+    30,
+    37
+   ],
+   "transcript": "ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+   "semantic_beat": "The world ahead becoming more amazing and futuristic",
+   "scene_objective": "End with a vision of an even more futuristic world ahead.",
+   "boundary_after": {
+    "type": "end",
+    "reason": "end of the narration",
+    "evidence": [],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.368,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "conclusion",
+    "reason": "Moves to concluding vision of an amazing futuristic world.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  }
+ ],
+ "stages": [
+  {
+   "n": 1,
+   "name": "Analysis Data Reader",
+   "status": "completed",
+   "detail": "38 words in 4 transcript segments, 4 measured pauses, duration 20.428s"
+  },
+  {
+   "n": 2,
+   "name": "Sentence & Clause Detection",
+   "status": "completed",
+   "detail": "4 units (0 clause splits), 8 places where a scene may end"
+  },
+  {
+   "n": 3,
+   "name": "Semantic Understanding",
+   "status": "completed",
+   "detail": "Claude read the numbered words in context"
+  },
+  {
+   "n": 4,
+   "name": "Topic & Idea Change Detection",
+   "status": "completed",
+   "detail": "topic and idea changes decided together with the grouping"
+  },
+  {
+   "n": 5,
+   "name": "Scene Boundary & Grouping",
+   "status": "completed",
+   "detail": "3 scenes from 4 segments (0 cut(s) inside a segment)"
+  },
+  {
+   "n": 6,
+   "name": "Duration & Timing Assignment",
+   "status": "completed",
+   "detail": "start = first word start, end = last word end (aligned_words)"
+  },
+  {
+   "n": 7,
+   "name": "Scene Validation & Continuity",
+   "status": "completed",
+   "detail": "coverage complete, order ok, 0 errors, 0 warnings, 0 source note(s)"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "transcript_coverage": "complete",
+  "chronological_order": true,
+  "timestamps_within_audio": true,
+  "errors": [],
+  "warnings": [],
+  "notes": []
+ }
+}

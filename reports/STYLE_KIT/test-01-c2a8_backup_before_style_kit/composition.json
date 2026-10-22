@@ -1,0 +1,804 @@
+{
+ "meta": {
+  "fps": 30,
+  "width": 1920,
+  "height": 1080,
+  "audio": "audio.mp3",
+  "duration": 20.428,
+  "subtitles": false,
+  "palette": [
+   "#0B1020",
+   "#22D3EE",
+   "#A78BFA",
+   "#F8FAFC"
+  ],
+  "grade": "cool",
+  "motion": "rich",
+  "motionSpeed": 1.4,
+  "motionOnly": true
+ },
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0,
+   "end": 9.47,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#0B1020",
+      "#A78BFA"
+     ],
+     "z": 0,
+     "look": "mesh",
+     "seed": "bg1",
+     "resource_id": "background.look.mesh",
+     "resource_sha256": "c9e76fed01491736205578fba6afc2933ee719322df20f4e3c1fe972ec38c3b5"
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "A Superpower",
+     "mark": "Superpower",
+     "at": 5.9,
+     "z": 10,
+     "pulses": [
+      0
+     ],
+     "preset": "split-reassemble",
+     "exitPreset": "fade-out",
+     "emphasis": "mask",
+     "dir": "down",
+     "k": 1.24,
+     "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:1:0",
+     "emphasisAt": [
+      6.08
+     ],
+     "dur": 0.71,
+     "stagger": 0.57,
+     "exitDur": 0.36
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "1:particles-float",
+       "kind": "gfx",
+       "preset": "particles-float",
+       "start": 0.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.26,
+       "dir": "right",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:1:particles-float",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "resource_id": "effect.cinematic.particles-float",
+       "resource_sha256": "585cdb29d4d5641d369b548dca572f5a0c4b44485235f7d204e2513db8809ae9"
+      },
+      {
+       "id": "1:targeting-ring",
+       "kind": "gfx",
+       "preset": "targeting-ring",
+       "start": 0.25,
+       "box": [
+        0.74,
+        0.08,
+        0.2,
+        0.36
+       ],
+       "boxTall": [
+        0.64,
+        0.06,
+        0.3,
+        0.16
+       ],
+       "k": 1.26,
+       "dir": "left",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:1:targeting-ring",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4
+      },
+      {
+       "id": "1:double-line",
+       "kind": "gfx",
+       "preset": "double-line",
+       "start": 0.46,
+       "box": [
+        0.3,
+        0.16,
+        0.4,
+        0.04
+       ],
+       "boxTall": [
+        0.2,
+        0.14,
+        0.6,
+        0.03
+       ],
+       "k": 1.26,
+       "dir": "up",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:1:double-line",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "resource_id": "icon.tabler.eyeglass",
+     "resource_sha256": "65f15a330fcecf63d1af0b7228fec33f57e1361a18c4c94d5a5107de6d1ac3f7",
+     "elementId": "glasses_icon",
+     "pos": [
+      960,
+      713
+     ],
+     "size": 108,
+     "color": "#F8FAFC",
+     "enter": {
+      "at": 0.214,
+      "anim": "pop",
+      "dur": 0.357
+     },
+     "z": 12
+    }
+   ],
+   "transition_out": {
+    "type": "light-leak",
+    "dur": 0.43
+   }
+  },
+  {
+   "id": 2,
+   "start": 9.47,
+   "end": 13.8,
+   "pattern": "quote_type",
+   "camera": {
+    "move": "static",
+    "from": 1,
+    "to": 1,
+    "focus": [
+     0.5,
+     0.5
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#0B1020",
+      "#A78BFA"
+     ],
+     "z": 0,
+     "look": "mesh",
+     "seed": "bg2",
+     "resource_id": "background.look.mesh",
+     "resource_sha256": "c9e76fed01491736205578fba6afc2933ee719322df20f4e3c1fe972ec38c3b5"
+    },
+    {
+     "type": "shape",
+     "kind": "line",
+     "from": [
+      120,
+      330
+     ],
+     "to": [
+      120,
+      560
+     ],
+     "color": "#F8FAFC",
+     "width": 12,
+     "at": 9.67,
+     "dur": 0.6,
+     "z": 3
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "The Journey Continues",
+     "mark": "Continues",
+     "at": 9.47,
+     "z": 10,
+     "pos": [
+      170,
+      360
+     ],
+     "preset": "kinetic",
+     "exitPreset": "fade-out",
+     "emphasis": "stroke",
+     "dir": "left",
+     "k": 1.18,
+     "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:2:0",
+     "emphasisAt": [
+      12.49
+     ],
+     "dur": 0.57,
+     "stagger": 0.86,
+     "exitDur": 0.36
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "2:glow-orb",
+       "kind": "gfx",
+       "preset": "glow-orb",
+       "start": 9.51,
+       "box": [
+        0.3,
+        0.2,
+        0.4,
+        0.6
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "down",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:2:glow-orb",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4
+      },
+      {
+       "id": "2:dashed-flow",
+       "kind": "gfx",
+       "preset": "dashed-flow",
+       "start": 9.72,
+       "box": [
+        0.211,
+        0.84,
+        0.536,
+        0.035
+       ],
+       "boxTall": [
+        0.1,
+        0.14,
+        0.8,
+        0.015
+       ],
+       "k": 1.22,
+       "dir": "up",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:2:dashed-flow",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "resource_id": "diagram.dashed-flow",
+       "resource_sha256": "585cdb29d4d5641d369b548dca572f5a0c4b44485235f7d204e2513db8809ae9"
+      },
+      {
+       "id": "2:frame-in",
+       "kind": "gfx",
+       "preset": "frame-in",
+       "start": 9.930000000000001,
+       "box": [
+        0.04,
+        0.06,
+        0.92,
+        0.8
+       ],
+       "boxTall": [
+        0.05,
+        0.05,
+        0.9,
+        0.74
+       ],
+       "k": 1.22,
+       "dir": "right",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:2:frame-in",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4
+      }
+     ]
+    },
+    {
+     "type": "shape",
+     "kind": "circle",
+     "elementId": "origin_point",
+     "from": [
+      332,
+      886
+     ],
+     "to": [
+      365,
+      886
+     ],
+     "color": "#ffffff",
+     "fill": "#ffffff",
+     "width": 5,
+     "at": 9.684,
+     "dur": 0.5,
+     "z": 12
+    },
+    {
+     "type": "shape",
+     "kind": "circle",
+     "elementId": "future_horizon",
+     "from": [
+      1458,
+      821
+     ],
+     "to": [
+      1555,
+      821
+     ],
+     "color": "#8b5cf6",
+     "fill": "#8b5cf6",
+     "width": 3,
+     "at": 9.934,
+     "dur": 0.5,
+     "z": 11
+    }
+   ],
+   "transition_out": {
+    "type": "zoom-through",
+    "dur": 0.43
+   }
+  },
+  {
+   "id": 3,
+   "start": 13.8,
+   "end": 20.43,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#0B1020",
+      "#A78BFA"
+     ],
+     "z": 0,
+     "look": "mesh",
+     "seed": "bg3",
+     "resource_id": "background.look.mesh",
+     "resource_sha256": "c9e76fed01491736205578fba6afc2933ee719322df20f4e3c1fe972ec38c3b5"
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "Even More Futuristic",
+     "mark": "Futuristic",
+     "at": 13.8,
+     "z": 10,
+     "preset": "split-reveal",
+     "exitPreset": "wipe-out",
+     "emphasis": "stroke",
+     "dir": "right",
+     "k": 1.24,
+     "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:3:0",
+     "emphasisAt": [
+      18.66
+     ],
+     "dur": 0.64,
+     "stagger": 0,
+     "exitDur": 0.36
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "3:scan-line",
+       "kind": "gfx",
+       "preset": "scan-line",
+       "start": 13.84,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.26,
+       "dir": "down",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:3:scan-line",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4
+      },
+      {
+       "id": "3:data-ticks",
+       "kind": "gfx",
+       "preset": "data-ticks",
+       "start": 14.05,
+       "box": [
+        0.1,
+        0.68,
+        0.8,
+        0.06
+       ],
+       "boxTall": [
+        0.1,
+        0.72,
+        0.8,
+        0.03
+       ],
+       "k": 1.26,
+       "dir": "up",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:3:data-ticks",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4
+      },
+      {
+       "id": "3:bracket-frame",
+       "kind": "gfx",
+       "preset": "bracket-frame",
+       "start": 14.260000000000002,
+       "box": [
+        0.06,
+        0.3,
+        0.88,
+        0.3
+       ],
+       "boxTall": [
+        0.06,
+        0.28,
+        0.88,
+        0.26
+       ],
+       "k": 1.26,
+       "dir": "left",
+       "seed": "3:Glowing smart glasses as a symbol of a new way of seeing:3:bracket-frame",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4
+      }
+     ]
+    },
+    {
+     "type": "icon",
+     "resource_id": "icon.tabler.sparkles",
+     "resource_sha256": "6b8003068b5bad65960a9c3a532bc056b6e85cc4f42e245e8f2ec9b00dc4ada7",
+     "elementId": "sparkle_accents",
+     "pos": [
+      960,
+      216
+     ],
+     "size": 108,
+     "color": "#F8FAFC",
+     "enter": {
+      "at": 14.014,
+      "anim": "pop",
+      "dur": 0.357
+     },
+     "z": 12
+    }
+   ]
+  }
+ ],
+ "words": [
+  {
+   "w": "smart",
+   "start": 0,
+   "end": 0.18,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "glass",
+   "start": 0.18,
+   "end": 0.6,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c05\u0c28\u0c47\u0c26\u0c3f",
+   "start": 0.72,
+   "end": 1.08,
+   "p": 0.976,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "it's",
+   "start": 1.1,
+   "end": 1.46,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "not",
+   "start": 1.46,
+   "end": 1.62,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "just",
+   "start": 1.62,
+   "end": 1.82,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "device",
+   "start": 1.82,
+   "end": 2.06,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c07\u0c26\u0c3f",
+   "start": 2.06,
+   "end": 3.18,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2e\u0c28\u0c3f\u0c37\u0c3f",
+   "start": 3.22,
+   "end": 3.54,
+   "p": 0.966,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c1c\u0c40\u0c35\u0c28",
+   "start": 3.54,
+   "end": 3.86,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c36\u0c48\u0c32\u0c3f\u0c28\u0c47",
+   "start": 3.86,
+   "end": 4.26,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c15\u0c3e\u0c26\u0c41",
+   "start": 4.26,
+   "end": 4.62,
+   "p": 0.992,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2e\u0c28",
+   "start": 4.62,
+   "end": 5.08,
+   "p": 0.976,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c26\u0c43\u0c37\u0c4d\u0c1f\u0c3f\u0c28\u0c3f",
+   "start": 5.08,
+   "end": 5.58,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2e\u0c28",
+   "start": 5.8500000000000005,
+   "end": 6.050000000000001,
+   "p": 0.932,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2a\u0c4d\u0c30\u0c2a\u0c02\u0c1a\u0c3e\u0c28\u0c4d\u0c28\u0c3f",
+   "start": 6.050000000000001,
+   "end": 6.710000000000001,
+   "p": 0.947,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2a\u0c42\u0c30\u0c4d\u0c24\u0c3f\u0c17\u0c3e",
+   "start": 6.710000000000001,
+   "end": 7.290000000000001,
+   "p": 0.948,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2e\u0c3e\u0c30\u0c4d\u0c1a\u0c47",
+   "start": 7.290000000000001,
+   "end": 7.65,
+   "p": 0.978,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c12\u0c15",
+   "start": 7.65,
+   "end": 8.17,
+   "p": 0.883,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "super",
+   "start": 8.17,
+   "end": 8.39,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "power",
+   "start": 8.39,
+   "end": 8.79,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2d\u0c35\u0c3f\u0c37\u0c4d\u0c2f\u0c24\u0c4d\u0c24\u0c41",
+   "start": 9.475,
+   "end": 10.03,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2e\u0c28",
+   "start": 10.030000000000001,
+   "end": 10.510000000000002,
+   "p": 0.993,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c15\u0c33\u0c4d\u0c32",
+   "start": 10.510000000000002,
+   "end": 10.790000000000001,
+   "p": 0.901,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2e\u0c41\u0c02\u0c26\u0c47",
+   "start": 10.790000000000001,
+   "end": 11.030000000000001,
+   "p": 0.943,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2a\u0c4d\u0c30\u0c24\u0c4d\u0c2f\u0c15\u0c4d\u0c37\u0c2e\u0c35\u0c41\u0c24\u0c41\u0c28\u0c4d\u0c28",
+   "start": 11.03,
+   "end": 11.95,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c08",
+   "start": 11.95,
+   "end": 12.03,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2a\u0c4d\u0c30\u0c2f\u0c3e\u0c23\u0c02",
+   "start": 12.03,
+   "end": 12.49,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c07\u0c15\u0c4d\u0c15\u0c21\u0c3f\u0c24\u0c4b",
+   "start": 12.49,
+   "end": 13.17,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2e\u0c41\u0c17\u0c3f\u0c2f\u0c26\u0c41",
+   "start": 13.17,
+   "end": 13.61,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c2e\u0c41\u0c02\u0c26\u0c41\u0c28\u0c4d\u0c28",
+   "start": 13.8,
+   "end": 16.1,
+   "p": 0.929,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2a\u0c4d\u0c30\u0c2a\u0c02\u0c1a\u0c02",
+   "start": 16.1,
+   "end": 16.580000000000002,
+   "p": 0.957,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c07\u0c02\u0c15\u0c3e",
+   "start": 16.580000000000002,
+   "end": 17.28,
+   "p": 0.919,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c05\u0c26\u0c4d\u0c2d\u0c41\u0c24\u0c02\u0c17\u0c3e",
+   "start": 17.28,
+   "end": 17.98,
+   "p": 0.977,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c07\u0c02\u0c15\u0c3e",
+   "start": 17.98,
+   "end": 18.66,
+   "p": 0.947,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "futuristic",
+   "start": 18.66,
+   "end": 18.92,
+   "p": null,
+   "timing": "aligned",
+   "edit": "llm"
+  },
+  {
+   "w": "\u0c17\u0c3e",
+   "start": 19.34,
+   "end": 19.46,
+   "p": 0.883,
+   "timing": null,
+   "edit": null
+  },
+  {
+   "w": "\u0c2e\u0c3e\u0c30\u0c2c\u0c4b\u0c24\u0c4b\u0c02\u0c26\u0c47",
+   "start": 19.46,
+   "end": 20.060000000000002,
+   "p": 0.925,
+   "timing": null,
+   "edit": null
+  }
+ ]
+}

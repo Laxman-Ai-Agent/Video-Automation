@@ -1,0 +1,57 @@
+09:11:04 START transcribe
+09:16:45 START refine
+09:19:36 START cuts
+09:48:59 START segment
+10:03:41 START motion-plan
+10:04:12 START motion-build
+10:04:19 START motion-validate
+10:04:20 STOP motion-validate: Motion & Timeline Validation is blocked (4 blocker(s), 0 error(s)): scene_01: glasses_icon is a required visual with no drawable representation in the current composition
+10:13:42 START motion-plan
+10:14:01 START motion-build
+10:14:14 START motion-validate
+10:14:14 STOP motion-validate: Motion & Timeline Validation is blocked (4 blocker(s), 0 error(s)): scene_01: glasses_icon is a required visual with no drawable representation in the current composition (accepted in Solve warnings, which does not draw it)
+10:19:07 START motion-plan
+10:19:27 START motion-build
+10:19:42 START motion-validation
+10:29:38 START motion-plan
+10:29:47 STOP motion-plan: the motion plan has 1 error(s): scene_01: 'resource:icon.tabler.eyeglass' is not a text preset of the installed registry
+10:43:01 START motion-plan
+10:43:27 START motion-build
+10:43:43 START motion-validation
+10:45:19 START motion-plan
+10:45:39 START motion-build
+10:45:49 START motion-validation
+10:59:08 START motion-plan
+10:59:23 START motion-build
+10:59:52 START motion-validation
+11:23:52 START motion-validation-preview
+11:27:46 START motion-validation
+11:35:19 START motion-plan
+11:35:38 START motion-build
+11:35:54 START motion-validation
+11:36:19 START motion-validation-preview
+11:36:54 FAIL motion-validation-preview:
+Traceback (most recent call last):
+  File "E:\audio-to-video\backend\pipeline.py", line 189, in execute
+    msg = st.run(pdir, ctx)
+          ^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\pipeline.py", line 675, in _preview
+    man = motion_validation_preview.generate(pdir, aspect, progress=ctx.progress)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 95, in generate
+    _still(tmp_bundle / "b", comp_file, smp["frame"], dest)
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 54, in _still
+    raise ValidationError(f"the still at frame {frame} could not be rendered after {ATTEMPTS} tries: {(r.stderr or r.stdout)[-240:]}")
+backend.motion_validation.ValidationError: the still at frame 34 could not be rendered after 3 tries: RESOLVED[39m
+[31m[41m[37m TypeError [39m[31m[49m[39m [31mFailed to fetch[39m
+[31m    at Object.fetchFontData (http://localhost:59679/bundle.js:120708:19)[39m
+[31m    at tryToLoad (http://localhost:59679/bundle.js:2385:52)[39m
+
+
+11:37:03 START motion-validation-preview
+11:38:50 START motion-validation
+11:45:10 START motion-validate
+11:45:11 START timeline-build
+12:36:19 START motion-validate
+12:38:20 START motion-validate
+12:38:28 START motion-validate

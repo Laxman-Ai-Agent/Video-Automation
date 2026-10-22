@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0.0",
+  "updated_at": 1792380661.6723075,
+  "total_lessons": 4,
+  "lessons": {
+    "lsn_orch_001": {
+      "lesson_id": "lsn_orch_001",
+      "tier": "verified",
+      "stage_id": "planning",
+      "error_category": "VALIDATION",
+      "error_code": "corrupted_scene_plan",
+      "trigger_condition": "Malformed JSON or truncated keys in scene_plan.json",
+      "recommended_action": "REPAIR_INTERMEDIATE_ARTIFACT",
+      "repair_recipe": "Rebuild baseline scene_plan.json structure using ensure_motion_planning_artifacts()",
+      "rationale": "Automated rebuild of baseline scene_plan resolves syntax errors without rerunning transcription.",
+      "confidence": 0.95,
+      "times_applied": 5,
+      "times_succeeded": 5,
+      "times_failed": 0,
+      "supporting_evidence": [
+        "tests/test_visual_planning.py",
+        "projects/sample-01/scene_plan.json"
+      ],
+      "created_at": 1792380661.6723075,
+      "updated_at": 1792380661.6723075
+    },
+    "lsn_orch_002": {
+      "lesson_id": "lsn_orch_002",
+      "tier": "verified",
+      "stage_id": "motion_plan",
+      "error_category": "RESOURCE",
+      "error_code": "lock_acquisition_failed",
+      "trigger_condition": "Stale temporary .tmp or .lock files from interrupted run",
+      "recommended_action": "REPAIR_INTERMEDIATE_ARTIFACT",
+      "repair_recipe": "Unlink stale *.tmp and *.lock files in project root directory",
+      "rationale": "Cleaning orphan lock files resolves contention without process restart.",
+      "confidence": 0.9,
+      "times_applied": 4,
+      "times_succeeded": 4,
+      "times_failed": 0,
+      "supporting_evidence": [
+        "SYSTEM/core/resilience.py:reconcile_interrupted_run"
+      ],
+      "created_at": 1792380661.6723075,
+      "updated_at": 1792380661.6723075
+    },
+    "lsn_orch_003": {
+      "lesson_id": "lsn_orch_003",
+      "tier": "verified",
+      "stage_id": "render",
+      "error_category": "TIMEOUT",
+      "error_code": "operation_timeout",
+      "trigger_condition": "Remotion headless rendering timeout under heavy CPU load",
+      "recommended_action": "ADJUST_PARAMETERS",
+      "repair_recipe": "Boost timeout deadline to 180s and retry with single concurrency thread",
+      "rationale": "Rendering high-density kinetic typography on Windows CPU benefits from extended timeout budget.",
+      "confidence": 0.88,
+      "times_applied": 3,
+      "times_succeeded": 3,
+      "times_failed": 0,
+      "supporting_evidence": [
+        "VIDEO_ENGINE/pipeline/orchestrator.py:check_system_capabilities"
+      ],
+      "created_at": 1792380661.6723075,
+      "updated_at": 1792380661.6723075
+    },
+    "lsn_orch_004": {
+      "lesson_id": "lsn_orch_004",
+      "tier": "failed",
+      "stage_id": "approval",
+      "error_category": "SECURITY",
+      "error_code": "security_policy_denied",
+      "trigger_condition": "Attempting automatic progression past Stage 8 without human approval sign-off",
+      "recommended_action": "SAFE_STOP",
+      "repair_recipe": "Never retry automatic progression on unapproved timeline; halt and await human PIN sign-off",
+      "rationale": "Mandatory human approval gate cannot be bypassed by automated retry.",
+      "confidence": 1.0,
+      "times_applied": 10,
+      "times_succeeded": 0,
+      "times_failed": 10,
+      "supporting_evidence": [
+        "tests/test_human_approval_gates_cannot_be_bypassed"
+      ],
+      "created_at": 1792380661.6723075,
+      "updated_at": 1792380661.6723075
+    }
+  }
+}

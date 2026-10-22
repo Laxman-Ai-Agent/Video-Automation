@@ -1,0 +1,321 @@
+================================================================================
+PIPELINE STAGE EXECUTION AUDIT & INTERRUPTED PROJECT INVESTIGATION REPORT
+Project Inspected: projects/test-01-c2a8
+Application: Dark World Video Generation Agent (audio-to-video)
+Audit Mode: Read-Only (no source code modified, no pipeline rerun)
+Date: 2026-10-15
+================================================================================
+
+--------------------------------------------------------------------------------
+1. COMPLETE PIPELINE STAGE EXECUTION AUDIT (DASHBOARD STAGES)
+--------------------------------------------------------------------------------
+
+The Dashboard displays a 12-stage sequential workflow (defined in
+frontend/src/pipeline/layout.ts and backend/pipeline_view.py).
+(Note: When use_images: false [Motion-Only mode], the legacy Asset Collection
+and Image Generation stages are bypassed as 'skipped' and not displayed on the
+active canvas).
+
+STAGE-BY-STAGE SUMMARY TABLE:
+--------------------------------------------------------------------------------
+# | Stage Name (ID)            | Trigger                 | Executing Handler & Function           | Key Inputs                             | Nature       | Key Outputs                              | Exit Criteria
+--+----------------------------+-------------------------+----------------------------------------+----------------------------------------+--------------+------------------------------------------+---------------------------------------------------
+1 | Audio Input (audio)        | Upload (/audio-input)   | routes/uploads.py, store.py            | Audio stream (.mp3, .wav)              | Deterministic| project.json, audio.mp3, audio_16k.wav   | Valid audio, 16 kHz mono conversion, SHA1 written
+2 | Audio Analyzer (analyzer)  | Auto / POST .../run     | pipeline.py (_transcribe,_refine,_cuts)| audio_16k.wav, vocabulary.txt          | Hybrid (ML)  | transcript.json, cuts.json, analysis     | Word timestamps, Claude check passed, cuts ready
+3 | Scene Segmentation (segment| POST .../segmentation/run| scene_segmentation.py:run (step segment| transcript.json, audio_analysis.json   | Hybrid (LLM) | scene_segmentation.json, cache           | 7-stage validation: contiguous, no word cuts
+4 | Visual Planning (planning) | POST .../visual-plan/run| autoplan.py:_plan, visual_planning.py  | scene_segmentation.json, transcript    | Hybrid (LLM) | translation.json, scene_plan, visual_plan| 8-stage visual plan checks pass with 0 errors
+5 | Motion Planning (motion_plan POST .../motion-plan/run| build_composition.ts, motion_planning  | scene_plan, visual_plan, motion_fixes  | Deterministic| motion_plan.json, motion_planning.json   | 13 stages passed: timing, margins, emphasis sync
+6 | Motion Gen (motion_gen)    | POST .../motion-gen/run | build_composition.ts, motion_gen_report| motion_plan, motion_planning, audio   | Deterministic| composition.json, motion_generation.json | Deterministic (byte-for-byte), all layers mapped
+7 | Motion Validation (valid.) | Explicit / timeline step| motion_validation.py:run, preview      | composition.json, motion_planning, etc.| Deterministic| motion_timeline_validation.json, stills  | 12 stages: status ready or ready_with_warnings
+8 | Timeline Build (timeline)  | POST .../timeline/run   | timeline_build.py:run (step tl-build)  | composition.json, validation, audio    | Deterministic| timeline.json, timeline_build_report.json| Atomic publish, digest matches, Stage 10 green
+9 | Timeline Approval (approval) POST .../decision       | timeline_approval.py:decide            | timeline.json, report, acknowledgements| Human Review | timeline_approval_history.json           | Valid decision matching current fingerprint
+10| Render Video (render)      | POST .../render         | render_video.py:run, render.py:render  | composition.json, timeline.json, audio | Ext. Tools   | out.mp4, render_manifest, render_report  | MP4 probe verified (codec, duration, audio stream)
+11| Final QC (qc)              | POST .../final-qc/run   | final_qc.py:run, review                | out.mp4, render_report.json            | Hybrid       | final_qc_report.json, qc_frames/*.jpg    | Automated probe passes + human playback confirm
+12| Final Video (final)        | Derived state           | pipeline_view.py:build                 | out.mp4, final_qc_report.json          | Read-only    | out.mp4 delivery                         | Final QC approved on exact file SHA-256
+
+
+DETAILED STAGE DOCUMENTATION:
+-----------------------------
+
+Stage 1: Audio Input (audio)
+- Purpose: Ingest narration audio, validate encoding/size, downsample to 16 kHz mono WAV, initialize project metadata.
+- Trigger: HTTP upload to POST /uploads/audio or POST /projects/new.
+- Handlers: backend/routes/uploads.py:receive and backend/store.py:new_project.
+- Inputs: Audio stream; reads file magic bytes, duration, audio channel configuration.
+- Processing: Validates extension (.mp3, .wav, .m4a), converts to 16 kHz mono WAV via ffmpeg, records sha1 in .audio.sha1, writes project.json (aspect: 16:9, use_images: false, motion_branch: true).
+- Nature: Pure deterministic code utilizing ffmpeg / ffprobe. No LLM.
+- Outputs: audio.mp3, audio_16k.wav, .audio.sha1, project.json.
+- Exit Conditions: audio.mp3 and audio_16k.wav exist and pass ffprobe check.
+- Consumer: Audio Analyzer.
+- Requirement: Mandatory.
+
+Stage 2: Audio Analyzer (analyzer)
+- Purpose: Transcribe speech with word-level timestamps, apply LLM correction for domain vocabulary and ASR slips, detect pauses/cuts, compute energy/speech metrics.
+- Trigger: Auto-queued on upload or POST /projects/{pid}/run (step transcribe).
+- Handlers: backend/pipeline.py steps transcribe, refine, cuts.
+- Inputs: audio_16k.wav, optional vocabulary.txt.
+- Processing:
+  1. transcribe: faster-whisper runs on audio_16k.wav to produce raw word timestamps.
+  2. refine: flags low-confidence words, invokes Claude CLI (promptgen.run_claude) to check and correct vocabulary without altering timestamps.
+  3. cuts: silence detection via ffmpeg/librosa (SILENCE_MIN = 0.4s, SILENCE_DB = -32dB) into cuts.json.
+  4. audio_analysis.py: evaluates 14 audio metrics into audio_analysis.json.
+- Nature: Local ML model (faster-whisper) + Claude LLM + deterministic signal processing.
+- Outputs: transcript.json, transcript_review.json, transcript_corrected.json, cuts.json, audio_analysis.json, asr_llm_cache.json.
+- Exit Conditions: transcript.json and cuts.json exist, LLM verification succeeds.
+- Consumer: Scene Segmentation.
+- Requirement: Mandatory.
+
+Stage 3: Scene Segmentation (segmentation)
+- Purpose: Group continuous narration into coherent semantic scenes based on acoustic pauses and thematic boundaries.
+- Trigger: Explicit user click: POST /projects/{pid}/segmentation/run.
+- Handler: backend/scene_segmentation.py:run via pipeline step segment.
+- Inputs: transcript.json (or transcript_corrected.json), audio_analysis.json.
+- Processing: Evaluates acoustic pauses, invokes Claude LLM to propose semantic scene chunks, snaps boundaries to exact spoken words, enforces min/max duration (3.0s - 12.0s), validates zero gaps/overlaps.
+- Nature: Hybrid: Claude LLM + deterministic boundary snapping and interval validation.
+- Outputs: scene_segmentation.json, scene_llm_cache.json.
+- Exit Conditions: scene_segmentation.json validation.status == "ok".
+- Consumer: Visual Planning.
+- Requirement: Mandatory.
+
+Stage 4: Visual Planning (planning)
+- Purpose: Translate narration to English, define per-scene visual concepts, specify text overlays and graphics, author Remotion pattern mappings and image prompts.
+- Trigger: Explicit user click: POST /projects/{pid}/visual-planning/run.
+- Handlers: backend/autoplan.py:_plan & backend/visual_planning.py:assemble.
+- Inputs: scene_segmentation.json, transcript.json, cuts.json.
+- Processing: Translates Telugu lines to English via Claude LLM (translation.json, transcript_en.json), compiles plan_input.txt, invokes Claude LLM with PLAN_SYSTEM prompt, evaluates 8 validation passes, formats prompts.txt and prompts_map.json.
+- Nature: Claude LLM (promptgen.run_claude) + strict Python schema validation.
+- Outputs: translation.json, transcript_en.json, plan_input.txt, scene_plan.json, prompts_map.json, prompts.txt, visual_planning.json.
+- Exit Conditions: scene_plan.json, prompts_map.json, visual_planning.json exist with 0 blocking errors.
+- Consumer: Motion Planning (and Asset Collection when images are used).
+- Requirement: Mandatory.
+
+Stage 5: Motion Planning (motion_plan)
+- Purpose: Select animation presets, typography styles, graphic elements, layout zones, camera pans/zooms, and transition styles for every scene.
+- Trigger: Advance in Motion-Only mode or POST /projects/{pid}/motion-planning/run.
+- Handlers: remotion/scripts/build_composition.ts --plan-only and backend/motion_planning.py:build.
+- Inputs: scene_plan.json, visual_planning.json, motion_fixes.json, audio.mp3, remotion/src digest.
+- Processing: Runs build_composition.ts to draft motion_plan.json, resolves element requests to registry presets (Tabler icons, chart styles), converts seconds to frames (fr = floor(sec * fps + 0.5)), computes safe area coordinates, margins, z-order, emphasis sync.
+- Nature: Pure deterministic TypeScript and Python algorithms. No LLM.
+- Outputs: motion_plan.json, motion_planning.json, .motion_checks.json.
+- Exit Conditions: motion_planning.json validation passes with 0 blocking errors.
+- Consumer: Motion Generation.
+- Requirement: Mandatory.
+
+Stage 6: Motion Generation (motion_gen)
+- Purpose: Construct the complete Remotion composition.json descriptor hierarchy, verify build determinism, validate layer parameters, record generation audit report.
+- Trigger: POST /projects/{pid}/motion-generation/run (pipeline step motion-build).
+- Handlers: remotion/scripts/build_composition.ts and backend/motion_gen_report.py:build.
+- Inputs: motion_plan.json, motion_planning.json, scene_plan.json, audio.mp3.
+- Processing: Runs build_composition.ts twice to verify byte-for-byte determinism, verifies layers match planned presets, injects audio metadata, runs 13 validation stages in motion_gen_report.py.
+- Nature: Deterministic TypeScript compiler and Python verification engine. No LLM.
+- Outputs: composition.json, motion_generation.json.
+- Exit Conditions: composition.json matches motion_plan.json and motion_generation.json records 0 errors.
+- Consumer: Motion & Timeline Validation.
+- Requirement: Mandatory.
+
+Stage 7: Motion & Timeline Validation (motion_validation)
+- Purpose: Pre-build safety gate (Stage 10). Validates that motion outputs conform to design, readability, collision, and timing rules before timeline assembly.
+- Trigger: Explicit POST /projects/{pid}/motion-timeline-validation/run or step motion-validate in timeline build chain.
+- Handlers: backend/motion_validation.py:run and backend/motion_validation_preview.py:generate.
+- Inputs: project.json, scene_segmentation.json, visual_planning.json, motion_plan.json, motion_planning.json, motion_generation.json, composition.json, motion_fixes.json, audio.mp3, transcript.json.
+- Processing: Evaluates 12 inspection stages (Input Provenance, Freshness, Scene Mapping, Timing Integrity, Element Completeness, Preset Validity, Layout & Collision, Audio/Text Sync, Transition Readiness, Buildability, Preview Validation, Readiness Gate). Checks for un-rendered required elements; renders preview stills via Remotion Puppeteer bundle into motion_validation_preview/.
+- Nature: Deterministic Python rule engine + headless Chrome still renderer. No LLM.
+- Outputs: motion_timeline_validation.json, motion_validation_preview/manifest.json and PNG stills.
+- Exit Conditions: Report status is ready or ready_with_warnings.
+- Consumer: Timeline Build.
+- Requirement: Mandatory gate for Timeline Build.
+
+Stage 8: Timeline Build (timeline)
+- Purpose: Compile scene-based composition.json into continuous, track-based timeline.json snapshot with validated intervals, layers, and transition envelopes.
+- Trigger: POST /projects/{pid}/timeline-build/run or pipeline step timeline-build.
+- Handlers: backend/timeline_build.py:run and _publish.
+- Inputs: composition.json, motion_timeline_validation.json, scene_plan.json, audio.mp3, remotion/src digest.
+- Processing: Verifies Stage 10 readiness gate, maps scenes to track clips with half-open frame intervals [start_frame, end_frame), assembles video and audio tracks, calculates transition windows and pause gaps (hold_previous_scene), validates structural integrity, performs atomic publish (backs up prior timeline to timeline_backup/).
+- Nature: Pure deterministic Python assembly and validation engine. No LLM.
+- Outputs: timeline.json, timeline_build_report.json, timeline_build_attempt.json, timeline_backup/.
+- Exit Conditions: timeline.json published, report status completed or completed_with_warnings.
+- Consumer: Timeline Approval.
+- Requirement: Mandatory.
+
+Stage 9: Timeline Approval (approval)
+- Purpose: Stage 12 human governance gate. Certifies that a specific, immutable fingerprint of the timeline has been reviewed and approved for video encoding.
+- Trigger: User click Approve on Timeline Approval page (POST /projects/{pid}/timeline-approval/decision).
+- Handler: backend/timeline_approval.py:decide.
+- Inputs: timeline.json, timeline_build_report.json, motion_validation_preview/, user decision payload (expected_fingerprint, decision_by, warning_acknowledgements).
+- Processing: Re-computes current timeline version fingerprint, ensures project is idle with 0 blocking errors, verifies all warnings/approximations have explicit acknowledgements, checks review coverage, appends immutable decision to timeline_approval_history.json.
+- Nature: Deterministic Python state machine recording human approval. No LLM.
+- Outputs: timeline_approval_history.json, timeline_review.json.
+- Exit Conditions: Active approved decision matching current timeline fingerprint recorded.
+- Consumer: Render Video.
+- Requirement: Mandatory gate for final render.
+
+Stage 10: Render Video (render)
+- Purpose: Stage 13: Render approved composition into a verified MP4 video using Remotion and headless Chromium.
+- Trigger: POST /projects/{pid}/render.
+- Handlers: backend/render_video.py:run executing Remotion via backend/render.py:render.
+- Inputs: composition.json, timeline.json, timeline_approval_history.json, audio.mp3, Remotion configurations.
+- Processing: Verifies approval gate, writes render_manifest.json, stages audio, executes npx remotion render, probes output via ffprobe / media_probe.py (checks H.264, dimensions, 30 fps, duration tolerance +/-0.15s, audio stream), publishes atomically to out.mp4, writes render_report.json.
+- Nature: Remotion (Node.js/Puppeteer/Chromium) + ffmpeg + deterministic Python wrapper. No LLM.
+- Outputs: out.mp4, render_manifest.json, render_job.json, render_report.json, render_profile.json.
+- Exit Conditions: out.mp4 passes all media verification checks, render_report.json published.
+- Consumer: Final QC.
+- Requirement: Mandatory to produce video.
+
+Stage 11: Final QC (qc)
+- Purpose: Stage 14: Quality control inspection combining automated glitch detection with human review.
+- Trigger: POST /projects/{pid}/final-qc/run + POST /projects/{pid}/final-qc/review.
+- Handlers: backend/final_qc.py:run and review.
+- Inputs: out.mp4, render_report.json, composition.json, timeline.json.
+- Processing: Probes out.mp4 for frozen frames, dropped frames, black frames, audio clipping, loudness metrics. Extracts keyframes to qc_frames/*.jpg. Records findings into final_qc_report.json. Accepts human sign-off confirming playback verification with sound.
+- Nature: Automated ffmpeg inspection + human review decision. No LLM.
+- Outputs: final_qc_report.json, qc_frames/*.jpg.
+- Exit Conditions: Automated checks pass and human records approval for exact video SHA-256.
+- Consumer: Final Video.
+- Requirement: Mandatory.
+
+Stage 12: Final Video (final)
+- Purpose: Delivery gate presenting finalized video for download or playback on dashboard.
+- Trigger: Implicit query evaluation when final_qc_report.json approval gate is satisfied.
+- Handler: backend/pipeline_view.py:build.
+- Inputs: out.mp4, final_qc_report.json.
+- Processing: Confirms out.mp4 exists on disk and has an approved QC decision matching its SHA-256.
+- Nature: Read-only query.
+- Outputs: Verified, downloadable out.mp4.
+- Exit Conditions: out.mp4 is certified by Final QC.
+- Consumer: User / Client.
+- Requirement: Terminal stage.
+
+
+--------------------------------------------------------------------------------
+2. INVESTIGATION OF THE INTERRUPTED PROJECT (test-01-c2a8)
+--------------------------------------------------------------------------------
+
+TIMELINE OF EVENTS (FROM PERSISTED LOGS & TIMESTAMPS):
+- 09:11:04: Audio Input completed (audio.mp3, audio_16k.wav)
+- 09:16:45: transcribe completed (transcript.json)
+- 09:19:36: refine & cuts completed (transcript_review.json, cuts.json)
+- 09:42:38: audio_analysis.json & transcript_corrected.json written
+- 09:49:09: Scene Segmentation completed (scene_segmentation.json, 3 scenes)
+- 09:53:17: Visual Planning completed (scene_plan.json, visual_planning.json)
+- 10:04 - 11:35: Iterative Motion Planning and autofixes (motion_plan.json, motion_planning.json)
+- 11:35:49: Motion Generation completed (composition.json, motion_generation.json)
+- 11:38:50: Motion & Timeline Validation completed (motion_timeline_validation.json, motion_validation_preview/)
+            Status was "ready" (0 blockers, 0 errors, 0 warnings)
+- 11:45:20: Timeline Build completed (timeline.json, timeline_build_report.json, 126/126 checks passed, 3 warnings)
+- 12:07:28: timeline_waveform.json generated
+- 12:38:28: Pre-render check step motion-validate executed successfully (prerender_report.json written, 0 warnings)
+
+SPECIFIC ANSWERS:
+1. The last stage that actually completed:
+   Timeline Build (timeline).
+   timeline.json (11,615 bytes) and timeline_build_report.json (7,399 bytes) were fully compiled,
+   validated, and published at 2026-10-15 11:45:20.
+
+2. The first stage that failed, remained blocked, or never started:
+   Timeline Approval (approval) never started.
+   Consequently, Render Video (render), Final QC (qc), and Final Video (final) never started.
+
+3. The exact JSON file expected but missing:
+   timeline_approval_history.json (and the derived review manifest timeline_review.json).
+   Downstream render artifacts (render_manifest.json, render_job.json, render_report.json)
+   and QC artifacts (final_qc_report.json) were also never created.
+
+4. Which function or process is responsible for creating that file:
+   - timeline_approval_history.json: backend/timeline_approval.py:decide(), called by
+     endpoint POST /projects/{pid}/timeline-approval/decision.
+   - timeline_review.json: backend/timeline_approval.py:prepare_review(), called by
+     endpoint POST /projects/{pid}/timeline-approval/review.
+
+5. Whether the creation function ran, failed, returned early, or was never called:
+   It was never called.
+   Zero log entries, job records, or network attempts exist for approval or render.
+
+6. Root cause analysis:
+   - Pipeline Boundary: By design, the pipeline halts after Timeline Build. backend/jobs.py:98 states:
+     "# nothing starts by itself after a job: the next stage (Scene Segmentation, Visual Planning, ...) runs only when the user starts it".
+     Timeline Approval is a human governance gate requiring an explicit user review and POST request.
+   - The "Out of Date" UI State in User Screenshot:
+     After test-01-c2a8 was validated at 11:38:50, uncommitted changes were made to files in
+     remotion/src/ (e.g., Background.tsx, ShapeAnim.tsx, as documented in reports/VISUAL_UPGRADE/CHANGE_SUMMARY.md).
+     backend/pipeline._remotion_src_digest() changed from 9b1ec6c3fdc806d52c1554830bc6eb1d35631e63 to
+     b7f7df4ef30bc2e86e182a6b12fa163d48c11e51.
+     Because motion_validation.py includes renderer digest in its input fingerprint calculation
+     (backend/motion_validation.py:104), load() detected that the current input fingerprint (82e4e195de724509)
+     differed from the stored report fingerprint (cf64c7811f421fcb), immediately setting the report status
+     to "stale" and showing the "Out of date" warning banner on the UI.
+
+7. Whether downstream stages were incorrectly marked complete despite missing outputs:
+   No. All downstream stages (approval, render, qc, final) are strictly evaluated as queued or blocked.
+
+
+--------------------------------------------------------------------------------
+3. THE MOTION PIPELINE SPECIFICS
+--------------------------------------------------------------------------------
+
+DATA FLOW:
+Visual Planning JSON -> Motion Planning JSON -> Motion Generation descriptors JSON ->
+Reusable React Component Props -> Motion & Timeline Validation -> Timeline Build ->
+Timeline Approval -> Render Video (Remotion + Chromium) -> Final MP4
+
+CRITICAL ARCHITECTURAL DISTINCTIONS:
+1. Planning JSON (visual_planning.json & scene_plan.json):
+   High-level semantic specifications. Contains scene objectives, visual metaphors, text hints,
+   and rough animation concepts ("fade and scale", "slide left"). No concrete frame numbers,
+   no Remotion props, no code.
+
+2. Motion Planning JSON (motion_plan.json & motion_planning.json):
+   Bridges visual plan to motion engine. Resolves visual items into library component/preset IDs
+   (e.g., icon.tabler.eyeglass, typewriter). Converts seconds into discrete frame intervals at
+   30 fps: fr = floor(sec * 30 + 0.5). Calculates safe area bounds, z-indices, emphasis word timing.
+
+3. Motion Generation Descriptors JSON (composition.json & motion_generation.json):
+   Hierarchical descriptor tree. Each scene contains ordered layer descriptors:
+   - motion_text layers (preset, text, font, size, x, y, enter_frame, exit_frame)
+   - motion_scene layers with items (preset, props, coordinates)
+   - background look and color gradients
+   - camera motion transforms (zoom, move)
+   - audio reference
+
+4. Code Generation vs. Reusable Components (Crucial Finding):
+   SOURCE CODE VERIFICATION CONFIRMS: Motion Generation DOES NOT generate executable
+   TypeScript or React (.tsx) code.
+   Instead, Remotion contains pre-existing, reusable React animation components:
+   - remotion/src/components/Background.tsx (gradient, mesh, spotlight, aurora shaders)
+   - remotion/src/components/Chart.tsx (bar, line, pie SVG charts)
+   - remotion/src/components/IconPop.tsx (Tabler/Lucide icons with entry animations)
+   - remotion/src/components/ShapeAnim.tsx (geometric badges, callouts, cards)
+   - remotion/src/motion/text.tsx & compose.tsx (kinetic typography presets)
+   During preview or render, Remotion dynamically reads composition.json descriptors and passes
+   the fields directly as props to these existing React components.
+
+
+--------------------------------------------------------------------------------
+4. CONFIRMED FACTS, UNKNOWNS, AND INFERENCES
+--------------------------------------------------------------------------------
+
+Confirmed Facts:
+1. test-01-c2a8 is in Motion-Only mode (use_images: false in project.json).
+2. The project ran successfully through Timeline Build at 2026-10-15 11:45:20 (timeline.json published).
+3. No job ever ran for Timeline Approval, Render Video, or Final QC.
+4. The "Out of date" status in the user's screenshot was caused by edits in remotion/src/ (e.g. Background.tsx),
+   which changed pipeline._remotion_src_digest() and invalidated the stored validation fingerprint.
+5. Motion Generation creates only JSON descriptors (composition.json); it does not write React/TSX code.
+
+Unknowns:
+1. User intent when pausing after 11:45 / 12:38.
+
+Inferences:
+1. Re-running Motion Validation (POST /projects/test-01-c2a8/motion-timeline-validation/run) will
+   recompute the validation against the current remotion/src digest, clearing the "Out of date" banner
+   and allowing Timeline Build and Approval to proceed normally.
+
+
+--------------------------------------------------------------------------------
+5. CONCLUSION
+--------------------------------------------------------------------------------
+- Exactly where execution stopped: Immediately after Timeline Build (Stage 8) and before Timeline Approval (Stage 9).
+- Missing expected JSON: timeline_approval_history.json (and timeline_review.json).
+- Current status: The pipeline is healthy and halted normally at a human approval gate. The "Out of date"
+  banner on Motion Validation is a valid, truthful reflection that remotion/src source files were edited
+  after the report was generated.
+================================================================================

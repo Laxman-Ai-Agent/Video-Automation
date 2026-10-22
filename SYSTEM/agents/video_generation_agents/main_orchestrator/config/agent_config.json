@@ -1,0 +1,17 @@
+{
+  "agent_id": "main_orchestrator",
+  "stage_id": "pipeline",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "job_queue",
+    "step_graph",
+    "pipeline_view",
+    "memory_service"
+  ],
+  "capabilities": [
+    "orchestration",
+    "auto-advance",
+    "safe-stop-guard"
+  ]
+}

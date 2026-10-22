@@ -1,0 +1,72 @@
+{
+ "mode": "final",
+ "seconds": 504.6,
+ "video_seconds": 57.611,
+ "x_video_length": 8.8,
+ "heavy": [],
+ "scenes": [
+  {
+   "id": 1,
+   "pattern": "quote_type",
+   "frames": 142,
+   "seconds": 38.5,
+   "s_per_frame": 0.271
+  },
+  {
+   "id": 2,
+   "pattern": "hero_text",
+   "frames": 266,
+   "seconds": 71.8,
+   "s_per_frame": 0.27
+  },
+  {
+   "id": 3,
+   "pattern": "hero_icon",
+   "frames": 179,
+   "seconds": 58.0,
+   "s_per_frame": 0.324
+  },
+  {
+   "id": 4,
+   "pattern": "hero_only",
+   "frames": 195,
+   "seconds": 65.7,
+   "s_per_frame": 0.337
+  },
+  {
+   "id": 5,
+   "pattern": "split_two",
+   "frames": 270,
+   "seconds": 73.9,
+   "s_per_frame": 0.274
+  },
+  {
+   "id": 6,
+   "pattern": "quote_type",
+   "frames": 131,
+   "seconds": 28.3,
+   "s_per_frame": 0.216
+  },
+  {
+   "id": 7,
+   "pattern": "hero_text",
+   "frames": 192,
+   "seconds": 41.5,
+   "s_per_frame": 0.216
+  },
+  {
+   "id": 8,
+   "pattern": "hero_only",
+   "frames": 211,
+   "seconds": 60.6,
+   "s_per_frame": 0.287
+  },
+  {
+   "id": 9,
+   "pattern": "hero_text",
+   "frames": 142,
+   "seconds": 39.7,
+   "s_per_frame": 0.279
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+  "agent_id": "autonomous_execution",
+  "name": "Autonomous Execution Agent",
+  "version": "1.0.0",
+  "category": "system_subagent",
+  "status": "implemented",
+  "purpose": "Supervises autonomous task execution, bounded failure recovery, durable checkpointing, and independent completion verification without competing with the Main Architecture Agent or Video Pipeline Orchestrator.",
+  "capabilities": [
+    "task-execution",
+    "bounded-recovery",
+    "checkpoint-persistence",
+    "task-resume",
+    "loop-prevention",
+    "verification-dispatch"
+  ],
+  "allowed_tools": [
+    "agent_registry",
+    "security_policy",
+    "verification_and_test",
+    "checkpoint_manager",
+    "recovery_manager"
+  ],
+  "owner": "system"
+}

@@ -1,0 +1,24 @@
+{
+ "at": "2026-10-15T08:02:56",
+ "verified": [],
+ "failed": [
+  "chart.svg.line"
+ ],
+ "results": {
+  "chart.svg.line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0153,
+     "preview": "resource-library/previews/16x9/chart.svg.line.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0092,
+     "preview": "resource-library/previews/9x16/chart.svg.line.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

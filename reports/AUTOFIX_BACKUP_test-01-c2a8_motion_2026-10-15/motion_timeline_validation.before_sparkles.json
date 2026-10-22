@@ -1,0 +1,772 @@
+{
+ "schema_version": "1.0",
+ "phase": "motion_timeline_validation",
+ "phase_status": "completed",
+ "readiness": "ready_with_warnings",
+ "created_at": "2026-10-15T11:27:46",
+ "project_id": "test-01-c2a8",
+ "validator": {
+  "version": 1,
+  "rule_set_version": "1.0"
+ },
+ "rule_set": "1.0",
+ "config": {
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration_seconds": 20.428,
+  "mode": "motion_only",
+  "motion_speed": 1.4
+ },
+ "policy": {
+  "timing": {
+   "frame_rounding_policy": "floor(seconds x fps + 0.5), the end frame is exclusive (the project's one rule, motion_planning.fr)",
+   "emphasis_alignment_tolerance_ms": 60,
+   "preserve_intentional_gaps": true
+  },
+  "layout": {
+   "safe_area_source": "config.SAFE_AREA",
+   "use_actual_drawn_boxes_when_available": true,
+   "unknown_geometry_is_not_a_pass": true
+  },
+  "readiness": {
+   "required_undrawn_blocks_by_default": true,
+   "explicit_exceptions_required": true,
+   "stale_inputs_block": true,
+   "validation_is_read_only": true
+  },
+  "preview": {
+   "sample_changed_or_flagged_scenes": true,
+   "separate_still_and_motion_review": true,
+   "human_review_required_for_human_review_status": true
+  }
+ },
+ "source_fingerprint": "c255406675fa1ae6",
+ "inputs": {
+  "visual_plan_fingerprint": "34b77ce4cea5ef07465456ac6dcc101f53324eac",
+  "scene_segmentation_fingerprint": "4bc84b6309314820fac39beed99395991f5d661a",
+  "motion_plan_fingerprint": "4e46b8eb06ce963c",
+  "motion_generation_fingerprint": "2fa0b961524043b2",
+  "composition_fingerprint": "ca51eb63fe37a4fc",
+  "renderer_registry_fingerprint": "425a7887496a18b12f24f7d8d864963a61516429",
+  "artifacts": {
+   "project": {
+    "file": "project.json",
+    "sha": "41652fe7feafdcc8"
+   },
+   "segmentation": {
+    "file": "scene_segmentation.json",
+    "sha": "a343c73d03ce30bb"
+   },
+   "visual_plan": {
+    "file": "visual_planning.json",
+    "sha": "fce34d0a7f89e8e8"
+   },
+   "motion_plan": {
+    "file": "motion_plan.json",
+    "sha": "c69b8b0196450d96"
+   },
+   "motion_planning": {
+    "file": "motion_planning.json",
+    "sha": "adf7c694b9140ddd"
+   },
+   "motion_generation": {
+    "file": "motion_generation.json",
+    "sha": "0015bcc8d812dce9"
+   },
+   "composition": {
+    "file": "composition.json",
+    "sha": "ca51eb63fe37a4fc"
+   },
+   "fixes": {
+    "file": "motion_fixes.json",
+    "sha": "536c4a74573c42d5"
+   }
+  },
+  "audio": "audio.mp3:326889",
+  "transcript_words": "a818c8f871129e4c"
+ },
+ "summary": {
+  "scenes_expected": 3,
+  "scenes_checked": 3,
+  "blockers": 0,
+  "errors": 0,
+  "warnings": 0,
+  "info": 2,
+  "accepted_exceptions": 0,
+  "unresolved_review_items": 0,
+  "required_not_drawn": 0,
+  "optional_not_drawn": 1,
+  "approximate": 2,
+  "stages_blocked": 0,
+  "checks_passed": 345,
+  "checks_total": 345,
+  "checks_skipped": 2
+ },
+ "stages": [
+  {
+   "n": 1,
+   "stage_id": "input_provenance",
+   "name": "Input Reader & Provenance",
+   "label": "Input Reader",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 33,
+   "checks_total": 33,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "3c2723c030033829",
+   "duration_ms": 2,
+   "cache": {
+    "hit": false,
+    "reason": "an input of this stage changed"
+   }
+  },
+  {
+   "n": 2,
+   "stage_id": "fingerprint_freshness",
+   "name": "Fingerprint & Freshness",
+   "label": "Fingerprint Check",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 9,
+   "checks_total": 9,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "0dd60553bf42fc69",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 3,
+   "stage_id": "scene_mapping",
+   "name": "Scene Mapping & Coverage",
+   "label": "Scene Mapping",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 29,
+   "checks_total": 29,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "7771ebcf0846460f",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 4,
+   "stage_id": "timing_frame",
+   "name": "Timing & Frame Integrity",
+   "label": "Timing & Frames",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 63,
+   "checks_total": 63,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "80fde2663181f2ec",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 5,
+   "stage_id": "element_completeness",
+   "name": "Element Completeness & Drawn Support",
+   "label": "Element Coverage",
+   "status": "warning",
+   "progress_percent": 100,
+   "checks_passed": 43,
+   "checks_total": 43,
+   "checks_skipped": 1,
+   "finding_ids": [
+    "element.optional_missing_classified:scene_03:sparkle_accents"
+   ],
+   "input_fingerprint": "1b45439dbf72e109",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   },
+   "elements": {
+    "scenes_expected": 3,
+    "scenes_checked": 3,
+    "required_not_drawn": 0,
+    "optional_not_drawn": 1,
+    "approximate": 2,
+    "drawn": 9,
+    "elements": 12
+   },
+   "element_rows": [
+    {
+     "scene_id": "scene_01",
+     "element_id": "glasses_icon",
+     "type": "icon",
+     "required": true,
+     "state": "approximate",
+     "plan_status": "approximate",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_01",
+     "element_id": "superpower_text",
+     "type": "text",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_01",
+     "element_id": "background_glow",
+     "type": "background",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_02",
+     "element_id": "journey_path",
+     "type": "graphic",
+     "required": true,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_02",
+     "element_id": "origin_point",
+     "type": "graphic",
+     "required": true,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_02",
+     "element_id": "future_horizon",
+     "type": "graphic",
+     "required": true,
+     "state": "approximate",
+     "plan_status": "approximate",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_02",
+     "element_id": "light_pulse",
+     "type": "graphic",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_02",
+     "element_id": "future_text",
+     "type": "text",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_03",
+     "element_id": "world_icon",
+     "type": "icon",
+     "required": true,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_03",
+     "element_id": "sparkle_accents",
+     "type": "icon",
+     "required": false,
+     "state": "optional_missing",
+     "plan_status": "fallback",
+     "why": "the library has no graphic that draws this element on its own"
+    },
+    {
+     "scene_id": "scene_03",
+     "element_id": "futuristic_text",
+     "type": "text",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    },
+    {
+     "scene_id": "scene_03",
+     "element_id": "background_glow",
+     "type": "background",
+     "required": false,
+     "state": "drawn",
+     "plan_status": "resolved",
+     "why": "drawn"
+    }
+   ]
+  },
+  {
+   "n": 6,
+   "stage_id": "animation_preset",
+   "name": "Animation & Preset Validity",
+   "label": "Preset & Animation",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 64,
+   "checks_total": 64,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "cef62fa2ac3dc650",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 7,
+   "stage_id": "layout_collision",
+   "name": "Layout & Collision",
+   "label": "Layout & Collisions",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 35,
+   "checks_total": 35,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "9c60ff3c4c9b6aa8",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 8,
+   "stage_id": "audio_text_sync",
+   "name": "Audio & Text Synchronization",
+   "label": "Audio & Text Sync",
+   "status": "warning",
+   "progress_percent": 100,
+   "checks_passed": 16,
+   "checks_total": 16,
+   "checks_skipped": 1,
+   "finding_ids": [
+    "audio.duration_compatible:project:audio_file"
+   ],
+   "input_fingerprint": "46f7ba839e857e8d",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 9,
+   "stage_id": "transition_readiness",
+   "name": "Transition & Continuity Readiness",
+   "label": "Transition Readiness",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 12,
+   "checks_total": 12,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "413a477bd4c890f7",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 10,
+   "stage_id": "buildability",
+   "name": "Composition Buildability & Determinism",
+   "label": "Buildability",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 12,
+   "checks_total": 12,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "d426f65b93390a7f",
+   "duration_ms": 0,
+   "cache": {
+    "hit": true,
+    "reason": "inputs, rule set and validator unchanged since the previous run"
+   }
+  },
+  {
+   "n": 11,
+   "stage_id": "preview_validation",
+   "name": "Preview Validation & Visual Evidence",
+   "label": "Preview Validation",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 26,
+   "checks_total": 26,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "e3402c1ff22c110e",
+   "duration_ms": 47,
+   "cache": {
+    "hit": false,
+    "reason": "an input of this stage changed"
+   }
+  },
+  {
+   "n": 12,
+   "stage_id": "readiness_gate",
+   "name": "Findings, Report & Timeline Readiness Gate",
+   "label": "Readiness Gate",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 3,
+   "checks_total": 3,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "always recomputed"
+   }
+  }
+ ],
+ "findings": [
+  {
+   "finding_id": "audio.duration_compatible:project:audio_file",
+   "rule_id": "audio.duration_compatible",
+   "stage_id": "audio_text_sync",
+   "severity": "info",
+   "status": "unresolved",
+   "scene_id": null,
+   "element_id": "audio_file",
+   "message": "the length of the audio file could not be read here (not a WAV): only the analysis' length was compared",
+   "evidence": {},
+   "owner_stage": "project",
+   "suggested_action": "",
+   "can_auto_fix": false,
+   "exceptionable": false,
+   "exception": null,
+   "occurrences": 1
+  },
+  {
+   "finding_id": "element.optional_missing_classified:scene_03:sparkle_accents",
+   "rule_id": "element.optional_missing_classified",
+   "stage_id": "element_completeness",
+   "severity": "info",
+   "status": "unresolved",
+   "scene_id": "scene_03",
+   "element_id": "sparkle_accents",
+   "message": "scene_03: the optional element sparkle_accents is not drawn (the library has no graphic that draws this element on its own)",
+   "evidence": {
+    "visual_plan_required": false
+   },
+   "owner_stage": "motion_generation",
+   "suggested_action": "",
+   "can_auto_fix": false,
+   "exceptionable": false,
+   "exception": null,
+   "occurrences": 1
+  }
+ ],
+ "elements": [
+  {
+   "scene_id": "scene_01",
+   "element_id": "glasses_icon",
+   "type": "icon",
+   "required": true,
+   "state": "approximate",
+   "plan_status": "approximate",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_01",
+   "element_id": "superpower_text",
+   "type": "text",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_01",
+   "element_id": "background_glow",
+   "type": "background",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_02",
+   "element_id": "journey_path",
+   "type": "graphic",
+   "required": true,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_02",
+   "element_id": "origin_point",
+   "type": "graphic",
+   "required": true,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_02",
+   "element_id": "future_horizon",
+   "type": "graphic",
+   "required": true,
+   "state": "approximate",
+   "plan_status": "approximate",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_02",
+   "element_id": "light_pulse",
+   "type": "graphic",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_02",
+   "element_id": "future_text",
+   "type": "text",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_03",
+   "element_id": "world_icon",
+   "type": "icon",
+   "required": true,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_03",
+   "element_id": "sparkle_accents",
+   "type": "icon",
+   "required": false,
+   "state": "optional_missing",
+   "plan_status": "fallback",
+   "why": "the library has no graphic that draws this element on its own"
+  },
+  {
+   "scene_id": "scene_03",
+   "element_id": "futuristic_text",
+   "type": "text",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  },
+  {
+   "scene_id": "scene_03",
+   "element_id": "background_glow",
+   "type": "background",
+   "required": false,
+   "state": "drawn",
+   "plan_status": "resolved",
+   "why": "drawn"
+  }
+ ],
+ "preview_evidence": [
+  {
+   "scene_id": "scene_01",
+   "kind": "entry",
+   "frame": 34,
+   "file": "scene_01_entry_00034.png",
+   "time_s": 1.133,
+   "sha": "518875c2865fc65c",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 24.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "mid",
+   "frame": 142,
+   "file": "scene_01_mid_00142.png",
+   "time_s": 4.733,
+   "sha": "198744ed7c5d6c63",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 22.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "pre_exit",
+   "frame": 256,
+   "file": "scene_01_pre_exit_00256.png",
+   "time_s": 8.533,
+   "sha": "7dcfa5c67ceab318",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 45.2,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "transition",
+   "frame": 278,
+   "file": "scene_01_transition_00278.png",
+   "time_s": 9.267,
+   "sha": "0eedc2646c875885",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 44.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "entry",
+   "frame": 300,
+   "file": "scene_02_entry_00300.png",
+   "time_s": 10.0,
+   "sha": "574d1a758a945ff8",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 39.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "mid",
+   "frame": 349,
+   "file": "scene_02_mid_00349.png",
+   "time_s": 11.633,
+   "sha": "73882d50ff3e105b",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 49.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "pre_exit",
+   "frame": 401,
+   "file": "scene_02_pre_exit_00401.png",
+   "time_s": 13.367,
+   "sha": "d568394e485a6ac4",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 50.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "transition",
+   "frame": 408,
+   "file": "scene_02_transition_00408.png",
+   "time_s": 13.6,
+   "sha": "dee0127917e16eab",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 43.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "entry",
+   "frame": 438,
+   "file": "scene_03_entry_00438.png",
+   "time_s": 14.6,
+   "sha": "e4cea92724e4d9d3",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 42.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "mid",
+   "frame": 513,
+   "file": "scene_03_mid_00513.png",
+   "time_s": 17.1,
+   "sha": "d47f1b0ec4a4c098",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 41.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "pre_exit",
+   "frame": 593,
+   "file": "scene_03_pre_exit_00593.png",
+   "time_s": 19.767,
+   "sha": "1f59524a5a92b113",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 43.6,
+   "blank": false,
+   "human_reviewed": false
+  }
+ ],
+ "preview": {
+  "evidence_generated": true,
+  "technical_checks_passed": true,
+  "stills_reviewed_by_person": false,
+  "motion_playback_reviewed": false,
+  "samples": 11,
+  "scenes_sampled": 3,
+  "reviews": []
+ },
+ "exceptions": [],
+ "cache": {
+  "stages_reused": 9,
+  "stages_run": 3
+ },
+ "next_action": "build_timeline_when_you_choose",
+ "error": null,
+ "note": "read-only: nothing upstream was changed; a timeline that is not built yet is not validated here (the pre-render check after the build does that)",
+ "timings_seconds": {
+  "validate": 0.151
+ }
+}

@@ -1,0 +1,72 @@
+{
+ "segments": [
+  {
+   "id": 0,
+   "en": "Let's see how AI agents are actually built. If you want to build AI agents,"
+  },
+  {
+   "id": 1,
+   "en": "Both people who know coding and people who don't can build AI agents."
+  },
+  {
+   "id": 2,
+   "en": "Those who know coding use languages like Python with advanced frameworks"
+  },
+  {
+   "id": 3,
+   "en": "to build complex AI agents."
+  },
+  {
+   "id": 4,
+   "en": "In these agents, multiple agents can work together,"
+  },
+  {
+   "id": 5,
+   "en": "add custom logic, databases,"
+  },
+  {
+   "id": 6,
+   "en": "integrating with APIs and different apps - there are advanced capabilities like these."
+  },
+  {
+   "id": 7,
+   "en": "Such AI agents, not just for simple automation,"
+  },
+  {
+   "id": 8,
+   "en": "for large projects, business automation systems, internal workflows - professional-level use cases - they are used."
+  },
+  {
+   "id": 9,
+   "en": "At the same time,"
+  },
+  {
+   "id": 10,
+   "en": "people who don't know coding are also creating simple AI agents using no-code tools."
+  },
+  {
+   "id": 11,
+   "en": "n8n, Zapier,"
+  },
+  {
+   "id": 12,
+   "en": "Make - with tools like these you can create drag-and-drop workflows."
+  },
+  {
+   "id": 13,
+   "en": "You select predefined actions, like replying to emails, sending WhatsApp messages,"
+  },
+  {
+   "id": 14,
+   "en": "generating reports, running basic automations - routine tasks."
+  },
+  {
+   "id": 15,
+   "en": "No coding is needed. So even without technical knowledge, building and using basic AI agents is something many people are doing now."
+  },
+  {
+   "id": 16,
+   "en": ""
+  }
+ ]
+}

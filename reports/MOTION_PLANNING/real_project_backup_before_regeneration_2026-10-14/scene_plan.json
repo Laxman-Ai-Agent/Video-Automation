@@ -1,0 +1,198 @@
+{
+ "style": {
+  "suffix": "cinematic documentary, warm teal-orange, film grain, no text",
+  "palette": [
+   "#0b1220",
+   "#d9582b",
+   "#2a9d9f",
+   "#f2e6d0"
+  ],
+  "grade": "teal-orange"
+ },
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 4.75,
+   "meaning": "Mental challenges of a Mars mission are even bigger than the physical ones",
+   "concept": "typography emphasis on the mind",
+   "mood": "dramatic, tense",
+   "mode": "typography",
+   "pattern": "quote_type",
+   "transition": "fade",
+   "keywords": [
+    {
+     "text": "Mental",
+     "at": 2.0
+    }
+   ],
+   "params": {
+    "text": "Mental challenges",
+    "mark": "Mental",
+    "text2": "Greater than physical",
+    "approximate": false
+   }
+  },
+  {
+   "id": 2,
+   "start": 4.75,
+   "end": 13.6,
+   "meaning": "The eight-month journey to Mars means long separation from family and Earth life",
+   "concept": "lone spacecraft crossing deep space",
+   "mood": "calm, sad",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "transition": "slide",
+   "keywords": [
+    {
+     "text": "Eight months",
+     "at": 5.4
+    }
+   ],
+   "params": {
+    "text": "Eight months",
+    "mark": "months",
+    "approximate": true
+   }
+  },
+  {
+   "id": 3,
+   "start": 13.6,
+   "end": 19.58,
+   "meaning": "Communication with Earth is delayed by several minutes",
+   "concept": "delayed signal between planets",
+   "mood": "tense, calm",
+   "mode": "image-composite",
+   "pattern": "hero_icon",
+   "transition": "blur",
+   "keywords": [
+    {
+     "text": "Delayed",
+     "at": 17.1
+    }
+   ],
+   "params": {
+    "text": "Delayed by minutes",
+    "icon": "clock",
+    "approximate": false
+   }
+  },
+  {
+   "id": 4,
+   "start": 19.58,
+   "end": 26.08,
+   "meaning": "A silent red desert and few people put the mind to a severe test",
+   "concept": "isolated astronaut in a vast red landscape",
+   "mood": "sad, calm",
+   "mode": "image-composite",
+   "pattern": "hero_only",
+   "transition": "fade",
+   "keywords": [],
+   "params": {
+    "approximate": false
+   }
+  },
+  {
+   "id": 5,
+   "start": 26.08,
+   "end": 35.05,
+   "meaning": "In an emergency help from Earth is not immediate, so the team must rely on its own knowledge, training and trust",
+   "concept": "distant Earth versus self-reliant crew",
+   "mood": "tense, dramatic",
+   "mode": "image-composite",
+   "pattern": "split_two",
+   "transition": "wipe",
+   "keywords": [
+    {
+     "text": "Trust",
+     "at": 33.5
+    }
+   ],
+   "params": {
+    "text": "Mutual trust",
+    "approximate": false
+   }
+  },
+  {
+   "id": 6,
+   "start": 35.05,
+   "end": 39.43,
+   "meaning": "Mental resilience, discipline and team spirit are extremely important",
+   "concept": "key virtues as typography",
+   "mood": "hopeful, energetic",
+   "mode": "typography",
+   "pattern": "quote_type",
+   "transition": "zoom-through",
+   "keywords": [
+    {
+     "text": "Resilience",
+     "at": 35.6
+    }
+   ],
+   "params": {
+    "text": "Resilience",
+    "text2": "Discipline, team spirit",
+    "mark": "Resilience",
+    "approximate": false
+   }
+  },
+  {
+   "id": 7,
+   "start": 39.43,
+   "end": 45.84,
+   "meaning": "Even so, Mars is humanity's next goal, first the Moon, then Mars",
+   "concept": "rocket heading from Moon toward Mars",
+   "mood": "hopeful, majestic",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "transition": "light-leak",
+   "keywords": [
+    {
+     "text": "Moon, then Mars",
+     "at": 42.0
+    }
+   ],
+   "params": {
+    "text": "First the Moon, then Mars",
+    "mark": "Mars",
+    "approximate": false
+   }
+  },
+  {
+   "id": 8,
+   "start": 45.84,
+   "end": 52.85,
+   "meaning": "Successful settlement on Mars would be a new chapter in human history",
+   "concept": "first Martian settlement at dawn",
+   "mood": "majestic, hopeful",
+   "mode": "image-composite",
+   "pattern": "hero_only",
+   "transition": "fade",
+   "keywords": [],
+   "params": {
+    "approximate": false
+   }
+  },
+  {
+   "id": 9,
+   "start": 52.85,
+   "end": 57.61,
+   "meaning": "The day humans become a multi-planet species will surely come",
+   "concept": "Earth and Mars together as two homes",
+   "mood": "majestic, hopeful",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "keywords": [
+    {
+     "text": "Multi-planet species",
+     "at": 53.6
+    }
+   ],
+   "params": {
+    "text": "A multi-planet species",
+    "mark": "multi-planet",
+    "approximate": false
+   }
+  }
+ ]
+}

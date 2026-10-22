@@ -1,0 +1,96 @@
+{
+ "duration": 57.611,
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 4.58,
+   "te": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి.",
+   "en": "These are not just physical challenges; the mental challenges are even greater."
+  },
+  {
+   "id": 1,
+   "start": 4.75,
+   "end": 13.41,
+   "te": "మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి",
+   "en": "Reaching Mars takes about eight months of travel, and during that time one must stay away from family, Earth, and everyday life."
+  },
+  {
+   "id": 2,
+   "start": 13.600000000000001,
+   "end": 17.1,
+   "te": "అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు",
+   "en": "Even after arriving there, communication with Earth is not instant."
+  },
+  {
+   "id": 3,
+   "start": 17.1,
+   "end": 19.42,
+   "te": "సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది",
+   "en": "Messages are delayed by several minutes."
+  },
+  {
+   "id": 4,
+   "start": 19.580000000000002,
+   "end": 22.240000000000002,
+   "te": "చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం",
+   "en": "A red desert all around, a silent atmosphere."
+  },
+  {
+   "id": 5,
+   "start": 22.5,
+   "end": 26.08,
+   "te": "పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి",
+   "en": "With only a limited number of people, all of this puts the mind to a severe test."
+  },
+  {
+   "id": 6,
+   "start": 26.08,
+   "end": 30.1,
+   "te": "ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు",
+   "en": "If an emergency arises, help from Earth will not arrive immediately."
+  },
+  {
+   "id": 7,
+   "start": 30.200000000000003,
+   "end": 34.900000000000006,
+   "te": "అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి",
+   "en": "The team there must make decisions using only their knowledge, training, and mutual trust."
+  },
+  {
+   "id": 8,
+   "start": 35.050000000000004,
+   "end": 39.730000000000004,
+   "te": "అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం",
+   "en": "That is why strong mental resilience, discipline, and team spirit are extremely important."
+  },
+  {
+   "id": 9,
+   "start": 39.730000000000004,
+   "end": 40.61000000000001,
+   "te": "అయినా కూడా",
+   "en": "Even so,"
+  },
+  {
+   "id": 10,
+   "start": 40.800000000000004,
+   "end": 47.720000000000006,
+   "te": "ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు అక్కడ మనిషి విజయవంతంగా స్థిరపడితే",
+   "en": "this is humanity's next goal. First the Moon, then Mars is our destination. One day, if humans settle there successfully,"
+  },
+  {
+   "id": 11,
+   "start": 47.900000000000006,
+   "end": 52.540000000000006,
+   "te": "అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం",
+   "en": "it will not be just a victory in space, but a new chapter in human history."
+  },
+  {
+   "id": 12,
+   "start": 52.85,
+   "end": 57.43,
+   "te": "ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+   "en": "The day when humans truly become a multi-planet species will surely come."
+  }
+ ]
+}

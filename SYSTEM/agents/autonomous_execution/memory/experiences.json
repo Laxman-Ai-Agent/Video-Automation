@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "agent_id": "autonomous_execution",
+  "updated_at": "2026-10-20T02:20:57.484633+00:00",
+  "total_experiences": 7,
+  "experiences": {
+    "exp-autonomous_execution-17b609714c": {
+      "experience_id": "exp-autonomous_execution-17b609714c",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792458906",
+      "project_id": "tmphpmbgsx6",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 9062.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'failed' in 9062.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from autonomous_execution on system",
+          "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from autonomous_execution on system",
+        "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:06.742550+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-19e3b4fb99": {
+      "experience_id": "exp-autonomous_execution-19e3b4fb99",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792462857",
+      "project_id": "tmpeu7tdwfn",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 10908.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'succeeded' in 10908.0ms.",
+        "takeaway": "Autonomous execution succeeded within retry and approval bounds.",
+        "performance": {
+          "duration_ms": 10908.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:57.477032+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-730a6e06f7": {
+      "experience_id": "exp-autonomous_execution-730a6e06f7",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792458825",
+      "project_id": "tmpa04zbr63",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 28816.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'failed' in 28816.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from autonomous_execution on system",
+          "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from autonomous_execution on system",
+        "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:45.266200+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-bc390d43ac": {
+      "experience_id": "exp-autonomous_execution-bc390d43ac",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792458267",
+      "project_id": "tmpnidtntn_",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 19706.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'failed' in 19706.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from autonomous_execution on system",
+          "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from autonomous_execution on system",
+        "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:27.879812+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-c31cf5606a": {
+      "experience_id": "exp-autonomous_execution-c31cf5606a",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792458635",
+      "project_id": "tmpaih_5lm6",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 20049.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'failed' in 20049.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from autonomous_execution on system",
+          "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from autonomous_execution on system",
+        "description": "Task 'system' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:35.785965+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-c9d629a82b": {
+      "experience_id": "exp-autonomous_execution-c9d629a82b",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792254403",
+      "project_id": "tmp4v19glb_",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 8534.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'succeeded' in 8534.0ms.",
+        "takeaway": "Autonomous execution succeeded within retry and approval bounds.",
+        "performance": {
+          "duration_ms": 8534.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:43.596142+00:00",
+      "schema_version": 1
+    },
+    "exp-autonomous_execution-dfc200bb57": {
+      "experience_id": "exp-autonomous_execution-dfc200bb57",
+      "agent_id": "autonomous_execution",
+      "task_type": "system",
+      "task_id": "req-1792381361",
+      "project_id": "tmp049rz7ui",
+      "context": {
+        "parameters": [
+          "task_spec",
+          "steps",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 6956.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'autonomous_execution' completed task 'system' with outcome 'succeeded' in 6956.0ms.",
+        "takeaway": "Autonomous execution succeeded within retry and approval bounds.",
+        "performance": {
+          "duration_ms": 6956.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.351573+00:00",
+      "schema_version": 1
+    }
+  }
+}

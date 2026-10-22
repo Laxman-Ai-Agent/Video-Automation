@@ -1,0 +1,1947 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-22T10:53:34.776072+00:00",
+  "skills": {
+    "audio.bilingual_preservation": {
+      "skill_id": "audio.bilingual_preservation",
+      "name": "Bilingual Telugu Script & Orthography Preservation",
+      "summary": "Principles for maintaining native Telugu vocabulary in Telugu script while retaining technical terms in English.",
+      "domain": "audio",
+      "tags": [
+        "audio",
+        "telugu",
+        "transcription",
+        "phonetics"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "audio/bilingual_preservation/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "085046c46c5f7e5585ed4415f1d92cf8939a3d619871011d9f88aeff8e0847e6",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "telugu-orthography",
+        "script-routing",
+        "technical-term-detection"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "audio_analyzer",
+        "visual_planning"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-16T04:19:34.472945+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-16T04:19:34.472945+00:00",
+      "created_at": "2026-10-16T04:19:34.472945+00:00",
+      "updated_at": "2026-10-16T04:19:34.472945+00:00",
+      "metadata": {}
+    },
+    "cinematic-lut-grader": {
+      "skill_id": "cinematic-lut-grader",
+      "name": "Cinematic LUT Grader",
+      "summary": "Category-managed skill for color_grading",
+      "domain": "color_grading",
+      "tags": [
+        "color_grading",
+        "general",
+        "cinematic-lut-grader"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "library/color_grading/cinematic-lut-grader/SKILL.md",
+      "status": "deprecated",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "75a56e0bcc9c625da25f8735ad00d2b8169cc0b64d264f8ea782ceb83cced6e2",
+      "license": "MIT",
+      "license_evidence": "",
+      "capabilities": [
+        "cinematic-lut-grader"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "render_video",
+        "final_qc",
+        "timeline_build"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-21T02:28:17.268476+00:00",
+        "evidence": "Passed automated validation and load tests with score 67.0/100"
+      },
+      "last_audited_at": "2026-10-21T02:28:17.268476+00:00",
+      "created_at": "2026-10-21T02:28:17.268476+00:00",
+      "updated_at": "2026-10-21T02:28:17.282141+00:00",
+      "metadata": {
+        "category": "color_grading",
+        "subcategory": null
+      }
+    },
+    "draft.skill": {
+      "skill_id": "draft.skill",
+      "name": "Draft Skill",
+      "summary": "Unreviewed draft",
+      "domain": "testing",
+      "tags": [],
+      "version": "1.0.0",
+      "entrypoint": "",
+      "status": "draft",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [],
+      "dependencies": [],
+      "compatible_agents": [],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": null,
+      "last_audited_at": "",
+      "created_at": "2026-10-16T14:51:43.229192+00:00",
+      "updated_at": "2026-10-16T14:51:43.229192+00:00",
+      "metadata": {}
+    },
+    "graphics.data_visualization": {
+      "skill_id": "graphics.data_visualization",
+      "name": "Dynamic Motion Data Visualization",
+      "summary": "Synthesizes parameterized, accessible motion graphics (bar charts, line graphs, donut charts, metric counters) with Remotion spring pacing.",
+      "domain": "graphics",
+      "tags": [
+        "graphics",
+        "charts",
+        "data",
+        "remotion",
+        "motion"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "graphics/data_visualization/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "335bb2eed1a7bc3f6dfc4b553eb1b8ba36e4e7ef882cb8683051b0440b5c64c9",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "data-visualization",
+        "bar-chart",
+        "line-chart",
+        "donut-chart",
+        "metric-counter",
+        "spring-pacing"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_generation",
+        "motion_architect"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {
+        "chart_type": {
+          "type": "string",
+          "options": [
+            "bar_chart",
+            "line_chart",
+            "donut_chart",
+            "metric_counter"
+          ]
+        }
+      },
+      "output_contracts": {
+        "svg_paths": "list",
+        "interpolations": "dict",
+        "clamped_bounds": "dict",
+        "legend": "list"
+      },
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_operator",
+        "timestamp": "2026-10-17T03:49:24.658645+00:00",
+        "evidence": "Domain-specific quality evaluation passed"
+      },
+      "last_audited_at": "2026-10-17T03:49:24.658645+00:00",
+      "created_at": "2026-10-17T03:49:24.658645+00:00",
+      "updated_at": "2026-10-17T03:49:24.665502+00:00",
+      "metadata": {
+        "supported_variants": [
+          "bar_chart",
+          "line_chart",
+          "donut_chart",
+          "metric_counter",
+          "bar",
+          "line",
+          "donut",
+          "counter"
+        ]
+      }
+    },
+    "idempotent-test-skill": {
+      "skill_id": "idempotent-test-skill",
+      "name": "Idempotent Skill",
+      "summary": "Tests that repeated installation reuses existing files.",
+      "domain": "transitions",
+      "tags": [
+        "transitions",
+        "general",
+        "idempotent-cut"
+      ],
+      "version": "1.1.0",
+      "entrypoint": "library/transitions/idempotent-test-skill/SKILL.md",
+      "status": "deprecated",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "c9308487aac3e66665c11c96d13c4ee475a8f8e9c3e26733544978b6e77369f5",
+      "license": "MIT",
+      "license_evidence": "",
+      "capabilities": [
+        "idempotent-cut"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_animation",
+        "motion_planning",
+        "timeline_build",
+        "main_orchestrator"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-21T02:28:17.172151+00:00",
+        "evidence": "Passed automated validation and load tests with score 67.0/100"
+      },
+      "last_audited_at": "2026-10-21T02:28:17.172151+00:00",
+      "created_at": "2026-10-21T02:28:17.176725+00:00",
+      "updated_at": "2026-10-21T02:28:17.191769+00:00",
+      "metadata": {
+        "category": "transitions",
+        "subcategory": null
+      }
+    },
+    "media.ffmpeg_operations": {
+      "skill_id": "media.ffmpeg_operations",
+      "name": "FFmpeg Media Probing, Sync Verification, and Stream Operations",
+      "summary": "Standardized FFmpeg operations for video/audio stream probing, duration sync verification, freeze-frame detection, and audio muxing.",
+      "domain": "rendering",
+      "tags": [
+        "ffmpeg",
+        "media",
+        "probing",
+        "qc",
+        "sync"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "rendering/ffmpeg_operations/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "57c67b582d668dd39ff9d5c0295e7455646dcdcf2d4016d974c32d3cacb3f659",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "stream-probing",
+        "audio-video-sync",
+        "freeze-frame-detection",
+        "audio-muxing",
+        "ffprobe-metadata"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "video_rendering",
+        "final_qc"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {
+        "media_path": "string",
+        "operation": {
+          "type": "string",
+          "options": [
+            "probe_streams",
+            "verify_sync",
+            "check_freeze_frames",
+            "mux_audio"
+          ]
+        }
+      },
+      "output_contracts": {
+        "is_valid": "bool",
+        "stream_metadata": "dict",
+        "sync_delta_ms": "float",
+        "diagnostics": "list"
+      },
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_operator",
+        "timestamp": "2026-10-17T03:49:24.658645+00:00",
+        "evidence": "Domain-specific quality evaluation passed"
+      },
+      "last_audited_at": "2026-10-17T03:49:24.658645+00:00",
+      "created_at": "2026-10-17T03:49:24.658645+00:00",
+      "updated_at": "2026-10-17T03:49:24.668344+00:00",
+      "metadata": {
+        "supported_variants": [
+          "probe_streams",
+          "verify_sync",
+          "check_freeze_frames",
+          "mux_audio"
+        ]
+      }
+    },
+    "media_probe": {
+      "skill_id": "media_probe",
+      "name": "Media Probe & Quality Verification",
+      "summary": "Performs deterministic video probing, codec verification, audio track analysis, and frame integrity checks using ffprobe.",
+      "domain": "qc",
+      "tags": [
+        "media",
+        "probe",
+        "qc",
+        "ffmpeg"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "media/media_probe/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "media-probing",
+        "audio-stream-verification",
+        "resolution-audit",
+        "freeze-frame-detection"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "final_qc",
+        "render_video",
+        "video_generator",
+        "architecture_validator"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-17T10:26:21.756197+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-17T10:26:21.756197+00:00",
+      "created_at": "2026-10-17T10:26:21.756197+00:00",
+      "updated_at": "2026-10-17T10:26:21.756197+00:00",
+      "metadata": {}
+    },
+    "motion.audio_visualizer": {
+      "skill_id": "motion.audio_visualizer",
+      "name": "Audio Visualizer (real, from the narration)",
+      "summary": "Real audio bars: const { audio } = useSceneData() (../sceneData); audioData = useAudioData(staticFile(audio)); bars = visualizeAudio({ audioData, frame: useAbsFrame(), fps, numberOfSamples: 32 }) (power of two, values 0..1: boost with pow(v,0.5)); mirrored gradient bars with a minimum height, behind or under the headline, never over text.",
+      "domain": "motion",
+      "tags": [
+        "audio",
+        "visualizer",
+        "waveform"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/audio_visualizer/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "8d95e2ac875d83a9d216bd6c970e7d0f10fc97e1235db774b2d3f077eabe0da0",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "audio-visualization"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.backgrounds_reveals_camera": {
+      "skill_id": "motion.backgrounds_reveals_camera",
+      "name": "Animated Backgrounds, Reveals & Camera Moves",
+      "summary": "Moving gradient (angle = 120 + frame*0.3) with 2 to 3 big radial blobs driven by noise2D; clipPath reveals (inset / circle / polygon) from interpolate(frame); slow push-in scale 1 to 1.06; 2D parallax layers (no perspective); glitch only 6 to 10 frames. No full-frame blur filters.",
+      "domain": "motion",
+      "tags": [
+        "background",
+        "reveal",
+        "camera",
+        "parallax"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/backgrounds_reveals_camera/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "dab097e56ccfc986e36b57543fde516ce9d39542cf4e81a93581a7faed516d6e",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "background",
+        "reveal",
+        "camera"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.captions_subtitles": {
+      "skill_id": "motion.captions_subtitles",
+      "name": "Captions & Word-Synced Emphasis",
+      "summary": "English captions: @remotion/captions createTikTokStyleCaptions({ captions: [{text,startMs,endMs,timestampMs:null,confidence:null}], combineTokensWithinMilliseconds }) -> pages with tokens {text,fromMs,toMs}; active token by (frame/fps)*1000. Spoken-word times: useSceneData().words (seconds, Telugu: timing only, never print) with useAbsFrame() from ../sceneContext. Telugu subtitles are the separate meta.subtitles layer.",
+      "domain": "motion",
+      "tags": [
+        "captions",
+        "subtitles",
+        "emphasis"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/captions_subtitles/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "3ff9281bffe1983d2f5beeb02119c354ccdcb38aed780e83880f54a133757d01",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "captions",
+        "word-sync"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.charts_nivo_echarts": {
+      "skill_id": "motion.charts_nivo_echarts",
+      "name": "Charts & Gauges (Nivo / ECharts SVG)",
+      "summary": "Charts: @nivo/bar|line|pie|radar|funnel|waffle|sankey|treemap|heatmap|chord with FIXED width/height (never Responsive*), animate={false}, theme text colours light, gradient fills via defs; values = target * spring/interpolate(frame). Gauges: echarts/core + GaugeChart + SVGRenderer, init(null,null,{renderer:'svg',ssr:true,width,height}), animation:false, renderToSVGString() in dangerouslySetInnerHTML.",
+      "domain": "motion",
+      "tags": [
+        "charts",
+        "nivo",
+        "echarts",
+        "data"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/charts_nivo_echarts/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "bar-chart",
+        "line-chart",
+        "gauge",
+        "sankey",
+        "treemap"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.design_kit": {
+      "skill_id": "motion.design_kit",
+      "name": "Professional Design Kit (palette, glass, gradients, depth)",
+      "summary": "Premium look: dark gradient background from @radix-ui/colors (slateDark/violetDark/cyanDark), glass cards (translucent gradient, 1px light border, soft shadow), gradient text, soft glow via drop-shadow, generous spacing, one accent pair per video, fontFamily FONT from ../fonts. Vary it: one hero element per scene, no identical card grids, mood from the subject, numbered markers only for real sequences. No canvas/WebGL/feTurbulence (slow on CPU).",
+      "domain": "motion",
+      "tags": [
+        "design",
+        "palette",
+        "glass",
+        "professional"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/design_kit/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "6077c65f19e8ba51a5dfdd8dfac13f4a44a08af9101d86cfb177f88afd5b77bb",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "palette",
+        "glassmorphism",
+        "gradients",
+        "depth"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.diagrams_layout": {
+      "skill_id": "motion.diagrams_layout",
+      "name": "Diagrams, Networks & Maps (precomputed layout)",
+      "summary": "Flowcharts: @dagrejs/dagre computes node positions, draw with SVG. Networks: d3-force run N ticks synchronously (simulation.tick(300)) then draw; trees/treemaps: d3-hierarchy. Maps: d3-geo + topojson-client + world-atlas projected to SVG paths, glow/gradient styling, reveal with frame-driven opacity/stroke. No live simulations, no tiles.",
+      "domain": "motion",
+      "tags": [
+        "diagram",
+        "d3-force",
+        "dagre",
+        "map"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/diagrams_layout/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "flowchart",
+        "network",
+        "map"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.hud_technical_overlays": {
+      "skill_id": "motion.hud_technical_overlays",
+      "name": "HUD & Technical Overlays",
+      "summary": "2D SVG HUD: corner brackets drawn with evolvePath, scan line translateY=(frame*6)%height, blueprint grid at 5 to 8% white, tick ring rotating with the frame, monospace readouts (fontStack(\"mono\") from ../fonts), target crosshair with spring. 30 to 60% opacity, no WebGL, no perspective.",
+      "domain": "motion",
+      "tags": [
+        "hud",
+        "technical",
+        "scan"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/hud_technical_overlays/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "13f4710ac4344db22d058ad533309764fd80c6b02b82d0198f94df0330c4b372",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "hud",
+        "overlay"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.icons_logos": {
+      "skill_id": "motion.icons_logos",
+      "name": "Icons, Logos & Flags",
+      "summary": "Icons: @phosphor-icons/react (weight=\"duotone\" or \"bold\", size, colour from the palette) or lucide-react; brand logos: simple-icons (import { siGithub } ... <path d={siGithub.path}/>, no OpenAI logo exists); flags: flag-icons SVG files. Put icons in glass chips with a soft glow; animate scale/opacity with spring(frame). Never load icons over the network.",
+      "domain": "motion",
+      "tags": [
+        "icons",
+        "phosphor",
+        "simple-icons",
+        "flags"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/icons_logos/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "icons",
+        "logos",
+        "flags"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.infographic_layouts": {
+      "skill_id": "motion.infographic_layouts",
+      "name": "Infographic Layouts (timeline, comparison, progress, table, lower third, callout)",
+      "summary": "Explainer layouts from SVG/DOM + spring: timeline (evolvePath line, staggered nodes), A-vs-B comparison (VS badge, bars), progress ring/bar with counting number, table rows revealing in turn, lower third (accent bar slides in), callout (leader line + label), before/after (clipPath inset wipe), split screen, title card. Max 3 to 4 items, the key number biggest, d3-scale for lengths.",
+      "domain": "motion",
+      "tags": [
+        "infographic",
+        "layout",
+        "explainer"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/infographic_layouts/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "dd9521f3a971978aac241292ac1740b6435299d54d491f6ff4bbb8b29d635fc5",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "timeline",
+        "comparison",
+        "progress",
+        "table",
+        "lower-third"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.kinetic_typography": {
+      "skill_id": "motion.kinetic_typography",
+      "name": "Kinetic Typography Specialist",
+      "summary": "Principles and constraints for Telugu narration kinetic typography layout, timing, and readability.",
+      "domain": "motion",
+      "tags": [
+        "typography",
+        "motion",
+        "telugu",
+        "timing"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/kinetic_typography/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "71979481783c0eab444deda81cac59d78695f255c3fe339d5a8c1f853f5e28e2",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "typography-layout",
+        "rhythm-matching",
+        "readability-optimization"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-16T04:19:34.472945+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-16T04:19:34.472945+00:00",
+      "created_at": "2026-10-16T04:19:34.472945+00:00",
+      "updated_at": "2026-10-16T04:19:34.472945+00:00",
+      "metadata": {}
+    },
+    "motion.lottie_overlays": {
+      "skill_id": "motion.lottie_overlays",
+      "name": "Lottie Animated Illustrations",
+      "summary": "@remotion/lottie <Lottie animationData={data} loop /> with a file from src/lottie (import data from \"../lottie/<file>.json\"; only files listed in src/lottie/manifest.json, never fetch); frame-driven by Remotion. External files need a licence record first; keep them under ~300 KB, SVG-based, no image assets.",
+      "domain": "motion",
+      "tags": [
+        "lottie",
+        "illustration",
+        "animation"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/lottie_overlays/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "04bed1d48c73e7952d0f3371a2615530acf82366bd7ad895c4b3f9c14549489a",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "lottie"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.maps_regions": {
+      "skill_id": "motion.maps_regions",
+      "name": "Regional Maps (US states, countries, nation outlines)",
+      "summary": "TopoJSON maps: us-atlas/states-10m.json (ids = 2-digit FIPS strings) with feature(us, us.objects.states), geoAlbersUsa().fitSize, geoPath; world-atlas/countries-110m.json (numeric ISO ids as strings). Dim glass fill, thin borders, accent gradient + glow on highlighted regions revealed by frame, label chip at pathOf.centroid. No tiles, no WebGL.",
+      "domain": "motion",
+      "tags": [
+        "map",
+        "us-atlas",
+        "regions"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/maps_regions/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "b2a08ba9b4b9c18df9c4734d3aa97558b50e33cb2ac9fba085ff2f549d4bcf46",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "us-map",
+        "regional-map"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.math_code_visuals": {
+      "skill_id": "motion.math_code_visuals",
+      "name": "Math Formulas & Code Visuals",
+      "summary": "Formulas: katex.renderToString(expr, { displayMode: true, throwOnError: false }) in dangerouslySetInnerHTML (stylesheet loaded globally, never import CSS in a scene). Code: prism-react-renderer <Highlight theme={themes.vsDark} code language=\"tsx\"> in a glass terminal card, fontStack(\"mono\"), typewriter = code.slice(0, floor(frame*1.5)), max ~12 lines.",
+      "domain": "motion",
+      "tags": [
+        "math",
+        "katex",
+        "code",
+        "terminal"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/math_code_visuals/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "6f72060b545e649a28b045b160bb433434de5cabbf49a4d52c84bd15568dec07",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "math",
+        "code"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.particles_ambient_effects": {
+      "skill_id": "motion.particles_ambient_effects",
+      "name": "Particles & Ambient Effects (seeded, CPU-friendly)",
+      "summary": "Ambient particles/glows: positions from random(\"p\"+i) (remotion) and noise2D (@remotion/noise) plus the frame, never Math.random/timers; at most ~60 SVG circles (1 to 4px, opacity 0.15 to 0.6), no per-particle blur, no canvas; behind the content, under 40% opacity.",
+      "domain": "motion",
+      "tags": [
+        "particles",
+        "noise",
+        "ambient"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/particles_ambient_effects/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "fcadf30175f77d97b9c227fa90087a3ec6ac8afc91ce26678a059010ba17d4e8",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "particles",
+        "ambient"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "motion.real_media": {
+      "skill_id": "motion.real_media",
+      "name": "Real Photos & Video Clips in Scenes",
+      "summary": "How to place a collected real photo or clip (an element with a real_media object) in a scene: <Img>/<OffthreadVideo muted> with staticFile(real_media.file), hero scrim or framed card, slow frame-driven push-in, mandatory real_media.credit chip, honest framing (never recolour, never imply it is generated).",
+      "domain": "motion",
+      "tags": [
+        "real-media",
+        "photo",
+        "video-clip",
+        "credit"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/real_media/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "7cf673dc1282492ac45ac5e58ea1136a6a1086ad85028b1851043284e4a4b044",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "real-media-placement",
+        "credit-chips",
+        "honest-framing"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-21T00:30:30.942908+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-21T00:30:30.942908+00:00",
+      "created_at": "2026-10-21T00:30:30.942908+00:00",
+      "updated_at": "2026-10-21T00:30:30.942908+00:00",
+      "metadata": {}
+    },
+    "motion.remotion_spring_curves": {
+      "skill_id": "motion.remotion_spring_curves",
+      "name": "Remotion Spring Physics & Curve Math",
+      "summary": "Standard spring curves, damping coefficients, and interpolation mechanics for smooth Remotion animations.",
+      "domain": "motion",
+      "tags": [
+        "remotion",
+        "spring",
+        "physics",
+        "interpolation"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/remotion_spring_curves/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "b1e92b2cc78b35f7eeeab9e2aa9e17b5f3417e5b9b04fb5b0150fde6e5c45c0c",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "spring-physics",
+        "interpolation-math",
+        "frame-clamping"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-16T04:19:34.472945+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-16T04:19:34.472945+00:00",
+      "created_at": "2026-10-16T04:19:34.472945+00:00",
+      "updated_at": "2026-10-16T04:19:34.472945+00:00",
+      "metadata": {}
+    },
+    "motion.svg_morph_paths": {
+      "skill_id": "motion.svg_morph_paths",
+      "name": "SVG Morphing & Path Drawing",
+      "summary": "Shape morph: flubber interpolate(fromPath, toPath, { maxSegmentLength: 8 })(t) with t = interpolate(frame,...); draw-on lines: @remotion/paths evolvePath(progress, path) for strokeDasharray/offset; gradient strokes via <linearGradient>. Deterministic: derive everything from the frame.",
+      "domain": "motion",
+      "tags": [
+        "svg",
+        "flubber",
+        "paths",
+        "animation"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/svg_morph_paths/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "morphing",
+        "path-draw"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T15:06:43.082139+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T15:06:43.082139+00:00",
+      "created_at": "2026-10-20T15:06:43.082139+00:00",
+      "updated_at": "2026-10-20T15:06:43.082139+00:00",
+      "metadata": {}
+    },
+    "motion.transitions_scene_effects": {
+      "skill_id": "motion.transitions_scene_effects",
+      "name": "In-Scene Transitions (DOM-only) and Scene Hand-off",
+      "summary": "Scene-to-scene transitions belong to the pipeline; a scene needs a clean entrance (10 frames) and exit (8 to 12 frames). Inside a scene use TransitionSeries with ONLY fade/slide/wipe/flip/iris/clock-wipe from @remotion/transitions/<name>. FORBIDDEN (WebGL, audit rejects): @remotion/light-leaks, blurSlide, crossZoom, dreamyZoom, filmBurn, linearBlur and similar; fake a light leak with a frame-driven radial gradient.",
+      "domain": "motion",
+      "tags": [
+        "transitions",
+        "dom-only"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "motion/transitions_scene_effects/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "0bcbdb35693c97611f49137ca59c655a67c3eb932863056ae1394789fb8b39c1",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "transitions"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_animation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-20T16:45:54.214172+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-20T16:45:54.214172+00:00",
+      "created_at": "2026-10-20T16:45:54.214172+00:00",
+      "updated_at": "2026-10-20T16:45:54.214172+00:00",
+      "metadata": {}
+    },
+    "remotion-animated-bar-chart": {
+      "skill_id": "remotion-animated-bar-chart",
+      "name": "Remotion Animated Bar Chart",
+      "summary": "Parametric animated bar chart with Remotion spring easing, D3 scales, and customizable color schemes.",
+      "domain": "charts",
+      "tags": [
+        "charts",
+        "bar_charts",
+        "dynamic-bar-chart",
+        "bar-chart-animator",
+        "data-visualization"
+      ],
+      "version": "1.2.0",
+      "entrypoint": "library/charts/remotion-animated-bar-chart/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "64b2005b071021f82f6249dbfd8f55d4dae0fcf3734c5228c33c24a980f0d82e",
+      "license": "MIT",
+      "license_evidence": "",
+      "capabilities": [
+        "dynamic-bar-chart",
+        "bar-chart-animator",
+        "data-visualization"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "visual_planning",
+        "motion_animation",
+        "timeline_build"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-18T05:42:46.564676+00:00",
+        "evidence": "Passed automated validation and load tests with score 87.0/100"
+      },
+      "last_audited_at": "2026-10-18T05:42:46.564676+00:00",
+      "created_at": "2026-10-18T05:42:46.565731+00:00",
+      "updated_at": "2026-10-18T05:42:46.565731+00:00",
+      "metadata": {
+        "category": "charts",
+        "subcategory": "bar_charts"
+      }
+    },
+    "remotion.captions": {
+      "skill_id": "remotion.captions",
+      "name": "Official Remotion Captions",
+      "summary": "Official Remotion guidance for displaying and animating captions with @remotion/captions (Caption type, TikTok-style pages, SRT import); transcription stays in the frozen Stage 2.",
+      "domain": "remotion",
+      "tags": [
+        "remotion",
+        "official",
+        "captions"
+      ],
+      "version": "4.0.537",
+      "entrypoint": "remotion/captions/SKILL.md",
+      "status": "review_required",
+      "source": "remote",
+      "repository_url": "https://github.com/remotion-dev/skills",
+      "commit_sha": "039e8a2fc78b67efc228d5645367838b85818a1c",
+      "content_sha256": "b21b90e87ffb2566502fe623693f3bc3be152c3c956f89c5f42170561838388b",
+      "license": "Remotion License (https://www.remotion.dev/license); repo ships no LICENSE file",
+      "license_evidence": "Official Remotion Agent Skills; copied with a project override block. Needs operator review (Laxman approval) before status approved.",
+      "capabilities": [
+        "captions-display",
+        "srt-import"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_animation",
+        "motion_planning"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": null,
+      "last_audited_at": "2026-10-20T17:18:57.090851+00:00",
+      "created_at": "2026-10-20T17:18:57.110694+00:00",
+      "updated_at": "2026-10-20T17:18:57.110694+00:00",
+      "metadata": {
+        "audit": {
+          "passed": true,
+          "risk_level": "low",
+          "findings": [],
+          "quarantine_required": false,
+          "ast_checked": true,
+          "audited_at": "2026-10-20T17:18:57.110694+00:00",
+          "filename": "SKILL.md",
+          "diagnostics": {
+            "typescript_audit": {
+              "passed": true,
+              "risk_level": "low",
+              "findings": [],
+              "quarantine_required": false,
+              "is_remotion_component": true,
+              "prop_contract_detected": false,
+              "animation_primitives_found": [],
+              "diagnostics": {
+                "blocks_count": 2,
+                "has_remotion_import": false
+              }
+            }
+          }
+        },
+        "excluded_files": [
+          "voiceover.md",
+          "3d.md",
+          "html-in-canvas.md",
+          "light-leaks.md",
+          "google-fonts.md",
+          "motion-blur.md",
+          "transcribe-captions.md"
+        ]
+      }
+    },
+    "remotion.markup": {
+      "skill_id": "remotion.markup",
+      "name": "Official Remotion Markup Best Practices",
+      "summary": "Official Remotion guidance for compositions, timing (interpolate/spring/Sequence), layout, text measuring, fonts, audio, transitions, lottie, with a project override block (no 3D/WebGL/canvas, self-hosted fonts, no paid services).",
+      "domain": "remotion",
+      "tags": [
+        "remotion",
+        "official",
+        "markup",
+        "timing"
+      ],
+      "version": "4.0.537",
+      "entrypoint": "remotion/markup/SKILL.md",
+      "status": "review_required",
+      "source": "remote",
+      "repository_url": "https://github.com/remotion-dev/skills",
+      "commit_sha": "039e8a2fc78b67efc228d5645367838b85818a1c",
+      "content_sha256": "ae865554206386f38e51ebf0acba34c5319658c2a521d436786cb694d472b6ad",
+      "license": "Remotion License (https://www.remotion.dev/license); repo ships no LICENSE file",
+      "license_evidence": "Official Remotion Agent Skills; copied with a project override block. Needs operator review (Laxman approval) before status approved.",
+      "capabilities": [
+        "remotion-markup",
+        "timing",
+        "sequencing",
+        "text-measuring"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_animation",
+        "motion_planning"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": null,
+      "last_audited_at": "2026-10-20T17:18:57.090851+00:00",
+      "created_at": "2026-10-20T17:18:57.098173+00:00",
+      "updated_at": "2026-10-20T17:18:57.098173+00:00",
+      "metadata": {
+        "audit": {
+          "passed": true,
+          "risk_level": "low",
+          "findings": [],
+          "quarantine_required": false,
+          "ast_checked": true,
+          "audited_at": "2026-10-20T17:18:57.098173+00:00",
+          "filename": "SKILL.md",
+          "diagnostics": {
+            "typescript_audit": {
+              "passed": true,
+              "risk_level": "low",
+              "findings": [],
+              "quarantine_required": false,
+              "is_remotion_component": true,
+              "prop_contract_detected": false,
+              "animation_primitives_found": [
+                "Audio",
+                "Video",
+                "staticFile",
+                "useCurrentFrame",
+                "spring",
+                "useVideoConfig",
+                "interpolate"
+              ],
+              "diagnostics": {
+                "blocks_count": 3,
+                "has_remotion_import": true
+              }
+            }
+          }
+        },
+        "excluded_files": [
+          "voiceover.md",
+          "3d.md",
+          "html-in-canvas.md",
+          "light-leaks.md",
+          "google-fonts.md",
+          "motion-blur.md",
+          "transcribe-captions.md"
+        ]
+      }
+    },
+    "staged.remote_skill": {
+      "skill_id": "staged.remote_skill",
+      "name": "Remote Candidate",
+      "summary": "External candidate under quarantine",
+      "domain": "external",
+      "tags": [],
+      "version": "0.1.0",
+      "entrypoint": "staging/remote_skill.md",
+      "status": "quarantined",
+      "source": "remote",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "9746caccbaaa581c8815a76dbd4149bf086408f1b29d988e6ab5c2cffe538f65",
+      "license": "MIT",
+      "license_evidence": "",
+      "capabilities": [],
+      "dependencies": [],
+      "compatible_agents": [],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": null,
+      "last_audited_at": "",
+      "created_at": "2026-10-16T14:51:43.587123+00:00",
+      "updated_at": "2026-10-16T14:51:43.587123+00:00",
+      "metadata": {
+        "audit": {
+          "passed": true,
+          "risk_level": "low",
+          "findings": [],
+          "audited_at": "2026-10-16T14:51:43.562987+00:00",
+          "filename": "remote_skill.md"
+        }
+      }
+    },
+    "test.checksum": {
+      "skill_id": "test.checksum",
+      "name": "Checksum Test",
+      "summary": "Test checksum validation",
+      "domain": "testing",
+      "tags": [],
+      "version": "1.0.0",
+      "entrypoint": "test_check.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "ff792a8ea03fcf57bc02814f461b6ab7bff27b01ee7b22a621e7a7d6d52a1790",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [],
+      "dependencies": [],
+      "compatible_agents": [],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": null,
+      "last_audited_at": "",
+      "created_at": "2026-10-16T14:52:42.320206+00:00",
+      "updated_at": "2026-10-16T14:52:42.320206+00:00",
+      "metadata": {}
+    },
+    "test.skill": {
+      "skill_id": "test.skill",
+      "name": "Test Skill",
+      "summary": "A test skill",
+      "domain": "testing",
+      "tags": [],
+      "version": "1.0.0",
+      "entrypoint": "",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [],
+      "dependencies": [],
+      "compatible_agents": [],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_engineer",
+        "timestamp": "2026-10-16T14:51:43.050482+00:00",
+        "evidence": "Manual code review and unit tests passed"
+      },
+      "last_audited_at": "2026-10-16T14:51:43.050482+00:00",
+      "created_at": "2026-10-16T14:51:43.042013+00:00",
+      "updated_at": "2026-10-16T14:51:43.050482+00:00",
+      "metadata": {}
+    },
+    "timeline.composition_assembly": {
+      "skill_id": "timeline.composition_assembly",
+      "name": "Multi-Track Timeline Composition and Frame Alignment",
+      "summary": "Mathematical frame alignment, audio-locked timeline assembly, transition scheduling, and gap/overlap prevention at 30 fps.",
+      "domain": "timeline",
+      "tags": [
+        "timeline",
+        "assembly",
+        "framerate",
+        "transitions",
+        "remotion"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "timeline/composition_assembly/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "27100772bd6cc0a09dbdeb48cebbd129410e45dc684b36870022f01ca28f92b2",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "timeline-assembly",
+        "frame-alignment",
+        "transition-scheduling",
+        "audio-locked-duration",
+        "gap-overlap-prevention"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "timeline_assembly",
+        "timeline_approval_gatekeeper"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {
+        "scenes": "list",
+        "audio_duration_seconds": "float",
+        "fps": "integer"
+      },
+      "output_contracts": {
+        "total_frames": "integer",
+        "scene_tracks": "list",
+        "transition_windows": "list",
+        "is_duration_locked": "bool"
+      },
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_operator",
+        "timestamp": "2026-10-17T03:49:24.658645+00:00",
+        "evidence": "Domain-specific quality evaluation passed"
+      },
+      "last_audited_at": "2026-10-17T03:49:24.658645+00:00",
+      "created_at": "2026-10-17T03:49:24.658645+00:00",
+      "updated_at": "2026-10-17T03:49:24.675343+00:00",
+      "metadata": {
+        "supported_variants": [
+          "cut",
+          "crossfade",
+          "wipe",
+          "slide"
+        ]
+      }
+    },
+    "typography.telugu_rendering": {
+      "skill_id": "typography.telugu_rendering",
+      "name": "Telugu Typography and Caption Layout Engine",
+      "summary": "Ensures Unicode stability, font glyph compatibility, rhythmic line breaking, and safe-zone placement for Telugu video captions.",
+      "domain": "transcript",
+      "tags": [
+        "telugu",
+        "typography",
+        "captions",
+        "subtitles",
+        "unicode"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "transcript/telugu_rendering/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "34c0c1b1bb00d5fcf59e40870992a28af5a4cea962e57d32efd2ff49dbb70a48",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "telugu-unicode-shaping",
+        "caption-line-breaking",
+        "safe-zone-captioning",
+        "noto-sans-telugu-config"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "audio_analyzer",
+        "kinetic_typography",
+        "timeline_assembly"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {
+        "telugu_text": "string",
+        "font_family": "string",
+        "aspect_ratio": "string"
+      },
+      "output_contracts": {
+        "formatted_lines": "list",
+        "font_config": "dict",
+        "safe_bounds": "dict"
+      },
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_operator",
+        "timestamp": "2026-10-17T03:49:24.658645+00:00",
+        "evidence": "Domain-specific quality evaluation passed"
+      },
+      "last_audited_at": "2026-10-17T03:49:24.658645+00:00",
+      "created_at": "2026-10-17T03:49:24.658645+00:00",
+      "updated_at": "2026-10-17T03:49:24.671451+00:00",
+      "metadata": {
+        "supported_variants": [
+          "9:16",
+          "16:9",
+          "headline",
+          "subtitle"
+        ]
+      }
+    },
+    "validation.layout_safe_zones": {
+      "skill_id": "validation.layout_safe_zones",
+      "name": "Layout Safe Zones & Collision Guard",
+      "summary": "Deterministic boundary checks and safe zone enforcement for 9:16 and 16:9 Remotion compositions.",
+      "domain": "validation",
+      "tags": [
+        "validation",
+        "safe-zone",
+        "bounds",
+        "collision"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "validation/layout_safe_zones/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "18963d2057d45e86c18310e1af98d46ef804bebe5f2bf07621954dcecc93a18c",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "safe-zone-validation",
+        "collision-detection",
+        "bounding-box-audit"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_planning",
+        "motion_timeline_validation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "system_bootstrap",
+        "timestamp": "2026-10-16T04:19:34.472945+00:00",
+        "evidence": "Canonical core skill verification suite"
+      },
+      "last_audited_at": "2026-10-16T04:19:34.472945+00:00",
+      "created_at": "2026-10-16T04:19:34.472945+00:00",
+      "updated_at": "2026-10-16T04:19:34.472945+00:00",
+      "metadata": {}
+    },
+    "visual-cinematic-composition": {
+      "skill_id": "visual-cinematic-composition",
+      "name": "Cinematic Composition and Depth Layering",
+      "summary": "Enforces 3-plane depth layering (foreground, midground, background), rule-of-thirds focal point placement, safe area margin compliance, and eye-flow direction.",
+      "domain": "layouts",
+      "tags": [
+        "layouts",
+        "general",
+        "cinematic-composition",
+        "depth-layering",
+        "visual-hierarchy",
+        "safe-area-governance"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "library/layouts/visual-cinematic-composition/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [
+        "cinematic-composition",
+        "depth-layering",
+        "visual-hierarchy",
+        "safe-area-governance"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "visual_planning",
+        "motion_planning",
+        "timeline_build",
+        "motion_validation"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-19T00:37:21.869011+00:00",
+        "evidence": "Passed automated validation and load tests with score 72.0/100"
+      },
+      "last_audited_at": "2026-10-19T00:37:21.869011+00:00",
+      "created_at": "2026-10-19T00:37:21.869011+00:00",
+      "updated_at": "2026-10-19T00:37:21.869011+00:00",
+      "metadata": {
+        "category": "layouts",
+        "subcategory": null
+      }
+    },
+    "visual-narrative-semantic-mapping": {
+      "skill_id": "visual-narrative-semantic-mapping",
+      "name": "Narrative-to-Visual Semantic Metaphor Mapping",
+      "summary": "Translates spoken narrative concepts into concrete visual entities, eliminating generic placeholder graphics.",
+      "domain": "science_visuals",
+      "tags": [
+        "science_visuals",
+        "general",
+        "narrative-semantic-mapping",
+        "metaphor-selection",
+        "concrete-visual-grounding"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "library/science_visuals/visual-narrative-semantic-mapping/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [
+        "narrative-semantic-mapping",
+        "metaphor-selection",
+        "concrete-visual-grounding"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "visual_planning",
+        "motion_animation",
+        "timeline_build"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-19T00:37:21.894082+00:00",
+        "evidence": "Passed automated validation and load tests with score 72.0/100"
+      },
+      "last_audited_at": "2026-10-19T00:37:21.894082+00:00",
+      "created_at": "2026-10-19T00:37:21.894635+00:00",
+      "updated_at": "2026-10-19T00:37:21.894635+00:00",
+      "metadata": {
+        "category": "science_visuals",
+        "subcategory": null
+      }
+    },
+    "visual-scene-variety-pacing": {
+      "skill_id": "visual-scene-variety-pacing",
+      "name": "Scene Variety and Pacing Rhythm Governance",
+      "summary": "Enforces visual variety across adjacent scenes, prevents visual fatigue, and alternates layouts.",
+      "domain": "video_editing",
+      "tags": [
+        "video_editing",
+        "general",
+        "scene-variety-enforcement",
+        "visual-fatigue-prevention",
+        "pacing-rhythm-control"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "library/video_editing/visual-scene-variety-pacing/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [
+        "scene-variety-enforcement",
+        "visual-fatigue-prevention",
+        "pacing-rhythm-control"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "main_orchestrator",
+        "scene_segmentation",
+        "timeline_build",
+        "final_qc"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-19T00:37:21.969351+00:00",
+        "evidence": "Passed automated validation and load tests with score 72.0/100"
+      },
+      "last_audited_at": "2026-10-19T00:37:21.969351+00:00",
+      "created_at": "2026-10-19T00:37:21.969351+00:00",
+      "updated_at": "2026-10-19T00:37:21.969351+00:00",
+      "metadata": {
+        "category": "video_editing",
+        "subcategory": null
+      }
+    },
+    "visual-word-semantic-animation": {
+      "skill_id": "visual-word-semantic-animation",
+      "name": "Word-Level Semantic Visual Animation",
+      "summary": "Coordinates multiple word-level semantic animation events within each scene using word-level alignment.",
+      "domain": "motion_animation",
+      "tags": [
+        "motion_animation",
+        "general",
+        "word-level-semantic-animation",
+        "temporal-event-coordination",
+        "narration-visual-synchronization"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "library/motion_animation/visual-word-semantic-animation/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+      "license": "Apache-2.0",
+      "license_evidence": "",
+      "capabilities": [
+        "word-level-semantic-animation",
+        "temporal-event-coordination",
+        "narration-visual-synchronization"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "motion_animation",
+        "motion_planning",
+        "motion_template_selection",
+        "timeline_build"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {},
+      "output_contracts": {},
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "category_skill_library_installer",
+        "timestamp": "2026-10-19T00:37:21.932339+00:00",
+        "evidence": "Passed automated validation and load tests with score 72.0/100"
+      },
+      "last_audited_at": "2026-10-19T00:37:21.932339+00:00",
+      "created_at": "2026-10-19T00:37:21.932832+00:00",
+      "updated_at": "2026-10-19T00:37:21.932832+00:00",
+      "metadata": {
+        "category": "motion_animation",
+        "subcategory": null
+      }
+    },
+    "visual.scene_planning": {
+      "skill_id": "visual.scene_planning",
+      "name": "Visual Scene Planning and Concept Breakdown",
+      "summary": "Transforms segmented narration into structured semantic visual concepts, element hierarchies, and mode-aware layouts.",
+      "domain": "visual_planning",
+      "tags": [
+        "visual_planning",
+        "concept",
+        "hierarchy",
+        "elements",
+        "layout"
+      ],
+      "version": "1.0.0",
+      "entrypoint": "visual_planning/scene_planning/SKILL.md",
+      "status": "approved",
+      "source": "local",
+      "repository_url": null,
+      "commit_sha": null,
+      "content_sha256": "a4de8a2208b85ac832d08a6fd51b45a18185e12bd5e028b868fa8978204a4192",
+      "license": "Apache-2.0",
+      "license_evidence": "Authored internally for Dark World Video Generation Agent.",
+      "capabilities": [
+        "scene-concept-generation",
+        "element-hierarchy-planning",
+        "mode-aware-layout",
+        "visual-objective-mapping"
+      ],
+      "dependencies": [],
+      "compatible_agents": [
+        "visual_concept",
+        "motion_architect"
+      ],
+      "compatible_project_modes": [
+        "motion_only"
+      ],
+      "input_contracts": {
+        "scene_id": "string",
+        "narration_text": "string",
+        "duration_seconds": "float",
+        "aspect_ratio": "string"
+      },
+      "output_contracts": {
+        "visual_concept": "string",
+        "scene_objective": "string",
+        "elements": "list",
+        "hierarchy": "dict",
+        "layout_mode": "string"
+      },
+      "risk_level": "low",
+      "approval": {
+        "reviewer": "lead_operator",
+        "timestamp": "2026-10-17T03:49:24.658645+00:00",
+        "evidence": "Domain-specific quality evaluation passed"
+      },
+      "last_audited_at": "2026-10-17T03:49:24.658645+00:00",
+      "created_at": "2026-10-17T03:49:24.658645+00:00",
+      "updated_at": "2026-10-17T03:49:24.663046+00:00",
+      "metadata": {
+        "supported_variants": [
+          "centered_headline",
+          "split_metric",
+          "diagrammatic"
+        ]
+      }
+    }
+  }
+}

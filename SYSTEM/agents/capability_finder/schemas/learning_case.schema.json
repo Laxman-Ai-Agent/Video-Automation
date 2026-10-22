@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LearningCase",
+  "type": "object",
+  "required": [
+    "case_id",
+    "schema_version",
+    "agent_id",
+    "timestamp",
+    "query",
+    "decision_recommendation"
+  ],
+  "properties": {
+    "case_id": {
+      "type": "string",
+      "pattern": "^lcase_[a-f0-9]+$"
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "task_id": {
+      "type": "string"
+    },
+    "correlation_id": {
+      "type": "string"
+    },
+    "agent_id": {
+      "type": "string",
+      "const": "capability_finder"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "query": {
+      "type": "string"
+    },
+    "parsed_requirement": {
+      "type": "object"
+    },
+    "candidates_considered": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "decision_recommendation": {
+      "type": "string",
+      "enum": ["REUSE", "ADAPT", "CREATE_SKILL", "CREATE_AGENT"]
+    },
+    "suggested_delegate_id": {
+      "type": ["string", "null"]
+    },
+    "constraints": {
+      "type": "object"
+    },
+    "evidence_refs": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "actual_outcome": {
+      "type": "string",
+      "enum": ["succeeded", "failed", "inconclusive", "pending"]
+    },
+    "outcome_detail": {
+      "type": ["string", "null"]
+    },
+    "verification_status": {
+      "type": "string",
+      "enum": ["passed", "failed", "unverified", "inconclusive"]
+    },
+    "reviewer_feedback": {
+      "type": "array",
+      "items": { "type": "object" }
+    },
+    "applied_knowledge_version": {
+      "type": "string"
+    },
+    "failure_category": {
+      "type": ["string", "null"]
+    },
+    "is_redacted": {
+      "type": "boolean"
+    }
+  },
+  "additionalProperties": false
+}

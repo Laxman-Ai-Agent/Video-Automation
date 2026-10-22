@@ -1,0 +1,26 @@
+{
+ "id": "20261015-113330-a25f",
+ "kind": "import",
+ "state": "done",
+ "started_at": "2026-10-15T11:33:30",
+ "finished_at": "2026-10-15T11:33:30",
+ "progress": [
+  "11:33:30 fetching 1/1 sparkles.svg",
+  "11:33:30 moving the files in",
+  "11:33:30 writing the registry"
+ ],
+ "result": {
+  "audit_id": "20261015-113321-c50024",
+  "imported": [
+   "icon.tabler.sparkles"
+  ],
+  "status": "imported",
+  "bundle_resources": 55,
+  "staged_fonts": [
+   "HindGuntur-Regular.ttf",
+   "HindGuntur-Bold.ttf"
+  ],
+  "note": "imported, NOT verified: run Verify to render them"
+ },
+ "error": null
+}

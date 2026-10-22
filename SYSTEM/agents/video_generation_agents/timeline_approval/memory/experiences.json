@@ -1,0 +1,645 @@
+{
+  "schema_version": 1,
+  "agent_id": "timeline_approval",
+  "updated_at": "2026-10-20T05:55:15.282152+00:00",
+  "total_experiences": 18,
+  "experiences": {
+    "exp-timeline_approval-10e87d0dbb": {
+      "experience_id": "exp-timeline_approval-10e87d0dbb",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792458669",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1555.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 1555.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 1555.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:11:09.875652+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-2298021af8": {
+      "experience_id": "exp-timeline_approval-2298021af8",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792458309",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1426.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 1426.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 1426.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:05:09.338590+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-2a085d0eef": {
+      "experience_id": "exp-timeline_approval-2a085d0eef",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792458921",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1328.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 1328.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 1328.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:21.028206+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-4770d31a16": {
+      "experience_id": "exp-timeline_approval-4770d31a16",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792254418",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 176.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 176.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:58.057727+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-47df9b475f": {
+      "experience_id": "exp-timeline_approval-47df9b475f",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792299413",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 47.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 47.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T04:56:53.853900+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-48f0341935": {
+      "experience_id": "exp-timeline_approval-48f0341935",
+      "agent_id": "timeline_approval",
+      "task_type": "timeline_approval",
+      "task_id": "task-6efcb12601",
+      "project_id": "proj_appr_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "fingerprint_short": "fp_valid_123",
+        "scenes_count": 2,
+        "llm_pacing_score": 88,
+        "risk_level": "medium"
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:49:45.546342+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-5773df43ce": {
+      "experience_id": "exp-timeline_approval-5773df43ce",
+      "agent_id": "timeline_approval",
+      "task_type": "timeline_approval",
+      "task_id": "task-45d8b0b359",
+      "project_id": "proj_appr_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "fingerprint_short": "fp_valid_123",
+        "scenes_count": 2,
+        "llm_pacing_score": 88,
+        "risk_level": "medium"
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:36:10.174937+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-64d6dc9b4d": {
+      "experience_id": "exp-timeline_approval-64d6dc9b4d",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792254418",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 98.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 98.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:58.810126+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-70d8631b2e": {
+      "experience_id": "exp-timeline_approval-70d8631b2e",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792299413",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 55.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 55.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T04:56:53.546786+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-7f787c44e2": {
+      "experience_id": "exp-timeline_approval-7f787c44e2",
+      "agent_id": "timeline_approval",
+      "task_type": "timeline_approval",
+      "task_id": "task-0f3d4df3d2",
+      "project_id": "proj_appr_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "fingerprint_short": "fp_valid_123",
+        "scenes_count": 2,
+        "llm_pacing_score": 88,
+        "risk_level": "medium"
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:33:45.524427+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-84a6f37ee8": {
+      "experience_id": "exp-timeline_approval-84a6f37ee8",
+      "agent_id": "timeline_approval",
+      "task_type": "recovery_approval",
+      "task_id": "run_7eb20038",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "approval",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_7eb20038",
+            "agent_id": "timeline_approval",
+            "stage_id": "approval",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "a job is running for this project: decide after it finishes",
+            "timestamp": "2026-10-20T05:55:15.228425+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_approval",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for approval resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:55:15.253683+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-9a9cea1534": {
+      "experience_id": "exp-timeline_approval-9a9cea1534",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792462868",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 115.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 115.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 115.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:08.046357+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-a5fad2a44b": {
+      "experience_id": "exp-timeline_approval-a5fad2a44b",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792299413",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 86.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 86.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T04:56:53.262440+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-ab8f54a2e7": {
+      "experience_id": "exp-timeline_approval-ab8f54a2e7",
+      "agent_id": "timeline_approval",
+      "task_type": "recovery_approval",
+      "task_id": "run_8974ef0b",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "approval",
+        "attempt": 2,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_8974ef0b",
+            "agent_id": "timeline_approval",
+            "stage_id": "approval",
+            "category": "VALIDATION",
+            "code": "contract_validation_error",
+            "message": "the LLM approval review did not pass (blocked, score 0.55): The frame math is sound. Six contiguous scenes sum to exactly 980 frames (0-158-309-509-690-834-980) at 30 fps, and every scene boundary, gap and transition window recomputes correctly from the source seconds. All five gap intervals use hold_previous_scene, so playback stays continuous. All five transitions are supported and apply 13 fram; blocker: checks.failed=1 (passed 179/180), but the findings list contains only the audio.tail_quantization warning, which is counted separately as checks.warnings=1, and summary.errors=0 / blockers=0. One failed check has no finding_id, rule_id, owner_stage or evidence, so its severity and scope cannot be assessed. Under the 'valid in every respect' approval policy this alone prevents approval. Re-run validation and either surface the failed rule as a finding or reconcile the counters.; warning: The latest decision is 'withdrawn' by llm:policy for timeline_fingerprint 16114d307f8f0b68, with 3 history records. The payload gives no current fingerprint, so it cannot be confirmed that the timeline under review differs from the withdrawn one or that the cause of the withdrawal was fixed. Include the current fingerprint and the withdrawal reason in the next submission.; warning: audio.tail_quantization: 980 frames = 32.667 s against 32.679 s of audio, so 0.012 s of tail (less than one 0.0333 s frame) is truncated. This is within the one-frame tolerance and permitted by policy, and the tail falls in the post-narration silence (narration ends 32.62 s). However, warning_acknowledgements is empty, so the warning is disclosed but not formally acknowledged.; warning: Every timeline scene reports layers_count=1 (6 layers total), while the motion plan specifies 1-2 text elements and 3 graphics per scene; scene_002 (quote_type) has 2 texts. This may be valid if each scene clip is a pre-composited motion_only render. However, nothing in the timeline evidence confirms that the planned kinetic typography and graphics are bound inside each clip. Confirm per-scene element binding.",
+            "timestamp": "2026-10-20T05:43:22.011025+00:00",
+            "recovery_permitted": false,
+            "attempt": 2,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_approval",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Deterministic VALIDATION error cannot succeed by retrying without input changes.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "VALIDATION",
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for approval resulted in failed on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:43:22.311610+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-d3b734d2ae": {
+      "experience_id": "exp-timeline_approval-d3b734d2ae",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792254418",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "needs_review",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 153.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'needs_review' in 153.0ms.",
+        "error": "the approval record cannot be read (malformed): rendering stays blocked",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "proposed_lesson": {
+          "title": "Lesson from timeline_approval on approval",
+          "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+          "affected_domain": "approval",
+          "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from timeline_approval on approval",
+        "description": "Task 'approval' failed with runtime_error: the approval record cannot be read (malformed): rendering stays blocked.",
+        "affected_domain": "approval",
+        "observed_pattern": "the approval record cannot be read (malformed): rendering stays blocked",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:58.429946+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-dc60a270ec": {
+      "experience_id": "exp-timeline_approval-dc60a270ec",
+      "agent_id": "timeline_approval",
+      "task_type": "timeline_approval",
+      "task_id": "task-faaf1dcf09",
+      "project_id": "test_proj_001",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "fingerprint_short": "tl_fp_valid_",
+        "scenes_count": 0,
+        "llm_pacing_score": 88,
+        "risk_level": "low"
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:44.372161+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-dcc79a522e": {
+      "experience_id": "exp-timeline_approval-dcc79a522e",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1792458840",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 56.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 56.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 56.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:00.330148+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-e76065abea": {
+      "experience_id": "exp-timeline_approval-e76065abea",
+      "agent_id": "timeline_approval",
+      "task_type": "timeline_approval",
+      "task_id": "task-a9dfe2ae12",
+      "project_id": "proj_appr_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "fingerprint_short": "fp_valid_123",
+        "scenes_count": 2,
+        "llm_pacing_score": 88,
+        "risk_level": "medium"
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:32:10.197317+00:00",
+      "schema_version": 1
+    }
+  }
+}

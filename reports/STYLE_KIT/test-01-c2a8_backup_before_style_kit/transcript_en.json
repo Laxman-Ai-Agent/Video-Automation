@@ -1,0 +1,33 @@
+{
+ "duration": 20.428,
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 5.6,
+   "te": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని",
+   "en": "Smart glasses are not just a device; they change not only how people live but also how we see,"
+  },
+  {
+   "id": 1,
+   "start": 5.8500000000000005,
+   "end": 9.07,
+   "te": "మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power",
+   "en": "a superpower that can completely transform our world."
+  },
+  {
+   "id": 2,
+   "start": 9.07,
+   "end": 13.57,
+   "te": "భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు",
+   "en": "This journey, where the future is unfolding right before our eyes, does not end here."
+  },
+  {
+   "id": 3,
+   "start": 13.8,
+   "end": 20.060000000000002,
+   "te": "ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+   "en": "The world ahead is going to become even more amazing and even more futuristic."
+  }
+ ]
+}

@@ -1,0 +1,99 @@
+{
+ "cuts": [
+  {
+   "t": 2.92,
+   "reason": "sentence_end",
+   "silence": 0.3
+  },
+  {
+   "t": 5.0,
+   "reason": "segment_end",
+   "silence": 0.35
+  },
+  {
+   "t": 9.33,
+   "reason": "segment_end",
+   "silence": 0.87
+  },
+  {
+   "t": 11.42,
+   "reason": "silence",
+   "silence": 0.0
+  },
+  {
+   "t": 15.2,
+   "reason": "segment_end",
+   "silence": 0.15
+  },
+  {
+   "t": 17.19,
+   "reason": "segment_end",
+   "silence": 0.0
+  },
+  {
+   "t": 20.77,
+   "reason": "segment_end",
+   "silence": 0.0
+  },
+  {
+   "t": 23.81,
+   "reason": "segment_end",
+   "silence": 0.09
+  },
+  {
+   "t": 28.4,
+   "reason": "segment_end",
+   "silence": 0.45
+  },
+  {
+   "t": 32.61,
+   "reason": "segment_end",
+   "silence": 0.34
+  },
+  {
+   "t": 39.09,
+   "reason": "segment_end",
+   "silence": 0.0
+  },
+  {
+   "t": 40.81,
+   "reason": "segment_end",
+   "silence": 0.34
+  },
+  {
+   "t": 45.75,
+   "reason": "segment_end",
+   "silence": 0.0
+  },
+  {
+   "t": 47.91,
+   "reason": "segment_end",
+   "silence": 0.14
+  },
+  {
+   "t": 51.89,
+   "reason": "segment_end",
+   "silence": 0.46
+  },
+  {
+   "t": 54.15,
+   "reason": "silence",
+   "silence": 0.1
+  },
+  {
+   "t": 57.49,
+   "reason": "segment_end",
+   "silence": 0.26
+  },
+  {
+   "t": 62.25,
+   "reason": "segment_end",
+   "silence": 0.1
+  },
+  {
+   "t": 63.31,
+   "reason": "sentence_end",
+   "silence": 0.1
+  }
+ ]
+}

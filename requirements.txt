@@ -1,0 +1,39 @@
+# Python 3.12. Install in a virtual environment:  python -m venv .venv  then  .venv\Scripts\pip install -r requirements.txt
+# Versions are the ones the project was built and tested with. tests/test_m9.py checks that this file matches the imports.
+
+# API server
+fastapi==0.142.4
+uvicorn==0.54.0
+python-multipart==0.0.32
+pydantic==2.13.5
+
+# Speech to text (Whisper large-v3, CPU, int8) - the model is read from the local Hugging Face cache, never downloaded
+faster-whisper==1.2.1
+# PyAV decodes the audio for faster-whisper. faster-whisper 1.2.1 passes metadata_errors to av.open, which av 19 rejects (it asks only for av>=11): stay on 18.1.0
+av==18.1.0
+
+# Image matching and checks (CLIP + Hungarian assignment, quality checks, background removal)
+# torch: the Windows wheels on PyPI are the CPU build, which is what this project uses (no NVIDIA GPU needed)
+torch==2.14.1
+torchvision==0.29.1
+open_clip_torch==3.3.0
+scipy==1.18.1
+numpy==2.5.3
+pillow==12.3.0
+opencv-python==5.0.0.93
+ImageHash==4.3.2
+rembg==2.0.85
+onnxruntime==1.30.0
+
+# Audio
+pydub==0.25.1
+
+# Agents: the capability store's file lock, the learning gate's schema check, the skill specification reader
+filelock==4.0.12
+jsonschema==4.26.0
+PyYAML==6.0.3
+# Tests (pytest -q). httpx is needed by FastAPI's TestClient.
+pytest==9.1.1
+httpx==0.28.1
+# Browser end-to-end test (tests/test_playwright_e2e.py)
+playwright==1.63.0

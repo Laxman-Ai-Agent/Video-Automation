@@ -1,0 +1,28 @@
+{
+ "id": "20261015-101526-7537",
+ "kind": "import",
+ "state": "done",
+ "started_at": "2026-10-15T10:15:26",
+ "finished_at": "2026-10-15T10:15:27",
+ "progress": [
+  "10:15:26 fetching 1/2 eyeglass.svg",
+  "10:15:26 fetching 2/2 eyeglass-2.svg",
+  "10:15:27 moving the files in",
+  "10:15:27 writing the registry"
+ ],
+ "result": {
+  "audit_id": "20261015-101513-adb5ff",
+  "imported": [
+   "icon.tabler.eyeglass",
+   "icon.tabler.eyeglass-2"
+  ],
+  "status": "imported",
+  "bundle_resources": 54,
+  "staged_fonts": [
+   "HindGuntur-Regular.ttf",
+   "HindGuntur-Bold.ttf"
+  ],
+  "note": "imported, NOT verified: run Verify to render them"
+ },
+ "error": null
+}

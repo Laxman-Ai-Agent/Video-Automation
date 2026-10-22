@@ -1,0 +1,292 @@
+{
+ "approval": {
+  "approved_fingerprint": null,
+  "status": "not_approved"
+ },
+ "aspect": "16:9",
+ "builder": {
+  "rule_set": "1.0",
+  "version": 1
+ },
+ "checks": {
+  "failed": 0,
+  "passed": 126,
+  "skipped": 0,
+  "total": 126,
+  "warnings": 3
+ },
+ "counts": {
+  "duration_frames": 613,
+  "fps": 30,
+  "gaps": 3,
+  "items": 4,
+  "layers": 14,
+  "scenes": 3,
+  "tracks": 2,
+  "transitions": 2
+ },
+ "created_at": "2026-10-15T11:45:20",
+ "disclosures": {
+  "accepted_exceptions": 0,
+  "approximate": 3,
+  "note": "accepted does not mean drawn: see the findings of the build report",
+  "optional_not_drawn": 0,
+  "required_not_drawn": 0
+ },
+ "error": null,
+ "findings": [
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": true,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_01:glasses_icon",
+   "item_id": "glasses_icon",
+   "message": "glasses_icon (icon) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_01",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": true,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_02:future_horizon",
+   "item_id": "future_horizon",
+   "message": "future_horizon (graphic) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_02",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": false,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_03:sparkle_accents",
+   "item_id": "sparkle_accents",
+   "message": "sparkle_accents (icon) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_03",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  }
+ ],
+ "inputs": {
+  "audio": "audio.mp3:326889",
+  "builder": "e595e744adb295d2",
+  "composition": "7b83f890c4a2341c",
+  "motion_generation": "5253cd7b4ddf357a",
+  "motion_plan": "8d0291ccff3d4d96",
+  "motion_planning": "13d49c42a40a1cc5",
+  "policies": "00674402a882b1cd",
+  "project": "41652fe7feafdcc8",
+  "renderer": "9b1ec6c3fdc806d52c1554830bc6eb1d35631e63",
+  "resources": "c862c3576e146311",
+  "scene_plan": "fbd012c1a9a47937",
+  "segmentation": "a343c73d03ce30bb",
+  "stage10": "c8c5de894c9b221a",
+  "visual_plan": "fce34d0a7f89e8e8",
+  "words": "a818c8f871129e4c"
+ },
+ "next_action": "review_the_warnings_then_approve_when_you_choose",
+ "note": "structural validation only: no video was rendered and the playback was not watched; Timeline Approval is a separate, explicit step",
+ "persistence": {
+  "digest_equal": true,
+  "inputs_rechecked": true,
+  "published": true,
+  "read_back_ok": true,
+  "written": true
+ },
+ "phase": "timeline_build",
+ "policies": {
+  "frame_timing_version": "1",
+  "gap_policy_version": "1",
+  "transition_policy_version": "1"
+ },
+ "project_id": "test-01-c2a8",
+ "readiness": "ready_with_warnings",
+ "schema_version": "1.0",
+ "source_fingerprint": "1f0beeefacca44b7",
+ "stages": [
+  {
+   "checks_passed": 0,
+   "checks_skipped": 0,
+   "checks_total": 0,
+   "duration_ms": 0,
+   "finding_ids": [],
+   "label": "Build Request",
+   "n": 1,
+   "name": "Build Request & Lock",
+   "stage_id": "request_lock",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 16,
+   "checks_skipped": 0,
+   "checks_total": 16,
+   "duration_ms": 30,
+   "finding_ids": [],
+   "label": "Input Discovery",
+   "n": 2,
+   "name": "Input Artifact Discovery",
+   "stage_id": "input_discovery",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 4,
+   "checks_skipped": 0,
+   "checks_total": 4,
+   "duration_ms": 315,
+   "finding_ids": [
+    "visual.approximate:scene_01:glasses_icon",
+    "visual.approximate:scene_02:future_horizon",
+    "visual.approximate:scene_03:sparkle_accents"
+   ],
+   "label": "Freshness Gate",
+   "n": 3,
+   "name": "Source Freshness & Readiness Gate",
+   "stage_id": "freshness_gate",
+   "status": "warning"
+  },
+  {
+   "checks_passed": 4,
+   "checks_skipped": 0,
+   "checks_total": 4,
+   "duration_ms": 7,
+   "finding_ids": [],
+   "label": "Project Settings",
+   "n": 4,
+   "name": "Project Settings Normalization",
+   "stage_id": "settings",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 12,
+   "checks_skipped": 0,
+   "checks_total": 12,
+   "duration_ms": 12,
+   "finding_ids": [],
+   "label": "Scene Mapping",
+   "n": 5,
+   "name": "Scene Mapping",
+   "stage_id": "scene_mapping",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 16,
+   "checks_skipped": 0,
+   "checks_total": 16,
+   "duration_ms": 112,
+   "finding_ids": [],
+   "label": "Frame Timing",
+   "n": 6,
+   "name": "Frame Timing Normalization",
+   "stage_id": "frame_timing",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 21,
+   "checks_skipped": 0,
+   "checks_total": 21,
+   "duration_ms": 7540,
+   "finding_ids": [],
+   "label": "Video Track",
+   "n": 7,
+   "name": "Video / Composition Track Assembly",
+   "stage_id": "video_track",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 3,
+   "checks_skipped": 0,
+   "checks_total": 3,
+   "duration_ms": 0,
+   "finding_ids": [],
+   "label": "Audio Track",
+   "n": 8,
+   "name": "Audio & Narration Track Assembly",
+   "stage_id": "audio_track",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 19,
+   "checks_skipped": 0,
+   "checks_total": 19,
+   "duration_ms": 1,
+   "finding_ids": [],
+   "label": "Transitions & Gaps",
+   "n": 9,
+   "name": "Transition & Gap Policy Application",
+   "stage_id": "transitions_gaps",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 1,
+   "checks_skipped": 0,
+   "checks_total": 1,
+   "duration_ms": 60,
+   "finding_ids": [],
+   "label": "Assembly",
+   "n": 10,
+   "name": "Timeline Assembly & Duration",
+   "stage_id": "assembly",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 30,
+   "checks_skipped": 0,
+   "checks_total": 30,
+   "duration_ms": 207,
+   "finding_ids": [],
+   "label": "Validation",
+   "n": 11,
+   "name": "Structural / Post-Build Validation",
+   "stage_id": "validation",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 0,
+   "checks_skipped": 0,
+   "checks_total": 0,
+   "detail": "written, read back, digest equal, inputs unchanged, last good pair backed up, published",
+   "duration_ms": 271,
+   "finding_ids": [],
+   "label": "Publish",
+   "n": 12,
+   "name": "Persist, Read Back & Publish",
+   "stage_id": "persist",
+   "status": "completed"
+  }
+ ],
+ "status": "completed_with_warnings",
+ "summary": {
+  "blockers": 0,
+  "disclosed_not_drawn_or_approximate": 3,
+  "errors": 0,
+  "info": 0,
+  "warnings": 3
+ },
+ "timeline_fingerprint": "c21231b279b2a174",
+ "timings_seconds": {
+  "build": 8.783
+ }
+}

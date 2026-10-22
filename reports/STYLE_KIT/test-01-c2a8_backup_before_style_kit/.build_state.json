@@ -1,0 +1,14 @@
+{
+ "fingerprints": {
+  "cuts": "80330681213f0a5d6dd51b25a51aae147e1587ba",
+  "motion-build": "3662b1c3ce3142a712991e9139286f4d1bda1203",
+  "motion-plan": "1c568e92447e675862a2825950f315eda74f2b2d",
+  "motion-validate": null,
+  "motion-validation": null,
+  "motion-validation-preview": null,
+  "refine": "7162aae9b4afcf9579f97016fcf408457b450178",
+  "segment": "ff592b2451f395e904903203544ffa4cf31b5a2e",
+  "timeline-build": "1f0beeefacca44b7",
+  "transcribe": "e9269b1c3b126ed0b62ba3e574212f22669be65d"
+ }
+}

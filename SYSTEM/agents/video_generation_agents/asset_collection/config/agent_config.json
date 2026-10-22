@@ -1,0 +1,19 @@
+{
+  "agent_id": "asset_collection",
+  "stage_id": "assets",
+  "max_retries": 2,
+  "timeout_seconds": 900,
+  "allowed_tools": [
+    "stock_providers",
+    "ffmpeg",
+    "llm_gateway",
+    "asset_manifest"
+  ],
+  "capabilities": [
+    "asset-requirement-planning",
+    "licensed-source-search",
+    "clip-preparation",
+    "rights-and-provenance-tracking",
+    "duplicate-detection"
+  ]
+}

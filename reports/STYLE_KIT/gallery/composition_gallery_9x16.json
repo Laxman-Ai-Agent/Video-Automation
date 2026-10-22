@@ -1,0 +1,849 @@
+{
+ "meta": {
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "audio": "audio.mp3",
+  "duration": 24,
+  "subtitles": false,
+  "palette": [
+   "#0B1D26",
+   "#F2A541",
+   "#2A9D8F"
+  ],
+  "motion": "rich",
+  "motionOnly": true,
+  "motionSpeed": 1.4,
+  "kit": "editorial"
+ },
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0,
+   "end": 4,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#2B44FF",
+      "#1E32D8"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "so you can see how capable",
+     "mark": "capable",
+     "at": 1.3333333333333333,
+     "z": 10,
+     "preset": "word-reveal",
+     "exitPreset": "fade-out",
+     "emphasis": "mask",
+     "dir": "left",
+     "k": 1.18,
+     "seed": "g0:1:0",
+     "emphasisAt": [
+      1.5133333333333332
+     ],
+     "dur": 0.36,
+     "stagger": 3.57,
+     "exitDur": 0.36,
+     "color": "#FFFFFF",
+     "accent": "#FFD23F",
+     "runs": [
+      {
+       "text": "so you can see how",
+       "scale": 0.5,
+       "weight": 600,
+       "color": "#95a2ff"
+      },
+      {
+       "text": "capable",
+       "scale": 1.6,
+       "weight": 800,
+       "color": "#FFD23F",
+       "hlColor": "#111111"
+      }
+     ],
+     "recipe": "lead-hero"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "1:floating-dots",
+       "kind": "gfx",
+       "preset": "floating-dots",
+       "start": 0.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g0:1:floating-dots",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      },
+      {
+       "id": "1:divider-grow",
+       "kind": "gfx",
+       "preset": "divider-grow",
+       "start": 0.25,
+       "box": [
+        0.35,
+        0.16,
+        0.3,
+        0.03
+       ],
+       "boxTall": [
+        0.3,
+        0.14,
+        0.4,
+        0.02
+       ],
+       "k": 1.22,
+       "dir": "down",
+       "seed": "g0:1:divider-grow",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      },
+      {
+       "id": "1:double-line",
+       "kind": "gfx",
+       "preset": "double-line",
+       "start": 0.46,
+       "box": [
+        0.3,
+        0.16,
+        0.4,
+        0.04
+       ],
+       "boxTall": [
+        0.2,
+        0.14,
+        0.6,
+        0.03
+       ],
+       "k": 1.22,
+       "dir": "left",
+       "seed": "g0:1:double-line",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 4,
+   "end": 8,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#0B0B10",
+      "#16161F"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "You create the future",
+     "at": 5.333333333333333,
+     "z": 10,
+     "preset": "word-slide",
+     "exitPreset": "fade-out",
+     "emphasis": "scale",
+     "dir": "right",
+     "k": 1.18,
+     "seed": "g2:2:0",
+     "dur": 0.39,
+     "stagger": 2.86,
+     "exitDur": 0.36,
+     "color": "#F4F1EA",
+     "accent": "#FF5A36",
+     "runs": [
+      {
+       "text": "You create",
+       "weight": 800,
+       "color": "#F4F1EA"
+      },
+      {
+       "text": "the future",
+       "font": "serif",
+       "italic": true,
+       "weight": 400,
+       "scale": 1.18,
+       "color": "#F4F1EA"
+      }
+     ],
+     "recipe": "sans-serif"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "2:scan-line",
+       "kind": "gfx",
+       "preset": "scan-line",
+       "start": 4.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g2:2:scan-line",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#F4F1EA",
+       "accentColor": "#FF5A36"
+      },
+      {
+       "id": "2:radar-sweep",
+       "kind": "gfx",
+       "preset": "radar-sweep",
+       "start": 4.25,
+       "box": [
+        0.74,
+        0.08,
+        0.2,
+        0.36
+       ],
+       "boxTall": [
+        0.62,
+        0.06,
+        0.32,
+        0.17
+       ],
+       "k": 1.22,
+       "dir": "up",
+       "seed": "g2:2:radar-sweep",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#F4F1EA",
+       "accentColor": "#FF5A36"
+      },
+      {
+       "id": "2:corner-accents",
+       "kind": "gfx",
+       "preset": "corner-accents",
+       "start": 4.46,
+       "box": [
+        0.04,
+        0.06,
+        0.92,
+        0.8
+       ],
+       "boxTall": [
+        0.05,
+        0.05,
+        0.9,
+        0.74
+       ],
+       "k": 1.22,
+       "dir": "down",
+       "seed": "g2:2:corner-accents",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#F4F1EA",
+       "accentColor": "#FF5A36"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 8,
+   "end": 12,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#EFEBE3",
+      "#E4DED1"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "Match the model to the task",
+     "mark": "task",
+     "at": 9.333333333333334,
+     "z": 10,
+     "preset": "word-reveal",
+     "exitPreset": "fade-out",
+     "emphasis": "stroke",
+     "dir": "down",
+     "k": 1.18,
+     "seed": "g8:3:0",
+     "emphasisAt": [
+      9.513333333333334
+     ],
+     "dur": 0.36,
+     "stagger": 3.57,
+     "exitDur": 0.36,
+     "color": "#15110A",
+     "accent": "#2B44FF",
+     "flat": true,
+     "runs": [
+      {
+       "text": "Match the model to the",
+       "weight": 800,
+       "color": "#15110A"
+      },
+      {
+       "text": "task",
+       "weight": 800,
+       "color": "#15110A",
+       "hl": true,
+       "hlColor": "#ffffff"
+      }
+     ],
+     "recipe": "marker"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "3:underline-sweep",
+       "kind": "gfx",
+       "preset": "underline-sweep",
+       "start": 8.25,
+       "box": [
+        0.3,
+        0.6,
+        0.4,
+        0.03
+       ],
+       "boxTall": [
+        0.15,
+        0.58,
+        0.7,
+        0.02
+       ],
+       "k": 1.22,
+       "dir": "up",
+       "seed": "g8:3:underline-sweep",
+       "z": 8,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#15110A",
+       "accentColor": "#2B44FF"
+      },
+      {
+       "id": "3:double-line",
+       "kind": "gfx",
+       "preset": "double-line",
+       "start": 8.46,
+       "box": [
+        0.3,
+        0.16,
+        0.4,
+        0.04
+       ],
+       "boxTall": [
+        0.2,
+        0.14,
+        0.6,
+        0.03
+       ],
+       "k": 1.22,
+       "dir": "down",
+       "seed": "g8:3:double-line",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#15110A",
+       "accentColor": "#2B44FF"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "start": 12,
+   "end": 16,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#F8C630",
+      "#F1B814"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "Smarter than us",
+     "mark": "Smarter",
+     "at": 13.333333333333334,
+     "z": 10,
+     "preset": "word-slide",
+     "exitPreset": "drop-out",
+     "emphasis": "stroke",
+     "dir": "left",
+     "k": 1.18,
+     "seed": "g0:4:0",
+     "emphasisAt": [
+      13.513333333333334
+     ],
+     "dur": 0.39,
+     "stagger": 2.86,
+     "exitDur": 0.36,
+     "color": "#15110A",
+     "accent": "#D93A24",
+     "flat": true,
+     "runs": [
+      {
+       "text": "Smarter",
+       "scale": 1.6,
+       "weight": 800,
+       "color": "#D93A24",
+       "hlColor": "#ffffff"
+      },
+      {
+       "text": "than us",
+       "scale": 0.5,
+       "weight": 600,
+       "color": "#876c1d"
+      }
+     ],
+     "recipe": "lead-hero"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "4:dust",
+       "kind": "gfx",
+       "preset": "dust",
+       "start": 12.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "down",
+       "seed": "g0:4:dust",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#15110A",
+       "accentColor": "#D93A24"
+      },
+      {
+       "id": "4:frame-in",
+       "kind": "gfx",
+       "preset": "frame-in",
+       "start": 12.25,
+       "box": [
+        0.04,
+        0.06,
+        0.92,
+        0.8
+       ],
+       "boxTall": [
+        0.05,
+        0.05,
+        0.9,
+        0.74
+       ],
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g0:4:frame-in",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#15110A",
+       "accentColor": "#D93A24"
+      },
+      {
+       "id": "4:bracket-frame",
+       "kind": "gfx",
+       "preset": "bracket-frame",
+       "start": 12.46,
+       "box": [
+        0.06,
+        0.3,
+        0.88,
+        0.3
+       ],
+       "boxTall": [
+        0.06,
+        0.28,
+        0.88,
+        0.26
+       ],
+       "k": 1.22,
+       "dir": "left",
+       "seed": "g0:4:bracket-frame",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#15110A",
+       "accentColor": "#D93A24"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "start": 16,
+   "end": 20,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#1B1E27",
+      "#262B38"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "Every system reacts in moments",
+     "at": 17.333333333333332,
+     "z": 10,
+     "preset": "word-blur",
+     "exitPreset": "wipe-out",
+     "emphasis": "mask",
+     "dir": "down",
+     "k": 1.18,
+     "seed": "g8:5:0",
+     "dur": 0.43,
+     "stagger": 3.57,
+     "exitDur": 0.36,
+     "color": "#ECE9E1",
+     "accent": "#3DDBB3",
+     "runs": [
+      {
+       "text": "Every system reacts",
+       "weight": 800,
+       "color": "#ECE9E1"
+      },
+      {
+       "text": "in moments",
+       "font": "serif",
+       "italic": true,
+       "weight": 400,
+       "scale": 1.18,
+       "color": "#ECE9E1"
+      }
+     ],
+     "recipe": "sans-serif"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "5:scan-line",
+       "kind": "gfx",
+       "preset": "scan-line",
+       "start": 16.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g8:5:scan-line",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#ECE9E1",
+       "accentColor": "#3DDBB3"
+      },
+      {
+       "id": "5:divider-grow",
+       "kind": "gfx",
+       "preset": "divider-grow",
+       "start": 16.25,
+       "box": [
+        0.35,
+        0.16,
+        0.3,
+        0.03
+       ],
+       "boxTall": [
+        0.3,
+        0.14,
+        0.4,
+        0.02
+       ],
+       "k": 1.22,
+       "dir": "left",
+       "seed": "g8:5:divider-grow",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#ECE9E1",
+       "accentColor": "#3DDBB3"
+      },
+      {
+       "id": "5:bracket-frame",
+       "kind": "gfx",
+       "preset": "bracket-frame",
+       "start": 16.46,
+       "box": [
+        0.06,
+        0.3,
+        0.88,
+        0.3
+       ],
+       "boxTall": [
+        0.06,
+        0.28,
+        0.88,
+        0.26
+       ],
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g8:5:bracket-frame",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#ECE9E1",
+       "accentColor": "#3DDBB3"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "start": 20,
+   "end": 24,
+   "pattern": "hero_text",
+   "camera": {
+    "move": "push-in",
+    "from": 1,
+    "to": 1.1,
+    "focus": [
+     0.6,
+     0.4
+    ]
+   },
+   "layers": [
+    {
+     "type": "background",
+     "colors": [
+      "#2B44FF",
+      "#1E32D8"
+     ],
+     "z": 0
+    },
+    {
+     "type": "motion_text",
+     "style": "headline",
+     "text": "The danger of unchecked machines",
+     "mark": "danger",
+     "at": 21.333333333333332,
+     "z": 10,
+     "preset": "word-reveal",
+     "exitPreset": "fade-out",
+     "emphasis": "stroke",
+     "dir": "up",
+     "k": 1.18,
+     "seed": "g1:6:0",
+     "emphasisAt": [
+      21.513333333333332
+     ],
+     "dur": 0.36,
+     "stagger": 3.57,
+     "exitDur": 0.36,
+     "color": "#FFFFFF",
+     "accent": "#FFD23F",
+     "runs": [
+      {
+       "text": "The",
+       "weight": 800,
+       "color": "#FFFFFF"
+      },
+      {
+       "text": "danger",
+       "weight": 800,
+       "color": "#FFFFFF",
+       "hl": true,
+       "hlColor": "#111111"
+      },
+      {
+       "text": "of unchecked machines",
+       "weight": 800,
+       "color": "#FFFFFF"
+      }
+     ],
+     "recipe": "marker"
+    },
+    {
+     "type": "motion_scene",
+     "z": 8,
+     "items": [
+      {
+       "id": "6:floating-dots",
+       "kind": "gfx",
+       "preset": "floating-dots",
+       "start": 20.04,
+       "box": [
+        0,
+        0,
+        1,
+        1
+       ],
+       "bleed": true,
+       "k": 1.22,
+       "dir": "down",
+       "seed": "g1:6:floating-dots",
+       "z": 2,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      },
+      {
+       "id": "6:divider-grow",
+       "kind": "gfx",
+       "preset": "divider-grow",
+       "start": 20.25,
+       "box": [
+        0.35,
+        0.16,
+        0.3,
+        0.03
+       ],
+       "boxTall": [
+        0.3,
+        0.14,
+        0.4,
+        0.02
+       ],
+       "k": 1.22,
+       "dir": "left",
+       "seed": "g1:6:divider-grow",
+       "z": 9,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      },
+      {
+       "id": "6:bracket-frame",
+       "kind": "gfx",
+       "preset": "bracket-frame",
+       "start": 20.46,
+       "box": [
+        0.06,
+        0.3,
+        0.88,
+        0.3
+       ],
+       "boxTall": [
+        0.06,
+        0.28,
+        0.88,
+        0.26
+       ],
+       "k": 1.22,
+       "dir": "right",
+       "seed": "g1:6:bracket-frame",
+       "z": 10,
+       "exitDur": 0.36,
+       "speed": 1.4,
+       "color": "#FFFFFF",
+       "accentColor": "#FFD23F"
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,16 @@
+{
+  "agent_id": "visual_planning",
+  "stage_id": "planning",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "llm_client",
+    "llm_gateway",
+    "store"
+  ],
+  "capabilities": [
+    "visual-metaphors",
+    "kinetic-typography-design",
+    "color-continuity"
+  ]
+}

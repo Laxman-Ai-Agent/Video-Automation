@@ -1,0 +1,80 @@
+12:30:27 START transcribe
+13:02:53 START cuts
+14:13:36 START motion-plan
+14:13:45 START motion-build
+14:13:51 START motion-validate
+14:34:29 START segment
+15:31:00 START segment
+16:14:30 START segment
+16:27:41 START segment
+16:34:24 START segment
+23:14:05 START motion-plan
+23:14:07 START motion-build
+23:14:09 START motion-validate
+23:18:44 START motion-plan
+23:56:50 START motion-plan
+09:17:53 START motion-plan
+09:35:23 START motion-plan
+09:44:26 START motion-plan
+11:18:05 START motion-plan
+11:19:29 START motion-plan
+14:15:45 START motion-plan
+14:28:15 START motion-plan
+15:49:57 START motion-plan
+15:51:02 START motion-build
+17:21:40 START motion-validation
+17:23:11 START motion-validation-preview
+17:24:12 FAIL motion-validation-preview:
+Traceback (most recent call last):
+  File "E:\audio-to-video\backend\pipeline.py", line 189, in execute
+    msg = st.run(pdir, ctx)
+          ^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\pipeline.py", line 645, in _preview
+    man = motion_validation_preview.generate(pdir, aspect, progress=ctx.progress)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 92, in generate
+    _still(tmp_bundle / "b", comp_file, smp["frame"], dest)
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 51, in _still
+    raise ValidationError(f"the still at frame {frame} could not be rendered: {(r.stderr or r.stdout)[-240:]}")
+backend.motion_validation.ValidationError: the still at frame 17 could not be rendered: ONNECTED[39m
+[31m[41m[37m TypeError [39m[31m[49m[39m [31mFailed to fetch[39m
+[31m    at Object.fetchFontData (http://localhost:60802/bundle.js:120564:19)[39m
+[31m    at tryToLoad (http://localhost:60802/bundle.js:2007:52)[39m
+
+
+17:26:08 START motion-validation-preview
+17:29:29 FAIL motion-validation-preview:
+Traceback (most recent call last):
+  File "E:\audio-to-video\backend\pipeline.py", line 189, in execute
+    msg = st.run(pdir, ctx)
+          ^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\pipeline.py", line 645, in _preview
+    man = motion_validation_preview.generate(pdir, aspect, progress=ctx.progress)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 92, in generate
+    _still(tmp_bundle / "b", comp_file, smp["frame"], dest)
+  File "E:\audio-to-video\backend\motion_validation_preview.py", line 51, in _still
+    raise ValidationError(f"the still at frame {frame} could not be rendered: {(r.stderr or r.stdout)[-240:]}")
+backend.motion_validation.ValidationError: the still at frame 581 could not be rendered: RESOLVED[39m
+[31m[41m[37m TypeError [39m[31m[49m[39m [31mFailed to fetch[39m
+[31m    at Object.fetchFontData (http://localhost:65202/bundle.js:120564:19)[39m
+[31m    at tryToLoad (http://localhost:65202/bundle.js:2007:52)[39m
+
+
+17:33:41 START motion-validation-preview
+17:38:02 START motion-validation
+17:43:53 START motion-validation
+17:43:59 START motion-validation-preview
+17:50:06 START motion-validation
+17:52:05 START motion-plan
+17:52:57 START motion-build
+17:53:21 START motion-validation
+17:53:30 START motion-validation-preview
+17:56:32 START motion-validation
+18:11:55 START motion-validation
+18:12:00 START motion-validation-preview
+18:19:58 START motion-validation
+18:33:49 START motion-plan
+18:34:01 START motion-build
+18:34:50 START motion-validation-preview
+18:39:31 START motion-validation

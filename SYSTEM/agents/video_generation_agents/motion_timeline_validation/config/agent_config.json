@@ -1,0 +1,32 @@
+{
+  "agent_id": "motion_timeline_validation",
+  "stage_id": "motion_validation",
+  "version": "2.0.0",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "static_analyzer",
+    "dimension_validator",
+    "visual_quality_assessor",
+    "semantic_alignment_engine",
+    "autonomous_repair_coordinator"
+  ],
+  "capabilities": [
+    "deterministic-checks",
+    "safe-margin-validation",
+    "contrast-timing-checks",
+    "visual-preview-inspection",
+    "semantic-alignment-verification",
+    "3d-fallback-assessment",
+    "4d-quality-scoring",
+    "bounded-autonomous-repair"
+  ],
+  "quality_dimensions": [
+    "technical",
+    "visual",
+    "semantic",
+    "runtime"
+  ],
+  "auto_repair_enabled": true,
+  "max_repair_attempts": 2
+}

@@ -1,0 +1,676 @@
+{
+ "schema_version": "1.1",
+ "timing_rules": 2,
+ "source_fingerprint": "c8b8566651b2c27324dc8b93919eb5774d7de7a2",
+ "source_audio_analysis": "audio_analysis.json",
+ "language": "te",
+ "audio_duration_seconds": 57.611,
+ "segmentation_method": "llm_semantic_grouping",
+ "semantic_confidence": "supported_by_llm",
+ "needs_review": false,
+ "llm": {
+  "status": "cached",
+  "error": null,
+  "model": null,
+  "attempts": 1,
+  "problems": [],
+  "calls": [
+   {
+    "attempt": 1,
+    "source": "cache",
+    "prompt_chars": 3592,
+    "lookup_s": 0.0001,
+    "check_s": 0.0001,
+    "problems": []
+   }
+  ]
+ },
+ "config": {
+  "pause_min": 0.35,
+  "pause_scene": 0.5,
+  "pause_clause": 0.15,
+  "soft_min": 3.0,
+  "soft_max": 12.0,
+  "long_unit": 6.0,
+  "min_split": 1.5
+ },
+ "source_segments": 13,
+ "timings_seconds": {
+  "1_read_input": 0.003,
+  "2_units_and_cuts": 0.006,
+  "3-5_grouping": 0.006,
+  "6_assemble": 0.001,
+  "7_validate": 0.001
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_001",
+   "scene_index": 1,
+   "start_time": 0.0,
+   "end_time": 4.58,
+   "source_segment_ids": [
+    0
+   ],
+   "source_sentence_ids": [
+    "sentence_001"
+   ],
+   "source_word_ids": [
+    "w001",
+    "w002",
+    "w003",
+    "w004",
+    "w005",
+    "w006",
+    "w007",
+    "w008",
+    "w009",
+    "w010"
+   ],
+   "word_range": [
+    0,
+    9
+   ],
+   "transcript": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి.",
+   "semantic_beat": "Mental challenges are even bigger than the physical ones",
+   "scene_objective": "Introduce psychological challenges of a Mars mission.",
+   "boundary_after": {
+    "type": "concept_change",
+    "reason": "Moves from general claim to the specific journey.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.17,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "start",
+    "reason": "first scene",
+    "evidence": [
+     "sentence_boundary"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_002",
+   "scene_index": 2,
+   "start_time": 4.75,
+   "end_time": 13.41,
+   "source_segment_ids": [
+    1
+   ],
+   "source_sentence_ids": [
+    "sentence_002"
+   ],
+   "source_word_ids": [
+    "w011",
+    "w012",
+    "w013",
+    "w014",
+    "w015",
+    "w016",
+    "w017",
+    "w018",
+    "w019",
+    "w020",
+    "w021",
+    "w022",
+    "w023",
+    "w024",
+    "w025",
+    "w026",
+    "w027",
+    "w028"
+   ],
+   "word_range": [
+    10,
+    27
+   ],
+   "transcript": "మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి",
+   "semantic_beat": "Eight-month journey to Mars, far from family and Earth life",
+   "scene_objective": "Show the isolation of the long journey.",
+   "boundary_after": {
+    "type": "topic_change",
+    "reason": "Shifts from travel to life after arrival.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.19,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "concept_change",
+    "reason": "Moves from general claim to the specific journey.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_003",
+   "scene_index": 3,
+   "start_time": 13.6,
+   "end_time": 19.58,
+   "source_segment_ids": [
+    2,
+    3
+   ],
+   "source_sentence_ids": [
+    "sentence_003",
+    "sentence_004"
+   ],
+   "source_word_ids": [
+    "w029",
+    "w030",
+    "w031",
+    "w032",
+    "w033",
+    "w034",
+    "w035",
+    "w036",
+    "w037",
+    "w038",
+    "w039"
+   ],
+   "word_range": [
+    28,
+    38
+   ],
+   "transcript": "అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది",
+   "semantic_beat": "Communication with Earth is delayed by minutes",
+   "scene_objective": "Explain that messages are not instant on Mars.",
+   "boundary_after": {
+    "type": "concept_change",
+    "reason": "Moves from communication delay to surroundings.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.0,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "topic_change",
+    "reason": "Shifts from travel to life after arrival.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_004",
+   "scene_index": 4,
+   "start_time": 19.58,
+   "end_time": 26.08,
+   "source_segment_ids": [
+    4,
+    5
+   ],
+   "source_sentence_ids": [
+    "sentence_005",
+    "sentence_006"
+   ],
+   "source_word_ids": [
+    "w040",
+    "w041",
+    "w042",
+    "w043",
+    "w044",
+    "w045",
+    "w046",
+    "w047",
+    "w048",
+    "w049",
+    "w050",
+    "w051"
+   ],
+   "word_range": [
+    39,
+    50
+   ],
+   "transcript": "చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి",
+   "semantic_beat": "Red desert, silence and few people test the mind",
+   "scene_objective": "Show the isolating environment's mental strain.",
+   "boundary_after": {
+    "type": "cause_effect_step",
+    "reason": "Next the consequence in emergencies is described.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.0,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "end_time_word": 26.26,
+   "boundary_before": {
+    "type": "concept_change",
+    "reason": "Moves from communication delay to surroundings.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_005",
+   "scene_index": 5,
+   "start_time": 26.08,
+   "end_time": 34.9,
+   "source_segment_ids": [
+    6,
+    7
+   ],
+   "source_sentence_ids": [
+    "sentence_007",
+    "sentence_008"
+   ],
+   "source_word_ids": [
+    "w052",
+    "w053",
+    "w054",
+    "w055",
+    "w056",
+    "w057",
+    "w058",
+    "w059",
+    "w060",
+    "w061",
+    "w062",
+    "w063",
+    "w064",
+    "w065",
+    "w066",
+    "w067",
+    "w068",
+    "w069"
+   ],
+   "word_range": [
+    51,
+    68
+   ],
+   "transcript": "ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి",
+   "semantic_beat": "In emergencies no quick help; team relies on its own skills",
+   "scene_objective": "Show the crew must decide on its own.",
+   "boundary_after": {
+    "type": "conclusion",
+    "reason": "Next lines draw the conclusion about needed qualities.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.15,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "cause_effect_step",
+    "reason": "Next the consequence in emergencies is described.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_006",
+   "scene_index": 6,
+   "start_time": 35.05,
+   "end_time": 39.43,
+   "source_segment_ids": [
+    8
+   ],
+   "source_sentence_ids": [
+    "sentence_009"
+   ],
+   "source_word_ids": [
+    "w070",
+    "w071",
+    "w072",
+    "w073",
+    "w074",
+    "w075",
+    "w076",
+    "w077"
+   ],
+   "word_range": [
+    69,
+    76
+   ],
+   "transcript": "అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం",
+   "semantic_beat": "Mental strength, discipline and teamwork are crucial",
+   "scene_objective": "State the qualities essential for the crew.",
+   "boundary_after": {
+    "type": "contrast",
+    "reason": "Turns to 'even so' and the larger goal.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.0,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "end_time_word": 39.71,
+   "boundary_before": {
+    "type": "conclusion",
+    "reason": "Next lines draw the conclusion about needed qualities.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_007",
+   "scene_index": 7,
+   "start_time": 39.43,
+   "end_time": 45.84,
+   "source_segment_ids": [
+    9,
+    10
+   ],
+   "source_sentence_ids": [
+    "sentence_010",
+    "sentence_011"
+   ],
+   "source_word_ids": [
+    "w078",
+    "w079",
+    "w080",
+    "w081",
+    "w082",
+    "w083",
+    "w084",
+    "w085",
+    "w086",
+    "w087",
+    "w088",
+    "w089",
+    "w090",
+    "w091"
+   ],
+   "word_range": [
+    77,
+    90
+   ],
+   "transcript": "అయినా కూడా ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు",
+   "semantic_beat": "Even so, Mars is humanity's next goal after the Moon",
+   "scene_objective": "Present Mars as the next target.",
+   "boundary_after": {
+    "type": "concept_change",
+    "reason": "Moves from the goal to what success means.",
+    "evidence": [
+     "clause_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": true
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.0,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "contrast",
+    "reason": "Turns to 'even so' and the larger goal.",
+    "evidence": [
+     "sentence_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  },
+  {
+   "scene_id": "scene_008",
+   "scene_index": 8,
+   "start_time": 45.84,
+   "end_time": 52.54,
+   "source_segment_ids": [
+    10,
+    11
+   ],
+   "source_sentence_ids": [
+    "sentence_012",
+    "sentence_013"
+   ],
+   "source_word_ids": [
+    "w092",
+    "w093",
+    "w094",
+    "w095",
+    "w096",
+    "w097",
+    "w098",
+    "w099",
+    "w100",
+    "w101",
+    "w102",
+    "w103",
+    "w104",
+    "w105",
+    "w106",
+    "w107"
+   ],
+   "word_range": [
+    91,
+    106
+   ],
+   "transcript": "అక్కడ మనిషి విజయవంతంగా స్థిరపడితే అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం",
+   "semantic_beat": "Settling on Mars would be a new chapter in history",
+   "scene_objective": "Explain the historic significance of settlement.",
+   "boundary_after": {
+    "type": "conclusion",
+    "reason": "Final line reveals the ultimate outcome.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.31,
+   "starts_inside_segment": true,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "concept_change",
+    "reason": "Moves from the goal to what success means.",
+    "evidence": [
+     "clause_boundary",
+     "discourse_marker",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": true
+   }
+  },
+  {
+   "scene_id": "scene_009",
+   "scene_index": 9,
+   "start_time": 52.85,
+   "end_time": 57.43,
+   "source_segment_ids": [
+    12
+   ],
+   "source_sentence_ids": [
+    "sentence_014"
+   ],
+   "source_word_ids": [
+    "w108",
+    "w109",
+    "w110",
+    "w111",
+    "w112",
+    "w113",
+    "w114",
+    "w115",
+    "w116",
+    "w117"
+   ],
+   "word_range": [
+    107,
+    116
+   ],
+   "transcript": "ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+   "semantic_beat": "The day humans become a multi-planetary species will come",
+   "scene_objective": "End with the hopeful certainty of that day.",
+   "boundary_after": {
+    "type": "end",
+    "reason": "end of the narration",
+    "evidence": [],
+    "confidence": null,
+    "inside_segment": false
+   },
+   "timing_source": "aligned_words",
+   "pause_after_seconds": 0.181,
+   "starts_inside_segment": false,
+   "warnings": [],
+   "warning_details": [],
+   "boundary_before": {
+    "type": "conclusion",
+    "reason": "Final line reveals the ultimate outcome.",
+    "evidence": [
+     "sentence_boundary",
+     "semantic_change"
+    ],
+    "confidence": null,
+    "inside_segment": false
+   }
+  }
+ ],
+ "stages": [
+  {
+   "n": 1,
+   "name": "Analysis Data Reader",
+   "status": "completed",
+   "detail": "117 words in 13 transcript segments, 3 measured pauses, duration 57.611s"
+  },
+  {
+   "n": 2,
+   "name": "Sentence & Clause Detection",
+   "status": "completed",
+   "detail": "14 units (1 clause splits), 27 places where a scene may end"
+  },
+  {
+   "n": 3,
+   "name": "Semantic Understanding",
+   "status": "completed",
+   "detail": "earlier answer reused, no new call"
+  },
+  {
+   "n": 4,
+   "name": "Topic & Idea Change Detection",
+   "status": "completed",
+   "detail": "topic and idea changes decided together with the grouping"
+  },
+  {
+   "n": 5,
+   "name": "Scene Boundary & Grouping",
+   "status": "completed",
+   "detail": "9 scenes from 13 segments (1 cut(s) inside a segment)"
+  },
+  {
+   "n": 6,
+   "name": "Duration & Timing Assignment",
+   "status": "completed",
+   "detail": "start = first word start, end = last word end (aligned_words)"
+  },
+  {
+   "n": 7,
+   "name": "Scene Validation & Continuity",
+   "status": "completed",
+   "detail": "coverage complete, order ok, 0 errors, 0 warnings, 4 source note(s)"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "transcript_coverage": "complete",
+  "chronological_order": true,
+  "timestamps_within_audio": true,
+  "errors": [],
+  "warnings": [],
+  "notes": [
+   {
+    "code": "segment_end_before_last_word",
+    "segment": 3,
+    "segment_end": 19.42,
+    "last_word_end": 19.58,
+    "continuous_with_next": true,
+    "audio_check": "not checked (no audio analysis note)",
+    "message": "transcript segment 3 ends at 19.42s but its last word ends at 19.58s; the next segment starts at 19.58s, so the word times are consistent. The scene times use the word times as the source has them"
+   },
+   {
+    "code": "segment_end_before_last_word",
+    "segment": 5,
+    "segment_end": 26.08,
+    "last_word_end": 26.26,
+    "continuous_with_next": false,
+    "audio_check": "not checked (no audio analysis note)",
+    "message": "transcript segment 5 ends at 26.08s but its last word ends at 26.26s; the next segment starts at 26.08s. The scene times use the word times as the source has them"
+   },
+   {
+    "code": "scene_end_adjusted",
+    "scene": "scene_004",
+    "message": "scene_004 ends at 26.08s, where the next scene starts: its last word ends at 26.26s in the source (word times overlap). The word times themselves are unchanged"
+   },
+   {
+    "code": "scene_end_adjusted",
+    "scene": "scene_006",
+    "message": "scene_006 ends at 39.43s, where the next scene starts: its last word ends at 39.71s in the source (word times overlap). The word times themselves are unchanged"
+   }
+  ]
+ }
+}

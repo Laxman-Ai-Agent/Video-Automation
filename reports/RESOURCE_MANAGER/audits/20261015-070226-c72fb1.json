@@ -1,0 +1,121 @@
+{
+ "audit_id": "20261015-070226-c72fb1",
+ "created_at": "2026-10-15T07:02:26",
+ "recipe": "hind-guntur",
+ "repository": "google/fonts",
+ "ref": "main",
+ "commit_sha": "67bc647ce1910e92f461bcc82aae30f21d21a9cc",
+ "category": "font",
+ "url": "https://github.com/google/fonts",
+ "files": [
+  {
+   "path": "ofl/hindguntur/HindGuntur-Regular.ttf",
+   "size": 322564,
+   "sha256": "2f9b4d31507c92fe1d54e5256904e41d91698b952c90d66bfe926cd156dac4eb",
+   "ok": false,
+   "coverage": {
+    "telugu_missing": [
+     "U+0C66",
+     "U+0C67",
+     "U+0C68",
+     "U+0C69",
+     "U+0C6A",
+     "U+0C6B",
+     "U+0C6C",
+     "U+0C6D",
+     "U+0C6E",
+     "U+0C6F"
+    ],
+    "latin_missing": [],
+    "telugu_shaping": true
+   }
+  },
+  {
+   "path": "ofl/hindguntur/HindGuntur-Bold.ttf",
+   "size": 340816,
+   "sha256": "e3e88e87a47094b34d1b0bc4a88f700cb1d1d35dd6286bd224bc35cc1712b167",
+   "ok": false,
+   "coverage": {
+    "telugu_missing": [
+     "U+0C66",
+     "U+0C67",
+     "U+0C68",
+     "U+0C69",
+     "U+0C6A",
+     "U+0C6B",
+     "U+0C6C",
+     "U+0C6D",
+     "U+0C6E",
+     "U+0C6F"
+    ],
+    "latin_missing": [],
+    "telugu_shaping": true
+   }
+  }
+ ],
+ "selected_bytes": 663380,
+ "files_with_tags": 0,
+ "problems": [
+  "ofl/hindguntur/HindGuntur-Regular.ttf: missing Telugu glyphs ['U+0C66', 'U+0C67', 'U+0C68', 'U+0C69', 'U+0C6A', 'U+0C6B']",
+  "ofl/hindguntur/HindGuntur-Bold.ttf: missing Telugu glyphs ['U+0C66', 'U+0C67', 'U+0C68', 'U+0C69', 'U+0C6A', 'U+0C6B']"
+ ],
+ "metadata": {
+  "stars": 20620,
+  "pushed_at": "2026-10-15T00:59:39Z",
+  "age_days": 0,
+  "archived": false,
+  "size_kb": 3341712,
+  "language": "HTML",
+  "default_branch": "main"
+ },
+ "license": {
+  "api_spdx": null,
+  "detected": "OFL-1.1",
+  "file": "ofl/hindguntur/OFL.txt",
+  "file_found": true,
+  "error": null,
+  "reserved_font_name": false,
+  "text_sha256": "4b255eb44f613a8e426e195f0d0b7e10fcba1af7eb6047d9a7f4f3c449940e19"
+ },
+ "scripts": {
+  "install_time": [],
+  "all": [],
+  "package_json": "none or unreadable"
+ },
+ "font_coverage": {
+  "telugu_missing": [
+   "U+0C66",
+   "U+0C67",
+   "U+0C68",
+   "U+0C69",
+   "U+0C6A",
+   "U+0C6B",
+   "U+0C6C",
+   "U+0C6D",
+   "U+0C6E",
+   "U+0C6F"
+  ],
+  "latin_missing": [],
+  "telugu_shaping": true,
+  "glyphs_checked": 179,
+  "full_name": "Hind Guntur Bold"
+ },
+ "gates": {
+  "license_known_and_allowed": true,
+  "license_text_kept": true,
+  "license_matches_api_or_font_metadata": true,
+  "ref_pinned_to_commit": true,
+  "not_archived": true,
+  "selected_files_only": true,
+  "no_install_script_executed": true,
+  "files_safe_and_valid": false,
+  "within_size_limits": true
+ },
+ "notes": [
+  "Bundled demo or sample assets elsewhere in the repository are NOT covered by this audit: only the selected files and the licence text above were read.",
+  "The licence verdict is a text check of the licence file, not legal advice."
+ ],
+ "score": 91.2,
+ "decision": "skip",
+ "rationale": "skipped: files_safe_and_valid; ofl/hindguntur/HindGuntur-Regular.ttf: missing Telugu glyphs ['U+0C66', 'U+0C67', 'U+0C68', 'U+0C69', 'U+0C6A', 'U+0C6B']; ofl/hindguntur/HindGuntur-Bold.ttf: missing Telugu glyphs ['U+0C66', 'U+0C67', 'U+0C68', 'U+0C69', 'U+0C6A', 'U+0C6B']"
+}

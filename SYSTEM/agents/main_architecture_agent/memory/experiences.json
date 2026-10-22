@@ -1,0 +1,295 @@
+{
+  "schema_version": 1,
+  "agent_id": "main_architecture_agent",
+  "updated_at": "2026-10-20T02:20:57.507833+00:00",
+  "total_experiences": 7,
+  "experiences": {
+    "exp-main_architecture_agent-10315ecd1f": {
+      "experience_id": "exp-main_architecture_agent-10315ecd1f",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254403",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 8568.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'succeeded' in 8568.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 8568.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:43.627371+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-1c19e16bd9": {
+      "experience_id": "exp-main_architecture_agent-1c19e16bd9",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458825",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 28871.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'failed' in 28871.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from main_architecture_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from main_architecture_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:45.296856+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-28a3486d9e": {
+      "experience_id": "exp-main_architecture_agent-28a3486d9e",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462857",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 10936.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'succeeded' in 10936.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 10936.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:57.507833+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-41a8886a53": {
+      "experience_id": "exp-main_architecture_agent-41a8886a53",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381361",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 7010.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'succeeded' in 7010.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 7010.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.415269+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-85030df904": {
+      "experience_id": "exp-main_architecture_agent-85030df904",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458267",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 19760.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'failed' in 19760.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from main_architecture_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from main_architecture_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:27.933102+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-a0f2097360": {
+      "experience_id": "exp-main_architecture_agent-a0f2097360",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458906",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 9093.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'failed' in 9093.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from main_architecture_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from main_architecture_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:06.766774+00:00",
+      "schema_version": 1
+    },
+    "exp-main_architecture_agent-df722b07e9": {
+      "experience_id": "exp-main_architecture_agent-df722b07e9",
+      "agent_id": "main_architecture_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458635",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "task_spec",
+          "steps"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 20083.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'main_architecture_agent' completed task 'execution' with outcome 'failed' in 20083.0ms.",
+        "error": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "proposed_lesson": {
+          "title": "Lesson from main_architecture_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+          "affected_domain": "general",
+          "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from main_architecture_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Frozen video algorithm files modified during execution; fail-closed integrity tripwire..",
+        "affected_domain": "general",
+        "observed_pattern": "Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:35.803120+00:00",
+      "schema_version": 1
+    }
+  }
+}

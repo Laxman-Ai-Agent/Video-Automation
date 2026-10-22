@@ -1,0 +1,16 @@
+{
+ "id": "test-01-c2a8",
+ "name": "Test-01",
+ "created": "2026-10-15T09:11:04",
+ "state": "done",
+ "aspect": "16:9",
+ "use_images": false,
+ "motion_branch": true,
+ "audio": {
+  "file": "audio.mp3",
+  "original_name": "06.mp3",
+  "size_bytes": 326889,
+  "format": "MP3",
+  "duration": 20.4
+ }
+}

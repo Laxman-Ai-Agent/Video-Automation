@@ -1,0 +1,190 @@
+{
+ "matches": [
+  {
+   "n": 1,
+   "file": "A_glowing_translucent_AI_agent_27.jpg",
+   "method": "clip",
+   "score": 0.383,
+   "margin": 0.12,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 2,
+   "file": "A_software_developer_typing_co_25.jpg",
+   "method": "clip",
+   "score": 0.367,
+   "margin": 0.074,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 3,
+   "file": "_A_person_without_a_technical__24.jpg",
+   "method": "clip",
+   "score": 0.353,
+   "margin": 0.049,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 4,
+   "file": "4_Close-up_of_a_dark_monitor_s_6.jpg",
+   "method": "filename",
+   "score": 0.291,
+   "margin": -0.02,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 5,
+   "file": "_Abstract_network_of_interconn_19.jpg",
+   "method": "clip",
+   "score": 0.338,
+   "margin": 0.068,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 6,
+   "file": "Rows_of_illuminated_server_rac_17.jpg",
+   "method": "clip",
+   "score": 0.335,
+   "margin": 0.121,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 7,
+   "file": "_Glowing_lines_connecting_diff_16.jpg",
+   "method": "clip",
+   "score": 0.295,
+   "margin": 0.043,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 8,
+   "file": "A_smiling_non-programmer_using_13.jpg",
+   "method": "clip",
+   "score": 0.348,
+   "margin": 0.108,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 9,
+   "file": "Three_glossy_rounded_workflow__3.jpg",
+   "method": "manual",
+   "score": null,
+   "margin": null,
+   "status": "ok",
+   "note": "manual fix"
+  },
+  {
+   "n": 10,
+   "file": "A_friendly_3D_envelope_with_a__9.jpg",
+   "method": "clip",
+   "score": 0.311,
+   "margin": 0.154,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 11,
+   "file": "A_smartphone_with_abstract_gre_7.jpg",
+   "method": "clip",
+   "score": 0.385,
+   "margin": 0.148,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 12,
+   "file": "A_floating_report_page_with_co_5.jpg",
+   "method": "clip",
+   "score": 0.313,
+   "margin": 0.044,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 13,
+   "file": "A_tidy_minimalist_calendar_and_2.jpg",
+   "method": "clip",
+   "score": 0.339,
+   "margin": 0.152,
+   "status": "ok",
+   "note": null
+  },
+  {
+   "n": 14,
+   "file": "_A_diverse_group_of_everyday_p_2.jpg",
+   "method": "clip",
+   "score": 0.319,
+   "margin": 0.134,
+   "status": "ok",
+   "note": null
+  }
+ ],
+ "unused": [],
+ "duplicates": [],
+ "warnings": [
+  {
+   "file": "A_glowing_translucent_AI_agent_27.jpg",
+   "n": 1,
+   "type": "low_res"
+  },
+  {
+   "file": "A_software_developer_typing_co_25.jpg",
+   "n": 2,
+   "type": "low_res"
+  },
+  {
+   "file": "4_Close-up_of_a_dark_monitor_s_6.jpg",
+   "n": 4,
+   "type": "low_res"
+  },
+  {
+   "file": "_Abstract_network_of_interconn_19.jpg",
+   "n": 5,
+   "type": "low_res"
+  },
+  {
+   "file": "Rows_of_illuminated_server_rac_17.jpg",
+   "n": 6,
+   "type": "bad_ratio"
+  },
+  {
+   "file": "_Glowing_lines_connecting_diff_16.jpg",
+   "n": 7,
+   "type": "bad_ratio"
+  },
+  {
+   "file": "A_smiling_non-programmer_using_13.jpg",
+   "n": 8,
+   "type": "low_res"
+  },
+  {
+   "file": "A_friendly_3D_envelope_with_a__9.jpg",
+   "n": 10,
+   "type": "blurry"
+  },
+  {
+   "file": "_A_diverse_group_of_everyday_p_2.jpg",
+   "n": 14,
+   "type": "low_res"
+  },
+  {
+   "file": "Three_glossy_rounded_workflow__3.jpg",
+   "n": 9,
+   "type": "bad_ratio"
+  },
+  {
+   "file": "Three_glossy_rounded_workflow__3.jpg",
+   "n": 9,
+   "type": "blurry"
+  }
+ ],
+ "broken": []
+}

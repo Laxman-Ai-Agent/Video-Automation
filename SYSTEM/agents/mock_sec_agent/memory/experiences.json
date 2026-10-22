@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_sec_agent",
+  "updated_at": "2026-10-20T02:20:58.902229+00:00",
+  "total_experiences": 7,
+  "experiences": {
+    "exp-mock_sec_agent-0b273f437d": {
+      "experience_id": "exp-mock_sec_agent-0b273f437d",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458274",
+      "project_id": "tmpun001hw5",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:34.424050+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-11e924e487": {
+      "experience_id": "exp-mock_sec_agent-11e924e487",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmplw666cy2",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.651485+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-2438ce0d7b": {
+      "experience_id": "exp-mock_sec_agent-2438ce0d7b",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpk4utpe38",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.913180+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-30644bfb85": {
+      "experience_id": "exp-mock_sec_agent-30644bfb85",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmpa_7egb9_",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.383804+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-57fc2af9c9": {
+      "experience_id": "exp-mock_sec_agent-57fc2af9c9",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254405",
+      "project_id": "tmpm09magoe",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:45.203835+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-a9d3d6dd92": {
+      "experience_id": "exp-mock_sec_agent-a9d3d6dd92",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmpn2mho3t8",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.886585+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_sec_agent-aab3d93a6a": {
+      "experience_id": "exp-mock_sec_agent-aab3d93a6a",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmpdvhkkkfq",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.894634+00:00",
+      "schema_version": 1
+    }
+  }
+}

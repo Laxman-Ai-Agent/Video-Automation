@@ -1,0 +1,18 @@
+{
+  "timestamp": "2026-10-17T14:58:39Z",
+  "archive_path": "E:\\audio-to-video\\dist\\laxman_video_engine_v1.0.0.zip",
+  "archive_sha256": "b4dc27710c256c16824655212c3b7552e116892ebf037e319a15eee744616075",
+  "temp_extraction_dir": "C:\\Users\\<user>\\AppData\\Local\\Temp\\laxman_release_acceptance_test",
+  "extracted_file_count": 1151,
+  "health_check_url": "http://127.0.0.1:8009/health",
+  "health_response": {
+    "ok": true
+  },
+  "capabilities_keys": [
+    "tools",
+    "remotion",
+    "browser",
+    "all_basic_tools_ready"
+  ],
+  "verdict": "PASS"
+}

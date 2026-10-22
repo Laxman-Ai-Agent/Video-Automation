@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "LessonProposal",
+  "type": "object",
+  "required": [
+    "proposal_id",
+    "schema_version",
+    "version",
+    "title",
+    "description",
+    "observed_pattern",
+    "affected_domain",
+    "rule_type",
+    "rule_content",
+    "supporting_case_ids",
+    "status"
+  ],
+  "properties": {
+    "proposal_id": {
+      "type": "string",
+      "pattern": "^prop_[a-f0-9]+$"
+    },
+    "schema_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "observed_pattern": {
+      "type": "string"
+    },
+    "affected_domain": {
+      "type": "string"
+    },
+    "rule_type": {
+      "type": "string",
+      "enum": ["routing_preference", "constraint_override", "synonym_expansion", "prerequisite_guard"]
+    },
+    "rule_content": {
+      "type": "object"
+    },
+    "supporting_case_ids": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "counterexample_case_ids": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "evidence_quality": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": ["low", "medium", "high"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["OBSERVED", "CANDIDATE", "EVALUATING", "APPROVED", "REJECTED", "SUPERSEDED"]
+    },
+    "author": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "evaluated_at": {
+      "type": ["string", "null"]
+    },
+    "evaluation_summary": {
+      "type": ["object", "null"]
+    }
+  },
+  "additionalProperties": false
+}

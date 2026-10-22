@@ -1,0 +1,23 @@
+{
+  "skill_id": "visual-word-semantic-animation",
+  "name": "Word-Level Semantic Visual Animation",
+  "category_id": "motion_animation",
+  "subcategory": null,
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "entrypoint": "library/motion_animation/visual-word-semantic-animation/SKILL.md",
+  "content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+  "capabilities": [
+    "word-level-semantic-animation",
+    "temporal-event-coordination",
+    "narration-visual-synchronization"
+  ],
+  "dependencies": [],
+  "applicable_agents": [
+    "motion_animation",
+    "motion_planning",
+    "motion_template_selection",
+    "timeline_build"
+  ],
+  "installed_at": "2026-10-19T00:37:21.902735+00:00"
+}

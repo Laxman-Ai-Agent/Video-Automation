@@ -1,0 +1,12 @@
+{
+  "agent_id": "verification_and_test",
+  "category": "system",
+  "timeout_seconds": 60,
+  "allowed_tools": [
+    "pytest_runner",
+    "hash_verifier",
+    "agent_registry",
+    "component_mapper",
+    "diagnostician"
+  ]
+}

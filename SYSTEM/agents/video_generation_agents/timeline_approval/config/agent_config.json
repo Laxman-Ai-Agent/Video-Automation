@@ -1,0 +1,22 @@
+{
+  "agent_id": "timeline_approval",
+  "stage_id": "approval",
+  "version": "2.0.0",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "laxman_approvals",
+    "store",
+    "llm_gateway"
+  ],
+  "capabilities": [
+    "human-in-the-loop-gate",
+    "pre-render-audit",
+    "approval-token-verification",
+    "sha256-fingerprint-lock",
+    "visual-structural-diff-inspector",
+    "llm-timeline-quality-assessment",
+    "evidence-based-risk-classification",
+    "append-only-audit-logging"
+  ]
+}

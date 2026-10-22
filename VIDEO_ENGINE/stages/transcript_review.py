@@ -1,0 +1,527 @@
+"""Stages 6-9 of the Audio Analyzer: technical vocabulary, confidence-based correction, raw vs corrected transcript (Claude), word timings of the corrected text.
+
+  transcript.json            the raw ASR output. NEVER edited.
+  transcript_review.json     what this stage found and did: vocabulary, uncertain words, the Claude answer's corrections (applied or rejected, each with a reason), what stays unresolved.
+  transcript_corrected.json  written only when at least one correction was applied (same schema as transcript.json, so every consumer reads it through load_transcript()).
+
+Rules: confidence is Whisper's own word probability (`p`), never made up; without it (older transcripts) nothing is flagged and the stage says so. Claude may only change words in a
+span that touches a flagged word, the "from" text must match the raw words exactly, and nothing it says is applied without these checks. Words it writes get `edit: "llm"` and an
+timing re-derived against the ORIGINAL audio: the edited segment's text is force-aligned with faster-whisper's own cross-attention alignment (the method behind Whisper's word
+timestamps, so the result is model-inferred, never "ground truth") and accepted only if the segment's unchanged words land within MAX_SHIFT of the timestamps Whisper measured
+for them; otherwise the new words keep an ESTIMATED timing inside the span of the words they replace and the stage reports a warning. Nothing keeps a stale timestamp of a word
+that no longer exists. If Claude is not available the raw transcript stays the transcript and the stage reports it; it never reports a correction that did not happen.   python -m backend.transcript_review <project id>"""
+import hashlib
+import json
+import os
+import re
+import statistics
+import sys
+from pathlib import Path
+
+from . import config
+from .transcribe import Segment, Transcript, Word
+
+SCHEMA = "transcript-review-1"
+VERSION = 3                       # bump when the rules or the instructions to Claude change (it is part of the step fingerprint)
+LOW_P = float(os.environ.get("A2V_ASR_LOW_CONFIDENCE", "0.5"))      # a word below this Whisper probability is "uncertain"
+MAX_SEGMENTS = 40                 # segments sent to Claude in one call
+MAX_SPAN = 6                      # words one correction may replace
+TIMEOUT = 180
+MAX_SHIFT = 0.4                   # seconds: the largest median disagreement between a forced alignment and Whisper's own timestamps of the UNCHANGED words that still lets us trust it
+ONSET_GAP = 0.15                  # seconds: a corrected word whose aligned start is this long before the first sound in its span is moved to that sound (measured from the signal)
+PAD = 0.3                         # seconds of audio around an edited segment given to the aligner
+
+SYSTEM = (
+    "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
+    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p). "
+    "Fix mis-heard words, phonetically distorted words, noise artifacts, and convert English words written in Telugu script into correct English spelling. "
+    "Guidelines: "
+    "1. Convert English words and technical loanwords written in Telugu script into correct standard English spelling. "
+    "   Examples: "
+    "   - 'స్మార్ట్' -> 'smart' "
+    "   - 'సెన్సార్స్' -> 'sensors' "
+    "   - 'బ్యాటరీ' -> 'battery' "
+    "   - 'మినియేచరైజేషన్' -> 'miniaturization' "
+    "   - 'కటింగ్ ఎడ్జ్' -> 'cutting edge' "
+    "   - 'ఐ ట్రాకింగ్' -> 'eye tracking' "
+    "   - 'టెక్నాలజీస్' -> 'technologies' "
+    "   - 'ఇంటిగ్రేషన్' -> 'integration' "
+    "   - 'డిస్ప్లేస్' -> 'displays' "
+    "   - 'మైక్రో ఎల్ఈడీ' -> 'micro LED' "
+    "   - 'ఫ్యూచర్ లెవెల్' -> 'future level' "
+    "   - 'టాప్ టెక్ జెయింట్స్' -> 'top tech giants' "
+    "   - 'ఫైనల్ ఫేజ్ డెవలప్మెంట్' -> 'final phase development' "
+    "   - 'స్టేబుల్' -> 'stable' "
+    "   - 'టెస్టింగ్' -> 'testing' "
+    "   - 'ప్రోటోటైప్స్' -> 'prototypes' "
+    "   - 'అడ్వాన్స్డ్ వెర్షన్స్' -> 'advanced versions' "
+    "   - 'రియల్ వరల్డ్' -> 'real world' "
+    "   - 'హోలోగ్రామ్ విజువల్స్' -> 'hologram visuals' "
+    "   - 'అల్ట్రా థిన్' -> 'ultra thin' "
+    "   - 'వాయిస్ కమాండ్స్' -> 'voice commands' "
+    "   - 'రెస్పాండ్' -> 'respond' "
+    "   - 'సిస్టమ్స్' -> 'systems' "
+    "   - 'వర్కింగ్ స్టేజ్' -> 'working stage' "
+    "   - 'ఎక్స్పర్ట్స్' -> 'experts' "
+    "   - 'ఇయర్స్' -> 'years' "
+    "   - 'పవర్డ్' -> 'powered' "
+    "   - 'మాస్ ప్రొడక్షన్' -> 'mass production' "
+    "2. Genuine Telugu words MUST remain in Telugu script. Never convert or translate genuine Telugu words into English! "
+    "   Examples: 'మన', 'కావడానికి', 'ఉంటుంది', 'భవిష్యత్తు', 'వైపు', 'దూసుకుపోతున్న', 'ఇప్పుడు', 'లో', 'ఉన్నాయి', 'కానీ', 'ఇవింకా', 'నిజమైన', 'మాత్రం', 'త్వరలోనే', 'అందుబాటులోకి', 'వస్తాయి', 'లాంటి', 'ప్రపంచంలోని', 'అంతా', 'పని చేస్తున్నారు', 'చివరి', 'జరుగుతోంది', 'కాదు', 'ఇప్పటికే', 'కూడా', 'కళ్ల ముందే', 'చూపించే', 'వెంటనే', 'అయ్యే', 'అన్నీ', 'చేరుకున్నాయి', 'చెప్తున్నట్లుగా', 'ఇంకో', 'రెండు', 'మూడు', 'వెళ్లి', 'సాధారణ', 'ప్రజలకు', 'రానుంది' must ALL stay in Telugu. "
+    "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
+    "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
+    "5. Keep the speaker's meaning; never add words that were not spoken; never summarize or translate whole sentences; when unsure change nothing. "
+    'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
+    '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
+)
+
+SYSTEM_ALL = (
+    "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
+    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p). "
+    "Check every word and fix those that are mis-heard, phonetically distorted, or English words written in Telugu script. "
+    "Guidelines: "
+    "1. Convert English words and technical loanwords written in Telugu script into correct standard English spelling. "
+    "   Examples: "
+    "   - 'స్మార్ట్' -> 'smart' "
+    "   - 'సెన్సార్స్' -> 'sensors' "
+    "   - 'బ్యాటరీ' -> 'battery' "
+    "   - 'మినియేచరైజేషన్' -> 'miniaturization' "
+    "   - 'కటింగ్ ఎడ్జ్' -> 'cutting edge' "
+    "   - 'ఐ ట్రాకింగ్' -> 'eye tracking' "
+    "   - 'టెక్నాలజీస్' -> 'technologies' "
+    "   - 'ఇంటిగ్రేషన్' -> 'integration' "
+    "   - 'డిస్ప్లేస్' -> 'displays' "
+    "   - 'మైక్రో ఎల్ఈడీ' -> 'micro LED' "
+    "   - 'ఫ్యూచర్ లెవెల్' -> 'future level' "
+    "   - 'టాప్ టెక్ జెయింట్స్' -> 'top tech giants' "
+    "   - 'ఫైనల్ ఫేజ్ డెవలప్మెంట్' -> 'final phase development' "
+    "   - 'స్టేబుల్' -> 'stable' "
+    "   - 'టెస్టింగ్' -> 'testing' "
+    "   - 'ప్రోటోటైప్స్' -> 'prototypes' "
+    "   - 'అడ్వాన్స్డ్ వెర్షన్స్' -> 'advanced versions' "
+    "   - 'రియల్ వరల్డ్' -> 'real world' "
+    "   - 'హోలోగ్రామ్ విజువల్స్' -> 'hologram visuals' "
+    "   - 'అల్ట్రా థిన్' -> 'ultra thin' "
+    "   - 'వాయిస్ కమాండ్స్' -> 'voice commands' "
+    "   - 'రెస్పాండ్' -> 'respond' "
+    "   - 'సిస్టమ్స్' -> 'systems' "
+    "   - 'వర్కింగ్ స్టేజ్' -> 'working stage' "
+    "   - 'ఎక్స్పర్ట్స్' -> 'experts' "
+    "   - 'ఇయర్స్' -> 'years' "
+    "   - 'పవర్డ్' -> 'powered' "
+    "   - 'మాస్ ప్రొడక్షన్' -> 'mass production' "
+    "2. Genuine Telugu words MUST remain in Telugu script. Never convert or translate genuine Telugu words into English! "
+    "   Examples: 'మన', 'కావడానికి', 'ఉంటుంది', 'భవిష్యత్తు', 'వైపు', 'దూసుకుపోతున్న', 'ఇప్పుడు', 'లో', 'ఉన్నాయి', 'కానీ', 'ఇవింకా', 'నిజమైన', 'మాత్రం', 'త్వరలోనే', 'అందుబాటులోకి', 'వస్తాయి', 'లాంటి', 'ప్రపంచంలోని', 'టాప్', 'అంతా', 'పని చేస్తున్నారు', 'చివరి', 'జరుగుతోంది', 'కాదు', 'ఇప్పటికే', 'కూడా', 'కళ్ల ముందే', 'చూపించే', 'వెంటనే', 'అయ్యే', 'అన్నీ', 'చేరుకున్నాయి', 'చెప్తున్నట్లుగా', 'ఇంకో', 'రెండు', 'మూడు', 'వెళ్లి', 'సాధారణ', 'ప్రజలకు', 'రానుంది' must ALL stay in Telugu. "
+    "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
+    "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
+    "5. Keep the speaker's original intended meaning. Never add words that were not spoken; never summarize or translate whole sentences; keep numbers and names accurate. "
+    'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
+    '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
+)
+
+_LATIN = re.compile(r"[A-Za-z][A-Za-z0-9+#.'\-]*")
+_NUM = re.compile(r"\d[\d,.:]*")
+_PUNCT = " \t.,;:!?()[]{}\"'“”‘’।"
+
+
+def _bare(w: str) -> str:
+    return w.strip(_PUNCT)
+
+
+# ---------- stage 6: Telugu + English technical vocabulary ----------
+def vocabulary(t: Transcript, listed: set[str]) -> list[dict]:
+    """English terms, numbers and the words of the project's own vocabulary.txt that occur in the transcript (found by their script, not guessed)."""
+    found: dict[str, dict] = {}
+    for s in t.segments:
+        for w in s.words:
+            b = _bare(w.w)
+            if not b:
+                continue
+            kind = "listed" if b.lower() in listed else "english" if _LATIN.fullmatch(b) else "number" if _NUM.fullmatch(b) else None
+            if kind:
+                e = found.setdefault(b, {"text": b, "kind": kind, "count": 0, "segments": []})
+                e["count"] += 1
+                if s.id not in e["segments"]:
+                    e["segments"].append(s.id)
+    return sorted(found.values(), key=lambda e: (-e["count"], e["text"]))
+
+
+def _listed(pdir: Path) -> set[str]:
+    f = pdir / "vocabulary.txt"
+    return {x.strip().lower() for x in f.read_text(encoding="utf-8").splitlines() if x.strip()} if f.exists() else set()
+
+
+# ---------- stage 7: confidence & linguistic uncertainty ----------
+_SUSPICIOUS_PHONETIC_RE = re.compile(
+    r"(?:^\d+\.$)|"                     # stray list numbering e.g. "2."
+    r"(?:.*ట్రిసే.*)|"                   # -trization phonetic distortion e.g. మినియట్రిసేసిం
+    r"(?:.*కటింగే.*)|"                  # cutting edge distortion e.g. కటింగేజ్
+    r"(?:.*సెంసర్.*)|"                  # sensors distortion e.g. సెంసర్స్
+    r"(?:.*టెక్గి.*)|"                   # tech distortion e.g. టెక్గి
+    r"(?:.*స్మాట్\b.*)|"                 # smart distortion e.g. స్మాట్
+    r"(?:.*ఆయ్\s*ట్రాకిం.*)|"            # eye tracking distortion
+    r"(?:.*ఎలా\s*డిస్ప్లే.*)|"          # led display distortion
+    r"(?:.*హెూలోగ్రామ్.*)"               # hologram variant
+)
+
+
+def uncertain(t: Transcript, low: float = LOW_P) -> dict:
+    words = [w for s in t.segments for w in s.words]
+    with_p = [w for w in words if w.p is not None]
+    flagged = []
+    for s in t.segments:
+        for i, w in enumerate(s.words):
+            is_low = w.p is not None and w.p < low
+            is_suspicious = bool(_SUSPICIOUS_PHONETIC_RE.search(w.w))
+            if is_low or is_suspicious:
+                flagged.append({
+                    "segment": s.id,
+                    "index": i,
+                    "text": w.w,
+                    "p": w.p,
+                    "reason": "low_confidence" if is_low else "phonetic_distortion",
+                })
+    return {"status": "available" if with_p else "unavailable", "threshold": low, "words_total": len(words), "words_with_confidence": len(with_p), "flagged": flagged}
+
+
+# ---------- stage 8: Claude correction ----------
+def _json_from(text: str) -> dict:
+    a, b = text.find("{"), text.rfind("}")
+    if a < 0 or b <= a:
+        raise ValueError("no JSON in the answer")
+    return json.loads(text[a:b + 1])
+
+
+def _request(t: Transcript, ids: list[int]) -> str:
+    by = {s.id: s for s in t.segments}
+    rows = [{"id": i, "text": by[i].text, "words": [{"i": k, "w": w.w, **({"p": w.p} if w.p is not None else {})} for k, w in enumerate(by[i].words)]} for i in ids]
+    return json.dumps({"segments": rows}, ensure_ascii=False)
+
+
+def validate_corrections(t: Transcript, answer: list, flagged: list[dict]) -> list[dict]:
+    """Every proposed correction with status applied/rejected and the reason for a rejection. Only checked, non-overlapping ones are 'applied'."""
+    by = {s.id: s for s in t.segments}
+    flag = {(f["segment"], f["index"]): f for f in flagged}
+    used: set[tuple[int, int]] = set()
+    out = []
+    for n, c in enumerate(answer if isinstance(answer, list) else []):
+        rec = {"id": f"c{n + 1:03d}", "segment": None, "from_index": None, "to_index": None, "from": "", "to": "", "reason": "", "p_from": [], "status": "rejected", "why": None}
+        try:
+            sid, i, j = int(c["segment"]), int(c["from_index"]), int(c["to_index"])
+            frm = " ".join(str(c["from"]).split())
+            to = " ".join(str(c.get("to", "")).split()) if c.get("to") is not None else ""
+            reason = str(c.get("reason", ""))[:60]
+        except (KeyError, TypeError, ValueError, AttributeError):
+            out.append({**rec, "why": "malformed"})
+            continue
+        rec.update(segment=sid, from_index=i, to_index=j, **{"from": frm, "to": to, "reason": reason})
+        seg = by.get(sid)
+        if seg is None or not (0 <= i <= j < len(seg.words)):
+            out.append({**rec, "why": "bad_index"})
+            continue
+        words = seg.words[i:j + 1]
+        rec["p_from"] = [w.p for w in words]
+        cells = {(sid, k) for k in range(i, j + 1)}
+        if " ".join(w.w for w in words) != frm:
+            why = "from_mismatch"
+        elif j - i + 1 > MAX_SPAN:
+            why = "span_too_long"
+        elif to == frm:
+            why = "empty_or_unchanged"
+        elif len(to.split()) > (j - i + 1) + 2:
+            why = "adds_words"
+        elif not any(k in flag for k in cells):
+            why = "not_uncertain"
+        elif cells & used:
+            why = "overlaps_another"
+        else:
+            why = None
+        if why is None:
+            used |= cells
+            rec["status"] = "applied"
+        else:
+            rec["why"] = why
+        out.append(rec)
+    return out
+
+
+def apply_corrections(t: Transcript, corrections: list[dict]) -> tuple[Transcript, int]:
+    """The corrected transcript. A replaced span keeps the time span of the words it replaced; the new words share it by their length (timing 'estimated')."""
+    todo: dict[int, list[dict]] = {}
+    for c in corrections:
+        if c["status"] == "applied":
+            todo.setdefault(c["segment"], []).append(c)
+    edited, segs = 0, []
+    for s in t.segments:
+        if s.id not in todo:
+            segs.append(s)
+            continue
+        words, at = [], 0
+        for c in sorted(todo[s.id], key=lambda c: c["from_index"]):
+            words += s.words[at:c["from_index"]]
+            span = s.words[c["from_index"]:c["to_index"] + 1]
+            new = c["to"].split()
+            t0, t1 = span[0].start, span[-1].end
+            size = sum(len(x) for x in new) or 1
+            cur = t0
+            for x in new:
+                nxt = cur + (t1 - t0) * len(x) / size
+                words.append(Word(w=x, start=round(cur, 3), end=round(nxt, 3), p=None, timing="estimated", edit="llm"))
+                cur = nxt
+            edited += len(new) if new else 1
+            at = c["to_index"] + 1
+        words += s.words[at:]
+        segs.append(Segment(id=s.id, start=s.start, end=s.end, text=" ".join(w.w for w in words), words=words))
+    return Transcript(language=t.language, duration=t.duration, segments=segs), edited
+
+
+def whisper_aligner():
+    """A forced aligner on faster-whisper's cross-attention alignment. aligner(audio_16k, words) -> [(start, end)] per word, seconds from the start of `audio`.
+    Loads the ASR model (about 3 GB of RAM), so it is built only when words were corrected."""
+    import numpy as np
+    from faster_whisper import WhisperModel
+    from faster_whisper.audio import pad_or_trim
+    from faster_whisper.tokenizer import Tokenizer
+
+    model = WhisperModel(config.WHISPER_MODEL, device=config.WHISPER_DEVICE, compute_type=config.WHISPER_COMPUTE, local_files_only=config.WHISPER_LOCAL_ONLY)
+    tok = Tokenizer(model.hf_tokenizer, model.model.is_multilingual, task="transcribe", language="te")
+
+    def align(audio, words):
+        feats = model.feature_extractor(np.asarray(audio, dtype="float32"))
+        frames = min(model.feature_extractor.nb_max_frames, feats.shape[-1] - 1)
+        enc = model.encode(pad_or_trim(feats[:, :frames]))
+        tokens = [t for t in tok.encode(" " + " ".join(words)) if t < tok.eot]
+        entries = model.find_alignment(tok, [tokens], enc, frames)[0]
+        spans, i = [], 0
+        for want in words:                                 # entries are word pieces (punctuation separately): glue them back to the words we asked for
+            text, first, last = "", None, None
+            while i < len(entries) and len(text) < len(want):
+                e = entries[i]
+                text += e["word"].strip()
+                first = e["start"] if first is None else first
+                last = e["end"]
+                i += 1
+            if text != want or first is None:
+                raise ValueError(f"the aligner returned '{text}' for '{want}'")
+            spans.append((float(first), float(last)))
+        return spans
+
+    return align
+
+
+def _voiced(pcm, hop: float = 0.025):
+    """(frame times, voiced flags): a frame is voiced when it is clearly louder than this audio's own silence floor (measured from the signal)."""
+    import numpy as np
+    n = int(16000 * hop)
+    k = len(pcm) // n
+    rms = np.sqrt((np.asarray(pcm[:k * n], dtype="float64").reshape(k, n) ** 2).mean(axis=1))
+    db = 20 * np.log10(rms + 1e-9)
+    lo, hi = np.percentile(db, 10), np.percentile(db, 85)
+    if hi - lo < 6.0:                                   # no loud/quiet difference in this audio (a constant tone): the signal cannot tell speech from silence, so it does not veto anything
+        return hop, np.ones(k, dtype=bool)
+    return hop, db > lo + max(8.0, 0.35 * (hi - lo))
+
+
+def _onset(hop, voiced, x: float, y: float):
+    """The first time in [x, y] where sound starts (two voiced frames in a row), or None when there is no sound in the span."""
+    i, j = int(x / hop), min(len(voiced) - 1, int(y / hop))
+    for k in range(i, j):
+        if voiced[k] and voiced[k + 1]:
+            return max(x, round(k * hop, 3))
+    return None
+
+
+def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
+    """Re-time the words of every edited segment against the original audio. Returns {"status", "segments": [...]}. Accepted words get timing 'aligned'; the others stay 'estimated'."""
+    edited = [s for s in fixed.segments if any(w.edit for w in s.words)]
+    out = {"status": "unchanged", "segments": []}
+    if not edited:
+        return out
+    try:
+        from faster_whisper.audio import decode_audio
+        wav = pdir / "audio_16k.wav"
+        if not wav.exists():
+            from .audio_utils import to_wav16k
+            from .transcribe import find_audio
+            to_wav16k(find_audio(pdir), wav)
+        pcm = decode_audio(str(wav), sampling_rate=16000)
+        align = aligner or whisper_aligner()
+    except Exception as e:     # no model / no memory / no audio: every edited segment keeps its estimated timing and the stage says why
+        why = f"alignment could not start: {str(e)[:120]}"
+        return {"status": "estimated_for_edits", "segments": [{"segment": s.id, "status": "estimated", "reason": why, "median_shift": None} for s in edited]}
+    for s in edited:
+        a, b = max(0.0, s.start - PAD), min(len(pcm) / 16000, s.end + PAD)
+        rec = {"segment": s.id, "status": "estimated", "reason": None, "median_shift": None, "snapped": []}
+        try:
+            spans = align(pcm[int(a * 16000):int(b * 16000)], [w.w for w in s.words])
+            spans = [(round(x + a, 3), round(y + a, 3)) for x, y in spans]
+            if len(spans) != len(s.words) or any(not (a - 1e-6 <= x <= y <= b + 1e-6) for x, y in spans) or any(spans[k][0] < spans[k - 1][0] - 1e-6 for k in range(1, len(spans))):
+                raise ValueError("the aligned times are out of order or outside the audio")
+            anchors = [abs(x - w.start) for w, (x, _) in zip(s.words, spans) if w.edit is None]
+            if not anchors:
+                rec["median_shift"] = 0.0
+            else:
+                rec["median_shift"] = round(statistics.median(anchors), 3)
+                if rec["median_shift"] > MAX_SHIFT:
+                    raise ValueError(f"the alignment disagrees with Whisper's own timestamps of the unchanged words (median {rec['median_shift']} s)")
+            fits = [(k, spans[k]) for k, w in enumerate(s.words) if w.edit]
+            hop, voiced = _voiced(pcm)
+            moved = []
+            for n, (k, (x, y)) in enumerate(fits):                                       # check the model's times against the sound itself
+                on = _onset(hop, voiced, x, y)
+                if on is not None and on - x > ONSET_GAP:
+                    moved.append({"word": s.words[k].w, "aligned_start": x, "first_sound": on})
+                    fits[n] = (k, (on, y))
+            rec["snapped"] = moved
+            for k, (x, y) in fits:
+                lo = s.words[k - 1].end if k and s.words[k - 1].edit is None else (s.words[k - 1].end if k else s.start)
+                hi = s.words[k + 1].start if k + 1 < len(s.words) and s.words[k + 1].edit is None else (s.words[k + 1].start if k + 1 < len(s.words) else s.end)
+                x = max(lo, round(x, 3))
+                y = min(hi, max(x + 0.05, round(y, 3)))
+                s.words[k].start, s.words[k].end, s.words[k].timing = x, y, "aligned"
+            cur = s.start
+            for w in s.words:
+                if w.start < cur:
+                    w.start = cur
+                if w.end < w.start + 0.04:
+                    w.end = w.start + 0.04
+                cur = w.end
+            if s.words and s.words[-1].end > s.end:
+                s.words[-1].end = s.end
+            rec["status"] = "aligned"
+        except Exception as e:
+            rec["reason"] = str(e)[:160]                  # the new words keep the ESTIMATED timing from apply_corrections
+        out["segments"].append(rec)
+    n_ok = sum(r["status"] == "aligned" for r in out["segments"])
+    out["status"] = "aligned_for_edits" if n_ok == len(out["segments"]) else "partial" if n_ok else "estimated_for_edits"
+    return out
+
+
+def _alignment_block(align_r: dict, edited: int) -> dict:
+    """The "alignment" record of transcript_review.json for an alignment result."""
+    return {"status": align_r["status"], "edited_words": edited, "segments": align_r["segments"],
+            "method": {"unchanged": "whisper word timestamps (model-inferred), no word changed",
+                       "aligned_for_edits": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words",
+                       "partial": "some corrected words re-aligned, the others keep ESTIMATED timestamps (see segments)",
+                       "estimated_for_edits": "ESTIMATED timestamps for the corrected words (not aligned or alignment failed, see segments)"}[align_r["status"]]}
+
+
+def complete_alignment(pdir: Path, aligner=None) -> dict:
+    """Give the corrected words that still have ESTIMATED times their measured ones: re-align the saved corrected transcript against the audio (the slow step a quick correction skipped)
+    and rewrite transcript_corrected.json and the alignment record of transcript_review.json. Nothing to do when no word is estimated. Returns the new alignment record (or the old one)."""
+    review_f, corrected_f = pdir / "transcript_review.json", pdir / "transcript_corrected.json"
+    if not review_f.exists() or not corrected_f.exists():
+        return {"status": "unchanged", "segments": []}
+    fixed = Transcript.model_validate_json(corrected_f.read_text(encoding="utf-8"))
+    if not any(w.timing == "estimated" for s in fixed.segments for w in s.words):
+        return json.loads(review_f.read_text(encoding="utf-8")).get("alignment") or {"status": "unchanged", "segments": []}
+    align_r = realign(pdir, fixed, aligner)
+    edited = sum(1 for s in fixed.segments for w in s.words if w.edit)
+    if align_r["status"] in ("aligned_for_edits", "partial"):                              # at least some words got measured times: keep them
+        corrected_f.write_text(fixed.model_dump_json(indent=1), encoding="utf-8")
+    review = json.loads(review_f.read_text(encoding="utf-8"))
+    review["alignment"] = _alignment_block(align_r, edited)
+    tmp = pdir / "transcript_review.json.part"
+    tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
+    os.replace(tmp, review_f)
+    return review["alignment"]
+
+
+def last_alignment(pdir: Path) -> str:
+    """The alignment status the last run recorded. While corrected words are ESTIMATED the `refine` step counts as unfinished (its outputs list a file that never exists), so every new run
+    tries the alignment again (resume) until it succeeds; the Claude answer comes from the cache, no second call."""
+    try:
+        return json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8"))["alignment"]["status"]
+    except (OSError, ValueError, KeyError):
+        return "none"
+
+
+def _model() -> str | None:
+    from . import llm_client
+    try:
+        _, model, _, _ = llm_client.resolve_provider_config()
+        return model
+    except Exception:
+        return os.environ.get("PROMPTGEN_MODEL") or None
+
+
+def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = False, align: bool = True) -> dict:
+    """Run stages 6-9 and write transcript_review.json (and transcript_corrected.json when something was corrected). `ask(user, system=, timeout=)` defaults to the Claude CLI.
+    `all_words`: the LLM checks every word (the final transcript is the LLM-corrected one); otherwise only the uncertain ones (Whisper's probability below LOW_P) may be corrected.
+    `align=False`: skip the slow forced re-alignment (the corrected words keep their ESTIMATED timing and the step is retried with the alignment on the next pipeline run)."""
+    say = progress or (lambda p, eta=None: None)
+    t = Transcript.model_validate_json((pdir / "transcript.json").read_text(encoding="utf-8"))
+    vocab = vocabulary(t, _listed(pdir))
+    say(25)
+    conf = uncertain(t)
+    say(50)
+    cache_f = pdir / "asr_llm_cache.json"
+    cache = json.loads(cache_f.read_text(encoding="utf-8")) if cache_f.exists() else {}
+    llm = {"status": "not_needed", "error": None, "model": _model(), "segments_sent": 0}
+    corrections: list[dict] = []
+    eligible = conf["flagged"]
+    system = SYSTEM
+    if all_words:
+        eligible = [{"segment": s.id, "index": i, "text": w.w, "p": w.p} for s in t.segments for i, w in enumerate(s.words)]
+        system = SYSTEM_ALL
+    if eligible:
+        ids = sorted({f["segment"] for f in eligible})
+        answers, statuses = [], []
+        try:
+            for n in range(0, len(ids), MAX_SEGMENTS):
+                user = _request(t, ids[n:n + MAX_SEGMENTS])
+                key = hashlib.sha1(f"{VERSION}|{_model()}|{system}|{user}".encode()).hexdigest()
+                llm["segments_sent"] += len(ids[n:n + MAX_SEGMENTS])
+                if key in cache:
+                    answers.append(cache[key])
+                    statuses.append("cached")                                 # the same question was answered before: no second call
+                else:
+                    from . import promptgen
+                    cache[key] = (ask or promptgen.run_claude)(user, system=system, timeout=TIMEOUT)
+                    cache_f.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+                    answers.append(cache[key])
+                    statuses.append("applied")
+            llm["status"] = "applied" if "applied" in statuses else "cached"
+            for ans in answers:
+                corrections += validate_corrections(t, _json_from(ans).get("corrections", []), eligible)
+            for n, c in enumerate(corrections):
+                c["id"] = f"c{n + 1:03d}"
+        except Exception as e:     # CLI missing / not signed in / timeout / an answer that is not the JSON asked for: the raw transcript stays
+            llm["status"] = "unavailable" if "not found" in str(e) or "sign" in str(e).lower() else "failed"
+            llm["error"] = str(e)[:240]
+            corrections = []
+    say(75)
+    fixed, edited = apply_corrections(t, corrections)
+    if not edited:
+        align_r = {"status": "unchanged", "segments": []}
+    elif align:
+        align_r = realign(pdir, fixed, aligner)
+    else:
+        align_r = {"status": "estimated_for_edits", "segments": [{"segment": x.id, "status": "estimated", "reason": "not re-aligned yet (quick correction)", "median_shift": None, "snapped": []}
+                                                                  for x in fixed.segments if any(w.edit for w in x.words)]}
+    out = pdir / "transcript_corrected.json"
+    down = llm["status"] in ("unavailable", "failed")
+    kept = bool(down and not edited and out.exists() and out.stat().st_mtime >= (pdir / "transcript.json").stat().st_mtime)
+    if edited:
+        out.write_text(fixed.model_dump_json(indent=1), encoding="utf-8")
+    elif kept:
+        llm["kept_earlier_correction"] = True      # the LLM is not available now: the transcript it verified earlier (made after the current raw transcript) is NOT thrown away
+    elif out.exists():
+        out.unlink()            # a derived file of an earlier run that no longer applies (the raw text is the transcript again, or it was made from an older raw transcript)
+    done = {(c["segment"], k) for c in corrections if c["status"] == "applied" for k in range(c["from_index"], c["to_index"] + 1)}
+    review = {
+        "schema_version": SCHEMA, "version": VERSION, "raw_file": "transcript.json", "corrected_file": "transcript_corrected.json" if edited or kept else None,
+        "vocabulary": {"terms": vocab, "project_list": (pdir / "vocabulary.txt").exists()},
+        "confidence": conf, "llm": llm, "corrections": corrections,
+        "unresolved": [f for f in conf["flagged"] if (f["segment"], f["index"]) not in done],
+        "alignment": _alignment_block(align_r, edited),
+    }
+    tmp = pdir / "transcript_review.json.part"
+    tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
+    os.replace(tmp, pdir / "transcript_review.json")
+    return review
+
+
+if __name__ == "__main__":
+    r = refine(config.project_dir(sys.argv[1]))
+    print(r["llm"]["status"], f"flagged={len(r['confidence']['flagged'])} corrections={sum(c['status'] == 'applied' for c in r['corrections'])}")

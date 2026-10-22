@@ -1,0 +1,1429 @@
+{
+ "schema_version": "1.0",
+ "version": 2,
+ "source": "deterministic_selector",
+ "project": {
+  "mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "timing_policy": {
+  "unit": "seconds",
+  "frame_rule": "frame = floor(seconds * fps + 0.5); the end frame is exclusive and after the start frame",
+  "pace": 1.4
+ },
+ "visual_plan": {
+  "file": "visual_planning.json",
+  "fingerprint": "34b77ce4cea5ef07465456ac6dcc101f53324eac",
+  "source": "llm",
+  "text_and_hints_used": true
+ },
+ "style_guide": {
+  "palette": [
+   "#0B1020",
+   "#22D3EE",
+   "#A78BFA",
+   "#F8FAFC"
+  ],
+  "typography": "clean geometric sans-serif, bold key words",
+  "tone": "inspiring, hopeful",
+  "density": "low",
+  "safe_area_policy": "Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin (in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background may fill the whole frame."
+ },
+ "source_fingerprint": "979eab4c80c28240",
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "timing": {
+    "start": 0,
+    "end": 9.47,
+    "start_frame": 0,
+    "end_frame": 284,
+    "source": "scene_segmentation",
+    "canonical_start": 0.0,
+    "canonical_end": 8.79,
+    "gap_after_seconds": 0.685
+   },
+   "motion_intent": {
+    "purpose": "hook",
+    "attention_goal": "Smart glasses icon radiating light",
+    "takeaway": "Smart glasses can transform how we perceive and live in the world.",
+    "intensity": "energetic",
+    "hints": [
+     "reveal_with_glow",
+     "emphasize_keyword"
+    ],
+    "mood": "majestic, inspiring"
+   },
+   "elements": [
+    {
+     "element_id": "glasses_icon",
+     "source_element_id": "glasses_icon",
+     "type": "icon",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "resource:icon.tabler.eyeglass",
+     "registry_kind": "primitive",
+     "status": "approximate",
+     "fallback": null,
+     "note": "drawn by the registry icon icon.tabler.eyeglass (curated alias): the description says more than this plain icon shows"
+    },
+    {
+     "element_id": "superpower_text",
+     "source_element_id": "superpower_text",
+     "type": "text",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": "split-reassemble",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "background_glow",
+     "source_element_id": "background_glow",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": false,
+     "registry_id": "particles-float",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_01_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "particles-float",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_01_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "double-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_01_a_gfx_01",
+     "target": "scene_01_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "particles-float",
+     "registry": {
+      "kind": "graphic",
+      "id": "particles-float",
+      "label": "Floating particles",
+      "category": "cinematic"
+     },
+     "start": 0.04,
+     "end": 9.47,
+     "start_frame": 1,
+     "end_frame": 284,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_draw_glasses_icon",
+     "target": "glasses_icon",
+     "phase": "reveal",
+     "kind": "icon",
+     "preset": "resource:icon.tabler.eyeglass",
+     "registry": {
+      "kind": "primitive",
+      "id": "resource:icon.tabler.eyeglass",
+      "label": "Resource icon icon.tabler.eyeglass",
+      "category": null
+     },
+     "start": 0.214,
+     "end": 9.47,
+     "start_frame": 6,
+     "end_frame": 284,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "draws glasses_icon: drawn by the registry icon icon.tabler.eyeglass (curated alias): the description says more than this plain icon shows",
+     "params": {
+      "box": [
+       0.472,
+       0.61,
+       0.056,
+       0.1
+      ],
+      "status": "approximate"
+     }
+    },
+    {
+     "action_id": "scene_01_a_gfx_02",
+     "target": "superpower_text",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "targeting-ring",
+     "registry": {
+      "kind": "graphic",
+      "id": "targeting-ring",
+      "label": "Targeting ring",
+      "category": "hud"
+     },
+     "start": 0.25,
+     "end": 9.47,
+     "start_frame": 8,
+     "end_frame": 284,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_keyword",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_gfx_03",
+     "target": "scene_01_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "double-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "double-line",
+      "label": "Double line",
+      "category": "line"
+     },
+     "start": 0.46,
+     "end": 9.47,
+     "start_frame": 14,
+     "end_frame": 284,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_enter",
+     "target": "superpower_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "split-reassemble",
+     "registry": {
+      "kind": "text",
+      "id": "split-reassemble",
+      "label": "Split and reassemble",
+      "category": "kinetic"
+     },
+     "start": 5.9,
+     "end": 6.61,
+     "start_frame": 177,
+     "end_frame": 198,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'split-reassemble' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "A Superpower",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_emphasis",
+     "target": "superpower_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "mask",
+     "registry": {
+      "kind": "emphasis",
+      "id": "mask",
+      "label": "Colour fill",
+      "category": null
+     },
+     "start": 6.08,
+     "end": 9.11,
+     "start_frame": 182,
+     "end_frame": 273,
+     "depends_on": [
+      "scene_01_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_exit",
+     "target": "superpower_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 9.11,
+     "end": 9.47,
+     "start_frame": 273,
+     "end_frame": 284,
+     "depends_on": [
+      "scene_01_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": null,
+    "next_scene_id": "scene_02",
+    "motifs": [
+     "cyan glow",
+     "lens light"
+    ],
+    "main_text_preset": "split-reassemble",
+    "placed_graphics": [
+     "targeting-ring",
+     "double-line"
+    ],
+    "recent_presets": [],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_approximate",
+     "severity": "info",
+     "message": "scene_01: glasses_icon is drawn as a stand-in: drawn by the registry icon icon.tabler.eyeglass (curated alias): the description says more than this plain icon shows"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "timing": {
+    "start": 9.47,
+    "end": 13.8,
+    "start_frame": 284,
+    "end_frame": 414,
+    "source": "scene_segmentation",
+    "canonical_start": 9.475,
+    "canonical_end": 13.61,
+    "gap_after_seconds": 0.19
+   },
+   "motion_intent": {
+    "purpose": "transition",
+    "attention_goal": "The path extending toward the future",
+    "takeaway": "This is only the beginning of an ongoing journey.",
+    "intensity": "energetic",
+    "hints": [
+     "show_flow_direction",
+     "extend_beyond_frame"
+    ],
+    "mood": "hopeful, forward-looking"
+   },
+   "elements": [
+    {
+     "element_id": "journey_path",
+     "source_element_id": "journey_path",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "dashed-flow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "dashes march along the line (dotted is drawn as dashed)"
+    },
+    {
+     "element_id": "origin_point",
+     "source_element_id": "origin_point",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "shape:circle",
+     "registry_kind": "primitive",
+     "status": "resolved",
+     "fallback": null,
+     "note": "a small filled point on the route"
+    },
+    {
+     "element_id": "future_horizon",
+     "source_element_id": "future_horizon",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "shape:circle",
+     "registry_kind": "primitive",
+     "status": "approximate",
+     "fallback": null,
+     "note": "a plain filled disc where the glow is: the soft glowing edge is not drawn"
+    },
+    {
+     "element_id": "light_pulse",
+     "source_element_id": "light_pulse",
+     "type": "graphic",
+     "semantic_role": "explanatory",
+     "required": false,
+     "registry_id": "dashed-flow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by dashed-flow for the hint 'show_flow_direction'"
+    },
+    {
+     "element_id": "future_text",
+     "source_element_id": "future_text",
+     "type": "text",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": "kinetic",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "scene_02_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "glow-orb",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_02_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "frame-in",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_02_a_gfx_01",
+     "target": "scene_02_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "glow-orb",
+     "registry": {
+      "kind": "graphic",
+      "id": "glow-orb",
+      "label": "Glow orb",
+      "category": "cinematic"
+     },
+     "start": 9.51,
+     "end": 13.8,
+     "start_frame": 285,
+     "end_frame": 414,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.3,
+       0.2,
+       0.4,
+       0.6
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_draw_origin_point",
+     "target": "origin_point",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "shape:circle",
+     "registry": {
+      "kind": "primitive",
+      "id": "shape:circle",
+      "label": "Shape circle",
+      "category": null
+     },
+     "start": 9.684,
+     "end": 13.8,
+     "start_frame": 291,
+     "end_frame": 414,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "draws origin_point: a small filled point on the route",
+     "params": {
+      "box": [
+       0.173,
+       0.82,
+       0.034,
+       0.06
+      ],
+      "status": "resolved"
+     }
+    },
+    {
+     "action_id": "scene_02_a_gfx_02",
+     "target": "light_pulse",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "dashed-flow",
+     "registry": {
+      "kind": "graphic",
+      "id": "dashed-flow",
+      "label": "Dashed flow",
+      "category": "line"
+     },
+     "start": 9.72,
+     "end": 13.8,
+     "start_frame": 292,
+     "end_frame": 414,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:show_flow_direction",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.211,
+       0.84,
+       0.536,
+       0.035
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_gfx_03",
+     "target": "scene_02_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "frame-in",
+     "registry": {
+      "kind": "graphic",
+      "id": "frame-in",
+      "label": "Double frame",
+      "category": "frame"
+     },
+     "start": 9.93,
+     "end": 13.8,
+     "start_frame": 298,
+     "end_frame": 414,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.04,
+       0.06,
+       0.92,
+       0.8
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_draw_future_horizon",
+     "target": "future_horizon",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "shape:circle",
+     "registry": {
+      "kind": "primitive",
+      "id": "shape:circle",
+      "label": "Shape circle",
+      "category": null
+     },
+     "start": 9.934,
+     "end": 13.8,
+     "start_frame": 298,
+     "end_frame": 414,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "draws future_horizon: a plain filled disc where the glow is: the soft glowing edge is not drawn",
+     "params": {
+      "box": [
+       0.759,
+       0.76,
+       0.101,
+       0.18
+      ],
+      "status": "approximate"
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_enter",
+     "target": "future_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "kinetic",
+     "registry": {
+      "kind": "text",
+      "id": "kinetic",
+      "label": "Kinetic typography",
+      "category": "kinetic"
+     },
+     "start": 9.47,
+     "end": 10.04,
+     "start_frame": 284,
+     "end_frame": 301,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'kinetic' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "The Journey Continues",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_emphasis",
+     "target": "future_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "stroke",
+     "registry": {
+      "kind": "emphasis",
+      "id": "stroke",
+      "label": "Highlighter stroke",
+      "category": null
+     },
+     "start": 12.49,
+     "end": 13.44,
+     "start_frame": 375,
+     "end_frame": 403,
+     "depends_on": [
+      "scene_02_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_exit",
+     "target": "future_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 13.44,
+     "end": 13.8,
+     "start_frame": 403,
+     "end_frame": 414,
+     "depends_on": [
+      "scene_02_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_01",
+    "next_scene_id": "scene_03",
+    "motifs": [
+     "cyan glow",
+     "forward motion"
+    ],
+    "main_text_preset": "kinetic",
+    "placed_graphics": [
+     "dashed-flow",
+     "frame-in"
+    ],
+    "recent_presets": [
+     "double-line",
+     "split-reassemble",
+     "targeting-ring"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_approximate",
+     "severity": "info",
+     "message": "scene_02: future_horizon is drawn as a stand-in: a plain filled disc where the glow is: the soft glowing edge is not drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "timing": {
+    "start": 13.8,
+    "end": 20.43,
+    "start_frame": 414,
+    "end_frame": 613,
+    "source": "scene_segmentation",
+    "canonical_start": 13.8,
+    "canonical_end": 20.06,
+    "gap_after_seconds": null
+   },
+   "motion_intent": {
+    "purpose": "conclusion",
+    "attention_goal": "Glowing globe",
+    "takeaway": "An exciting, futuristic world is coming.",
+    "intensity": "energetic",
+    "hints": [
+     "emphasize_growth",
+     "reveal_in_sequence"
+    ],
+    "mood": "hopeful, energetic"
+   },
+   "elements": [
+    {
+     "element_id": "world_icon",
+     "source_element_id": "world_icon",
+     "type": "icon",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "data-ticks",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by data-ticks for the hint 'emphasize_growth'"
+    },
+    {
+     "element_id": "sparkle_accents",
+     "source_element_id": "sparkle_accents",
+     "type": "icon",
+     "semantic_role": "decoration",
+     "required": false,
+     "registry_id": "resource:icon.tabler.sparkles",
+     "registry_kind": "primitive",
+     "status": "approximate",
+     "fallback": null,
+     "note": "the registry icon icon.tabler.sparkles (Resource Library), placed like the book icon; it is not placed around the primary visual"
+    },
+    {
+     "element_id": "futuristic_text",
+     "source_element_id": "futuristic_text",
+     "type": "text",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": "split-reveal",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "background_glow",
+     "source_element_id": "background_glow",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_03_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_03_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "bracket-frame",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_03_a_gfx_01",
+     "target": "scene_03_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "scan-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "scan-line",
+      "label": "Scan line",
+      "category": "hud"
+     },
+     "start": 13.84,
+     "end": 20.43,
+     "start_frame": 415,
+     "end_frame": 613,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_draw_sparkle_accents",
+     "target": "sparkle_accents",
+     "phase": "reveal",
+     "kind": "icon",
+     "preset": "resource:icon.tabler.sparkles",
+     "registry": {
+      "kind": "primitive",
+      "id": "resource:icon.tabler.sparkles",
+      "label": "Resource icon icon.tabler.sparkles",
+      "category": null
+     },
+     "start": 14.014,
+     "end": 20.43,
+     "start_frame": 420,
+     "end_frame": 613,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "draws sparkle_accents: the registry icon icon.tabler.sparkles (Resource Library), placed like the book icon; it is not placed around the primary visual",
+     "params": {
+      "box": [
+       0.472,
+       0.15,
+       0.056,
+       0.1
+      ],
+      "status": "approximate"
+     }
+    },
+    {
+     "action_id": "scene_03_a_gfx_02",
+     "target": "world_icon",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "data-ticks",
+     "registry": {
+      "kind": "graphic",
+      "id": "data-ticks",
+      "label": "Ruler ticks",
+      "category": "hud"
+     },
+     "start": 14.05,
+     "end": 20.43,
+     "start_frame": 422,
+     "end_frame": 613,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_growth",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.1,
+       0.68,
+       0.8,
+       0.06
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_gfx_03",
+     "target": "scene_03_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "bracket-frame",
+     "registry": {
+      "kind": "graphic",
+      "id": "bracket-frame",
+      "label": "Bracket frame",
+      "category": "frame"
+     },
+     "start": 14.26,
+     "end": 20.43,
+     "start_frame": 428,
+     "end_frame": 613,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_text_01_enter",
+     "target": "futuristic_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "split-reveal",
+     "registry": {
+      "kind": "text",
+      "id": "split-reveal",
+      "label": "Split reveal",
+      "category": "reveal"
+     },
+     "start": 13.8,
+     "end": 14.44,
+     "start_frame": 414,
+     "end_frame": 433,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'split-reveal' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "Even More Futuristic",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_03_a_text_01_emphasis",
+     "target": "futuristic_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "stroke",
+     "registry": {
+      "kind": "emphasis",
+      "id": "stroke",
+      "label": "Highlighter stroke",
+      "category": null
+     },
+     "start": 18.66,
+     "end": 20.07,
+     "start_frame": 560,
+     "end_frame": 602,
+     "depends_on": [
+      "scene_03_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_03_a_text_01_exit",
+     "target": "futuristic_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "wipe-out",
+     "registry": {
+      "kind": "exit",
+      "id": "wipe-out",
+      "label": "Wipe out",
+      "category": null
+     },
+     "start": 20.07,
+     "end": 20.43,
+     "start_frame": 602,
+     "end_frame": 613,
+     "depends_on": [
+      "scene_03_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": null,
+   "continuity": {
+    "previous_scene_id": "scene_02",
+    "next_scene_id": null,
+    "motifs": [
+     "cyan glow",
+     "violet horizon"
+    ],
+    "main_text_preset": "split-reveal",
+    "placed_graphics": [
+     "data-ticks",
+     "bracket-frame"
+    ],
+    "recent_presets": [
+     "dashed-flow",
+     "double-line",
+     "frame-in",
+     "kinetic",
+     "split-reassemble",
+     "targeting-ring"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_approximate",
+     "severity": "info",
+     "message": "scene_03: sparkle_accents is drawn as a stand-in: the registry icon icon.tabler.sparkles (Resource Library), placed like the book icon; it is not placed around the primary visual"
+    }
+   ]
+  }
+ ],
+ "reuse": {
+  "text_presets_used": 3,
+  "text_presets_available": 41,
+  "graphics_used": 10,
+  "graphics_available": 52,
+  "ids_not_in_registry": 0,
+  "new_presets_added": 0
+ },
+ "output": {
+  "motion_text": 3,
+  "motion_scene_items": 11,
+  "icons": 2,
+  "classic_texts": 0,
+  "composition": "matches the plan"
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Motion Plan Reader",
+   "status": "completed",
+   "detail": "6 of 6 inputs checks passed"
+  },
+  {
+   "n": 2,
+   "name": "Element Resolver",
+   "status": "completed",
+   "detail": "8 of 8 elements checks passed"
+  },
+  {
+   "n": 3,
+   "name": "Preset Registry Lookup",
+   "status": "completed",
+   "detail": "24 of 24 ids checks passed"
+  },
+  {
+   "n": 4,
+   "name": "Effect Reuse Engine",
+   "status": "completed",
+   "detail": "7 of 7 reuse checks passed"
+  },
+  {
+   "n": 5,
+   "name": "Animation Builder",
+   "status": "completed",
+   "detail": "12 of 12 sequence checks passed"
+  },
+  {
+   "n": 6,
+   "name": "Animation Engine Adapter",
+   "status": "completed",
+   "detail": "27 of 27 parameters checks passed"
+  },
+  {
+   "n": 7,
+   "name": "Composition & Transition Builder",
+   "status": "completed",
+   "detail": "5 of 5 transitions checks passed"
+  },
+  {
+   "n": 8,
+   "name": "Timing & Audio Sync",
+   "status": "completed",
+   "detail": "47 of 47 timing checks passed"
+  },
+  {
+   "n": 9,
+   "name": "Layout Validator",
+   "status": "completed",
+   "detail": "30 of 30 layout checks passed"
+  },
+  {
+   "n": 10,
+   "name": "Code & Plan Validator",
+   "status": "completed",
+   "detail": "5 of 5 contract checks passed"
+  },
+  {
+   "n": 11,
+   "name": "Motion Test Runner",
+   "status": "completed",
+   "detail": "2 of 2 tests checks passed"
+  },
+  {
+   "n": 12,
+   "name": "Error Repair Handler",
+   "status": "completed",
+   "detail": "nothing needed repair"
+  },
+  {
+   "n": 13,
+   "name": "Remotion Output Adapter",
+   "status": "completed",
+   "detail": "3 texts, 11 graphics, 2 icons ready; composition matches the plan"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "checks": {
+   "passed": 188,
+   "total": 188,
+   "by_rule": {
+    "visual_plan_current": {
+     "passed": 1,
+     "total": 1
+    },
+    "visual_plan_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_linked": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "aspect_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "element_drawn": {
+     "passed": 12,
+     "total": 12
+    },
+    "text_kept": {
+     "passed": 3,
+     "total": 3
+    },
+    "registry_id": {
+     "passed": 22,
+     "total": 22
+    },
+    "action_in_scene": {
+     "passed": 22,
+     "total": 22
+    },
+    "frames_valid": {
+     "passed": 22,
+     "total": 22
+    },
+    "telugu_safe_preset": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_style": {
+     "passed": 3,
+     "total": 3
+    },
+    "min_duration": {
+     "passed": 12,
+     "total": 12
+    },
+    "text_readable": {
+     "passed": 3,
+     "total": 3
+    },
+    "emphasis_inside_text": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_count": {
+     "passed": 3,
+     "total": 3
+    },
+    "speed_range": {
+     "passed": 9,
+     "total": 9
+    },
+    "graphic_in_safe_area": {
+     "passed": 6,
+     "total": 6
+    },
+    "graphic_clear_of_drawn_text": {
+     "passed": 4,
+     "total": 4
+    },
+    "graphic_clear_of_text": {
+     "passed": 5,
+     "total": 5
+    },
+    "diagram_element_exists": {
+     "passed": 5,
+     "total": 5
+    },
+    "diagram_in_safe_area": {
+     "passed": 5,
+     "total": 5
+    },
+    "diagram_clear_of_drawn_text": {
+     "passed": 4,
+     "total": 4
+    },
+    "transition_known": {
+     "passed": 2,
+     "total": 2
+    },
+    "transition_not_repeated": {
+     "passed": 2,
+     "total": 2
+    },
+    "transition_fits": {
+     "passed": 2,
+     "total": 2
+    },
+    "repeat_text_preset": {
+     "passed": 3,
+     "total": 3
+    },
+    "repeat_graphic": {
+     "passed": 3,
+     "total": 3
+    },
+    "scene_animated": {
+     "passed": 3,
+     "total": 3
+    },
+    "dependency_acyclic": {
+     "passed": 3,
+     "total": 3
+    },
+    "dependencies_exist": {
+     "passed": 3,
+     "total": 3
+    },
+    "dependency_order": {
+     "passed": 3,
+     "total": 3
+    },
+    "mode_requirement": {
+     "passed": 3,
+     "total": 3
+    },
+    "transition_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "variety": {
+     "passed": 1,
+     "total": 1
+    },
+    "ids_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_code": {
+     "passed": 1,
+     "total": 1
+    },
+    "adapter_fields": {
+     "passed": 1,
+     "total": 1
+    },
+    "composition_current": {
+     "passed": 1,
+     "total": 1
+    },
+    "motion_checks": {
+     "passed": 1,
+     "total": 1
+    },
+    "motion_checks_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "contract": {
+     "passed": 1,
+     "total": 1
+    }
+   }
+  },
+  "note": "no probability is claimed: the result is the list of checks that passed; the choice is the deterministic selector of the motion library"
+ },
+ "repairs": [],
+ "tests": {
+  "motion_checks": {
+   "ok": true,
+   "count": 176,
+   "failed": [],
+   "error": null,
+   "cached": false
+  }
+ },
+ "needs_review": false,
+ "timings_seconds": {
+  "build": 14.188
+ },
+ "warning_fix": {
+  "status": "solved",
+  "not_drawn": 0,
+  "approximate": 3,
+  "at": "2026-10-15T10:59:00",
+  "before": 4,
+  "after": 0,
+  "changes": [
+   {
+    "scene": "scene_02",
+    "kind": "graphic_moved",
+    "preset": "dashed-flow",
+    "from": [
+     0.1,
+     0.16,
+     0.8,
+     0.02
+    ],
+    "to": [
+     0.1,
+     0.93,
+     0.8,
+     0.02
+    ],
+    "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+   },
+   {
+    "scene": "scene_03",
+    "kind": "graphic_moved",
+    "preset": "data-ticks",
+    "from": [
+     0.1,
+     0.8,
+     0.8,
+     0.06
+    ],
+    "to": [
+     0.1,
+     0.68,
+     0.8,
+     0.06
+    ],
+    "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+   },
+   {
+    "scene": "scene_02",
+    "kind": "emphasis_aligned",
+    "text": "The Journey Continues",
+    "word": "ఇక్కడితో",
+    "from": 9.65,
+    "to": 12.49,
+    "why": "The highlighted word 'Continues' means the spoken phrase 'ఇక్కడితో ముగియదు' (does not end here). The phrase's last word 'ముగియదు' (13.17 s) is too late to be seen before the text leaves, so the emphasis starts with the phrase, on 'ఇక్కడితో' (12.49 s). Chosen by Claude on 2026-10-15, recorded here."
+   },
+   {
+    "scene": "scene_03",
+    "kind": "emphasis_aligned",
+    "text": "Even More Futuristic",
+    "word": "futuristic",
+    "from": 13.98,
+    "to": 18.66,
+    "why": "The highlighted word 'Futuristic' is spoken as the English word 'futuristic' (18.66 s): an exact match. Chosen by Claude on 2026-10-15, recorded here."
+   }
+  ],
+  "accepted": [],
+  "left": []
+ }
+}

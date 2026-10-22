@@ -1,0 +1,12 @@
+{
+ "fingerprints": {
+  "cuts": "6a8443d4eafd0723972fb54c207ffc9ce486682f",
+  "motion-build": "c7f39aa94b8b37b267c657f9b42bcf4b3aa47a15",
+  "motion-plan": "cc3a5c48f4780eb2c6957b0d3377a48c1541ce1c",
+  "motion-validate": null,
+  "motion-validation": null,
+  "motion-validation-preview": null,
+  "segment": "e6881a8b95ffc3736a5fc2d975ee6635f782ee90",
+  "transcribe": "360783e5a6edb45b4d43eadf4db51498cd63866d"
+ }
+}

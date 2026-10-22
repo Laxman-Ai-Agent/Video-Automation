@@ -1,0 +1,124 @@
+{
+ "duration": 70.131,
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 5.0,
+   "te": "అసలు ఇ ఏయ్ ఎంస్ ని ఎలా బిల్ చాస్తారో చుద్దాం. ఏయ్ ఎంస్ ని బిల్ చేయాలంటే",
+   "en": "Let's see how AI agents are actually built. If you want to build AI agents,"
+  },
+  {
+   "id": 1,
+   "start": 5.3500000000000005,
+   "end": 9.33,
+   "te": "కోడింగ్ తెలిస్నవాళ్ళు, కోడింగ్ తెలియనివాళ్ళు కూడా AI ఏజంస్ని బిల్ల్ చేయచ్చు.",
+   "en": "Both people who know coding and people who don't can build AI agents."
+  },
+  {
+   "id": 2,
+   "start": 10.200000000000001,
+   "end": 15.200000000000001,
+   "te": "కోడింగ్ తిలిసిన వాళ్ళితే పైతోన్ లాంటి లాంగ్విజస్ ఉపియోగించి అడ్వాంస్ట్ ఫ్రేమ్వర్క్స్ తో",
+   "en": "Those who know coding use languages like Python with advanced frameworks"
+  },
+  {
+   "id": 3,
+   "start": 15.350000000000001,
+   "end": 17.19,
+   "te": "కంప్లేక్స్ ఏయ్ ఎంట్స్ బిల్ చేస్తారు",
+   "en": "to build complex AI agents."
+  },
+  {
+   "id": 4,
+   "start": 17.19,
+   "end": 20.770000000000003,
+   "te": "ఈ ఎంట్స్ లో ముల్ట్పుల ఎంట్స్ కలిసి వర్క్ చేడాం",
+   "en": "In these agents, multiple agents can work together,"
+  },
+  {
+   "id": 5,
+   "start": 20.770000000000003,
+   "end": 23.810000000000002,
+   "te": "కస్టమ్ లోజిక ఆడ్ చేడాం డేటాబేసిస్",
+   "en": "add custom logic, databases,"
+  },
+  {
+   "id": 6,
+   "start": 23.900000000000002,
+   "end": 28.400000000000002,
+   "te": "ఆపియిస్ డిఫ్రన్ట ఆప్స్ తో ఇంటిగ్రేట్ చేడం లాంటి అడ్వాంస్ట్ కేపబుల్టిస్ ఉంటాయ్",
+   "en": "integrating with APIs and different apps - there are advanced capabilities like these."
+  },
+  {
+   "id": 7,
+   "start": 28.85,
+   "end": 32.61,
+   "te": "ఇలాంటి AI ఏజంట్స్ని సాధారన ఆటోమేషన్ మాత్రమే కాకుండా",
+   "en": "Such AI agents, not just for simple automation,"
+  },
+  {
+   "id": 8,
+   "start": 32.95,
+   "end": 39.09,
+   "te": "పెద్ధ ప్రోజేక్స్, బిస్నస్ అటోమేశన్ సిస్టమ్స్, ఇంటర్నల్ వర్క్ఫ్లోస్ లాంటి ప్రోఫిష్నల్ లేవల్ యూస్ కేసిస్ కోసం ఉప్యోగిస్త�",
+   "en": "for large projects, business automation systems, internal workflows - professional-level use cases - they are used."
+  },
+  {
+   "id": 9,
+   "start": 39.09,
+   "end": 40.81,
+   "te": "అదే సమీయం లో",
+   "en": "At the same time,"
+  },
+  {
+   "id": 10,
+   "start": 41.150000000000006,
+   "end": 45.75000000000001,
+   "te": "కోడింగ్ రాని వాళ్ళు కూడా నో కోడ్ టూల్స్ ఉప్యోగించి సింప్పుల్ ఏయా అజంట్స్ క్రియేట్ చేస్తునారు.",
+   "en": "people who don't know coding are also creating simple AI agents using no-code tools."
+  },
+  {
+   "id": 11,
+   "start": 45.75000000000001,
+   "end": 47.910000000000004,
+   "te": "ఇనేటేన్ జాపియర్",
+   "en": "n8n, Zapier,"
+  },
+  {
+   "id": 12,
+   "start": 48.050000000000004,
+   "end": 51.89,
+   "te": "మేక్ ఇలాంటి టూల్స్ తో డ్రాగ్ ఇం డ్రాప్ వర్క్ఫ్లోస్ క్రేట్ చేయవచ్చు",
+   "en": "Make - with tools like these you can create drag-and-drop workflows."
+  },
+  {
+   "id": 13,
+   "start": 52.35,
+   "end": 57.49,
+   "te": "ప్రిడిఫాన్డ ఆక్షన్ సెలెక్చేవచు, ఈమేల్స్ రిప్లై చేడం, వాట్సాప్ మెసేజేస్ పంపడం,",
+   "en": "You select predefined actions, like replying to emails, sending WhatsApp messages,"
+  },
+  {
+   "id": 14,
+   "start": 57.75,
+   "end": 62.25,
+   "te": "రిపోట్స్ జేన్రేట్ చేడం, బేసిక ఆటోమేశన్స్ రంచేడం లాంటి రూటిం టాస్కి",
+   "en": "generating reports, running basic automations - routine tasks."
+  },
+  {
+   "id": 15,
+   "start": 62.35,
+   "end": 69.67,
+   "te": "కోడింగ్ అవస్రమ్ ఉండిదు. అంటే టేక్నికల్ నాలేజ్ లేకపోయిన బేసిక ఏయి అజంట్స్ బిల్ చేసి యూస్ చేడం ఇప్పుడు చాలా మంది చేస్తునార",
+   "en": "No coding is needed. So even without technical knowledge, building and using basic AI agents is something many people are doing now."
+  },
+  {
+   "id": 16,
+   "start": 69.67,
+   "end": 70.07000000000001,
+   "te": "ప్రారు",
+   "en": ""
+  }
+ ]
+}

@@ -1,0 +1,372 @@
+{
+ "approval": {
+  "approved_fingerprint": null,
+  "status": "not_approved"
+ },
+ "aspect": "16:9",
+ "builder": {
+  "rule_set": "1.0",
+  "version": 1
+ },
+ "checks": {
+  "failed": 1,
+  "passed": 281,
+  "skipped": 0,
+  "total": 282,
+  "warnings": 4
+ },
+ "counts": {
+  "duration_frames": 1728,
+  "fps": 30,
+  "gaps": 5,
+  "items": 10,
+  "layers": 48,
+  "scenes": 9,
+  "tracks": 2,
+  "transitions": 8
+ },
+ "created_at": "2026-10-15T05:35:01",
+ "disclosures": {
+  "accepted_exceptions": 0,
+  "approximate": 3,
+  "note": "accepted does not mean drawn: see the findings of the build report",
+  "optional_not_drawn": 3,
+  "required_not_drawn": 0
+ },
+ "error": null,
+ "findings": [
+  {
+   "blocks_build": false,
+   "evidence": {
+    "frame_seconds": 0.0333,
+    "renderer_frames": 1728,
+    "tail_seconds": 0.011
+   },
+   "finding_id": "audio.tail_quantization:project:audio",
+   "item_id": "audio",
+   "message": "the renderer's frame count (1728 frames = 57.600 s) is 0.011 s shorter than the audio (57.611 s): less than one frame is cut off the end of the audio",
+   "occurrences": 1,
+   "owner_stage": "render",
+   "rule_id": "audio.tail_quantization",
+   "scene_id": null,
+   "severity": "warning",
+   "stage_id": "frame_timing",
+   "status": "unresolved",
+   "suggested_action": "within one frame: permitted by policy, disclosed here"
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": true,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_04:small_crew_group",
+   "item_id": "small_crew_group",
+   "message": "small_crew_group (graphic) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_04",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": true,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_05:crew_team",
+   "item_id": "crew_team",
+   "message": "crew_team (graphic) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "required": true,
+    "state": "approximate"
+   },
+   "finding_id": "visual.approximate:scene_05:help_line",
+   "item_id": "help_line",
+   "message": "help_line (graphic) is drawn as a stand-in for what the plan describes",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.approximate",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "plan_status": "fallback",
+    "required": false,
+    "state": "optional_missing"
+   },
+   "finding_id": "visual.optional_not_drawn:scene_01:mind_icon",
+   "item_id": "mind_icon",
+   "message": "mind_icon (icon) is optional missing: the library has no graphic that draws this element on its own",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.optional_not_drawn",
+   "scene_id": "scene_01",
+   "severity": "info",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "plan_status": "fallback",
+    "required": false,
+    "state": "optional_missing"
+   },
+   "finding_id": "visual.optional_not_drawn:scene_04:silence_icon",
+   "item_id": "silence_icon",
+   "message": "silence_icon (icon) is optional missing: the library has no graphic that draws this element on its own",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.optional_not_drawn",
+   "scene_id": "scene_04",
+   "severity": "info",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  },
+  {
+   "blocks_build": false,
+   "evidence": {
+    "plan_status": "fallback",
+    "required": false,
+    "state": "optional_missing"
+   },
+   "finding_id": "visual.optional_not_drawn:scene_06:triad_emblem",
+   "item_id": "triad_emblem",
+   "message": "triad_emblem (graphic) is optional missing: the library has no graphic that draws this element on its own",
+   "occurrences": 1,
+   "owner_stage": "motion_generation",
+   "rule_id": "visual.optional_not_drawn",
+   "scene_id": "scene_06",
+   "severity": "info",
+   "stage_id": "freshness_gate",
+   "status": "unresolved",
+   "suggested_action": ""
+  }
+ ],
+ "inputs": {
+  "audio": "audio.wav:2765370",
+  "builder": "7283aed19944c334",
+  "composition": "b0b79ab1428bb704",
+  "motion_generation": "d8123e2ab5231d64",
+  "motion_plan": "46cfe7eed67f9217",
+  "motion_planning": "455b7794c0eee124",
+  "policies": "00674402a882b1cd",
+  "project": "41652fe7feafdcc8",
+  "renderer": "cdf5f33028052d6e97578400738513ce970bb298",
+  "scene_plan": "475589436a8e784b",
+  "segmentation": "35e46d7b6669b229",
+  "stage10": "5e6315642883bc8d",
+  "visual_plan": "9255d84cb8b3f754",
+  "words": "78893eb15d712430"
+ },
+ "next_action": "review_the_warnings_then_approve_when_you_choose",
+ "note": "structural validation only: no video was rendered and the playback was not watched; Timeline Approval is a separate, explicit step",
+ "persistence": {
+  "digest_equal": true,
+  "inputs_rechecked": true,
+  "published": true,
+  "read_back_ok": true,
+  "written": true
+ },
+ "phase": "timeline_build",
+ "policies": {
+  "frame_timing_version": "1",
+  "gap_policy_version": "1",
+  "transition_policy_version": "1"
+ },
+ "project_id": "my-video-project-c2e8",
+ "readiness": "ready_with_warnings",
+ "schema_version": "1.0",
+ "source_fingerprint": "109f522e604c9959",
+ "stages": [
+  {
+   "checks_passed": 0,
+   "checks_skipped": 0,
+   "checks_total": 0,
+   "duration_ms": 0,
+   "finding_ids": [],
+   "label": "Build Request",
+   "n": 1,
+   "name": "Build Request & Lock",
+   "stage_id": "request_lock",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 16,
+   "checks_skipped": 0,
+   "checks_total": 16,
+   "duration_ms": 17,
+   "finding_ids": [],
+   "label": "Input Discovery",
+   "n": 2,
+   "name": "Input Artifact Discovery",
+   "stage_id": "input_discovery",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 4,
+   "checks_skipped": 0,
+   "checks_total": 4,
+   "duration_ms": 67,
+   "finding_ids": [
+    "visual.optional_not_drawn:scene_01:mind_icon",
+    "visual.approximate:scene_04:small_crew_group",
+    "visual.optional_not_drawn:scene_04:silence_icon",
+    "visual.approximate:scene_05:crew_team",
+    "visual.approximate:scene_05:help_line",
+    "visual.optional_not_drawn:scene_06:triad_emblem"
+   ],
+   "label": "Freshness Gate",
+   "n": 3,
+   "name": "Source Freshness & Readiness Gate",
+   "stage_id": "freshness_gate",
+   "status": "warning"
+  },
+  {
+   "checks_passed": 4,
+   "checks_skipped": 0,
+   "checks_total": 4,
+   "duration_ms": 3,
+   "finding_ids": [],
+   "label": "Project Settings",
+   "n": 4,
+   "name": "Project Settings Normalization",
+   "stage_id": "settings",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 30,
+   "checks_skipped": 0,
+   "checks_total": 30,
+   "duration_ms": 12,
+   "finding_ids": [],
+   "label": "Scene Mapping",
+   "n": 5,
+   "name": "Scene Mapping",
+   "stage_id": "scene_mapping",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 39,
+   "checks_skipped": 0,
+   "checks_total": 40,
+   "duration_ms": 88,
+   "finding_ids": [
+    "audio.tail_quantization:project:audio"
+   ],
+   "label": "Frame Timing",
+   "n": 6,
+   "name": "Frame Timing Normalization",
+   "stage_id": "frame_timing",
+   "status": "warning"
+  },
+  {
+   "checks_passed": 67,
+   "checks_skipped": 0,
+   "checks_total": 67,
+   "duration_ms": 18,
+   "finding_ids": [],
+   "label": "Video Track",
+   "n": 7,
+   "name": "Video / Composition Track Assembly",
+   "stage_id": "video_track",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 3,
+   "checks_skipped": 0,
+   "checks_total": 3,
+   "duration_ms": 0,
+   "finding_ids": [],
+   "label": "Audio Track",
+   "n": 8,
+   "name": "Audio & Narration Track Assembly",
+   "stage_id": "audio_track",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 69,
+   "checks_skipped": 0,
+   "checks_total": 69,
+   "duration_ms": 1,
+   "finding_ids": [],
+   "label": "Transitions & Gaps",
+   "n": 9,
+   "name": "Transition & Gap Policy Application",
+   "stage_id": "transitions_gaps",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 1,
+   "checks_skipped": 0,
+   "checks_total": 1,
+   "duration_ms": 0,
+   "finding_ids": [],
+   "label": "Assembly",
+   "n": 10,
+   "name": "Timeline Assembly & Duration",
+   "stage_id": "assembly",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 48,
+   "checks_skipped": 0,
+   "checks_total": 48,
+   "duration_ms": 45,
+   "finding_ids": [],
+   "label": "Validation",
+   "n": 11,
+   "name": "Structural / Post-Build Validation",
+   "stage_id": "validation",
+   "status": "completed"
+  },
+  {
+   "checks_passed": 0,
+   "checks_skipped": 0,
+   "checks_total": 0,
+   "detail": "written, read back, digest equal, inputs unchanged, last good pair backed up, published",
+   "duration_ms": 81,
+   "finding_ids": [],
+   "label": "Publish",
+   "n": 12,
+   "name": "Persist, Read Back & Publish",
+   "stage_id": "persist",
+   "status": "completed"
+  }
+ ],
+ "status": "completed_with_warnings",
+ "summary": {
+  "blockers": 0,
+  "disclosed_not_drawn_or_approximate": 6,
+  "errors": 0,
+  "info": 3,
+  "warnings": 4
+ },
+ "timeline_fingerprint": "0b43b549635f0a76",
+ "timings_seconds": {
+  "build": 0.378
+ }
+}

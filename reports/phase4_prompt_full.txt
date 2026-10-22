@@ -1,0 +1,557 @@
+<USER_REQUEST>
+# PHASE 4 — SKILL FACTORY PRODUCTION HARDENING
+## Complete Implementation, Integration, Security, Testing, and Handoff
+
+### 1. Mission
+
+Repository: `E:\audio-to-video`  
+Expected branch: `agents-building`  
+Canonical Skill Factory location: `SYSTEM/agents/skill_factory/`  
+Capability Finder location: `SYSTEM/agents/capability_finder/`  
+Shared skills library: `SYSTEM/skills/`
+
+Previous phases:
+- Phase 0: Architecture audit
+- Phase 1: System Agent restructuring
+- Phase 2: Capability Registry and Capability Finder
+- Phase 3: Capability Finder Self-Learning
+- Phase 3.1: Final security and concurrency verification
+
+Phase 3.1 has been reported as complete and ready to close. Its reported final verification run passed 12 targeted tests, and the three frozen video algorithm files retained their expected SHA-256 hashes.
+
+Your task is to implement **Phase 4: Skill Factory Production Hardening**. The goal is a functioning, secure, reusable Skill Factory that can create or adapt skills, validate them, test them safely, obtain required approvals, publish approved versions to the shared skill library and registries, and recover from failed promotions.
+
+This is an implementation task, not a planning-only exercise. Inspect the actual project, implement the required behavior, run meaningful tests, and produce evidence-based reports.
+
+**Do not begin Phase 5, Phase 6, Phase 7, Phase 8, or Phase 9. Do not implement the future Autonomous Task Execution Protocol in this phase.**
+
+---
+
+## 2. Mandatory Project Rules
+
+Before modifying anything:
+
+1. Read `AGENTS.md`, `CLAUDE.md`, applicable project architecture documents, and project status files such as `PROJECT_OVERVIEW.md` and `PROJECT_STATUS.md`, if they exist.
+2. Read the Phase 0, Phase 1, Phase 2, Phase 3, and Phase 3.1 reports relevant to the Skill Factory, registries, authorization, and testing infrastructure.
+3. Inspect the complete current implementation of the canonical Skill Factory and its legacy compatibility paths.
+4. Inspect existing `AgentRegistry`, `SkillRegistry`, `CapabilityRegistry`, agent base classes, approval services, validation utilities, audit logging, and test infrastructure before designing new abstractions.
+5. Verify the actual Git branch, HEAD, working-tree changes, untracked files, and relevant ignored files. Preserve user work.
+6. Reuse existing, verified components wherever appropriate. Do not duplicate registries, approval systems, agent lifecycle implementations, or storage abstractions unnecessarily.
+7. Do not assume that previous completion reports prove the current implementation is correct. Verify source code and relevant execution evidence.
+8. Do not replace functioning implementations with simplified placeholders, mocked production behavior, TODO-only implementations, or empty adapters.
+9. Do not change public interfaces, persisted data formats, or legacy paths unnecessarily. Add backward-compatible migrations only when required.
+10. Do not run all tests repeatedly. Inspect previous results, run targeted tests first, then run the relevant regression suite when warranted.
+11. Do not weaken assertions, skip failing tests to obtain a green result, conceal exceptions, or claim that unexecuted tests passed.
+12. Do not commit, push, reset, clean, stash, or discard user changes.
+
+### Frozen algorithm files
+
+These files must remain byte-for-byte unchanged throughout Phase 4:
+
+- `VIDEO_ENGINE/stages/transcribe.py`
+- `VIDEO_ENGINE/stages/transcript_review.py`
+- `VIDEO_ENGINE/stages/scene_segmentation.py`
+
+Required SHA-256 hashes:
+
+| File | SHA-256 |
+|---|---|
+| `VIDEO_ENGINE/stages/transcribe.py` | `07a200319d41c2bd1550dfd5704f3bbcc5fac8331a0aeb09dcca4bf46d61376e` |
+| `VIDEO_ENGINE/stages/transcript_review.py` | `7290ea210d922514c011c799caf73aad61398f0229cc6799dd2f10072b38d049` |
+| `VIDEO_ENGINE/stages/scene_segmentation.py` | `2d9ea882b8c53a6cfcd43b048481f72140a1a6792b8f05578e16fd56a9b37042` |
+
+Calculate the hashes before and after implementation. If a hash already differs at baseline, report it and investigate without modifying the file.
+
+---
+
+## 3. Phase 4 Goals
+
+Implement a production-oriented Skill Factory that supports this lifecycle:
+
+`Requirement → Capability Gap → Skill Discovery → Reuse/Adapt/Create Decision → Skill Draft → Static Security Validation → Isolated Testing → Validation Report → Required Approval → Versioned Promotion → Registry Synchronization → Runtime Discovery → Rollback When Necessary`
+
+The lifecycle must enforce these principles:
+
+- Reuse an appropriate existing skill before considering adaptation or creating a new skill.
+- Adapt an existing skill when its reusable implementation is close to the requirement and the modification is justified.
+- Create a new skill only when the existing capability catalog and skill library do not provide a suitable solution.
+- Never bypass required security validation, testing, or approval.
+- Keep drafts, quarantined skills, and rejected candidates out of the active production skill registry.
+- Publish only a validated, approved, versioned skill.
+- Make published skills discoverable by the Capability Finder and the rest of the system.
+- Preserve enough evidence and version history to investigate failures and restore an earlier working version.
+- Do not claim that a skill is production-ready merely because its source file exists.
+
+---
+
+## 4. Audit Before Implementation
+
+Inspect the real files in:
+
+- `SYSTEM/agents/skill_factory/`
+- `SYSTEM/agents/capability_finder/`
+- `SYSTEM/skills/`
+- `SYSTEM/registries/`
+- `SYSTEM/approvals/`
+- Existing tests and reports relevant to skills, agent delegation, security validation, and promotion.
+
+Identify which of these capabilities are already implemented, partially implemented, or missing:
+
+1. Skill requirement intake and normalized specification.
+2. Existing-skill discovery and reuse decisions.
+3. Skill adaptation workflow.
+4. Skill source generation or adaptation using the configured project model/provider infrastructure.
+5. Skill schema and metadata validation.
+6. Static code security validation.
+7. Safe execution and behavioral testing.
+8. Test-result aggregation and quality gates.
+9. Human/operator approval integration.
+10. Draft, quarantine, rejection, and promotion states.
+11. Immutable skill versioning and provenance.
+12. Atomic publication and registry synchronization.
+13. Rollback of failed publications.
+14. Audit history and failure diagnostics.
+15. Capability Finder integration.
+16. Agent registry and lifecycle compatibility.
+17. Backward-compatible imports and existing skill references.
+
+Create a short gap matrix in the implementation report. Then implement the missing or defective items. Do not rewrite components that already satisfy the acceptance criteria.
+
+---
+
+## 5. Skill Specification and Lifecycle
+
+### 5.1 Explicit skill specification
+
+Each skill creation or adaptation request must produce a validated specification containing the fields appropriate to the existing repository schema, including:
+
+- Stable skill ID.
+- Name and concise purpose.
+- Version.
+- Skill category/domain and capability tags.
+- Inputs, types, constraints, and required fields.
+- Outputs and their expected format.
+- Execution interface or entry point.
+- Dependencies and runtime requirements.
+- Validation and behavioral test requirements.
+- Security risk classification.
+- Origin and provenance.
+- Creation/adaptation rationale.
+- Source and test artifact references.
+- Lifecycle status and approval evidence.
+
+Inspect the existing schemas and consumers before deciding field names or adding required fields. Do not break existing skill manifests.
+
+Reject malformed specifications before generation or promotion. Missing information that materially affects safety or behavior must produce an explicit clarification request or a safe, documented rejection.
+
+### 5.2 Existing-skill discovery and decision
+
+Integrate the Skill Factory with the existing Capability Finder, Capability Registry, and Skill Registry.
+
+Use this order:
+
+1. Reuse an active, compatible skill.
+2. Adapt an active skill when the capability is close enough and adaptation is justified.
+3. Create a new skill when the available reusable capabilities are insufficient.
+
+The Skill Factory must not independently contradict a verified reuse decision without a concrete, recorded reason.
+
+For create/adapt decisions, preserve the original requirement and record why the selected approach is appropriate.
+
+### 5.3 Generation and adaptation
+
+Inspect the configured model/provider interface and existing code-generation conventions.
+
+Use the existing supported provider infrastructure to generate or adapt skill source code where appropriate. Avoid hardcoding provider keys, model credentials, local secrets, or model-specific behavior into the Skill Factory.
+
+Generated code must be an actual implementation of the declared skill interface. It must not be an empty placeholder, a fake success response, or a hardcoded answer that ignores its inputs.
+
+If the model/provider service is unavailable, fail clearly and safely. Do not report a draft as successfully generated when generation did not occur.
+
+Generated output must satisfy the skill specification, runtime contract, and validation requirements before it can proceed.
+
+---
+
+## 6. Static Security Validation and Safe Testing
+
+### 6.1 Static validation
+
+Reuse and strengthen existing AST-based validation and security checks where available.
+
+Inspect the complete proposed skill, relevant imports, entry points, dependencies, and metadata. Detect and appropriately reject or quarantine risky behavior, including:
+
+- Credential, token, password, or secret exfiltration.
+- Unauthorized filesystem access.
+- Unexpected process execution or shell commands.
+- Unapproved network access.
+- Unsafe dynamic code execution or import behavior.
+- Destructive file operations.
+- Attempts to access unrelated project or user data.
+- Attempts to alter the frozen pipeline algorithms.
+- Attempts to bypass approval gates or write directly into active registries.
+- Unbounded recursion, uncontrolled resource use, or other unsafe execution patterns.
+
+Do not rely only on suspicious-string checks when the risk requires structural analysis. Preserve source references and actionable diagnostics for rejected findings.
+
+False positives should be handled through an explicit review mechanism, not by automatically bypassing security validation.
+
+### 6.2 Safe behavioral testing
+
+Do not execute newly generated or untrusted code directly inside the unrestricted application process.
+
+Inspect the existing execution environment and implement an appropriate isolation strategy for the supported platform. On Windows, use the project's available sandboxing or operating-system isolation mechanisms, if present. If no adequate isolation exists, do not pretend that a normal subprocess or temporary directory constitutes a complete security sandbox.
+
+At minimum, the implementation must:
+
+- Use a controlled temporary workspace.
+- Apply bounded execution timeouts.
+- Enforce appropriate resource and filesystem restrictions supported by the environment.
+- Prevent generated tests from modifying production registries, active knowledge, secrets, or frozen files.
+- Capture standard output, standard error, exit status, and structured test results.
+- Terminate timed-out test workers safely.
+- Clean up temporary artifacts without deleting unrelated user data.
+- Clearly distinguish security validation from behavioral correctness testing.
+
+If the available platform cannot provide the required isolation for a specific skill, classify that skill as blocked from execution/promotion, report the missing isolation capability, and offer a safe non-executing validation path. Do not claim that an unisolated test is secure.
+
+### 6.3 Test quality
+
+Test the declared skill inputs and outputs, expected successful behavior, invalid inputs, boundary conditions, failure behavior, and relevant security conditions.
+
+Do not accept a skill solely because its source parses or because it exits with code zero. Validate that the implementation behaves according to its specification.
+
+---
+
+## 7. Approval and Promotion Workflow
+
+Integrate with the existing approval services, including the established trusted identity and role verification path where applicable.
+
+Never treat a caller-supplied role string, proposal field, or `authorized_by` text alone as proof of authorization.
+
+Use appropriate approvals according to the project's existing risk policy.
+
+A suggested lifecycle, subject to compatibility with existing schemas, is:
+
+`DRAFT → VALIDATING → TESTING → AWAITING_APPROVAL → APPROVED → PROMOTING → ACTIVE`
+
+Alternative terminal states may include:
+
+`REJECTED`, `QUARANTINED`, `FAILED_VALIDATION`, `FAILED_TESTS`, `PROMOTION_FAILED`, and `ROLLED_BACK`.
+
+Implement these states coherently without creating duplicate status systems or silently changing existing persisted values.
+
+Rules:
+
+1. A security failure must prevent promotion.
+2. A required test failure must prevent promotion.
+3. An outstanding approval must prevent promotion.
+4. An unauthorized caller must not approve or promote a skill.
+5. A failed or interrupted promotion must not expose a partially written active skill.
+6. Drafts and rejected skills must not appear as usable production capabilities.
+7. A successful promotion must record its version, source, validation/test evidence, approval identity, timestamp, and provenance.
+8. Existing approval policy must not be weakened merely to simplify the workflow.
+
+**Approval boundary:** If the established architecture requires a manual approval at a stage, preserve it. Do not replace an explicit manual approval with an automatic pass. Where automated promotion is already permitted by approved policy, use the appropriate existing verification mechanism.
+
+---
+
+## 8. Versioning, Atomic Promotion, and Rollback
+
+Implement a reliable publication workflow using the project's existing storage conventions.
+
+Before promotion:
+
+- Validate the skill package and metadata.
+- Confirm required security and behavioral checks passed.
+- Confirm required authorization is valid.
+- Check version and publication conflicts.
+- Confirm that the destination is within the intended skill library.
+
+During promotion:
+
+- Write to a temporary location on the same filesystem where atomic replacement is required.
+- Flush and synchronize data where appropriate.
+- Use safe atomic replacement for the supported filesystem.
+- Ensure the registry never references an incomplete artifact.
+- Preserve recoverable prior metadata and versions.
+- Avoid publishing duplicate or conflicting skill IDs and versions.
+- Protect transactions against concurrent publication or rollback where concurrent operations are supported.
+
+After promotion:
+
+- Verify the published artifact exists and matches the expected content hash.
+- Verify the active registry points to the correct version.
+- Verify the Capability Registry can discover the newly active skill.
+- Record the final publication result and evidence.
+
+Rollback must restore a known valid prior version and reconcile the related registry state. It must not simply remove arbitrary files or leave the active registry pointing at a missing version.
+
+Treat package files, manifests, registry entries, and archive state as a coherent publication transaction. If full atomicity across those resources is not possible, implement explicit recovery/reconciliation logic and document the exact guarantees.
+
+Do not delete previous valid skill versions merely to simplify storage.
+
+---
+
+## 9. Registry Integration
+
+Integrate with:
+
+- `SYSTEM/registries/skill_registry.py`
+- `SYSTEM/registries/capability_registry.py`
+- The existing `AgentRegistry`, where applicable.
+- The canonical Skill Factory agent lifecycle.
+- Existing Capability Finder execution and delegation paths.
+
+Verify that:
+
+1. Only active, validated, and approved skills are returned as usable production capabilities.
+2. Draft, quarantined, rejected, and failed skills cannot be discovered as active skills.
+3. Newly published skills become discoverable without unnecessarily rebuilding or rescanning unrelated parts of the project.
+4. Registry synchronization is deterministic and idempotent.
+5. Repeated synchronization does not create duplicate records.
+6. Rollback removes or deactivates the failed published version appropriately and restores the selected valid prior version.
+7. Registry state remains consistent with on-disk skill packages after interruption and restart.
+8. Registry APIs remain backward-compatible for existing agents.
+
+If the Capability Finder recommends `CREATE_SKILL`, verify that the actual supported delegation workflow can deliver that request to `SkillFactoryAgent`.
+
+If it recommends `REUSE`, the system must not create a redundant skill merely because the Skill Factory was invoked.
+
+If it recommends `ADAPT`, the selected existing skill must be identified and adapted under version control without silently overwriting the previous active version.
+
+Keep `PipelineOrchestrator` as the deterministic video pipeline engine. Do not turn the Skill Factory into a second master brain.
+
+---
+
+## 10. Auditability and Diagnostics
+
+Every consequential Skill Factory operation must provide an actionable, structured result consistent with existing agent response conventions.
+
+Track relevant fields such as:
+
+- Request or operation ID.
+- Skill ID and candidate version.
+- Operation and lifecycle state.
+- Selected reuse/adapt/create decision.
+- Validation and behavioral test outcomes.
+- Security findings.
+- Approval result and trusted attribution.
+- Promotion or rollback outcome.
+- Source and artifact hashes.
+- Failure category and diagnostic references.
+- Start/end timestamps where consistent with existing telemetry.
+
+Do not log PINs, API keys, credentials, or other sensitive values.
+
+Errors must not silently transition to `ACTIVE`. An exception must be caught at an appropriate boundary, preserve useful diagnostics, and leave the skill in a safe, truthful lifecycle state.
+
+---
+
+## 11. Main Architecture Agent and Capability Finder Integration
+
+Reuse the existing `MainArchitectureAgent` and `CapabilityFinderAgent` interfaces. Do not create an additional master/orchestrator agent.
+
+The existing Capability Finder remains responsible for discovery, matching, and recommending whether to reuse, adapt, or create a capability.
+
+The Skill Factory owns skill-specific generation/adaptation, validation, testing, approval, publication, and rollback.
+
+The Main Architecture Agent continues to coordinate work through the project's existing delegation protocol.
+
+Verify the real request/response path end to end:
+
+`User Requirement → Main Architecture Agent → Capability Finder → CREATE_SKILL Recommendation → Skill Factory → Validation and Tests → Required Approval → Promotion → Registry Synchronization → Capability Finder Discovery`
+
+For manual-approval steps, the pipeline must stop at the correct state and resume through the supported approval mechanism.
+
+Do not add a new autonomous agent framework, duplicate the Agent Registry, or introduce a new orchestration layer to achieve this integration.
+
+---
+
+## 12. Tests and Regression Strategy
+
+Inspect existing tests before adding new ones. Reuse existing fixtures and test utilities when reliable.
+
+Add or improve targeted tests for:
+
+### A. Skill specifications and generation
+- Valid and invalid specifications.
+- Existing skill reuse.
+- Adaptation without overwriting the old active version.
+- Genuine skill generation with the supported provider interface.
+- Clear failure when the generation provider is unavailable.
+- Output satisfying the declared skill contract.
+
+### B. Security and safe execution
+- Malicious or unsafe imports and execution patterns.
+- Secret/credential access attempts.
+- Unsafe filesystem and process operations.
+- Timeouts and failed workers.
+- Evidence that testing cannot modify production registries or frozen files.
+- Correct quarantine/rejection behavior.
+
+### C. Approval and authorization
+- Unauthenticated promotion rejection.
+- Invalid or missing approval rejection.
+- Risk-based approval enforcement.
+- Prevention of direct-call bypasses.
+- Rejected operations leave active state unchanged.
+- Actual trusted authorization path for accepted operations.
+
+### D. Versioning and promotion
+- Valid publication.
+- Duplicate/conflicting versions.
+- Archive and artifact integrity.
+- Registry synchronization.
+- Failure before or during publication.
+- Recovery after interrupted operations.
+- Concurrent publication and rollback where supported.
+- Valid prior-version restoration.
+
+### E. Integration and backward compatibility
+- Capability Finder `REUSE`, `ADAPT`, and `CREATE_SKILL` behavior.
+- Main Architecture Agent delegation to the canonical Skill Factory.
+- Canonical and legacy imports.
+- Existing skill discovery after restart.
+- Existing Phase 1–3.1 functionality.
+- No duplicate agents or registry entries.
+
+Use deterministic tests, isolated temporary directories, and bounded timeouts. Do not rely on arbitrary sleeps.
+
+Run the smallest relevant tests first. Reuse verified previous results for unaffected components. Run the relevant broader agent integration suite when changes affect shared APIs. Do not repeat the full suite unnecessarily.
+
+Record real commands, exit codes, pass/fail/skip counts, warnings, and any remaining gaps.
+
+---
+
+## 13. Production Readiness Requirements
+
+Before declaring Phase 4 complete, confirm:
+
+- The Skill Factory follows the canonical agent lifecycle and configuration structure.
+- Existing-skill reuse is preferred over unnecessary duplication.
+- Adaptation preserves the previous valid version.
+- New skill generation uses the configured provider interface correctly.
+- Static security checks execute before untrusted code testing.
+- Untrusted code is not executed without the required isolation.
+- Required approvals cannot be bypassed.
+- Publication is safe and recoverable.
+- Version history and rollback are functional.
+- Skill and capability registries remain consistent.
+- Capability Finder delegation works end to end.
+- Failures produce accurate status and diagnostic evidence.
+- No production behavior is represented by a fake implementation, dummy success result, or placeholder.
+- Existing compatibility paths still work.
+- All frozen SHA-256 values remain unchanged.
+- Only in-scope files were modified.
+- No commits or pushes were performed.
+
+Do not claim that arbitrary skills can be executed safely on every platform. Document the actual isolation guarantees supported by the inspected environment.
+
+---
+
+## 14. Required Deliverables
+
+Create:
+
+`reports/SYSTEM_AGENTS_PHASE_4_20261017/`
+
+Produce these reports:
+
+### `PHASE_4_IMPLEMENTATION_REPORT.md`
+Include:
+1. Executive summary.
+2. Initial repository and Git state.
+3. Existing Skill Factory audit and gap matrix.
+4. Architecture decisions and reuse of existing components.
+5. Files created and modified.
+6. Implementation details by lifecycle stage.
+7. Registry and delegation integration.
+8. Security, testing, approval, and rollback behavior.
+9. Compatibility considerations.
+10. Known limitations and unresolved defects.
+
+### `PHASE_4_TEST_AND_HASH_REPORT.md`
+Include:
+1. Exact commands executed.
+2. Actual test results, exit codes, and durations.
+3. Targeted integration results.
+4. Skill security and behavioral test evidence.
+5. Approval, promotion, versioning, and rollback test evidence.
+6. Registry consistency checks.
+7. Frozen algorithm SHA-256 results.
+8. Failed, skipped, or unavailable tests and their reasons.
+9. Remaining gaps and deployment constraints.
+
+### `PHASE_4_HANDOFF.md`
+Include:
+1. Overall verdict.
+2. Acceptance criteria status.
+3. Verified capabilities.
+4. Known limitations and blockers.
+5. Exact report and artifact locations.
+6. Git and frozen-file integrity status.
+7. Recommended next phase.
+8. Explicit confirmation that Phase 5 and later phases were not started.
+
+Preserve historical reports unchanged.
+
+---
+
+## 15. Acceptance Checklist
+
+Mark each criterion as `PASS`, `FAIL`, or `NOT VERIFIED`:
+
+- [ ] Canonical Skill Factory implementation works through the existing agent lifecycle.
+- [ ] Existing-skill discovery and reuse are functional.
+- [ ] Skill adaptation creates a versioned candidate without overwriting the previous active version.
+- [ ] New skill generation uses the supported provider interface and produces real implementations.
+- [ ] Skill specifications and manifests are validated.
+- [ ] Static security validation is functional.
+- [ ] Behavioral tests use a supported and accurately documented isolation strategy.
+- [ ] Unsafe, untested, or rejected skills cannot be promoted.
+- [ ] Authorization uses the established trusted authentication mechanism.
+- [ ] Required manual approvals remain enforced.
+- [ ] Promotion and rollback preserve valid versions and archives.
+- [ ] Registry synchronization is idempotent and recoverable.
+- [ ] Capability Finder correctly routes `CREATE_SKILL` requests to Skill Factory.
+- [ ] `REUSE` decisions do not unnecessarily create duplicate skills.
+- [ ] `ADAPT` decisions preserve the existing valid version.
+- [ ] Audit records and diagnostic results accurately reflect actual operations.
+- [ ] Relevant regression tests pass.
+- [ ] The canonical and legacy agent interfaces remain compatible.
+- [ ] All three frozen algorithm SHA-256 hashes match.
+- [ ] No unrelated changes, commits, pushes, or later-phase implementations occurred.
+
+A completed file, green test count, or successful mock is not sufficient evidence that a production capability works end to end.
+
+If any criterion fails, record the evidence and continue fixing in-scope defects. If a requirement cannot be safely fulfilled because a real platform dependency or necessary authorization is unavailable, document the specific blocker rather than simulating success.
+
+---
+
+## 16. Stop Conditions
+
+Stop after completing Phase 4 implementation, applicable tests, hash verification, and handoff reports.
+
+Do not implement Architecture Validator, Verification/Test Agent, Security Policy Agent, Main Architecture Agent autonomy upgrades, or the Autonomous Task Execution Protocol in this phase.
+
+Do not proceed to Phase 5 until Phase 4 acceptance results are reported and explicit authorization is given.
+
+### Final Response
+
+Provide:
+- Overall Phase 4 verdict.
+- Main capabilities implemented.
+- Important files changed.
+- Real test results.
+- Security and sandboxing guarantees actually demonstrated.
+- Registry and delegation integration evidence.
+- Frozen-file hash verification.
+- Remaining blockers.
+- Exact report paths.
+- Confirmation that Phase 5 and later phases were not started.
+
+Be accurate about what was actually implemented and tested. Do not call Phase 4 complete if a critical acceptance criterion remains unverified.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-17T08:23:18+05:30.
+</ADDITIONAL_METADATA>

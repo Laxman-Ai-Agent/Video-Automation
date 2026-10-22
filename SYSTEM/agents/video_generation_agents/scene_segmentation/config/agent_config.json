@@ -1,0 +1,20 @@
+{
+  "agent_id": "scene_segmentation",
+  "version": "2.0.0",
+  "stage_id": "segmentation",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "llm_client",
+    "llm_gateway",
+    "regex_validator"
+  ],
+  "capabilities": [
+    "semantic-chunking",
+    "boundary-snapping",
+    "duration-enforcement",
+    "topic-modeling",
+    "adaptive-pacing",
+    "vocabulary-standardization"
+  ]
+}

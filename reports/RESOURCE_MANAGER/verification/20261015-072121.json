@@ -1,0 +1,899 @@
+{
+ "at": "2026-10-15T07:21:21",
+ "verified": [
+  "background.look.aurora",
+  "background.look.mesh",
+  "background.look.spotlight",
+  "chart.svg.bar",
+  "chart.svg.pie",
+  "font.hind-guntur",
+  "icon.tabler.alien",
+  "icon.tabler.antenna",
+  "icon.tabler.atom",
+  "icon.tabler.award",
+  "icon.tabler.bolt",
+  "icon.tabler.books",
+  "icon.tabler.broadcast",
+  "icon.tabler.building-bank",
+  "icon.tabler.building-community",
+  "icon.tabler.bulb",
+  "icon.tabler.chart-bar",
+  "icon.tabler.chart-line",
+  "icon.tabler.chart-pie",
+  "icon.tabler.clock",
+  "icon.tabler.coin",
+  "icon.tabler.compass",
+  "icon.tabler.currency-rupee",
+  "icon.tabler.droplet",
+  "icon.tabler.flag",
+  "icon.tabler.flame",
+  "icon.tabler.flask",
+  "icon.tabler.leaf",
+  "icon.tabler.map-pin",
+  "icon.tabler.meteor",
+  "icon.tabler.microscope",
+  "icon.tabler.moon",
+  "icon.tabler.mountain",
+  "icon.tabler.planet",
+  "icon.tabler.radar-2",
+  "icon.tabler.rocket",
+  "icon.tabler.route",
+  "icon.tabler.satellite",
+  "icon.tabler.school",
+  "icon.tabler.sun",
+  "icon.tabler.target",
+  "icon.tabler.telescope",
+  "icon.tabler.trophy",
+  "icon.tabler.ufo",
+  "icon.tabler.world"
+ ],
+ "failed": [
+  "chart.svg.line",
+  "effect.cinematic.particles-float",
+  "motion.hud.radar-sweep"
+ ],
+ "results": {
+  "background.look.aurora": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "mean_diff": 10.46,
+     "preview": "resource-library/previews/16x9/background.look.aurora.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "mean_diff": 8.9,
+     "preview": "resource-library/previews/9x16/background.look.aurora.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "background.look.mesh": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "mean_diff": 9.55,
+     "preview": "resource-library/previews/16x9/background.look.mesh.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "mean_diff": 10.07,
+     "preview": "resource-library/previews/9x16/background.look.mesh.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "background.look.spotlight": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "mean_diff": 24.09,
+     "preview": "resource-library/previews/16x9/background.look.spotlight.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "mean_diff": 24.5,
+     "preview": "resource-library/previews/9x16/background.look.spotlight.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "chart.svg.bar": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.1156,
+     "preview": "resource-library/previews/16x9/chart.svg.bar.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0719,
+     "preview": "resource-library/previews/9x16/chart.svg.bar.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "chart.svg.line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0153,
+     "preview": "resource-library/previews/16x9/chart.svg.line.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0092,
+     "preview": "resource-library/previews/9x16/chart.svg.line.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "chart.svg.pie": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0919,
+     "preview": "resource-library/previews/16x9/chart.svg.pie.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0574,
+     "preview": "resource-library/previews/9x16/chart.svg.pie.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.dashed-flow": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/diagram.dashed-flow.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/diagram.dashed-flow.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.node-network": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/diagram.node-network.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/diagram.node-network.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.route-line": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/diagram.route-line.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/diagram.route-line.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.timeline-dots": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/diagram.timeline-dots.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/diagram.timeline-dots.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "effect.cinematic.particles-float": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/effect.cinematic.particles-float.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/effect.cinematic.particles-float.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "font.hind-guntur": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "ink_in_every_row": true,
+     "width_vs_default_font": {
+      "tel": 1.0,
+      "conj": 0.96,
+      "en": 0.86
+     },
+     "bands_px": {
+      "tel_font": [
+       503,
+       49
+      ],
+      "tel_default": [
+       504,
+       58
+      ],
+      "conj_font": [
+       297,
+       64
+      ],
+      "conj_default": [
+       308,
+       57
+      ],
+      "en_font": [
+       383,
+       34
+      ],
+      "en_default": [
+       444,
+       38
+      ]
+     },
+     "preview": "resource-library/previews/16x9/font.hind-guntur.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "ink_in_every_row": true,
+     "width_vs_default_font": {
+      "tel": 1.0,
+      "conj": 0.96,
+      "en": 0.86
+     },
+     "bands_px": {
+      "tel_font": [
+       336,
+       33
+      ],
+      "tel_default": [
+       337,
+       32
+      ],
+      "conj_font": [
+       198,
+       44
+      ],
+      "conj_default": [
+       206,
+       39
+      ],
+      "en_font": [
+       255,
+       24
+      ],
+      "en_default": [
+       297,
+       25
+      ]
+     },
+     "preview": "resource-library/previews/9x16/font.hind-guntur.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.alien": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0552,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0552,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.antenna": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0476,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0476,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.atom": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0715,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0716,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.award": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0606,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0601,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.bolt": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0426,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0434,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.books": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0873,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0872,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.broadcast": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0626,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0623,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.building-bank": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0747,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0743,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.building-community": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0717,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0718,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.bulb": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0435,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0441,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.chart-bar": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0662,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0662,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.chart-line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0359,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0359,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.chart-pie": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0631,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.063,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.clock": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.055,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0551,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.coin": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0693,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0699,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.compass": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0715,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0711,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.currency-rupee": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0372,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0364,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.droplet": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.04,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0398,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.flag": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0464,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0459,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.flame": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0448,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0447,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.flask": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0466,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0465,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.leaf": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0524,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0525,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.map-pin": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.06,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.06,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.meteor": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0696,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0691,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.microscope": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0515,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0534,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.moon": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0491,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.049,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.mountain": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0567,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0566,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.planet": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0613,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0611,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.radar-2": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0736,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0739,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.rocket": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0538,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0544,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.route": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0551,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.055,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.satellite": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0568,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0566,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.school": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.058,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0579,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.sun": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.037,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0371,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.target": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0758,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0766,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.telescope": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0589,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0588,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.trophy": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0583,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0557,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.ufo": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0609,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0604,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.world": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.101,
+     "preview": "resource-library/previews/16x9/icons_2.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.1078,
+     "preview": "resource-library/previews/9x16/icons_2.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "motion.hud.radar-sweep": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/16x9/motion.hud.radar-sweep.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0,
+     "preview": "resource-library/previews/9x16/motion.hud.radar-sweep.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

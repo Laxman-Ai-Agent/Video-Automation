@@ -1,0 +1,80 @@
+{
+ "style": {
+  "suffix": "cinematic futuristic documentary, cool teal and violet light, soft glow, film grain, no text",
+  "palette": [
+   "#0B1020",
+   "#22D3EE",
+   "#A78BFA",
+   "#F8FAFC"
+  ],
+  "grade": "cool"
+ },
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0.0,
+   "end": 9.47,
+   "meaning": "Smart glasses are more than a device: they change how people live and see, a superpower that can transform the world.",
+   "concept": "Glowing smart glasses as a symbol of a new way of seeing",
+   "mood": "majestic, inspiring",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "transition": "light-leak",
+   "keywords": [
+    {
+     "text": "Superpower",
+     "at": 5.9
+    },
+    {
+     "text": "Smart Glasses",
+     "at": 0.0
+    }
+   ],
+   "params": {
+    "text": "A Superpower",
+    "mark": "Superpower"
+   }
+  },
+  {
+   "id": 2,
+   "start": 9.47,
+   "end": 13.8,
+   "meaning": "The future is unfolding before our eyes and this journey does not end here.",
+   "concept": "A glowing path leading from today toward a distant future horizon",
+   "mood": "hopeful, forward-looking",
+   "mode": "typography",
+   "pattern": "quote_type",
+   "transition": "zoom-through",
+   "keywords": [
+    {
+     "text": "The Future",
+     "at": 9.47
+    }
+   ],
+   "params": {
+    "text": "The Journey Continues",
+    "mark": "Continues"
+   }
+  },
+  {
+   "id": 3,
+   "start": 13.8,
+   "end": 20.43,
+   "meaning": "The world ahead will become even more amazing and futuristic.",
+   "concept": "A luminous futuristic world opening up ahead",
+   "mood": "hopeful, energetic",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "keywords": [
+    {
+     "text": "Futuristic",
+     "at": 13.8
+    }
+   ],
+   "params": {
+    "text": "Even More Futuristic",
+    "mark": "Futuristic"
+   }
+  }
+ ]
+}

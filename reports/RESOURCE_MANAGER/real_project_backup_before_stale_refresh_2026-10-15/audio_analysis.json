@@ -1,0 +1,1722 @@
+{
+ "schema_version": "audio-analysis-2",
+ "source": {
+  "file": "audio.wav",
+  "size_bytes": 2765370,
+  "duration_seconds": 57.611,
+  "codec": "pcm_s16le",
+  "container": "wav",
+  "sample_rate_hz": 24000,
+  "channels": 1,
+  "metadata_source": "ffprobe"
+ },
+ "transcription": {
+  "language": {
+   "code": "te",
+   "source": "config (forced; no detection ran)",
+   "confidence": null
+  },
+  "full_text": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి. మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం అయినా కూడా ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు అక్కడ మనిషి విజయవంతంగా స్థిరపడితే అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+  "transcript_file": "transcript_corrected.json",
+  "raw_file": "transcript.json",
+  "corrected_file": "transcript_corrected.json",
+  "edited_by_user": false,
+  "asr": {
+   "engine": "faster-whisper",
+   "model": "large-v3",
+   "model_version": "v3",
+   "device": "cpu",
+   "compute_type": "int8"
+  }
+ },
+ "utterances": [
+  {
+   "utterance_id": "utt_001",
+   "id": 0,
+   "text": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి.",
+   "start_seconds": 0.0,
+   "end_seconds": 4.58,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 0,
+     "text": "ఇవి",
+     "start_seconds": 0.0,
+     "end_seconds": 0.26,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 1,
+     "text": "కేవలం",
+     "start_seconds": 0.26,
+     "end_seconds": 0.68,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 2,
+     "text": "శారీరక",
+     "start_seconds": 0.7,
+     "end_seconds": 1.24,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 3,
+     "text": "సవాల్లు",
+     "start_seconds": 1.24,
+     "end_seconds": 1.68,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 4,
+     "text": "మాత్రమే",
+     "start_seconds": 1.68,
+     "end_seconds": 2.04,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 5,
+     "text": "కావు,",
+     "start_seconds": 2.04,
+     "end_seconds": 2.4,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 6,
+     "text": "మానసిక",
+     "start_seconds": 2.44,
+     "end_seconds": 3.1,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 7,
+     "text": "సవాల్లు",
+     "start_seconds": 3.1,
+     "end_seconds": 3.66,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 8,
+     "text": "ఇంకా",
+     "start_seconds": 3.66,
+     "end_seconds": 4.18,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 9,
+     "text": "పెద్దవి.",
+     "start_seconds": 4.18,
+     "end_seconds": 4.58,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_002",
+   "id": 1,
+   "text": "మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి",
+   "start_seconds": 4.75,
+   "end_seconds": 13.41,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 10,
+     "text": "మార్స్కు",
+     "start_seconds": 4.75,
+     "end_seconds": 5.29,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 11,
+     "text": "చేరడానికి",
+     "start_seconds": 5.29,
+     "end_seconds": 5.79,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 12,
+     "text": "సుమారు",
+     "start_seconds": 5.79,
+     "end_seconds": 6.37,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 13,
+     "text": "ఎనిమిది",
+     "start_seconds": 6.37,
+     "end_seconds": 6.89,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 14,
+     "text": "నెలల",
+     "start_seconds": 6.89,
+     "end_seconds": 7.15,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 15,
+     "text": "ప్రయాణం",
+     "start_seconds": 7.15,
+     "end_seconds": 7.65,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 16,
+     "text": "చేయాలి",
+     "start_seconds": 7.65,
+     "end_seconds": 8.05,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 17,
+     "text": "ఆ",
+     "start_seconds": 8.05,
+     "end_seconds": 8.51,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 18,
+     "text": "సమయం",
+     "start_seconds": 8.51,
+     "end_seconds": 8.87,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 19,
+     "text": "లో",
+     "start_seconds": 8.91,
+     "end_seconds": 9.11,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 20,
+     "text": "కుటుంబం",
+     "start_seconds": 9.11,
+     "end_seconds": 10.03,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 21,
+     "text": "భూమి",
+     "start_seconds": 10.03,
+     "end_seconds": 10.61,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 22,
+     "text": "సాధారణ",
+     "start_seconds": 10.61,
+     "end_seconds": 11.31,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 23,
+     "text": "జీవితం",
+     "start_seconds": 11.31,
+     "end_seconds": 11.79,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 24,
+     "text": "అన్నిటి",
+     "start_seconds": 11.79,
+     "end_seconds": 12.47,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 25,
+     "text": "నించి",
+     "start_seconds": 12.47,
+     "end_seconds": 12.69,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 26,
+     "text": "దూరంగా",
+     "start_seconds": 12.69,
+     "end_seconds": 13.09,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 27,
+     "text": "ఉండాలి",
+     "start_seconds": 13.09,
+     "end_seconds": 13.41,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_003",
+   "id": 2,
+   "text": "అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు",
+   "start_seconds": 13.6,
+   "end_seconds": 17.1,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 28,
+     "text": "అక్కడికి",
+     "start_seconds": 13.6,
+     "end_seconds": 14.08,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 29,
+     "text": "చేరుకున్నాక",
+     "start_seconds": 14.08,
+     "end_seconds": 14.62,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 30,
+     "text": "కూడా",
+     "start_seconds": 14.62,
+     "end_seconds": 14.94,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 31,
+     "text": "భూమితో",
+     "start_seconds": 14.94,
+     "end_seconds": 15.62,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 32,
+     "text": "సంభాషణ",
+     "start_seconds": 15.62,
+     "end_seconds": 16.08,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 33,
+     "text": "తక్షణం",
+     "start_seconds": 16.08,
+     "end_seconds": 16.68,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 34,
+     "text": "జరగదు",
+     "start_seconds": 16.7,
+     "end_seconds": 17.1,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_004",
+   "id": 3,
+   "text": "సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది",
+   "start_seconds": 17.1,
+   "end_seconds": 19.42,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 35,
+     "text": "సందేశాలకు",
+     "start_seconds": 16.8,
+     "end_seconds": 18.06,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 36,
+     "text": "నిమిషాల",
+     "start_seconds": 18.02,
+     "end_seconds": 18.6,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 37,
+     "text": "ఆలస్యం",
+     "start_seconds": 18.62,
+     "end_seconds": 19.0,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 38,
+     "text": "ఉంటుంది",
+     "start_seconds": 19.04,
+     "end_seconds": 19.58,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_005",
+   "id": 4,
+   "text": "చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం",
+   "start_seconds": 19.58,
+   "end_seconds": 22.24,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 39,
+     "text": "చుట్టు",
+     "start_seconds": 19.58,
+     "end_seconds": 20.02,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 40,
+     "text": "ఎర్రటి",
+     "start_seconds": 20.02,
+     "end_seconds": 20.5,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 41,
+     "text": "ఎడారి",
+     "start_seconds": 20.5,
+     "end_seconds": 20.9,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 42,
+     "text": "నిశ్శబ్ద",
+     "start_seconds": 20.9,
+     "end_seconds": 21.64,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 43,
+     "text": "వాతావరణం",
+     "start_seconds": 21.64,
+     "end_seconds": 22.24,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_006",
+   "id": 5,
+   "text": "పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి",
+   "start_seconds": 22.5,
+   "end_seconds": 26.08,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 44,
+     "text": "పరిమితమైన",
+     "start_seconds": 22.5,
+     "end_seconds": 23.1,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 45,
+     "text": "మనుష్యులు",
+     "start_seconds": 23.1,
+     "end_seconds": 23.6,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 46,
+     "text": "మాత్రమే",
+     "start_seconds": 23.6,
+     "end_seconds": 23.92,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 47,
+     "text": "ఇవన్ని",
+     "start_seconds": 23.92,
+     "end_seconds": 24.5,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 48,
+     "text": "మనసును",
+     "start_seconds": 24.5,
+     "end_seconds": 25.04,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 49,
+     "text": "గట్టిగా",
+     "start_seconds": 25.04,
+     "end_seconds": 25.54,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 50,
+     "text": "పరీక్షిస్తాయి",
+     "start_seconds": 25.54,
+     "end_seconds": 26.26,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_007",
+   "id": 6,
+   "text": "ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు",
+   "start_seconds": 26.08,
+   "end_seconds": 30.1,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 51,
+     "text": "ఏదేనా",
+     "start_seconds": 26.08,
+     "end_seconds": 26.8,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 52,
+     "text": "అత్యవసర",
+     "start_seconds": 26.82,
+     "end_seconds": 27.22,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 53,
+     "text": "పరిస్థితి",
+     "start_seconds": 27.22,
+     "end_seconds": 27.68,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 54,
+     "text": "వచ్చిన",
+     "start_seconds": 27.68,
+     "end_seconds": 28.02,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 55,
+     "text": "వెంటనే",
+     "start_seconds": 28.02,
+     "end_seconds": 28.68,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 56,
+     "text": "భూమినుంచి",
+     "start_seconds": 28.68,
+     "end_seconds": 29.28,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 57,
+     "text": "సహాయం",
+     "start_seconds": 29.28,
+     "end_seconds": 29.74,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 58,
+     "text": "అందదు",
+     "start_seconds": 29.74,
+     "end_seconds": 30.1,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_008",
+   "id": 7,
+   "text": "అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి",
+   "start_seconds": 30.2,
+   "end_seconds": 34.9,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 59,
+     "text": "అక్కడి",
+     "start_seconds": 30.2,
+     "end_seconds": 30.72,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 60,
+     "text": "బృందం",
+     "start_seconds": 30.7,
+     "end_seconds": 31.04,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 61,
+     "text": "తమ",
+     "start_seconds": 31.04,
+     "end_seconds": 31.36,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 62,
+     "text": "జ్ఞానం",
+     "start_seconds": 31.34,
+     "end_seconds": 31.84,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 63,
+     "text": "శిక్షణ",
+     "start_seconds": 31.84,
+     "end_seconds": 32.46,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 64,
+     "text": "పరస్పర",
+     "start_seconds": 32.44,
+     "end_seconds": 33.22,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 65,
+     "text": "నమ్మకం",
+     "start_seconds": 33.22,
+     "end_seconds": 33.62,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 66,
+     "text": "తోనే",
+     "start_seconds": 33.62,
+     "end_seconds": 33.86,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 67,
+     "text": "నిర్ణయాలు",
+     "start_seconds": 33.86,
+     "end_seconds": 34.36,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 68,
+     "text": "తీసుకోవాలి",
+     "start_seconds": 34.36,
+     "end_seconds": 34.9,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_009",
+   "id": 8,
+   "text": "అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం",
+   "start_seconds": 35.05,
+   "end_seconds": 39.73,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 69,
+     "text": "అందుకే",
+     "start_seconds": 35.05,
+     "end_seconds": 35.61,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 70,
+     "text": "బలమైన",
+     "start_seconds": 35.61,
+     "end_seconds": 36.29,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 71,
+     "text": "మనోధైర్యం",
+     "start_seconds": 36.29,
+     "end_seconds": 36.95,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 72,
+     "text": "క్రమశిక్షణ",
+     "start_seconds": 36.95,
+     "end_seconds": 37.73,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 73,
+     "text": "జట్టు",
+     "start_seconds": 37.73,
+     "end_seconds": 38.43,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 74,
+     "text": "భావన",
+     "start_seconds": 38.43,
+     "end_seconds": 38.67,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 75,
+     "text": "అత్యంత",
+     "start_seconds": 38.67,
+     "end_seconds": 39.31,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 76,
+     "text": "కీలకం",
+     "start_seconds": 39.31,
+     "end_seconds": 39.71,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_010",
+   "id": 9,
+   "text": "అయినా కూడా",
+   "start_seconds": 39.73,
+   "end_seconds": 40.61,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 77,
+     "text": "అయినా",
+     "start_seconds": 39.43,
+     "end_seconds": 40.39,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 78,
+     "text": "కూడా",
+     "start_seconds": 40.41,
+     "end_seconds": 40.61,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_011",
+   "id": 10,
+   "text": "ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు అక్కడ మనిషి విజయవంతంగా స్థిరపడితే",
+   "start_seconds": 40.8,
+   "end_seconds": 47.72,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 79,
+     "text": "ఇదే",
+     "start_seconds": 40.8,
+     "end_seconds": 41.06,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 80,
+     "text": "మనిషి",
+     "start_seconds": 41.06,
+     "end_seconds": 41.44,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 81,
+     "text": "తదుపరి",
+     "start_seconds": 41.44,
+     "end_seconds": 41.86,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 82,
+     "text": "లక్ష్యం",
+     "start_seconds": 41.86,
+     "end_seconds": 42.18,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 83,
+     "text": "మొదట",
+     "start_seconds": 42.6,
+     "end_seconds": 42.86,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 84,
+     "text": "చంద్రుడి",
+     "start_seconds": 42.86,
+     "end_seconds": 43.56,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 85,
+     "text": "తర్వాత",
+     "start_seconds": 43.54,
+     "end_seconds": 43.84,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 86,
+     "text": "మార్స్",
+     "start_seconds": 43.84,
+     "end_seconds": 44.6,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 87,
+     "text": "మన",
+     "start_seconds": 44.6,
+     "end_seconds": 44.74,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 88,
+     "text": "గమ్యం",
+     "start_seconds": 44.74,
+     "end_seconds": 45.1,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 89,
+     "text": "ఒక",
+     "start_seconds": 45.1,
+     "end_seconds": 45.5,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 90,
+     "text": "రోజు",
+     "start_seconds": 45.5,
+     "end_seconds": 45.84,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 91,
+     "text": "అక్కడ",
+     "start_seconds": 45.84,
+     "end_seconds": 46.06,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 92,
+     "text": "మనిషి",
+     "start_seconds": 46.06,
+     "end_seconds": 46.48,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 93,
+     "text": "విజయవంతంగా",
+     "start_seconds": 46.48,
+     "end_seconds": 47.16,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 94,
+     "text": "స్థిరపడితే",
+     "start_seconds": 47.16,
+     "end_seconds": 47.72,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_012",
+   "id": 11,
+   "text": "అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం",
+   "start_seconds": 47.9,
+   "end_seconds": 52.54,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 95,
+     "text": "అది",
+     "start_seconds": 47.9,
+     "end_seconds": 48.2,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 96,
+     "text": "కేవలం",
+     "start_seconds": 48.2,
+     "end_seconds": 48.66,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 97,
+     "text": "అంతరిక్ష",
+     "start_seconds": 48.66,
+     "end_seconds": 49.12,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 98,
+     "text": "విజయం",
+     "start_seconds": 49.12,
+     "end_seconds": 49.5,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 99,
+     "text": "మాత్రమే",
+     "start_seconds": 49.48,
+     "end_seconds": 49.82,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 100,
+     "text": "కాదు",
+     "start_seconds": 49.82,
+     "end_seconds": 50.14,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 101,
+     "text": "మానవ",
+     "start_seconds": 50.14,
+     "end_seconds": 50.82,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 102,
+     "text": "చరిత్ర",
+     "start_seconds": 50.82,
+     "end_seconds": 51.22,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 103,
+     "text": "లో",
+     "start_seconds": 51.22,
+     "end_seconds": 51.38,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 104,
+     "text": "ఒక",
+     "start_seconds": 51.38,
+     "end_seconds": 51.54,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 105,
+     "text": "కొత్త",
+     "start_seconds": 51.54,
+     "end_seconds": 51.98,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 106,
+     "text": "అధ్యాయం",
+     "start_seconds": 52.04,
+     "end_seconds": 52.54,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_013",
+   "id": 12,
+   "text": "ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+   "start_seconds": 52.85,
+   "end_seconds": 57.43,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 107,
+     "text": "ఆ",
+     "start_seconds": 52.85,
+     "end_seconds": 52.99,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 108,
+     "text": "రోజు",
+     "start_seconds": 52.99,
+     "end_seconds": 53.37,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 109,
+     "text": "మనిషి",
+     "start_seconds": 53.37,
+     "end_seconds": 53.95,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 110,
+     "text": "నిజంగా",
+     "start_seconds": 53.95,
+     "end_seconds": 54.41,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 111,
+     "text": "బహుగ్రహ",
+     "start_seconds": 54.39,
+     "end_seconds": 54.91,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 112,
+     "text": "జీవిగా",
+     "start_seconds": 54.91,
+     "end_seconds": 55.41,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 113,
+     "text": "పరిణమించిన",
+     "start_seconds": 55.41,
+     "end_seconds": 56.01,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 114,
+     "text": "రోజు",
+     "start_seconds": 56.01,
+     "end_seconds": 56.33,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 115,
+     "text": "తప్పకుండా",
+     "start_seconds": 56.33,
+     "end_seconds": 57.05,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 116,
+     "text": "వస్తుంది.",
+     "start_seconds": 57.05,
+     "end_seconds": 57.43,
+     "confidence": null,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  }
+ ],
+ "pauses": [
+  {
+   "start_seconds": 8.09,
+   "end_seconds": 8.467,
+   "duration_seconds": 0.377,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  },
+  {
+   "start_seconds": 9.148,
+   "end_seconds": 9.649,
+   "duration_seconds": 0.5,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  },
+  {
+   "start_seconds": 42.182,
+   "end_seconds": 42.62,
+   "duration_seconds": 0.438,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  }
+ ],
+ "review": {
+  "vocabulary": [],
+  "confidence": {
+   "status": "unavailable",
+   "threshold": 0.5,
+   "words_total": 117,
+   "words_with_confidence": 0,
+   "flagged": []
+  },
+  "llm": {
+   "status": "applied",
+   "error": null,
+   "model": null,
+   "segments_sent": 13
+  },
+  "corrections": [
+   {
+    "id": "c001",
+    "segment": 0,
+    "from_index": 2,
+    "to_index": 2,
+    "from": "సారిరక",
+    "to": "శారీరక",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c002",
+    "segment": 1,
+    "from_index": 4,
+    "to_index": 5,
+    "from": "నిలల ప్రయానం",
+    "to": "నెలల ప్రయాణం",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c003",
+    "segment": 1,
+    "from_index": 8,
+    "to_index": 8,
+    "from": "సమైయం",
+    "to": "సమయం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c004",
+    "segment": 1,
+    "from_index": 13,
+    "to_index": 13,
+    "from": "జివితం",
+    "to": "జీవితం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c005",
+    "segment": 2,
+    "from_index": 4,
+    "to_index": 5,
+    "from": "సంభాషన తక్షనం",
+    "to": "సంభాషణ తక్షణం",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c006",
+    "segment": 3,
+    "from_index": 0,
+    "to_index": 0,
+    "from": "సందేసాలకు",
+    "to": "సందేశాలకు",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c007",
+    "segment": 3,
+    "from_index": 2,
+    "to_index": 2,
+    "from": "ఆలసియం",
+    "to": "ఆలస్యం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c008",
+    "segment": 4,
+    "from_index": 3,
+    "to_index": 4,
+    "from": "నిస్సబ్ద వాతావర్నం",
+    "to": "నిశ్శబ్ద వాతావరణం",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c009",
+    "segment": 5,
+    "from_index": 6,
+    "to_index": 6,
+    "from": "పరిక్షిస్తై",
+    "to": "పరీక్షిస్తాయి",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c010",
+    "segment": 6,
+    "from_index": 1,
+    "to_index": 2,
+    "from": "అత్యవ్సర పరిస్తితి",
+    "to": "అత్యవసర పరిస్థితి",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c011",
+    "segment": 7,
+    "from_index": 1,
+    "to_index": 1,
+    "from": "బ్రుందం",
+    "to": "బృందం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c012",
+    "segment": 7,
+    "from_index": 3,
+    "to_index": 4,
+    "from": "గ్ఞానం సిక్షన",
+    "to": "జ్ఞానం శిక్షణ",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c013",
+    "segment": 7,
+    "from_index": 8,
+    "to_index": 9,
+    "from": "నిర్ణాయాలు తిస్కోవాలి",
+    "to": "నిర్ణయాలు తీసుకోవాలి",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c014",
+    "segment": 8,
+    "from_index": 2,
+    "to_index": 3,
+    "from": "మనోధాయరియం క్రమసిక్షన",
+    "to": "మనోధైర్యం క్రమశిక్షణ",
+    "reason": "spelling",
+    "p_from": [
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c015",
+    "segment": 8,
+    "from_index": 7,
+    "to_index": 7,
+    "from": "కిలకం",
+    "to": "కీలకం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c016",
+    "segment": 9,
+    "from_index": 0,
+    "to_index": 0,
+    "from": "అయనా",
+    "to": "అయినా",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c017",
+    "segment": 10,
+    "from_index": 3,
+    "to_index": 5,
+    "from": "లక్షిమ్ మొదటక చెంత్రూడి",
+    "to": "లక్ష్యం మొదట చంద్రుడి",
+    "reason": "mishearing",
+    "p_from": [
+     null,
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c018",
+    "segment": 10,
+    "from_index": 14,
+    "to_index": 14,
+    "from": "విజేవంతంగా",
+    "to": "విజయవంతంగా",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c019",
+    "segment": 11,
+    "from_index": 3,
+    "to_index": 3,
+    "from": "విజ్యం",
+    "to": "విజయం",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c020",
+    "segment": 11,
+    "from_index": 10,
+    "to_index": 10,
+    "from": "కుత్త",
+    "to": "కొత్త",
+    "reason": "spelling",
+    "p_from": [
+     null
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c021",
+    "segment": 12,
+    "from_index": 4,
+    "to_index": 6,
+    "from": "బహుగ్రా జివిగా పరణమించిన",
+    "to": "బహుగ్రహ జీవిగా పరిణమించిన",
+    "reason": "mishearing",
+    "p_from": [
+     null,
+     null,
+     null
+    ],
+    "status": "applied",
+    "why": null
+   }
+  ],
+  "unresolved": []
+ },
+ "quality": {
+  "status": "measured",
+  "max_volume_db": -1.3,
+  "mean_volume_db": -20.5,
+  "noise_level": "not measured",
+  "uncertain_words": 0,
+  "unresolved_words": 0,
+  "uncertain_share": null
+ },
+ "processing": {
+  "preprocessing": {
+   "applied": true,
+   "kind": "ffmpeg resample to 16 kHz mono (derived copy audio_16k.wav)",
+   "derived_duration_seconds": 57.611
+  },
+  "alignment_status": "word_timestamps",
+  "alignment_method": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words",
+  "pause_detection": {
+   "status": "measured",
+   "method": "ffmpeg silencedetect",
+   "min_seconds": 0.35,
+   "threshold_db": -35
+  }
+ },
+ "caching": {
+  "steps": {
+   "transcribe": "ran",
+   "refine": null,
+   "cuts": "ran"
+  },
+  "reused": [],
+  "llm_cache_entries": 2
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Audio File Validation",
+   "status": "completed",
+   "detail": "file readable, has an audio stream"
+  },
+  {
+   "n": 2,
+   "name": "Audio Metadata Extraction",
+   "status": "completed",
+   "detail": "57.611s, 24000 Hz, 1 ch (pcm_s16le)"
+  },
+  {
+   "n": 3,
+   "name": "Audio Preprocessing",
+   "status": "completed",
+   "detail": "16 kHz mono copy for the model (57.611s); the original is untouched"
+  },
+  {
+   "n": 4,
+   "name": "Language & Speech Detection",
+   "status": "completed",
+   "detail": "language 'te' set by config (no detection ran); confidence unavailable"
+  },
+  {
+   "n": 5,
+   "name": "Speech-to-Text (ASR)",
+   "status": "completed",
+   "detail": "large-v3 (int8, cpu): 13 segments, 117 words kept as the raw transcript"
+  },
+  {
+   "n": 6,
+   "name": "Telugu + English Technical Vocabulary",
+   "status": "completed",
+   "detail": "0 English terms, 0 numbers found"
+  },
+  {
+   "n": 7,
+   "name": "Confidence-Based Correction",
+   "status": "skipped",
+   "detail": "no word confidences were saved for this transcript (made before they were recorded); nothing is flagged"
+  },
+  {
+   "n": 8,
+   "name": "Raw vs Corrected Transcript (LLM)",
+   "status": "completed",
+   "detail": "Claude checked 13 segment(s): 21 correction(s) applied, 0 rejected"
+  },
+  {
+   "n": 9,
+   "name": "Word-Level Alignment",
+   "status": "warning",
+   "detail": "32 corrected word(s) re-aligned against the original audio (forced alignment, model-inferred), cross-checked against the unchanged words; the others keep Whisper's timestamps"
+  },
+  {
+   "n": 10,
+   "name": "Word Timestamp Integrity",
+   "status": "warning",
+   "detail": "0 errors, 3 warnings in 117 word timestamps"
+  },
+  {
+   "n": 11,
+   "name": "Pause & Speech Rhythm Analysis",
+   "status": "completed",
+   "detail": "3 silences ≥ 0.35s below -35 dB"
+  },
+  {
+   "n": 12,
+   "name": "Audio Quality & Uncertainty Detection",
+   "status": "completed",
+   "detail": "max -1.3 dB, mean -20.5 dB; 0 uncertain, 0 unresolved word(s); noise level not measured"
+  },
+  {
+   "n": 13,
+   "name": "Final Audio Analysis Validation",
+   "status": "warning",
+   "detail": "0 errors, 4 warnings"
+  },
+  {
+   "n": 14,
+   "name": "Caching & Resume",
+   "status": "completed",
+   "detail": "Claude answers cached: 2; a failed run resumes from the last finished step"
+  }
+ ],
+ "validation": {
+  "status": "warning",
+  "errors": [],
+  "warnings": [
+   {
+    "stage": "Word Timestamp Integrity",
+    "code": "word_out_of_order",
+    "message": "word 35 “సందేశాలకు” starts before the previous word ended"
+   },
+   {
+    "stage": "Word Timestamp Integrity",
+    "code": "word_out_of_order",
+    "message": "word 51 “ఏదేనా” starts before the previous word ended"
+   },
+   {
+    "stage": "Word Timestamp Integrity",
+    "code": "word_out_of_order",
+    "message": "word 77 “అయినా” starts before the previous word ended"
+   },
+   {
+    "stage": "Word-Level Alignment",
+    "code": "start_moved_to_sound",
+    "message": "1 corrected word(s) started before any sound in the model's alignment; the start was moved to the first sound measured in the audio (42.18s -> 42.6s)"
+   }
+  ]
+ }
+}

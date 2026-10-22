@@ -1,0 +1,887 @@
+{
+  "schema_version": 1,
+  "agent_id": "timeline_build",
+  "updated_at": "2026-10-20T06:03:06.259954+00:00",
+  "total_experiences": 32,
+  "experiences": {
+    "exp-timeline_build-1e25d137d4": {
+      "experience_id": "exp-timeline_build-1e25d137d4",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-465aa5237e",
+      "project_id": "01-2f64",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 980,
+        "fps": 30,
+        "duration_seconds": 32.68,
+        "speech_coverage_percent": 92.8,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 980 frames at 30 fps (32.68s). Speech coverage: 92.8%. Continuity score: 60.0/100. Transitions recommended: 5.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:56:40.184558+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-207b0ac6ac": {
+      "experience_id": "exp-timeline_build-207b0ac6ac",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-a7b865ba8c",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:33:47.584324+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-341b2fa9b0": {
+      "experience_id": "exp-timeline_build-341b2fa9b0",
+      "agent_id": "timeline_build",
+      "task_type": "recovery_timeline",
+      "task_id": "run_49ae3be1",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "timeline",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_49ae3be1",
+            "agent_id": "timeline_build",
+            "stage_id": "timeline",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "timeline.json missing frame count",
+            "timestamp": "2026-10-18T14:50:52.841296+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_timeline",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for timeline resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T14:50:52.981494+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-3f180f90f9": {
+      "experience_id": "exp-timeline_build-3f180f90f9",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-4475c53937",
+      "project_id": "01-2f64",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 980,
+        "fps": 30,
+        "duration_seconds": 32.68,
+        "speech_coverage_percent": 92.8,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 980 frames at 30 fps (32.68s). Speech coverage: 92.8%. Continuity score: 60.0/100. Transitions recommended: 5.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:51:06.528038+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-412707ae39": {
+      "experience_id": "exp-timeline_build-412707ae39",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-2710416fae",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:49:31.342074+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-437fa7c6d7": {
+      "experience_id": "exp-timeline_build-437fa7c6d7",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-33a1b5ced9",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T06:47:55.874530+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-4948212368": {
+      "experience_id": "exp-timeline_build-4948212368",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-158559d96b",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:11:33.081152+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-52ce901111": {
+      "experience_id": "exp-timeline_build-52ce901111",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-7360cf7d7c",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T06:45:26.397482+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-541d77b4de": {
+      "experience_id": "exp-timeline_build-541d77b4de",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-36ad5721b9",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T06:47:19.159917+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-564062f9d3": {
+      "experience_id": "exp-timeline_build-564062f9d3",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-8b54932529",
+      "project_id": "01-2f64",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 980,
+        "fps": 30,
+        "duration_seconds": 32.68,
+        "speech_coverage_percent": 92.8,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 980 frames at 30 fps (32.68s). Speech coverage: 92.8%. Continuity score: 60.0/100. Transitions recommended: 5.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:39:58.821508+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-5f00f449f6": {
+      "experience_id": "exp-timeline_build-5f00f449f6",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-4638840b48",
+      "project_id": "01-2f64",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 980,
+        "fps": 30,
+        "duration_seconds": 32.68,
+        "speech_coverage_percent": 92.8,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 980 frames at 30 fps (32.68s). Speech coverage: 92.8%. Continuity score: 60.0/100. Transitions recommended: 5.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T04:38:16.963573+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-6d72e53743": {
+      "experience_id": "exp-timeline_build-6d72e53743",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_assembly",
+      "task_id": "task-1fa84570d1",
+      "project_id": null,
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 420.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:45.745321+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-74fbcad478": {
+      "experience_id": "exp-timeline_build-74fbcad478",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-8e3228710f",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:11:57.686042+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-77de79ed6d": {
+      "experience_id": "exp-timeline_build-77de79ed6d",
+      "agent_id": "timeline_build",
+      "task_type": "timeline",
+      "task_id": "req-1792462861",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 118.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_build' completed task 'timeline' with outcome 'succeeded' in 118.0ms.",
+        "takeaway": "Parameters and inputs for 'timeline' produced verified output.",
+        "performance": {
+          "duration_ms": 118.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:01.646583+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-79ef989f51": {
+      "experience_id": "exp-timeline_build-79ef989f51",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-a11cdb83b3",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:36:10.590175+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-84fb9a65b0": {
+      "experience_id": "exp-timeline_build-84fb9a65b0",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-9777b9c7d7",
+      "project_id": "test_p9_e2e_project",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 15,
+        "fps": 30,
+        "duration_seconds": 0.5,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 15 frames at 30 fps (0.50s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:48.615730+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-88e348e36d": {
+      "experience_id": "exp-timeline_build-88e348e36d",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-c8375b0438",
+      "project_id": "test_p9_e2e_project",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 15,
+        "fps": 30,
+        "duration_seconds": 0.5,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 15 frames at 30 fps (0.50s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:37.725076+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-891282df9f": {
+      "experience_id": "exp-timeline_build-891282df9f",
+      "agent_id": "timeline_build",
+      "task_type": "timeline",
+      "task_id": "req-1792458641",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 166.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_build' completed task 'timeline' with outcome 'succeeded' in 166.0ms.",
+        "takeaway": "Parameters and inputs for 'timeline' produced verified output.",
+        "performance": {
+          "duration_ms": 166.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:41.902313+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-920eb6ac61": {
+      "experience_id": "exp-timeline_build-920eb6ac61",
+      "agent_id": "timeline_build",
+      "task_type": "timeline",
+      "task_id": "req-1792458828",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 89.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_build' completed task 'timeline' with outcome 'succeeded' in 89.0ms.",
+        "takeaway": "Parameters and inputs for 'timeline' produced verified output.",
+        "performance": {
+          "duration_ms": 89.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:48.719146+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-9374e2d62d": {
+      "experience_id": "exp-timeline_build-9374e2d62d",
+      "agent_id": "timeline_build",
+      "task_type": "timeline",
+      "task_id": "req-1792458911",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 167.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_build' completed task 'timeline' with outcome 'succeeded' in 167.0ms.",
+        "takeaway": "Parameters and inputs for 'timeline' produced verified output.",
+        "performance": {
+          "duration_ms": 167.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:11.155715+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-9692ca95a2": {
+      "experience_id": "exp-timeline_build-9692ca95a2",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-5f3440b1a4",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:11:11.341038+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-c073707246": {
+      "experience_id": "exp-timeline_build-c073707246",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-01e0d26db6",
+      "project_id": "test_p9_e2e_project",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 15,
+        "fps": 30,
+        "duration_seconds": 0.5,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 15 frames at 30 fps (0.50s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:01.587685+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-cdfb7999c7": {
+      "experience_id": "exp-timeline_build-cdfb7999c7",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-ca798a4984",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:27:21.919582+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-db63933695": {
+      "experience_id": "exp-timeline_build-db63933695",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-b8115e8105",
+      "project_id": "test_p9_e2e_project",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 15,
+        "fps": 30,
+        "duration_seconds": 0.5,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 15 frames at 30 fps (0.50s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:41.777724+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-ead2913727": {
+      "experience_id": "exp-timeline_build-ead2913727",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-bb29a7b460",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T07:32:10.410096+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-edb80cf694": {
+      "experience_id": "exp-timeline_build-edb80cf694",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-4205c7d18c",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T06:03:06.236817+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-f2246fd5eb": {
+      "experience_id": "exp-timeline_build-f2246fd5eb",
+      "agent_id": "timeline_build",
+      "task_type": "recovery_timeline",
+      "task_id": "run_195c83d6",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "timeline",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_195c83d6",
+            "agent_id": "timeline_build",
+            "stage_id": "timeline",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Timeline has non-positive frame count",
+            "timestamp": "2026-10-18T15:29:52.584872+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_timeline",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for timeline resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T15:29:52.717778+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-f54edd0360": {
+      "experience_id": "exp-timeline_build-f54edd0360",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-5e0825508d",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:46.405354+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-f747c1314f": {
+      "experience_id": "exp-timeline_build-f747c1314f",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-78e00a9322",
+      "project_id": "test_p9_e2e_project",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 15,
+        "fps": 30,
+        "duration_seconds": 0.5,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 90.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 15 frames at 30 fps (0.50s). Speech coverage: 100.0%. Continuity score: 90.0/100. Transitions recommended: 0.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:11.007366+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-fa24dbaabf": {
+      "experience_id": "exp-timeline_build-fa24dbaabf",
+      "agent_id": "timeline_build",
+      "task_type": "recovery_timeline",
+      "task_id": "run_043baefe",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "timeline",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_043baefe",
+            "agent_id": "timeline_build",
+            "stage_id": "timeline",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Timeline has non-positive frame count",
+            "timestamp": "2026-10-18T14:56:31.073802+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_timeline",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for timeline resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T14:56:31.194322+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-fe821812d0": {
+      "experience_id": "exp-timeline_build-fe821812d0",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-7120d85cc9",
+      "project_id": "proj_p7_test",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 120,
+        "fps": 30,
+        "duration_seconds": 4.0,
+        "speech_coverage_percent": 100.0,
+        "continuity_score": 80.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 120 frames at 30 fps (4.00s). Speech coverage: 100.0%. Continuity score: 80.0/100. Transitions recommended: 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T06:45:26.134401+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-fefc0c7f20": {
+      "experience_id": "exp-timeline_build-fefc0c7f20",
+      "agent_id": "timeline_build",
+      "task_type": "timeline",
+      "task_id": "req-1792458278",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 469.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_build' completed task 'timeline' with outcome 'succeeded' in 469.0ms.",
+        "takeaway": "Parameters and inputs for 'timeline' produced verified output.",
+        "performance": {
+          "duration_ms": 469.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:38.623658+00:00",
+      "schema_version": 1
+    }
+  }
+}

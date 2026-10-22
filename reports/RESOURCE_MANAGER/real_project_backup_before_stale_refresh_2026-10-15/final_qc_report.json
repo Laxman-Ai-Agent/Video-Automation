@@ -1,0 +1,3263 @@
+{
+ "aspect": "16:9",
+ "candidate": {
+  "relative_path": "out.mp4",
+  "sha256": "e9351e5da80d18724ba97413e5991b4431ba57015bd182ab2260da83046a8f20",
+  "size_bytes": 33161114
+ },
+ "checks": [
+  {
+   "evidence": {
+    "profile": {
+     "audio_tail_warn_s": 0.5,
+     "av_offset_error_s": 0.25,
+     "av_offset_warn_s": 0.04,
+     "black_min_s": 0.5,
+     "black_pix_th": 0.1,
+     "blank_std": 2.0,
+     "clip_db": -0.1,
+     "decode": "full",
+     "frame_width": 480,
+     "freeze_min_s": 3.0,
+     "freeze_noise": 0.001,
+     "sample_fractions": [
+      0.12,
+      0.5,
+      0.9
+     ],
+     "silence_min_s": 2.0,
+     "silent_db": -50.0,
+     "static_diff": 0.5,
+     "static_scene_min_s": 3.0
+    }
+   },
+   "finding_id": "QC_RUN_STARTED:video:-",
+   "message": "profile standard, rules version 1",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_RUN_STARTED",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "run_initialization",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "sha256": "e9351e5da80d18724ba97413e5991b4431ba57015bd182ab2260da83046a8f20"
+   },
+   "finding_id": "QC_CANDIDATE_RESOLVED:video:-",
+   "message": "out.mp4, 33161114 bytes",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_CANDIDATE_RESOLVED",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "artifact_resolution",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "manifest_fingerprint": "10767b100951d0d2"
+   },
+   "finding_id": "QC_MANIFEST_PRESENT:video:-",
+   "message": "the render manifest is present",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_MANIFEST_PRESENT",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "artifact_resolution",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_MANIFEST_MATCHES_RENDER:video:-",
+   "message": "the render manifest is the one the render report names",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_MANIFEST_MATCHES_RENDER",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "provenance_gate",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "approval_status": "approved",
+    "approved_now": "ad1b6d1feb23c8de",
+    "rendered_from": "ad1b6d1feb23c8de"
+   },
+   "finding_id": "QC_APPROVAL_CURRENT:video:-",
+   "message": "the render was made from the timeline version that is approved now",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_APPROVAL_CURRENT",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "provenance_gate",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_CANDIDATE_STABLE:video:-",
+   "message": "the file did not change between reads and no render is writing",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_CANDIDATE_STABLE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "provenance_gate",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "sha256": "e9351e5da80d18724ba97413e5991b4431ba57015bd182ab2260da83046a8f20",
+    "size_bytes": 33161114
+   },
+   "finding_id": "QC_FILE_NONEMPTY:video:-",
+   "message": "33161114 bytes, sha256 e9351e5da80d1872",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FILE_NONEMPTY",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "file_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_FILE_HASH_MATCHES_RENDER:video:-",
+   "message": "the bytes are exactly what Render Video verified and published",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FILE_HASH_MATCHES_RENDER",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "file_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_PROBE_READABLE:video:-",
+   "message": "container mov,mp4,m4a,3gp,3g2,mj2, 2 stream(s)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_PROBE_READABLE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "expected": [
+     1920,
+     1080
+    ],
+    "observed": [
+     1920,
+     1080
+    ]
+   },
+   "finding_id": "QC_DIMENSIONS:video:-",
+   "message": "1920x1080 (expected 1920x1080), aspect 1.7778",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_DIMENSIONS",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "expected": 30,
+    "observed": "30"
+   },
+   "finding_id": "QC_FRAME_RATE:video:-",
+   "message": "30 fps (expected 30/1)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FRAME_RATE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "avg_frame_rate": "30/1",
+    "r_frame_rate": "30"
+   },
+   "finding_id": "QC_CONSTANT_FRAME_RATE:video:-",
+   "message": "constant frame rate (r_frame_rate equals avg_frame_rate)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_CONSTANT_FRAME_RATE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "pix_fmt": "yuvj420p"
+   },
+   "finding_id": "QC_VIDEO_CODEC:video:-",
+   "message": "h264 (configured h264), pixel format yuvj420p",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_VIDEO_CODEC",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "audio": {
+     "bit_rate": 317374.0,
+     "channels": 2,
+     "codec": "aac",
+     "duration": 57.6,
+     "sample_rate": 48000,
+     "start_time": 0.0
+    }
+   },
+   "finding_id": "QC_AUDIO_STREAM:video:-",
+   "message": "audio stream present (required by the render manifest)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_AUDIO_STREAM",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "stream_metadata",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "coverage": "full decode",
+    "decoded_frames": 1728,
+    "tool_exit_code": 0
+   },
+   "finding_id": "QC_VIDEO_DECODES:video:-",
+   "message": "every frame decoded (full decode of the video stream)",
+   "recommended_action": "inspect the render log; render again after fixing the cause",
+   "resolution": "none",
+   "rule_id": "QC_VIDEO_DECODES",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "video_decode",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "expected": 57.6,
+    "observed": 57.6
+   },
+   "finding_id": "QC_DURATION:video:-",
+   "message": "57.600 s (expected 57.6 s, tolerance 0.15 s)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_DURATION",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "duration_frames",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "expected": 1728,
+    "observed": 1728
+   },
+   "finding_id": "QC_FRAME_COUNT_CONTAINER:video:-",
+   "message": "1728 frames (expected 1728 from the approved timeline, +-1)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FRAME_COUNT_CONTAINER",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "duration_frames",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "expected": 1728,
+    "observed": 1728
+   },
+   "finding_id": "QC_FRAME_COUNT_DECODED:video:-",
+   "message": "1728 frames (expected 1728 from the approved timeline, +-1)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FRAME_COUNT_DECODED",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "duration_frames",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_AUDIO_DECODES:video:-",
+   "message": "the whole audio track decoded",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_AUDIO_DECODES",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "audio_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "peak_db": -4.3
+   },
+   "finding_id": "QC_AUDIO_LEVEL:video:-",
+   "message": "peak -4.3 dB, mean -23.5 dB (no clipping)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_AUDIO_LEVEL",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "audio_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_AUDIO_SILENCE:video:-",
+   "message": "no silence of 2 s or more",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_AUDIO_SILENCE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "audio_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "audio": 57.6,
+    "speech_end": 57.43,
+    "video": 57.6
+   },
+   "finding_id": "QC_SPEECH_NOT_CUT:video:-",
+   "message": "the last spoken word ends at 57.43 s; the video lasts 57.60 s, the audio 57.60 s: 0.17 s of margin",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SPEECH_NOT_CUT",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "audio_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "audio": 57.6,
+    "video": 57.6
+   },
+   "finding_id": "QC_AUDIO_NOT_BEYOND_VIDEO:video:-",
+   "message": "audio 57.600 s, video 57.600 s (+0.000 s)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_AUDIO_NOT_BEYOND_VIDEO",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "audio_integrity",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "audio_start": 0.0,
+    "video_start": 0.0
+   },
+   "finding_id": "QC_STREAM_START_OFFSET:video:-",
+   "message": "the audio stream starts 0.0 ms from the video stream (container timestamps)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_STREAM_START_OFFSET",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "av_sync",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_AV_CONTENT_SYNC:video:-",
+   "message": "whether the narration lands on its scene cannot be measured automatically (no reliable detector): a person has to watch and listen",
+   "recommended_action": "watch the video with sound (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_AV_CONTENT_SYNC",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "av_sync",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_EMPHASIS_ON_WORD:video:-",
+   "message": "the rendered emphasis moments were not measured against the spoken words (no pixel/audio detector); the planned emphasis times were aligned to words upstream",
+   "recommended_action": "watch the emphasis moments (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_EMPHASIS_ON_WORD",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "av_sync",
+   "status": "not_run",
+   "target": null
+  },
+  {
+   "evidence": {
+    "coverage": "sampled frames: first, last, every scene at 12 % / 50 % / 90 %, around every cut, every transition start / middle / end",
+    "sampled": 70,
+    "undecoded": []
+   },
+   "finding_id": "QC_FRAMES_EXTRACTED:video:-",
+   "message": "70 of 70 sampled frames decoded (frame sampling, not playback)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FRAMES_EXTRACTED",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_001:-",
+   "message": "scene_001: sampled frames have content (std 30.7-46.4)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_001",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_001:-",
+   "message": "scene_001: the picture changes within the scene (difference 26.3)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_001",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_002:-",
+   "message": "scene_002: sampled frames have content (std 42.9-44.3)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_002",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_002:-",
+   "message": "scene_002: the picture changes within the scene (difference 14.6)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_002",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_003:-",
+   "message": "scene_003: sampled frames have content (std 42.6-55.7)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_003",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_003:-",
+   "message": "scene_003: the picture changes within the scene (difference 17.0)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_003",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_004:-",
+   "message": "scene_004: sampled frames have content (std 38.4-47.2)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_004",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_004:-",
+   "message": "scene_004: the picture changes within the scene (difference 17.8)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_004",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_005:-",
+   "message": "scene_005: sampled frames have content (std 27.7-30.2)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_005",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_005:-",
+   "message": "scene_005: the picture changes within the scene (difference 10.5)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_005",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_006:-",
+   "message": "scene_006: sampled frames have content (std 23.2-34.7)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_006",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_006:-",
+   "message": "scene_006: the picture changes within the scene (difference 14.1)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_006",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_007:-",
+   "message": "scene_007: sampled frames have content (std 31.7-48.2)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_007",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_007:-",
+   "message": "scene_007: the picture changes within the scene (difference 20.3)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_007",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_008:-",
+   "message": "scene_008: sampled frames have content (std 41.5-43.6)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_008",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_008:-",
+   "message": "scene_008: the picture changes within the scene (difference 13.6)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_008",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_NOT_BLANK:scene_009:-",
+   "message": "scene_009: sampled frames have content (std 30.1-45.7)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_NOT_BLANK",
+   "scene_id": "scene_009",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_009:-",
+   "message": "scene_009: the picture changes within the scene (difference 27.1)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_SCENE_SHOWS_CHANGE",
+   "scene_id": "scene_009",
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_BLACK_RUN:video:-",
+   "message": "no black longer than 0.5 s",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_BLACK_RUN",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_FROZEN_RUN:video:-",
+   "message": "no picture stays unchanged for 3 s or more",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FROZEN_RUN",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "frames": []
+   },
+   "finding_id": "QC_FRAME_GEOMETRY:video:-",
+   "message": "every sampled frame has the shape of the render",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FRAME_GEOMETRY",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "frame_quality",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_001:transition_001_002",
+   "message": "scene_001 -> scene_002 (fade, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_001",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_001_002"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_002:transition_002_003",
+   "message": "scene_002 -> scene_003 (slide, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_002",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_002_003"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_003:transition_003_004",
+   "message": "scene_003 -> scene_004 (blur, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_003",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_003_004"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_004:transition_004_005",
+   "message": "scene_004 -> scene_005 (fade, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_004",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_004_005"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_005:transition_005_006",
+   "message": "scene_005 -> scene_006 (wipe, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_005",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_005_006"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_006:transition_006_007",
+   "message": "scene_006 -> scene_007 (zoom-through, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_006",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_006_007"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_007:transition_007_008",
+   "message": "scene_007 -> scene_008 (light-leak, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_007",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_007_008"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_NOT_BLANK:scene_008:transition_008_009",
+   "message": "scene_008 -> scene_009 (fade, 13 f): the window has content at start, middle and end",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_TRANSITION_NOT_BLANK",
+   "scene_id": "scene_008",
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": "transition_008_009"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_FIRST_FRAME:video:-",
+   "message": "the first frame decodes",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_FIRST_FRAME",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "scene_boundaries",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {
+    "scenes": [
+     "scene_001",
+     "scene_002",
+     "scene_003",
+     "scene_004",
+     "scene_005",
+     "scene_006",
+     "scene_007",
+     "scene_008",
+     "scene_009"
+    ]
+   },
+   "finding_id": "QC_SCENE_ORDER_AND_COVERAGE:video:-",
+   "message": "all 9 scenes were sampled in timeline order; that the right content is in the right scene needs a person (frames below)",
+   "recommended_action": "",
+   "resolution": "unresolved",
+   "rule_id": "QC_SCENE_ORDER_AND_COVERAGE",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "scene_boundaries",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_SMOOTHNESS:video:-",
+   "message": "how smooth each transition looks is subjective and cannot be established from stills",
+   "recommended_action": "watch the transitions (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_TRANSITION_SMOOTHNESS",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "scene_boundaries",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [
+     "cut_after_cut_00144.jpg",
+     "cut_after_cut_00409.jpg",
+     "cut_after_cut_00588.jpg",
+     "cut_after_cut_00783.jpg"
+    ],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_LIMITATION:video:audio",
+   "message": "the renderer's frame count (1728 frames = 57.600 s) is 0.011 s shorter than the audio (57.611 s): less than one frame is cut off the end of the audio",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_LIMITATION",
+   "scene_id": null,
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "audio"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_04:small_crew_group",
+   "message": "small_crew_group (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_04",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "small_crew_group"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_05:crew_team",
+   "message": "crew_team (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "crew_team"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_05:help_line",
+   "message": "help_line (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "help_line"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_01:mind_icon",
+   "message": "mind_icon (icon) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_01",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "mind_icon"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_04:silence_icon",
+   "message": "silence_icon (icon) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_04",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "silence_icon"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_06:triad_emblem",
+   "message": "triad_emblem (graphic) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_06",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "triad_emblem"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_ELEMENTS_COUNTED:video:-",
+   "message": "39 of 45 planned elements were drawn exactly as planned according to Motion Generation (a plan fact, not measured on this video)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_UPSTREAM_ELEMENTS_COUNTED",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_EMPHASIS:video:-",
+   "message": "Stage 10 reports 0 warning(s); 4 emphasis time(s) were aligned to spoken words by recorded decisions (not measured in the rendered video)",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_UPSTREAM_EMPHASIS",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_APPROVAL_REVIEW_COVERAGE:video:-",
+   "message": "the timeline approval recorded: stills looked at by a person: False, motion watched: False",
+   "recommended_action": "",
+   "resolution": "none",
+   "rule_id": "QC_APPROVAL_REVIEW_COVERAGE",
+   "scene_id": null,
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "passed",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_HUMAN_REVIEW:video:-",
+   "message": "no person has recorded a decision about this exact file yet",
+   "recommended_action": "watch the video and record a decision",
+   "resolution": "unresolved",
+   "rule_id": "QC_HUMAN_REVIEW",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "human_review",
+   "status": "requires_review",
+   "target": null
+  }
+ ],
+ "created_at": "2026-10-15T05:45:37",
+ "delivery_gate": {
+  "open": false,
+  "reason": "Final QC is needs review"
+ },
+ "evidence": {
+  "audio_integrity": {
+   "checks": [
+    {
+     "evidence": {},
+     "finding_id": "QC_AUDIO_DECODES:video:-",
+     "message": "the whole audio track decoded",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_AUDIO_DECODES",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "audio_integrity",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "peak_db": -4.3
+     },
+     "finding_id": "QC_AUDIO_LEVEL:video:-",
+     "message": "peak -4.3 dB, mean -23.5 dB (no clipping)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_AUDIO_LEVEL",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "audio_integrity",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_AUDIO_SILENCE:video:-",
+     "message": "no silence of 2 s or more",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_AUDIO_SILENCE",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "audio_integrity",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "audio": 57.6,
+      "speech_end": 57.43,
+      "video": 57.6
+     },
+     "finding_id": "QC_SPEECH_NOT_CUT:video:-",
+     "message": "the last spoken word ends at 57.43 s; the video lasts 57.60 s, the audio 57.60 s: 0.17 s of margin",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SPEECH_NOT_CUT",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "audio_integrity",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "audio": 57.6,
+      "video": 57.6
+     },
+     "finding_id": "QC_AUDIO_NOT_BEYOND_VIDEO:video:-",
+     "message": "audio 57.600 s, video 57.600 s (+0.000 s)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_AUDIO_NOT_BEYOND_VIDEO",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "audio_integrity",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {
+    "peak_db": -4.3,
+    "silences": [],
+    "speech_end": 57.43
+   },
+   "key": "24a80a98939fa94b"
+  },
+  "av_sync": {
+   "checks": [
+    {
+     "evidence": {
+      "audio_start": 0.0,
+      "video_start": 0.0
+     },
+     "finding_id": "QC_STREAM_START_OFFSET:video:-",
+     "message": "the audio stream starts 0.0 ms from the video stream (container timestamps)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_STREAM_START_OFFSET",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "av_sync",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_AV_CONTENT_SYNC:video:-",
+     "message": "whether the narration lands on its scene cannot be measured automatically (no reliable detector): a person has to watch and listen",
+     "recommended_action": "watch the video with sound (human review)",
+     "resolution": "unresolved",
+     "rule_id": "QC_AV_CONTENT_SYNC",
+     "scene_id": null,
+     "severity": "review",
+     "stage_id": "av_sync",
+     "status": "requires_review",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_EMPHASIS_ON_WORD:video:-",
+     "message": "the rendered emphasis moments were not measured against the spoken words (no pixel/audio detector); the planned emphasis times were aligned to words upstream",
+     "recommended_action": "watch the emphasis moments (human review)",
+     "resolution": "unresolved",
+     "rule_id": "QC_EMPHASIS_ON_WORD",
+     "scene_id": null,
+     "severity": "review",
+     "stage_id": "av_sync",
+     "status": "not_run",
+     "target": null
+    }
+   ],
+   "data": {},
+   "key": "9b67c5acf09e564e"
+  },
+  "duration_frames": {
+   "checks": [
+    {
+     "evidence": {
+      "expected": 57.6,
+      "observed": 57.6
+     },
+     "finding_id": "QC_DURATION:video:-",
+     "message": "57.600 s (expected 57.6 s, tolerance 0.15 s)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_DURATION",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "duration_frames",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "expected": 1728,
+      "observed": 1728
+     },
+     "finding_id": "QC_FRAME_COUNT_CONTAINER:video:-",
+     "message": "1728 frames (expected 1728 from the approved timeline, +-1)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FRAME_COUNT_CONTAINER",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "duration_frames",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "expected": 1728,
+      "observed": 1728
+     },
+     "finding_id": "QC_FRAME_COUNT_DECODED:video:-",
+     "message": "1728 frames (expected 1728 from the approved timeline, +-1)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FRAME_COUNT_DECODED",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "duration_frames",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {},
+   "key": "f068bfacf477ab49"
+  },
+  "file_integrity": {
+   "checks": [
+    {
+     "evidence": {
+      "sha256": "e9351e5da80d18724ba97413e5991b4431ba57015bd182ab2260da83046a8f20",
+      "size_bytes": 33161114
+     },
+     "finding_id": "QC_FILE_NONEMPTY:video:-",
+     "message": "33161114 bytes, sha256 e9351e5da80d1872",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FILE_NONEMPTY",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "file_integrity",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_FILE_HASH_MATCHES_RENDER:video:-",
+     "message": "the bytes are exactly what Render Video verified and published",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FILE_HASH_MATCHES_RENDER",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "file_integrity",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {},
+   "key": "3f4a05c604c16901"
+  },
+  "frame_quality": {
+   "checks": [
+    {
+     "evidence": {
+      "coverage": "sampled frames: first, last, every scene at 12 % / 50 % / 90 %, around every cut, every transition start / middle / end",
+      "sampled": 70,
+      "undecoded": []
+     },
+     "finding_id": "QC_FRAMES_EXTRACTED:video:-",
+     "message": "70 of 70 sampled frames decoded (frame sampling, not playback)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FRAMES_EXTRACTED",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_001:-",
+     "message": "scene_001: sampled frames have content (std 30.7-46.4)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_001",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_001:-",
+     "message": "scene_001: the picture changes within the scene (difference 26.3)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_001",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_002:-",
+     "message": "scene_002: sampled frames have content (std 42.9-44.3)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_002",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_002:-",
+     "message": "scene_002: the picture changes within the scene (difference 14.6)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_002",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_003:-",
+     "message": "scene_003: sampled frames have content (std 42.6-55.7)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_003",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_003:-",
+     "message": "scene_003: the picture changes within the scene (difference 17.0)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_003",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_004:-",
+     "message": "scene_004: sampled frames have content (std 38.4-47.2)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_004",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_004:-",
+     "message": "scene_004: the picture changes within the scene (difference 17.8)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_004",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_005:-",
+     "message": "scene_005: sampled frames have content (std 27.7-30.2)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_005",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_005:-",
+     "message": "scene_005: the picture changes within the scene (difference 10.5)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_005",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_006:-",
+     "message": "scene_006: sampled frames have content (std 23.2-34.7)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_006",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_006:-",
+     "message": "scene_006: the picture changes within the scene (difference 14.1)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_006",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_007:-",
+     "message": "scene_007: sampled frames have content (std 31.7-48.2)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_007",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_007:-",
+     "message": "scene_007: the picture changes within the scene (difference 20.3)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_007",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_008:-",
+     "message": "scene_008: sampled frames have content (std 41.5-43.6)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_008",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_008:-",
+     "message": "scene_008: the picture changes within the scene (difference 13.6)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_008",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_NOT_BLANK:scene_009:-",
+     "message": "scene_009: sampled frames have content (std 30.1-45.7)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_NOT_BLANK",
+     "scene_id": "scene_009",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_SCENE_SHOWS_CHANGE:scene_009:-",
+     "message": "scene_009: the picture changes within the scene (difference 27.1)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_SCENE_SHOWS_CHANGE",
+     "scene_id": "scene_009",
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_BLACK_RUN:video:-",
+     "message": "no black longer than 0.5 s",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_BLACK_RUN",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_FROZEN_RUN:video:-",
+     "message": "no picture stays unchanged for 3 s or more",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FROZEN_RUN",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "frames": []
+     },
+     "finding_id": "QC_FRAME_GEOMETRY:video:-",
+     "message": "every sampled frame has the shape of the render",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FRAME_GEOMETRY",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "frame_quality",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {
+    "samples": [
+     {
+      "decode_ok": true,
+      "file": "s001_first_00000.jpg",
+      "frame": 0,
+      "frame_used": 0,
+      "height": 270,
+      "kind": "first",
+      "mean": 67.1,
+      "scene_id": "scene_001",
+      "std": 22.7,
+      "time_s": 0.017,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s001_entry_00017.jpg",
+      "frame": 17,
+      "frame_used": 17,
+      "height": 270,
+      "kind": "entry",
+      "mean": 74.2,
+      "scene_id": "scene_001",
+      "std": 30.7,
+      "time_s": 0.583,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s001_mid_00071.jpg",
+      "frame": 71,
+      "frame_used": 71,
+      "height": 270,
+      "kind": "mid",
+      "mean": 78.6,
+      "scene_id": "scene_001",
+      "std": 40.6,
+      "time_s": 2.383,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s001_pre_exit_00128.jpg",
+      "frame": 128,
+      "frame_used": 128,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 82.0,
+      "scene_id": "scene_001",
+      "std": 46.4,
+      "time_s": 4.283,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s001_before_cut_00141.jpg",
+      "frame": 141,
+      "frame_used": 141,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 75.5,
+      "scene_id": "scene_001",
+      "std": 41.5,
+      "time_s": 4.717,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_transition_start_00143.jpg",
+      "frame": 143,
+      "frame_used": 143,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 75.1,
+      "scene_id": "scene_002",
+      "std": 41.6,
+      "time_s": 4.783,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_00144.jpg",
+      "frame": 144,
+      "frame_used": 144,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 74.4,
+      "scene_id": null,
+      "std": 41.5,
+      "time_s": 4.817,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_transition_mid_00149.jpg",
+      "frame": 149,
+      "frame_used": 149,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 70.5,
+      "scene_id": "scene_002",
+      "std": 26.4,
+      "time_s": 4.983,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_transition_end_00155.jpg",
+      "frame": 155,
+      "frame_used": 155,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 69.1,
+      "scene_id": "scene_002",
+      "std": 25.9,
+      "time_s": 5.183,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_entry_00174.jpg",
+      "frame": 174,
+      "frame_used": 174,
+      "height": 270,
+      "kind": "entry",
+      "mean": 76.6,
+      "scene_id": "scene_002",
+      "std": 42.9,
+      "time_s": 5.817,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_mid_00275.jpg",
+      "frame": 275,
+      "frame_used": 275,
+      "height": 270,
+      "kind": "mid",
+      "mean": 77.8,
+      "scene_id": "scene_002",
+      "std": 44.3,
+      "time_s": 9.183,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_pre_exit_00381.jpg",
+      "frame": 381,
+      "frame_used": 381,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 77.3,
+      "scene_id": "scene_002",
+      "std": 43.9,
+      "time_s": 12.717,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s002_before_cut_00406.jpg",
+      "frame": 406,
+      "frame_used": 406,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 74.9,
+      "scene_id": "scene_002",
+      "std": 41.8,
+      "time_s": 13.55,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_transition_start_00408.jpg",
+      "frame": 408,
+      "frame_used": 408,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 76.1,
+      "scene_id": "scene_003",
+      "std": 41.3,
+      "time_s": 13.617,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_00409.jpg",
+      "frame": 409,
+      "frame_used": 409,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 76.2,
+      "scene_id": null,
+      "std": 41.3,
+      "time_s": 13.65,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_transition_mid_00414.jpg",
+      "frame": 414,
+      "frame_used": 414,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 78.7,
+      "scene_id": "scene_003",
+      "std": 32.5,
+      "time_s": 13.817,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_transition_end_00420.jpg",
+      "frame": 420,
+      "frame_used": 420,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 80.6,
+      "scene_id": "scene_003",
+      "std": 39.7,
+      "time_s": 14.017,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_entry_00429.jpg",
+      "frame": 429,
+      "frame_used": 429,
+      "height": 270,
+      "kind": "entry",
+      "mean": 81.4,
+      "scene_id": "scene_003",
+      "std": 42.6,
+      "time_s": 14.317,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_mid_00497.jpg",
+      "frame": 497,
+      "frame_used": 497,
+      "height": 270,
+      "kind": "mid",
+      "mean": 89.0,
+      "scene_id": "scene_003",
+      "std": 55.7,
+      "time_s": 16.583,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_pre_exit_00569.jpg",
+      "frame": 569,
+      "frame_used": 569,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 89.0,
+      "scene_id": "scene_003",
+      "std": 54.5,
+      "time_s": 18.983,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s003_before_cut_00585.jpg",
+      "frame": 585,
+      "frame_used": 585,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 74.0,
+      "scene_id": "scene_003",
+      "std": 41.5,
+      "time_s": 19.517,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_transition_start_00587.jpg",
+      "frame": 587,
+      "frame_used": 587,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 73.8,
+      "scene_id": "scene_004",
+      "std": 41.6,
+      "time_s": 19.583,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_00588.jpg",
+      "frame": 588,
+      "frame_used": 588,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 71.9,
+      "scene_id": null,
+      "std": 41.6,
+      "time_s": 19.617,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_transition_mid_00593.jpg",
+      "frame": 593,
+      "frame_used": 593,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 65.4,
+      "scene_id": "scene_004",
+      "std": 26.8,
+      "time_s": 19.783,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_transition_end_00599.jpg",
+      "frame": 599,
+      "frame_used": 599,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 85.2,
+      "scene_id": "scene_004",
+      "std": 35.4,
+      "time_s": 19.983,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_entry_00610.jpg",
+      "frame": 610,
+      "frame_used": 610,
+      "height": 270,
+      "kind": "entry",
+      "mean": 83.0,
+      "scene_id": "scene_004",
+      "std": 47.2,
+      "time_s": 20.35,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_mid_00684.jpg",
+      "frame": 684,
+      "frame_used": 684,
+      "height": 270,
+      "kind": "mid",
+      "mean": 73.3,
+      "scene_id": "scene_004",
+      "std": 38.7,
+      "time_s": 22.817,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_pre_exit_00762.jpg",
+      "frame": 762,
+      "frame_used": 762,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 73.2,
+      "scene_id": "scene_004",
+      "std": 38.4,
+      "time_s": 25.417,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s004_before_cut_00780.jpg",
+      "frame": 780,
+      "frame_used": 780,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 72.8,
+      "scene_id": "scene_004",
+      "std": 38.1,
+      "time_s": 26.017,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_transition_start_00782.jpg",
+      "frame": 782,
+      "frame_used": 782,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 72.8,
+      "scene_id": "scene_005",
+      "std": 38.1,
+      "time_s": 26.083,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_00783.jpg",
+      "frame": 783,
+      "frame_used": 783,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 72.5,
+      "scene_id": null,
+      "std": 37.8,
+      "time_s": 26.117,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_transition_mid_00788.jpg",
+      "frame": 788,
+      "frame_used": 788,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 70.6,
+      "scene_id": "scene_005",
+      "std": 26.2,
+      "time_s": 26.283,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_transition_end_00794.jpg",
+      "frame": 794,
+      "frame_used": 794,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 71.2,
+      "scene_id": "scene_005",
+      "std": 26.7,
+      "time_s": 26.483,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_entry_00814.jpg",
+      "frame": 814,
+      "frame_used": 814,
+      "height": 270,
+      "kind": "entry",
+      "mean": 73.6,
+      "scene_id": "scene_005",
+      "std": 30.2,
+      "time_s": 27.15,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_mid_00917.jpg",
+      "frame": 917,
+      "frame_used": 917,
+      "height": 270,
+      "kind": "mid",
+      "mean": 72.0,
+      "scene_id": "scene_005",
+      "std": 27.7,
+      "time_s": 30.583,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_pre_exit_01025.jpg",
+      "frame": 1025,
+      "frame_used": 1025,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 72.5,
+      "scene_id": "scene_005",
+      "std": 30.0,
+      "time_s": 34.183,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s005_before_cut_01050.jpg",
+      "frame": 1050,
+      "frame_used": 1050,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 68.6,
+      "scene_id": "scene_005",
+      "std": 25.1,
+      "time_s": 35.017,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_transition_start_01052.jpg",
+      "frame": 1052,
+      "frame_used": 1052,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 68.4,
+      "scene_id": "scene_006",
+      "std": 25.1,
+      "time_s": 35.083,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_01053.jpg",
+      "frame": 1053,
+      "frame_used": 1053,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 68.3,
+      "scene_id": null,
+      "std": 25.3,
+      "time_s": 35.117,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_transition_mid_01058.jpg",
+      "frame": 1058,
+      "frame_used": 1058,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 63.3,
+      "scene_id": "scene_006",
+      "std": 22.7,
+      "time_s": 35.283,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_transition_end_01064.jpg",
+      "frame": 1064,
+      "frame_used": 1064,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 67.5,
+      "scene_id": "scene_006",
+      "std": 23.0,
+      "time_s": 35.483,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_entry_01067.jpg",
+      "frame": 1067,
+      "frame_used": 1067,
+      "height": 270,
+      "kind": "entry",
+      "mean": 67.6,
+      "scene_id": "scene_006",
+      "std": 23.2,
+      "time_s": 35.583,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_mid_01117.jpg",
+      "frame": 1117,
+      "frame_used": 1117,
+      "height": 270,
+      "kind": "mid",
+      "mean": 73.7,
+      "scene_id": "scene_006",
+      "std": 34.7,
+      "time_s": 37.25,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_pre_exit_01169.jpg",
+      "frame": 1169,
+      "frame_used": 1169,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 73.5,
+      "scene_id": "scene_006",
+      "std": 34.7,
+      "time_s": 38.983,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s006_before_cut_01181.jpg",
+      "frame": 1181,
+      "frame_used": 1181,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 73.0,
+      "scene_id": "scene_006",
+      "std": 34.6,
+      "time_s": 39.383,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_transition_start_01183.jpg",
+      "frame": 1183,
+      "frame_used": 1183,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 72.8,
+      "scene_id": "scene_007",
+      "std": 34.5,
+      "time_s": 39.45,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_01184.jpg",
+      "frame": 1184,
+      "frame_used": 1184,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 72.9,
+      "scene_id": null,
+      "std": 34.2,
+      "time_s": 39.483,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_transition_mid_01189.jpg",
+      "frame": 1189,
+      "frame_used": 1189,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 69.7,
+      "scene_id": "scene_007",
+      "std": 26.0,
+      "time_s": 39.65,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_transition_end_01195.jpg",
+      "frame": 1195,
+      "frame_used": 1195,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 73.5,
+      "scene_id": "scene_007",
+      "std": 27.8,
+      "time_s": 39.85,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_entry_01206.jpg",
+      "frame": 1206,
+      "frame_used": 1206,
+      "height": 270,
+      "kind": "entry",
+      "mean": 74.5,
+      "scene_id": "scene_007",
+      "std": 31.7,
+      "time_s": 40.217,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_mid_01279.jpg",
+      "frame": 1279,
+      "frame_used": 1279,
+      "height": 270,
+      "kind": "mid",
+      "mean": 80.6,
+      "scene_id": "scene_007",
+      "std": 48.2,
+      "time_s": 42.65,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_pre_exit_01355.jpg",
+      "frame": 1355,
+      "frame_used": 1355,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 81.9,
+      "scene_id": "scene_007",
+      "std": 48.0,
+      "time_s": 45.183,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s007_before_cut_01373.jpg",
+      "frame": 1373,
+      "frame_used": 1373,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 76.5,
+      "scene_id": "scene_007",
+      "std": 44.2,
+      "time_s": 45.783,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_transition_start_01375.jpg",
+      "frame": 1375,
+      "frame_used": 1375,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 76.3,
+      "scene_id": "scene_008",
+      "std": 44.3,
+      "time_s": 45.85,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_01376.jpg",
+      "frame": 1376,
+      "frame_used": 1376,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 75.8,
+      "scene_id": null,
+      "std": 43.8,
+      "time_s": 45.883,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_transition_mid_01381.jpg",
+      "frame": 1381,
+      "frame_used": 1381,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 85.0,
+      "scene_id": "scene_008",
+      "std": 39.1,
+      "time_s": 46.05,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_transition_end_01387.jpg",
+      "frame": 1387,
+      "frame_used": 1387,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 85.0,
+      "scene_id": "scene_008",
+      "std": 33.7,
+      "time_s": 46.25,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_entry_01400.jpg",
+      "frame": 1400,
+      "frame_used": 1400,
+      "height": 270,
+      "kind": "entry",
+      "mean": 75.9,
+      "scene_id": "scene_008",
+      "std": 41.5,
+      "time_s": 46.683,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_mid_01480.jpg",
+      "frame": 1480,
+      "frame_used": 1480,
+      "height": 270,
+      "kind": "mid",
+      "mean": 76.0,
+      "scene_id": "scene_008",
+      "std": 43.6,
+      "time_s": 49.35,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_pre_exit_01564.jpg",
+      "frame": 1564,
+      "frame_used": 1564,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 75.9,
+      "scene_id": "scene_008",
+      "std": 43.2,
+      "time_s": 52.15,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s008_before_cut_01584.jpg",
+      "frame": 1584,
+      "frame_used": 1584,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 75.5,
+      "scene_id": "scene_008",
+      "std": 42.8,
+      "time_s": 52.817,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_transition_start_01586.jpg",
+      "frame": 1586,
+      "frame_used": 1586,
+      "height": 270,
+      "kind": "transition_start",
+      "mean": 75.5,
+      "scene_id": "scene_009",
+      "std": 42.8,
+      "time_s": 52.883,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "cut_after_cut_01587.jpg",
+      "frame": 1587,
+      "frame_used": 1587,
+      "height": 270,
+      "kind": "after_cut",
+      "mean": 74.9,
+      "scene_id": null,
+      "std": 42.4,
+      "time_s": 52.917,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_transition_mid_01592.jpg",
+      "frame": 1592,
+      "frame_used": 1592,
+      "height": 270,
+      "kind": "transition_mid",
+      "mean": 72.2,
+      "scene_id": "scene_009",
+      "std": 25.7,
+      "time_s": 53.083,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_transition_end_01598.jpg",
+      "frame": 1598,
+      "frame_used": 1598,
+      "height": 270,
+      "kind": "transition_end",
+      "mean": 73.8,
+      "scene_id": "scene_009",
+      "std": 28.4,
+      "time_s": 53.283,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_entry_01603.jpg",
+      "frame": 1603,
+      "frame_used": 1603,
+      "height": 270,
+      "kind": "entry",
+      "mean": 74.1,
+      "scene_id": "scene_009",
+      "std": 30.1,
+      "time_s": 53.45,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_mid_01657.jpg",
+      "frame": 1657,
+      "frame_used": 1657,
+      "height": 270,
+      "kind": "mid",
+      "mean": 81.8,
+      "scene_id": "scene_009",
+      "std": 44.7,
+      "time_s": 55.25,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_pre_exit_01713.jpg",
+      "frame": 1713,
+      "frame_used": 1713,
+      "height": 270,
+      "kind": "pre_exit",
+      "mean": 82.2,
+      "scene_id": "scene_009",
+      "std": 45.7,
+      "time_s": 57.117,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_before_cut_01726.jpg",
+      "frame": 1726,
+      "frame_used": 1726,
+      "height": 270,
+      "kind": "before_cut",
+      "mean": 76.1,
+      "scene_id": "scene_009",
+      "std": 41.2,
+      "time_s": 57.55,
+      "width": 480
+     },
+     {
+      "decode_ok": true,
+      "file": "s009_last_01727.jpg",
+      "frame": 1727,
+      "frame_used": 1726,
+      "height": 270,
+      "kind": "last",
+      "mean": 76.1,
+      "scene_id": "scene_009",
+      "std": 41.2,
+      "time_s": 57.55,
+      "width": 480
+     }
+    ]
+   },
+   "key": "0f4a3a42203aaacb"
+  },
+  "scene_boundaries": {
+   "checks": [
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_001:transition_001_002",
+     "message": "scene_001 -> scene_002 (fade, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_001",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_001_002"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_002:transition_002_003",
+     "message": "scene_002 -> scene_003 (slide, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_002",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_002_003"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_003:transition_003_004",
+     "message": "scene_003 -> scene_004 (blur, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_003",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_003_004"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_004:transition_004_005",
+     "message": "scene_004 -> scene_005 (fade, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_004",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_004_005"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_005:transition_005_006",
+     "message": "scene_005 -> scene_006 (wipe, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_005",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_005_006"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_006:transition_006_007",
+     "message": "scene_006 -> scene_007 (zoom-through, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_006",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_006_007"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_007:transition_007_008",
+     "message": "scene_007 -> scene_008 (light-leak, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_007",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_007_008"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_NOT_BLANK:scene_008:transition_008_009",
+     "message": "scene_008 -> scene_009 (fade, 13 f): the window has content at start, middle and end",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_TRANSITION_NOT_BLANK",
+     "scene_id": "scene_008",
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": "transition_008_009"
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_FIRST_FRAME:video:-",
+     "message": "the first frame decodes",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FIRST_FRAME",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "scene_boundaries",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "scenes": [
+       "scene_001",
+       "scene_002",
+       "scene_003",
+       "scene_004",
+       "scene_005",
+       "scene_006",
+       "scene_007",
+       "scene_008",
+       "scene_009"
+      ]
+     },
+     "finding_id": "QC_SCENE_ORDER_AND_COVERAGE:video:-",
+     "message": "all 9 scenes were sampled in timeline order; that the right content is in the right scene needs a person (frames below)",
+     "recommended_action": "",
+     "resolution": "unresolved",
+     "rule_id": "QC_SCENE_ORDER_AND_COVERAGE",
+     "scene_id": null,
+     "severity": "review",
+     "stage_id": "scene_boundaries",
+     "status": "requires_review",
+     "target": null
+    },
+    {
+     "evidence": {},
+     "finding_id": "QC_TRANSITION_SMOOTHNESS:video:-",
+     "message": "how smooth each transition looks is subjective and cannot be established from stills",
+     "recommended_action": "watch the transitions (human review)",
+     "resolution": "unresolved",
+     "rule_id": "QC_TRANSITION_SMOOTHNESS",
+     "scene_id": null,
+     "severity": "review",
+     "stage_id": "scene_boundaries",
+     "status": "requires_review",
+     "target": null
+    }
+   ],
+   "data": {},
+   "key": "885ec157f4d59312"
+  },
+  "stream_metadata": {
+   "checks": [
+    {
+     "evidence": {},
+     "finding_id": "QC_PROBE_READABLE:video:-",
+     "message": "container mov,mp4,m4a,3gp,3g2,mj2, 2 stream(s)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_PROBE_READABLE",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "expected": [
+       1920,
+       1080
+      ],
+      "observed": [
+       1920,
+       1080
+      ]
+     },
+     "finding_id": "QC_DIMENSIONS:video:-",
+     "message": "1920x1080 (expected 1920x1080), aspect 1.7778",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_DIMENSIONS",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "expected": 30,
+      "observed": "30"
+     },
+     "finding_id": "QC_FRAME_RATE:video:-",
+     "message": "30 fps (expected 30/1)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_FRAME_RATE",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "avg_frame_rate": "30/1",
+      "r_frame_rate": "30"
+     },
+     "finding_id": "QC_CONSTANT_FRAME_RATE:video:-",
+     "message": "constant frame rate (r_frame_rate equals avg_frame_rate)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_CONSTANT_FRAME_RATE",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "pix_fmt": "yuvj420p"
+     },
+     "finding_id": "QC_VIDEO_CODEC:video:-",
+     "message": "h264 (configured h264), pixel format yuvj420p",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_VIDEO_CODEC",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    },
+    {
+     "evidence": {
+      "audio": {
+       "bit_rate": 317374.0,
+       "channels": 2,
+       "codec": "aac",
+       "duration": 57.6,
+       "sample_rate": 48000,
+       "start_time": 0.0
+      }
+     },
+     "finding_id": "QC_AUDIO_STREAM:video:-",
+     "message": "audio stream present (required by the render manifest)",
+     "recommended_action": "",
+     "resolution": "none",
+     "rule_id": "QC_AUDIO_STREAM",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "stream_metadata",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {
+    "observed": {
+     "audio_channels": 2,
+     "audio_codec": "aac",
+     "audio_duration": 57.6,
+     "audio_present": true,
+     "audio_sample_rate": 48000,
+     "audio_start": 0.0,
+     "container": "mov,mp4,m4a,3gp,3g2,mj2",
+     "duration": 57.6,
+     "frame_rate": "30",
+     "height": 1080,
+     "nb_frames": 1728,
+     "pix_fmt": "yuvj420p",
+     "size_bytes": 33161114,
+     "video_codec": "h264",
+     "video_start": 0.0,
+     "width": 1920
+    }
+   },
+   "key": "af64705afc0bd223"
+  },
+  "video_decode": {
+   "checks": [
+    {
+     "evidence": {
+      "coverage": "full decode",
+      "decoded_frames": 1728,
+      "tool_exit_code": 0
+     },
+     "finding_id": "QC_VIDEO_DECODES:video:-",
+     "message": "every frame decoded (full decode of the video stream)",
+     "recommended_action": "inspect the render log; render again after fixing the cause",
+     "resolution": "none",
+     "rule_id": "QC_VIDEO_DECODES",
+     "scene_id": null,
+     "severity": "info",
+     "stage_id": "video_decode",
+     "status": "passed",
+     "target": null
+    }
+   ],
+   "data": {
+    "black": [],
+    "decoded_frames": 1728,
+    "freeze": []
+   },
+   "key": "3c782871ebabd591"
+  }
+ },
+ "findings": [
+  {
+   "evidence": {},
+   "finding_id": "QC_AV_CONTENT_SYNC:video:-",
+   "message": "whether the narration lands on its scene cannot be measured automatically (no reliable detector): a person has to watch and listen",
+   "recommended_action": "watch the video with sound (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_AV_CONTENT_SYNC",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "av_sync",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_EMPHASIS_ON_WORD:video:-",
+   "message": "the rendered emphasis moments were not measured against the spoken words (no pixel/audio detector); the planned emphasis times were aligned to words upstream",
+   "recommended_action": "watch the emphasis moments (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_EMPHASIS_ON_WORD",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "av_sync",
+   "status": "not_run",
+   "target": null
+  },
+  {
+   "evidence": {
+    "scenes": [
+     "scene_001",
+     "scene_002",
+     "scene_003",
+     "scene_004",
+     "scene_005",
+     "scene_006",
+     "scene_007",
+     "scene_008",
+     "scene_009"
+    ]
+   },
+   "finding_id": "QC_SCENE_ORDER_AND_COVERAGE:video:-",
+   "message": "all 9 scenes were sampled in timeline order; that the right content is in the right scene needs a person (frames below)",
+   "recommended_action": "",
+   "resolution": "unresolved",
+   "rule_id": "QC_SCENE_ORDER_AND_COVERAGE",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "scene_boundaries",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_TRANSITION_SMOOTHNESS:video:-",
+   "message": "how smooth each transition looks is subjective and cannot be established from stills",
+   "recommended_action": "watch the transitions (human review)",
+   "resolution": "unresolved",
+   "rule_id": "QC_TRANSITION_SMOOTHNESS",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "scene_boundaries",
+   "status": "requires_review",
+   "target": null
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [
+     "cut_after_cut_00144.jpg",
+     "cut_after_cut_00409.jpg",
+     "cut_after_cut_00588.jpg",
+     "cut_after_cut_00783.jpg"
+    ],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_LIMITATION:video:audio",
+   "message": "the renderer's frame count (1728 frames = 57.600 s) is 0.011 s shorter than the audio (57.611 s): less than one frame is cut off the end of the audio",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_LIMITATION",
+   "scene_id": null,
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "audio"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_04:small_crew_group",
+   "message": "small_crew_group (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_04",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "small_crew_group"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_05:crew_team",
+   "message": "crew_team (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "crew_team"
+  },
+  {
+   "evidence": {
+    "acknowledged_at_approval": true,
+    "frames": [],
+    "note": "carried from the approved timeline: not proof the visual is right",
+    "source": "timeline_build"
+   },
+   "finding_id": "QC_UPSTREAM_STAND_IN:scene_05:help_line",
+   "message": "help_line (graphic) is drawn as a stand-in for what the plan describes",
+   "recommended_action": "look at the frames of this scene (human review)",
+   "resolution": "accepted_with_reason",
+   "rule_id": "QC_UPSTREAM_STAND_IN",
+   "scene_id": "scene_05",
+   "severity": "warning",
+   "stage_id": "upstream_reconciliation",
+   "status": "requires_review",
+   "target": "help_line"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_01:mind_icon",
+   "message": "mind_icon (icon) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_01",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "mind_icon"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_04:silence_icon",
+   "message": "silence_icon (icon) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_04",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "silence_icon"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_06:triad_emblem",
+   "message": "triad_emblem (graphic) is optional and was not drawn: the library has no graphic that draws this element on its own",
+   "recommended_action": "",
+   "resolution": "not_drawn",
+   "rule_id": "QC_UPSTREAM_OPTIONAL_NOT_DRAWN",
+   "scene_id": "scene_06",
+   "severity": "info",
+   "stage_id": "upstream_reconciliation",
+   "status": "warning",
+   "target": "triad_emblem"
+  },
+  {
+   "evidence": {},
+   "finding_id": "QC_HUMAN_REVIEW:video:-",
+   "message": "no person has recorded a decision about this exact file yet",
+   "recommended_action": "watch the video and record a decision",
+   "resolution": "unresolved",
+   "rule_id": "QC_HUMAN_REVIEW",
+   "scene_id": null,
+   "severity": "review",
+   "stage_id": "human_review",
+   "status": "requires_review",
+   "target": null
+  }
+ ],
+ "human_review": {
+  "coverage": null,
+  "decision": null,
+  "notes": [],
+  "review_id": null,
+  "reviewer": null,
+  "status": "pending"
+ },
+ "limitations": [
+  "frames are sampled evidence, not motion playback",
+  "audio/video content sync and emphasis moments are not measured automatically",
+  "upstream stand-ins and undrawn elements are reported from the plan, not judged from pixels"
+ ],
+ "lineage": {
+  "approved_timeline_fingerprint": "ad1b6d1feb23c8de",
+  "approved_timeline_id": "decision_c5746819b527ce2e",
+  "render_job_id": "9318678114",
+  "render_manifest_fingerprint": "10767b100951d0d2",
+  "timeline_fingerprint": "0b43b549635f0a76"
+ },
+ "media": {
+  "audio_channels": 2,
+  "audio_codec": "aac",
+  "audio_duration": 57.6,
+  "audio_present": true,
+  "audio_sample_rate": 48000,
+  "audio_start": 0.0,
+  "container": "mov,mp4,m4a,3gp,3g2,mj2",
+  "duration": 57.6,
+  "frame_rate": "30",
+  "height": 1080,
+  "nb_frames": 1728,
+  "pix_fmt": "yuvj420p",
+  "size_bytes": 33161114,
+  "video_codec": "h264",
+  "video_start": 0.0,
+  "width": 1920
+ },
+ "next_action": "watch the video and record a decision",
+ "profile": "standard",
+ "profile_parameters": {
+  "audio_tail_warn_s": 0.5,
+  "av_offset_error_s": 0.25,
+  "av_offset_warn_s": 0.04,
+  "black_min_s": 0.5,
+  "black_pix_th": 0.1,
+  "blank_std": 2.0,
+  "clip_db": -0.1,
+  "decode": "full",
+  "frame_width": 480,
+  "freeze_min_s": 3.0,
+  "freeze_noise": 0.001,
+  "sample_fractions": [
+   0.12,
+   0.5,
+   0.9
+  ],
+  "silence_min_s": 2.0,
+  "silent_db": -50.0,
+  "static_diff": 0.5,
+  "static_scene_min_s": 3.0
+ },
+ "project_id": "my-video-project-c2e8",
+ "qc_run_id": "qc_1deabc74bf",
+ "rules_version": "1",
+ "schema_version": "1.0",
+ "stages": [
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 1,
+   "findings": [],
+   "label": "Run Initialization",
+   "n": 1,
+   "stage_id": "run_initialization",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 2,
+   "findings": [],
+   "label": "Artifact & Manifest",
+   "n": 2,
+   "stage_id": "artifact_resolution",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 3,
+   "findings": [],
+   "label": "Provenance & Approval",
+   "n": 3,
+   "stage_id": "provenance_gate",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 2,
+   "findings": [],
+   "label": "File Integrity",
+   "n": 4,
+   "stage_id": "file_integrity",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 6,
+   "findings": [],
+   "label": "Stream & Metadata",
+   "n": 5,
+   "stage_id": "stream_metadata",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 1,
+   "findings": [],
+   "label": "Video Decode",
+   "n": 6,
+   "stage_id": "video_decode",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 3,
+   "findings": [],
+   "label": "Duration & Frames",
+   "n": 7,
+   "stage_id": "duration_frames",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 5,
+   "findings": [],
+   "label": "Audio Integrity",
+   "n": 8,
+   "stage_id": "audio_integrity",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 3,
+   "findings": [
+    "QC_AV_CONTENT_SYNC:video:-",
+    "QC_EMPHASIS_ON_WORD:video:-"
+   ],
+   "label": "A/V Sync",
+   "n": 9,
+   "stage_id": "av_sync",
+   "status": "warning"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 22,
+   "findings": [],
+   "label": "Frame Quality",
+   "n": 10,
+   "stage_id": "frame_quality",
+   "status": "completed"
+  },
+  {
+   "cache": {
+    "hit": false,
+    "reason": "first run"
+   },
+   "checks": 11,
+   "findings": [
+    "QC_SCENE_ORDER_AND_COVERAGE:video:-",
+    "QC_TRANSITION_SMOOTHNESS:video:-"
+   ],
+   "label": "Scenes & Transitions",
+   "n": 11,
+   "stage_id": "scene_boundaries",
+   "status": "warning"
+  },
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 10,
+   "findings": [
+    "QC_UPSTREAM_LIMITATION:video:audio",
+    "QC_UPSTREAM_STAND_IN:scene_04:small_crew_group",
+    "QC_UPSTREAM_STAND_IN:scene_05:crew_team",
+    "QC_UPSTREAM_STAND_IN:scene_05:help_line",
+    "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_01:mind_icon",
+    "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_04:silence_icon",
+    "QC_UPSTREAM_OPTIONAL_NOT_DRAWN:scene_06:triad_emblem"
+   ],
+   "label": "Upstream Reconciliation",
+   "n": 12,
+   "stage_id": "upstream_reconciliation",
+   "status": "warning"
+  },
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 1,
+   "findings": [],
+   "label": "Human Review",
+   "n": 13,
+   "stage_id": "human_review",
+   "status": "warning"
+  },
+  {
+   "cache": {
+    "hit": false
+   },
+   "checks": 0,
+   "findings": [],
+   "label": "Report & Delivery Gate",
+   "n": 14,
+   "stage_id": "report_gate",
+   "status": "completed"
+  }
+ ],
+ "status": "needs_review",
+ "summary": {
+  "blocking_findings": 0,
+  "checks_failed": 0,
+  "checks_not_run": 1,
+  "checks_passed": 58,
+  "checks_requires_review": 8,
+  "checks_total": 70,
+  "checks_warned": 3,
+  "human_review_required": true,
+  "info": 3,
+  "warnings": 4
+ },
+ "timings_seconds": {
+  "qc": 39.8
+ },
+ "tool_versions": {
+  "ffmpeg": "ffmpeg version 9.0.2-full_build-www.gyan.dev Copyright (c) 2000-2026 the FFmpeg ",
+  "ffprobe": "ffprobe version 9.0.2-full_build-www.gyan.dev Copyright (c) 2007-2026 the FFmpeg"
+ }
+}

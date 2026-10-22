@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "agent_id": "final_qc",
+  "updated_at": "2026-10-20T06:00:42.753210+00:00",
+  "total_experiences": 2,
+  "experiences": {
+    "exp-final_qc-5be7034645": {
+      "experience_id": "exp-final_qc-5be7034645",
+      "agent_id": "final_qc",
+      "task_type": "recovery_qc",
+      "task_id": "run_2b20ee31",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "qc",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_2b20ee31",
+            "agent_id": "final_qc",
+            "stage_id": "qc",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Deterministic QC report status is 'blocked'; QC_APPROVAL_CURRENT: the approved timeline changed (or its approval was withdrawn) after this video was rendered: the video is stale",
+            "timestamp": "2026-10-20T05:33:03.562260+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_qc",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for qc resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T05:33:03.711386+00:00",
+      "schema_version": 1
+    },
+    "exp-final_qc-fb19382700": {
+      "experience_id": "exp-final_qc-fb19382700",
+      "agent_id": "final_qc",
+      "task_type": "recovery_qc",
+      "task_id": "run_ca95927c",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "qc",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_ca95927c",
+            "agent_id": "final_qc",
+            "stage_id": "qc",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Deterministic QC report status is 'blocked'; QC_APPROVAL_CURRENT: the approved timeline changed (or its approval was withdrawn) after this video was rendered: the video is stale",
+            "timestamp": "2026-10-20T06:00:42.711578+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_qc",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for qc resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T06:00:42.753210+00:00",
+      "schema_version": 1
+    }
+  }
+}

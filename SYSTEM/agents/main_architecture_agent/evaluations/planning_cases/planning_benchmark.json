@@ -1,0 +1,42 @@
+{
+  "benchmark_name": "architecture_planning_benchmark",
+  "version": "1.0.0",
+  "description": "Deterministic benchmark suite for evaluating task planning and decomposition accuracy.",
+  "cases": [
+    {
+      "case_id": "plan_case_video_01",
+      "goal": "Generate video from narration audio with dynamic motion graphics",
+      "expected_family": "video_generation",
+      "min_subtasks": 2,
+      "expected_agents": ["capability_finder", "main_orchestrator"]
+    },
+    {
+      "case_id": "plan_case_skill_01",
+      "goal": "Create custom skill for neon text animations",
+      "expected_family": "skill_authoring",
+      "min_subtasks": 2,
+      "expected_agents": ["capability_finder", "skill_factory"]
+    },
+    {
+      "case_id": "plan_case_audio_01",
+      "goal": "Transcribe speech narration and segment audio",
+      "expected_family": "audio_processing",
+      "min_subtasks": 2,
+      "expected_agents": ["audio_input", "audio_analyzer"]
+    },
+    {
+      "case_id": "plan_case_discovery_01",
+      "goal": "Inspect capabilities and discover system status",
+      "expected_family": "system_discovery",
+      "min_subtasks": 1,
+      "expected_agents": ["capability_finder"]
+    },
+    {
+      "case_id": "plan_case_fallback_01",
+      "goal": "Something completely novel that has no matching keywords",
+      "expected_family": "fallback_discovery",
+      "min_subtasks": 1,
+      "expected_agents": ["capability_finder"]
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "agent_id": "motion_animation",
+  "stage_id": "motion_gen",
+  "version": "2.0.0",
+  "max_retries": 2,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "llm_client",
+    "llm_gateway",
+    "ast_parser",
+    "threed_fallback_engine",
+    "visual_preview_verifier",
+    "structured_generation_reporter"
+  ],
+  "capabilities": [
+    "motion-codegen",
+    "remotion-primitive-synthesis",
+    "ast-validation",
+    "3d-graceful-fallback",
+    "retry-prevention",
+    "visual-preview-verification",
+    "structured-generation-reporting",
+    "autonomous-memory-learning"
+  ]
+}

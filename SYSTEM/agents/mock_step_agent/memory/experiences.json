@@ -1,0 +1,757 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_step_agent",
+  "updated_at": "2026-10-20T02:20:59.410242+00:00",
+  "total_experiences": 21,
+  "experiences": {
+    "exp-mock_step_agent-24619f51b0": {
+      "experience_id": "exp-mock_step_agent-24619f51b0",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381363",
+      "project_id": "tmp5u4ar6ny",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:43.189614+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-2585b7e329": {
+      "experience_id": "exp-mock_step_agent-2585b7e329",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458637",
+      "project_id": "tmp4ybngmtg",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:37.136512+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-2c94305bd6": {
+      "experience_id": "exp-mock_step_agent-2c94305bd6",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462859",
+      "project_id": "tmp18yc0sni",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:59.393388+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-2e3e5f146d": {
+      "experience_id": "exp-mock_step_agent-2e3e5f146d",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmp3a8o7ds1",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.988166+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-2ff05e6de5": {
+      "experience_id": "exp-mock_step_agent-2ff05e6de5",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458274",
+      "project_id": "tmpnp0mcfnk",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:34.822931+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-3c772cf9ac": {
+      "experience_id": "exp-mock_step_agent-3c772cf9ac",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458827",
+      "project_id": "tmp3a8o7ds1",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:47.077865+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-4060188702": {
+      "experience_id": "exp-mock_step_agent-4060188702",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462859",
+      "project_id": "tmp18yc0sni",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:59.185829+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-50200c0c18": {
+      "experience_id": "exp-mock_step_agent-50200c0c18",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458637",
+      "project_id": "tmp4ybngmtg",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:37.247167+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-5f73925e84": {
+      "experience_id": "exp-mock_step_agent-5f73925e84",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmp0rhjdjft",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.800711+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-61f47f22a0": {
+      "experience_id": "exp-mock_step_agent-61f47f22a0",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462859",
+      "project_id": "tmp18yc0sni",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:59.282742+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-7123f6c4ec": {
+      "experience_id": "exp-mock_step_agent-7123f6c4ec",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254405",
+      "project_id": "tmpiwewy_kc",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:45.780546+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-717d374003": {
+      "experience_id": "exp-mock_step_agent-717d374003",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381363",
+      "project_id": "tmp5u4ar6ny",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:43.433898+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-7998df03a0": {
+      "experience_id": "exp-mock_step_agent-7998df03a0",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381363",
+      "project_id": "tmp5u4ar6ny",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:43.306119+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-8251736e49": {
+      "experience_id": "exp-mock_step_agent-8251736e49",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254406",
+      "project_id": "tmpiwewy_kc",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:46.005944+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-8dc6794e44": {
+      "experience_id": "exp-mock_step_agent-8dc6794e44",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmp0rhjdjft",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.670607+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-970303a8d2": {
+      "experience_id": "exp-mock_step_agent-970303a8d2",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458909",
+      "project_id": "tmp0rhjdjft",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:09.074568+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-a4c782ae76": {
+      "experience_id": "exp-mock_step_agent-a4c782ae76",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458274",
+      "project_id": "tmpnp0mcfnk",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_step_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_step_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:34.956245+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-a7bba616cf": {
+      "experience_id": "exp-mock_step_agent-a7bba616cf",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458275",
+      "project_id": "tmpnp0mcfnk",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:35.137838+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-a9d9aa8557": {
+      "experience_id": "exp-mock_step_agent-a9d9aa8557",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254405",
+      "project_id": "tmpiwewy_kc",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:45.588017+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-b7d3872128": {
+      "experience_id": "exp-mock_step_agent-b7d3872128",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458637",
+      "project_id": "tmp4ybngmtg",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:37.386438+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_step_agent-f4d038c91b": {
+      "experience_id": "exp-mock_step_agent-f4d038c91b",
+      "agent_id": "mock_step_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmp3a8o7ds1",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_step_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.878000+00:00",
+      "schema_version": 1
+    }
+  }
+}

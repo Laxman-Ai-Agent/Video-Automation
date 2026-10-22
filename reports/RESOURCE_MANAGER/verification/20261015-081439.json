@@ -1,0 +1,56 @@
+{
+ "at": "2026-10-15T08:14:39",
+ "verified": [
+  "chart.svg.bar",
+  "chart.svg.line",
+  "chart.svg.pie"
+ ],
+ "failed": [],
+ "results": {
+  "chart.svg.bar": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.1155,
+     "preview": "resource-library/previews/16x9/chart.svg.bar.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0719,
+     "preview": "resource-library/previews/9x16/chart.svg.bar.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "chart.svg.line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0312,
+     "preview": "resource-library/previews/16x9/chart.svg.line.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0181,
+     "preview": "resource-library/previews/9x16/chart.svg.line.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "chart.svg.pie": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0918,
+     "preview": "resource-library/previews/16x9/chart.svg.pie.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0574,
+     "preview": "resource-library/previews/9x16/chart.svg.pie.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

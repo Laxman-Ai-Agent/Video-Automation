@@ -1,0 +1,80 @@
+<USER_REQUEST>
+# PHASE 4 — SKILL FACTORY PRODUCTION HARDENING
+## Complete Implementation, Integration, Security, Testing, and Handoff
+
+### 1. Mission
+
+Repository: `E:\audio-to-video`  
+Expected branch: `agents-building`  
+Canonical Skill Factory location: `SYSTEM/agents/skill_factory/`  
+Capability Finder location: `SYSTEM/agents/capability_finder/`  
+Shared skills library: `SYSTEM/skills/`
+
+Previous phases:
+- Phase 0: Architecture audit
+- Phase 1: System Agent restructuring
+- Phase 2: Capability Registry and Capability Finder
+- Phase 3: Capability Finder Self-Learning
+- Phase 3.1: Final security and concurrency verification
+
+Phase 3.1 has been reported as complete and ready to close. Its reported final verification run passed 12 targeted tests, and the three frozen video algorithm files retained their expected SHA-256 hashes.
+
+Your task is to implement **Phase 4: Skill Factory Production Hardening**. The goal is a functioning, secure, reusable Skill Factory that can create or adapt skills, validate them, test them safely, obtain required approvals, publish approved versions to the shared skill library and registries, and recover from failed promotions.
+
+This is an implementation task, not a planning-only exercise. Inspect the actual project, implement the required behavior, run meaningful tests, and produce evidence-based reports.
+
+**Do not begin Phase 5, Phase 6, Phase 7, Phase 8, or Phase 9. Do not implement the future Autonomous Task Execution Protocol in this phase.**
+
+---
+
+## 2. Mandatory Project Rules
+
+Before modifying anything:
+
+1. Read `AGENTS.md`, `CLAUDE.md`, applicable project architecture documents, and project status files such as `PROJECT_OVERVIEW.md` and `PROJECT_STATUS.md`, if they exist.
+2. Read the Phase 0, Phase 1, Phase 2, Phase 3, and Phase 3.1 reports relevant to the Skill Factory, registries, authorization, and testing infrastructure.
+3. Inspect the complete current implementation of the canonical Skill Factory and its legacy compatibility paths.
+4. Ins
+<truncated 23528 bytes>
+Capability Finder correctly routes `CREATE_SKILL` requests to Skill Factory.
+- [ ] `REUSE` decisions do not unnecessarily create duplicate skills.
+- [ ] `ADAPT` decisions preserve the existing valid version.
+- [ ] Audit records and diagnostic results accurately reflect actual operations.
+- [ ] Relevant regression tests pass.
+- [ ] The canonical and legacy agent interfaces remain compatible.
+- [ ] All three frozen algorithm SHA-256 hashes match.
+- [ ] No unrelated changes, commits, pushes, or later-phase implementations occurred.
+
+A completed file, green test count, or successful mock is not sufficient evidence that a production capability works end to end.
+
+If any criterion fails, record the evidence and continue fixing in-scope defects. If a requirement cannot be safely fulfilled because a real platform dependency or necessary authorization is unavailable, document the specific blocker rather than simulating success.
+
+---
+
+## 16. Stop Conditions
+
+Stop after completing Phase 4 implementation, applicable tests, hash verification, and handoff reports.
+
+Do not implement Architecture Validator, Verification/Test Agent, Security Policy Agent, Main Architecture Agent autonomy upgrades, or the Autonomous Task Execution Protocol in this phase.
+
+Do not proceed to Phase 5 until Phase 4 acceptance results are reported and explicit authorization is given.
+
+### Final Response
+
+Provide:
+- Overall Phase 4 verdict.
+- Main capabilities implemented.
+- Important files changed.
+- Real test results.
+- Security and sandboxing guarantees actually demonstrated.
+- Registry and delegation integration evidence.
+- Frozen-file hash verification.
+- Remaining blockers.
+- Exact report paths.
+- Confirmation that Phase 5 and later phases were not started.
+
+Be accurate about what was actually implemented and tested. Do not call Phase 4 complete if a critical acceptance criterion remains unverified.
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-10-17T08:23:18+05:30.
+</ADDITIONAL_METADATA>

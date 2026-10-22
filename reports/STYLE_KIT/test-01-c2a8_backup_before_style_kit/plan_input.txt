@@ -1,0 +1,13 @@
+duration=20.43s (narration translated from Telugu; plan in English)
+Scene Segmentation already decided the scenes below from the meaning of the narration: make exactly one scene for each line S1, S2, ... (boundaries: 0, duration, or these starts): 9.47, 13.80
+
+English narration by time (start-end):
+[0.0-5.6] Smart glasses are not just a device; they change not only how people live but also how we see,
+[5.9-9.1] a superpower that can completely transform our world.
+[9.1-13.6] This journey, where the future is unfolding right before our eyes, does not end here.
+[13.8-20.1] The world ahead is going to become even more amazing and even more futuristic.
+
+Scenes decided by Scene Segmentation (one planned scene each):
+S1 0.00-9.47 (9.5s) beat: Smart glass as a superpower changing life, vision, world
+S2 9.47-13.80 (4.3s) beat: The future unfolding before our eyes, journey not ending
+S3 13.80-20.43 (6.6s) beat: The world ahead becoming more amazing and futuristic

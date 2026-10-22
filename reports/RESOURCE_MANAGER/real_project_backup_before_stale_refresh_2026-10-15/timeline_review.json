@@ -1,0 +1,188 @@
+{
+ "audio_tail": {
+  "conclusion": "the part the renderer cuts holds no signal (digital silence): no audio content is lost",
+  "cut_is_digital_silence": true,
+  "cut_peak_amplitude": 0,
+  "cut_samples": 263,
+  "cut_seconds": 0.011,
+  "cut_starts_at_seconds": 57.6,
+  "measured": true,
+  "speech_ends_at_seconds": 57.43,
+  "speech_ends_before_cut_seconds": 0.17
+ },
+ "created_at": "2026-10-15T05:36:01",
+ "duration_frames": 1728,
+ "duration_seconds": 57.611,
+ "format": {
+  "aspect_ratio": "16:9",
+  "fps": 30,
+  "height": 1080,
+  "width": 1920
+ },
+ "mode": "motion_only",
+ "preview": {
+  "composition_sha": "950f26250bff7ed3",
+  "folder": "motion_validation_preview",
+  "kind": "review_proxy_stills",
+  "note": "quarter-size stills of the composition at deterministic frames: a proxy, not the final video and not motion playback",
+  "scale": 0.25,
+  "timeline_fingerprint": "ad1b6d1feb23c8de",
+  "verified": true
+ },
+ "project_id": "my-video-project-c2e8",
+ "readiness": {
+  "approximate_visuals": 3,
+  "errors": 0,
+  "optional_not_drawn": 3,
+  "required_visuals_not_drawn": 0,
+  "status": "approved",
+  "warnings": 4
+ },
+ "review_coverage": {
+  "motion_playback_reviewed": false,
+  "note": "recorded by a person through Motion & Timeline Validation; a still does not show how the motion or a transition plays",
+  "reviews": [],
+  "stills_reviewed_by_person": false
+ },
+ "review_id": "review_ad1b6d1feb23",
+ "scene_count": 9,
+ "scenes": [
+  {
+   "end_frame": 143,
+   "end_s": 4.767,
+   "layers": 5,
+   "pause_after_s": 0.17,
+   "scene_id": "scene_001",
+   "start_frame": 0,
+   "start_s": 0.0,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "fade"
+   }
+  },
+  {
+   "end_frame": 408,
+   "end_s": 13.6,
+   "layers": 6,
+   "pause_after_s": 0.19,
+   "scene_id": "scene_002",
+   "start_frame": 143,
+   "start_s": 4.767,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "slide"
+   }
+  },
+  {
+   "end_frame": 587,
+   "end_s": 19.567,
+   "layers": 7,
+   "pause_after_s": null,
+   "scene_id": "scene_003",
+   "start_frame": 408,
+   "start_s": 13.6,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "blur"
+   }
+  },
+  {
+   "end_frame": 782,
+   "end_s": 26.067,
+   "layers": 4,
+   "pause_after_s": null,
+   "scene_id": "scene_004",
+   "start_frame": 587,
+   "start_s": 19.567,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "fade"
+   }
+  },
+  {
+   "end_frame": 1052,
+   "end_s": 35.067,
+   "layers": 5,
+   "pause_after_s": 0.15,
+   "scene_id": "scene_005",
+   "start_frame": 782,
+   "start_s": 26.067,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "wipe"
+   }
+  },
+  {
+   "end_frame": 1183,
+   "end_s": 39.433,
+   "layers": 5,
+   "pause_after_s": null,
+   "scene_id": "scene_006",
+   "start_frame": 1052,
+   "start_s": 35.067,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "zoom-through"
+   }
+  },
+  {
+   "end_frame": 1375,
+   "end_s": 45.833,
+   "layers": 6,
+   "pause_after_s": null,
+   "scene_id": "scene_007",
+   "start_frame": 1183,
+   "start_s": 39.433,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "light-leak"
+   }
+  },
+  {
+   "end_frame": 1586,
+   "end_s": 52.867,
+   "layers": 5,
+   "pause_after_s": 0.31,
+   "scene_id": "scene_008",
+   "start_frame": 1375,
+   "start_s": 45.833,
+   "transition_out": {
+    "applied_frames": 13,
+    "requested_frames": 13,
+    "type": "fade"
+   }
+  },
+  {
+   "end_frame": 1728,
+   "end_s": 57.6,
+   "layers": 5,
+   "pause_after_s": 0.181,
+   "scene_id": "scene_009",
+   "start_frame": 1586,
+   "start_s": 52.867,
+   "transition_out": null
+  }
+ ],
+ "schema_version": "1.0",
+ "source_fingerprints": {
+  "audio": "audio.wav:2765370",
+  "composition": "b0b79ab1428bb704",
+  "motion_generation": "d8123e2ab5231d64",
+  "motion_plan": "46cfe7eed67f9217",
+  "motion_planning": "455b7794c0eee124",
+  "renderer": "cdf5f33028052d6e97578400738513ce970bb298",
+  "stage10": "5e6315642883bc8d",
+  "timeline_build": "109f522e604c9959",
+  "visual_plan": "9255d84cb8b3f754"
+ },
+ "timeline_build_id": "timeline_109f522e604c",
+ "timeline_digest": "0b43b549635f0a76",
+ "timeline_fingerprint": "ad1b6d1feb23c8de"
+}

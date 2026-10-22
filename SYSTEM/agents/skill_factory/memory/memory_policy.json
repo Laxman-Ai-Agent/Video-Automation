@@ -1,0 +1,6 @@
+{
+  "agent_id": "skill_factory",
+  "scope": "agent",
+  "isolation_level": "strict",
+  "allow_global_read": true
+}

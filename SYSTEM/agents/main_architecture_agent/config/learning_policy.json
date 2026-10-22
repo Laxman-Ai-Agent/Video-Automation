@@ -1,0 +1,25 @@
+{
+  "learning_enabled": true,
+  "min_experiences_before_reflection": 2,
+  "confidence_threshold_hypothesis": 0.5,
+  "confidence_threshold_proposal": 0.75,
+  "max_learning_cycles_per_run": 5,
+  "max_proposals_per_cycle": 3,
+  "allowed_strategy_mutation_fields": [
+    "agent_routing_preferences",
+    "fallback_routes",
+    "task_decomposition_rules",
+    "retry_policies",
+    "acceptance_criteria"
+  ],
+  "require_human_approval_for": [
+    "governance",
+    "security",
+    "high_risk",
+    "consequential_routing"
+  ],
+  "loop_prevention_max_identical_proposals": 2,
+  "max_extra_llm_calls_per_cycle": 3,
+  "deduplication_window_seconds": 86400,
+  "evaluation_tolerance": 0.05
+}

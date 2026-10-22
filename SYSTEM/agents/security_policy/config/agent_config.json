@@ -1,0 +1,12 @@
+{
+  "agent_id": "security_policy",
+  "category": "system",
+  "timeout_seconds": 30,
+  "allowed_tools": [
+    "agent_registry",
+    "tool_registry",
+    "approval_engine",
+    "policy_enforcer",
+    "hash_verifier"
+  ]
+}

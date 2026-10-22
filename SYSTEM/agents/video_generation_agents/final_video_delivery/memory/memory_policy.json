@@ -1,0 +1,7 @@
+{
+  "agent_id": "final_video_delivery",
+  "scope": "agent",
+  "isolation_level": "strict",
+  "allow_project_share": true,
+  "allow_global_read": true
+}

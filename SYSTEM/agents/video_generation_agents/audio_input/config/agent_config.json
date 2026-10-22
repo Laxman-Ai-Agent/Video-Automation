@@ -1,0 +1,16 @@
+{
+  "agent_id": "audio_input",
+  "stage_id": "audio",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "ffmpeg",
+    "ffprobe",
+    "store"
+  ],
+  "capabilities": [
+    "audio-ingest",
+    "sample-rate-conversion",
+    "ffprobe-metadata"
+  ]
+}

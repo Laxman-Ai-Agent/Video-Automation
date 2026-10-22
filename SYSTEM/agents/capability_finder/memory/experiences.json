@@ -1,0 +1,732 @@
+{
+  "schema_version": 1,
+  "agent_id": "capability_finder",
+  "updated_at": "2026-10-20T02:21:10.430899+00:00",
+  "total_experiences": 23,
+  "experiences": {
+    "exp-capability_finder-14f6f76f6a": {
+      "experience_id": "exp-capability_finder-14f6f76f6a",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792462846",
+      "project_id": "tmpeu7tdwfn",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 145.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 145.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 145.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:46.850902+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-1739d1df54": {
+      "experience_id": "exp-capability_finder-1739d1df54",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458924",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 87.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 87.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 87.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:24.942404+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-1a5d06e8f5": {
+      "experience_id": "exp-capability_finder-1a5d06e8f5",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458676",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 440.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 440.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 440.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:11:16.894964+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-1efa91b375": {
+      "experience_id": "exp-capability_finder-1efa91b375",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792462870",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 58.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 58.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 58.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:10.399677+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-23a868dc63": {
+      "experience_id": "exp-capability_finder-23a868dc63",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458616",
+      "project_id": "tmpaih_5lm6",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 157.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 157.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 157.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:16.005572+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-2cab2bcaaf": {
+      "experience_id": "exp-capability_finder-2cab2bcaaf",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458831",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 124.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 124.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 124.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:51.239512+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-35d0700629": {
+      "experience_id": "exp-capability_finder-35d0700629",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458900",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 152.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 152.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 152.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:00.637376+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-39d1ec501c": {
+      "experience_id": "exp-capability_finder-39d1ec501c",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458258",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 144.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 144.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 144.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:18.092725+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-4b733a94f9": {
+      "experience_id": "exp-capability_finder-4b733a94f9",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458285",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 70.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 70.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 70.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:45.355926+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-503629f7b6": {
+      "experience_id": "exp-capability_finder-503629f7b6",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792381357",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 42.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 42.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 42.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:37.402087+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-6a16333650": {
+      "experience_id": "exp-capability_finder-6a16333650",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458915",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 89.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 89.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 89.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:15.672843+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-72a596493c": {
+      "experience_id": "exp-capability_finder-72a596493c",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792381354",
+      "project_id": "tmp049rz7ui",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 31.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 31.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 31.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:34.497201+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-7b2242db6b": {
+      "experience_id": "exp-capability_finder-7b2242db6b",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458897",
+      "project_id": "tmphpmbgsx6",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 114.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 114.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 114.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:57.915895+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-7b38137a4b": {
+      "experience_id": "exp-capability_finder-7b38137a4b",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792462864",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 74.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 74.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 74.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:04.037654+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-7e17a52b70": {
+      "experience_id": "exp-capability_finder-7e17a52b70",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792462849",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 73.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 73.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 73.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:49.760798+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-83868eba17": {
+      "experience_id": "exp-capability_finder-83868eba17",
+      "agent_id": "capability_finder",
+      "task_type": "remote_search",
+      "task_id": "task-a9ce4baa57",
+      "project_id": null,
+      "context": {
+        "api_header": "Bearer [REDACTED_API_KEY]"
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {},
+      "reflection": "Queried GitHub using token [REDACTED_GITHUB_TOKEN]",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:45.764299+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-9dbca2366c": {
+      "experience_id": "exp-capability_finder-9dbca2366c",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458318",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 119.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 119.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 119.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:05:18.627024+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-9ecb8e6337": {
+      "experience_id": "exp-capability_finder-9ecb8e6337",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458842",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 71.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 71.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 71.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:02.629797+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-a25f825a29": {
+      "experience_id": "exp-capability_finder-a25f825a29",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458809",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 177.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 177.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 177.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:29.239158+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-cb2c3cdc07": {
+      "experience_id": "exp-capability_finder-cb2c3cdc07",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458248",
+      "project_id": "tmpnidtntn_",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 322.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 322.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 322.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:08.693477+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-cff8e26ee7": {
+      "experience_id": "exp-capability_finder-cff8e26ee7",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458650",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 103.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 103.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 103.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:50.057653+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-d5dd8a1d3a": {
+      "experience_id": "exp-capability_finder-d5dd8a1d3a",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458797",
+      "project_id": "tmpa04zbr63",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 304.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 304.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 304.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:17.041512+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-e2791c7cc4": {
+      "experience_id": "exp-capability_finder-e2791c7cc4",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1792458623",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 535.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 535.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 535.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:23.163829+00:00",
+      "schema_version": 1
+    }
+  }
+}

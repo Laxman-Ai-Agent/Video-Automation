@@ -1,0 +1,5 @@
+Translate each Telugu line to clean English (keep meaning, fix obvious ASR slips). Keep ids.
+0 [0.00-5.60] smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని
+1 [5.85-9.07] మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power
+2 [9.07-13.57] భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు
+3 [13.80-20.06] ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే

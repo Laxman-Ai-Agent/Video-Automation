@@ -1,0 +1,22 @@
+{
+  "skill_id": "remotion-animated-bar-chart",
+  "name": "Remotion Animated Bar Chart",
+  "category_id": "charts",
+  "subcategory": "bar_charts",
+  "version": "1.2.0",
+  "license": "MIT",
+  "entrypoint": "library/charts/remotion-animated-bar-chart/SKILL.md",
+  "content_sha256": "43acba3b9aa4376bd814af1ccec1f9979ee29de1a9d81e8517eaf2713e2a940b",
+  "capabilities": [
+    "dynamic-bar-chart",
+    "bar-chart-animator",
+    "data-visualization"
+  ],
+  "dependencies": [],
+  "applicable_agents": [
+    "visual_planning",
+    "motion_animation",
+    "timeline_build"
+  ],
+  "installed_at": "2026-10-18T05:39:43.271886+00:00"
+}

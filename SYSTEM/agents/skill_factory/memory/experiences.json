@@ -1,0 +1,913 @@
+{
+  "schema_version": 1,
+  "agent_id": "skill_factory",
+  "updated_at": "2026-10-20T02:21:10.638300+00:00",
+  "total_experiences": 27,
+  "experiences": {
+    "exp-skill_factory-09bcfe6238": {
+      "experience_id": "exp-skill_factory-09bcfe6238",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458811",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 243.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 243.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 243.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:31.880604+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-10075c8151": {
+      "experience_id": "exp-skill_factory-10075c8151",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792254412",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 3.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 3.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 3.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:52.039275+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-14578f76b9": {
+      "experience_id": "exp-skill_factory-14578f76b9",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458258",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 8.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 8.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 8.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:18.334394+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-1aa284cdad": {
+      "experience_id": "exp-skill_factory-1aa284cdad",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792462864",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 12.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 12.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 12.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:04.228406+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-2370718b30": {
+      "experience_id": "exp-skill_factory-2370718b30",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792381357",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 2.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 2.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:37.617148+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-23dd7a5fb5": {
+      "experience_id": "exp-skill_factory-23dd7a5fb5",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792253582",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 2.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 2.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:13:02.809730+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-286e95eff6": {
+      "experience_id": "exp-skill_factory-286e95eff6",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458624",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 13.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 13.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 13.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:24.363182+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-30bf08b197": {
+      "experience_id": "exp-skill_factory-30bf08b197",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458901",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 11.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 11.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 11.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:01.063133+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-384640ba5f": {
+      "experience_id": "exp-skill_factory-384640ba5f",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792386182",
+      "project_id": "test_e2e_capability_finder_to_0",
+      "context": {
+        "parameters": [
+          "action",
+          "specification",
+          "allow_template_fallback"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 9.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'failed' in 9.0ms.",
+        "error": "name 're' is not defined",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: name 're' is not defined.",
+        "proposed_lesson": {
+          "title": "Lesson from skill_factory on execution",
+          "description": "Task 'execution' failed with runtime_error: name 're' is not defined.",
+          "affected_domain": "general",
+          "observed_pattern": "name 're' is not defined",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from skill_factory on execution",
+        "description": "Task 'execution' failed with runtime_error: name 're' is not defined.",
+        "affected_domain": "general",
+        "observed_pattern": "name 're' is not defined",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T05:03:02.430353+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-5662323f5c": {
+      "experience_id": "exp-skill_factory-5662323f5c",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458650",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 36.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 36.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 36.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:50.362150+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-5a6b3c63e4": {
+      "experience_id": "exp-skill_factory-5a6b3c63e4",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792384788",
+      "project_id": "test_e2e_capability_finder_to_0",
+      "context": {
+        "parameters": [
+          "action",
+          "specification",
+          "allow_template_fallback"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 127.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 127.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 127.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T04:39:48.143131+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-5f9f69e109": {
+      "experience_id": "exp-skill_factory-5f9f69e109",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792254393",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 3.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 3.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 3.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:33.440209+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-765292da56": {
+      "experience_id": "exp-skill_factory-765292da56",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792462849",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 5.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 5.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:49.983550+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-79bcfc8a35": {
+      "experience_id": "exp-skill_factory-79bcfc8a35",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792462870",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 9.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 9.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 9.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:10.620463+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-88f115da4c": {
+      "experience_id": "exp-skill_factory-88f115da4c",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792254399",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 9.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 9.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 9.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:39.239142+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-8fdcc2242e": {
+      "experience_id": "exp-skill_factory-8fdcc2242e",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458925",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 5.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 5.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:25.167099+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-9512f4d8ea": {
+      "experience_id": "exp-skill_factory-9512f4d8ea",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458831",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 7.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 7.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 7.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:51.507987+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-a1740a846b": {
+      "experience_id": "exp-skill_factory-a1740a846b",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792299409",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 2.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 2.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T04:56:49.122490+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-a4e7423447": {
+      "experience_id": "exp-skill_factory-a4e7423447",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792386212",
+      "project_id": "test_e2e_capability_finder_to_0",
+      "context": {
+        "parameters": [
+          "action",
+          "specification",
+          "allow_template_fallback"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 17.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 17.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 17.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T05:03:32.548422+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-e37be8bc45": {
+      "experience_id": "exp-skill_factory-e37be8bc45",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458677",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 27.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 27.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 27.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:11:17.939026+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-e42fac0492": {
+      "experience_id": "exp-skill_factory-e42fac0492",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792386560",
+      "project_id": "test_e2e_capability_finder_to_0",
+      "context": {
+        "parameters": [
+          "action",
+          "specification",
+          "allow_template_fallback"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 39.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 39.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 39.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T05:09:20.613879+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-e4ce23127f": {
+      "experience_id": "exp-skill_factory-e4ce23127f",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792234156",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 7.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 7.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 7.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T10:49:16.531473+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-ebcfce9a0f": {
+      "experience_id": "exp-skill_factory-ebcfce9a0f",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458915",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 5.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 5.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:15.863947+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-f00ee23b28": {
+      "experience_id": "exp-skill_factory-f00ee23b28",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458318",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 10.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 10.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 10.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:05:18.893471+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-f297bfb6b3": {
+      "experience_id": "exp-skill_factory-f297bfb6b3",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792234311",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T10:51:51.491690+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-f34c2b129e": {
+      "experience_id": "exp-skill_factory-f34c2b129e",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458285",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 5.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 5.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:45.538831+00:00",
+      "schema_version": 1
+    },
+    "exp-skill_factory-f8e7db16ec": {
+      "experience_id": "exp-skill_factory-f8e7db16ec",
+      "agent_id": "skill_factory",
+      "task_type": "execution",
+      "task_id": "req-1792458842",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "action",
+          "content",
+          "filename"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 4.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'skill_factory' completed task 'execution' with outcome 'succeeded' in 4.0ms.",
+        "takeaway": "Skill synthesized and passed AST sandbox and test suites.",
+        "performance": {
+          "duration_ms": 4.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:02.822852+00:00",
+      "schema_version": 1
+    }
+  }
+}

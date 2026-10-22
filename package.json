@@ -1,0 +1,12 @@
+{
+  "name": "audio-to-video",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Telugu audio to cinematic video. The real code lives in UI/backend/, VIDEO_ENGINE/remotion/ and UI/frontend/; these scripts only forward to them.",
+  "scripts": {
+    "start": "start.bat",
+    "install:all": "npm --prefix VIDEO_ENGINE/remotion install && npm --prefix UI/frontend install",
+    "test": "npm --prefix UI/frontend test && npm --prefix VIDEO_ENGINE/remotion run tsc",
+    "test:backend": ".venv\\Scripts\\python.exe -m pytest -q"
+  }
+}

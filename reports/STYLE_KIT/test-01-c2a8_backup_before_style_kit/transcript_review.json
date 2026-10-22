@@ -1,0 +1,262 @@
+{
+ "schema_version": "transcript-review-1",
+ "version": 1,
+ "raw_file": "transcript.json",
+ "corrected_file": "transcript_corrected.json",
+ "vocabulary": {
+  "terms": [],
+  "project_list": false
+ },
+ "confidence": {
+  "status": "available",
+  "threshold": 0.5,
+  "words_total": 38,
+  "words_with_confidence": 38,
+  "flagged": []
+ },
+ "llm": {
+  "status": "applied",
+  "error": null,
+  "model": null,
+  "segments_sent": 4
+ },
+ "corrections": [
+  {
+   "id": "c001",
+   "segment": 0,
+   "from_index": 0,
+   "to_index": 1,
+   "from": "స్మాట్ గ్లాస్",
+   "to": "smart glass",
+   "reason": "English term, Latin script",
+   "p_from": [
+    0.938,
+    0.969
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c002",
+   "segment": 0,
+   "from_index": 3,
+   "to_index": 6,
+   "from": "ఇత్స్ నాట్ జస్ట డివాఇస్",
+   "to": "it's not just device",
+   "reason": "English phrase, Latin script",
+   "p_from": [
+    0.918,
+    0.941,
+    0.902,
+    0.897
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c003",
+   "segment": 0,
+   "from_index": 7,
+   "to_index": 7,
+   "from": "ఇతి",
+   "to": "ఇది",
+   "reason": "misspelling",
+   "p_from": [
+    0.887
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c004",
+   "segment": 0,
+   "from_index": 9,
+   "to_index": 9,
+   "from": "జివన",
+   "to": "జీవన",
+   "reason": "misspelling",
+   "p_from": [
+    0.955
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c005",
+   "segment": 0,
+   "from_index": 10,
+   "to_index": 10,
+   "from": "సేల్నే",
+   "to": "శైలినే",
+   "reason": "misheard word",
+   "p_from": [
+    0.892
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c006",
+   "segment": 0,
+   "from_index": 13,
+   "to_index": 13,
+   "from": "ద్రుష్టిని",
+   "to": "దృష్టిని",
+   "reason": "misspelling",
+   "p_from": [
+    0.953
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c007",
+   "segment": 1,
+   "from_index": 5,
+   "to_index": 6,
+   "from": "సూపర్ పవర్",
+   "to": "super power",
+   "reason": "English term, Latin script",
+   "p_from": [
+    0.969,
+    0.916
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c008",
+   "segment": 2,
+   "from_index": 0,
+   "to_index": 0,
+   "from": "భవిషతు",
+   "to": "భవిష్యత్తు",
+   "reason": "misspelling",
+   "p_from": [
+    0.899
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c009",
+   "segment": 2,
+   "from_index": 4,
+   "to_index": 4,
+   "from": "ప్రతేక్షమోతున",
+   "to": "ప్రత్యక్షమవుతున్న",
+   "reason": "misspelling",
+   "p_from": [
+    0.929
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c010",
+   "segment": 2,
+   "from_index": 5,
+   "to_index": 5,
+   "from": "ఇ",
+   "to": "ఈ",
+   "reason": "misspelling",
+   "p_from": [
+    0.808
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c011",
+   "segment": 2,
+   "from_index": 6,
+   "to_index": 6,
+   "from": "ప్రయానం",
+   "to": "ప్రయాణం",
+   "reason": "misspelling",
+   "p_from": [
+    0.944
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c012",
+   "segment": 2,
+   "from_index": 7,
+   "to_index": 7,
+   "from": "ఇకడుతో",
+   "to": "ఇక్కడితో",
+   "reason": "misspelling",
+   "p_from": [
+    0.876
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c013",
+   "segment": 2,
+   "from_index": 8,
+   "to_index": 8,
+   "from": "ముగిదు",
+   "to": "ముగియదు",
+   "reason": "misspelling",
+   "p_from": [
+    0.964
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c014",
+   "segment": 3,
+   "from_index": 5,
+   "to_index": 5,
+   "from": "ఫ్యూచరిస్టిక్",
+   "to": "futuristic",
+   "reason": "English term, Latin script",
+   "p_from": [
+    0.934
+   ],
+   "status": "applied",
+   "why": null
+  }
+ ],
+ "unresolved": [],
+ "alignment": {
+  "status": "aligned_for_edits",
+  "edited_words": 19,
+  "segments": [
+   {
+    "segment": 0,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.02,
+    "snapped": []
+   },
+   {
+    "segment": 1,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.02,
+    "snapped": []
+   },
+   {
+    "segment": 2,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 3,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   }
+  ],
+  "method": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words"
+ }
+}

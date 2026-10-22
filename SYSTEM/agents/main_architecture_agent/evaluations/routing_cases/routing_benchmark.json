@@ -1,0 +1,57 @@
+{
+  "benchmark_name": "architecture_routing_benchmark",
+  "version": "1.0.0",
+  "description": "Deterministic benchmark suite for evaluating agent routing accuracy and fallback compliance.",
+  "cases": [
+    {
+      "case_id": "route_case_audio_ingest",
+      "subtask": {
+        "action": "audio_ingest",
+        "title": "Ingest audio file",
+        "assigned_agent_id": "audio_input"
+      },
+      "expected_agent": "audio_input",
+      "allow_fallback": false
+    },
+    {
+      "case_id": "route_case_transcribe",
+      "subtask": {
+        "action": "speech_transcription",
+        "title": "Transcribe speech",
+        "assigned_agent_id": "audio_analyzer"
+      },
+      "expected_agent": "audio_analyzer",
+      "allow_fallback": false
+    },
+    {
+      "case_id": "route_case_scene_segmentation",
+      "subtask": {
+        "action": "semantic_segmentation",
+        "title": "Segment transcript into visual scenes",
+        "assigned_agent_id": "scene_segmentation"
+      },
+      "expected_agent": "scene_segmentation",
+      "allow_fallback": false
+    },
+    {
+      "case_id": "route_case_motion_fallback",
+      "subtask": {
+        "action": "motion_template_selection",
+        "title": "Select motion template",
+        "assigned_agent_id": "motion_template_selection"
+      },
+      "expected_agent": "motion_planning",
+      "allow_fallback": true
+    },
+    {
+      "case_id": "route_case_unregistered_fallback",
+      "subtask": {
+        "action": "unknown_action_xyz",
+        "title": "Execute completely unsupported action",
+        "assigned_agent_id": "nonexistent_agent_xyz"
+      },
+      "expected_agent": "capability_finder",
+      "allow_fallback": true
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+ "id": "20261015-101537-4af7",
+ "kind": "verify",
+ "state": "done",
+ "started_at": "2026-10-15T10:15:37",
+ "finished_at": "2026-10-15T10:16:35",
+ "progress": [
+  "10:15:37 bundling the renderer",
+  "10:15:58 16:9: rendering baseline (1/2)",
+  "10:16:07 16:9: rendering icons_1 (2/2)",
+  "10:16:20 9:16: rendering baseline (1/2)",
+  "10:16:27 9:16: rendering icons_1 (2/2)"
+ ],
+ "result": {
+  "at": "2026-10-15T10:16:35",
+  "verified": [
+   "icon.tabler.eyeglass",
+   "icon.tabler.eyeglass-2"
+  ],
+  "failed": [],
+  "results": {
+   "icon.tabler.eyeglass": {
+    "aspects": {
+     "16:9": {
+      "ok": true,
+      "changed_ratio": 0.0611,
+      "preview": "resource-library/previews/16x9/icons_1.jpg"
+     },
+     "9:16": {
+      "ok": true,
+      "changed_ratio": 0.0611,
+      "preview": "resource-library/previews/9x16/icons_1.jpg"
+     }
+    },
+    "deterministic": true
+   },
+   "icon.tabler.eyeglass-2": {
+    "aspects": {
+     "16:9": {
+      "ok": true,
+      "changed_ratio": 0.0606,
+      "preview": "resource-library/previews/16x9/icons_1.jpg"
+     },
+     "9:16": {
+      "ok": true,
+      "changed_ratio": 0.0607,
+      "preview": "resource-library/previews/9x16/icons_1.jpg"
+     }
+    },
+    "deterministic": true
+   }
+  }
+ },
+ "error": null
+}

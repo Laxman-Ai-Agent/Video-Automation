@@ -1,0 +1,144 @@
+{
+ "prompts": [
+  {
+   "n": 1,
+   "scene": 1,
+   "slot": "s01_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A glowing translucent AI agent avatar made of light and fine circuit lines hovering above a clean modern workspace, soft rim light, wide shot"
+  },
+  {
+   "n": 2,
+   "scene": 2,
+   "slot": "s02_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A software developer typing code on a dark monitor in a dim room, over-the-shoulder angle, warm desk lamp glow"
+  },
+  {
+   "n": 3,
+   "scene": 2,
+   "slot": "s02_1",
+   "role": "supporting",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A person without a technical background arranging colorful workflow blocks on a tablet with a drag-and-drop interface, bright modern office, over-the-shoulder angle"
+  },
+  {
+   "n": 4,
+   "scene": 3,
+   "slot": "s03_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "Close-up of a dark monitor showing lines of colorful syntax-highlighted code, shallow depth of field, teal glow reflecting on a keyboard"
+  },
+  {
+   "n": 5,
+   "scene": 4,
+   "slot": "s04_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "Abstract network of interconnected glowing nodes representing multiple AI agents collaborating, deep blue background, volumetric light, wide shot"
+  },
+  {
+   "n": 6,
+   "scene": 4,
+   "slot": "s04_1",
+   "role": "supporting",
+   "ratio": "4:3",
+   "required": true,
+   "bg": "full",
+   "text": "Rows of illuminated server racks in a modern data center representing databases, cool teal lighting, low angle"
+  },
+  {
+   "n": 7,
+   "scene": 4,
+   "slot": "s04_2",
+   "role": "supporting",
+   "ratio": "4:3",
+   "required": true,
+   "bg": "full",
+   "text": "Glowing lines connecting different app tiles through plug-like connectors, isometric view, soft gradient background"
+  },
+  {
+   "n": 8,
+   "scene": 6,
+   "slot": "s06_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A smiling non-programmer using a laptop with a colorful visual workflow builder on screen, cozy bright room, medium shot"
+  },
+  {
+   "n": 9,
+   "scene": 7,
+   "slot": "s07_0",
+   "role": "object",
+   "ratio": "1:1",
+   "required": true,
+   "bg": "removable",
+   "text": "Three glossy rounded workflow node blocks connected by smooth curved lines, floating, simple clean 3D style"
+  },
+  {
+   "n": 10,
+   "scene": 8,
+   "slot": "s08_0",
+   "role": "supporting",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A friendly 3D envelope with a curved reply arrow, soft pastel gradient background"
+  },
+  {
+   "n": 11,
+   "scene": 8,
+   "slot": "s08_1",
+   "role": "supporting",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A smartphone with abstract green chat bubbles flying out with a soft motion trail, studio light"
+  },
+  {
+   "n": 12,
+   "scene": 8,
+   "slot": "s08_2",
+   "role": "supporting",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A floating report page with colorful bar and pie charts being generated, soft studio light"
+  },
+  {
+   "n": 13,
+   "scene": 8,
+   "slot": "s08_3",
+   "role": "supporting",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A tidy minimalist calendar and checklist with tick marks beside tasks, soft shadows"
+  },
+  {
+   "n": 14,
+   "scene": 9,
+   "slot": "s09_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "A diverse group of everyday people collaborating around laptops in a bright co-working space, warm natural light, wide shot"
+  }
+ ]
+}

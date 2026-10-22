@@ -1,0 +1,15 @@
+{
+  "agent_id": "motion_template_selection",
+  "stage_id": "motion_template",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "template_registry",
+    "preset_library"
+  ],
+  "capabilities": [
+    "template-search",
+    "preset-evaluation",
+    "metadata-scoring"
+  ]
+}

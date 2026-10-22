@@ -1,0 +1,86 @@
+{
+ "version": 1,
+ "at": "2026-10-14T11:19:28",
+ "before": 11,
+ "scenes": {
+  "2": {
+   "box": {
+    "route-line": [
+     0.125,
+     0.662,
+     0.3,
+     0.2
+    ]
+   }
+  },
+  "5": {
+   "textAt": {
+    "0": 31.88
+   }
+  },
+  "9": {
+   "box": {
+    "double-line": [
+     0.175,
+     0.265,
+     0.4,
+     0.04
+    ]
+   }
+  }
+ },
+ "accepted": [
+  "scene_02",
+  "scene_03",
+  "scene_05",
+  "scene_07",
+  "scene_08",
+  "scene_09"
+ ],
+ "changes": [
+  {
+   "scene": "scene_02",
+   "kind": "graphic_moved",
+   "preset": "route-line",
+   "from": [
+    0.1,
+    0.12,
+    0.3,
+    0.2
+   ],
+   "to": [
+    0.125,
+    0.662,
+    0.3,
+    0.2
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  },
+  {
+   "scene": "scene_05",
+   "kind": "text_earlier",
+   "text": "Knowledge · Training · Trust",
+   "from": 33.5,
+   "to": 31.88,
+   "why": "it needs 2.8 s on screen before it starts to leave; it now starts 1.62 s earlier"
+  },
+  {
+   "scene": "scene_09",
+   "kind": "graphic_moved",
+   "preset": "double-line",
+   "from": [
+    0.3,
+    0.16,
+    0.4,
+    0.04
+   ],
+   "to": [
+    0.175,
+    0.265,
+    0.4,
+    0.04
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  }
+ ]
+}

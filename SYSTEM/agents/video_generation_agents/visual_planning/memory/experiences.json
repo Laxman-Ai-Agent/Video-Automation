@@ -1,0 +1,299 @@
+{
+  "schema_version": 1,
+  "agent_id": "visual_planning",
+  "updated_at": "2026-10-20T03:37:16.906518+00:00",
+  "total_experiences": 9,
+  "experiences": {
+    "exp-visual_planning-0e412fb66d": {
+      "experience_id": "exp-visual_planning-0e412fb66d",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-vp-001",
+      "project_id": "proj-e2e",
+      "context": {
+        "parameters": [
+          "aspect",
+          "theme"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Visual concept generated and verified against bilingual terminology rules.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.268010+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-153cf4b186": {
+      "experience_id": "exp-visual_planning-153cf4b186",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_123",
+      "project_id": "test_proj",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 2,
+        "details": {
+          "notes": "recovered successfully"
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for planning resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:24.726889+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-1743c1f8c3": {
+      "experience_id": "exp-visual_planning-1743c1f8c3",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_123",
+      "project_id": "test_proj",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 2,
+        "details": {
+          "notes": "recovered successfully"
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for planning resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:09:12.045579+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-2972def0e4": {
+      "experience_id": "exp-visual_planning-2972def0e4",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-1792467418",
+      "project_id": "base_agent_proj",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "blocked",
+      "error_category": "validation_error",
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'blocked' in 1.0ms.",
+        "error": "Mandatory LLM review gate failed: llm_review_missing",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+        "proposed_lesson": {
+          "title": "Lesson from visual_planning on planning",
+          "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+          "affected_domain": "planning",
+          "observed_pattern": "Mandatory LLM review gate failed: llm_review_missing",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from visual_planning on planning",
+        "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+        "affected_domain": "planning",
+        "observed_pattern": "Mandatory LLM review gate failed: llm_review_missing",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T03:36:58.027705+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-43e77de0d2": {
+      "experience_id": "exp-visual_planning-43e77de0d2",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_123",
+      "project_id": "test_proj",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 2,
+        "details": {
+          "notes": "recovered successfully"
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for planning resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:38.414874+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-4a612d6a87": {
+      "experience_id": "exp-visual_planning-4a612d6a87",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_123",
+      "project_id": "test_proj",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 2,
+        "details": {
+          "notes": "recovered successfully"
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for planning resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:57:35.467854+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-54a10bd3ef": {
+      "experience_id": "exp-visual_planning-54a10bd3ef",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-1792386830",
+      "project_id": "proj_test_01",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "blocked",
+      "error_category": "validation_error",
+      "metrics": {
+        "duration_ms": 22.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'blocked' in 22.0ms.",
+        "error": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+        "proposed_lesson": {
+          "title": "Lesson from visual_planning on planning",
+          "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+          "affected_domain": "planning",
+          "observed_pattern": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from visual_planning on planning",
+        "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+        "affected_domain": "planning",
+        "observed_pattern": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T05:13:50.368845+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-c67179ae25": {
+      "experience_id": "exp-visual_planning-c67179ae25",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-1792467436",
+      "project_id": "base_agent_proj",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "blocked",
+      "error_category": "validation_error",
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'blocked' in 1.0ms.",
+        "error": "Mandatory LLM review gate failed: llm_review_missing",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+        "proposed_lesson": {
+          "title": "Lesson from visual_planning on planning",
+          "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+          "affected_domain": "planning",
+          "observed_pattern": "Mandatory LLM review gate failed: llm_review_missing",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from visual_planning on planning",
+        "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: llm_review_missing.",
+        "affected_domain": "planning",
+        "observed_pattern": "Mandatory LLM review gate failed: llm_review_missing",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T03:37:16.890106+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-f7107bdb52": {
+      "experience_id": "exp-visual_planning-f7107bdb52",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_123",
+      "project_id": "test_proj",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 2,
+        "details": {
+          "notes": "recovered successfully"
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for planning resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:12:25.405396+00:00",
+      "schema_version": 1
+    }
+  }
+}

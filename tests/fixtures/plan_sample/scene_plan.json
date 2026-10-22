@@ -1,0 +1,174 @@
+{
+ "style": {
+  "suffix": "cinematic documentary style, soft teal and orange color grade, shallow depth of field, clean modern tech aesthetic, no text, no logos",
+  "palette": [
+   "#0B1D26",
+   "#2A9D8F",
+   "#F2A541"
+  ]
+ },
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0,
+   "end": 5.0,
+   "meaning": "Introduces how AI agents are built",
+   "concept": "Glowing AI agent avatar over a workspace, title appears",
+   "mood": "curious, inviting",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "keywords": [
+    {
+     "text": "AI agents",
+     "at": 0.8
+    }
+   ],
+   "params": {
+    "text": "Building AI Agents",
+    "mark": "AI"
+   }
+  },
+  {
+   "id": 2,
+   "start": 5.0,
+   "end": 9.33,
+   "meaning": "Both coders and non-coders can build AI agents",
+   "concept": "Split: developer coding vs non-technical person using visual builder",
+   "mood": "friendly, energetic",
+   "mode": "image-composite",
+   "pattern": "split_two",
+   "keywords": [
+    {
+     "text": "Everyone",
+     "at": 5.4
+    }
+   ],
+   "params": {
+    "text": "Everyone can build"
+   }
+  },
+  {
+   "id": 3,
+   "start": 9.33,
+   "end": 17.19,
+   "meaning": "Coders use Python and advanced frameworks for complex agents",
+   "concept": "Python code on a monitor, code icon pops",
+   "mood": "focused, technical",
+   "mode": "image-composite",
+   "pattern": "hero_icon",
+   "keywords": [],
+   "params": {
+    "icon": "code"
+   }
+  },
+  {
+   "id": 4,
+   "start": 17.19,
+   "end": 28.4,
+   "meaning": "Advanced capabilities: multi-agent teamwork, custom logic, databases, APIs, apps",
+   "concept": "Agent network with data center and app connections",
+   "mood": "powerful, majestic",
+   "mode": "image-composite",
+   "pattern": "triple_stack",
+   "keywords": [
+    {
+     "text": "Advanced capabilities",
+     "at": 20.8
+    }
+   ],
+   "params": {
+    "text": "Advanced capabilities"
+   }
+  },
+  {
+   "id": 5,
+   "start": 28.4,
+   "end": 39.09,
+   "meaning": "Used for big projects, business automation and internal workflows, not just simple automation",
+   "concept": "Typography: beyond simple automation",
+   "mood": "dramatic, confident",
+   "mode": "typography",
+   "pattern": "quote_type",
+   "keywords": [
+    {
+     "text": "Beyond simple automation",
+     "at": 29.0
+    }
+   ],
+   "params": {
+    "text": "Beyond simple automation",
+    "text2": "Business systems and internal workflows"
+   }
+  },
+  {
+   "id": 6,
+   "start": 39.09,
+   "end": 45.75,
+   "meaning": "Non-coders also build simple agents with no-code tools",
+   "concept": "Person using a visual workflow builder, headline",
+   "mood": "hopeful, welcoming",
+   "mode": "image-composite",
+   "pattern": "hero_text",
+   "keywords": [
+    {
+     "text": "No-code",
+     "at": 41.15
+    }
+   ],
+   "params": {
+    "text": "No-code AI agents",
+    "mark": "No-code"
+   }
+  },
+  {
+   "id": 7,
+   "start": 45.75,
+   "end": 51.89,
+   "meaning": "Tools like n8n, Zapier and Make give drag-and-drop workflows",
+   "concept": "Floating connected workflow nodes",
+   "mood": "playful, light",
+   "mode": "image-composite",
+   "pattern": "object_float",
+   "keywords": [
+    {
+     "text": "n8n, Zapier, Make",
+     "at": 46.3
+    }
+   ],
+   "params": {
+    "text": "n8n, Zapier, Make"
+   }
+  },
+  {
+   "id": 8,
+   "start": 51.89,
+   "end": 62.25,
+   "meaning": "Pre-built actions: emails, WhatsApp messages, reports, routine tasks",
+   "concept": "Four quick visuals of routine tasks being automated",
+   "mood": "upbeat, practical",
+   "mode": "image-composite",
+   "pattern": "grid_four",
+   "keywords": [
+    {
+     "text": "Routine tasks",
+     "at": 58.0
+    }
+   ],
+   "params": {
+    "text": "Routine tasks, automated"
+   }
+  },
+  {
+   "id": 9,
+   "start": 62.25,
+   "end": 70.13,
+   "meaning": "No technical knowledge needed; many people build basic agents now",
+   "concept": "Diverse people collaborating, slow push-in",
+   "mood": "hopeful, warm",
+   "mode": "image-composite",
+   "pattern": "hero_only",
+   "keywords": [],
+   "params": {}
+  }
+ ]
+}

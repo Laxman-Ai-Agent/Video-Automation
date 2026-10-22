@@ -1,0 +1,40 @@
+{
+ "at": "2026-10-15T10:16:35",
+ "verified": [
+  "icon.tabler.eyeglass",
+  "icon.tabler.eyeglass-2"
+ ],
+ "failed": [],
+ "results": {
+  "icon.tabler.eyeglass": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0611,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0611,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "icon.tabler.eyeglass-2": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0606,
+     "preview": "resource-library/previews/16x9/icons_1.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0607,
+     "preview": "resource-library/previews/9x16/icons_1.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

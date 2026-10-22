@@ -1,0 +1,10 @@
+{
+  "agent_id": "capability_finder",
+  "category": "system",
+  "timeout_seconds": 60,
+  "allowed_tools": [
+    "agent_registry",
+    "skill_registry",
+    "tool_registry"
+  ]
+}

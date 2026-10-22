@@ -1,0 +1,992 @@
+{
+  "schema_version": 1,
+  "agent_id": "verification_and_test",
+  "updated_at": "2026-10-20T02:21:13.372985+00:00",
+  "total_experiences": 25,
+  "experiences": {
+    "exp-verification_and_test-033dc34b40": {
+      "experience_id": "exp-verification_and_test-033dc34b40",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458334",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 25544.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 25544.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:05:34.975927+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-0fad70bc86": {
+      "experience_id": "exp-verification_and_test-0fad70bc86",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458928",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 7112.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 7112.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:28.231808+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-2390dff715": {
+      "experience_id": "exp-verification_and_test-2390dff715",
+      "agent_id": "verification_and_test",
+      "task_type": "system",
+      "task_id": "req-1792234313",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "verification_action",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'system' with outcome 'succeeded' in 2.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 2.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T10:51:53.667967+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-2e02d9d67d": {
+      "experience_id": "exp-verification_and_test-2e02d9d67d",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458919",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 7968.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 7968.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:19.182401+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-30e9b88eed": {
+      "experience_id": "exp-verification_and_test-30e9b88eed",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792299412",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 6444.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 6444.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 6444.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T04:56:52.565169+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-37068b5dd4": {
+      "experience_id": "exp-verification_and_test-37068b5dd4",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458839",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 11173.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 11173.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:59.946641+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-3eb8a91856": {
+      "experience_id": "exp-verification_and_test-3eb8a91856",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458635",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 19618.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 19618.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:35.703145+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-43f8eb1f10": {
+      "experience_id": "exp-verification_and_test-43f8eb1f10",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458825",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 28072.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 28072.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:45.194179+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-48fc80b963": {
+      "experience_id": "exp-verification_and_test-48fc80b963",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458846",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 5799.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 5799.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:06.203598+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-49c63efc20": {
+      "experience_id": "exp-verification_and_test-49c63efc20",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792254394",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:34.668349+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-4a6fdee6a8": {
+      "experience_id": "exp-verification_and_test-4a6fdee6a8",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792254403",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 8287.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 8287.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 8287.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:43.557135+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-5c561a29fa": {
+      "experience_id": "exp-verification_and_test-5c561a29fa",
+      "agent_id": "verification_and_test",
+      "task_type": "system",
+      "task_id": "req-1792253583",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "verification_action",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'system' with outcome 'succeeded' in 1.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 1.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:13:03.111070+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-7f6acd1859": {
+      "experience_id": "exp-verification_and_test-7f6acd1859",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458689",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 19672.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 19672.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:11:29.671276+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-867f1e2b3c": {
+      "experience_id": "exp-verification_and_test-867f1e2b3c",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458307",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 28419.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 28419.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:05:07.328587+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-88038119ab": {
+      "experience_id": "exp-verification_and_test-88038119ab",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792234313",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T10:51:53.775915+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-88e4a9a0f7": {
+      "experience_id": "exp-verification_and_test-88e4a9a0f7",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792462867",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5737.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 5737.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 5737.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:07.425486+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-9c3f92bb1f": {
+      "experience_id": "exp-verification_and_test-9c3f92bb1f",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792381361",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 6723.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 6723.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 6723.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.289729+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-a0a7947052": {
+      "experience_id": "exp-verification_and_test-a0a7947052",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792253583",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:13:03.172249+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-a215f6a198": {
+      "experience_id": "exp-verification_and_test-a215f6a198",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792462873",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5266.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 5266.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 5266.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:13.370912+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-a38db31d09": {
+      "experience_id": "exp-verification_and_test-a38db31d09",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792254417",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 8066.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 8066.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 8066.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:57.012823+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-b72a44cbee": {
+      "experience_id": "exp-verification_and_test-b72a44cbee",
+      "agent_id": "verification_and_test",
+      "task_type": "system",
+      "task_id": "req-1792254394",
+      "project_id": "test_coordination",
+      "context": {
+        "parameters": [
+          "verification_action",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'system' with outcome 'succeeded' in 1.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 1.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:34.562320+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-c6fef2dd1d": {
+      "experience_id": "exp-verification_and_test-c6fef2dd1d",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458267",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 19024.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 19024.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:27.807774+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-c9d3a6fd68": {
+      "experience_id": "exp-verification_and_test-c9d3a6fd68",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792462857",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 10501.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'succeeded' in 10501.0ms.",
+        "takeaway": "Test execution completed; frozen file hashes and contracts confirmed.",
+        "performance": {
+          "duration_ms": 10501.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:57.429298+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-cfc6a0caf6": {
+      "experience_id": "exp-verification_and_test-cfc6a0caf6",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458906",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 8686.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 8686.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:06.667377+00:00",
+      "schema_version": 1
+    },
+    "exp-verification_and_test-fb1f0e8efe": {
+      "experience_id": "exp-verification_and_test-fb1f0e8efe",
+      "agent_id": "verification_and_test",
+      "task_type": "execution",
+      "task_id": "req-1792458667",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "acceptance_criteria",
+          "target_components"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 26018.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'verification_and_test' completed task 'execution' with outcome 'failed' in 26018.0ms.",
+        "error": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "proposed_lesson": {
+          "title": "Lesson from verification_and_test on execution",
+          "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+          "affected_domain": "general",
+          "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from verification_and_test on execution",
+        "description": "Task 'execution' failed with runtime_error: Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected..",
+        "affected_domain": "general",
+        "observed_pattern": "Verification failed: 2 check(s) failed, frozen algorithm hash mismatch detected.",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:11:07.975019+00:00",
+      "schema_version": 1
+    }
+  }
+}

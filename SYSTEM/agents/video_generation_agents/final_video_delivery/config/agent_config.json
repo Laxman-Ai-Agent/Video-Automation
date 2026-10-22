@@ -1,0 +1,16 @@
+{
+  "agent_id": "final_video_delivery",
+  "stage_id": "final",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "store",
+    "hasher",
+    "notifier"
+  ],
+  "capabilities": [
+    "artifact-packaging",
+    "delivery-verification",
+    "provenance-hash-generation"
+  ]
+}

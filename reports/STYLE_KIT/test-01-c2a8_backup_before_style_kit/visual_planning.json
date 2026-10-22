@@ -1,0 +1,810 @@
+{
+ "schema_version": "1.0",
+ "version": 3,
+ "source": "llm",
+ "source_scene_plan": "scene_plan.json",
+ "source_prompts": "prompts_map.json",
+ "source_segmentation": "scene_segmentation.json",
+ "source_fingerprint": "34b77ce4cea5ef07465456ac6dcc101f53324eac",
+ "project": {
+  "visual_mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "source_mapping": {
+  "policy": "one planned scene for each Scene Segmentation scene; plan_start/plan_end are the canonical start and end of its narration, the pause after it is gap_after_seconds, and timeline_start/timeline_end is the interval it holds on the timeline (the pause included, as in scene_plan.json)",
+  "canonical_scenes": 3,
+  "planned_scenes": 3
+ },
+ "visual_style": {
+  "category": "futuristic tech documentary",
+  "tone": "inspiring, hopeful",
+  "typography": "clean geometric sans-serif, bold key words",
+  "palette": [
+   "#0B1020",
+   "#22D3EE",
+   "#A78BFA",
+   "#F8FAFC"
+  ],
+  "style_suffix": "cinematic futuristic documentary, cool teal and violet light, soft glow, film grain, no text",
+  "grade": "cool",
+  "density": "low",
+  "contrast_policy": "light text and glowing cyan accents on deep navy backgrounds",
+  "safe_area_policy": "Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin (in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background may fill the whole frame.",
+  "continuity_policy": "consistent_palette_and_typography"
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_001",
+    "segmentation_scene_index": 1,
+    "plan_scene_id": 1,
+    "plan_start": 0.0,
+    "plan_end": 8.79,
+    "timeline_start": 0.0,
+    "timeline_end": 9.47,
+    "gap_after_seconds": 0.685
+   },
+   "source_segment_ids": [
+    0,
+    1
+   ],
+   "narration": {
+    "text": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power",
+    "text_en": "Smart glasses are not just a device; they change not only how people live but also how we see, a superpower that can completely transform our world.",
+    "start_seconds": 0.0,
+    "end_seconds": 8.79,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "Smart glasses are not just a device; they change how people live and see the world, like a superpower.",
+    "audience_takeaway": "Smart glasses can transform how we perceive and live in the world.",
+    "narrative_role": "hook"
+   },
+   "visual_concept": {
+    "description": "A glowing pair of smart glasses at center radiating light, framed as a superpower.",
+    "representation": "object_in_context",
+    "primary_focus": "Smart glasses icon radiating light",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Do not show a specific brand or product",
+     "Do not imply specific technical features"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "glasses_icon",
+     "type": "icon",
+     "role": "primary",
+     "required": true,
+     "visual_description": "Large glowing smart glasses icon with cyan lenses emitting soft light rays",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "glasses",
+      "category": "devices",
+      "search_descriptors": [
+       "glasses",
+       "eyewear",
+       "vision"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "superpower_text",
+     "type": "text",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "Bold short caption with the word Superpower highlighted in cyan",
+     "content": "A Superpower",
+     "language": "en",
+     "text_purpose": "keyword",
+     "appearance": {},
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "background_glow",
+     "type": "background",
+     "role": "environment",
+     "required": false,
+     "visual_description": "Deep navy background with a soft radial cyan-violet glow",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "full_frame",
+      "priority": 3,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "superpower_text",
+     "target": "glasses_icon",
+     "relation": "labels",
+     "description": "The caption names what the glasses represent"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "glasses_icon",
+     "intent": "reveal_with_glow",
+     "description": "Lenses light up and radiate outward"
+    },
+    {
+     "element_id": "superpower_text",
+     "intent": "emphasize_keyword",
+     "description": null
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": null,
+    "next_scene_id": "scene_02",
+    "motifs": [
+     "cyan glow",
+     "lens light"
+    ],
+    "transition_intent": "Light from the lenses flares into the path of the next scene",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s1_b1",
+     "start_seconds": 0.0,
+     "end_seconds": 5.6,
+     "description": "Smart glasses icon glows in the center, lenses lighting up as a new way of seeing.",
+     "element_ids": [
+      "glasses_icon",
+      "background_glow"
+     ]
+    },
+    {
+     "beat_id": "s1_b2",
+     "start_seconds": 5.9,
+     "end_seconds": 8.79,
+     "description": "The word Superpower appears below as the glasses radiate light outward.",
+     "element_ids": [
+      "glasses_icon",
+      "superpower_text",
+      "background_glow"
+     ]
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_002",
+    "segmentation_scene_index": 2,
+    "plan_scene_id": 2,
+    "plan_start": 9.475,
+    "plan_end": 13.61,
+    "timeline_start": 9.47,
+    "timeline_end": 13.8,
+    "gap_after_seconds": 0.19
+   },
+   "source_segment_ids": [
+    2
+   ],
+   "narration": {
+    "text": "భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు",
+    "text_en": "This journey, where the future is unfolding right before our eyes, does not end here.",
+    "start_seconds": 9.475,
+    "end_seconds": 13.61,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "The future is unfolding before our eyes and the journey continues beyond this point.",
+    "audience_takeaway": "This is only the beginning of an ongoing journey.",
+    "narrative_role": "transition"
+   },
+   "visual_concept": {
+    "description": "A schematic glowing path running from a starting point toward an open future horizon, with a light pulse moving along it.",
+    "representation": "abstract_graphic",
+    "primary_focus": "The path extending toward the future",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Schematic only: no dates, distances or milestones implied"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "journey_path",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "Glowing cyan line running left to right, fading open at its far end",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "path_across_frame",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "origin_point",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "Small bright node marking the present starting point",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "left",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "future_horizon",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "Soft violet horizon glow where the path continues onward",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "right",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "light_pulse",
+     "type": "graphic",
+     "role": "explanatory",
+     "required": false,
+     "visual_description": "Bright pulse of light traveling along the path",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "over_primary_visual",
+      "priority": 3,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "future_text",
+     "type": "text",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "Short title with Continues highlighted",
+     "content": "The Journey Continues",
+     "language": "en",
+     "text_purpose": "title",
+     "appearance": {},
+     "placement": {
+      "region": "upper_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "journey_path",
+     "target": "origin_point",
+     "relation": "connects_to",
+     "description": null
+    },
+    {
+     "source": "journey_path",
+     "target": "future_horizon",
+     "relation": "connects_to",
+     "description": null
+    },
+    {
+     "source": "light_pulse",
+     "target": "journey_path",
+     "relation": "follows",
+     "description": null
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "light_pulse",
+     "intent": "show_flow_direction",
+     "description": null
+    },
+    {
+     "element_id": "journey_path",
+     "intent": "extend_beyond_frame",
+     "description": null
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_01",
+    "next_scene_id": "scene_03",
+    "motifs": [
+     "cyan glow",
+     "forward motion"
+    ],
+    "transition_intent": "Zoom through the future horizon into the world ahead",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s2_b1",
+     "start_seconds": 9.475,
+     "end_seconds": 13.61,
+     "description": "A glowing pulse travels along the path from today toward the future horizon, which keeps extending.",
+     "element_ids": [
+      "journey_path",
+      "origin_point",
+      "future_horizon",
+      "light_pulse",
+      "future_text"
+     ]
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_003",
+    "segmentation_scene_index": 3,
+    "plan_scene_id": 3,
+    "plan_start": 13.8,
+    "plan_end": 20.06,
+    "timeline_start": 13.8,
+    "timeline_end": 20.43,
+    "gap_after_seconds": null
+   },
+   "source_segment_ids": [
+    3
+   ],
+   "narration": {
+    "text": "ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+    "text_en": "The world ahead is going to become even more amazing and even more futuristic.",
+    "start_seconds": 13.8,
+    "end_seconds": 20.06,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "The world ahead will become even more amazing and futuristic.",
+    "audience_takeaway": "An exciting, futuristic world is coming.",
+    "narrative_role": "conclusion"
+   },
+   "visual_concept": {
+    "description": "A luminous globe at center surrounded by blooming sparkles, symbolizing an increasingly amazing future world.",
+    "representation": "abstract_graphic",
+    "primary_focus": "Glowing globe",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Do not show specific technologies or predictions"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "world_icon",
+     "type": "icon",
+     "role": "primary",
+     "required": true,
+     "visual_description": "Large glowing globe icon with cyan outline",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "globe",
+      "category": "world",
+      "search_descriptors": [
+       "globe",
+       "world",
+       "earth"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "sparkle_accents",
+     "type": "icon",
+     "role": "decoration",
+     "required": false,
+     "visual_description": "Small violet sparkles blooming around the globe",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "around_primary_visual",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "sparkles",
+      "category": "effects",
+      "search_descriptors": [
+       "sparkles",
+       "shine",
+       "magic"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "futuristic_text",
+     "type": "text",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "Bold caption with Futuristic highlighted in cyan",
+     "content": "Even More Futuristic",
+     "language": "en",
+     "text_purpose": "short_caption",
+     "appearance": {},
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "background_glow",
+     "type": "background",
+     "role": "environment",
+     "required": false,
+     "visual_description": "Deep navy background with a brightening cyan-violet radial glow",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {},
+     "placement": {
+      "region": "full_frame",
+      "priority": 4,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "sparkle_accents",
+     "target": "world_icon",
+     "relation": "part_of",
+     "description": null
+    },
+    {
+     "source": "futuristic_text",
+     "target": "world_icon",
+     "relation": "labels",
+     "description": null
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "world_icon",
+     "intent": "emphasize_growth",
+     "description": null
+    },
+    {
+     "element_id": "sparkle_accents",
+     "intent": "reveal_in_sequence",
+     "description": null
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_02",
+    "next_scene_id": null,
+    "motifs": [
+     "cyan glow",
+     "violet horizon"
+    ],
+    "transition_intent": "Closing scene; glow brightens to end",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s3_b1",
+     "start_seconds": 13.8,
+     "end_seconds": 20.06,
+     "description": "A glowing globe brightens as sparkles bloom around it and the caption appears below.",
+     "element_ids": [
+      "world_icon",
+      "sparkle_accents",
+      "futuristic_text",
+      "background_glow"
+     ]
+    }
+   ],
+   "validation_notes": []
+  }
+ ],
+ "stages": [
+  {
+   "n": 1,
+   "name": "Semantic Understanding",
+   "status": "completed",
+   "detail": "meaning, narrative role and takeaway of 3 scenes"
+  },
+  {
+   "n": 2,
+   "name": "Scene Objective & Visual Concept",
+   "status": "completed",
+   "detail": "a visual concept for each of 3 scenes"
+  },
+  {
+   "n": 3,
+   "name": "Element Breakdown",
+   "status": "completed",
+   "detail": "12 elements"
+  },
+  {
+   "n": 4,
+   "name": "Relationships & Visual Hierarchy",
+   "status": "completed",
+   "detail": "6 relationships"
+  },
+  {
+   "n": 5,
+   "name": "Mode-Aware Planning",
+   "status": "completed",
+   "detail": "Motion-Only: no pictures required"
+  },
+  {
+   "n": 6,
+   "name": "Audio Timing & Text",
+   "status": "completed",
+   "detail": "times and narration from the source; on-screen text checked against it"
+  },
+  {
+   "n": 7,
+   "name": "Style & Continuity",
+   "status": "completed",
+   "detail": "style, previous/next links and repeated concepts"
+  },
+  {
+   "n": 8,
+   "name": "Validation & Confidence",
+   "status": "completed",
+   "detail": "deterministic checks, 3 planned scenes against 3 Scene Segmentation scenes"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "checks": {
+   "passed": 113,
+   "total": 113,
+   "by_rule": {
+    "scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "source_scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "source_start": {
+     "passed": 3,
+     "total": 3
+    },
+    "source_end": {
+     "passed": 3,
+     "total": 3
+    },
+    "source_mapping_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "gaps_preserved": {
+     "passed": 2,
+     "total": 2
+    },
+    "no_conflicting_intervals": {
+     "passed": 2,
+     "total": 2
+    },
+    "plan_interval": {
+     "passed": 3,
+     "total": 3
+    },
+    "gap_after": {
+     "passed": 3,
+     "total": 3
+    },
+    "timeline_interval": {
+     "passed": 3,
+     "total": 3
+    },
+    "no_overlapping_timeline": {
+     "passed": 2,
+     "total": 2
+    },
+    "element_ids_unique": {
+     "passed": 3,
+     "total": 3
+    },
+    "primary_element": {
+     "passed": 3,
+     "total": 3
+    },
+    "required_element": {
+     "passed": 3,
+     "total": 3
+    },
+    "element_count": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_count": {
+     "passed": 3,
+     "total": 3
+    },
+    "hierarchy": {
+     "passed": 3,
+     "total": 3
+    },
+    "regions": {
+     "passed": 3,
+     "total": 3
+    },
+    "no_placeholders": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_safe_area": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_over_primary": {
+     "passed": 3,
+     "total": 3
+    },
+    "layout_overlap": {
+     "passed": 3,
+     "total": 3
+    },
+    "references_valid": {
+     "passed": 3,
+     "total": 3
+    },
+    "path_element": {
+     "passed": 3,
+     "total": 3
+    },
+    "concept_consistent": {
+     "passed": 3,
+     "total": 3
+    },
+    "timing": {
+     "passed": 3,
+     "total": 3
+    },
+    "beats_inside_parent": {
+     "passed": 4,
+     "total": 4
+    },
+    "beats_on_words": {
+     "passed": 4,
+     "total": 4
+    },
+    "beats_ordered": {
+     "passed": 3,
+     "total": 3
+    },
+    "ordered": {
+     "passed": 3,
+     "total": 3
+    },
+    "narration_present": {
+     "passed": 3,
+     "total": 3
+    },
+    "no_pictures": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_content": {
+     "passed": 3,
+     "total": 3
+    },
+    "numbers_grounded": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_grounded": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_short": {
+     "passed": 3,
+     "total": 3
+    },
+    "text_not_narration": {
+     "passed": 3,
+     "total": 3
+    },
+    "palette": {
+     "passed": 3,
+     "total": 3
+    },
+    "motion_not_presets": {
+     "passed": 3,
+     "total": 3
+    },
+    "path_connected": {
+     "passed": 1,
+     "total": 1
+    },
+    "variety": {
+     "passed": 2,
+     "total": 2
+    }
+   }
+  },
+  "confidence": "supported_by_llm",
+  "note": "no probability is claimed: confidence is whether Claude judged the meaning, plus the deterministic checks that passed"
+ },
+ "needs_review": false,
+ "llm": {
+  "status": "applied",
+  "problems": [],
+  "scenes_from_llm": 3
+ },
+ "timings_seconds": {
+  "assemble": 0.023
+ }
+}

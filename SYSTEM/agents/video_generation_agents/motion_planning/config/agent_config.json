@@ -1,0 +1,20 @@
+{
+  "agent_id": "motion_planning",
+  "version": "2.0.0",
+  "stage_id": "motion_plan",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "llm_client",
+    "llm_gateway",
+    "spring_solver"
+  ],
+  "capabilities": [
+    "kinetic-typography-math",
+    "spring-curve-solver",
+    "transition-scheduling",
+    "cinematic-camera-choreography",
+    "audio-reactive-intelligence",
+    "collision-resolution"
+  ]
+}

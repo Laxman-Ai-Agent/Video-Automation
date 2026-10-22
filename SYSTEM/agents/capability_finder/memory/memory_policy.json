@@ -1,0 +1,6 @@
+{
+  "agent_id": "capability_finder",
+  "scope": "agent",
+  "isolation_level": "strict",
+  "allow_global_read": true
+}

@@ -1,0 +1,260 @@
+[
+  {
+    "id": "fb-1792299574927-9bd1",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792299574: Reduce spacing between cards and align right.",
+    "status": "in_review",
+    "createdAt": "2026-10-18T04:59:34Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792293676832-93b5",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792293676: Reduce spacing between cards and align right.",
+    "status": "implemented",
+    "createdAt": "2026-10-18T03:21:16Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792293317092-f557",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792293316: Reduce spacing between cards and align right.",
+    "status": "in_review",
+    "createdAt": "2026-10-18T03:15:17Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792293051348-7beb",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792293051: Reduce spacing between cards and align right.",
+    "status": "implemented",
+    "createdAt": "2026-10-18T03:10:51Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792292389104-6db2",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792292388: Reduce spacing between cards and align right.",
+    "status": "implemented",
+    "createdAt": "2026-10-18T02:59:49Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792291751544-2c80",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792291751: Reduce spacing between cards and align right.",
+    "status": "resolved",
+    "createdAt": "2026-10-18T02:49:11Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792290582546-737d",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792290582: Reduce spacing between cards and align right.",
+    "status": "resolved",
+    "createdAt": "2026-10-18T02:29:42Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792289942782-e2b8",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792289942: Reduce spacing between cards and align right.",
+    "status": "resolved",
+    "createdAt": "2026-10-18T02:19:02Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792289215546-009e",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792289215: Reduce spacing between cards and align right.",
+    "status": "resolved",
+    "createdAt": "2026-10-18T02:06:55Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792289083848-b4a2",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.custom-ui-node",
+    "elementName": "Custom UI Element",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Automated E2E Note 1792289083: Reduce spacing between cards and align right.",
+    "status": "in_review",
+    "createdAt": "2026-10-18T02:04:43Z",
+    "tags": [
+      "layout",
+      "pipeline-execution-flow"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-1792288552123-bb91",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "div.card",
+    "elementName": "Card",
+    "componentRef": "UnmappedComponent",
+    "sourceFile": "Approximated / Unmapped",
+    "isSourceMapped": false,
+    "category": "layout",
+    "feedback": "Test note",
+    "status": "pending",
+    "createdAt": "2026-10-18T01:55:52Z",
+    "tags": [
+      "layout"
+    ],
+    "visualRef": null
+  },
+  {
+    "id": "fb-seed-01",
+    "projectId": "sample-01",
+    "page": "Pipeline Execution Flow",
+    "route": "/pipeline",
+    "elementSelector": "[data-testid^='stage-card-']",
+    "elementName": "Stage Card Status Badge",
+    "componentRef": "StageCard",
+    "sourceFile": "UI/frontend/src/components/StageCard.tsx",
+    "isSourceMapped": true,
+    "category": "layout",
+    "feedback": "Optimize card vertical padding and ensure percentage number remains crisp on high-DPI displays.",
+    "status": "in_review",
+    "createdAt": "2026-10-18T01:49:14Z",
+    "tags": [
+      "layout",
+      "typography",
+      "responsive"
+    ]
+  },
+  {
+    "id": "fb-seed-02",
+    "projectId": "sample-01",
+    "page": "New Project",
+    "route": "/pipeline#new-project",
+    "elementSelector": "[data-testid='analyze-audio-btn']",
+    "elementName": "Analyze Audio Action Button",
+    "componentRef": "AudioInputPage",
+    "sourceFile": "UI/frontend/src/pages/AudioInputPage.tsx",
+    "isSourceMapped": true,
+    "category": "alignment",
+    "feedback": "Keep button clearly pinned above the viewport bottom with 0px scroll required.",
+    "status": "in_review",
+    "createdAt": "2026-10-18T00:49:14Z",
+    "tags": [
+      "viewport",
+      "spacing"
+    ]
+  }
+]

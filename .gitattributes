@@ -1,0 +1,4 @@
+# The Resource Library pins files by their bytes (sha256): never convert line endings on checkout, or every icon/licence turns "stale".
+resource-library/** -text
+# cmd.exe needs CRLF in batch files (labels and goto fail on LF-only files): tests/test_m9.py checks start.bat.
+*.bat text eol=crlf

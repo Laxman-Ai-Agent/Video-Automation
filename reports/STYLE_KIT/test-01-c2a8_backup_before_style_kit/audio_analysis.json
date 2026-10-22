@@ -1,0 +1,795 @@
+{
+ "schema_version": "audio-analysis-2",
+ "source": {
+  "file": "audio.mp3",
+  "size_bytes": 326889,
+  "duration_seconds": 20.428,
+  "codec": "mp3",
+  "container": "mp3",
+  "sample_rate_hz": 44100,
+  "channels": 1,
+  "metadata_source": "ffprobe"
+ },
+ "transcription": {
+  "language": {
+   "code": "te",
+   "source": "config (forced; no detection ran)",
+   "confidence": null
+  },
+  "full_text": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+  "transcript_file": "transcript_corrected.json",
+  "raw_file": "transcript.json",
+  "corrected_file": "transcript_corrected.json",
+  "edited_by_user": false,
+  "asr": {
+   "engine": "faster-whisper",
+   "model": "large-v3",
+   "model_version": "v3",
+   "device": "cpu",
+   "compute_type": "int8"
+  }
+ },
+ "utterances": [
+  {
+   "utterance_id": "utt_001",
+   "id": 0,
+   "text": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని",
+   "start_seconds": 0.0,
+   "end_seconds": 5.6,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 0,
+     "text": "smart",
+     "start_seconds": 0.0,
+     "end_seconds": 0.18,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 1,
+     "text": "glass",
+     "start_seconds": 0.18,
+     "end_seconds": 0.6,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 2,
+     "text": "అనేది",
+     "start_seconds": 0.72,
+     "end_seconds": 1.08,
+     "confidence": 0.976,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 3,
+     "text": "it's",
+     "start_seconds": 1.1,
+     "end_seconds": 1.46,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 4,
+     "text": "not",
+     "start_seconds": 1.46,
+     "end_seconds": 1.62,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 5,
+     "text": "just",
+     "start_seconds": 1.62,
+     "end_seconds": 1.82,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 6,
+     "text": "device",
+     "start_seconds": 1.82,
+     "end_seconds": 2.06,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 7,
+     "text": "ఇది",
+     "start_seconds": 2.06,
+     "end_seconds": 3.18,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 8,
+     "text": "మనిషి",
+     "start_seconds": 3.22,
+     "end_seconds": 3.54,
+     "confidence": 0.966,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 9,
+     "text": "జీవన",
+     "start_seconds": 3.54,
+     "end_seconds": 3.86,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 10,
+     "text": "శైలినే",
+     "start_seconds": 3.86,
+     "end_seconds": 4.26,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 11,
+     "text": "కాదు",
+     "start_seconds": 4.26,
+     "end_seconds": 4.62,
+     "confidence": 0.992,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 12,
+     "text": "మన",
+     "start_seconds": 4.62,
+     "end_seconds": 5.08,
+     "confidence": 0.976,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 13,
+     "text": "దృష్టిని",
+     "start_seconds": 5.08,
+     "end_seconds": 5.58,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_002",
+   "id": 1,
+   "text": "మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power",
+   "start_seconds": 5.85,
+   "end_seconds": 9.07,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 14,
+     "text": "మన",
+     "start_seconds": 5.85,
+     "end_seconds": 6.05,
+     "confidence": 0.932,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 15,
+     "text": "ప్రపంచాన్ని",
+     "start_seconds": 6.05,
+     "end_seconds": 6.71,
+     "confidence": 0.947,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 16,
+     "text": "పూర్తిగా",
+     "start_seconds": 6.71,
+     "end_seconds": 7.29,
+     "confidence": 0.948,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 17,
+     "text": "మార్చే",
+     "start_seconds": 7.29,
+     "end_seconds": 7.65,
+     "confidence": 0.978,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 18,
+     "text": "ఒక",
+     "start_seconds": 7.65,
+     "end_seconds": 8.17,
+     "confidence": 0.883,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 19,
+     "text": "super",
+     "start_seconds": 8.17,
+     "end_seconds": 8.39,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 20,
+     "text": "power",
+     "start_seconds": 8.39,
+     "end_seconds": 8.79,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_003",
+   "id": 2,
+   "text": "భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు",
+   "start_seconds": 9.07,
+   "end_seconds": 13.57,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 21,
+     "text": "భవిష్యత్తు",
+     "start_seconds": 9.475,
+     "end_seconds": 10.03,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 22,
+     "text": "మన",
+     "start_seconds": 10.03,
+     "end_seconds": 10.51,
+     "confidence": 0.993,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 23,
+     "text": "కళ్ల",
+     "start_seconds": 10.51,
+     "end_seconds": 10.79,
+     "confidence": 0.901,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 24,
+     "text": "ముందే",
+     "start_seconds": 10.79,
+     "end_seconds": 11.03,
+     "confidence": 0.943,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 25,
+     "text": "ప్రత్యక్షమవుతున్న",
+     "start_seconds": 11.03,
+     "end_seconds": 11.95,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 26,
+     "text": "ఈ",
+     "start_seconds": 11.95,
+     "end_seconds": 12.03,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 27,
+     "text": "ప్రయాణం",
+     "start_seconds": 12.03,
+     "end_seconds": 12.49,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 28,
+     "text": "ఇక్కడితో",
+     "start_seconds": 12.49,
+     "end_seconds": 13.17,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 29,
+     "text": "ముగియదు",
+     "start_seconds": 13.17,
+     "end_seconds": 13.61,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "utterance_id": "utt_004",
+   "id": 3,
+   "text": "ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+   "start_seconds": 13.8,
+   "end_seconds": 20.06,
+   "boundary_source": "whisper_segment",
+   "alignment_status": "word_timestamps",
+   "words": [
+    {
+     "index": 30,
+     "text": "ముందున్న",
+     "start_seconds": 13.8,
+     "end_seconds": 16.1,
+     "confidence": 0.929,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 31,
+     "text": "ప్రపంచం",
+     "start_seconds": 16.1,
+     "end_seconds": 16.58,
+     "confidence": 0.957,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 32,
+     "text": "ఇంకా",
+     "start_seconds": 16.58,
+     "end_seconds": 17.28,
+     "confidence": 0.919,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 33,
+     "text": "అద్భుతంగా",
+     "start_seconds": 17.28,
+     "end_seconds": 17.98,
+     "confidence": 0.977,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 34,
+     "text": "ఇంకా",
+     "start_seconds": 17.98,
+     "end_seconds": 18.66,
+     "confidence": 0.947,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 35,
+     "text": "futuristic",
+     "start_seconds": 18.66,
+     "end_seconds": 18.92,
+     "confidence": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "index": 36,
+     "text": "గా",
+     "start_seconds": 19.34,
+     "end_seconds": 19.46,
+     "confidence": 0.883,
+     "timing": "measured",
+     "edit": null
+    },
+    {
+     "index": 37,
+     "text": "మారబోతోందే",
+     "start_seconds": 19.46,
+     "end_seconds": 20.06,
+     "confidence": 0.925,
+     "timing": "measured",
+     "edit": null
+    }
+   ]
+  }
+ ],
+ "pauses": [
+  {
+   "start_seconds": 2.527,
+   "end_seconds": 3.045,
+   "duration_seconds": 0.518,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  },
+  {
+   "start_seconds": 8.937,
+   "end_seconds": 9.498,
+   "duration_seconds": 0.561,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  },
+  {
+   "start_seconds": 13.628,
+   "end_seconds": 14.03,
+   "duration_seconds": 0.402,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  },
+  {
+   "start_seconds": 15.138,
+   "end_seconds": 15.708,
+   "duration_seconds": 0.57,
+   "kind": "silence",
+   "source": "ffmpeg_silencedetect"
+  }
+ ],
+ "review": {
+  "vocabulary": [],
+  "confidence": {
+   "status": "available",
+   "threshold": 0.5,
+   "words_total": 38,
+   "words_with_confidence": 38,
+   "flagged": []
+  },
+  "llm": {
+   "status": "applied",
+   "error": null,
+   "model": null,
+   "segments_sent": 4
+  },
+  "corrections": [
+   {
+    "id": "c001",
+    "segment": 0,
+    "from_index": 0,
+    "to_index": 1,
+    "from": "స్మాట్ గ్లాస్",
+    "to": "smart glass",
+    "reason": "English term, Latin script",
+    "p_from": [
+     0.938,
+     0.969
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c002",
+    "segment": 0,
+    "from_index": 3,
+    "to_index": 6,
+    "from": "ఇత్స్ నాట్ జస్ట డివాఇస్",
+    "to": "it's not just device",
+    "reason": "English phrase, Latin script",
+    "p_from": [
+     0.918,
+     0.941,
+     0.902,
+     0.897
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c003",
+    "segment": 0,
+    "from_index": 7,
+    "to_index": 7,
+    "from": "ఇతి",
+    "to": "ఇది",
+    "reason": "misspelling",
+    "p_from": [
+     0.887
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c004",
+    "segment": 0,
+    "from_index": 9,
+    "to_index": 9,
+    "from": "జివన",
+    "to": "జీవన",
+    "reason": "misspelling",
+    "p_from": [
+     0.955
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c005",
+    "segment": 0,
+    "from_index": 10,
+    "to_index": 10,
+    "from": "సేల్నే",
+    "to": "శైలినే",
+    "reason": "misheard word",
+    "p_from": [
+     0.892
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c006",
+    "segment": 0,
+    "from_index": 13,
+    "to_index": 13,
+    "from": "ద్రుష్టిని",
+    "to": "దృష్టిని",
+    "reason": "misspelling",
+    "p_from": [
+     0.953
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c007",
+    "segment": 1,
+    "from_index": 5,
+    "to_index": 6,
+    "from": "సూపర్ పవర్",
+    "to": "super power",
+    "reason": "English term, Latin script",
+    "p_from": [
+     0.969,
+     0.916
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c008",
+    "segment": 2,
+    "from_index": 0,
+    "to_index": 0,
+    "from": "భవిషతు",
+    "to": "భవిష్యత్తు",
+    "reason": "misspelling",
+    "p_from": [
+     0.899
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c009",
+    "segment": 2,
+    "from_index": 4,
+    "to_index": 4,
+    "from": "ప్రతేక్షమోతున",
+    "to": "ప్రత్యక్షమవుతున్న",
+    "reason": "misspelling",
+    "p_from": [
+     0.929
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c010",
+    "segment": 2,
+    "from_index": 5,
+    "to_index": 5,
+    "from": "ఇ",
+    "to": "ఈ",
+    "reason": "misspelling",
+    "p_from": [
+     0.808
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c011",
+    "segment": 2,
+    "from_index": 6,
+    "to_index": 6,
+    "from": "ప్రయానం",
+    "to": "ప్రయాణం",
+    "reason": "misspelling",
+    "p_from": [
+     0.944
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c012",
+    "segment": 2,
+    "from_index": 7,
+    "to_index": 7,
+    "from": "ఇకడుతో",
+    "to": "ఇక్కడితో",
+    "reason": "misspelling",
+    "p_from": [
+     0.876
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c013",
+    "segment": 2,
+    "from_index": 8,
+    "to_index": 8,
+    "from": "ముగిదు",
+    "to": "ముగియదు",
+    "reason": "misspelling",
+    "p_from": [
+     0.964
+    ],
+    "status": "applied",
+    "why": null
+   },
+   {
+    "id": "c014",
+    "segment": 3,
+    "from_index": 5,
+    "to_index": 5,
+    "from": "ఫ్యూచరిస్టిక్",
+    "to": "futuristic",
+    "reason": "English term, Latin script",
+    "p_from": [
+     0.934
+    ],
+    "status": "applied",
+    "why": null
+   }
+  ],
+  "unresolved": []
+ },
+ "quality": {
+  "status": "measured",
+  "max_volume_db": -1.2,
+  "mean_volume_db": -15.8,
+  "noise_level": "not measured",
+  "uncertain_words": 0,
+  "unresolved_words": 0,
+  "uncertain_share": 0.0
+ },
+ "processing": {
+  "preprocessing": {
+   "applied": true,
+   "kind": "ffmpeg resample to 16 kHz mono (derived copy audio_16k.wav)",
+   "derived_duration_seconds": 20.428
+  },
+  "alignment_status": "word_timestamps",
+  "alignment_method": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words",
+  "pause_detection": {
+   "status": "measured",
+   "method": "ffmpeg silencedetect",
+   "min_seconds": 0.35,
+   "threshold_db": -35
+  }
+ },
+ "caching": {
+  "steps": {
+   "transcribe": "ran",
+   "refine": "ran",
+   "cuts": "ran"
+  },
+  "reused": [],
+  "llm_cache_entries": 1
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Audio File Validation",
+   "status": "completed",
+   "detail": "file readable, has an audio stream"
+  },
+  {
+   "n": 2,
+   "name": "Audio Metadata Extraction",
+   "status": "completed",
+   "detail": "20.428s, 44100 Hz, 1 ch (mp3)"
+  },
+  {
+   "n": 3,
+   "name": "Audio Preprocessing",
+   "status": "completed",
+   "detail": "16 kHz mono copy for the model (20.428s); the original is untouched"
+  },
+  {
+   "n": 4,
+   "name": "Language & Speech Detection",
+   "status": "completed",
+   "detail": "language 'te' set by config (no detection ran); confidence unavailable"
+  },
+  {
+   "n": 5,
+   "name": "Speech-to-Text (ASR)",
+   "status": "completed",
+   "detail": "large-v3 (int8, cpu): 4 segments, 38 words kept as the raw transcript"
+  },
+  {
+   "n": 6,
+   "name": "Telugu + English Technical Vocabulary",
+   "status": "completed",
+   "detail": "0 English terms, 0 numbers found"
+  },
+  {
+   "n": 7,
+   "name": "Confidence-Based Correction",
+   "status": "completed",
+   "detail": "0 word(s) below p=0.5 (Whisper's own probability)"
+  },
+  {
+   "n": 8,
+   "name": "Raw vs Corrected Transcript (LLM)",
+   "status": "completed",
+   "detail": "Claude checked 4 segment(s): 14 correction(s) applied, 0 rejected"
+  },
+  {
+   "n": 9,
+   "name": "Word-Level Alignment",
+   "status": "completed",
+   "detail": "19 corrected word(s) re-aligned against the original audio (forced alignment, model-inferred), cross-checked against the unchanged words; the others keep Whisper's timestamps"
+  },
+  {
+   "n": 10,
+   "name": "Word Timestamp Integrity",
+   "status": "completed",
+   "detail": "0 errors, 0 warnings in 38 word timestamps"
+  },
+  {
+   "n": 11,
+   "name": "Pause & Speech Rhythm Analysis",
+   "status": "completed",
+   "detail": "4 silences ≥ 0.35s below -35 dB"
+  },
+  {
+   "n": 12,
+   "name": "Audio Quality & Uncertainty Detection",
+   "status": "completed",
+   "detail": "max -1.2 dB, mean -15.8 dB; 0 uncertain, 0 unresolved word(s); noise level not measured"
+  },
+  {
+   "n": 13,
+   "name": "Final Audio Analysis Validation",
+   "status": "completed",
+   "detail": "0 errors, 0 warnings"
+  },
+  {
+   "n": 14,
+   "name": "Caching & Resume",
+   "status": "completed",
+   "detail": "Claude answers cached: 1; a failed run resumes from the last finished step"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "notes": []
+ }
+}

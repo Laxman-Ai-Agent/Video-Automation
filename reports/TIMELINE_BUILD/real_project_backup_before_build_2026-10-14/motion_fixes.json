@@ -1,0 +1,138 @@
+{
+ "version": 1,
+ "at": "2026-10-14T18:33:27",
+ "before": 11,
+ "scenes": {
+  "2": {
+   "box": {
+    "route-line": [
+     0.125,
+     0.662,
+     0.3,
+     0.2
+    ]
+   },
+   "emphasisAt": {
+    "0": 6.89
+   }
+  },
+  "5": {
+   "textAt": {
+    "0": 31.88
+   }
+  },
+  "9": {
+   "box": {
+    "double-line": [
+     0.175,
+     0.265,
+     0.4,
+     0.04
+    ]
+   },
+   "emphasisAt": {
+    "0": 54.39
+   }
+  },
+  "1": {
+   "emphasisAt": {
+    "0": 2.44
+   }
+  },
+  "6": {
+   "emphasisAt": {
+    "0": 36.29
+   }
+  }
+ },
+ "accepted": [
+  "scene_02",
+  "scene_03",
+  "scene_05",
+  "scene_07",
+  "scene_08",
+  "scene_09"
+ ],
+ "changes": [
+  {
+   "scene": "scene_02",
+   "kind": "graphic_moved",
+   "preset": "route-line",
+   "from": [
+    0.1,
+    0.12,
+    0.3,
+    0.2
+   ],
+   "to": [
+    0.125,
+    0.662,
+    0.3,
+    0.2
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  },
+  {
+   "scene": "scene_05",
+   "kind": "text_earlier",
+   "text": "Knowledge · Training · Trust",
+   "from": 33.5,
+   "to": 31.88,
+   "why": "it needs 2.8 s on screen before it starts to leave; it now starts 1.62 s earlier"
+  },
+  {
+   "scene": "scene_09",
+   "kind": "graphic_moved",
+   "preset": "double-line",
+   "from": [
+    0.3,
+    0.16,
+    0.4,
+    0.04
+   ],
+   "to": [
+    0.175,
+    0.265,
+    0.4,
+    0.04
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  },
+  {
+   "scene": "scene_01",
+   "kind": "emphasis_aligned",
+   "text": "Mental challenges",
+   "word": "మానసిక",
+   "from": 2.18,
+   "to": 2.44,
+   "why": "'Mental' is spoken as 'మానసిక' (mental) from 2.44 s; the library's placeholder time 2.18 s was inside the word 'కావు'"
+  },
+  {
+   "scene": "scene_02",
+   "kind": "emphasis_aligned",
+   "text": "About eight months",
+   "word": "నెలల",
+   "from": 5.58,
+   "to": 6.89,
+   "why": "'months' is spoken as 'నెలల' (of months) from 6.89 s; the placeholder time 5.58 s was inside the word 'చేరడానికి'"
+  },
+  {
+   "scene": "scene_06",
+   "kind": "emphasis_aligned",
+   "text": "Resilience",
+   "word": "మనోధైర్యం",
+   "from": 35.78,
+   "to": 36.29,
+   "why": "'Resilience' is spoken as 'మనోధైర్యం' (mental strength) from 36.29 s; the placeholder time 35.78 s was inside the word 'బలమైన'"
+  },
+  {
+   "scene": "scene_09",
+   "kind": "emphasis_aligned",
+   "text": "A multi-planet species",
+   "word": "బహుగ్రహ",
+   "from": 53.78,
+   "to": 54.39,
+   "why": "'multi-planet' is spoken as 'బహుగ్రహ' from 54.39 s; the placeholder time 53.78 s was inside the word 'మనిషి'"
+  }
+ ]
+}

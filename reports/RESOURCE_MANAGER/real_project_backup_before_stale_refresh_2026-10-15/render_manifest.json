@@ -1,0 +1,102 @@
+{
+ "approval": {
+  "acknowledgements": 6,
+  "approval_id": "decision_c5746819b527ce2e",
+  "approved_at": "2026-10-15T05:36:00",
+  "approved_by": "Claude (decision delegated by the user)",
+  "approved_by_source": "self_declared",
+  "review_coverage": {
+   "motion_playback_reviewed": false,
+   "stills_reviewed_by_person": false
+  },
+  "timeline_fingerprint": "ad1b6d1feb23c8de"
+ },
+ "aspect": "16:9",
+ "carried_warnings": [
+  {
+   "category": "limitation",
+   "element_id": "audio",
+   "key": "audio_tail_not_rendered:audio",
+   "scene_id": null,
+   "source": "timeline_build",
+   "text": "the renderer's frame count (1728 frames = 57.600 s) is 0.011 s shorter than the audio (57.611 s): less than one frame is cut off the end of the audio"
+  },
+  {
+   "category": "approximation",
+   "element_id": "small_crew_group",
+   "key": "approximate_visual:small_crew_group",
+   "scene_id": "scene_04",
+   "source": "timeline_build",
+   "text": "small_crew_group (graphic) is drawn as a stand-in for what the plan describes"
+  },
+  {
+   "category": "approximation",
+   "element_id": "crew_team",
+   "key": "approximate_visual:crew_team",
+   "scene_id": "scene_05",
+   "source": "timeline_build",
+   "text": "crew_team (graphic) is drawn as a stand-in for what the plan describes"
+  },
+  {
+   "category": "approximation",
+   "element_id": "help_line",
+   "key": "approximate_visual:help_line",
+   "scene_id": "scene_05",
+   "source": "timeline_build",
+   "text": "help_line (graphic) is drawn as a stand-in for what the plan describes"
+  },
+  {
+   "category": "review_coverage",
+   "element_id": null,
+   "key": "stills_not_reviewed_by_person:-",
+   "scene_id": null,
+   "source": "review",
+   "text": "No person has recorded looking at the review stills of this version."
+  },
+  {
+   "category": "review_coverage",
+   "element_id": null,
+   "key": "motion_playback_not_reviewed:-",
+   "scene_id": null,
+   "source": "review",
+   "text": "Nobody has watched the motion, the transitions or the narration timing of this version (this page shows stills only, no video is rendered for review)."
+  }
+ ],
+ "created_at": "2026-10-15T05:36:13",
+ "dependencies_fingerprint": "ad1b6d1feb23c8de",
+ "expected": {
+  "duration_seconds": 57.6,
+  "fps": 30,
+  "frames": 1728,
+  "height": 1080,
+  "width": 1920
+ },
+ "job_id": "9318678114",
+ "manifest_fingerprint": "10767b100951d0d2",
+ "project_id": "my-video-project-c2e8",
+ "render_config": {
+  "audio_enabled": true,
+  "codec": "h264",
+  "container": "mp4",
+  "flags": [
+   "--concurrency=3"
+  ],
+  "fps": 30,
+  "height": 1080,
+  "profile": "standard_final",
+  "width": 1920
+ },
+ "renderer": {
+  "name": "remotion",
+  "source": "node_modules/remotion/package.json",
+  "version": "4.0.534"
+ },
+ "schema_version": "1.0",
+ "timeline": {
+  "artifact_ref": "timeline.json",
+  "build_fingerprint": "109f522e604c9959",
+  "duration_seconds": 57.611,
+  "fingerprint": "0b43b549635f0a76",
+  "scene_count": 9
+ }
+}

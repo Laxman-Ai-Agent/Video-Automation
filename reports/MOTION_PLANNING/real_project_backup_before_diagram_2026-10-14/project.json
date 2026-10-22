@@ -1,0 +1,16 @@
+{
+ "id": "my-video-project-c2e8",
+ "name": "My Video Project",
+ "created": "2026-10-13T12:30:27",
+ "state": "done",
+ "aspect": "16:9",
+ "use_images": false,
+ "motion_branch": true,
+ "audio": {
+  "file": "audio.wav",
+  "original_name": "09.wav",
+  "size_bytes": 2765370,
+  "format": "WAV",
+  "duration": 57.6
+ }
+}

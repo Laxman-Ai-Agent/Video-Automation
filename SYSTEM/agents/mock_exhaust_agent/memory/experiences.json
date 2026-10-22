@@ -1,0 +1,638 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_exhaust_agent",
+  "updated_at": "2026-10-20T02:20:58.316830+00:00",
+  "total_experiences": 14,
+  "experiences": {
+    "exp-mock_exhaust_agent-072f7bde6d": {
+      "experience_id": "exp-mock_exhaust_agent-072f7bde6d",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458907",
+      "project_id": "tmpg3mjqmcd",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:07.741843+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-196c1c6e5e": {
+      "experience_id": "exp-mock_exhaust_agent-196c1c6e5e",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpu1wcub82",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.119484+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-319e28c5dc": {
+      "experience_id": "exp-mock_exhaust_agent-319e28c5dc",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmp0q77vl6h",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.220788+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-3a9124a45d": {
+      "experience_id": "exp-mock_exhaust_agent-3a9124a45d",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458270",
+      "project_id": "tmpzi05jmsr",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:30.858239+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-45c0ecab1f": {
+      "experience_id": "exp-mock_exhaust_agent-45c0ecab1f",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmpx3x9j35z",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.333562+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-55bd57e9a8": {
+      "experience_id": "exp-mock_exhaust_agent-55bd57e9a8",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpu1wcub82",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.272650+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-59164fffdd": {
+      "experience_id": "exp-mock_exhaust_agent-59164fffdd",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmp953mwyb7",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.158300+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-5a7e5f3c31": {
+      "experience_id": "exp-mock_exhaust_agent-5a7e5f3c31",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmp0q77vl6h",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.303706+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-6c86b636ca": {
+      "experience_id": "exp-mock_exhaust_agent-6c86b636ca",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458270",
+      "project_id": "tmpzi05jmsr",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:30.230110+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-6fbd410d7a": {
+      "experience_id": "exp-mock_exhaust_agent-6fbd410d7a",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmpx3x9j35z",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.272927+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-8a38215db7": {
+      "experience_id": "exp-mock_exhaust_agent-8a38215db7",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458907",
+      "project_id": "tmpg3mjqmcd",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:07.647760+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-991060495e": {
+      "experience_id": "exp-mock_exhaust_agent-991060495e",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmp953mwyb7",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.229034+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-e128f7e769": {
+      "experience_id": "exp-mock_exhaust_agent-e128f7e769",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp0w5dom65",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-B",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-B",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-B.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-B",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.493860+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_exhaust_agent-f7b792241e": {
+      "experience_id": "exp-mock_exhaust_agent-f7b792241e",
+      "agent_id": "mock_exhaust_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp0w5dom65",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_exhaust_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: 503-A",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_exhaust_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: 503-A",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_exhaust_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: 503-A.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: 503-A",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.420081+00:00",
+      "schema_version": 1
+    }
+  }
+}

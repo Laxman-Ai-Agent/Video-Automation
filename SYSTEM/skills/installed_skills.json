@@ -1,0 +1,250 @@
+{
+  "version": "1.0.0",
+  "updated_at": "2026-10-19T16:24:43.088536+00:00",
+  "total_installed": 5,
+  "installed_skills": {
+    "remotion-animated-bar-chart": {
+      "skill_id": "remotion-animated-bar-chart",
+      "name": "Remotion Animated Bar Chart",
+      "category_id": "charts",
+      "subcategory": "bar_charts",
+      "version": "1.2.0",
+      "installation_path": "skills\\library\\charts\\remotion-animated-bar-chart",
+      "entrypoint": "library/charts/remotion-animated-bar-chart/SKILL.md",
+      "content_sha256": "64b2005b071021f82f6249dbfd8f55d4dae0fcf3734c5228c33c24a980f0d82e",
+      "license": "MIT",
+      "capabilities": [
+        "dynamic-bar-chart",
+        "bar-chart-animator",
+        "data-visualization"
+      ],
+      "dependencies": [],
+      "applicable_agents": [
+        "visual_planning",
+        "motion_animation",
+        "timeline_build"
+      ],
+      "source_url": null,
+      "installed_at": "2026-10-18T05:42:46.564676+00:00",
+      "validation_status": "verified",
+      "metadata": {
+        "skill_id": "remotion-animated-bar-chart",
+        "name": "Remotion Animated Bar Chart",
+        "category_id": "charts",
+        "subcategory": "bar_charts",
+        "version": "1.2.0",
+        "license": "MIT",
+        "entrypoint": "library/charts/remotion-animated-bar-chart/SKILL.md",
+        "content_sha256": "64b2005b071021f82f6249dbfd8f55d4dae0fcf3734c5228c33c24a980f0d82e",
+        "capabilities": [
+          "dynamic-bar-chart",
+          "bar-chart-animator",
+          "data-visualization"
+        ],
+        "dependencies": [],
+        "applicable_agents": [
+          "visual_planning",
+          "motion_animation",
+          "timeline_build"
+        ],
+        "installed_at": "2026-10-18T05:42:46.532176+00:00"
+      }
+    },
+    "visual-cinematic-composition": {
+      "skill_id": "visual-cinematic-composition",
+      "name": "Cinematic Composition and Depth Layering",
+      "category_id": "layouts",
+      "subcategory": null,
+      "version": "1.0.0",
+      "installation_path": "skills\\library\\layouts\\visual-cinematic-composition",
+      "entrypoint": "library/layouts/visual-cinematic-composition/SKILL.md",
+      "content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+      "license": "Apache-2.0",
+      "capabilities": [
+        "cinematic-composition",
+        "depth-layering",
+        "visual-hierarchy",
+        "safe-area-governance"
+      ],
+      "dependencies": [],
+      "applicable_agents": [
+        "visual_planning",
+        "motion_planning",
+        "timeline_build",
+        "motion_validation"
+      ],
+      "source_url": null,
+      "installed_at": "2026-10-19T00:37:21.869011+00:00",
+      "validation_status": "verified",
+      "metadata": {
+        "skill_id": "visual-cinematic-composition",
+        "name": "Cinematic Composition and Depth Layering",
+        "category_id": "layouts",
+        "subcategory": null,
+        "version": "1.0.0",
+        "license": "Apache-2.0",
+        "entrypoint": "library/layouts/visual-cinematic-composition/SKILL.md",
+        "content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+        "capabilities": [
+          "cinematic-composition",
+          "depth-layering",
+          "visual-hierarchy",
+          "safe-area-governance"
+        ],
+        "dependencies": [],
+        "applicable_agents": [
+          "visual_planning",
+          "motion_planning",
+          "timeline_build",
+          "motion_validation"
+        ],
+        "installed_at": "2026-10-19T00:37:21.854961+00:00"
+      }
+    },
+    "visual-narrative-semantic-mapping": {
+      "skill_id": "visual-narrative-semantic-mapping",
+      "name": "Narrative-to-Visual Semantic Metaphor Mapping",
+      "category_id": "science_visuals",
+      "subcategory": null,
+      "version": "1.0.0",
+      "installation_path": "skills\\library\\science_visuals\\visual-narrative-semantic-mapping",
+      "entrypoint": "library/science_visuals/visual-narrative-semantic-mapping/SKILL.md",
+      "content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+      "license": "Apache-2.0",
+      "capabilities": [
+        "narrative-semantic-mapping",
+        "metaphor-selection",
+        "concrete-visual-grounding"
+      ],
+      "dependencies": [],
+      "applicable_agents": [
+        "visual_planning",
+        "motion_animation",
+        "timeline_build"
+      ],
+      "source_url": null,
+      "installed_at": "2026-10-19T00:37:21.894082+00:00",
+      "validation_status": "verified",
+      "metadata": {
+        "skill_id": "visual-narrative-semantic-mapping",
+        "name": "Narrative-to-Visual Semantic Metaphor Mapping",
+        "category_id": "science_visuals",
+        "subcategory": null,
+        "version": "1.0.0",
+        "license": "Apache-2.0",
+        "entrypoint": "library/science_visuals/visual-narrative-semantic-mapping/SKILL.md",
+        "content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+        "capabilities": [
+          "narrative-semantic-mapping",
+          "metaphor-selection",
+          "concrete-visual-grounding"
+        ],
+        "dependencies": [],
+        "applicable_agents": [
+          "visual_planning",
+          "motion_animation",
+          "timeline_build"
+        ],
+        "installed_at": "2026-10-19T00:37:21.877681+00:00"
+      }
+    },
+    "visual-word-semantic-animation": {
+      "skill_id": "visual-word-semantic-animation",
+      "name": "Word-Level Semantic Visual Animation",
+      "category_id": "motion_animation",
+      "subcategory": null,
+      "version": "1.0.0",
+      "installation_path": "skills\\library\\motion_animation\\visual-word-semantic-animation",
+      "entrypoint": "library/motion_animation/visual-word-semantic-animation/SKILL.md",
+      "content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+      "license": "Apache-2.0",
+      "capabilities": [
+        "word-level-semantic-animation",
+        "temporal-event-coordination",
+        "narration-visual-synchronization"
+      ],
+      "dependencies": [],
+      "applicable_agents": [
+        "motion_animation",
+        "motion_planning",
+        "motion_template_selection",
+        "timeline_build"
+      ],
+      "source_url": null,
+      "installed_at": "2026-10-19T00:37:21.932339+00:00",
+      "validation_status": "verified",
+      "metadata": {
+        "skill_id": "visual-word-semantic-animation",
+        "name": "Word-Level Semantic Visual Animation",
+        "category_id": "motion_animation",
+        "subcategory": null,
+        "version": "1.0.0",
+        "license": "Apache-2.0",
+        "entrypoint": "library/motion_animation/visual-word-semantic-animation/SKILL.md",
+        "content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+        "capabilities": [
+          "word-level-semantic-animation",
+          "temporal-event-coordination",
+          "narration-visual-synchronization"
+        ],
+        "dependencies": [],
+        "applicable_agents": [
+          "motion_animation",
+          "motion_planning",
+          "motion_template_selection",
+          "timeline_build"
+        ],
+        "installed_at": "2026-10-19T00:37:21.902735+00:00"
+      }
+    },
+    "visual-scene-variety-pacing": {
+      "skill_id": "visual-scene-variety-pacing",
+      "name": "Scene Variety and Pacing Rhythm Governance",
+      "category_id": "video_editing",
+      "subcategory": null,
+      "version": "1.0.0",
+      "installation_path": "skills\\library\\video_editing\\visual-scene-variety-pacing",
+      "entrypoint": "library/video_editing/visual-scene-variety-pacing/SKILL.md",
+      "content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+      "license": "Apache-2.0",
+      "capabilities": [
+        "scene-variety-enforcement",
+        "visual-fatigue-prevention",
+        "pacing-rhythm-control"
+      ],
+      "dependencies": [],
+      "applicable_agents": [
+        "main_orchestrator",
+        "scene_segmentation",
+        "timeline_build",
+        "final_qc"
+      ],
+      "source_url": null,
+      "installed_at": "2026-10-19T00:37:21.969351+00:00",
+      "validation_status": "verified",
+      "metadata": {
+        "skill_id": "visual-scene-variety-pacing",
+        "name": "Scene Variety and Pacing Rhythm Governance",
+        "category_id": "video_editing",
+        "subcategory": null,
+        "version": "1.0.0",
+        "license": "Apache-2.0",
+        "entrypoint": "library/video_editing/visual-scene-variety-pacing/SKILL.md",
+        "content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+        "capabilities": [
+          "scene-variety-enforcement",
+          "visual-fatigue-prevention",
+          "pacing-rhythm-control"
+        ],
+        "dependencies": [],
+        "applicable_agents": [
+          "main_orchestrator",
+          "scene_segmentation",
+          "timeline_build",
+          "final_qc"
+        ],
+        "installed_at": "2026-10-19T00:37:21.944942+00:00"
+      }
+    }
+  }
+}

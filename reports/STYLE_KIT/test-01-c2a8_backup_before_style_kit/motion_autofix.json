@@ -1,0 +1,12 @@
+{
+ "scene_plan": "fbd012c1a9a47937",
+ "attempts": [
+  {
+   "at": "2026-10-15T10:13:42",
+   "moved": 2,
+   "earlier": 0,
+   "accepted": 2,
+   "kept": []
+  }
+ ]
+}

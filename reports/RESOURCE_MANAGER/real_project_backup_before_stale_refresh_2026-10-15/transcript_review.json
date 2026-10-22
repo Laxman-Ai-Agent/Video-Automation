@@ -1,0 +1,435 @@
+{
+ "schema_version": "transcript-review-1",
+ "version": 1,
+ "raw_file": "transcript.json",
+ "corrected_file": "transcript_corrected.json",
+ "vocabulary": {
+  "terms": [],
+  "project_list": false
+ },
+ "confidence": {
+  "status": "unavailable",
+  "threshold": 0.5,
+  "words_total": 117,
+  "words_with_confidence": 0,
+  "flagged": []
+ },
+ "llm": {
+  "status": "applied",
+  "error": null,
+  "model": null,
+  "segments_sent": 13
+ },
+ "corrections": [
+  {
+   "id": "c001",
+   "segment": 0,
+   "from_index": 2,
+   "to_index": 2,
+   "from": "సారిరక",
+   "to": "శారీరక",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c002",
+   "segment": 1,
+   "from_index": 4,
+   "to_index": 5,
+   "from": "నిలల ప్రయానం",
+   "to": "నెలల ప్రయాణం",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c003",
+   "segment": 1,
+   "from_index": 8,
+   "to_index": 8,
+   "from": "సమైయం",
+   "to": "సమయం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c004",
+   "segment": 1,
+   "from_index": 13,
+   "to_index": 13,
+   "from": "జివితం",
+   "to": "జీవితం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c005",
+   "segment": 2,
+   "from_index": 4,
+   "to_index": 5,
+   "from": "సంభాషన తక్షనం",
+   "to": "సంభాషణ తక్షణం",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c006",
+   "segment": 3,
+   "from_index": 0,
+   "to_index": 0,
+   "from": "సందేసాలకు",
+   "to": "సందేశాలకు",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c007",
+   "segment": 3,
+   "from_index": 2,
+   "to_index": 2,
+   "from": "ఆలసియం",
+   "to": "ఆలస్యం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c008",
+   "segment": 4,
+   "from_index": 3,
+   "to_index": 4,
+   "from": "నిస్సబ్ద వాతావర్నం",
+   "to": "నిశ్శబ్ద వాతావరణం",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c009",
+   "segment": 5,
+   "from_index": 6,
+   "to_index": 6,
+   "from": "పరిక్షిస్తై",
+   "to": "పరీక్షిస్తాయి",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c010",
+   "segment": 6,
+   "from_index": 1,
+   "to_index": 2,
+   "from": "అత్యవ్సర పరిస్తితి",
+   "to": "అత్యవసర పరిస్థితి",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c011",
+   "segment": 7,
+   "from_index": 1,
+   "to_index": 1,
+   "from": "బ్రుందం",
+   "to": "బృందం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c012",
+   "segment": 7,
+   "from_index": 3,
+   "to_index": 4,
+   "from": "గ్ఞానం సిక్షన",
+   "to": "జ్ఞానం శిక్షణ",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c013",
+   "segment": 7,
+   "from_index": 8,
+   "to_index": 9,
+   "from": "నిర్ణాయాలు తిస్కోవాలి",
+   "to": "నిర్ణయాలు తీసుకోవాలి",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c014",
+   "segment": 8,
+   "from_index": 2,
+   "to_index": 3,
+   "from": "మనోధాయరియం క్రమసిక్షన",
+   "to": "మనోధైర్యం క్రమశిక్షణ",
+   "reason": "spelling",
+   "p_from": [
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c015",
+   "segment": 8,
+   "from_index": 7,
+   "to_index": 7,
+   "from": "కిలకం",
+   "to": "కీలకం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c016",
+   "segment": 9,
+   "from_index": 0,
+   "to_index": 0,
+   "from": "అయనా",
+   "to": "అయినా",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c017",
+   "segment": 10,
+   "from_index": 3,
+   "to_index": 5,
+   "from": "లక్షిమ్ మొదటక చెంత్రూడి",
+   "to": "లక్ష్యం మొదట చంద్రుడి",
+   "reason": "mishearing",
+   "p_from": [
+    null,
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c018",
+   "segment": 10,
+   "from_index": 14,
+   "to_index": 14,
+   "from": "విజేవంతంగా",
+   "to": "విజయవంతంగా",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c019",
+   "segment": 11,
+   "from_index": 3,
+   "to_index": 3,
+   "from": "విజ్యం",
+   "to": "విజయం",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c020",
+   "segment": 11,
+   "from_index": 10,
+   "to_index": 10,
+   "from": "కుత్త",
+   "to": "కొత్త",
+   "reason": "spelling",
+   "p_from": [
+    null
+   ],
+   "status": "applied",
+   "why": null
+  },
+  {
+   "id": "c021",
+   "segment": 12,
+   "from_index": 4,
+   "to_index": 6,
+   "from": "బహుగ్రా జివిగా పరణమించిన",
+   "to": "బహుగ్రహ జీవిగా పరిణమించిన",
+   "reason": "mishearing",
+   "p_from": [
+    null,
+    null,
+    null
+   ],
+   "status": "applied",
+   "why": null
+  }
+ ],
+ "unresolved": [],
+ "alignment": {
+  "status": "aligned_for_edits",
+  "edited_words": 32,
+  "segments": [
+   {
+    "segment": 0,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 1,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 2,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.02,
+    "snapped": []
+   },
+   {
+    "segment": 3,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.04,
+    "snapped": []
+   },
+   {
+    "segment": 4,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 5,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.03,
+    "snapped": []
+   },
+   {
+    "segment": 6,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 7,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.02,
+    "snapped": []
+   },
+   {
+    "segment": 8,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   },
+   {
+    "segment": 9,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.02,
+    "snapped": []
+   },
+   {
+    "segment": 10,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": [
+     {
+      "word": "మొదట",
+      "aligned_start": 42.18,
+      "first_sound": 42.6
+     }
+    ]
+   },
+   {
+    "segment": 11,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.01,
+    "snapped": []
+   },
+   {
+    "segment": 12,
+    "status": "aligned",
+    "reason": null,
+    "median_shift": 0.0,
+    "snapped": []
+   }
+  ],
+  "method": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words"
+ }
+}

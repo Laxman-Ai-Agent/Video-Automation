@@ -1,0 +1,342 @@
+{
+ "language": "te",
+ "duration": 20.428,
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 5.6,
+   "text": "smart glass అనేది it's not just device ఇది మనిషి జీవన శైలినే కాదు మన దృష్టిని",
+   "words": [
+    {
+     "w": "smart",
+     "start": 0.0,
+     "end": 0.18,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "glass",
+     "start": 0.18,
+     "end": 0.6,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "అనేది",
+     "start": 0.72,
+     "end": 1.08,
+     "p": 0.976,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "it's",
+     "start": 1.1,
+     "end": 1.46,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "not",
+     "start": 1.46,
+     "end": 1.62,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "just",
+     "start": 1.62,
+     "end": 1.82,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "device",
+     "start": 1.82,
+     "end": 2.06,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ఇది",
+     "start": 2.06,
+     "end": 3.18,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "మనిషి",
+     "start": 3.22,
+     "end": 3.54,
+     "p": 0.966,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "జీవన",
+     "start": 3.54,
+     "end": 3.86,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "శైలినే",
+     "start": 3.86,
+     "end": 4.26,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "కాదు",
+     "start": 4.26,
+     "end": 4.62,
+     "p": 0.992,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మన",
+     "start": 4.62,
+     "end": 5.08,
+     "p": 0.976,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "దృష్టిని",
+     "start": 5.08,
+     "end": 5.58,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "start": 5.8500000000000005,
+   "end": 9.07,
+   "text": "మన ప్రపంచాన్ని పూర్తిగా మార్చే ఒక super power",
+   "words": [
+    {
+     "w": "మన",
+     "start": 5.8500000000000005,
+     "end": 6.050000000000001,
+     "p": 0.932,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ప్రపంచాన్ని",
+     "start": 6.050000000000001,
+     "end": 6.710000000000001,
+     "p": 0.947,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "పూర్తిగా",
+     "start": 6.710000000000001,
+     "end": 7.290000000000001,
+     "p": 0.948,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మార్చే",
+     "start": 7.290000000000001,
+     "end": 7.65,
+     "p": 0.978,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఒక",
+     "start": 7.65,
+     "end": 8.17,
+     "p": 0.883,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "super",
+     "start": 8.17,
+     "end": 8.39,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "power",
+     "start": 8.39,
+     "end": 8.79,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 9.07,
+   "end": 13.57,
+   "text": "భవిష్యత్తు మన కళ్ల ముందే ప్రత్యక్షమవుతున్న ఈ ప్రయాణం ఇక్కడితో ముగియదు",
+   "words": [
+    {
+     "w": "భవిష్యత్తు",
+     "start": 9.475,
+     "end": 10.03,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "మన",
+     "start": 10.030000000000001,
+     "end": 10.510000000000002,
+     "p": 0.993,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కళ్ల",
+     "start": 10.510000000000002,
+     "end": 10.790000000000001,
+     "p": 0.901,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ముందే",
+     "start": 10.790000000000001,
+     "end": 11.030000000000001,
+     "p": 0.943,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ప్రత్యక్షమవుతున్న",
+     "start": 11.03,
+     "end": 11.95,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ఈ",
+     "start": 11.95,
+     "end": 12.03,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ప్రయాణం",
+     "start": 12.03,
+     "end": 12.49,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ఇక్కడితో",
+     "start": 12.49,
+     "end": 13.17,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ముగియదు",
+     "start": 13.17,
+     "end": 13.61,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 13.8,
+   "end": 20.060000000000002,
+   "text": "ముందున్న ప్రపంచం ఇంకా అద్భుతంగా ఇంకా futuristic గా మారబోతోందే",
+   "words": [
+    {
+     "w": "ముందున్న",
+     "start": 13.8,
+     "end": 16.1,
+     "p": 0.929,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ప్రపంచం",
+     "start": 16.1,
+     "end": 16.580000000000002,
+     "p": 0.957,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఇంకా",
+     "start": 16.580000000000002,
+     "end": 17.28,
+     "p": 0.919,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అద్భుతంగా",
+     "start": 17.28,
+     "end": 17.98,
+     "p": 0.977,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఇంకా",
+     "start": 17.98,
+     "end": 18.66,
+     "p": 0.947,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "futuristic",
+     "start": 18.66,
+     "end": 18.92,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "గా",
+     "start": 19.34,
+     "end": 19.46,
+     "p": 0.883,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మారబోతోందే",
+     "start": 19.46,
+     "end": 20.060000000000002,
+     "p": 0.925,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  }
+ ]
+}

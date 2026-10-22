@@ -1,0 +1,953 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_loop_agent",
+  "updated_at": "2026-10-20T02:20:58.699906+00:00",
+  "total_experiences": 21,
+  "experiences": {
+    "exp-mock_loop_agent-046f251b0c": {
+      "experience_id": "exp-mock_loop_agent-046f251b0c",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp51tlpg78",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.627298+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-084d82f0f7": {
+      "experience_id": "exp-mock_loop_agent-084d82f0f7",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458272",
+      "project_id": "tmpgbwdsumi",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:32.026215+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-14b500f664": {
+      "experience_id": "exp-mock_loop_agent-14b500f664",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmpuwib8r8u",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.874589+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-156e65d012": {
+      "experience_id": "exp-mock_loop_agent-156e65d012",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpl3d7ohnx",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.765172+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-169e39f6b5": {
+      "experience_id": "exp-mock_loop_agent-169e39f6b5",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmpg6byndc8",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.043513+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-2ff7bc4f36": {
+      "experience_id": "exp-mock_loop_agent-2ff7bc4f36",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmpjmqk0e9z",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.533276+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-4471cfddc6": {
+      "experience_id": "exp-mock_loop_agent-4471cfddc6",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpl3d7ohnx",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.589774+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-46e118ac1a": {
+      "experience_id": "exp-mock_loop_agent-46e118ac1a",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmp86gl3d7c",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.617785+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-4743af509c": {
+      "experience_id": "exp-mock_loop_agent-4743af509c",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmpg6byndc8",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.125391+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-55b93f1487": {
+      "experience_id": "exp-mock_loop_agent-55b93f1487",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmpjmqk0e9z",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.474764+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-63e679f2fa": {
+      "experience_id": "exp-mock_loop_agent-63e679f2fa",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458273",
+      "project_id": "tmpgbwdsumi",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:33.340949+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-6e8e5e532b": {
+      "experience_id": "exp-mock_loop_agent-6e8e5e532b",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmpuwib8r8u",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.481189+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-7963b15cd6": {
+      "experience_id": "exp-mock_loop_agent-7963b15cd6",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458272",
+      "project_id": "tmpgbwdsumi",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:32.599848+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-90ce74b73b": {
+      "experience_id": "exp-mock_loop_agent-90ce74b73b",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381362",
+      "project_id": "tmpl3d7ohnx",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:42.457551+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-aab8c2cfb0": {
+      "experience_id": "exp-mock_loop_agent-aab8c2cfb0",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmp86gl3d7c",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.698278+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-b40365b247": {
+      "experience_id": "exp-mock_loop_agent-b40365b247",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp51tlpg78",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.744821+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-b5b1cdf542": {
+      "experience_id": "exp-mock_loop_agent-b5b1cdf542",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmp86gl3d7c",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.538419+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-beffff5b12": {
+      "experience_id": "exp-mock_loop_agent-beffff5b12",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp51tlpg78",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.669642+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-e27a393247": {
+      "experience_id": "exp-mock_loop_agent-e27a393247",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458908",
+      "project_id": "tmpg6byndc8",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:08.206167+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-ecd7a1aab1": {
+      "experience_id": "exp-mock_loop_agent-ecd7a1aab1",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmpjmqk0e9z",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.385656+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_loop_agent-f696ddc230": {
+      "experience_id": "exp-mock_loop_agent-f696ddc230",
+      "agent_id": "mock_loop_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmpuwib8r8u",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_loop_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Database connection error 1005",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_loop_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+          "affected_domain": "general",
+          "observed_pattern": "Database connection error 1005",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_loop_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Database connection error 1005.",
+        "affected_domain": "general",
+        "observed_pattern": "Database connection error 1005",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.649588+00:00",
+      "schema_version": 1
+    }
+  }
+}

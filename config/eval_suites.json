@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "updated_at": "2026-10-16T22:40:16.928502+00:00",
+  "suites": {
+    "suite-telugu-orthography": {
+      "suite_id": "suite-telugu-orthography",
+      "version": 1,
+      "name": "Telugu Narration & English Orthography Preservation Suite",
+      "description": "Verifies that Telugu spoken words retain native script (U+0C00-U+0C7F) while technical English words remain in standard Latin characters.",
+      "cases": [
+        {
+          "case_id": "eval-telugu-01-positive",
+          "case_version": 1,
+          "suite_id": "suite-telugu-orthography",
+          "name": "Standard Bilingual Narration Segment",
+          "purpose": "Confirms Telugu native script is preserved alongside English technical terminology.",
+          "stage_id": "analyzer",
+          "risk_level": "high",
+          "tags": [
+            "telugu_preservation",
+            "bilingual",
+            "positive"
+          ],
+          "input_fixture": {
+            "transcript": "\u0c08 \u0c30\u0c4b\u0c1c\u0c41 \u0c2e\u0c28\u0c2e\u0c41 AI \u0c2e\u0c30\u0c3f\u0c2f\u0c41 Machine Learning \u0c17\u0c41\u0c30\u0c3f\u0c02\u0c1a\u0c3f \u0c28\u0c47\u0c30\u0c4d\u0c1a\u0c41\u0c15\u0c41\u0c02\u0c26\u0c3e\u0c2e\u0c41.",
+            "expected_telugu": true,
+            "expected_terms": [
+              "AI",
+              "Machine Learning"
+            ]
+          },
+          "expected_invariants": {
+            "require_telugu_script": true,
+            "require_english_terms": [
+              "AI",
+              "Machine Learning"
+            ],
+            "forbid_english_phonetic_transliteration_of_telugu": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        },
+        {
+          "case_id": "eval-telugu-02-negative-transliteration",
+          "case_version": 1,
+          "suite_id": "suite-telugu-orthography",
+          "name": "Corrupted Latin Transliteration Rejection",
+          "purpose": "Negative test asserting that Telugu words transcribed in Latin phonetics fail the hard gate.",
+          "stage_id": "analyzer",
+          "risk_level": "high",
+          "tags": [
+            "telugu_preservation",
+            "negative"
+          ],
+          "input_fixture": {
+            "transcript": "Ee roju manamu AI gurinchi nerchukundamu.",
+            "expected_telugu": true
+          },
+          "expected_invariants": {
+            "require_telugu_script": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        }
+      ],
+      "target_stages": [
+        "analyzer",
+        "planning"
+      ],
+      "status": "approved",
+      "updated_at": "2026-10-16T07:08:54.542751+00:00"
+    },
+    "suite-timeline-arithmetic": {
+      "suite_id": "suite-timeline-arithmetic",
+      "version": 1,
+      "name": "Master Timeline Exact 30 FPS Frame Arithmetic Suite",
+      "description": "Enforces strict 30.0 fps timing, non-overlapping scene boundaries, and exact frame count calculations.",
+      "cases": [
+        {
+          "case_id": "eval-timeline-01-exact-30fps",
+          "case_version": 1,
+          "suite_id": "suite-timeline-arithmetic",
+          "name": "Continuous Multi-Scene 30 FPS Alignment",
+          "purpose": "Verifies scene start_frame and end_frame are sequential without gaps or overlaps.",
+          "stage_id": "timeline",
+          "risk_level": "critical",
+          "tags": [
+            "frame_arithmetic",
+            "fps_30",
+            "positive"
+          ],
+          "input_fixture": {
+            "fps": 30,
+            "scenes": [
+              {
+                "id": "scene_1",
+                "start_frame": 0,
+                "end_frame": 90,
+                "duration_frames": 90
+              },
+              {
+                "id": "scene_2",
+                "start_frame": 90,
+                "end_frame": 180,
+                "duration_frames": 90
+              },
+              {
+                "id": "scene_3",
+                "start_frame": 180,
+                "end_frame": 270,
+                "duration_frames": 90
+              }
+            ],
+            "total_frames": 270
+          },
+          "expected_invariants": {
+            "exact_fps": 30,
+            "contiguous_scenes": true,
+            "positive_duration": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        },
+        {
+          "case_id": "eval-timeline-02-negative-gap",
+          "case_version": 1,
+          "suite_id": "suite-timeline-arithmetic",
+          "name": "Overlapping Scene Frame Arithmetic Rejection",
+          "purpose": "Negative test verifying that overlapping frame boundaries trigger immediate hard gate failure.",
+          "stage_id": "timeline",
+          "risk_level": "critical",
+          "tags": [
+            "frame_arithmetic",
+            "negative"
+          ],
+          "input_fixture": {
+            "fps": 30,
+            "scenes": [
+              {
+                "id": "scene_1",
+                "start_frame": 0,
+                "end_frame": 90,
+                "duration_frames": 90
+              },
+              {
+                "id": "scene_2",
+                "start_frame": 85,
+                "end_frame": 180,
+                "duration_frames": 95
+              }
+            ],
+            "total_frames": 180
+          },
+          "expected_invariants": {
+            "contiguous_scenes": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        }
+      ],
+      "target_stages": [
+        "timeline",
+        "motion_validation"
+      ],
+      "status": "approved",
+      "updated_at": "2026-10-16T07:08:54.542751+00:00"
+    },
+    "suite-security-gates": {
+      "suite_id": "suite-security-gates",
+      "version": 1,
+      "name": "Static Code Security & Path Confinement Suite",
+      "description": "Validates static security rules, path confinement, and prompt injection defense on generated TSX code.",
+      "cases": [
+        {
+          "case_id": "eval-sec-01-safe-react",
+          "case_version": 1,
+          "suite_id": "suite-security-gates",
+          "name": "Safe Scene TSX Verification",
+          "purpose": "Verifies clean Remotion React code complies with sandbox constraints.",
+          "stage_id": "motion_gen",
+          "risk_level": "critical",
+          "tags": [
+            "security",
+            "sandbox",
+            "positive"
+          ],
+          "input_fixture": {
+            "code": "import { AbsoluteFill, useCurrentFrame } from \"remotion\";\nexport const Scene = () => <AbsoluteFill><div>Test</div></AbsoluteFill>;"
+          },
+          "expected_invariants": {
+            "forbid_eval": true,
+            "forbid_dom_access": true,
+            "forbid_shell_imports": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        },
+        {
+          "case_id": "eval-sec-02-negative-dangerous-import",
+          "case_version": 1,
+          "suite_id": "suite-security-gates",
+          "name": "Dangerous Node Imports Rejection",
+          "purpose": "Negative test asserting that importing child_process or fs triggers hard gate rejection.",
+          "stage_id": "motion_gen",
+          "risk_level": "critical",
+          "tags": [
+            "security",
+            "negative"
+          ],
+          "input_fixture": {
+            "code": "import { exec } from \"child_process\";\nexport const Scene = () => <div>Exploit</div>;"
+          },
+          "expected_invariants": {
+            "forbid_shell_imports": true
+          },
+          "rubric_version": "1.0",
+          "rubric": {},
+          "status": "approved",
+          "provenance": {}
+        }
+      ],
+      "target_stages": [
+        "motion_gen",
+        "motion_validation"
+      ],
+      "status": "approved",
+      "updated_at": "2026-10-16T07:08:54.542751+00:00"
+    }
+  }
+}

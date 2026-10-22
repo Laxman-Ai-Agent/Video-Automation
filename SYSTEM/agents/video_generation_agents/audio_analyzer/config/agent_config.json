@@ -1,0 +1,17 @@
+{
+  "agent_id": "audio_analyzer",
+  "stage_id": "analyzer",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "faster-whisper",
+    "silencedetect",
+    "llm_client",
+    "llm_gateway"
+  ],
+  "capabilities": [
+    "speech-to-text",
+    "silence-detection",
+    "phonetic-review"
+  ]
+}

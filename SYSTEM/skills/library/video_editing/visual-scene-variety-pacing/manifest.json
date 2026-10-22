@@ -1,0 +1,23 @@
+{
+  "skill_id": "visual-scene-variety-pacing",
+  "name": "Scene Variety and Pacing Rhythm Governance",
+  "category_id": "video_editing",
+  "subcategory": null,
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "entrypoint": "library/video_editing/visual-scene-variety-pacing/SKILL.md",
+  "content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+  "capabilities": [
+    "scene-variety-enforcement",
+    "visual-fatigue-prevention",
+    "pacing-rhythm-control"
+  ],
+  "dependencies": [],
+  "applicable_agents": [
+    "main_orchestrator",
+    "scene_segmentation",
+    "timeline_build",
+    "final_qc"
+  ],
+  "installed_at": "2026-10-19T00:37:21.944942+00:00"
+}

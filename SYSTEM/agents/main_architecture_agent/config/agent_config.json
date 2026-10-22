@@ -1,0 +1,31 @@
+{
+  "agent_id": "main_architecture_agent",
+  "category": "orchestrator",
+  "coordination_timeout_seconds": 600,
+  "max_parallel_tasks": 5,
+  "capabilities": [
+    "task-decomposition",
+    "agent-delegation",
+    "capability-discovery",
+    "policy-enforcement",
+    "experience-collection",
+    "system-reflection",
+    "strategy-management",
+    "self-learning-governance"
+  ],
+  "allowed_tools": [
+    "agent_registry",
+    "skill_registry",
+    "tool_registry",
+    "memory_service",
+    "history_service",
+    "evaluation_engine",
+    "approval_engine"
+  ],
+  "learning_config": {
+    "policy_path": "config/learning_policy.json",
+    "active_strategy_dir": "strategies/active",
+    "candidate_strategy_dir": "strategies/candidates",
+    "archive_strategy_dir": "strategies/archive"
+  }
+}

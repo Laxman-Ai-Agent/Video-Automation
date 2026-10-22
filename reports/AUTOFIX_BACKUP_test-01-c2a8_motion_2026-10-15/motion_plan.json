@@ -1,0 +1,492 @@
+{
+ "version": 1,
+ "aspect": "16:9",
+ "mode": "motion-only",
+ "speed": 1.4,
+ "fps": 30,
+ "visual_plan_used": true,
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0,
+   "end": 9.47,
+   "pattern": "hero_text",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "A Superpower",
+     "style": "headline",
+     "preset": "split-reassemble",
+     "exit": "fade-out",
+     "emphasis": "mask",
+     "enter_s": 0.71,
+     "at": 5.9,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      6.08
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.221,
+      0.38,
+      0.779,
+      0.529
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "particles-float",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.04,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "targeting-ring",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.25,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.74,
+      0.08,
+      0.2,
+      0.36
+     ],
+     "why": "hint:emphasize_keyword"
+    },
+    {
+     "preset": "double-line",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.46,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.3,
+      0.16,
+      0.4,
+      0.04
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "particles-float": "atmosphere",
+     "targeting-ring": "hint:emphasize_keyword",
+     "double-line": "accent"
+    },
+    "intents": [
+     "reveal_with_glow",
+     "emphasize_keyword"
+    ],
+    "mood": "majestic, inspiring",
+    "importance": 0.9
+   },
+   "diagram": null,
+   "resources": [
+    "background.look.mesh",
+    "effect.cinematic.particles-float"
+   ]
+  },
+  {
+   "id": 2,
+   "start": 9.47,
+   "end": 13.8,
+   "pattern": "quote_type",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "The Journey Continues",
+     "style": "headline",
+     "preset": "kinetic",
+     "exit": "fade-out",
+     "emphasis": "stroke",
+     "enter_s": 0.57,
+     "at": 9.47,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      9.65
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.089,
+      0.333,
+      0.599,
+      0.632
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "glow-orb",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 9.51,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.3,
+      0.2,
+      0.4,
+      0.6
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "dashed-flow",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 9.72,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.1,
+      0.16,
+      0.8,
+      0.02
+     ],
+     "why": "hint:show_flow_direction"
+    },
+    {
+     "preset": "frame-in",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 9.930000000000001,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.04,
+      0.06,
+      0.92,
+      0.8
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "glow-orb": "atmosphere",
+     "dashed-flow": "hint:show_flow_direction",
+     "frame-in": "accent"
+    },
+    "intents": [
+     "show_flow_direction",
+     "extend_beyond_frame"
+    ],
+    "mood": "hopeful, forward-looking",
+    "importance": 0.8
+   },
+   "diagram": null,
+   "resources": [
+    "background.look.mesh",
+    "diagram.dashed-flow"
+   ]
+  },
+  {
+   "id": 3,
+   "start": 13.8,
+   "end": 20.43,
+   "pattern": "hero_text",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "Even More Futuristic",
+     "style": "headline",
+     "preset": "split-reveal",
+     "exit": "wipe-out",
+     "emphasis": "stroke",
+     "enter_s": 0.64,
+     "at": 13.8,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      13.98
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.258,
+      0.38,
+      0.742,
+      0.679
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "scan-line",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 13.84,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "data-ticks",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 14.05,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.1,
+      0.8,
+      0.8,
+      0.06
+     ],
+     "why": "hint:emphasize_growth"
+    },
+    {
+     "preset": "bracket-frame",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 14.260000000000002,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.06,
+      0.3,
+      0.88,
+      0.3
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": null,
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "scan-line": "atmosphere",
+     "data-ticks": "hint:emphasize_growth",
+     "bracket-frame": "accent"
+    },
+    "intents": [
+     "emphasize_growth",
+     "reveal_in_sequence"
+    ],
+    "mood": "hopeful, energetic",
+    "importance": 0.9
+   },
+   "diagram": null,
+   "resources": [
+    "background.look.mesh"
+   ]
+  }
+ ],
+ "visual_plan": {
+  "file": "visual_planning.json",
+  "source": "llm",
+  "fingerprint": "34b77ce4cea5ef07465456ac6dcc101f53324eac",
+  "validation": "ok",
+  "scenes": [
+   {
+    "scene_id": "scene_01",
+    "plan_scene_id": 1,
+    "concept": "object_in_context",
+    "start": 0.0,
+    "end": 8.79,
+    "plan_start": 0.0,
+    "plan_end": 8.79,
+    "segmentation_scene_id": "scene_001",
+    "timeline_start": 0.0,
+    "timeline_end": 9.47,
+    "gap_after_seconds": 0.685,
+    "elements": [
+     {
+      "element_id": "glasses_icon",
+      "type": "icon",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "superpower_text",
+      "type": "text",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "background_glow",
+      "type": "background",
+      "role": "environment",
+      "required": false
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "glasses_icon",
+      "intent": "reveal_with_glow",
+      "description": "Lenses light up and radiate outward"
+     },
+     {
+      "element_id": "superpower_text",
+      "intent": "emphasize_keyword",
+      "description": null
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_02",
+    "plan_scene_id": 2,
+    "concept": "abstract_graphic",
+    "start": 9.475,
+    "end": 13.61,
+    "plan_start": 9.475,
+    "plan_end": 13.61,
+    "segmentation_scene_id": "scene_002",
+    "timeline_start": 9.47,
+    "timeline_end": 13.8,
+    "gap_after_seconds": 0.19,
+    "elements": [
+     {
+      "element_id": "journey_path",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "origin_point",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "future_horizon",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "light_pulse",
+      "type": "graphic",
+      "role": "explanatory",
+      "required": false
+     },
+     {
+      "element_id": "future_text",
+      "type": "text",
+      "role": "supporting",
+      "required": false
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "light_pulse",
+      "intent": "show_flow_direction",
+      "description": null
+     },
+     {
+      "element_id": "journey_path",
+      "intent": "extend_beyond_frame",
+      "description": null
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_03",
+    "plan_scene_id": 3,
+    "concept": "abstract_graphic",
+    "start": 13.8,
+    "end": 20.06,
+    "plan_start": 13.8,
+    "plan_end": 20.06,
+    "segmentation_scene_id": "scene_003",
+    "timeline_start": 13.8,
+    "timeline_end": 20.43,
+    "gap_after_seconds": null,
+    "elements": [
+     {
+      "element_id": "world_icon",
+      "type": "icon",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "sparkle_accents",
+      "type": "icon",
+      "role": "decoration",
+      "required": false
+     },
+     {
+      "element_id": "futuristic_text",
+      "type": "text",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "background_glow",
+      "type": "background",
+      "role": "environment",
+      "required": false
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "world_icon",
+      "intent": "emphasize_growth",
+      "description": null
+     },
+     {
+      "element_id": "sparkle_accents",
+      "intent": "reveal_in_sequence",
+      "description": null
+     }
+    ]
+   }
+  ]
+ }
+}

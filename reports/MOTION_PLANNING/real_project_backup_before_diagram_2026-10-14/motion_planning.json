@@ -1,0 +1,3433 @@
+{
+ "schema_version": "1.0",
+ "version": 1,
+ "source": "deterministic_selector",
+ "project": {
+  "mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "timing_policy": {
+  "unit": "seconds",
+  "frame_rule": "frame = floor(seconds * fps + 0.5); the end frame is exclusive and after the start frame",
+  "pace": 1.4
+ },
+ "visual_plan": {
+  "file": "visual_planning.json",
+  "fingerprint": "10620efffe73712084c96e048688a5037603388f",
+  "source": "llm",
+  "text_and_hints_used": true
+ },
+ "style_guide": {
+  "palette": [
+   "#0b1220",
+   "#d9582b",
+   "#2a9d9f",
+   "#f2e6d0"
+  ],
+  "typography": "bold clean sans-serif headlines in warm cream, with one accent word in orange; small caps style labels",
+  "tone": "contemplative and tense at first, rising to hopeful and majestic",
+  "density": "low",
+  "safe_area_policy": "Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin (in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background may fill the whole frame."
+ },
+ "source_fingerprint": "fcf6a3109bc1786c",
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "timing": {
+    "start": 0,
+    "end": 4.75,
+    "start_frame": 0,
+    "end_frame": 143,
+    "source": "scene_segmentation",
+    "canonical_start": 0.0,
+    "canonical_end": 4.58,
+    "gap_after_seconds": 0.17
+   },
+   "motion_intent": {
+    "purpose": "hook",
+    "attention_goal": "The headline 'Mental challenges' with the word 'Mental' accented",
+    "takeaway": "The mental challenges outweigh the physical ones.",
+    "intensity": "energetic",
+    "hints": [
+     "emphasize_key_word",
+     "reveal_in_sequence"
+    ],
+    "mood": "dramatic, tense"
+   },
+   "elements": [
+    {
+     "element_id": "headline_mental",
+     "source_element_id": "headline_mental",
+     "type": "text",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "char-scale",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "subline_physical",
+     "source_element_id": "subline_physical",
+     "type": "text",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "word-pop",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "mind_icon",
+     "source_element_id": "mind_icon",
+     "type": "icon",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "targeting-ring",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "dark_space_bg",
+     "source_element_id": "dark_space_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_01_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_01_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "double-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_01_a_gfx_01",
+     "target": "scene_01_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "scan-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "scan-line",
+      "label": "Scan line",
+      "category": "hud"
+     },
+     "start": 0.04,
+     "end": 4.75,
+     "start_frame": 1,
+     "end_frame": 143,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_gfx_02",
+     "target": "headline_mental",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "targeting-ring",
+     "registry": {
+      "kind": "graphic",
+      "id": "targeting-ring",
+      "label": "Targeting ring",
+      "category": "hud"
+     },
+     "start": 0.25,
+     "end": 4.75,
+     "start_frame": 8,
+     "end_frame": 143,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_key_word",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_gfx_03",
+     "target": "scene_01_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "double-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "double-line",
+      "label": "Double line",
+      "category": "line"
+     },
+     "start": 0.46,
+     "end": 4.75,
+     "start_frame": 14,
+     "end_frame": 143,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_enter",
+     "target": "headline_mental",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "char-scale",
+     "registry": {
+      "kind": "text",
+      "id": "char-scale",
+      "label": "Character pop",
+      "category": "typography"
+     },
+     "start": 2,
+     "end": 2.39,
+     "start_frame": 60,
+     "end_frame": 72,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'char-scale' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "Mental challenges",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_02_enter",
+     "target": "subline_physical",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "word-pop",
+     "registry": {
+      "kind": "text",
+      "id": "word-pop",
+      "label": "Word pop",
+      "category": "typography"
+     },
+     "start": 2,
+     "end": 2.36,
+     "start_frame": 60,
+     "end_frame": 71,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'word-pop' (visual_plan)",
+     "params": {
+      "style": "label",
+      "duration_source": "plan",
+      "text": "Greater than physical",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_emphasis",
+     "target": "headline_mental",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "glow",
+     "registry": {
+      "kind": "emphasis",
+      "id": "glow",
+      "label": "Glow",
+      "category": null
+     },
+     "start": 2.18,
+     "end": 4.39,
+     "start_frame": 65,
+     "end_frame": 132,
+     "depends_on": [
+      "scene_01_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_01_exit",
+     "target": "headline_mental",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 4.39,
+     "end": 4.75,
+     "start_frame": 132,
+     "end_frame": 143,
+     "depends_on": [
+      "scene_01_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    },
+    {
+     "action_id": "scene_01_a_text_02_exit",
+     "target": "subline_physical",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 4.39,
+     "end": 4.75,
+     "start_frame": 132,
+     "end_frame": 143,
+     "depends_on": [
+      "scene_01_a_text_02_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": null,
+    "next_scene_id": "scene_02",
+    "motifs": [
+     "deep navy space ground",
+     "orange accent word"
+    ],
+    "main_text_preset": "char-scale",
+    "placed_graphics": [
+     "targeting-ring",
+     "double-line"
+    ],
+    "recent_presets": [],
+    "repeats": []
+   },
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "timing": {
+    "start": 4.75,
+    "end": 13.6,
+    "start_frame": 143,
+    "end_frame": 408,
+    "source": "scene_segmentation",
+    "canonical_start": 4.75,
+    "canonical_end": 13.41,
+    "gap_after_seconds": 0.19
+   },
+   "motion_intent": {
+    "purpose": "context",
+    "attention_goal": "The long route line between Earth and Mars with the lone spacecraft on it",
+    "takeaway": "The journey itself means a long separation from everything familiar.",
+    "intensity": "energetic",
+    "hints": [
+     "show_flow_direction",
+     "travel_along_path",
+     "emphasize_distance"
+    ],
+    "mood": "calm, sad"
+   },
+   "elements": [
+    {
+     "element_id": "route_earth_mars",
+     "source_element_id": "route_earth_mars",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "route-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by route-line for the hint 'show_flow_direction'"
+    },
+    {
+     "element_id": "earth_home",
+     "source_element_id": "earth_home",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "route-line",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mars_destination",
+     "source_element_id": "mars_destination",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "route-line",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "lone_spacecraft",
+     "source_element_id": "lone_spacecraft",
+     "type": "icon",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "route-line",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "duration_text",
+     "source_element_id": "duration_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "elastic",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "deep_space_bg",
+     "source_element_id": "deep_space_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "floating-dots",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_02_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "floating-dots",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_02_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "bracket-frame",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_02_a_gfx_01",
+     "target": "scene_02_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "floating-dots",
+     "registry": {
+      "kind": "graphic",
+      "id": "floating-dots",
+      "label": "Floating dots",
+      "category": "cinematic"
+     },
+     "start": 4.79,
+     "end": 13.6,
+     "start_frame": 144,
+     "end_frame": 408,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_gfx_02",
+     "target": "route_earth_mars",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "route-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "route-line",
+      "label": "Route line",
+      "category": "map"
+     },
+     "start": 5,
+     "end": 13.6,
+     "start_frame": 150,
+     "end_frame": 408,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:show_flow_direction",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.125,
+       0.662,
+       0.3,
+       0.2
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_gfx_03",
+     "target": "scene_02_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "bracket-frame",
+     "registry": {
+      "kind": "graphic",
+      "id": "bracket-frame",
+      "label": "Bracket frame",
+      "category": "frame"
+     },
+     "start": 5.21,
+     "end": 13.6,
+     "start_frame": 156,
+     "end_frame": 408,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_enter",
+     "target": "duration_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "elastic",
+     "registry": {
+      "kind": "text",
+      "id": "elastic",
+      "label": "Elastic",
+      "category": "entrance"
+     },
+     "start": 5.4,
+     "end": 6.19,
+     "start_frame": 162,
+     "end_frame": 186,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'elastic' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "About eight months",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_emphasis",
+     "target": "duration_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "scale",
+     "registry": {
+      "kind": "emphasis",
+      "id": "scale",
+      "label": "Scale up",
+      "category": null
+     },
+     "start": 5.58,
+     "end": 13.24,
+     "start_frame": 167,
+     "end_frame": 397,
+     "depends_on": [
+      "scene_02_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_02_a_text_01_exit",
+     "target": "duration_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "scale-out",
+     "registry": {
+      "kind": "exit",
+      "id": "scale-out",
+      "label": "Scale out",
+      "category": null
+     },
+     "start": 13.24,
+     "end": 13.6,
+     "start_frame": 397,
+     "end_frame": 408,
+     "depends_on": [
+      "scene_02_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "slide",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_01",
+    "next_scene_id": "scene_03",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "dashed link between the two worlds"
+    ],
+    "main_text_preset": "elastic",
+    "placed_graphics": [
+     "route-line",
+     "bracket-frame"
+    ],
+    "recent_presets": [
+     "char-scale",
+     "double-line",
+     "targeting-ring",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_02: 3 required element(s) (earth_home, mars_destination, lone_spacecraft) are not drawn one by one: the scene is carried by 'route-line' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "timing": {
+    "start": 13.6,
+    "end": 19.58,
+    "start_frame": 408,
+    "end_frame": 587,
+    "source": "scene_segmentation",
+    "canonical_start": 13.6,
+    "canonical_end": 19.58,
+    "gap_after_seconds": 0.0
+   },
+   "motion_intent": {
+    "purpose": "explanation",
+    "attention_goal": "The signal link between Mars and Earth with a slow pulse travelling along it",
+    "takeaway": "Communication with Earth is delayed by minutes, so there is no instant conversation.",
+    "intensity": "energetic",
+    "hints": [
+     "travel_slowly_along_path",
+     "show_flow_direction"
+    ],
+    "mood": "tense, calm"
+   },
+   "elements": [
+    {
+     "element_id": "signal_link",
+     "source_element_id": "signal_link",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "dashed-flow",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mars_sender",
+     "source_element_id": "mars_sender",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "dashed-flow",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "earth_receiver",
+     "source_element_id": "earth_receiver",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "dashed-flow",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "message_pulse",
+     "source_element_id": "message_pulse",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "dashed-flow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by dashed-flow for the hint 'travel_slowly_along_path'"
+    },
+    {
+     "element_id": "delay_text",
+     "source_element_id": "delay_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "word-pop",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "space_bg",
+     "source_element_id": "space_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_03_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_03_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "frame-in",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    },
+    {
+     "element_id": "scene_03_icon_01",
+     "source_element_id": null,
+     "type": "icon",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": "clock",
+     "registry_kind": "icon",
+     "status": "resolved",
+     "fallback": null,
+     "note": "from the scene plan"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_03_a_gfx_01",
+     "target": "scene_03_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "scan-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "scan-line",
+      "label": "Scan line",
+      "category": "hud"
+     },
+     "start": 13.64,
+     "end": 19.58,
+     "start_frame": 409,
+     "end_frame": 587,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_gfx_02",
+     "target": "message_pulse",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "dashed-flow",
+     "registry": {
+      "kind": "graphic",
+      "id": "dashed-flow",
+      "label": "Dashed flow",
+      "category": "line"
+     },
+     "start": 13.85,
+     "end": 19.58,
+     "start_frame": 416,
+     "end_frame": 587,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:travel_slowly_along_path",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.232,
+       0.65,
+       0.536,
+       0.035
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_gfx_03",
+     "target": "scene_03_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "frame-in",
+     "registry": {
+      "kind": "graphic",
+      "id": "frame-in",
+      "label": "Double frame",
+      "category": "frame"
+     },
+     "start": 14.06,
+     "end": 19.58,
+     "start_frame": 422,
+     "end_frame": 587,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.04,
+       0.06,
+       0.92,
+       0.8
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_03_a_icon_01",
+     "target": "scene_03_icon_01",
+     "phase": "reveal",
+     "kind": "icon",
+     "preset": null,
+     "registry": null,
+     "start": 14.8,
+     "end": 19.58,
+     "start_frame": 444,
+     "end_frame": 587,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "the scene plan's icon",
+     "params": {
+      "name": "clock"
+     }
+    },
+    {
+     "action_id": "scene_03_a_text_01_enter",
+     "target": "delay_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "word-pop",
+     "registry": {
+      "kind": "text",
+      "id": "word-pop",
+      "label": "Word pop",
+      "category": "typography"
+     },
+     "start": 13.74,
+     "end": 14.1,
+     "start_frame": 412,
+     "end_frame": 423,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "enters with 'word-pop' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "Delayed by minutes",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_03_a_text_01_exit",
+     "target": "delay_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 19.22,
+     "end": 19.58,
+     "start_frame": 577,
+     "end_frame": 587,
+     "depends_on": [
+      "scene_03_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "blur",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_02",
+    "next_scene_id": "scene_04",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "link between the two worlds"
+    ],
+    "main_text_preset": "word-pop",
+    "placed_graphics": [
+     "dashed-flow",
+     "frame-in"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "char-scale",
+     "double-line",
+     "elastic",
+     "route-line",
+     "targeting-ring",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_03: 3 required element(s) (signal_link, mars_sender, earth_receiver) are not drawn one by one: the scene is carried by 'dashed-flow' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_04",
+   "plan_scene_id": 4,
+   "timing": {
+    "start": 19.58,
+    "end": 26.08,
+    "start_frame": 587,
+    "end_frame": 782,
+    "source": "scene_segmentation",
+    "canonical_start": 19.58,
+    "canonical_end": 26.08,
+    "gap_after_seconds": 0.0
+   },
+   "motion_intent": {
+    "purpose": "consequence",
+    "attention_goal": "The tiny crew group surrounded by empty red desert",
+    "takeaway": "The emptiness and isolation of Mars are a severe psychological test.",
+    "intensity": "restrained",
+    "hints": [
+     "reveal_vast_emptiness",
+     "emphasize_isolation",
+     "reveal_in_sequence"
+    ],
+    "mood": "sad, calm"
+   },
+   "elements": [
+    {
+     "element_id": "small_crew_group",
+     "source_element_id": "small_crew_group",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "crosshair",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by crosshair for the hint 'emphasize_isolation'"
+    },
+    {
+     "element_id": "red_desert_bg",
+     "source_element_id": "red_desert_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "light-sweep",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "silence_icon",
+     "source_element_id": "silence_icon",
+     "type": "icon",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "crosshair",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mind_test_caption",
+     "source_element_id": "mind_test_caption",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": false,
+     "registry_id": "layered-depth",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "scene_04_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "light-sweep",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_04_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "divider-grow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_04_a_gfx_01",
+     "target": "scene_04_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "light-sweep",
+     "registry": {
+      "kind": "graphic",
+      "id": "light-sweep",
+      "label": "Light sweep",
+      "category": "cinematic"
+     },
+     "start": 19.62,
+     "end": 26.08,
+     "start_frame": 589,
+     "end_frame": 782,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_04_a_gfx_02",
+     "target": "small_crew_group",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "crosshair",
+     "registry": {
+      "kind": "graphic",
+      "id": "crosshair",
+      "label": "Crosshair",
+      "category": "hud"
+     },
+     "start": 19.83,
+     "end": 26.08,
+     "start_frame": 595,
+     "end_frame": 782,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_isolation",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.76,
+       0.1,
+       0.16,
+       0.28
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_04_a_gfx_03",
+     "target": "scene_04_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "divider-grow",
+     "registry": {
+      "kind": "graphic",
+      "id": "divider-grow",
+      "label": "Divider grow",
+      "category": "line"
+     },
+     "start": 20.04,
+     "end": 26.08,
+     "start_frame": 601,
+     "end_frame": 782,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.35,
+       0.16,
+       0.3,
+       0.03
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_04_a_text_01_enter",
+     "target": "mind_test_caption",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "layered-depth",
+     "registry": {
+      "kind": "text",
+      "id": "layered-depth",
+      "label": "Layered depth",
+      "category": "depth"
+     },
+     "start": 19.72,
+     "end": 20.43,
+     "start_frame": 592,
+     "end_frame": 613,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "enters with 'layered-depth' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "A test of the mind",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_04_a_text_01_exit",
+     "target": "mind_test_caption",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 25.72,
+     "end": 26.08,
+     "start_frame": 772,
+     "end_frame": 782,
+     "depends_on": [
+      "scene_04_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_03",
+    "next_scene_id": "scene_05",
+    "motifs": [
+     "orange-red Mars",
+     "cream crew silhouettes"
+    ],
+    "main_text_preset": "layered-depth",
+    "placed_graphics": [
+     "crosshair",
+     "divider-grow"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "char-scale",
+     "dashed-flow",
+     "double-line",
+     "elastic",
+     "frame-in",
+     "route-line",
+     "targeting-ring",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_05",
+   "plan_scene_id": 5,
+   "timing": {
+    "start": 26.08,
+    "end": 35.05,
+    "start_frame": 782,
+    "end_frame": 1052,
+    "source": "scene_segmentation",
+    "canonical_start": 26.08,
+    "canonical_end": 34.9,
+    "gap_after_seconds": 0.15
+   },
+   "motion_intent": {
+    "purpose": "consequence",
+    "attention_goal": "The self-reliant crew group ringed by its three supports",
+    "takeaway": "On Mars the team is on its own and must rely on knowledge, training and mutual trust.",
+    "intensity": "energetic",
+    "hints": [
+     "show_help_falling_short",
+     "reveal_in_sequence",
+     "emphasize_self_reliance"
+    ],
+    "mood": "tense, dramatic"
+   },
+   "elements": [
+    {
+     "element_id": "crew_team",
+     "source_element_id": "crew_team",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "node-network",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "three_supports_ring",
+     "source_element_id": "three_supports_ring",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "node-network",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by node-network for the hint 'reveal_in_sequence'"
+    },
+    {
+     "element_id": "distant_earth",
+     "source_element_id": "distant_earth",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "node-network",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "help_line",
+     "source_element_id": "help_line",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "node-network",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "supports_text",
+     "source_element_id": "supports_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "slide-left",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "dark_mars_bg",
+     "source_element_id": "dark_mars_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "glow-orb",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_05_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "glow-orb",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_05_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "bracket-frame",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    },
+    {
+     "element_id": "scene_05_gfx_04",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "dashed-flow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "topic"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_05_a_gfx_01",
+     "target": "scene_05_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "glow-orb",
+     "registry": {
+      "kind": "graphic",
+      "id": "glow-orb",
+      "label": "Glow orb",
+      "category": "cinematic"
+     },
+     "start": 26.12,
+     "end": 35.05,
+     "start_frame": 784,
+     "end_frame": 1052,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.3,
+       0.2,
+       0.4,
+       0.6
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_05_a_gfx_02",
+     "target": "three_supports_ring",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "node-network",
+     "registry": {
+      "kind": "graphic",
+      "id": "node-network",
+      "label": "Node network",
+      "category": "connect"
+     },
+     "start": 26.33,
+     "end": 35.05,
+     "start_frame": 790,
+     "end_frame": 1052,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:reveal_in_sequence",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.75,
+       0.09,
+       0.2,
+       0.22
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_05_a_gfx_03",
+     "target": "scene_05_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "bracket-frame",
+     "registry": {
+      "kind": "graphic",
+      "id": "bracket-frame",
+      "label": "Bracket frame",
+      "category": "frame"
+     },
+     "start": 26.54,
+     "end": 35.05,
+     "start_frame": 796,
+     "end_frame": 1052,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_05_a_gfx_04",
+     "target": "scene_05_gfx_04",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "dashed-flow",
+     "registry": {
+      "kind": "graphic",
+      "id": "dashed-flow",
+      "label": "Dashed flow",
+      "category": "line"
+     },
+     "start": 27.223,
+     "end": 35.05,
+     "start_frame": 817,
+     "end_frame": 1052,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "topic",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.182,
+       0.183,
+       0.548,
+       0.035
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_05_a_text_01_enter",
+     "target": "supports_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "slide-left",
+     "registry": {
+      "kind": "text",
+      "id": "slide-left",
+      "label": "Slide from left",
+      "category": "entrance"
+     },
+     "start": 31.88,
+     "end": 32.38,
+     "start_frame": 956,
+     "end_frame": 971,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "enters with 'slide-left' (visual_plan)",
+     "params": {
+      "style": "caption",
+      "duration_source": "plan",
+      "text": "Knowledge · Training · Trust",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_05_a_text_01_exit",
+     "target": "supports_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "slide-out",
+     "registry": {
+      "kind": "exit",
+      "id": "slide-out",
+      "label": "Slide out",
+      "category": null
+     },
+     "start": 34.69,
+     "end": 35.05,
+     "start_frame": 1041,
+     "end_frame": 1052,
+     "depends_on": [
+      "scene_05_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "wipe",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_04",
+    "next_scene_id": "scene_06",
+    "motifs": [
+     "cream crew silhouettes",
+     "small teal Earth far away",
+     "three linked teal nodes"
+    ],
+    "main_text_preset": "slide-left",
+    "placed_graphics": [
+     "node-network",
+     "bracket-frame",
+     "dashed-flow"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "crosshair",
+     "dashed-flow",
+     "divider-grow",
+     "elastic",
+     "frame-in",
+     "layered-depth",
+     "route-line",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_05: 3 required element(s) (crew_team, distant_earth, help_line) are not drawn one by one: the scene is carried by 'node-network' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_06",
+   "plan_scene_id": 6,
+   "timing": {
+    "start": 35.05,
+    "end": 39.43,
+    "start_frame": 1052,
+    "end_frame": 1183,
+    "source": "scene_segmentation",
+    "canonical_start": 35.05,
+    "canonical_end": 39.43,
+    "gap_after_seconds": 0.0
+   },
+   "motion_intent": {
+    "purpose": "recap",
+    "attention_goal": "The word 'Resilience' in orange",
+    "takeaway": "Mental resilience, discipline and team spirit are extremely important for Mars.",
+    "intensity": "energetic",
+    "hints": [
+     "emphasize_key_word",
+     "reveal_in_sequence"
+    ],
+    "mood": "hopeful, energetic"
+   },
+   "elements": [
+    {
+     "element_id": "resilience_word",
+     "source_element_id": "resilience_word",
+     "type": "text",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "word-pop",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "virtues_subline",
+     "source_element_id": "virtues_subline",
+     "type": "text",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": "elastic",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "triad_emblem",
+     "source_element_id": "triad_emblem",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "ring-pulse",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "warm_dark_bg",
+     "source_element_id": "warm_dark_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "particles-float",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_06_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "particles-float",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_06_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "double-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_06_a_gfx_01",
+     "target": "scene_06_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "particles-float",
+     "registry": {
+      "kind": "graphic",
+      "id": "particles-float",
+      "label": "Floating particles",
+      "category": "cinematic"
+     },
+     "start": 35.09,
+     "end": 39.43,
+     "start_frame": 1053,
+     "end_frame": 1183,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_06_a_gfx_02",
+     "target": "resilience_word",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "ring-pulse",
+     "registry": {
+      "kind": "graphic",
+      "id": "ring-pulse",
+      "label": "Ring pulse",
+      "category": "shape"
+     },
+     "start": 35.3,
+     "end": 39.43,
+     "start_frame": 1059,
+     "end_frame": 1183,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_key_word",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.76,
+       0.1,
+       0.16,
+       0.28
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_06_a_gfx_03",
+     "target": "scene_06_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "double-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "double-line",
+      "label": "Double line",
+      "category": "line"
+     },
+     "start": 35.51,
+     "end": 39.43,
+     "start_frame": 1065,
+     "end_frame": 1183,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_06_a_text_01_enter",
+     "target": "resilience_word",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "word-pop",
+     "registry": {
+      "kind": "text",
+      "id": "word-pop",
+      "label": "Word pop",
+      "category": "typography"
+     },
+     "start": 35.6,
+     "end": 35.96,
+     "start_frame": 1068,
+     "end_frame": 1079,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'word-pop' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "Resilience",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_06_a_text_02_enter",
+     "target": "virtues_subline",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "elastic",
+     "registry": {
+      "kind": "text",
+      "id": "elastic",
+      "label": "Elastic",
+      "category": "entrance"
+     },
+     "start": 35.6,
+     "end": 36.39,
+     "start_frame": 1068,
+     "end_frame": 1092,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'elastic' (visual_plan)",
+     "params": {
+      "style": "label",
+      "duration_source": "plan",
+      "text": "Discipline · Team spirit",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_06_a_text_01_emphasis",
+     "target": "resilience_word",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "glow",
+     "registry": {
+      "kind": "emphasis",
+      "id": "glow",
+      "label": "Glow",
+      "category": null
+     },
+     "start": 35.78,
+     "end": 39.07,
+     "start_frame": 1073,
+     "end_frame": 1172,
+     "depends_on": [
+      "scene_06_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_06_a_text_01_exit",
+     "target": "resilience_word",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 39.07,
+     "end": 39.43,
+     "start_frame": 1172,
+     "end_frame": 1183,
+     "depends_on": [
+      "scene_06_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    },
+    {
+     "action_id": "scene_06_a_text_02_exit",
+     "target": "virtues_subline",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "scale-out",
+     "registry": {
+      "kind": "exit",
+      "id": "scale-out",
+      "label": "Scale out",
+      "category": null
+     },
+     "start": 39.07,
+     "end": 39.43,
+     "start_frame": 1172,
+     "end_frame": 1183,
+     "depends_on": [
+      "scene_06_a_text_02_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_05",
+    "next_scene_id": "scene_07",
+    "motifs": [
+     "three linked teal nodes",
+     "orange accent word"
+    ],
+    "main_text_preset": "word-pop",
+    "placed_graphics": [
+     "ring-pulse",
+     "double-line"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "crosshair",
+     "dashed-flow",
+     "divider-grow",
+     "frame-in",
+     "layered-depth",
+     "node-network",
+     "slide-left",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_07",
+   "plan_scene_id": 7,
+   "timing": {
+    "start": 39.43,
+    "end": 45.84,
+    "start_frame": 1183,
+    "end_frame": 1375,
+    "source": "scene_segmentation",
+    "canonical_start": 39.43,
+    "canonical_end": 45.84,
+    "gap_after_seconds": 0.0
+   },
+   "motion_intent": {
+    "purpose": "transition",
+    "attention_goal": "The route from Earth through the Moon to Mars",
+    "takeaway": "The path forward is Moon first, then Mars.",
+    "intensity": "energetic",
+    "hints": [
+     "reveal_in_sequence",
+     "emphasize_destination"
+    ],
+    "mood": "hopeful, majestic"
+   },
+   "elements": [
+    {
+     "element_id": "goal_route",
+     "source_element_id": "goal_route",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "timeline-dots",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "earth_origin",
+     "source_element_id": "earth_origin",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "timeline-dots",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "moon_stop",
+     "source_element_id": "moon_stop",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "timeline-dots",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mars_goal",
+     "source_element_id": "mars_goal",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "timeline-dots",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "moon_then_mars_text",
+     "source_element_id": "moon_then_mars_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "rotate-in",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "hopeful_space_bg",
+     "source_element_id": "hopeful_space_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_07_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_07_gfx_02",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "timeline-dots",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "topic"
+    },
+    {
+     "element_id": "scene_07_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "bracket-frame",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_07_a_gfx_01",
+     "target": "scene_07_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "scan-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "scan-line",
+      "label": "Scan line",
+      "category": "hud"
+     },
+     "start": 39.47,
+     "end": 45.84,
+     "start_frame": 1184,
+     "end_frame": 1375,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_07_a_gfx_02",
+     "target": "scene_07_gfx_02",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "timeline-dots",
+     "registry": {
+      "kind": "graphic",
+      "id": "timeline-dots",
+      "label": "Timeline",
+      "category": "data"
+     },
+     "start": 39.68,
+     "end": 45.84,
+     "start_frame": 1190,
+     "end_frame": 1375,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "topic",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.1,
+       0.75,
+       0.8,
+       0.12
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_07_a_gfx_03",
+     "target": "scene_07_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "bracket-frame",
+     "registry": {
+      "kind": "graphic",
+      "id": "bracket-frame",
+      "label": "Bracket frame",
+      "category": "frame"
+     },
+     "start": 39.89,
+     "end": 45.84,
+     "start_frame": 1197,
+     "end_frame": 1375,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_07_a_text_01_enter",
+     "target": "moon_then_mars_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "rotate-in",
+     "registry": {
+      "kind": "text",
+      "id": "rotate-in",
+      "label": "Rotate in",
+      "category": "entrance"
+     },
+     "start": 42,
+     "end": 42.57,
+     "start_frame": 1260,
+     "end_frame": 1277,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'rotate-in' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "First the Moon, then Mars",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_07_a_text_01_emphasis",
+     "target": "moon_then_mars_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "glow",
+     "registry": {
+      "kind": "emphasis",
+      "id": "glow",
+      "label": "Glow",
+      "category": null
+     },
+     "start": 42.18,
+     "end": 45.48,
+     "start_frame": 1265,
+     "end_frame": 1364,
+     "depends_on": [
+      "scene_07_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_07_a_text_01_exit",
+     "target": "moon_then_mars_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "scale-out",
+     "registry": {
+      "kind": "exit",
+      "id": "scale-out",
+      "label": "Scale out",
+      "category": null
+     },
+     "start": 45.48,
+     "end": 45.84,
+     "start_frame": 1364,
+     "end_frame": 1375,
+     "depends_on": [
+      "scene_07_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_06",
+    "next_scene_id": "scene_08",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "dashed route"
+    ],
+    "main_text_preset": "rotate-in",
+    "placed_graphics": [
+     "timeline-dots",
+     "bracket-frame"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "crosshair",
+     "dashed-flow",
+     "divider-grow",
+     "double-line",
+     "elastic",
+     "layered-depth",
+     "node-network",
+     "ring-pulse",
+     "slide-left",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_07: 4 required element(s) (goal_route, earth_origin, moon_stop, mars_goal) are not drawn one by one: the scene is carried by 'timeline-dots' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_08",
+   "plan_scene_id": 8,
+   "timing": {
+    "start": 45.84,
+    "end": 52.85,
+    "start_frame": 1375,
+    "end_frame": 1586,
+    "source": "scene_segmentation",
+    "canonical_start": 45.84,
+    "canonical_end": 52.54,
+    "gap_after_seconds": 0.31
+   },
+   "motion_intent": {
+    "purpose": "conclusion",
+    "attention_goal": "The habitat domes at sunrise",
+    "takeaway": "A Mars settlement would be a milestone for all of human history.",
+    "intensity": "restrained",
+    "hints": [
+     "reveal_settlement",
+     "emphasize_sunrise",
+     "reveal_in_sequence"
+    ],
+    "mood": "majestic, hopeful"
+   },
+   "elements": [
+    {
+     "element_id": "habitat_domes",
+     "source_element_id": "habitat_domes",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "targeting-ring",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mars_dawn_bg",
+     "source_element_id": "mars_dawn_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "light-sweep",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "chapter_icon",
+     "source_element_id": "chapter_icon",
+     "type": "icon",
+     "semantic_role": "supporting",
+     "required": false,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "targeting-ring",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "new_chapter_text",
+     "source_element_id": "new_chapter_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "underline-draw",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "scene_08_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "light-sweep",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_08_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "divider-grow",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_08_a_gfx_01",
+     "target": "scene_08_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "light-sweep",
+     "registry": {
+      "kind": "graphic",
+      "id": "light-sweep",
+      "label": "Light sweep",
+      "category": "cinematic"
+     },
+     "start": 45.88,
+     "end": 52.85,
+     "start_frame": 1376,
+     "end_frame": 1586,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_08_a_gfx_02",
+     "target": "mars_dawn_bg",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "targeting-ring",
+     "registry": {
+      "kind": "graphic",
+      "id": "targeting-ring",
+      "label": "Targeting ring",
+      "category": "hud"
+     },
+     "start": 46.09,
+     "end": 52.85,
+     "start_frame": 1383,
+     "end_frame": 1586,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:emphasize_sunrise",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_08_a_gfx_03",
+     "target": "scene_08_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "divider-grow",
+     "registry": {
+      "kind": "graphic",
+      "id": "divider-grow",
+      "label": "Divider grow",
+      "category": "line"
+     },
+     "start": 46.3,
+     "end": 52.85,
+     "start_frame": 1389,
+     "end_frame": 1586,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.35,
+       0.16,
+       0.3,
+       0.03
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_08_a_text_01_enter",
+     "target": "new_chapter_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "underline-draw",
+     "registry": {
+      "kind": "text",
+      "id": "underline-draw",
+      "label": "Underline draw",
+      "category": "depth"
+     },
+     "start": 45.98,
+     "end": 46.62,
+     "start_frame": 1379,
+     "end_frame": 1399,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "enters with 'underline-draw' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "A new chapter",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_08_a_text_01_exit",
+     "target": "new_chapter_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 52.49,
+     "end": 52.85,
+     "start_frame": 1575,
+     "end_frame": 1586,
+     "depends_on": [
+      "scene_08_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "continuity": {
+    "previous_scene_id": "scene_07",
+    "next_scene_id": "scene_09",
+    "motifs": [
+     "orange-red Mars",
+     "teal lights of human presence",
+     "warm dawn glow"
+    ],
+    "main_text_preset": "underline-draw",
+    "placed_graphics": [
+     "targeting-ring",
+     "divider-grow"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "dashed-flow",
+     "double-line",
+     "elastic",
+     "node-network",
+     "ring-pulse",
+     "rotate-in",
+     "slide-left",
+     "timeline-dots",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_08: 1 required element(s) (habitat_domes) are not drawn one by one: the scene is carried by 'targeting-ring' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_09",
+   "plan_scene_id": 9,
+   "timing": {
+    "start": 52.85,
+    "end": 57.61,
+    "start_frame": 1586,
+    "end_frame": 1728,
+    "source": "scene_segmentation",
+    "canonical_start": 52.85,
+    "canonical_end": 57.43,
+    "gap_after_seconds": null
+   },
+   "motion_intent": {
+    "purpose": "conclusion",
+    "attention_goal": "The human emblem bridging Earth and Mars",
+    "takeaway": "Humans becoming a multi-planet species is a matter of when, not if.",
+    "intensity": "energetic",
+    "hints": [
+     "connect_two_worlds",
+     "emphasize_growth",
+     "emphasize_key_word"
+    ],
+    "mood": "majestic, hopeful"
+   },
+   "elements": [
+    {
+     "element_id": "human_bridge_emblem",
+     "source_element_id": "human_bridge_emblem",
+     "type": "graphic",
+     "semantic_role": "primary",
+     "required": true,
+     "registry_id": "node-network",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "drawn by node-network for the hint 'connect_two_worlds'"
+    },
+    {
+     "element_id": "earth_home_world",
+     "source_element_id": "earth_home_world",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "node-network",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "mars_home_world",
+     "source_element_id": "mars_home_world",
+     "type": "graphic",
+     "semantic_role": "supporting",
+     "required": true,
+     "registry_id": null,
+     "registry_kind": null,
+     "status": "fallback",
+     "fallback": {
+      "id": "node-network",
+      "kind": "graphic_preset",
+      "reason": "the library has no graphic that draws this element on its own"
+     },
+     "note": null
+    },
+    {
+     "element_id": "multi_planet_text",
+     "source_element_id": "multi_planet_text",
+     "type": "text",
+     "semantic_role": "explanatory",
+     "required": true,
+     "registry_id": "kinetic",
+     "registry_kind": "text_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": null
+    },
+    {
+     "element_id": "starfield_bg",
+     "source_element_id": "starfield_bg",
+     "type": "background",
+     "semantic_role": "environment",
+     "required": true,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "the atmosphere layer"
+    },
+    {
+     "element_id": "scene_09_gfx_01",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "scan-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "atmosphere"
+    },
+    {
+     "element_id": "scene_09_gfx_03",
+     "source_element_id": null,
+     "type": "effect",
+     "semantic_role": "decorative",
+     "required": false,
+     "registry_id": "double-line",
+     "registry_kind": "graphic_preset",
+     "status": "resolved",
+     "fallback": null,
+     "note": "accent"
+    }
+   ],
+   "sequence": [
+    {
+     "action_id": "scene_09_a_gfx_01",
+     "target": "scene_09_gfx_01",
+     "phase": "establish",
+     "kind": "graphic",
+     "preset": "scan-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "scan-line",
+      "label": "Scan line",
+      "category": "hud"
+     },
+     "start": 52.89,
+     "end": 57.61,
+     "start_frame": 1587,
+     "end_frame": 1728,
+     "depends_on": [],
+     "timing_source": "plan",
+     "reason": "atmosphere",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_09_a_gfx_02",
+     "target": "human_bridge_emblem",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "node-network",
+     "registry": {
+      "kind": "graphic",
+      "id": "node-network",
+      "label": "Node network",
+      "category": "connect"
+     },
+     "start": 53.1,
+     "end": 57.61,
+     "start_frame": 1593,
+     "end_frame": 1728,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "hint:connect_two_worlds",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.232,
+       0.71,
+       0.536,
+       0.2
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_09_a_gfx_03",
+     "target": "scene_09_gfx_03",
+     "phase": "reveal",
+     "kind": "graphic",
+     "preset": "double-line",
+     "registry": {
+      "kind": "graphic",
+      "id": "double-line",
+      "label": "Double line",
+      "category": "line"
+     },
+     "start": 53.31,
+     "end": 57.61,
+     "start_frame": 1599,
+     "end_frame": 1728,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "timing_source": "plan",
+     "reason": "accent",
+     "params": {
+      "speed": 1.4,
+      "box": [
+       0.175,
+       0.265,
+       0.4,
+       0.04
+      ],
+      "exit_s": 0.36
+     }
+    },
+    {
+     "action_id": "scene_09_a_text_01_enter",
+     "target": "multi_planet_text",
+     "phase": "enter",
+     "kind": "text",
+     "preset": "kinetic",
+     "registry": {
+      "kind": "text",
+      "id": "kinetic",
+      "label": "Kinetic typography",
+      "category": "kinetic"
+     },
+     "start": 53.6,
+     "end": 54.17,
+     "start_frame": 1608,
+     "end_frame": 1625,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "enters with 'kinetic' (visual_plan)",
+     "params": {
+      "style": "headline",
+      "duration_source": "plan",
+      "text": "A multi-planet species",
+      "dir": null,
+      "k": null
+     }
+    },
+    {
+     "action_id": "scene_09_a_text_01_emphasis",
+     "target": "multi_planet_text",
+     "phase": "emphasis",
+     "kind": "text",
+     "preset": "glow",
+     "registry": {
+      "kind": "emphasis",
+      "id": "glow",
+      "label": "Glow",
+      "category": null
+     },
+     "start": 53.78,
+     "end": 57.25,
+     "start_frame": 1613,
+     "end_frame": 1718,
+     "depends_on": [
+      "scene_09_a_text_01_enter"
+     ],
+     "timing_source": "keyword_time",
+     "reason": "keyword emphasis from the spoken time until the exit starts",
+     "params": {
+      "style": "headline"
+     }
+    },
+    {
+     "action_id": "scene_09_a_text_01_exit",
+     "target": "multi_planet_text",
+     "phase": "exit",
+     "kind": "text",
+     "preset": "fade-out",
+     "registry": {
+      "kind": "exit",
+      "id": "fade-out",
+      "label": "Smooth fade",
+      "category": null
+     },
+     "start": 57.25,
+     "end": 57.61,
+     "start_frame": 1718,
+     "end_frame": 1728,
+     "depends_on": [
+      "scene_09_a_text_01_enter"
+     ],
+     "timing_source": "scene_interval",
+     "reason": "no exit is rendered: the text stays until the scene ends and the transition removes it; this is the latest time the planner lets the reading run",
+     "params": {
+      "duration_source": "plan"
+     }
+    }
+   ],
+   "transition_out": null,
+   "continuity": {
+    "previous_scene_id": "scene_08",
+    "next_scene_id": null,
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "teal lights of human presence"
+    ],
+    "main_text_preset": "kinetic",
+    "placed_graphics": [
+     "node-network",
+     "double-line"
+    ],
+    "recent_presets": [
+     "bracket-frame",
+     "divider-grow",
+     "double-line",
+     "elastic",
+     "ring-pulse",
+     "rotate-in",
+     "targeting-ring",
+     "timeline-dots",
+     "underline-draw",
+     "word-pop"
+    ],
+    "repeats": []
+   },
+   "validation_notes": [
+    {
+     "code": "element_fallback",
+     "severity": "info",
+     "message": "scene_09: 2 required element(s) (earth_home_world, mars_home_world) are not drawn one by one: the scene is carried by 'node-network' (the library has no diagram graphic for them) - accepted as a recorded fallback: the element is still NOT drawn"
+    }
+   ]
+  }
+ ],
+ "reuse": {
+  "text_presets_used": 8,
+  "text_presets_available": 41,
+  "graphics_used": 16,
+  "graphics_available": 52,
+  "ids_not_in_registry": 0,
+  "new_presets_added": 0
+ },
+ "output": {
+  "motion_text": 11,
+  "motion_scene_items": 28,
+  "icons": 1,
+  "classic_texts": 0,
+  "composition": "differs from the plan: Motion Generation has to build it again"
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Motion Plan Reader",
+   "status": "completed",
+   "detail": "6 of 6 inputs checks passed"
+  },
+  {
+   "n": 2,
+   "name": "Element Resolver",
+   "status": "completed",
+   "detail": "11 of 11 elements checks passed"
+  },
+  {
+   "n": 3,
+   "name": "Preset Registry Lookup",
+   "status": "completed",
+   "detail": "63 of 63 ids checks passed"
+  },
+  {
+   "n": 4,
+   "name": "Effect Reuse Engine",
+   "status": "completed",
+   "detail": "19 of 19 reuse checks passed"
+  },
+  {
+   "n": 5,
+   "name": "Animation Builder",
+   "status": "completed",
+   "detail": "36 of 36 sequence checks passed"
+  },
+  {
+   "n": 6,
+   "name": "Animation Engine Adapter",
+   "status": "completed",
+   "detail": "89 of 89 parameters checks passed"
+  },
+  {
+   "n": 7,
+   "name": "Composition & Transition Builder",
+   "status": "completed",
+   "detail": "17 of 17 transitions checks passed"
+  },
+  {
+   "n": 8,
+   "name": "Timing & Audio Sync",
+   "status": "completed",
+   "detail": "117 of 117 timing checks passed"
+  },
+  {
+   "n": 9,
+   "name": "Layout Validator",
+   "status": "completed",
+   "detail": "72 of 72 layout checks passed"
+  },
+  {
+   "n": 10,
+   "name": "Code & Plan Validator",
+   "status": "completed",
+   "detail": "11 of 11 contract checks passed"
+  },
+  {
+   "n": 11,
+   "name": "Motion Test Runner",
+   "status": "completed",
+   "detail": "2 of 2 tests checks passed"
+  },
+  {
+   "n": 12,
+   "name": "Error Repair Handler",
+   "status": "completed",
+   "detail": "nothing needed repair"
+  },
+  {
+   "n": 13,
+   "name": "Remotion Output Adapter",
+   "status": "completed",
+   "detail": "11 texts, 28 graphics, 1 icons ready; composition differs from the plan: Motion Generation has to build it again"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "checks": {
+   "passed": 470,
+   "total": 491,
+   "by_rule": {
+    "visual_plan_current": {
+     "passed": 1,
+     "total": 1
+    },
+    "visual_plan_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_linked": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "aspect_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "text_kept": {
+     "passed": 11,
+     "total": 11
+    },
+    "element_drawn": {
+     "passed": 25,
+     "total": 45
+    },
+    "registry_id": {
+     "passed": 55,
+     "total": 55
+    },
+    "action_in_scene": {
+     "passed": 56,
+     "total": 56
+    },
+    "frames_valid": {
+     "passed": 56,
+     "total": 56
+    },
+    "telugu_safe_preset": {
+     "passed": 11,
+     "total": 11
+    },
+    "text_style": {
+     "passed": 11,
+     "total": 11
+    },
+    "min_duration": {
+     "passed": 39,
+     "total": 39
+    },
+    "text_readable": {
+     "passed": 11,
+     "total": 11
+    },
+    "emphasis_inside_text": {
+     "passed": 5,
+     "total": 5
+    },
+    "text_count": {
+     "passed": 9,
+     "total": 9
+    },
+    "speed_range": {
+     "passed": 28,
+     "total": 28
+    },
+    "graphic_in_safe_area": {
+     "passed": 19,
+     "total": 19
+    },
+    "graphic_clear_of_text": {
+     "passed": 22,
+     "total": 22
+    },
+    "transition_known": {
+     "passed": 8,
+     "total": 8
+    },
+    "transition_not_repeated": {
+     "passed": 8,
+     "total": 8
+    },
+    "transition_fits": {
+     "passed": 8,
+     "total": 8
+    },
+    "repeat_text_preset": {
+     "passed": 9,
+     "total": 9
+    },
+    "repeat_graphic": {
+     "passed": 9,
+     "total": 9
+    },
+    "scene_animated": {
+     "passed": 9,
+     "total": 9
+    },
+    "dependency_acyclic": {
+     "passed": 9,
+     "total": 9
+    },
+    "dependencies_exist": {
+     "passed": 9,
+     "total": 9
+    },
+    "dependency_order": {
+     "passed": 9,
+     "total": 9
+    },
+    "mode_requirement": {
+     "passed": 9,
+     "total": 9
+    },
+    "graphic_clear_of_drawn_text": {
+     "passed": 11,
+     "total": 11
+    },
+    "transition_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "variety": {
+     "passed": 1,
+     "total": 1
+    },
+    "ids_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_code": {
+     "passed": 1,
+     "total": 1
+    },
+    "adapter_fields": {
+     "passed": 1,
+     "total": 1
+    },
+    "composition_current": {
+     "passed": 0,
+     "total": 1
+    },
+    "motion_checks": {
+     "passed": 1,
+     "total": 1
+    },
+    "motion_checks_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "contract": {
+     "passed": 1,
+     "total": 1
+    }
+   }
+  },
+  "note": "no probability is claimed: the result is the list of checks that passed; the choice is the deterministic selector of the motion library"
+ },
+ "repairs": [],
+ "tests": {
+  "motion_checks": {
+   "ok": true,
+   "count": 147,
+   "failed": [],
+   "error": null,
+   "cached": false
+  }
+ },
+ "needs_review": false,
+ "timings_seconds": {
+  "build": 27.032
+ },
+ "warning_fix": {
+  "status": "partly",
+  "not_drawn": 16,
+  "at": "2026-10-14T11:19:28",
+  "before": 11,
+  "after": 0,
+  "changes": [
+   {
+    "scene": "scene_02",
+    "kind": "graphic_moved",
+    "preset": "route-line",
+    "from": [
+     0.1,
+     0.12,
+     0.3,
+     0.2
+    ],
+    "to": [
+     0.125,
+     0.662,
+     0.3,
+     0.2
+    ],
+    "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+   },
+   {
+    "scene": "scene_05",
+    "kind": "text_earlier",
+    "text": "Knowledge · Training · Trust",
+    "from": 33.5,
+    "to": 31.88,
+    "why": "it needs 2.8 s on screen before it starts to leave; it now starts 1.62 s earlier"
+   },
+   {
+    "scene": "scene_09",
+    "kind": "graphic_moved",
+    "preset": "double-line",
+    "from": [
+     0.3,
+     0.16,
+     0.4,
+     0.04
+    ],
+    "to": [
+     0.175,
+     0.265,
+     0.4,
+     0.04
+    ],
+    "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+   }
+  ],
+  "accepted": [
+   "scene_02",
+   "scene_03",
+   "scene_05",
+   "scene_07",
+   "scene_08",
+   "scene_09"
+  ],
+  "left": []
+ }
+}

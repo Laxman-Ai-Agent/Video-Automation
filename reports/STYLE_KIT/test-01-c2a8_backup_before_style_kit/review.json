@@ -1,0 +1,22 @@
+{
+ "gates": {
+  "analysis": {
+   "fp": "350f8e7bcbf9ca73",
+   "at": "2026-10-15T10:03:41"
+  }
+ },
+ "prompts": {},
+ "generation": {
+  "kind": "plan",
+  "n": null,
+  "total": 3,
+  "done": 3,
+  "failed": [],
+  "skipped": [],
+  "current": null,
+  "error": null,
+  "started": "2026-10-15T09:51:15",
+  "finished": "2026-10-15T09:53:17",
+  "state": "done"
+ }
+}

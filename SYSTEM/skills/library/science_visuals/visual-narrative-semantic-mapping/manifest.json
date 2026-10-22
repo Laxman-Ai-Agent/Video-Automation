@@ -1,0 +1,22 @@
+{
+  "skill_id": "visual-narrative-semantic-mapping",
+  "name": "Narrative-to-Visual Semantic Metaphor Mapping",
+  "category_id": "science_visuals",
+  "subcategory": null,
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "entrypoint": "library/science_visuals/visual-narrative-semantic-mapping/SKILL.md",
+  "content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+  "capabilities": [
+    "narrative-semantic-mapping",
+    "metaphor-selection",
+    "concrete-visual-grounding"
+  ],
+  "dependencies": [],
+  "applicable_agents": [
+    "visual_planning",
+    "motion_animation",
+    "timeline_build"
+  ],
+  "installed_at": "2026-10-19T00:37:21.877681+00:00"
+}

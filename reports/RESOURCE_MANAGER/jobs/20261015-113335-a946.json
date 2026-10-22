@@ -1,0 +1,39 @@
+{
+ "id": "20261015-113335-a946",
+ "kind": "verify",
+ "state": "done",
+ "started_at": "2026-10-15T11:33:35",
+ "finished_at": "2026-10-15T11:34:41",
+ "progress": [
+  "11:33:35 bundling the renderer",
+  "11:34:01 16:9: rendering baseline (1/2)",
+  "11:34:11 16:9: rendering icons_1 (2/2)",
+  "11:34:24 9:16: rendering baseline (1/2)",
+  "11:34:31 9:16: rendering icons_1 (2/2)"
+ ],
+ "result": {
+  "at": "2026-10-15T11:34:41",
+  "verified": [
+   "icon.tabler.sparkles"
+  ],
+  "failed": [],
+  "results": {
+   "icon.tabler.sparkles": {
+    "aspects": {
+     "16:9": {
+      "ok": true,
+      "changed_ratio": 0.0421,
+      "preview": "resource-library/previews/16x9/icons_1.jpg"
+     },
+     "9:16": {
+      "ok": true,
+      "changed_ratio": 0.042,
+      "preview": "resource-library/previews/9x16/icons_1.jpg"
+     }
+    },
+    "deterministic": true
+   }
+  }
+ },
+ "error": null
+}

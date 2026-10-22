@@ -1,0 +1,69 @@
+{
+ "version": 1,
+ "at": "2026-10-15T10:13:42",
+ "before": 4,
+ "scenes": {
+  "2": {
+   "box": {
+    "dashed-flow": [
+     0.1,
+     0.93,
+     0.8,
+     0.02
+    ]
+   }
+  },
+  "3": {
+   "box": {
+    "data-ticks": [
+     0.1,
+     0.68,
+     0.8,
+     0.06
+    ]
+   }
+  }
+ },
+ "accepted": [
+  "scene_01",
+  "scene_02"
+ ],
+ "changes": [
+  {
+   "scene": "scene_02",
+   "kind": "graphic_moved",
+   "preset": "dashed-flow",
+   "from": [
+    0.1,
+    0.16,
+    0.8,
+    0.02
+   ],
+   "to": [
+    0.1,
+    0.93,
+    0.8,
+    0.02
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  },
+  {
+   "scene": "scene_03",
+   "kind": "graphic_moved",
+   "preset": "data-ticks",
+   "from": [
+    0.1,
+    0.8,
+    0.8,
+    0.06
+   ],
+   "to": [
+    0.1,
+    0.68,
+    0.8,
+    0.06
+   ],
+   "why": "it lay on a text (planned area or drawn position); the new place does not touch any text, any other graphic or the margin"
+  }
+ ]
+}

@@ -1,0 +1,24 @@
+{
+  "skill_id": "visual-cinematic-composition",
+  "name": "Cinematic Composition and Depth Layering",
+  "category_id": "layouts",
+  "subcategory": null,
+  "version": "1.0.0",
+  "license": "Apache-2.0",
+  "entrypoint": "library/layouts/visual-cinematic-composition/SKILL.md",
+  "content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+  "capabilities": [
+    "cinematic-composition",
+    "depth-layering",
+    "visual-hierarchy",
+    "safe-area-governance"
+  ],
+  "dependencies": [],
+  "applicable_agents": [
+    "visual_planning",
+    "motion_planning",
+    "timeline_build",
+    "motion_validation"
+  ],
+  "installed_at": "2026-10-19T00:37:21.854961+00:00"
+}

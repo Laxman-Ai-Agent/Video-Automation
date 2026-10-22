@@ -1,0 +1,2405 @@
+{
+  "schema_version": 1,
+  "agent_id": "motion_planning",
+  "updated_at": "2026-10-19T16:39:38.552954+00:00",
+  "total_experiences": 79,
+  "experiences": {
+    "exp-motion_planning-04791ddb41": {
+      "experience_id": "exp-motion_planning-04791ddb41",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-10c9b25637",
+      "project_id": null,
+      "context": {
+        "scene_index": 31,
+        "font_size": 55
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 46.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.773337+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-098f000ee0": {
+      "experience_id": "exp-motion_planning-098f000ee0",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a1b748e0ef",
+      "project_id": null,
+      "context": {
+        "scene_index": 49,
+        "font_size": 73
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 64.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:48.014939+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-0a1ce2f62b": {
+      "experience_id": "exp-motion_planning-0a1ce2f62b",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_13a2224e",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_13a2224e",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:18:43.947946+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:19:16.838224+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-0caab4237a": {
+      "experience_id": "exp-motion_planning-0caab4237a",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-ea0163ccf8",
+      "project_id": null,
+      "context": {
+        "scene_index": 44,
+        "font_size": 68
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 59.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.950969+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-0cb6dd4aba": {
+      "experience_id": "exp-motion_planning-0cb6dd4aba",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-8add02014f",
+      "project_id": null,
+      "context": {
+        "scene_index": 48,
+        "font_size": 72
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 63.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:48.001462+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-112f0db714": {
+      "experience_id": "exp-motion_planning-112f0db714",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-1b6ab211b8",
+      "project_id": null,
+      "context": {
+        "scene_index": 23,
+        "font_size": 47
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 38.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.696825+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-12c745bf6e": {
+      "experience_id": "exp-motion_planning-12c745bf6e",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_b3c54bcc",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_b3c54bcc",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:32:40.408672+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:33:09.481065+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-158461184b": {
+      "experience_id": "exp-motion_planning-158461184b",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-adcdf94520",
+      "project_id": null,
+      "context": {
+        "scene_index": 43,
+        "font_size": 67
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 58.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.936469+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-1893bd4667": {
+      "experience_id": "exp-motion_planning-1893bd4667",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-977a95e3d8",
+      "project_id": null,
+      "context": {
+        "scene_index": 29,
+        "font_size": 53
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 44.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.757293+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-1dac5a5d29": {
+      "experience_id": "exp-motion_planning-1dac5a5d29",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_eebef832",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_eebef832",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T14:25:55.127269+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T14:26:03.471815+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-1dcca42f1c": {
+      "experience_id": "exp-motion_planning-1dcca42f1c",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-903c2dcc71",
+      "project_id": null,
+      "context": {
+        "scene_index": 24,
+        "font_size": 48
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 39.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.701356+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-1f68fd78f1": {
+      "experience_id": "exp-motion_planning-1f68fd78f1",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-4a2b3392a2",
+      "project_id": null,
+      "context": {
+        "scene_index": 1,
+        "font_size": 25
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 16.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.436909+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-1fe7bc628f": {
+      "experience_id": "exp-motion_planning-1fe7bc628f",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-0a31469e12",
+      "project_id": null,
+      "context": {
+        "scene_index": 4,
+        "font_size": 28
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 19.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.463091+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-206199ac95": {
+      "experience_id": "exp-motion_planning-206199ac95",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_3d348984",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_3d348984",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T14:33:44.918292+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T14:34:01.895024+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-21ddd607b7": {
+      "experience_id": "exp-motion_planning-21ddd607b7",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_f8773ba6",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_f8773ba6",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:39:17.720821+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:39:38.419488+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-278e424af0": {
+      "experience_id": "exp-motion_planning-278e424af0",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-0bf56838ef",
+      "project_id": null,
+      "context": {
+        "scene_index": 42,
+        "font_size": 66
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 57.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.921718+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-2cc411ea81": {
+      "experience_id": "exp-motion_planning-2cc411ea81",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a3c7c8882f",
+      "project_id": null,
+      "context": {
+        "scene_index": 16,
+        "font_size": 40
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 31.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.617838+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-2f0927cc07": {
+      "experience_id": "exp-motion_planning-2f0927cc07",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a3210d13b1",
+      "project_id": null,
+      "context": {
+        "scene_index": 36,
+        "font_size": 60
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 51.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.847355+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-30f5473359": {
+      "experience_id": "exp-motion_planning-30f5473359",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_80fb99eb",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_80fb99eb",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:17:52.058984+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:18:11.154063+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-310b99bc5d": {
+      "experience_id": "exp-motion_planning-310b99bc5d",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_7f57cbed",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_7f57cbed",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:27:51.753963+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:28:07.936572+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-316e168d75": {
+      "experience_id": "exp-motion_planning-316e168d75",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-09f0d9611c",
+      "project_id": null,
+      "context": {
+        "scene_index": 40,
+        "font_size": 64
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 55.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.900946+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-3504e24c96": {
+      "experience_id": "exp-motion_planning-3504e24c96",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-512ef8b6d2",
+      "project_id": null,
+      "context": {
+        "scene_index": 21,
+        "font_size": 45
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 36.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.675495+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-36b87db96e": {
+      "experience_id": "exp-motion_planning-36b87db96e",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-23b690d503",
+      "project_id": null,
+      "context": {
+        "scene_index": 35,
+        "font_size": 59
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 50.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.839292+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-39e873dcd4": {
+      "experience_id": "exp-motion_planning-39e873dcd4",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-6211160a09",
+      "project_id": null,
+      "context": {
+        "scene_index": 15,
+        "font_size": 39
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 30.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.609431+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-46fa840277": {
+      "experience_id": "exp-motion_planning-46fa840277",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-275a84edfe",
+      "project_id": null,
+      "context": {
+        "scene_index": 33,
+        "font_size": 57
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 48.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.814793+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-4865b9fec2": {
+      "experience_id": "exp-motion_planning-4865b9fec2",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_68b51224",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_68b51224",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:31:48.371717+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:31:56.063878+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-49afd301a3": {
+      "experience_id": "exp-motion_planning-49afd301a3",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-71b6eef9a6",
+      "project_id": null,
+      "context": {
+        "scene_index": 19,
+        "font_size": 43
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 34.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.651065+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-4eaf5e2bc4": {
+      "experience_id": "exp-motion_planning-4eaf5e2bc4",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_29cc7aec",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_29cc7aec",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:20:04.236104+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:20:32.858536+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-53923aca95": {
+      "experience_id": "exp-motion_planning-53923aca95",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_da13d2ec",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_da13d2ec",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:51:02.479309+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:51:14.495701+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-5ae689aa2e": {
+      "experience_id": "exp-motion_planning-5ae689aa2e",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-2494dfbd98",
+      "project_id": null,
+      "context": {
+        "scene_index": 41,
+        "font_size": 65
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 56.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.903942+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-5edeab6cfe": {
+      "experience_id": "exp-motion_planning-5edeab6cfe",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a4c7ca112c",
+      "project_id": null,
+      "context": {
+        "scene_index": 13,
+        "font_size": 37
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 28.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.586740+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-5f492d446c": {
+      "experience_id": "exp-motion_planning-5f492d446c",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_a0ccd4fa",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_a0ccd4fa",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:48:27.037001+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:48:39.968593+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-6524b222d6": {
+      "experience_id": "exp-motion_planning-6524b222d6",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-d8ca4ec4e2",
+      "project_id": null,
+      "context": {
+        "scene_index": 46,
+        "font_size": 70
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 61.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.969078+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-6596b0f81b": {
+      "experience_id": "exp-motion_planning-6596b0f81b",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-142217de8e",
+      "project_id": null,
+      "context": {
+        "scene_index": 0,
+        "font_size": 24
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 15.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.431807+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-6ea5035337": {
+      "experience_id": "exp-motion_planning-6ea5035337",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_64876dfc",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_64876dfc",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:42:11.561958+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:42:23.655625+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-6ecafe47ef": {
+      "experience_id": "exp-motion_planning-6ecafe47ef",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_db642835",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_db642835",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:41:38.828679+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:41:57.525342+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-7534281aa4": {
+      "experience_id": "exp-motion_planning-7534281aa4",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-f940ec8ff4",
+      "project_id": null,
+      "context": {
+        "scene_index": 22,
+        "font_size": 46
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 37.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.684476+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-7546262018": {
+      "experience_id": "exp-motion_planning-7546262018",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_79824004",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_79824004",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:45:38.019462+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:46:24.543538+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-7dd99813d1": {
+      "experience_id": "exp-motion_planning-7dd99813d1",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-1355015f45",
+      "project_id": null,
+      "context": {
+        "scene_index": 2,
+        "font_size": 26
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 17.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.441897+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-7e264d3930": {
+      "experience_id": "exp-motion_planning-7e264d3930",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-2d698405fd",
+      "project_id": null,
+      "context": {
+        "scene_index": 12,
+        "font_size": 36
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 27.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.579764+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-8c40a2be6c": {
+      "experience_id": "exp-motion_planning-8c40a2be6c",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-6a8dc12f79",
+      "project_id": null,
+      "context": {
+        "scene_index": 26,
+        "font_size": 50
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 41.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.725176+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-8c6a322b82": {
+      "experience_id": "exp-motion_planning-8c6a322b82",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_11039b0b",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_11039b0b",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:56:25.723038+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:56:37.882460+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-8e4b4c0782": {
+      "experience_id": "exp-motion_planning-8e4b4c0782",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_27292361",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_27292361",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T14:32:55.610565+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T14:33:09.104150+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-8f2e61d797": {
+      "experience_id": "exp-motion_planning-8f2e61d797",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_911bb605",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_911bb605",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:11:24.896899+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:11:34.763420+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-92e2e888c7": {
+      "experience_id": "exp-motion_planning-92e2e888c7",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-6f16c18197",
+      "project_id": null,
+      "context": {
+        "scene_index": 7,
+        "font_size": 31
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 22.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.510752+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-9833495746": {
+      "experience_id": "exp-motion_planning-9833495746",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_35c89728",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_35c89728",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:06:46.100086+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:06:58.100941+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-9f04afe2f9": {
+      "experience_id": "exp-motion_planning-9f04afe2f9",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-5e45e184b9",
+      "project_id": null,
+      "context": {
+        "scene_index": 5,
+        "font_size": 29
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 20.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.477512+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-9fdff618bc": {
+      "experience_id": "exp-motion_planning-9fdff618bc",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_1391482c",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_1391482c",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:37:28.842909+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:37:50.482952+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-a5c85a7fa4": {
+      "experience_id": "exp-motion_planning-a5c85a7fa4",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_919556c7",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_919556c7",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:44:48.032627+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:45:00.793517+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b097f18d4d": {
+      "experience_id": "exp-motion_planning-b097f18d4d",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a097a718b2",
+      "project_id": null,
+      "context": {
+        "scene_index": 34,
+        "font_size": 58
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 49.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.822836+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b32982b367": {
+      "experience_id": "exp-motion_planning-b32982b367",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-a057adb26e",
+      "project_id": null,
+      "context": {
+        "scene_index": 10,
+        "font_size": 34
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 25.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.544665+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b60eca6b50": {
+      "experience_id": "exp-motion_planning-b60eca6b50",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-75e235ab12",
+      "project_id": null,
+      "context": {
+        "scene_index": 37,
+        "font_size": 61
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 52.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.863707+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b6191e9321": {
+      "experience_id": "exp-motion_planning-b6191e9321",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-d27c962aed",
+      "project_id": null,
+      "context": {
+        "scene_index": 3,
+        "font_size": 27
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 18.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.451970+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b61f814d7f": {
+      "experience_id": "exp-motion_planning-b61f814d7f",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_340ba5ba",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_340ba5ba",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:11:06.291306+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:11:17.707974+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-b84c8190ba": {
+      "experience_id": "exp-motion_planning-b84c8190ba",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_42bf0a9a",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_42bf0a9a",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T16:14:35.255196+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T16:14:49.094337+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-bc11384c61": {
+      "experience_id": "exp-motion_planning-bc11384c61",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_bfbb1daa",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_bfbb1daa",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T14:59:01.703684+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T14:59:22.893681+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-bf0c4bf0d6": {
+      "experience_id": "exp-motion_planning-bf0c4bf0d6",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_d7b1e263",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_d7b1e263",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T14:34:42.326576+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T14:34:53.298557+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-c210149d8c": {
+      "experience_id": "exp-motion_planning-c210149d8c",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_9f54da16",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_9f54da16",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:44:52.921730+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:45:04.319996+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-c29c6d681b": {
+      "experience_id": "exp-motion_planning-c29c6d681b",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-ac08115e04",
+      "project_id": null,
+      "context": {
+        "scene_index": 20,
+        "font_size": 44
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 35.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.659044+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-c3f486d292": {
+      "experience_id": "exp-motion_planning-c3f486d292",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-3e4c83f09f",
+      "project_id": null,
+      "context": {
+        "scene_index": 9,
+        "font_size": 33
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 24.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.535145+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-c6b609379b": {
+      "experience_id": "exp-motion_planning-c6b609379b",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-0b08b2952e",
+      "project_id": null,
+      "context": {
+        "scene_index": 18,
+        "font_size": 42
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 33.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.642436+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-cc15cb05f8": {
+      "experience_id": "exp-motion_planning-cc15cb05f8",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-54c2e03830",
+      "project_id": null,
+      "context": {
+        "scene_index": 38,
+        "font_size": 62
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 53.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.879895+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-d24d062f6d": {
+      "experience_id": "exp-motion_planning-d24d062f6d",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-4a6ee9a7e7",
+      "project_id": null,
+      "context": {
+        "scene_index": 39,
+        "font_size": 63
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 54.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.887899+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-d281333405": {
+      "experience_id": "exp-motion_planning-d281333405",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-e905bb2d2d",
+      "project_id": null,
+      "context": {
+        "scene_index": 6,
+        "font_size": 30
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 21.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.495841+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-d4585c2a99": {
+      "experience_id": "exp-motion_planning-d4585c2a99",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-0205b87162",
+      "project_id": null,
+      "context": {
+        "scene_index": 28,
+        "font_size": 52
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 43.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.750886+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-d652d61000": {
+      "experience_id": "exp-motion_planning-d652d61000",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-e46d86bf92",
+      "project_id": null,
+      "context": {
+        "scene_index": 8,
+        "font_size": 32
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 23.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.520181+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-d8c7fbfebe": {
+      "experience_id": "exp-motion_planning-d8c7fbfebe",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-e9c62f4d84",
+      "project_id": null,
+      "context": {
+        "scene_index": 30,
+        "font_size": 54
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 45.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.765329+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-e386acd136": {
+      "experience_id": "exp-motion_planning-e386acd136",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-6bf23c5e33",
+      "project_id": null,
+      "context": {
+        "scene_index": 11,
+        "font_size": 35
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 26.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.565211+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-e8c9ffde50": {
+      "experience_id": "exp-motion_planning-e8c9ffde50",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-f0161842ef",
+      "project_id": null,
+      "context": {
+        "scene_index": 45,
+        "font_size": 69
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 60.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.961036+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-ea770d4476": {
+      "experience_id": "exp-motion_planning-ea770d4476",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_0ce62697",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_0ce62697",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:58:40.189060+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:58:49.232149+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-ec4fe6f081": {
+      "experience_id": "exp-motion_planning-ec4fe6f081",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-3a082685c0",
+      "project_id": null,
+      "context": {
+        "scene_index": 14,
+        "font_size": 38
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 29.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.601131+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-ecabe9db44": {
+      "experience_id": "exp-motion_planning-ecabe9db44",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_d2480aaa",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_d2480aaa",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:59:41.290369+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:59:51.214420+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-eefae11017": {
+      "experience_id": "exp-motion_planning-eefae11017",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-751a5280dc",
+      "project_id": null,
+      "context": {
+        "scene_index": 47,
+        "font_size": 71
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 62.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.985358+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-f0ef639296": {
+      "experience_id": "exp-motion_planning-f0ef639296",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-d10bbc69af",
+      "project_id": null,
+      "context": {
+        "scene_index": 25,
+        "font_size": 49
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 40.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.716832+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-f1e304fc23": {
+      "experience_id": "exp-motion_planning-f1e304fc23",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_96ecf855",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_96ecf855",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T11:57:49.935803+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T11:57:57.481595+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-f4625bc06e": {
+      "experience_id": "exp-motion_planning-f4625bc06e",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_d0bffda9",
+      "project_id": "01-2f64",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-2f64",
+            "task_id": "run_d0bffda9",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "'dict' object has no attribute 'split'",
+            "timestamp": "2026-10-19T15:13:35.615658+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T15:13:49.322915+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-f71444fced": {
+      "experience_id": "exp-motion_planning-f71444fced",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-8f1fcdb43a",
+      "project_id": null,
+      "context": {
+        "scene_index": 27,
+        "font_size": 51
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 42.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.734327+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-fccb09d91c": {
+      "experience_id": "exp-motion_planning-fccb09d91c",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-f650ea7284",
+      "project_id": null,
+      "context": {
+        "scene_index": 17,
+        "font_size": 41
+      },
+      "outcome": "failed",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 32.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.635889+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-ffe4f4542e": {
+      "experience_id": "exp-motion_planning-ffe4f4542e",
+      "agent_id": "motion_planning",
+      "task_type": "typography_layout",
+      "task_id": "task-fba28e5974",
+      "project_id": null,
+      "context": {
+        "scene_index": 32,
+        "font_size": 56
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 47.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:47.798634+00:00",
+      "schema_version": 1
+    }
+  }
+}

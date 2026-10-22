@@ -1,0 +1,35 @@
+{
+  "lesson-motion-remotion-spring-damping": {
+    "lesson_id": "lesson-motion-remotion-spring-damping",
+    "domain": "motion",
+    "target_action": "generate_skill",
+    "trigger_condition": "remotion TSX component uses spring() physics",
+    "recommendation": "Always declare damping >= 10 and mass >= 0.1 in Remotion spring configs to prevent oscillations.",
+    "evidence_count": 1,
+    "confidence": 0.95,
+    "validation_status": "promoted",
+    "created_at": "2026-10-19T07:35:52.626798+00:00"
+  },
+  "lesson-motion-kinetic-reuse-preference": {
+    "lesson_id": "lesson-motion-kinetic-reuse-preference",
+    "domain": "motion",
+    "target_action": "decision",
+    "trigger_condition": "request mentions typography text motion or animated subtitles",
+    "recommendation": "Prefer REUSE of canonical 'motion.kinetic_typography' over creating unverified text animation skills.",
+    "evidence_count": 1,
+    "confidence": 0.92,
+    "validation_status": "promoted",
+    "created_at": "2026-10-19T07:35:52.626798+00:00"
+  },
+  "lesson-security-no-os-paths-in-remotion": {
+    "lesson_id": "lesson-security-no-os-paths-in-remotion",
+    "domain": "visual",
+    "target_action": "security_validator",
+    "trigger_condition": "remotion TSX component references asset paths",
+    "recommendation": "Enforce staticFile() or relative URLs; forbid raw OS drive paths (e.g. C:\\...).",
+    "evidence_count": 1,
+    "confidence": 0.98,
+    "validation_status": "promoted",
+    "created_at": "2026-10-19T07:35:52.626798+00:00"
+  }
+}

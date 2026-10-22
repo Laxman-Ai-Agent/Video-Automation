@@ -1,0 +1,247 @@
+[
+  {
+    "upgrade_id": "UPG-20261019-VIS-01",
+    "agent_id": "visual_planning",
+    "timestamp": "2026-10-19T06:30:00Z",
+    "before_version": "0.9.0",
+    "after_version": "1.0.0",
+    "reason": "Enhance scene variety, cinematic framing, and integrate Skill Factory capabilities.",
+    "previous_limitation": "Static prompt templates caused repetitive scenes and lack of word-level kinetic animations.",
+    "changes_introduced": [
+      "Integrated 6 registered skills from Skill Factory",
+      "Added camera shot variety pacing heuristic (prohibits consecutive identical angles)",
+      "Added word-level semantic animation mapping (kinetic, color_shift, pop_in)"
+    ],
+    "capabilities_added": [
+      "visual.scene_planning",
+      "visual.cinematic_composition",
+      "visual.narrative_semantic_mapping",
+      "visual.word_semantic_animation",
+      "visual.scene_variety_pacing"
+    ],
+    "files_changed": [
+      "VIDEO_ENGINE/stages/visual_planning.py",
+      "SYSTEM/agents/video_generation_agents/visual_planning/agent.py"
+    ],
+    "tools_and_skills_updated": [
+      "Skill Factory Library",
+      "Pydantic Schemas"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_visual_planning_skills_and_word_animation.py",
+        "passed": 5,
+        "failed": 0
+      },
+      {
+        "suite": "test_category_skill_library.py",
+        "passed": 12,
+        "failed": 0
+      },
+      {
+        "suite": "test_stage2_agent_skills_discovery.py",
+        "passed": 18,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "tests/test_visual_planning_skills_and_word_animation.py"
+    ]
+  },
+  {
+    "upgrade_id": "UPG-20261018-TL-01",
+    "agent_id": "timeline_build",
+    "timestamp": "2026-10-18T14:40:00Z",
+    "before_version": "0.9.0",
+    "after_version": "1.0.0",
+    "reason": "Build frame-accurate visual timeline view with multi-track inspection.",
+    "previous_limitation": "Timeline was only inspectable via raw JSON without playhead or frame alignment.",
+    "changes_introduced": [
+      "Implemented TimelineBuildVisualView component",
+      "Added horizontal zoomable time ruler with frame numbers and timecodes",
+      "Synchronized playhead with composition preview canvas"
+    ],
+    "capabilities_added": [
+      "Frame-accurate visual inspection",
+      "Multi-track layer display"
+    ],
+    "files_changed": [
+      "UI/frontend/src/components/TimelineBuildVisualView.tsx",
+      "VIDEO_ENGINE/stages/timeline_build.py"
+    ],
+    "tools_and_skills_updated": [
+      "Remotion Timeline Compiler",
+      "FFprobe"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_timeline_render_qc_delivery.py",
+        "passed": 1,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "tests/test_timeline_render_qc_delivery.py"
+    ]
+  },
+  {
+    "upgrade_id": "UPG-20261018-QC-01",
+    "agent_id": "final_qc",
+    "timestamp": "2026-10-18T16:15:00Z",
+    "before_version": "0.9.0",
+    "after_version": "1.0.0",
+    "reason": "Automatic media probe validation and stream re-mux targeted autofix.",
+    "previous_limitation": "Minor A/V sync drift required re-rendering the entire video from scratch.",
+    "changes_introduced": [
+      "Integrated FFmpeg blackdetect and freezedetect filters",
+      "Added astats loudness LUFS compliance check (-14 to -16 LUFS)",
+      "Added targeted stream re-mux autofix loop for sync drift under 0.3s"
+    ],
+    "capabilities_added": [
+      "Black/freeze frame detection",
+      "A/V sync autofix"
+    ],
+    "files_changed": [
+      "VIDEO_ENGINE/stages/final_qc.py",
+      "SYSTEM/agents/video_generation_agents/final_qc/agent.py"
+    ],
+    "tools_and_skills_updated": [
+      "FFmpeg media probe",
+      "FFprobe"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_stage5_desktop_delivery_auto_qc.py",
+        "passed": 1,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "VIDEO_ENGINE/stages/final_qc.py"
+    ]
+  },
+  {
+    "upgrade_id": "UPG-20261018-APP-01",
+    "agent_id": "timeline_approval",
+    "timestamp": "2026-10-18T16:25:00Z",
+    "before_version": "0.9.0",
+    "after_version": "1.0.0",
+    "reason": "Cryptographic SHA-256 fingerprinting and autonomous auto-advance gate.",
+    "previous_limitation": "Required manual operator button click at every iteration even when rubrics passed.",
+    "changes_introduced": [
+      "SHA-256 fingerprint hashing over all upstream project assets",
+      "Autonomous rubric evaluation allowing verified pipelines to proceed automatically",
+      "Append-only audit trail logging to config/approvals_audit.jsonl"
+    ],
+    "capabilities_added": [
+      "Cryptographic fingerprint lock",
+      "Autonomous auto-advancement"
+    ],
+    "files_changed": [
+      "VIDEO_ENGINE/stages/timeline_approval.py",
+      "config/approvals_audit.jsonl"
+    ],
+    "tools_and_skills_updated": [
+      "SHA-256 Hasher",
+      "Approvals Audit Logger"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_laxman_approval.py",
+        "passed": 4,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "tests/test_laxman_approval.py"
+    ]
+  },
+  {
+    "upgrade_id": "UPG-20261018-MGEN-01",
+    "agent_id": "motion_animation",
+    "timestamp": "2026-10-18T12:50:00Z",
+    "before_version": "0.9.0",
+    "after_version": "1.0.0",
+    "reason": "Autonomous compiler error self-healing loop for Remotion React codegen.",
+    "previous_limitation": "TypeScript compile errors in synthesized components halted execution.",
+    "changes_introduced": [
+      "Added tsc --noEmit static typecheck verification",
+      "Added LLM compiler error feedback loop for one-shot syntax repair",
+      "Added Babel AST security scanner banning unsafe dynamic APIs"
+    ],
+    "capabilities_added": [
+      "AST security audit",
+      "Compiler self-healing loop"
+    ],
+    "files_changed": [
+      "VIDEO_ENGINE/stages/motion_animation.py",
+      "VIDEO_ENGINE/stages/motion_gen_rules.py"
+    ],
+    "tools_and_skills_updated": [
+      "TypeScript Compiler",
+      "Babel Parser"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_motion_codegen.py",
+        "passed": 3,
+        "failed": 0
+      },
+      {
+        "suite": "test_motion_codegen_and_concurrency.py",
+        "passed": 2,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "tests/test_motion_codegen.py"
+    ]
+  },
+  {
+    "upgrade_id": "UPG-20261019-ABOUT-01",
+    "agent_id": "audio_analyzer",
+    "timestamp": "2026-10-19T01:30:00Z",
+    "before_version": "1.0.0",
+    "after_version": "1.0.1",
+    "reason": "Full architectural evidence and technical specification integration in UI.",
+    "previous_limitation": "No inline technical profile or verification evidence displayed.",
+    "changes_introduced": [
+      "Integrated AgentAboutTab with sections A through L",
+      "Exposed 14-stage telemetry and frozen file verification"
+    ],
+    "capabilities_added": [
+      "Technical profile transparency",
+      "Inline evidence inspection"
+    ],
+    "files_changed": [
+      "UI/frontend/src/components/AudioAnalysisDrawer.tsx",
+      "UI/frontend/src/data/agentAboutData.ts"
+    ],
+    "tools_and_skills_updated": [
+      "AgentAboutTab",
+      "agentAboutData"
+    ],
+    "tests_and_results": [
+      {
+        "suite": "test_playwright_about_tab_all_stages.py",
+        "passed": 1,
+        "failed": 0
+      }
+    ],
+    "regression_status": "clean",
+    "verification_status": "VERIFIED",
+    "evidence_refs": [
+      "tests/test_playwright_about_tab_all_stages.py"
+    ]
+  }
+]

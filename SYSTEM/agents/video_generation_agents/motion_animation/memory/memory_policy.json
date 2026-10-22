@@ -1,0 +1,7 @@
+{
+  "agent_id": "motion_animation",
+  "scope": "agent",
+  "isolation_level": "strict",
+  "allow_project_share": true,
+  "allow_global_read": true
+}

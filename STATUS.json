@@ -1,0 +1,523 @@
+{
+ "updated": "2026-10-09T07:28",
+ "milestones": [
+  {
+   "id": "M0",
+   "name": "STATUS + dashboard",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "Create dashboard project",
+     "done": true
+    },
+    {
+     "name": "Status polling hook",
+     "done": true
+    },
+    {
+     "name": "Overall progress bar",
+     "done": true
+    },
+    {
+     "name": "Milestone bar chart",
+     "done": true
+    },
+    {
+     "name": "Current milestone checklist",
+     "done": true
+    },
+    {
+     "name": "Counters and last updated",
+     "done": true
+    },
+    {
+     "name": "sync_status.py",
+     "done": true
+    },
+    {
+     "name": "update_status.py",
+     "done": true
+    },
+    {
+     "name": "Acceptance test",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M1",
+   "name": "Remotion base",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "Config 1080p 30fps",
+     "done": true
+    },
+    {
+     "name": "Composition root + zod",
+     "done": true
+    },
+    {
+     "name": "Audio master track",
+     "done": true
+    },
+    {
+     "name": "SceneRoot",
+     "done": true
+    },
+    {
+     "name": "Layer registry",
+     "done": true
+    },
+    {
+     "name": "Camera.tsx",
+     "done": true
+    },
+    {
+     "name": "ImageLayer.tsx",
+     "done": true
+    },
+    {
+     "name": "HighlightText.tsx",
+     "done": true
+    },
+    {
+     "name": "Background.tsx",
+     "done": true
+    },
+    {
+     "name": "FilmLook.tsx",
+     "done": true
+    },
+    {
+     "name": "Basic scene fade",
+     "done": true
+    },
+    {
+     "name": "Render test script",
+     "done": true
+    },
+    {
+     "name": "Render final script",
+     "done": true
+    },
+    {
+     "name": "Telugu font check",
+     "done": true
+    },
+    {
+     "name": "Sample composition render",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M2",
+   "name": "Component library",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "IconPop",
+     "done": true
+    },
+    {
+     "name": "Callout",
+     "done": true
+    },
+    {
+     "name": "ShapeAnim",
+     "done": true
+    },
+    {
+     "name": "Caption and HighlightText marker",
+     "done": true
+    },
+    {
+     "name": "Counter",
+     "done": true
+    },
+    {
+     "name": "Chart",
+     "done": true
+    },
+    {
+     "name": "MapLayer",
+     "done": true
+    },
+    {
+     "name": "ImageLayer parallax",
+     "done": true
+    },
+    {
+     "name": "Effect",
+     "done": true
+    },
+    {
+     "name": "StockVideo",
+     "done": true
+    },
+    {
+     "name": "Subtitles",
+     "done": true
+    },
+    {
+     "name": "Light leak overlay",
+     "done": true
+    },
+    {
+     "name": "Built-in transitions",
+     "done": true
+    },
+    {
+     "name": "Custom transitions",
+     "done": true
+    },
+    {
+     "name": "pickTransition util",
+     "done": true
+    },
+    {
+     "name": "16 patterns",
+     "done": true
+    },
+    {
+     "name": "Pattern gallery render",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M3",
+   "name": "Whisper",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "config.py",
+     "done": true
+    },
+    {
+     "name": "audio_utils.py",
+     "done": true
+    },
+    {
+     "name": "transcribe.py",
+     "done": true
+    },
+    {
+     "name": "Transcript schema validation",
+     "done": true
+    },
+    {
+     "name": "Progress reporting",
+     "done": true
+    },
+    {
+     "name": "Transcript cache",
+     "done": true
+    },
+    {
+     "name": "Transcribe CLI",
+     "done": true
+    },
+    {
+     "name": "cuts.py",
+     "done": true
+    },
+    {
+     "name": "show_transcript helper",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M4",
+   "name": "Planning",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "models.py pydantic",
+     "done": true
+    },
+    {
+     "name": "validate.py",
+     "done": true
+    },
+    {
+     "name": "/plan command",
+     "done": true
+    },
+    {
+     "name": "prompts_writer.py",
+     "done": true
+    },
+    {
+     "name": "plan_checks.py",
+     "done": true
+    },
+    {
+     "name": "plan_input.py",
+     "done": true
+    },
+    {
+     "name": "Plan sample fixture",
+     "done": true
+    },
+    {
+     "name": "First real plan run",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M5",
+   "name": "Matching",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "assets.py upload save",
+     "done": true
+    },
+    {
+     "name": "Filename matcher",
+     "done": true
+    },
+    {
+     "name": "CLIP matcher",
+     "done": true
+    },
+    {
+     "name": "Status rules",
+     "done": true
+    },
+    {
+     "name": "Role-aware hints",
+     "done": true
+    },
+    {
+     "name": "checks.py",
+     "done": true
+    },
+    {
+     "name": "focus.py",
+     "done": true
+    },
+    {
+     "name": "bg_remove.py",
+     "done": true
+    },
+    {
+     "name": "fill_slots.py",
+     "done": true
+    },
+    {
+     "name": "match_report output",
+     "done": true
+    },
+    {
+     "name": "Matching tests",
+     "done": true
+    },
+    {
+     "name": "apply_fix",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M6",
+   "name": "End-to-end CLI",
+   "status": "doing",
+   "tasks": [
+    {
+     "name": "cli.py",
+     "done": true
+    },
+    {
+     "name": "pipeline.py",
+     "done": true
+    },
+    {
+     "name": "Dependency checks",
+     "done": true
+    },
+    {
+     "name": "render.py",
+     "done": true
+    },
+    {
+     "name": "Review gate",
+     "done": true
+    },
+    {
+     "name": "Logging and timings",
+     "done": true
+    },
+    {
+     "name": "Full test run",
+     "done": true
+    },
+    {
+     "name": "Quality review checklist",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M7",
+   "name": "FastAPI",
+   "status": "done",
+   "tasks": [
+    {
+     "name": "main.py",
+     "done": true
+    },
+    {
+     "name": "Project store",
+     "done": true
+    },
+    {
+     "name": "Core endpoints",
+     "done": true
+    },
+    {
+     "name": "Uploads",
+     "done": true
+    },
+    {
+     "name": "Background jobs",
+     "done": true
+    },
+    {
+     "name": "Status endpoint",
+     "done": true
+    },
+    {
+     "name": "Video serving",
+     "done": true
+    },
+    {
+     "name": "Error format",
+     "done": true
+    },
+    {
+     "name": "API tests",
+     "done": true
+    }
+   ]
+  },
+  {
+   "id": "M8",
+   "name": "Main UI",
+   "status": "doing",
+   "tasks": [
+    {
+     "name": "Routes and stepper",
+     "done": true
+    },
+    {
+     "name": "API client",
+     "done": true
+    },
+    {
+     "name": "zustand store",
+     "done": true
+    },
+    {
+     "name": "Upload component",
+     "done": true
+    },
+    {
+     "name": "Image grid",
+     "done": true
+    },
+    {
+     "name": "Match check screen",
+     "done": true
+    },
+    {
+     "name": "Remotion Player preview",
+     "done": true
+    },
+    {
+     "name": "Render screen",
+     "done": true
+    },
+    {
+     "name": "Subtitles toggle",
+     "done": true
+    },
+    {
+     "name": "Error toasts",
+     "done": true
+    },
+    {
+     "name": "Full UI run",
+     "done": false
+    }
+   ]
+  },
+  {
+   "id": "M9",
+   "name": "Polish",
+   "status": "doing",
+   "tasks": [
+    {
+     "name": "Transition audit",
+     "done": true
+    },
+    {
+     "name": "Camera polish",
+     "done": true
+    },
+    {
+     "name": "Typography",
+     "done": true
+    },
+    {
+     "name": "Color grade",
+     "done": true
+    },
+    {
+     "name": "Parallax upgrade (optional)",
+     "done": false
+    },
+    {
+     "name": "Particles tuning",
+     "done": true
+    },
+    {
+     "name": "Music ducking",
+     "done": false
+    },
+    {
+     "name": "Word accents",
+     "done": true
+    },
+    {
+     "name": "Pexels stock",
+     "done": false
+    },
+    {
+     "name": "Lottie (optional)",
+     "done": false
+    },
+    {
+     "name": "Error handling pass",
+     "done": true
+    },
+    {
+     "name": "Performance pass",
+     "done": true
+    },
+    {
+     "name": "Packaging and start.bat",
+     "done": true
+    },
+    {
+     "name": "Export extras",
+     "done": false
+    }
+   ]
+  }
+ ]
+}

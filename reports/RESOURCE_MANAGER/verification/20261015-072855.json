@@ -1,0 +1,121 @@
+{
+ "at": "2026-10-15T07:28:55",
+ "verified": [
+  "chart.svg.line",
+  "diagram.dashed-flow",
+  "diagram.node-network",
+  "diagram.route-line",
+  "diagram.timeline-dots",
+  "motion.hud.radar-sweep"
+ ],
+ "failed": [
+  "effect.cinematic.particles-float"
+ ],
+ "results": {
+  "chart.svg.line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0153,
+     "preview": "resource-library/previews/16x9/chart.svg.line.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0092,
+     "preview": "resource-library/previews/9x16/chart.svg.line.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.dashed-flow": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0125,
+     "preview": "resource-library/previews/16x9/diagram.dashed-flow.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0107,
+     "preview": "resource-library/previews/9x16/diagram.dashed-flow.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.node-network": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.023,
+     "preview": "resource-library/previews/16x9/diagram.node-network.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.033,
+     "preview": "resource-library/previews/9x16/diagram.node-network.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.route-line": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0179,
+     "preview": "resource-library/previews/16x9/diagram.route-line.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0228,
+     "preview": "resource-library/previews/9x16/diagram.route-line.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "diagram.timeline-dots": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.0223,
+     "preview": "resource-library/previews/16x9/diagram.timeline-dots.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0259,
+     "preview": "resource-library/previews/9x16/diagram.timeline-dots.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "effect.cinematic.particles-float": {
+   "aspects": {
+    "16:9": {
+     "ok": false,
+     "changed_ratio": 0.0002,
+     "preview": "resource-library/previews/16x9/effect.cinematic.particles-float.jpg"
+    },
+    "9:16": {
+     "ok": false,
+     "changed_ratio": 0.0002,
+     "preview": "resource-library/previews/9x16/effect.cinematic.particles-float.jpg"
+    }
+   },
+   "deterministic": true
+  },
+  "motion.hud.radar-sweep": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.1007,
+     "preview": "resource-library/previews/16x9/motion.hud.radar-sweep.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0462,
+     "preview": "resource-library/previews/9x16/motion.hud.radar-sweep.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

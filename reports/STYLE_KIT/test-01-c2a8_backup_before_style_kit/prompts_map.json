@@ -1,0 +1,24 @@
+{
+ "prompts": [
+  {
+   "n": 1,
+   "scene": 1,
+   "slot": "s01_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "Sleek pair of smart glasses floating in darkness, faint holographic light reflecting on the lenses, close-up side angle, soft rim light, sense of wonder"
+  },
+  {
+   "n": 2,
+   "scene": 3,
+   "slot": "s03_0",
+   "role": "main",
+   "ratio": "16:9",
+   "required": true,
+   "bg": "full",
+   "text": "Wide view of a glowing futuristic city skyline at dawn, luminous towers and light trails, low wide-angle camera, hopeful bright atmosphere"
+  }
+ ]
+}

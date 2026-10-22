@@ -1,0 +1,323 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_perm_agent",
+  "updated_at": "2026-10-20T02:20:58.042789+00:00",
+  "total_experiences": 7,
+  "experiences": {
+    "exp-mock_perm_agent-0c047695fc": {
+      "experience_id": "exp-mock_perm_agent-0c047695fc",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458907",
+      "project_id": "tmpxpuudnwm",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:07.408795+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-3cda8aad0e": {
+      "experience_id": "exp-mock_perm_agent-3cda8aad0e",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381361",
+      "project_id": "tmpvmukq6ez",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.963438+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-4d6a38e504": {
+      "experience_id": "exp-mock_perm_agent-4d6a38e504",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462858",
+      "project_id": "tmpa_1hh_pa",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:58.030165+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-8cadecb5bb": {
+      "experience_id": "exp-mock_perm_agent-8cadecb5bb",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458268",
+      "project_id": "tmp4t57rxxh",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:28.900042+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-9f10db816c": {
+      "experience_id": "exp-mock_perm_agent-9f10db816c",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458826",
+      "project_id": "tmp0zp55yge",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:46.007773+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-c93f7fb8c3": {
+      "experience_id": "exp-mock_perm_agent-c93f7fb8c3",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp4an70l56",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.261526+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_perm_agent-f1658a373c": {
+      "experience_id": "exp-mock_perm_agent-f1658a373c",
+      "agent_id": "mock_perm_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254404",
+      "project_id": "tmp5yfte8e3",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_perm_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Permanent failure: corrupted unrecoverable input",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_perm_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+          "affected_domain": "general",
+          "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_perm_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Permanent failure: corrupted unrecoverable input.",
+        "affected_domain": "general",
+        "observed_pattern": "Permanent failure: corrupted unrecoverable input",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:44.101843+00:00",
+      "schema_version": 1
+    }
+  }
+}

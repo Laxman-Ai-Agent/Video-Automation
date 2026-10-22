@@ -1,0 +1,45 @@
+{
+  "_rules": "Every Lottie file a generated scene may import is listed here with its source and licence. External files (e.g. LottieFiles) are added only with the creator's name, the licence and the file page URL, must be under 300 KB, self-contained (no image assets) and not redistributed outside this project.",
+  "animations": [
+    {
+      "id": "success_check",
+      "file": "success_check.json",
+      "description": "A ring draws on, then a check mark: success / completed / verified (3 s, holds the final state)",
+      "source": "original",
+      "author": "Dark World Video Generation Agent (this project)",
+      "license": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "size_bytes": 1399
+    },
+    {
+      "id": "loading_ring",
+      "file": "loading_ring.json",
+      "description": "A rotating arc over a faint track: loading / processing (2 s loop)",
+      "source": "original",
+      "author": "Dark World Video Generation Agent (this project)",
+      "license": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "size_bytes": 1347
+    },
+    {
+      "id": "pulse_rings",
+      "file": "pulse_rings.json",
+      "description": "Concentric rings expanding from a dot: signal / broadcast / live / alert (2 s loop)",
+      "source": "original",
+      "author": "Dark World Video Generation Agent (this project)",
+      "license": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "size_bytes": 2924
+    },
+    {
+      "id": "arrow_bounce",
+      "file": "arrow_bounce.json",
+      "description": "A right-pointing arrow bouncing forward: next / continue / direction (1.5 s loop)",
+      "source": "original",
+      "author": "Dark World Video Generation Agent (this project)",
+      "license": "Apache-2.0",
+      "license_url": "https://www.apache.org/licenses/LICENSE-2.0",
+      "size_bytes": 1308
+    }
+  ]
+}

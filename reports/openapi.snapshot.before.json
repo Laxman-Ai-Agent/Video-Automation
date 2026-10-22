@@ -1,0 +1,3587 @@
+{
+ "components": {
+  "schemas": {
+   "ApproveRequest": {
+    "properties": {
+     "approved": {
+      "default": true,
+      "title": "Approved",
+      "type": "boolean"
+     },
+     "gate": {
+      "enum": [
+       "analysis",
+       "prompts",
+       "images"
+      ],
+      "title": "Gate",
+      "type": "string"
+     }
+    },
+    "required": [
+     "gate"
+    ],
+    "title": "ApproveRequest",
+    "type": "object"
+   },
+   "AudioRef": {
+    "description": "The uploaded audio of a project, as the server stored it.",
+    "properties": {
+     "file": {
+      "title": "File",
+      "type": "string"
+     },
+     "format": {
+      "title": "Format",
+      "type": "string"
+     },
+     "original_name": {
+      "title": "Original Name",
+      "type": "string"
+     },
+     "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "file",
+     "original_name",
+     "size_bytes",
+     "format"
+    ],
+    "title": "AudioRef",
+    "type": "object"
+   },
+   "Body_create_project_projects_post": {
+    "properties": {
+     "aspect": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Aspect"
+     },
+     "audio": {
+      "contentMediaType": "application/octet-stream",
+      "title": "Audio",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     }
+    },
+    "required": [
+     "name",
+     "audio"
+    ],
+    "title": "Body_create_project_projects_post",
+    "type": "object"
+   },
+   "Body_upload_assets_projects__pid__assets_post": {
+    "properties": {
+     "files": {
+      "items": {
+       "contentMediaType": "application/octet-stream",
+       "type": "string"
+      },
+      "title": "Files",
+      "type": "array"
+     }
+    },
+    "required": [
+     "files"
+    ],
+    "title": "Body_upload_assets_projects__pid__assets_post",
+    "type": "object"
+   },
+   "CropRequest": {
+    "properties": {
+     "aspect": {
+      "default": "9:16",
+      "enum": [
+       "16:9",
+       "9:16"
+      ],
+      "title": "Aspect",
+      "type": "string"
+     },
+     "reset": {
+      "default": false,
+      "title": "Reset",
+      "type": "boolean"
+     },
+     "x": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "X"
+     },
+     "y": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Y"
+     },
+     "zoom": {
+      "default": 1.0,
+      "title": "Zoom",
+      "type": "number"
+     }
+    },
+    "title": "CropRequest",
+    "type": "object"
+   },
+   "CropResult": {
+    "properties": {
+     "aspect": {
+      "enum": [
+       "16:9",
+       "9:16"
+      ],
+      "title": "Aspect",
+      "type": "string"
+     },
+     "crop": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/CropValue"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "n": {
+      "title": "N",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "n",
+     "aspect",
+     "crop"
+    ],
+    "title": "CropResult",
+    "type": "object"
+   },
+   "CropValue": {
+    "properties": {
+     "file": {
+      "title": "File",
+      "type": "string"
+     },
+     "stale": {
+      "default": false,
+      "title": "Stale",
+      "type": "boolean"
+     },
+     "x": {
+      "title": "X",
+      "type": "number"
+     },
+     "y": {
+      "title": "Y",
+      "type": "number"
+     },
+     "zoom": {
+      "title": "Zoom",
+      "type": "number"
+     }
+    },
+    "required": [
+     "x",
+     "y",
+     "zoom",
+     "file"
+    ],
+    "title": "CropValue",
+    "type": "object"
+   },
+   "Deleted": {
+    "properties": {
+     "deleted": {
+      "title": "Deleted",
+      "type": "string"
+     }
+    },
+    "required": [
+     "deleted"
+    ],
+    "title": "Deleted",
+    "type": "object"
+   },
+   "FixRequest": {
+    "properties": {
+     "file": {
+      "title": "File",
+      "type": "string"
+     },
+     "n": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "N"
+     },
+     "unused": {
+      "default": false,
+      "title": "Unused",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "file"
+    ],
+    "title": "FixRequest",
+    "type": "object"
+   },
+   "Gate": {
+    "properties": {
+     "approved": {
+      "title": "Approved",
+      "type": "boolean"
+     },
+     "approved_count": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Approved Count"
+     },
+     "at": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "At"
+     },
+     "blockers": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Blockers",
+      "type": "array"
+     },
+     "ready": {
+      "title": "Ready",
+      "type": "boolean"
+     },
+     "stale": {
+      "title": "Stale",
+      "type": "boolean"
+     },
+     "total": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Total"
+     },
+     "warnings": {
+      "default": [],
+      "items": {
+       "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+     }
+    },
+    "required": [
+     "approved",
+     "stale",
+     "at",
+     "ready",
+     "blockers"
+    ],
+    "title": "Gate",
+    "type": "object"
+   },
+   "Gates": {
+    "properties": {
+     "analysis": {
+      "$ref": "#/components/schemas/Gate"
+     },
+     "images": {
+      "$ref": "#/components/schemas/Gate"
+     },
+     "prompts": {
+      "$ref": "#/components/schemas/Gate"
+     }
+    },
+    "required": [
+     "analysis",
+     "prompts",
+     "images"
+    ],
+    "title": "Gates",
+    "type": "object"
+   },
+   "Generation": {
+    "description": "Progress of the app's own prompt writer (promptgen.py): all prompts after the analysis approval, or one prompt.",
+    "properties": {
+     "current": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Current"
+     },
+     "done": {
+      "default": 0,
+      "title": "Done",
+      "type": "integer"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     },
+     "failed": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/GenerationFailure"
+      },
+      "title": "Failed",
+      "type": "array"
+     },
+     "finished": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Finished"
+     },
+     "kind": {
+      "anyOf": [
+       {
+        "enum": [
+         "all",
+         "one",
+         "plan"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Kind"
+     },
+     "n": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "N"
+     },
+     "skipped": {
+      "default": [],
+      "items": {
+       "type": "integer"
+      },
+      "title": "Skipped",
+      "type": "array"
+     },
+     "started": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Started"
+     },
+     "state": {
+      "default": "idle",
+      "enum": [
+       "idle",
+       "running",
+       "done",
+       "failed"
+      ],
+      "title": "State",
+      "type": "string"
+     },
+     "total": {
+      "default": 0,
+      "title": "Total",
+      "type": "integer"
+     }
+    },
+    "title": "Generation",
+    "type": "object"
+   },
+   "GenerationFailure": {
+    "properties": {
+     "error": {
+      "title": "Error",
+      "type": "string"
+     },
+     "n": {
+      "title": "N",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "n",
+     "error"
+    ],
+    "title": "GenerationFailure",
+    "type": "object"
+   },
+   "HTTPValidationError": {
+    "properties": {
+     "detail": {
+      "items": {
+       "$ref": "#/components/schemas/ValidationError"
+      },
+      "title": "Detail",
+      "type": "array"
+     }
+    },
+    "title": "HTTPValidationError",
+    "type": "object"
+   },
+   "HistoryEntry": {
+    "properties": {
+     "at": {
+      "title": "At",
+      "type": "string"
+     },
+     "by": {
+      "title": "By",
+      "type": "string"
+     },
+     "text": {
+      "title": "Text",
+      "type": "string"
+     }
+    },
+    "required": [
+     "text",
+     "at",
+     "by"
+    ],
+    "title": "HistoryEntry",
+    "type": "object"
+   },
+   "Issue": {
+    "properties": {
+     "message": {
+      "title": "Message",
+      "type": "string"
+     },
+     "severity": {
+      "enum": [
+       "error",
+       "warning"
+      ],
+      "title": "Severity",
+      "type": "string"
+     }
+    },
+    "required": [
+     "severity",
+     "message"
+    ],
+    "title": "Issue",
+    "type": "object"
+   },
+   "JobStarted": {
+    "properties": {
+     "label": {
+      "title": "Label",
+      "type": "string"
+     },
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "steps": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Steps",
+      "type": "array"
+     }
+    },
+    "required": [
+     "project",
+     "label",
+     "steps"
+    ],
+    "title": "JobStarted",
+    "type": "object"
+   },
+   "Keyword": {
+    "properties": {
+     "at": {
+      "title": "At",
+      "type": "number"
+     },
+     "text": {
+      "title": "Text",
+      "type": "string"
+     }
+    },
+    "required": [
+     "text",
+     "at"
+    ],
+    "title": "Keyword",
+    "type": "object"
+   },
+   "MatchItem": {
+    "properties": {
+     "file": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "File"
+     },
+     "margin": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Margin"
+     },
+     "method": {
+      "enum": [
+       "filename",
+       "clip",
+       "manual",
+       "none"
+      ],
+      "title": "Method",
+      "type": "string"
+     },
+     "n": {
+      "title": "N",
+      "type": "integer"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "status": {
+      "enum": [
+       "ok",
+       "review",
+       "missing"
+      ],
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "n",
+     "file",
+     "method",
+     "status"
+    ],
+    "title": "MatchItem",
+    "type": "object"
+   },
+   "MatchReport": {
+    "properties": {
+     "broken": {
+      "default": [],
+      "items": {
+       "type": "string"
+      },
+      "title": "Broken",
+      "type": "array"
+     },
+     "duplicates": {
+      "default": [],
+      "items": {
+       "items": {
+        "type": "string"
+       },
+       "type": "array"
+      },
+      "title": "Duplicates",
+      "type": "array"
+     },
+     "matches": {
+      "items": {
+       "$ref": "#/components/schemas/MatchItem"
+      },
+      "title": "Matches",
+      "type": "array"
+     },
+     "unused": {
+      "default": [],
+      "items": {
+       "type": "string"
+      },
+      "title": "Unused",
+      "type": "array"
+     },
+     "warnings": {
+      "default": [],
+      "items": {
+       "additionalProperties": true,
+       "type": "object"
+      },
+      "title": "Warnings",
+      "type": "array"
+     }
+    },
+    "required": [
+     "matches"
+    ],
+    "title": "MatchReport",
+    "type": "object"
+   },
+   "ProjectInfo": {
+    "properties": {
+     "aspect": {
+      "anyOf": [
+       {
+        "enum": [
+         "9:16",
+         "16:9"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Aspect"
+     },
+     "audio": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/AudioRef"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "created": {
+      "title": "Created",
+      "type": "string"
+     },
+     "id": {
+      "title": "Id",
+      "type": "string"
+     },
+     "name": {
+      "title": "Name",
+      "type": "string"
+     },
+     "state": {
+      "title": "State",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "name",
+     "created",
+     "state"
+    ],
+    "title": "ProjectInfo",
+    "type": "object"
+   },
+   "PromptApprove": {
+    "properties": {
+     "ns": {
+      "anyOf": [
+       {
+        "items": {
+         "type": "integer"
+        },
+        "type": "array"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ns"
+     }
+    },
+    "title": "PromptApprove",
+    "type": "object"
+   },
+   "PromptEdit": {
+    "properties": {
+     "text": {
+      "title": "Text",
+      "type": "string"
+     }
+    },
+    "required": [
+     "text"
+    ],
+    "title": "PromptEdit",
+    "type": "object"
+   },
+   "PromptImage": {
+    "properties": {
+     "file": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "File"
+     },
+     "height": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Height"
+     },
+     "margin": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Margin"
+     },
+     "method": {
+      "title": "Method",
+      "type": "string"
+     },
+     "note": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Note"
+     },
+     "ratio": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Ratio"
+     },
+     "score": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Score"
+     },
+     "status": {
+      "enum": [
+       "ok",
+       "review",
+       "missing"
+      ],
+      "title": "Status",
+      "type": "string"
+     },
+     "warnings": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Warnings",
+      "type": "array"
+     },
+     "width": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Width"
+     }
+    },
+    "required": [
+     "file",
+     "status",
+     "method",
+     "score",
+     "margin",
+     "note",
+     "warnings",
+     "width",
+     "height",
+     "ratio"
+    ],
+    "title": "PromptImage",
+    "type": "object"
+   },
+   "PromptItem": {
+    "properties": {
+     "approved": {
+      "title": "Approved",
+      "type": "boolean"
+     },
+     "concept": {
+      "title": "Concept",
+      "type": "string"
+     },
+     "crops": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/CropValue"
+      },
+      "title": "Crops",
+      "type": "object"
+     },
+     "edited": {
+      "title": "Edited",
+      "type": "boolean"
+     },
+     "full_text": {
+      "title": "Full Text",
+      "type": "string"
+     },
+     "generated_text": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Generated Text"
+     },
+     "history": {
+      "items": {
+       "$ref": "#/components/schemas/HistoryEntry"
+      },
+      "title": "History",
+      "type": "array"
+     },
+     "history_count": {
+      "title": "History Count",
+      "type": "integer"
+     },
+     "image": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/PromptImage"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "n": {
+      "title": "N",
+      "type": "integer"
+     },
+     "narration_en": {
+      "title": "Narration En",
+      "type": "string"
+     },
+     "ratio": {
+      "title": "Ratio",
+      "type": "string"
+     },
+     "regen_requested": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Regen Requested"
+     },
+     "required": {
+      "title": "Required",
+      "type": "boolean"
+     },
+     "role": {
+      "title": "Role",
+      "type": "string"
+     },
+     "scene": {
+      "title": "Scene",
+      "type": "integer"
+     },
+     "scene_end": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scene End"
+     },
+     "scene_start": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scene Start"
+     },
+     "slot": {
+      "title": "Slot",
+      "type": "string"
+     },
+     "status": {
+      "enum": [
+       "generated",
+       "edited",
+       "approved",
+       "regenerating"
+      ],
+      "title": "Status",
+      "type": "string"
+     },
+     "text": {
+      "title": "Text",
+      "type": "string"
+     }
+    },
+    "required": [
+     "n",
+     "scene",
+     "slot",
+     "role",
+     "ratio",
+     "required",
+     "text",
+     "full_text",
+     "scene_start",
+     "scene_end",
+     "concept",
+     "narration_en",
+     "status",
+     "approved",
+     "edited",
+     "regen_requested",
+     "generated_text",
+     "history",
+     "history_count",
+     "image",
+     "crops"
+    ],
+    "title": "PromptItem",
+    "type": "object"
+   },
+   "QcApproval": {
+    "properties": {
+     "at": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "At"
+     },
+     "issues": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/QcIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+     },
+     "result": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Result"
+     },
+     "status": {
+      "enum": [
+       "none",
+       "approved",
+       "fixes"
+      ],
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "status"
+    ],
+    "title": "QcApproval",
+    "type": "object"
+   },
+   "QcCheck": {
+    "properties": {
+     "at": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "At"
+     },
+     "check": {
+      "title": "Check",
+      "type": "string"
+     },
+     "detail": {
+      "title": "Detail",
+      "type": "string"
+     },
+     "id": {
+      "title": "Id",
+      "type": "string"
+     },
+     "result": {
+      "enum": [
+       "passed",
+       "warning",
+       "failed"
+      ],
+      "title": "Result",
+      "type": "string"
+     },
+     "scene": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scene"
+     },
+     "severity": {
+      "enum": [
+       "error",
+       "warning",
+       "info"
+      ],
+      "title": "Severity",
+      "type": "string"
+     },
+     "source": {
+      "title": "Source",
+      "type": "string"
+     },
+     "until": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Until"
+     }
+    },
+    "required": [
+     "id",
+     "check",
+     "source",
+     "severity",
+     "result",
+     "detail"
+    ],
+    "title": "QcCheck",
+    "type": "object"
+   },
+   "QcDecisionRequest": {
+    "properties": {
+     "action": {
+      "enum": [
+       "approve",
+       "fixes"
+      ],
+      "title": "Action",
+      "type": "string"
+     },
+     "aspect": {
+      "enum": [
+       "16:9",
+       "9:16"
+      ],
+      "title": "Aspect",
+      "type": "string"
+     },
+     "issues": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/QcIssue"
+      },
+      "title": "Issues",
+      "type": "array"
+     },
+     "preview": {
+      "title": "Preview",
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "aspect",
+     "preview",
+     "action"
+    ],
+    "title": "QcDecisionRequest",
+    "type": "object"
+   },
+   "QcIssue": {
+    "properties": {
+     "at": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "At"
+     },
+     "check": {
+      "title": "Check",
+      "type": "string"
+     },
+     "detail": {
+      "title": "Detail",
+      "type": "string"
+     },
+     "scene": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scene"
+     }
+    },
+    "required": [
+     "check",
+     "detail"
+    ],
+    "title": "QcIssue",
+    "type": "object"
+   },
+   "QcMedia": {
+    "properties": {
+     "audio_codec": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Audio Codec"
+     },
+     "duration": {
+      "title": "Duration",
+      "type": "number"
+     },
+     "fps": {
+      "title": "Fps",
+      "type": "number"
+     },
+     "height": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Height"
+     },
+     "modified": {
+      "title": "Modified",
+      "type": "number"
+     },
+     "size_bytes": {
+      "title": "Size Bytes",
+      "type": "integer"
+     },
+     "video_codec": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Video Codec"
+     },
+     "width": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Width"
+     }
+    },
+    "required": [
+     "size_bytes",
+     "duration",
+     "fps",
+     "modified"
+    ],
+    "title": "QcMedia",
+    "type": "object"
+   },
+   "QcReport": {
+    "properties": {
+     "aspect": {
+      "enum": [
+       "16:9",
+       "9:16"
+      ],
+      "title": "Aspect",
+      "type": "string"
+     },
+     "checks": {
+      "items": {
+       "$ref": "#/components/schemas/QcCheck"
+      },
+      "title": "Checks",
+      "type": "array"
+     },
+     "media": {
+      "anyOf": [
+       {
+        "$ref": "#/components/schemas/QcMedia"
+       },
+       {
+        "type": "null"
+       }
+      ]
+     },
+     "preview": {
+      "title": "Preview",
+      "type": "boolean"
+     },
+     "result": {
+      "enum": [
+       "passed",
+       "passed_with_warning",
+       "failed"
+      ],
+      "title": "Result",
+      "type": "string"
+     },
+     "video": {
+      "title": "Video",
+      "type": "string"
+     }
+    },
+    "required": [
+     "aspect",
+     "preview",
+     "video",
+     "result",
+     "checks"
+    ],
+    "title": "QcReport",
+    "type": "object"
+   },
+   "RegenRequested": {
+    "properties": {
+     "command": {
+      "title": "Command",
+      "type": "string"
+     },
+     "n": {
+      "title": "N",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "n",
+     "command"
+    ],
+    "title": "RegenRequested",
+    "type": "object"
+   },
+   "ReviewState": {
+    "properties": {
+     "analysis": {
+      "$ref": "#/components/schemas/SceneTable"
+     },
+     "gates": {
+      "$ref": "#/components/schemas/Gates"
+     },
+     "generation": {
+      "$ref": "#/components/schemas/Generation",
+      "default": {
+       "done": 0,
+       "failed": [],
+       "skipped": [],
+       "state": "idle",
+       "total": 0
+      }
+     },
+     "plan_ready": {
+      "title": "Plan Ready",
+      "type": "boolean"
+     },
+     "project": {
+      "title": "Project",
+      "type": "string"
+     },
+     "prompts": {
+      "items": {
+       "$ref": "#/components/schemas/PromptItem"
+      },
+      "title": "Prompts",
+      "type": "array"
+     },
+     "timeline": {
+      "additionalProperties": {
+       "$ref": "#/components/schemas/TimelineAspect"
+      },
+      "title": "Timeline",
+      "type": "object"
+     }
+    },
+    "required": [
+     "project",
+     "plan_ready",
+     "analysis",
+     "prompts",
+     "gates",
+     "timeline"
+    ],
+    "title": "ReviewState",
+    "type": "object"
+   },
+   "RunRequest": {
+    "properties": {
+     "aspect": {
+      "default": "9:16",
+      "enum": [
+       "16:9",
+       "9:16"
+      ],
+      "title": "Aspect",
+      "type": "string"
+     },
+     "stage": {
+      "enum": [
+       "match",
+       "timeline",
+       "preview",
+       "final"
+      ],
+      "title": "Stage",
+      "type": "string"
+     }
+    },
+    "required": [
+     "stage"
+    ],
+    "title": "RunRequest",
+    "type": "object"
+   },
+   "SceneApproval": {
+    "properties": {
+     "action": {
+      "enum": [
+       "approve",
+       "reopen"
+      ],
+      "title": "Action",
+      "type": "string"
+     }
+    },
+    "required": [
+     "action"
+    ],
+    "title": "SceneApproval",
+    "type": "object"
+   },
+   "SceneChange": {
+    "properties": {
+     "path": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "title": "Path",
+      "type": "array"
+     },
+     "value": {
+      "title": "Value"
+     }
+    },
+    "required": [
+     "path",
+     "value"
+    ],
+    "title": "SceneChange",
+    "type": "object"
+   },
+   "SceneRegenerate": {
+    "properties": {
+     "confirm_overwrite": {
+      "default": false,
+      "title": "Confirm Overwrite",
+      "type": "boolean"
+     }
+    },
+    "title": "SceneRegenerate",
+    "type": "object"
+   },
+   "SceneRow": {
+    "properties": {
+     "concept": {
+      "title": "Concept",
+      "type": "string"
+     },
+     "duration": {
+      "title": "Duration",
+      "type": "number"
+     },
+     "end": {
+      "title": "End",
+      "type": "number"
+     },
+     "id": {
+      "title": "Id",
+      "type": "integer"
+     },
+     "issues": {
+      "items": {
+       "$ref": "#/components/schemas/Issue"
+      },
+      "title": "Issues",
+      "type": "array"
+     },
+     "keywords": {
+      "items": {
+       "$ref": "#/components/schemas/Keyword"
+      },
+      "title": "Keywords",
+      "type": "array"
+     },
+     "meaning": {
+      "title": "Meaning",
+      "type": "string"
+     },
+     "mode": {
+      "title": "Mode",
+      "type": "string"
+     },
+     "mood": {
+      "title": "Mood",
+      "type": "string"
+     },
+     "narration": {
+      "title": "Narration",
+      "type": "string"
+     },
+     "narration_en": {
+      "title": "Narration En",
+      "type": "string"
+     },
+     "pattern": {
+      "title": "Pattern",
+      "type": "string"
+     },
+     "slots": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Slots",
+      "type": "array"
+     },
+     "start": {
+      "title": "Start",
+      "type": "number"
+     },
+     "status": {
+      "enum": [
+       "ok",
+       "warning",
+       "error"
+      ],
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "id",
+     "start",
+     "end",
+     "duration",
+     "narration",
+     "narration_en",
+     "meaning",
+     "concept",
+     "mood",
+     "mode",
+     "pattern",
+     "keywords",
+     "slots",
+     "status",
+     "issues"
+    ],
+    "title": "SceneRow",
+    "type": "object"
+   },
+   "SceneSave": {
+    "properties": {
+     "changes": {
+      "items": {
+       "$ref": "#/components/schemas/SceneChange"
+      },
+      "title": "Changes",
+      "type": "array"
+     },
+     "revision": {
+      "title": "Revision",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "revision",
+     "changes"
+    ],
+    "title": "SceneSave",
+    "type": "object"
+   },
+   "SceneTable": {
+    "properties": {
+     "duration": {
+      "anyOf": [
+       {
+        "type": "number"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Duration"
+     },
+     "general": {
+      "items": {
+       "$ref": "#/components/schemas/Issue"
+      },
+      "title": "General",
+      "type": "array"
+     },
+     "scenes": {
+      "items": {
+       "$ref": "#/components/schemas/SceneRow"
+      },
+      "title": "Scenes",
+      "type": "array"
+     },
+     "status": {
+      "enum": [
+       "ok",
+       "warning",
+       "error",
+       "empty"
+      ],
+      "title": "Status",
+      "type": "string"
+     }
+    },
+    "required": [
+     "scenes",
+     "general",
+     "duration",
+     "status"
+    ],
+    "title": "SceneTable",
+    "type": "object"
+   },
+   "Status": {
+    "properties": {
+     "command": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Command"
+     },
+     "error": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Error"
+     },
+     "hint": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Hint"
+     },
+     "message": {
+      "default": "",
+      "title": "Message",
+      "type": "string"
+     },
+     "percent": {
+      "default": 0,
+      "title": "Percent",
+      "type": "number"
+     },
+     "running": {
+      "default": false,
+      "title": "Running",
+      "type": "boolean"
+     },
+     "state": {
+      "default": "",
+      "title": "State",
+      "type": "string"
+     },
+     "step": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Step"
+     },
+     "waiting_for": {
+      "anyOf": [
+       {
+        "enum": [
+         "plan",
+         "images",
+         "review"
+        ],
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Waiting For"
+     }
+    },
+    "title": "Status",
+    "type": "object"
+   },
+   "SubmitRequest": {
+    "properties": {
+     "force": {
+      "default": false,
+      "title": "Force",
+      "type": "boolean"
+     },
+     "preview": {
+      "default": false,
+      "title": "Preview",
+      "type": "boolean"
+     }
+    },
+    "title": "SubmitRequest",
+    "type": "object"
+   },
+   "TimelineAspect": {
+    "properties": {
+     "checked": {
+      "title": "Checked",
+      "type": "boolean"
+     },
+     "composition": {
+      "title": "Composition",
+      "type": "boolean"
+     },
+     "errors": {
+      "title": "Errors",
+      "type": "integer"
+     },
+     "final_video": {
+      "title": "Final Video",
+      "type": "boolean"
+     },
+     "findings": {
+      "default": [],
+      "items": {
+       "$ref": "#/components/schemas/TimelineFinding"
+      },
+      "title": "Findings",
+      "type": "array"
+     },
+     "fresh": {
+      "title": "Fresh",
+      "type": "boolean"
+     },
+     "ok": {
+      "title": "Ok",
+      "type": "boolean"
+     },
+     "preview_video": {
+      "title": "Preview Video",
+      "type": "boolean"
+     },
+     "ready": {
+      "title": "Ready",
+      "type": "boolean"
+     },
+     "warnings": {
+      "title": "Warnings",
+      "type": "integer"
+     }
+    },
+    "required": [
+     "composition",
+     "checked",
+     "fresh",
+     "ok",
+     "errors",
+     "warnings",
+     "ready",
+     "preview_video",
+     "final_video"
+    ],
+    "title": "TimelineAspect",
+    "type": "object"
+   },
+   "TimelineFinding": {
+    "properties": {
+     "advice": {
+      "title": "Advice",
+      "type": "string"
+     },
+     "message": {
+      "title": "Message",
+      "type": "string"
+     },
+     "rule": {
+      "title": "Rule",
+      "type": "string"
+     },
+     "scene": {
+      "anyOf": [
+       {
+        "type": "integer"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Scene"
+     },
+     "severity": {
+      "enum": [
+       "error",
+       "warning",
+       "info"
+      ],
+      "title": "Severity",
+      "type": "string"
+     },
+     "shot": {
+      "anyOf": [
+       {
+        "type": "string"
+       },
+       {
+        "type": "null"
+       }
+      ],
+      "title": "Shot"
+     }
+    },
+    "required": [
+     "severity",
+     "rule",
+     "scene",
+     "shot",
+     "message",
+     "advice"
+    ],
+    "title": "TimelineFinding",
+    "type": "object"
+   },
+   "UploadResult": {
+    "properties": {
+     "renamed": {
+      "additionalProperties": {
+       "type": "string"
+      },
+      "default": {},
+      "title": "Renamed",
+      "type": "object"
+     },
+     "replaced": {
+      "default": [],
+      "items": {
+       "type": "string"
+      },
+      "title": "Replaced",
+      "type": "array"
+     },
+     "saved": {
+      "items": {
+       "type": "string"
+      },
+      "title": "Saved",
+      "type": "array"
+     }
+    },
+    "required": [
+     "saved"
+    ],
+    "title": "UploadResult",
+    "type": "object"
+   },
+   "ValidationError": {
+    "properties": {
+     "ctx": {
+      "title": "Context",
+      "type": "object"
+     },
+     "input": {
+      "title": "Input"
+     },
+     "loc": {
+      "items": {
+       "anyOf": [
+        {
+         "type": "string"
+        },
+        {
+         "type": "integer"
+        }
+       ]
+      },
+      "title": "Location",
+      "type": "array"
+     },
+     "msg": {
+      "title": "Message",
+      "type": "string"
+     },
+     "type": {
+      "title": "Error Type",
+      "type": "string"
+     }
+    },
+    "required": [
+     "loc",
+     "msg",
+     "type"
+    ],
+    "title": "ValidationError",
+    "type": "object"
+   },
+   "VisualPlanState": {
+    "properties": {
+     "all_approved": {
+      "title": "All Approved",
+      "type": "boolean"
+     },
+     "plan": {
+      "additionalProperties": true,
+      "title": "Plan",
+      "type": "object"
+     }
+    },
+    "required": [
+     "plan",
+     "all_approved"
+    ],
+    "title": "VisualPlanState",
+    "type": "object"
+   },
+   "VisualSceneState": {
+    "properties": {
+     "all_approved": {
+      "title": "All Approved",
+      "type": "boolean"
+     },
+     "scene": {
+      "additionalProperties": true,
+      "title": "Scene",
+      "type": "object"
+     }
+    },
+    "required": [
+     "scene",
+     "all_approved"
+    ],
+    "title": "VisualSceneState",
+    "type": "object"
+   }
+  }
+ },
+ "info": {
+  "title": "Audio-to-Video",
+  "version": "0.7"
+ },
+ "openapi": "3.1.0",
+ "paths": {
+  "/health": {
+   "get": {
+    "operationId": "health_health_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "Health"
+   }
+  },
+  "/projects": {
+   "get": {
+    "operationId": "list_projects_projects_get",
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "items": {
+          "$ref": "#/components/schemas/ProjectInfo"
+         },
+         "title": "Response List Projects Projects Get",
+         "type": "array"
+        }
+       }
+      },
+      "description": "Successful Response"
+     }
+    },
+    "summary": "List Projects",
+    "tags": [
+     "projects"
+    ]
+   },
+   "post": {
+    "operationId": "create_project_projects_post",
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_create_project_projects_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ProjectInfo"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Create Project",
+    "tags": [
+     "projects"
+    ]
+   }
+  },
+  "/projects/{pid}": {
+   "delete": {
+    "operationId": "delete_project_projects__pid__delete",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "confirm",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Confirm",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Deleted"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Delete Project",
+    "tags": [
+     "projects"
+    ]
+   },
+   "get": {
+    "operationId": "get_project_projects__pid__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ProjectInfo"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Get Project",
+    "tags": [
+     "projects"
+    ]
+   }
+  },
+  "/projects/{pid}/approve": {
+   "post": {
+    "operationId": "approve_projects__pid__approve_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/ApproveRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Gate"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Approve",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/assets": {
+   "post": {
+    "operationId": "upload_assets_projects__pid__assets_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "multipart/form-data": {
+       "schema": {
+        "$ref": "#/components/schemas/Body_upload_assets_projects__pid__assets_post"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "201": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/UploadResult"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Upload Assets",
+    "tags": [
+     "uploads"
+    ]
+   }
+  },
+  "/projects/{pid}/assets/{name}": {
+   "get": {
+    "operationId": "asset_projects__pid__assets__name__get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "name",
+      "required": true,
+      "schema": {
+       "title": "Name",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Asset",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/cancel": {
+   "post": {
+    "operationId": "cancel_projects__pid__cancel_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Cancel",
+    "tags": [
+     "jobs"
+    ]
+   }
+  },
+  "/projects/{pid}/crops/{n}": {
+   "put": {
+    "operationId": "set_crop_projects__pid__crops__n__put",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "n",
+      "required": true,
+      "schema": {
+       "title": "N",
+       "type": "integer"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/CropRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/CropResult"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Set Crop",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/match": {
+   "get": {
+    "operationId": "get_match_projects__pid__match_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MatchReport"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Get Match",
+    "tags": [
+     "results"
+    ]
+   }
+  },
+  "/projects/{pid}/match/fix": {
+   "post": {
+    "operationId": "fix_match_projects__pid__match_fix_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/FixRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/MatchReport"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Fix Match",
+    "tags": [
+     "results"
+    ]
+   }
+  },
+  "/projects/{pid}/prompts": {
+   "get": {
+    "operationId": "download_prompts_projects__pid__prompts_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "text/plain": {
+        "schema": {
+         "type": "string"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Download Prompts",
+    "tags": [
+     "projects"
+    ]
+   }
+  },
+  "/projects/{pid}/prompts/approve": {
+   "post": {
+    "operationId": "approve_prompts_projects__pid__prompts_approve_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PromptApprove"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Approve Prompts",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/prompts/generate": {
+   "post": {
+    "description": "Writes what is still missing: the scene plan when it does not exist yet (transcript and cut points are ready), else the prompts of the approved\nanalysis. Also the retry after a failure: it never starts a second job.",
+    "operationId": "generate_projects__pid__prompts_generate_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Generation"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Generate",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/prompts/{n}": {
+   "put": {
+    "operationId": "edit_prompt_projects__pid__prompts__n__put",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "n",
+      "required": true,
+      "schema": {
+       "title": "N",
+       "type": "integer"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/PromptEdit"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/PromptItem"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Edit Prompt",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/prompts/{n}/regenerate": {
+   "post": {
+    "description": "Writes a new text for this one prompt in the background (the progress is in /review \"generation\"); other prompts are not touched.",
+    "operationId": "regenerate_projects__pid__prompts__n__regenerate_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "n",
+      "required": true,
+      "schema": {
+       "title": "N",
+       "type": "integer"
+      }
+     }
+    ],
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/RegenRequested"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Regenerate",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/qc": {
+   "get": {
+    "description": "Quality checks measured on the rendered video of this aspect (a missing video is one failed check, not an error).",
+    "operationId": "qc_projects__pid__qc_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "aspect",
+      "required": false,
+      "schema": {
+       "default": "9:16",
+       "title": "Aspect",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "preview",
+      "required": false,
+      "schema": {
+       "default": true,
+       "title": "Preview",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/QcReport"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Qc",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/qc/approval": {
+   "get": {
+    "description": "The user's decision about the rendered video of this aspect: none, approved, or fixes requested (with the issues).",
+    "operationId": "qc_approval_projects__pid__qc_approval_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "aspect",
+      "required": false,
+      "schema": {
+       "default": "9:16",
+       "title": "Aspect",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "preview",
+      "required": false,
+      "schema": {
+       "default": true,
+       "title": "Preview",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/QcApproval"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Qc Approval",
+    "tags": [
+     "review"
+    ]
+   },
+   "put": {
+    "description": "Approve the video (refused while a QC check has failed) or request fixes (the issues are kept).",
+    "operationId": "qc_decide_projects__pid__qc_approval_put",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/QcDecisionRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/QcApproval"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Qc Decide",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/result": {
+   "get": {
+    "operationId": "result_projects__pid__result_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "preview",
+      "required": false,
+      "schema": {
+       "default": false,
+       "title": "Preview",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Result",
+    "tags": [
+     "results"
+    ]
+   }
+  },
+  "/projects/{pid}/review": {
+   "get": {
+    "operationId": "get_review_projects__pid__review_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/ReviewState"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Get Review",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/run": {
+   "post": {
+    "description": "match = ingest + match (no render); timeline = ingest, match, gate, fill, validate (no render); preview / final = the existing build chain for the chosen aspect.",
+    "operationId": "run_projects__pid__run_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/RunRequest"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/JobStarted"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Run",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/status": {
+   "get": {
+    "operationId": "status_projects__pid__status_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/Status"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Status",
+    "tags": [
+     "projects"
+    ]
+   }
+  },
+  "/projects/{pid}/submit": {
+   "post": {
+    "operationId": "submit_projects__pid__submit_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "anyOf": [
+         {
+          "$ref": "#/components/schemas/SubmitRequest"
+         },
+         {
+          "type": "null"
+         }
+        ],
+        "title": "Req"
+       }
+      }
+     }
+    },
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/JobStarted"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Submit",
+    "tags": [
+     "jobs"
+    ]
+   }
+  },
+  "/projects/{pid}/transcribe": {
+   "post": {
+    "operationId": "transcribe_projects__pid__transcribe_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "202": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/JobStarted"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Transcribe",
+    "tags": [
+     "jobs"
+    ]
+   }
+  },
+  "/projects/{pid}/video": {
+   "get": {
+    "operationId": "video_projects__pid__video_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "aspect",
+      "required": false,
+      "schema": {
+       "default": "9:16",
+       "title": "Aspect",
+       "type": "string"
+      }
+     },
+     {
+      "in": "query",
+      "name": "preview",
+      "required": false,
+      "schema": {
+       "default": true,
+       "title": "Preview",
+       "type": "boolean"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {}
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Video",
+    "tags": [
+     "review"
+    ]
+   }
+  },
+  "/projects/{pid}/visual-plan": {
+   "get": {
+    "operationId": "get_visual_plan_projects__pid__visual_plan_get",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     }
+    ],
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VisualPlanState"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Get Visual Plan",
+    "tags": [
+     "visual-plan"
+    ]
+   }
+  },
+  "/projects/{pid}/visual-plan/scenes/{sid}": {
+   "put": {
+    "operationId": "save_scene_projects__pid__visual_plan_scenes__sid__put",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "sid",
+      "required": true,
+      "schema": {
+       "title": "Sid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SceneSave"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VisualSceneState"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Save Scene",
+    "tags": [
+     "visual-plan"
+    ]
+   }
+  },
+  "/projects/{pid}/visual-plan/scenes/{sid}/approval": {
+   "post": {
+    "operationId": "scene_approval_projects__pid__visual_plan_scenes__sid__approval_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "sid",
+      "required": true,
+      "schema": {
+       "title": "Sid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SceneApproval"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VisualSceneState"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Scene Approval",
+    "tags": [
+     "visual-plan"
+    ]
+   }
+  },
+  "/projects/{pid}/visual-plan/scenes/{sid}/regenerate": {
+   "post": {
+    "operationId": "regenerate_scene_projects__pid__visual_plan_scenes__sid__regenerate_post",
+    "parameters": [
+     {
+      "in": "path",
+      "name": "pid",
+      "required": true,
+      "schema": {
+       "title": "Pid",
+       "type": "string"
+      }
+     },
+     {
+      "in": "path",
+      "name": "sid",
+      "required": true,
+      "schema": {
+       "title": "Sid",
+       "type": "string"
+      }
+     }
+    ],
+    "requestBody": {
+     "content": {
+      "application/json": {
+       "schema": {
+        "$ref": "#/components/schemas/SceneRegenerate"
+       }
+      }
+     },
+     "required": true
+    },
+    "responses": {
+     "200": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/VisualSceneState"
+        }
+       }
+      },
+      "description": "Successful Response"
+     },
+     "422": {
+      "content": {
+       "application/json": {
+        "schema": {
+         "$ref": "#/components/schemas/HTTPValidationError"
+        }
+       }
+      },
+      "description": "Validation Error"
+     }
+    },
+    "summary": "Regenerate Scene",
+    "tags": [
+     "visual-plan"
+    ]
+   }
+  }
+ }
+}

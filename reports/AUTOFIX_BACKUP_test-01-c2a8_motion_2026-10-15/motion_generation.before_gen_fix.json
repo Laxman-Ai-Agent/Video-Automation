@@ -1,0 +1,952 @@
+{
+ "schema_version": "1.0",
+ "version": 1,
+ "source": "motion_plan",
+ "project": {
+  "mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "input": {
+  "file": "motion_planning.json",
+  "plan_version": 2,
+  "plan_fingerprint": "7e535e4fae52512b",
+  "motion_plan_file": "motion_plan.json",
+  "motion_plan_sha": "89a5b1cb43f0f19a"
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "timing": {
+    "start": 0,
+    "end": 9.47,
+    "start_frame": 0,
+    "end_frame": 284
+   },
+   "transition_out": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_01:scene_01_layer_01:background:None",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 0,
+     "end": 9.47,
+     "start_frame": 0,
+     "end_frame": 284,
+     "duration_frames": 284,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_01:superpower_text:motion_text:split-reassemble",
+     "scene_id": "scene_01",
+     "element_id": "superpower_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "split-reassemble",
+     "props": {
+      "text": "A Superpower",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "mask",
+      "dir": "down",
+      "k": 1.24,
+      "mark": "Superpower",
+      "emphasisAt": [
+       6.08
+      ],
+      "dur": 0.71,
+      "exitDur": 0.36
+     },
+     "start": 5.9,
+     "end": 9.47,
+     "start_frame": 177,
+     "end_frame": 284,
+     "duration_frames": 107,
+     "z": 10,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:scene_01_gfx_01:motion_scene:particles-float",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "particles-float",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.26,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 0.04,
+     "end": 9.47,
+     "start_frame": 1,
+     "end_frame": 284,
+     "duration_frames": 283,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_01_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:superpower_text:motion_scene:targeting-ring",
+     "scene_id": "scene_01",
+     "element_id": "superpower_text",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "targeting-ring",
+     "props": {
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "boxTall": [
+       0.64,
+       0.06,
+       0.3,
+       0.16
+      ],
+      "k": 1.26,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 0.25,
+     "end": 9.47,
+     "start_frame": 8,
+     "end_frame": 284,
+     "duration_frames": 276,
+     "z": 9,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:scene_01_gfx_03:motion_scene:double-line",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "double-line",
+     "props": {
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "boxTall": [
+       0.2,
+       0.14,
+       0.6,
+       0.03
+      ],
+      "k": 1.26,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 0.46,
+     "end": 9.47,
+     "start_frame": 14,
+     "end_frame": 284,
+     "duration_frames": 270,
+     "z": 10,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:glasses_icon:icon:resource:icon.tabler.eyeglass",
+     "scene_id": "scene_01",
+     "element_id": "glasses_icon",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "resource:icon.tabler.eyeglass",
+     "props": {
+      "resource_id": "icon.tabler.eyeglass",
+      "pos": [
+       960,
+       713
+      ],
+      "size": 108,
+      "color": "#F8FAFC"
+     },
+     "start": 0.214,
+     "end": 9.47,
+     "start_frame": 6,
+     "end_frame": 284,
+     "duration_frames": 278,
+     "z": 12,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_draw_glasses_icon",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "timing": {
+    "start": 9.47,
+    "end": 13.8,
+    "start_frame": 284,
+    "end_frame": 414
+   },
+   "transition_out": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_02:scene_02_layer_01:background:None",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 9.47,
+     "end": 13.8,
+     "start_frame": 284,
+     "end_frame": 414,
+     "duration_frames": 130,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_02:scene_02_layer_02:shape:None",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_layer_02",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": null,
+     "props": {
+      "kind": "line"
+     },
+     "start": 9.67,
+     "end": 13.8,
+     "start_frame": 290,
+     "end_frame": 414,
+     "duration_frames": 124,
+     "z": 3,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_02:future_text:motion_text:kinetic",
+     "scene_id": "scene_02",
+     "element_id": "future_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "kinetic",
+     "props": {
+      "text": "The Journey Continues",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "stroke",
+      "dir": "left",
+      "k": 1.18,
+      "mark": "Continues",
+      "emphasisAt": [
+       9.65
+      ],
+      "dur": 0.57,
+      "exitDur": 0.36
+     },
+     "start": 9.47,
+     "end": 13.8,
+     "start_frame": 284,
+     "end_frame": 414,
+     "duration_frames": 130,
+     "z": 10,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:scene_02_gfx_01:motion_scene:glow-orb",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "glow-orb",
+     "props": {
+      "box": [
+       0.3,
+       0.2,
+       0.4,
+       0.6
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 9.51,
+     "end": 13.8,
+     "start_frame": 285,
+     "end_frame": 414,
+     "duration_frames": 129,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_02_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:light_pulse:motion_scene:dashed-flow",
+     "scene_id": "scene_02",
+     "element_id": "light_pulse",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "dashed-flow",
+     "props": {
+      "box": [
+       0.1,
+       0.93,
+       0.8,
+       0.02
+      ],
+      "boxTall": [
+       0.1,
+       0.14,
+       0.8,
+       0.015
+      ],
+      "k": 1.22,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 9.72,
+     "end": 13.8,
+     "start_frame": 292,
+     "end_frame": 414,
+     "duration_frames": 122,
+     "z": 9,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:scene_02_gfx_03:motion_scene:frame-in",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "frame-in",
+     "props": {
+      "box": [
+       0.04,
+       0.06,
+       0.92,
+       0.8
+      ],
+      "boxTall": [
+       0.05,
+       0.05,
+       0.9,
+       0.74
+      ],
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 9.93,
+     "end": 13.8,
+     "start_frame": 298,
+     "end_frame": 414,
+     "duration_frames": 116,
+     "z": 10,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_gfx_03",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "element_not_drawn",
+     "severity": "warning",
+     "message": "scene_02: journey_path is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)"
+    },
+    {
+     "code": "element_not_drawn",
+     "severity": "warning",
+     "message": "scene_02: origin_point is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)"
+    },
+    {
+     "code": "element_not_drawn",
+     "severity": "warning",
+     "message": "scene_02: future_horizon is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)"
+    },
+    {
+     "code": "emphasis_off_word",
+     "severity": "warning",
+     "message": "scene_02: the emphasis of 'The Journey Continues' at 9.65 s is not on a spoken word"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "timing": {
+    "start": 13.8,
+    "end": 20.43,
+    "start_frame": 414,
+    "end_frame": 613
+   },
+   "transition_out": null,
+   "descriptors": [
+    {
+     "descriptor_id": "scene_03:scene_03_layer_01:background:None",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 13.8,
+     "end": 20.43,
+     "start_frame": 414,
+     "end_frame": 613,
+     "duration_frames": 199,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_03:futuristic_text:motion_text:split-reveal",
+     "scene_id": "scene_03",
+     "element_id": "futuristic_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "split-reveal",
+     "props": {
+      "text": "Even More Futuristic",
+      "style": "headline",
+      "exitPreset": "wipe-out",
+      "emphasis": "stroke",
+      "dir": "right",
+      "k": 1.24,
+      "mark": "Futuristic",
+      "emphasisAt": [
+       13.98
+      ],
+      "dur": 0.64,
+      "exitDur": 0.36
+     },
+     "start": 13.8,
+     "end": 20.43,
+     "start_frame": 414,
+     "end_frame": 613,
+     "duration_frames": 199,
+     "z": 10,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_gfx_01:motion_scene:scan-line",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "scan-line",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.26,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 13.84,
+     "end": 20.43,
+     "start_frame": 415,
+     "end_frame": 613,
+     "duration_frames": 198,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_03_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:world_icon:motion_scene:data-ticks",
+     "scene_id": "scene_03",
+     "element_id": "world_icon",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "data-ticks",
+     "props": {
+      "box": [
+       0.1,
+       0.68,
+       0.8,
+       0.06
+      ],
+      "boxTall": [
+       0.1,
+       0.72,
+       0.8,
+       0.03
+      ],
+      "k": 1.26,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 14.05,
+     "end": 20.43,
+     "start_frame": 422,
+     "end_frame": 613,
+     "duration_frames": 191,
+     "z": 9,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_gfx_03:motion_scene:bracket-frame",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "bracket-frame",
+     "props": {
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "boxTall": [
+       0.06,
+       0.28,
+       0.88,
+       0.26
+      ],
+      "k": 1.26,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 14.26,
+     "end": 20.43,
+     "start_frame": 428,
+     "end_frame": 613,
+     "duration_frames": 185,
+     "z": 10,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_gfx_03",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "emphasis_off_word",
+     "severity": "warning",
+     "message": "scene_03: the emphasis of 'Even More Futuristic' at 13.98 s is not on a spoken word"
+    }
+   ]
+  }
+ ],
+ "reuse": {
+  "presets_used": 13,
+  "new_presets_added": 0,
+  "fallbacks_carried": 4
+ },
+ "output": {
+  "composition_file": "composition.json",
+  "composition_sha": "710ba709e15f5282",
+  "scenes": 3,
+  "layers": 11,
+  "texts": 3,
+  "graphics": 9,
+  "shapes": 1,
+  "icons": 1,
+  "pictures": 0,
+  "descriptors": 17,
+  "persisted": true
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Plan Reader",
+   "status": "completed",
+   "detail": "7 of 7 inputs checks passed"
+  },
+  {
+   "n": 2,
+   "name": "Element Resolver",
+   "status": "warning",
+   "detail": "scene_02: journey_path is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)"
+  },
+  {
+   "n": 3,
+   "name": "Preset Registry",
+   "status": "completed",
+   "detail": "21 of 21 ids checks passed"
+  },
+  {
+   "n": 4,
+   "name": "Effect Reuse",
+   "status": "completed",
+   "detail": "19 of 19 reuse checks passed"
+  },
+  {
+   "n": 5,
+   "name": "Animation Builder",
+   "status": "completed",
+   "detail": "38 of 38 descriptors checks passed"
+  },
+  {
+   "n": 6,
+   "name": "Engine Adapter",
+   "status": "completed",
+   "detail": "3 of 3 engine checks passed"
+  },
+  {
+   "n": 7,
+   "name": "Composition Builder",
+   "status": "completed",
+   "detail": "18 of 18 composition checks passed"
+  },
+  {
+   "n": 8,
+   "name": "Audio Sync",
+   "status": "warning",
+   "detail": "scene_02: the emphasis of 'The Journey Continues' at 9.65 s is not on a spoken word"
+  },
+  {
+   "n": 9,
+   "name": "Layout Validation",
+   "status": "completed",
+   "detail": "13 of 13 layout checks passed"
+  },
+  {
+   "n": 10,
+   "name": "Code Validation",
+   "status": "completed",
+   "detail": "20 of 20 contract checks passed"
+  },
+  {
+   "n": 11,
+   "name": "Motion Testing",
+   "status": "completed",
+   "detail": "4 of 4 tests checks passed"
+  },
+  {
+   "n": 12,
+   "name": "Error Repair",
+   "status": "completed",
+   "detail": "nothing needed repair"
+  },
+  {
+   "n": 13,
+   "name": "Remotion Adapter",
+   "status": "completed",
+   "detail": "11 layers in 3 scenes ready for Remotion (no pictures)"
+  }
+ ],
+ "validation": {
+  "status": "warning",
+  "errors": [],
+  "warnings": [
+   "scene_02: journey_path is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)",
+   "scene_02: origin_point is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)",
+   "scene_02: future_horizon is a recorded fallback of the plan and is NOT drawn (the library has no graphic that draws this element on its own)",
+   "scene_02: the emphasis of 'The Journey Continues' at 9.65 s is not on a spoken word",
+   "scene_03: the emphasis of 'Even More Futuristic' at 13.98 s is not on a spoken word"
+  ],
+  "checks": {
+   "passed": 181,
+   "total": 186,
+   "by_rule": {
+    "plan_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "plan_current": {
+     "passed": 1,
+     "total": 1
+    },
+    "plan_without_errors": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "aspect_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "fps_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "element_drawn": {
+     "passed": 15,
+     "total": 18
+    },
+    "registry_id": {
+     "passed": 19,
+     "total": 19
+    },
+    "transition_known": {
+     "passed": 4,
+     "total": 4
+    },
+    "no_new_presets": {
+     "passed": 1,
+     "total": 1
+    },
+    "fallback_recorded": {
+     "passed": 18,
+     "total": 18
+    },
+    "descriptor_ids_unique": {
+     "passed": 3,
+     "total": 3
+    },
+    "action_built": {
+     "passed": 13,
+     "total": 13
+    },
+    "timing_matches_plan": {
+     "passed": 13,
+     "total": 13
+    },
+    "box_matches_plan": {
+     "passed": 9,
+     "total": 9
+    },
+    "validator_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "component_registered": {
+     "passed": 1,
+     "total": 1
+    },
+    "frame_driven": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_ids_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_interval": {
+     "passed": 3,
+     "total": 3
+    },
+    "one_owner": {
+     "passed": 1,
+     "total": 1
+    },
+    "transition_not_repeated": {
+     "passed": 2,
+     "total": 2
+    },
+    "transition_fits": {
+     "passed": 2,
+     "total": 2
+    },
+    "transition_as_planned": {
+     "passed": 2,
+     "total": 2
+    },
+    "z_order_defined": {
+     "passed": 3,
+     "total": 3
+    },
+    "scenes_in_order": {
+     "passed": 2,
+     "total": 2
+    },
+    "frames_in_scene": {
+     "passed": 17,
+     "total": 17
+    },
+    "emphasis_on_a_word": {
+     "passed": 1,
+     "total": 3
+    },
+    "audio_file": {
+     "passed": 1,
+     "total": 1
+    },
+    "duration_is_audio": {
+     "passed": 1,
+     "total": 1
+    },
+    "text_in_safe_area": {
+     "passed": 3,
+     "total": 3
+    },
+    "graphic_in_safe_area": {
+     "passed": 4,
+     "total": 4
+    },
+    "graphic_clear_of_text": {
+     "passed": 4,
+     "total": 4
+    },
+    "node_in_safe_area": {
+     "passed": 1,
+     "total": 1
+    },
+    "node_clear_of_text": {
+     "passed": 1,
+     "total": 1
+    },
+    "renderer_schema": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_code": {
+     "passed": 1,
+     "total": 1
+    },
+    "intensity_range": {
+     "passed": 3,
+     "total": 3
+    },
+    "min_duration": {
+     "passed": 6,
+     "total": 6
+    },
+    "speed_range": {
+     "passed": 9,
+     "total": 9
+    },
+    "motion_checks": {
+     "passed": 1,
+     "total": 1
+    },
+    "motion_checks_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "deterministic": {
+     "passed": 1,
+     "total": 1
+    },
+    "deterministic_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_flags": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_pictures_in_motion_only": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_present": {
+     "passed": 1,
+     "total": 1
+    }
+   }
+  },
+  "note": "no probability is claimed: the result is the list of checks that passed; a still-frame preview is a separate, manual check"
+ },
+ "repairs": [],
+ "repair_passes": 0,
+ "tests": {
+  "motion_checks": {
+   "ok": true,
+   "count": 170,
+   "failed": [],
+   "error": null,
+   "cached": true
+  },
+  "determinism": {
+   "identical": true,
+   "note": "built twice, compared byte for byte"
+  },
+  "renderer": {
+   "zod": true,
+   "unknown_layer_types": [],
+   "wallclock_files": [],
+   "registered_components": 30
+  }
+ },
+ "needs_review": true,
+ "source_fingerprint": "ac832756ffb2473a",
+ "timings_seconds": {
+  "build": 5.189
+ }
+}

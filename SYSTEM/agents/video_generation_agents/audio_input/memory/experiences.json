@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "agent_id": "audio_input",
+  "updated_at": "2026-10-18T13:41:48.830282+00:00",
+  "total_experiences": 2,
+  "experiences": {
+    "exp-audio_input-0f26e78282": {
+      "experience_id": "exp-audio_input-0f26e78282",
+      "agent_id": "audio_input",
+      "task_type": "audio_ingest",
+      "task_id": "task-51669f8b1e",
+      "project_id": null,
+      "context": {
+        "file_path": "invalid_audio.xyz"
+      },
+      "outcome": "failed",
+      "error_category": "validation_error",
+      "metrics": {},
+      "reflection": "Unsupported audio extension .xyz; expected .wav or .mp3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:45.754326+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_input-a4c5f2a84f": {
+      "experience_id": "exp-audio_input-a4c5f2a84f",
+      "agent_id": "audio_input",
+      "task_type": "audio",
+      "task_id": "run-001",
+      "project_id": "test-proj-base-agent",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_input' completed task 'audio' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'audio' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:48.830282+00:00",
+      "schema_version": 1
+    }
+  }
+}

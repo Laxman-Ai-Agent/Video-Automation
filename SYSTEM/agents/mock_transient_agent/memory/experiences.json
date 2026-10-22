@@ -1,0 +1,540 @@
+{
+  "schema_version": 1,
+  "agent_id": "mock_transient_agent",
+  "updated_at": "2026-10-20T02:20:57.897615+00:00",
+  "total_experiences": 14,
+  "experiences": {
+    "exp-mock_transient_agent-54fd564233": {
+      "experience_id": "exp-mock_transient_agent-54fd564233",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381361",
+      "project_id": "tmpd3yq6u2w",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.806153+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-585711aad2": {
+      "experience_id": "exp-mock_transient_agent-585711aad2",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458825",
+      "project_id": "tmp4hxjg79r",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:45.837572+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-68c65859e5": {
+      "experience_id": "exp-mock_transient_agent-68c65859e5",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458907",
+      "project_id": "tmp82xvrczu",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:07.023472+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-69fb0c653e": {
+      "experience_id": "exp-mock_transient_agent-69fb0c653e",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp7hrjlvx1",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.061565+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-763c358604": {
+      "experience_id": "exp-mock_transient_agent-763c358604",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458907",
+      "project_id": "tmp82xvrczu",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:07.108216+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-9728d1db6c": {
+      "experience_id": "exp-mock_transient_agent-9728d1db6c",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462857",
+      "project_id": "tmpg6fwjf8f",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:57.831349+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-c7014ffc3f": {
+      "experience_id": "exp-mock_transient_agent-c7014ffc3f",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458268",
+      "project_id": "tmp7guhdq5x",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:28.410681+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-c78146a1e8": {
+      "experience_id": "exp-mock_transient_agent-c78146a1e8",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458268",
+      "project_id": "tmp7guhdq5x",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:28.327359+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-c8e27a048c": {
+      "experience_id": "exp-mock_transient_agent-c8e27a048c",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792462857",
+      "project_id": "tmpg6fwjf8f",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:20:57.896363+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-cc35bfd136": {
+      "experience_id": "exp-mock_transient_agent-cc35bfd136",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254403",
+      "project_id": "tmp40sq2e27",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:43.913378+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-cc8a53ad36": {
+      "experience_id": "exp-mock_transient_agent-cc8a53ad36",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458825",
+      "project_id": "tmp4hxjg79r",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:45.622624+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-ed320ced48": {
+      "experience_id": "exp-mock_transient_agent-ed320ced48",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792254403",
+      "project_id": "tmp40sq2e27",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-17T16:26:43.976163+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-f6d481e915": {
+      "experience_id": "exp-mock_transient_agent-f6d481e915",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792381361",
+      "project_id": "tmpd3yq6u2w",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-19T03:42:41.727923+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-faf145c92b": {
+      "experience_id": "exp-mock_transient_agent-faf145c92b",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1792458636",
+      "project_id": "tmp7hrjlvx1",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:36.111517+00:00",
+      "schema_version": 1
+    }
+  }
+}

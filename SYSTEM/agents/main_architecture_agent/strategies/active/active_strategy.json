@@ -1,0 +1,111 @@
+{
+  "strategy_id": "strategy_arch_default",
+  "version": "1.0.0",
+  "name": "Canonical Baseline Architecture Strategy",
+  "description": "Deterministic rule-based task decomposition, capability-matched agent routing, and prerequisite validation.",
+  "created_at": "2026-10-17T05:00:00Z",
+  "updated_at": "2026-10-17T05:00:00Z",
+  "authorized_by": "system_bootstrap",
+  "task_decomposition_rules": {
+    "video_generation": {
+      "keywords": ["video", "pipeline", "render", "generate video", "narrative"],
+      "subtasks": [
+        {
+          "step": 1,
+          "title": "Evaluate system and media capabilities",
+          "assigned_agent_id": "capability_finder",
+          "action": "inspect_capabilities",
+          "dependencies": []
+        },
+        {
+          "step": 2,
+          "title": "Execute video generation pipeline",
+          "assigned_agent_id": "main_orchestrator",
+          "action": "run",
+          "dependencies": [1]
+        }
+      ]
+    },
+    "skill_authoring": {
+      "keywords": ["skill", "author skill", "custom skill", "typography skill"],
+      "subtasks": [
+        {
+          "step": 1,
+          "title": "Discover existing skills",
+          "assigned_agent_id": "capability_finder",
+          "action": "search_skills",
+          "dependencies": []
+        },
+        {
+          "step": 2,
+          "title": "Create or stage requested skill",
+          "assigned_agent_id": "skill_factory",
+          "action": "create_skill",
+          "dependencies": [1]
+        }
+      ]
+    },
+    "audio_processing": {
+      "keywords": ["audio", "transcribe", "transcription", "speech"],
+      "subtasks": [
+        {
+          "step": 1,
+          "title": "Ingest and normalize audio",
+          "assigned_agent_id": "audio_input",
+          "action": "ingest",
+          "dependencies": []
+        },
+        {
+          "step": 2,
+          "title": "Transcribe audio narration",
+          "assigned_agent_id": "audio_analyzer",
+          "action": "transcribe",
+          "dependencies": [1]
+        }
+      ]
+    },
+    "system_discovery": {
+      "keywords": ["discovery", "inspect", "status", "capabilities"],
+      "subtasks": [
+        {
+          "step": 1,
+          "title": "System discovery and capability inspection",
+          "assigned_agent_id": "capability_finder",
+          "action": "inspect_all",
+          "dependencies": []
+        }
+      ]
+    }
+  },
+  "agent_routing_preferences": {
+    "audio_ingest": ["audio_input"],
+    "speech_transcription": ["audio_analyzer"],
+    "semantic_segmentation": ["scene_segmentation"],
+    "visual_concepts": ["visual_planning"],
+    "motion_planning": ["motion_planning"],
+    "motion_animation": ["motion_animation"],
+    "motion_validation": ["motion_timeline_validation"],
+    "timeline_assembly": ["timeline_build"],
+    "human_approval": ["timeline_approval"],
+    "video_rendering": ["render_video"],
+    "quality_control": ["final_qc"],
+    "video_delivery": ["final_video_delivery"],
+    "capability_inspection": ["capability_finder"],
+    "skill_authoring": ["skill_factory"],
+    "pipeline_coordination": ["main_orchestrator"]
+  },
+  "fallback_routes": {
+    "motion_template_selection": "motion_planning",
+    "unregistered_fallback": "capability_finder"
+  },
+  "retry_policies": {
+    "default_max_retries": 2,
+    "backoff_factor": 1.5,
+    "retryable_error_codes": ["timeout", "transient_io", "rate_limit"]
+  },
+  "acceptance_criteria": {
+    "require_all_subtasks_succeeded": true,
+    "require_non_empty_outputs": true,
+    "check_prerequisites_prior_to_delegation": true
+  }
+}

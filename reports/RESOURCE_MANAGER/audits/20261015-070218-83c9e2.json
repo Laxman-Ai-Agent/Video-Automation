@@ -1,0 +1,781 @@
+{
+ "audit_id": "20261015-070218-83c9e2",
+ "created_at": "2026-10-15T07:02:18",
+ "recipe": "tabler-icons",
+ "repository": "tabler/tabler-icons",
+ "ref": "v3.49.0",
+ "commit_sha": "bbed884d15354b5cebf2493371f20dc2d5e83eaf",
+ "category": "icon",
+ "url": "https://github.com/tabler/tabler-icons",
+ "files": [
+  {
+   "path": "icons/outline/rocket.svg",
+   "size": 555,
+   "sha256": "ea5f8a0922691d4c36d56c61c6e5c1dab1ae11ff5856a1036430f26d0eb23214",
+   "ok": true,
+   "tags": [
+    "launch",
+    "startup",
+    "space",
+    "spaceship",
+    "deploy",
+    "boost",
+    "fast",
+    "release",
+    "rocket"
+   ]
+  },
+  {
+   "path": "icons/outline/satellite.svg",
+   "size": 677,
+   "sha256": "dbdfbd34536720a2a1b0b42425481aa80b87aa928bd7a092668567d570b29bc3",
+   "ok": true,
+   "tags": [
+    "space",
+    "orbit",
+    "communication",
+    "satellite-dish",
+    "gps",
+    "signal",
+    "satellite"
+   ]
+  },
+  {
+   "path": "icons/outline/planet.svg",
+   "size": 573,
+   "sha256": "f5deee6a208d67e2163b206ccf88670d35bc2a0aca98011a28e558327a167754",
+   "ok": true,
+   "tags": [
+    "saturn",
+    "space",
+    "astronomy",
+    "orbit",
+    "universe",
+    "galaxy",
+    "cosmos",
+    "rings",
+    "world",
+    "planet"
+   ]
+  },
+  {
+   "path": "icons/outline/telescope.svg",
+   "size": 676,
+   "sha256": "d2ab005c08cc123e0c67de981c6a4986766e93ddf6118de5dc58daaaf130d5b4",
+   "ok": true,
+   "tags": [
+    "astronomy",
+    "space",
+    "stars",
+    "observe",
+    "observatory",
+    "explore",
+    "discover",
+    "telescopic",
+    "science",
+    "telescope"
+   ]
+  },
+  {
+   "path": "icons/outline/antenna.svg",
+   "size": 507,
+   "sha256": "119565717b2cc6593951117b12e3a681ae36e1f0d37b68787c289bdfd4034873",
+   "ok": true,
+   "tags": [
+    "signal",
+    "broadcast",
+    "tv",
+    "radio",
+    "network",
+    "transmission",
+    "tower",
+    "wireless",
+    "reception",
+    "antenna"
+   ]
+  },
+  {
+   "path": "icons/outline/broadcast.svg",
+   "size": 509,
+   "sha256": "b48ed1d9816564422961462dcb70efe9ff6c4e2ecf3f323fb459024623b3f6e2",
+   "ok": true,
+   "tags": [
+    "broadcast",
+    "signal",
+    "antenna",
+    "radio",
+    "transmission",
+    "podcast",
+    "live",
+    "wireless",
+    "streaming"
+   ]
+  },
+  {
+   "path": "icons/outline/ufo.svg",
+   "size": 747,
+   "sha256": "43c43535a9e45335ea000c89b34e7bbeca91a60fde2fd7fbb2d96ac6c8afda33",
+   "ok": true,
+   "tags": [
+    "ufo",
+    "alien",
+    "spaceship",
+    "flying-saucer",
+    "sci-fi",
+    "space",
+    "extraterrestrial",
+    "outer-space"
+   ]
+  },
+  {
+   "path": "icons/outline/meteor.svg",
+   "size": 504,
+   "sha256": "255b0c569f326d6cbe9d005b8d0da6106394e93b50dde238b4baab8e8efaefd5",
+   "ok": true,
+   "tags": [
+    "shooting-star",
+    "comet",
+    "asteroid",
+    "space",
+    "astronomy",
+    "falling-star",
+    "cosmos",
+    "meteor"
+   ]
+  },
+  {
+   "path": "icons/outline/alien.svg",
+   "size": 693,
+   "sha256": "32318f41f160aed93a14affe600e642d8a308cdc9de00fa49d6c90d79749c095",
+   "ok": true,
+   "tags": [
+    "ufo",
+    "extraterrestrial",
+    "space",
+    "et",
+    "martian",
+    "creature",
+    "sci-fi",
+    "outer-space",
+    "alien"
+   ]
+  },
+  {
+   "path": "icons/outline/radar-2.svg",
+   "size": 515,
+   "sha256": "d442df6710a0c680ae939906a0f84550200edf539f87880dfc99077438578ad3",
+   "ok": true,
+   "tags": [
+    "scan",
+    "sonar",
+    "detection",
+    "tracking",
+    "signal",
+    "gps",
+    "locate",
+    "search",
+    "radar"
+   ]
+  },
+  {
+   "path": "icons/outline/world.svg",
+   "size": 533,
+   "sha256": "d0dfc538f966d03b72a9fe872fbb567d5e84db9d24b95af032305404ef71f587",
+   "ok": true,
+   "tags": [
+    "globe",
+    "earth",
+    "world",
+    "internet",
+    "global",
+    "web",
+    "international",
+    "language",
+    "planet"
+   ]
+  },
+  {
+   "path": "icons/outline/map-pin.svg",
+   "size": 479,
+   "sha256": "682a0c629579341afd218175d96489747a35bf0a75e3177616f819320cb69f67",
+   "ok": true,
+   "tags": [
+    "pin",
+    "marker",
+    "location",
+    "place",
+    "gps",
+    "map",
+    "point",
+    "poi",
+    "destination"
+   ]
+  },
+  {
+   "path": "icons/outline/compass.svg",
+   "size": 551,
+   "sha256": "7f1b14b0e5c4dddf2cbbc429a0c2b297bf040cbdb4d8841062919d00ba95fc1a",
+   "ok": true,
+   "tags": [
+    "compass",
+    "navigation",
+    "direction",
+    "explore",
+    "discover",
+    "north",
+    "travel",
+    "orientation",
+    "safari"
+   ]
+  },
+  {
+   "path": "icons/outline/route.svg",
+   "size": 500,
+   "sha256": "383e4d1290ea525748767973343b3f20ea979b3638f9b3896b417e032c6ebe6f",
+   "ok": true,
+   "tags": [
+    "path",
+    "directions",
+    "journey",
+    "navigation",
+    "map",
+    "trip",
+    "way",
+    "gps"
+   ]
+  },
+  {
+   "path": "icons/outline/target.svg",
+   "size": 489,
+   "sha256": "1874e1180c0fbe2a570c59986adfbed4e4eb9e839f7dd100bc871e08f5aabb1d",
+   "ok": true,
+   "tags": [
+    "bullseye",
+    "aim",
+    "goal",
+    "focus",
+    "objective",
+    "crosshair",
+    "target",
+    "goals"
+   ]
+  },
+  {
+   "path": "icons/outline/flag.svg",
+   "size": 446,
+   "sha256": "91c224b828fd0716ef8617633a714ef6764a16618fe222becbcf0a4b83b35b9e",
+   "ok": true,
+   "tags": [
+    "flag",
+    "report",
+    "banner",
+    "milestone",
+    "mark",
+    "country",
+    "goal",
+    "nation",
+    "finish"
+   ]
+  },
+  {
+   "path": "icons/outline/bulb.svg",
+   "size": 530,
+   "sha256": "4f4688352f60a3d65ca9abb8cebc9fc3c3d3b9f2fbc47784b44b22008a69f0fc",
+   "ok": true,
+   "tags": [
+    "bulb",
+    "lightbulb",
+    "light",
+    "idea",
+    "lamp",
+    "tip",
+    "hint",
+    "creativity",
+    "innovation"
+   ]
+  },
+  {
+   "path": "icons/outline/clock.svg",
+   "size": 445,
+   "sha256": "971b0b2d3b5b17ae240cd3aac1a09710ab680d8c41900f1a37a0e430994d7fda",
+   "ok": true,
+   "tags": [
+    "time",
+    "watch",
+    "hour",
+    "schedule",
+    "timer",
+    "clock-face",
+    "history",
+    "pending",
+    "wall-clock",
+    "minutes",
+    "clock"
+   ]
+  },
+  {
+   "path": "icons/outline/atom.svg",
+   "size": 714,
+   "sha256": "6cbe121c18abc187a7f4b6eabbcb700dc0853715729d5515a0d62766f931b755",
+   "ok": true,
+   "tags": [
+    "science",
+    "physics",
+    "chemistry",
+    "nuclear",
+    "molecule",
+    "electron",
+    "react",
+    "laboratory",
+    "atom"
+   ]
+  },
+  {
+   "path": "icons/outline/flask.svg",
+   "size": 482,
+   "sha256": "28459e1fcdf7e9d8b0664aa3fe350995c4df3dda6ee9823351df3ea0f5714d17",
+   "ok": true,
+   "tags": [
+    "flask",
+    "lab",
+    "laboratory",
+    "chemistry",
+    "science",
+    "experiment",
+    "beta",
+    "test",
+    "potion",
+    "beaker"
+   ]
+  },
+  {
+   "path": "icons/outline/microscope.svg",
+   "size": 581,
+   "sha256": "279fb1bd505b97a6b79514f890bdb6dac4783b06b4b1880ba31e36403bce1a66",
+   "ok": true,
+   "tags": [
+    "science",
+    "laboratory",
+    "lab",
+    "biology",
+    "research",
+    "experiment",
+    "magnify",
+    "microbiology",
+    "chemistry"
+   ]
+  },
+  {
+   "path": "icons/outline/chart-bar.svg",
+   "size": 694,
+   "sha256": "ca1d3717da5007a46a2cf7521f9df558fd6e159874696dd400626809ead41162",
+   "ok": true,
+   "tags": [
+    "chart",
+    "graph",
+    "statistics",
+    "analytics",
+    "data",
+    "report",
+    "diagram",
+    "bar-chart",
+    "bars",
+    "histogram",
+    "column",
+    "visualization",
+    "bar"
+   ]
+  },
+  {
+   "path": "icons/outline/chart-line.svg",
+   "size": 445,
+   "sha256": "91ae4d96cfc8926df2c715438bd539da2703dc158828336c227ce23e62ca7cb4",
+   "ok": true,
+   "tags": [
+    "chart",
+    "graph",
+    "statistics",
+    "analytics",
+    "data",
+    "report",
+    "diagram",
+    "line-chart",
+    "trend",
+    "growth",
+    "visualization",
+    "line"
+   ]
+  },
+  {
+   "path": "icons/outline/chart-pie.svg",
+   "size": 544,
+   "sha256": "cf800f8dc1b3d6474dc79f6914c168b299e67752d1ff6e6bf653774d185e5f1f",
+   "ok": true,
+   "tags": [
+    "chart",
+    "graph",
+    "statistics",
+    "analytics",
+    "data",
+    "report",
+    "diagram",
+    "pie-chart",
+    "pie",
+    "percentage",
+    "visualization"
+   ]
+  },
+  {
+   "path": "icons/outline/building-community.svg",
+   "size": 566,
+   "sha256": "34437a9ea9ac171c92c3b0591dc1066bd5152d2a29d8f09e77903f748c64b9b1",
+   "ok": true,
+   "tags": [
+    "community",
+    "neighborhood",
+    "district",
+    "town",
+    "city",
+    "buildings",
+    "houses",
+    "residential",
+    "building"
+   ]
+  },
+  {
+   "path": "icons/outline/building-bank.svg",
+   "size": 572,
+   "sha256": "4ed04931200303958f332ace00f94f10f2297270f99ec39a7975aa2cc0b631b1",
+   "ok": true,
+   "tags": [
+    "bank",
+    "finance",
+    "money",
+    "institution",
+    "government",
+    "courthouse",
+    "museum",
+    "columns",
+    "building"
+   ]
+  },
+  {
+   "path": "icons/outline/school.svg",
+   "size": 455,
+   "sha256": "8817457400645445cc584dcb45315cc01c7bd0dd07e1ac9791fd176328d29edb",
+   "ok": true,
+   "tags": [
+    "graduation",
+    "education",
+    "student",
+    "mortarboard",
+    "university",
+    "college",
+    "academic",
+    "hat",
+    "learning"
+   ]
+  },
+  {
+   "path": "icons/outline/books.svg",
+   "size": 883,
+   "sha256": "ac7886471d461e98d967a0574e49e7d320d9fcefc014ea01de79e31b0eba2700",
+   "ok": true,
+   "tags": [
+    "library",
+    "reading",
+    "education",
+    "study",
+    "literature",
+    "bookshelf",
+    "book-stack",
+    "reading-list",
+    "books"
+   ]
+  },
+  {
+   "path": "icons/outline/trophy.svg",
+   "size": 555,
+   "sha256": "1c1168d9b0656d1c19797a199e19bd5f2bda185f818b46d67ce6f66db0ece666",
+   "ok": true,
+   "tags": [
+    "trophy",
+    "award",
+    "winner",
+    "prize",
+    "cup",
+    "achievement",
+    "champion",
+    "success"
+   ]
+  },
+  {
+   "path": "icons/outline/award.svg",
+   "size": 538,
+   "sha256": "9ed9dfd4bb9c49a2ee011fd2900b316a87fd4fab648d7f03f51093113a106874",
+   "ok": true,
+   "tags": [
+    "medal",
+    "prize",
+    "achievement",
+    "reward",
+    "winner",
+    "ribbon",
+    "badge",
+    "certificate",
+    "award"
+   ]
+  },
+  {
+   "path": "icons/outline/sun.svg",
+   "size": 501,
+   "sha256": "6677490605af8987d55d6e4185b1f6c241eced65b63ccfece68cadb7ce90fbb5",
+   "ok": true,
+   "tags": [
+    "light-mode",
+    "light",
+    "theme",
+    "day",
+    "brightness",
+    "weather",
+    "sunny",
+    "bright",
+    "sun"
+   ]
+  },
+  {
+   "path": "icons/outline/moon.svg",
+   "size": 443,
+   "sha256": "7cabaae40eea65310da478d3cad30b23cf1d7e99adad56378f82824338079668",
+   "ok": true,
+   "tags": [
+    "night",
+    "dark-mode",
+    "dark",
+    "theme",
+    "crescent",
+    "sleep",
+    "lunar",
+    "evening",
+    "moon"
+   ]
+  },
+  {
+   "path": "icons/outline/droplet.svg",
+   "size": 570,
+   "sha256": "c9432a9be52d7375c760add5d405903b6b8b29e88f38abd0d192c87048df7a0f",
+   "ok": true,
+   "tags": [
+    "droplet",
+    "drop",
+    "water",
+    "liquid",
+    "rain",
+    "blood",
+    "ink",
+    "color",
+    "fill",
+    "humidity"
+   ]
+  },
+  {
+   "path": "icons/outline/flame.svg",
+   "size": 608,
+   "sha256": "4afc9c5fdb4ed5fac3f3e6947200a3c210a0d97e7556edd2a39b70b5fafbd78c",
+   "ok": true,
+   "tags": [
+    "flame",
+    "fire",
+    "hot",
+    "burn",
+    "trending",
+    "popular",
+    "heat",
+    "lit",
+    "streak",
+    "campfire"
+   ]
+  },
+  {
+   "path": "icons/outline/bolt.svg",
+   "size": 395,
+   "sha256": "5321162cf117d3a83aec6c8f67a3bb0398068edb487b524d280b8fb47d6b98ce",
+   "ok": true,
+   "tags": [
+    "lightning",
+    "flash",
+    "electricity",
+    "power",
+    "energy",
+    "thunder",
+    "fast",
+    "zap",
+    "bolt"
+   ]
+  },
+  {
+   "path": "icons/outline/leaf.svg",
+   "size": 486,
+   "sha256": "ca3b92ae35e9b8e7e94746cc4e51301ee2f85b4760a03a62250eb418f39a063a",
+   "ok": true,
+   "tags": [
+    "leaf",
+    "nature",
+    "plant",
+    "eco",
+    "green",
+    "ecology",
+    "environment",
+    "organic",
+    "vegan"
+   ]
+  },
+  {
+   "path": "icons/outline/mountain.svg",
+   "size": 486,
+   "sha256": "a015c6e2b1d9fa1a7750ecbc64347826b41f98af2bc86d62f81eab0a7a68192e",
+   "ok": true,
+   "tags": [
+    "mountains",
+    "peak",
+    "hill",
+    "landscape",
+    "hiking",
+    "climbing",
+    "nature",
+    "outdoor",
+    "terrain",
+    "mountain"
+   ]
+  },
+  {
+   "path": "icons/outline/coin.svg",
+   "size": 524,
+   "sha256": "af519ba6ee6150b8854041d7cb80830828983dbe771568bda7d4059a95c1cf05",
+   "ok": true,
+   "tags": [
+    "coin",
+    "dollar",
+    "money",
+    "cash",
+    "currency",
+    "payment",
+    "finance",
+    "price",
+    "change",
+    "token"
+   ]
+  },
+  {
+   "path": "icons/outline/currency-rupee.svg",
+   "size": 425,
+   "sha256": "438160e64c55a1e51d0b0dcde5abebeb821894eca01d399f9c926e359e388448",
+   "ok": true,
+   "tags": [
+    "rupee",
+    "inr",
+    "india",
+    "indian",
+    "currency",
+    "money",
+    "symbol",
+    "cash",
+    "finance",
+    "payment"
+   ]
+  }
+ ],
+ "selected_bytes": 21396,
+ "files_with_tags": 39,
+ "problems": [],
+ "metadata": {
+  "stars": 22310,
+  "pushed_at": "2026-10-10T00:05:51Z",
+  "age_days": 5,
+  "archived": false,
+  "size_kb": 1146149,
+  "language": "JavaScript",
+  "default_branch": "main"
+ },
+ "license": {
+  "api_spdx": "MIT",
+  "detected": "MIT",
+  "file": "LICENSE",
+  "file_found": true,
+  "error": null,
+  "reserved_font_name": false,
+  "text_sha256": "b740a1d46122672da62833e97f7e7c8a13fa85cbc7445b584b297cc00dde93db"
+ },
+ "scripts": {
+  "all": [
+   "build",
+   "build:angular",
+   "build:astro",
+   "build:esp",
+   "build:icons",
+   "build:packages",
+   "build:pdf",
+   "build:png",
+   "build:preact",
+   "build:react",
+   "build:react-native",
+   "build:solidjs",
+   "build:sprite",
+   "build:svelte",
+   "build:svelte-runes",
+   "build:vue",
+   "build:webfont",
+   "changelog",
+   "changelog-commit",
+   "changelog-image",
+   "changeset",
+   "clean",
+   "dev",
+   "format",
+   "format:check",
+   "generate-icons-comment",
+   "generate-preview",
+   "generate-preview-icons",
+   "generate-preview-random-icons",
+   "generate-preview-stroke",
+   "import",
+   "import-categories",
+   "import-tags",
+   "lint",
+   "optimize",
+   "preview",
+   "release",
+   "test",
+   "test:build",
+   "typecheck:build",
+   "update",
+   "update-readme",
+   "update:icons",
+   "validate",
+   "validate-pr",
+   "version-packages",
+   "zip"
+  ],
+  "install_time": [],
+  "package_license": null
+ },
+ "font_coverage": null,
+ "gates": {
+  "license_known_and_allowed": true,
+  "license_text_kept": true,
+  "license_matches_api_or_font_metadata": true,
+  "ref_pinned_to_commit": true,
+  "not_archived": true,
+  "selected_files_only": true,
+  "no_install_script_executed": true,
+  "files_safe_and_valid": true,
+  "within_size_limits": true
+ },
+ "notes": [
+  "Bundled demo or sample assets elsewhere in the repository are NOT covered by this audit: only the selected files and the licence text above were read.",
+  "The licence verdict is a text check of the licence file, not legal advice."
+ ],
+ "score": 99.9,
+ "decision": "import",
+ "rationale": "every hard gate passed; score 99.9"
+}

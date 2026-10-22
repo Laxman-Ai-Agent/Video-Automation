@@ -1,0 +1,358 @@
+{
+  "schema_version": 1,
+  "agent_id": "audio_analyzer",
+  "updated_at": "2026-10-20T02:21:37.815240+00:00",
+  "total_experiences": 10,
+  "experiences": {
+    "exp-audio_analyzer-29c2e65deb": {
+      "experience_id": "exp-audio_analyzer-29c2e65deb",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1792458276",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 10.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 10.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 10.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:04:36.879897+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-43b97fbd18": {
+      "experience_id": "exp-audio_analyzer-43b97fbd18",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1792458828",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 7.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 7.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 7.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:13:48.265712+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-465df482f7": {
+      "experience_id": "exp-audio_analyzer-465df482f7",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1792458910",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 22.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 22.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 22.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:15:10.189391+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-46a40a0c19": {
+      "experience_id": "exp-audio_analyzer-46a40a0c19",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_e7b1c0b1",
+      "project_id": "test_proj_stage8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "test_proj_stage8",
+            "task_id": "run_e7b1c0b1",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "missing audio.* - run: python -m backend.cli new <id> --audio <file>",
+            "timestamp": "2026-10-20T01:14:22.743623+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 1,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (1/1).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:14:23.810240+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-66b7bf37a2": {
+      "experience_id": "exp-audio_analyzer-66b7bf37a2",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_9c8d2f0a",
+      "project_id": "test_proj_stage8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "test_proj_stage8",
+            "task_id": "run_9c8d2f0a",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "missing audio.* - run: python -m backend.cli new <id> --audio <file>",
+            "timestamp": "2026-10-20T01:12:23.339356+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 1,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (1/1).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:12:24.557969+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-7ae7626804": {
+      "experience_id": "exp-audio_analyzer-7ae7626804",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_6dd151ba",
+      "project_id": "test_proj_stage8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "test_proj_stage8",
+            "task_id": "run_6dd151ba",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "missing audio.* - run: python -m backend.cli new <id> --audio <file>",
+            "timestamp": "2026-10-20T02:21:36.774638+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 1,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (1/1).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:37.799471+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-84ce78bebf": {
+      "experience_id": "exp-audio_analyzer-84ce78bebf",
+      "agent_id": "audio_analyzer",
+      "task_type": "audio_transcription",
+      "task_id": "task-64ceecc514",
+      "project_id": null,
+      "context": {
+        "audio_format": "wav",
+        "sample_rate": 44100
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 350.0
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-18T13:41:45.303239+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-9bf7e7775d": {
+      "experience_id": "exp-audio_analyzer-9bf7e7775d",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1792462860",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 12.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 12.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 12.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T02:21:00.723834+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-da44313190": {
+      "experience_id": "exp-audio_analyzer-da44313190",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_10fada94",
+      "project_id": "test_proj_stage8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "test_proj_stage8",
+            "task_id": "run_10fada94",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "missing audio.* - run: python -m backend.cli new <id> --audio <file>",
+            "timestamp": "2026-10-20T01:09:09.304242+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 1,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (1/1).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:09:11.033917+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-fa143d6b1d": {
+      "experience_id": "exp-audio_analyzer-fa143d6b1d",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1792458639",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 83.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 83.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 83.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-20T01:10:39.845417+00:00",
+      "schema_version": 1
+    }
+  }
+}

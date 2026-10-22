@@ -1,0 +1,63 @@
+{
+ "approval_id": "decision_c5746819b527ce2e",
+ "approved_version": "ad1b6d1feb23c8de",
+ "aspect": "16:9",
+ "attempts": [
+  {
+   "error": null,
+   "finished_at": "2026-10-15T05:44:39",
+   "job_id": "9318678114",
+   "started_at": "2026-10-15T05:36:12",
+   "status": "completed"
+  }
+ ],
+ "cancel_requested": false,
+ "error": null,
+ "eta_s": 1,
+ "events": [
+  {
+   "at": "2026-10-15T05:36:12",
+   "note": "checking the approval and the configuration",
+   "phase": "validating"
+  },
+  {
+   "at": "2026-10-15T05:36:13",
+   "note": "rendering 1728 frames to a temporary file",
+   "phase": "rendering"
+  },
+  {
+   "at": "2026-10-15T05:44:38",
+   "note": "the renderer finished; checking that nothing is still writing",
+   "phase": "finalizing"
+  },
+  {
+   "at": "2026-10-15T05:44:39",
+   "note": "verifying the encoded file",
+   "phase": "verifying_output"
+  },
+  {
+   "at": "2026-10-15T05:44:39",
+   "note": "publishing the verified file",
+   "phase": "publishing"
+  },
+  {
+   "at": "2026-10-15T05:44:39",
+   "note": "published, verified and reported",
+   "phase": "publishing"
+  }
+ ],
+ "finished_at": "2026-10-15T05:44:39",
+ "frames_done": 1728,
+ "frames_total": 1728,
+ "job_id": "9318678114",
+ "manifest_fingerprint": "10767b100951d0d2",
+ "output_published": true,
+ "phase": "completed",
+ "project_id": "my-video-project-c2e8",
+ "render_percent": 100,
+ "schema_version": "1.0",
+ "started_at": "2026-10-15T05:36:12",
+ "status": "completed",
+ "temp_output": "out.rendering-9318678114.mp4",
+ "updated_at": "2026-10-15T05:44:39"
+}

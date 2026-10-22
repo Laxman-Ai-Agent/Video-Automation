@@ -1,0 +1,31 @@
+{
+  "agent_id": "render_video",
+  "stage_id": "render",
+  "version": "2.0.0",
+  "max_retries": 3,
+  "max_recovery_attempts": 2,
+  "timeout_seconds": 600,
+  "allowed_tools": [
+    "remotion",
+    "ffmpeg",
+    "browser_profiles",
+    "media_probe",
+    "llm_gateway"
+  ],
+  "capabilities": [
+    "remotion-render",
+    "gpu-frame-muxing",
+    "crash-resilient-jobs",
+    "autonomous-error-recovery",
+    "adaptive-resource-tuning",
+    "ffprobe-stream-audit",
+    "llm-render-diagnosis"
+  ],
+  "recovery_allowlist": [
+    "reallocate_port",
+    "reduce_concurrency",
+    "software_gl_fallback",
+    "restage_assets",
+    "report_upstream_blocker"
+  ]
+}

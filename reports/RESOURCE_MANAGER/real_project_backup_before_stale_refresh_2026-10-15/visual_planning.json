@@ -1,0 +1,2380 @@
+{
+ "schema_version": "1.0",
+ "version": 3,
+ "source": "llm",
+ "source_scene_plan": "scene_plan.json",
+ "source_prompts": "prompts_map.json",
+ "source_segmentation": "scene_segmentation.json",
+ "source_fingerprint": "10620efffe73712084c96e048688a5037603388f",
+ "project": {
+  "visual_mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "source_mapping": {
+  "policy": "one planned scene for each Scene Segmentation scene; plan_start/plan_end are the canonical start and end of its narration, the pause after it is gap_after_seconds, and timeline_start/timeline_end is the interval it holds on the timeline (the pause included, as in scene_plan.json)",
+  "canonical_scenes": 9,
+  "planned_scenes": 9
+ },
+ "visual_style": {
+  "category": "flat cinematic motion graphics, documentary explainer",
+  "tone": "contemplative and tense at first, rising to hopeful and majestic",
+  "typography": "bold clean sans-serif headlines in warm cream, with one accent word in orange; small caps style labels",
+  "palette": [
+   "#0b1220",
+   "#d9582b",
+   "#2a9d9f",
+   "#f2e6d0"
+  ],
+  "style_suffix": "cinematic documentary, warm teal-orange, film grain, no text",
+  "grade": "teal-orange",
+  "density": "low",
+  "contrast_policy": "light cream (#f2e6d0) text and bright orange (#d9582b) or teal (#2a9d9f) shapes on a deep navy (#0b1220) ground; never place text on mid-tone shapes",
+  "safe_area_policy": "Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin (in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background may fill the whole frame.",
+  "continuity_policy": "consistent_palette_and_typography"
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_001",
+    "segmentation_scene_index": 1,
+    "plan_scene_id": 1,
+    "plan_start": 0.0,
+    "plan_end": 4.58,
+    "timeline_start": 0.0,
+    "timeline_end": 4.75,
+    "gap_after_seconds": 0.17
+   },
+   "source_segment_ids": [
+    0
+   ],
+   "narration": {
+    "text": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి.",
+    "text_en": "These are not just physical challenges; the mental challenges are even greater.",
+    "start_seconds": 0.0,
+    "end_seconds": 4.58,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "The hardest part of a Mars mission is not the strain on the body but the strain on the mind.",
+    "audience_takeaway": "The mental challenges outweigh the physical ones.",
+    "narrative_role": "hook"
+   },
+   "visual_concept": {
+    "description": "A typographic statement: a mind symbol above the bold words 'Mental challenges', with a smaller line beneath stating they are greater than the physical ones.",
+    "representation": "typography",
+    "primary_focus": "The headline 'Mental challenges' with the word 'Mental' accented",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Do not imply that physical challenges are unimportant, only that mental ones are greater",
+     "Do not depict illness or a medical diagnosis"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "headline_mental",
+     "type": "text",
+     "role": "primary",
+     "required": true,
+     "visual_description": "Large bold headline in cream, with the word 'Mental' in orange",
+     "content": "Mental challenges",
+     "language": "en",
+     "text_purpose": "title",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b",
+      "weight": "bold"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "subline_physical",
+     "type": "text",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "Smaller cream caption line under the headline area",
+     "content": "Greater than physical",
+     "language": "en",
+     "text_purpose": "short_caption",
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mind_icon",
+     "type": "icon",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "A simple line icon of a brain in teal, standing for the mind",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "top",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "brain",
+      "category": "mind",
+      "search_descriptors": [
+       "brain",
+       "mind",
+       "psychology"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "dark_space_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy background with a faint warm vignette and subtle grain",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 4,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "mind_icon",
+     "target": "headline_mental",
+     "relation": "explains",
+     "description": "The brain symbol marks the headline as being about the mind"
+    },
+    {
+     "source": "subline_physical",
+     "target": "headline_mental",
+     "relation": "explains",
+     "description": "The caption completes the comparison with physical challenges"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "headline_mental",
+     "intent": "emphasize_key_word",
+     "description": "Draw attention to the word 'Mental'"
+    },
+    {
+     "element_id": "subline_physical",
+     "intent": "reveal_in_sequence",
+     "description": "The comparison line arrives after the headline"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": null,
+    "next_scene_id": "scene_02",
+    "motifs": [
+     "deep navy space ground",
+     "orange accent word"
+    ],
+    "transition_intent": "Open on the dark ground that becomes deep space in the next scene",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s1_b1",
+     "start_seconds": 0.0,
+     "end_seconds": 2.4,
+     "description": "The dark ground and the mind symbol set the theme while the narration puts the physical challenges aside.",
+     "element_ids": [
+      "dark_space_bg",
+      "mind_icon"
+     ]
+    },
+    {
+     "beat_id": "s1_b2",
+     "start_seconds": 2.44,
+     "end_seconds": 4.58,
+     "description": "The headline 'Mental challenges' appears, followed by the line 'Greater than physical'.",
+     "element_ids": [
+      "headline_mental",
+      "subline_physical"
+     ]
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_002",
+    "segmentation_scene_index": 2,
+    "plan_scene_id": 2,
+    "plan_start": 4.75,
+    "plan_end": 13.41,
+    "timeline_start": 4.75,
+    "timeline_end": 13.6,
+    "gap_after_seconds": 0.19
+   },
+   "source_segment_ids": [
+    1
+   ],
+   "narration": {
+    "text": "మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి",
+    "text_en": "Reaching Mars takes about eight months of travel, and during that time one must stay away from family, Earth, and everyday life.",
+    "start_seconds": 4.75,
+    "end_seconds": 13.41,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "The trip to Mars lasts about eight months, a long stretch cut off from family, Earth and ordinary life.",
+    "audience_takeaway": "The journey itself means a long separation from everything familiar.",
+    "narrative_role": "context"
+   },
+   "visual_concept": {
+    "description": "A schematic route across deep space from Earth on the left to Mars on the right, with a single small spacecraft travelling along it and leaving Earth far behind.",
+    "representation": "route_path_diagram",
+    "primary_focus": "The long route line between Earth and Mars with the lone spacecraft on it",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "The route is schematic: do not imply exact distances, orbits, trajectory shape or scale",
+     "The duration is approximate ('about eight months'), not an exact figure",
+     "Do not show a crew size or any dates"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "route_earth_mars",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "A long, thin dashed route line in cream stretching across the frame from Earth to Mars",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0",
+      "style": "dashed line"
+     },
+     "placement": {
+      "region": "path_across_frame",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "earth_home",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A small flat teal disc with simple land shapes representing Earth, the home left behind",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "left",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mars_destination",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A small flat orange-red disc representing Mars, the destination",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b"
+     },
+     "placement": {
+      "region": "right",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "lone_spacecraft",
+     "type": "icon",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A single small spacecraft icon in cream travelling along the route",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "over_primary_visual",
+      "priority": 2,
+      "avoid_overlap": false
+     },
+     "registry_requirements": {
+      "icon": "rocket",
+      "category": "space",
+      "search_descriptors": [
+       "rocket",
+       "spacecraft",
+       "spaceship"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "duration_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Bold cream text with the word 'months' accented in orange",
+     "content": "About eight months",
+     "language": "en",
+     "text_purpose": "number",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "upper_safe_area",
+      "priority": 5,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "deep_space_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy space with sparse faint stars and subtle grain",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 7,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "route_earth_mars",
+     "target": "earth_home",
+     "relation": "connects_to",
+     "description": "The route starts at Earth"
+    },
+    {
+     "source": "route_earth_mars",
+     "target": "mars_destination",
+     "relation": "connects_to",
+     "description": "The route ends at Mars"
+    },
+    {
+     "source": "lone_spacecraft",
+     "target": "route_earth_mars",
+     "relation": "follows",
+     "description": "The spacecraft travels along the route"
+    },
+    {
+     "source": "duration_text",
+     "target": "route_earth_mars",
+     "relation": "labels",
+     "description": "The duration of the journey"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "route_earth_mars",
+     "intent": "show_flow_direction",
+     "description": "The route extends from Earth toward Mars"
+    },
+    {
+     "element_id": "lone_spacecraft",
+     "intent": "travel_along_path",
+     "description": "The spacecraft moves slowly away from Earth"
+    },
+    {
+     "element_id": "earth_home",
+     "intent": "emphasize_distance",
+     "description": "Earth feels further and further behind"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_01",
+    "next_scene_id": "scene_03",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "dashed link between the two worlds"
+    ],
+    "transition_intent": "Keep Earth and Mars in the same positions so the route can become a communication link in the next scene",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s2_b1",
+     "start_seconds": 4.75,
+     "end_seconds": 8.05,
+     "description": "The route opens from Earth toward Mars, the spacecraft sets off and the duration 'About eight months' appears.",
+     "element_ids": [
+      "deep_space_bg",
+      "earth_home",
+      "mars_destination",
+      "route_earth_mars",
+      "lone_spacecraft",
+      "duration_text"
+     ]
+    },
+    {
+     "beat_id": "s2_b2",
+     "start_seconds": 8.05,
+     "end_seconds": 13.41,
+     "description": "The spacecraft is alone mid-route with Earth far behind, marking the separation from family and everyday life.",
+     "element_ids": [
+      "lone_spacecraft",
+      "route_earth_mars",
+      "earth_home"
+     ]
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "uncertainty",
+     "severity": "info",
+     "message": "Family and everyday life are represented only by Earth being left behind, since no pictures are allowed in motion-only mode"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_003",
+    "segmentation_scene_index": 3,
+    "plan_scene_id": 3,
+    "plan_start": 13.6,
+    "plan_end": 19.58,
+    "timeline_start": 13.6,
+    "timeline_end": 19.58,
+    "gap_after_seconds": 0.0
+   },
+   "source_segment_ids": [
+    2,
+    3
+   ],
+   "narration": {
+    "text": "అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది",
+    "text_en": "Even after arriving there, communication with Earth is not instant. Messages are delayed by several minutes.",
+    "start_seconds": 13.6,
+    "end_seconds": 19.58,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "Even on Mars, talking to Earth is never live: every message takes several minutes to arrive.",
+    "audience_takeaway": "Communication with Earth is delayed by minutes, so there is no instant conversation.",
+    "narrative_role": "explanation"
+   },
+   "visual_concept": {
+    "description": "A signal diagram: a message pulse leaves Mars and creeps along a link toward Earth while a caption names the delay.",
+    "representation": "signal_path_diagram",
+    "primary_focus": "The signal link between Mars and Earth with a slow pulse travelling along it",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Do not state an exact number of minutes; the narration only says 'several minutes'",
+     "The link is schematic: no exact distances, scale or orbits",
+     "The direction shown is illustrative; the delay applies to messages in both directions",
+     "Do not imply the connection is broken, only delayed"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "signal_link",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "A thin dotted signal line in teal stretching between Mars and Earth",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f",
+      "style": "dotted line"
+     },
+     "placement": {
+      "region": "path_across_frame",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mars_sender",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat orange-red disc representing Mars, where the message starts",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b"
+     },
+     "placement": {
+      "region": "right",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "earth_receiver",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat teal disc representing Earth, where the message is awaited",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "left",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "message_pulse",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A small glowing cream pulse dot with faint ripple rings, representing one message in transit",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "over_primary_visual",
+      "priority": 2,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "delay_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Cream caption with the word 'Delayed' accented in orange",
+     "content": "Delayed by minutes",
+     "language": "en",
+     "text_purpose": "short_caption",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 6,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "space_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy space with sparse faint stars",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 7,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "signal_link",
+     "target": "mars_sender",
+     "relation": "connects_to",
+     "description": "The message starts at Mars"
+    },
+    {
+     "source": "signal_link",
+     "target": "earth_receiver",
+     "relation": "connects_to",
+     "description": "The message is received on Earth"
+    },
+    {
+     "source": "message_pulse",
+     "target": "signal_link",
+     "relation": "follows",
+     "description": "The pulse travels slowly along the link"
+    },
+    {
+     "source": "delay_text",
+     "target": "signal_link",
+     "relation": "labels",
+     "description": "Names the delay on the link"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "message_pulse",
+     "intent": "travel_slowly_along_path",
+     "description": "The pulse is visibly slow, not instant"
+    },
+    {
+     "element_id": "signal_link",
+     "intent": "show_flow_direction",
+     "description": "Direction from Mars toward Earth"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_02",
+    "next_scene_id": "scene_04",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "link between the two worlds"
+    ],
+    "transition_intent": "From the abstract link between the planets, settle onto the surface of Mars",
+    "note": "Same layout as the route scene, but the line is now a signal, not a journey"
+   },
+   "beats": [
+    {
+     "beat_id": "s3_b1",
+     "start_seconds": 13.6,
+     "end_seconds": 17.1,
+     "description": "Mars and Earth are joined by the signal link; a message pulse leaves Mars but does not reach Earth at once.",
+     "element_ids": [
+      "space_bg",
+      "mars_sender",
+      "earth_receiver",
+      "signal_link",
+      "message_pulse"
+     ]
+    },
+    {
+     "beat_id": "s3_b2",
+     "start_seconds": 16.8,
+     "end_seconds": 19.58,
+     "description": "The pulse is still on its way along the link, and the caption 'Delayed by minutes' appears.",
+     "element_ids": [
+      "message_pulse",
+      "signal_link",
+      "delay_text"
+     ]
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "uncertainty",
+     "severity": "info",
+     "message": "The exact delay in minutes is not given in the narration and is not shown"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_04",
+   "plan_scene_id": 4,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_004",
+    "segmentation_scene_index": 4,
+    "plan_scene_id": 4,
+    "plan_start": 19.58,
+    "plan_end": 26.08,
+    "timeline_start": 19.58,
+    "timeline_end": 26.08,
+    "gap_after_seconds": 0.0
+   },
+   "source_segment_ids": [
+    4,
+    5
+   ],
+   "narration": {
+    "text": "చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి",
+    "text_en": "A red desert all around, a silent atmosphere. With only a limited number of people, all of this puts the mind to a severe test.",
+    "start_seconds": 19.58,
+    "end_seconds": 26.08,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "Life on Mars means endless red desert, silence and only a handful of companions, and that isolation tests the mind hard.",
+    "audience_takeaway": "The emptiness and isolation of Mars are a severe psychological test.",
+    "narrative_role": "consequence"
+   },
+   "visual_concept": {
+    "description": "A stylised wide Martian desert under a dusty sky with one tiny group of astronaut silhouettes in the middle, dwarfed by the empty landscape.",
+    "representation": "object_in_context",
+    "primary_focus": "The tiny crew group surrounded by empty red desert",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Show one small group without a countable or stated number of people",
+     "Do not show an accident, distress or an emergency",
+     "The landscape is stylised, not a real location on Mars"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "small_crew_group",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "One very small cluster of astronaut silhouettes in cream, standing close together and tiny against the landscape",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0",
+      "scale": "very small"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "red_desert_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Flat layered dunes and a low horizon in orange-red tones filling the frame under a dark dusty sky, completely empty",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b",
+      "sky_color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 3,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "silence_icon",
+     "type": "icon",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "A small muted-sound icon in teal standing for the silent surroundings",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "upper_right",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "volume-x",
+      "category": "sound",
+      "search_descriptors": [
+       "mute",
+       "silence",
+       "no sound"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "mind_test_caption",
+     "type": "text",
+     "role": "explanatory",
+     "required": false,
+     "visual_description": "Small cream caption",
+     "content": "A test of the mind",
+     "language": "en",
+     "text_purpose": "short_caption",
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "red_desert_bg",
+     "target": "small_crew_group",
+     "relation": "contains",
+     "description": "The vast desert surrounds the tiny group"
+    },
+    {
+     "source": "silence_icon",
+     "target": "red_desert_bg",
+     "relation": "explains",
+     "description": "The surroundings are silent"
+    },
+    {
+     "source": "mind_test_caption",
+     "target": "small_crew_group",
+     "relation": "explains",
+     "description": "The isolation tests the minds of the people there"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "red_desert_bg",
+     "intent": "reveal_vast_emptiness",
+     "description": "The landscape feels wide and still"
+    },
+    {
+     "element_id": "small_crew_group",
+     "intent": "emphasize_isolation",
+     "description": "The group stays small against the surroundings"
+    },
+    {
+     "element_id": "mind_test_caption",
+     "intent": "reveal_in_sequence",
+     "description": "The caption arrives last"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_03",
+    "next_scene_id": "scene_05",
+    "motifs": [
+     "orange-red Mars",
+     "cream crew silhouettes"
+    ],
+    "transition_intent": "Keep the crew group as the carried-over subject into the emergency scene",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s4_b1",
+     "start_seconds": 19.58,
+     "end_seconds": 22.24,
+     "description": "The empty red desert fills the frame and the silence symbol marks the still atmosphere.",
+     "element_ids": [
+      "red_desert_bg",
+      "silence_icon"
+     ]
+    },
+    {
+     "beat_id": "s4_b2",
+     "start_seconds": 22.5,
+     "end_seconds": 23.92,
+     "description": "The tiny crew group appears in the middle of the emptiness.",
+     "element_ids": [
+      "small_crew_group",
+      "red_desert_bg"
+     ]
+    },
+    {
+     "beat_id": "s4_b3",
+     "start_seconds": 23.92,
+     "end_seconds": 26.08,
+     "description": "The caption 'A test of the mind' appears under the isolated group.",
+     "element_ids": [
+      "small_crew_group",
+      "mind_test_caption"
+     ]
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "uncertainty",
+     "severity": "info",
+     "message": "A photographic desert is not available in motion-only mode; the landscape is a flat stylised graphic"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_05",
+   "plan_scene_id": 5,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_005",
+    "segmentation_scene_index": 5,
+    "plan_scene_id": 5,
+    "plan_start": 26.08,
+    "plan_end": 34.9,
+    "timeline_start": 26.08,
+    "timeline_end": 35.05,
+    "gap_after_seconds": 0.15
+   },
+   "source_segment_ids": [
+    6,
+    7
+   ],
+   "narration": {
+    "text": "ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి",
+    "text_en": "If an emergency arises, help from Earth will not arrive immediately. The team there must make decisions using only their knowledge, training, and mutual trust.",
+    "start_seconds": 26.08,
+    "end_seconds": 34.9,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "When something goes wrong, Earth is too far away to help in time, so the crew must decide for themselves using what they know, how they trained and their trust in each other.",
+    "audience_takeaway": "On Mars the team is on its own and must rely on knowledge, training and mutual trust.",
+    "narrative_role": "consequence"
+   },
+   "visual_concept": {
+    "description": "A contrast across the frame: a small, distant Earth on the left with a long faint help line that does not reach in time, and the crew group on the right ringed by three linked supports that stand for knowledge, training and trust.",
+    "representation": "comparison",
+    "primary_focus": "The self-reliant crew group ringed by its three supports",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "The emergency is hypothetical: do not depict a specific accident, damage or injury",
+     "Do not imply that Earth never helps, only that help is not immediate",
+     "Show the crew as one group without a stated number of people",
+     "The help line is schematic: no distances, times or scale"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "crew_team",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "One group of astronaut silhouettes in cream standing close together, facing each other as a team",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "right",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "three_supports_ring",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "Three teal nodes joined by a ring around the crew, standing for knowledge, training and trust",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "around_primary_visual",
+      "priority": 2,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "distant_earth",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A very small flat teal disc representing Earth, far away",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f",
+      "scale": "very small"
+     },
+     "placement": {
+      "region": "left",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "help_line",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A long, faint dashed cream line from Earth toward the crew that fades before it arrives, showing help that is not immediate",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0",
+      "style": "faint dashed line"
+     },
+     "placement": {
+      "region": "path_across_frame",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "supports_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Cream keywords in one line, with 'Trust' accented in orange",
+     "content": "Knowledge · Training · Trust",
+     "language": "en",
+     "text_purpose": "keyword",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 6,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "dark_mars_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy ground with a faint orange-red glow on the crew side",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 7,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "help_line",
+     "target": "distant_earth",
+     "relation": "connects_to",
+     "description": "Help would start from Earth"
+    },
+    {
+     "source": "help_line",
+     "target": "crew_team",
+     "relation": "connects_to",
+     "description": "Help is meant for the crew but does not arrive at once"
+    },
+    {
+     "source": "distant_earth",
+     "target": "crew_team",
+     "relation": "compares_with",
+     "description": "Far-off help versus the team on the spot"
+    },
+    {
+     "source": "three_supports_ring",
+     "target": "crew_team",
+     "relation": "part_of",
+     "description": "Knowledge, training and trust belong to the team"
+    },
+    {
+     "source": "supports_text",
+     "target": "three_supports_ring",
+     "relation": "labels",
+     "description": "Names the three supports"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "help_line",
+     "intent": "show_help_falling_short",
+     "description": "The line from Earth fades before reaching the crew"
+    },
+    {
+     "element_id": "three_supports_ring",
+     "intent": "reveal_in_sequence",
+     "description": "The three supports appear one after another as they are named"
+    },
+    {
+     "element_id": "crew_team",
+     "intent": "emphasize_self_reliance",
+     "description": "Focus settles on the team"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_04",
+    "next_scene_id": "scene_06",
+    "motifs": [
+     "cream crew silhouettes",
+     "small teal Earth far away",
+     "three linked teal nodes"
+    ],
+    "transition_intent": "Carry the three linked nodes forward as the emblem of the virtues in the next scene",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s5_b1",
+     "start_seconds": 26.08,
+     "end_seconds": 30.1,
+     "description": "The help line from the small distant Earth stretches toward the crew but fades before arriving.",
+     "element_ids": [
+      "dark_mars_bg",
+      "distant_earth",
+      "help_line",
+      "crew_team"
+     ]
+    },
+    {
+     "beat_id": "s5_b2",
+     "start_seconds": 30.2,
+     "end_seconds": 34.9,
+     "description": "Focus moves to the crew: the three supports form a ring around them and the keywords 'Knowledge · Training · Trust' appear.",
+     "element_ids": [
+      "crew_team",
+      "three_supports_ring",
+      "supports_text"
+     ]
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "uncertainty",
+     "severity": "info",
+     "message": "Knowledge and training are abstract; they are shown only as labelled nodes"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_06",
+   "plan_scene_id": 6,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_006",
+    "segmentation_scene_index": 6,
+    "plan_scene_id": 6,
+    "plan_start": 35.05,
+    "plan_end": 39.43,
+    "timeline_start": 35.05,
+    "timeline_end": 39.43,
+    "gap_after_seconds": 0.0
+   },
+   "source_segment_ids": [
+    8
+   ],
+   "narration": {
+    "text": "అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం",
+    "text_en": "That is why strong mental resilience, discipline, and team spirit are extremely important.",
+    "start_seconds": 35.05,
+    "end_seconds": 39.43,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "Because the crew is on its own, inner strength, discipline and a sense of team are the decisive qualities.",
+    "audience_takeaway": "Mental resilience, discipline and team spirit are extremely important for Mars.",
+    "narrative_role": "recap"
+   },
+   "visual_concept": {
+    "description": "A typographic statement: the bold word 'Resilience' in the middle, the three-node emblem above it and the line 'Discipline · Team spirit' below.",
+    "representation": "typography",
+    "primary_focus": "The word 'Resilience' in orange",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "Do not rank the three qualities against each other",
+     "Do not add qualities the narration does not name"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "resilience_word",
+     "type": "text",
+     "role": "primary",
+     "required": true,
+     "visual_description": "Large bold headline word in orange",
+     "content": "Resilience",
+     "language": "en",
+     "text_purpose": "title",
+     "appearance": {
+      "color": "#d9582b",
+      "weight": "bold"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "virtues_subline",
+     "type": "text",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "Smaller cream line naming the two other qualities",
+     "content": "Discipline · Team spirit",
+     "language": "en",
+     "text_purpose": "keyword",
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "triad_emblem",
+     "type": "graphic",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "Three teal nodes joined in a closed triangle, a compact emblem of three qualities held together",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "top",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "warm_dark_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy ground with a soft warm glow rising from below, more hopeful than earlier scenes",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 4,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "triad_emblem",
+     "target": "resilience_word",
+     "relation": "explains",
+     "description": "Three qualities held together, led by resilience"
+    },
+    {
+     "source": "virtues_subline",
+     "target": "resilience_word",
+     "relation": "follows",
+     "description": "The other two qualities follow the first"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "resilience_word",
+     "intent": "emphasize_key_word",
+     "description": "The word lands with strength"
+    },
+    {
+     "element_id": "virtues_subline",
+     "intent": "reveal_in_sequence",
+     "description": "Discipline, then team spirit"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_05",
+    "next_scene_id": "scene_07",
+    "motifs": [
+     "three linked teal nodes",
+     "orange accent word"
+    ],
+    "transition_intent": "Turn from inner qualities outward to the goal ahead",
+    "note": null
+   },
+   "beats": [
+    {
+     "beat_id": "s6_b1",
+     "start_seconds": 35.05,
+     "end_seconds": 36.95,
+     "description": "The emblem and the word 'Resilience' appear on the warm dark ground.",
+     "element_ids": [
+      "warm_dark_bg",
+      "triad_emblem",
+      "resilience_word"
+     ]
+    },
+    {
+     "beat_id": "s6_b2",
+     "start_seconds": 36.95,
+     "end_seconds": 39.31,
+     "description": "The line 'Discipline · Team spirit' joins beneath the headline.",
+     "element_ids": [
+      "virtues_subline",
+      "resilience_word",
+      "triad_emblem"
+     ]
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_07",
+   "plan_scene_id": 7,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_007",
+    "segmentation_scene_index": 7,
+    "plan_scene_id": 7,
+    "plan_start": 39.43,
+    "plan_end": 45.84,
+    "timeline_start": 39.43,
+    "timeline_end": 45.84,
+    "gap_after_seconds": 0.0
+   },
+   "source_segment_ids": [
+    9,
+    10
+   ],
+   "narration": {
+    "text": "అయినా కూడా ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు",
+    "text_en": "Even so, this is humanity's next goal. First the Moon, then Mars is our destination. One day, if humans settle there successfully,",
+    "start_seconds": 39.43,
+    "end_seconds": 45.84,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "Despite the hardships, Mars remains humanity's next step: the Moon comes first, then Mars.",
+    "audience_takeaway": "The path forward is Moon first, then Mars.",
+    "narrative_role": "transition"
+   },
+   "visual_concept": {
+    "description": "A schematic stepping-stone route across the frame: Earth on the left as the origin, the Moon in the middle as the first stop and Mars on the right as the destination, with the route extending stop by stop.",
+    "representation": "route_path_diagram",
+    "primary_focus": "The route from Earth through the Moon to Mars",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "The route is schematic: do not imply exact distances, orbits, relative sizes or a real trajectory",
+     "Do not show any dates or mission names",
+     "Do not imply a single continuous flight; the route shows the order of goals",
+     "Settlement is only anticipated here, not shown as achieved"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "goal_route",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "A cream dashed route line running across the frame through three stops",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0",
+      "style": "dashed line"
+     },
+     "placement": {
+      "region": "path_across_frame",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "earth_origin",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat teal disc representing Earth, the starting point",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "left",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "moon_stop",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A small flat cream-grey disc with a few craters representing the Moon, the first stop",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mars_goal",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat orange-red disc with a soft glow representing Mars, the destination",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b"
+     },
+     "placement": {
+      "region": "right",
+      "priority": 5,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "moon_then_mars_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Cream headline with the word 'Mars' accented in orange",
+     "content": "First the Moon, then Mars",
+     "language": "en",
+     "text_purpose": "title",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "upper_safe_area",
+      "priority": 6,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "hopeful_space_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy space with faint stars and a warm glow toward the Mars side",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 7,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "goal_route",
+     "target": "earth_origin",
+     "relation": "connects_to",
+     "description": "The route starts at Earth"
+    },
+    {
+     "source": "goal_route",
+     "target": "moon_stop",
+     "relation": "connects_to",
+     "description": "The first stop is the Moon"
+    },
+    {
+     "source": "goal_route",
+     "target": "mars_goal",
+     "relation": "connects_to",
+     "description": "The final destination is Mars"
+    },
+    {
+     "source": "moon_then_mars_text",
+     "target": "goal_route",
+     "relation": "labels",
+     "description": "States the order of the goals"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "goal_route",
+     "intent": "reveal_in_sequence",
+     "description": "The route extends stop by stop"
+    },
+    {
+     "element_id": "mars_goal",
+     "intent": "emphasize_destination",
+     "description": "Mars brightens as the final goal"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_06",
+    "next_scene_id": "scene_08",
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "dashed route"
+    ],
+    "transition_intent": "Arrive at Mars so that the next scene can land on its surface",
+    "note": "Reuses the route layout of the journey scene, now with the Moon as an added stop and a hopeful tone"
+   },
+   "beats": [
+    {
+     "beat_id": "s7_b1",
+     "start_seconds": 39.43,
+     "end_seconds": 42.18,
+     "description": "Earth appears as the origin with the route beginning, as the narration names the next goal.",
+     "element_ids": [
+      "hopeful_space_bg",
+      "earth_origin",
+      "goal_route"
+     ]
+    },
+    {
+     "beat_id": "s7_b2",
+     "start_seconds": 42.6,
+     "end_seconds": 43.54,
+     "description": "The route reaches from Earth to the Moon, the first stop.",
+     "element_ids": [
+      "earth_origin",
+      "moon_stop",
+      "goal_route",
+      "moon_then_mars_text"
+     ]
+    },
+    {
+     "beat_id": "s7_b3",
+     "start_seconds": 43.54,
+     "end_seconds": 45.84,
+     "description": "The route continues from the Moon to Mars, and Mars brightens as the destination.",
+     "element_ids": [
+      "moon_stop",
+      "mars_goal",
+      "goal_route",
+      "moon_then_mars_text"
+     ]
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_08",
+   "plan_scene_id": 8,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_008",
+    "segmentation_scene_index": 8,
+    "plan_scene_id": 8,
+    "plan_start": 45.84,
+    "plan_end": 52.54,
+    "timeline_start": 45.84,
+    "timeline_end": 52.85,
+    "gap_after_seconds": 0.31
+   },
+   "source_segment_ids": [
+    10,
+    11
+   ],
+   "narration": {
+    "text": "అక్కడ మనిషి విజయవంతంగా స్థిరపడితే అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం",
+    "text_en": "it will not be just a victory in space, but a new chapter in human history.",
+    "start_seconds": 45.84,
+    "end_seconds": 52.54,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "If people manage to settle on Mars, it will be more than a space achievement: it will open a new chapter in the human story.",
+    "audience_takeaway": "A Mars settlement would be a milestone for all of human history.",
+    "narrative_role": "conclusion"
+   },
+   "visual_concept": {
+    "description": "A stylised first settlement on Mars at dawn: a cluster of habitat domes on the horizon with the sun rising behind them, under an open-book symbol that marks a new chapter.",
+    "representation": "object_in_context",
+    "primary_focus": "The habitat domes at sunrise",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "The settlement is a hypothetical future, not something that exists today",
+     "Do not show a population number, a date or a named mission",
+     "Do not show national flags or imply any nation's claim"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "habitat_domes",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "A small cluster of simple habitat domes with lit teal windows, standing on the Martian ground",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0",
+      "window_color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mars_dawn_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Orange-red Martian plain with a low horizon and a soft rising sun glow, fading into a deep navy sky above",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b",
+      "sky_color": "#0b1220",
+      "glow_color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 3,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "chapter_icon",
+     "type": "icon",
+     "role": "supporting",
+     "required": false,
+     "visual_description": "An open book line icon in cream, standing for a chapter of history",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "upper_safe_area",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": {
+      "icon": "book-open",
+      "category": "history",
+      "search_descriptors": [
+       "open book",
+       "chapter",
+       "history"
+      ],
+      "resolved": true
+     },
+     "constraints": []
+    },
+    {
+     "element_id": "new_chapter_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Cream caption with the word 'new' accented in orange",
+     "content": "A new chapter",
+     "language": "en",
+     "text_purpose": "short_caption",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "lower_safe_area",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "mars_dawn_bg",
+     "target": "habitat_domes",
+     "relation": "contains",
+     "description": "The settlement stands on the Martian plain at dawn"
+    },
+    {
+     "source": "chapter_icon",
+     "target": "habitat_domes",
+     "relation": "explains",
+     "description": "The settlement is a chapter of history, not only a space feat"
+    },
+    {
+     "source": "new_chapter_text",
+     "target": "chapter_icon",
+     "relation": "labels",
+     "description": "Names the meaning of the book symbol"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "habitat_domes",
+     "intent": "reveal_settlement",
+     "description": "The domes come to life with lit windows"
+    },
+    {
+     "element_id": "mars_dawn_bg",
+     "intent": "emphasize_sunrise",
+     "description": "The dawn light grows, suggesting a beginning"
+    },
+    {
+     "element_id": "new_chapter_text",
+     "intent": "reveal_in_sequence",
+     "description": "The caption arrives with the final phrase"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_07",
+    "next_scene_id": "scene_09",
+    "motifs": [
+     "orange-red Mars",
+     "teal lights of human presence",
+     "warm dawn glow"
+    ],
+    "transition_intent": "Pull back from the surface to see both worlds together",
+    "note": "Deliberately contrasts with the empty desert of scene 4: same ground, now inhabited"
+   },
+   "beats": [
+    {
+     "beat_id": "s8_b1",
+     "start_seconds": 45.84,
+     "end_seconds": 47.72,
+     "description": "On the Martian plain at dawn the habitat domes appear and their windows light up.",
+     "element_ids": [
+      "mars_dawn_bg",
+      "habitat_domes"
+     ]
+    },
+    {
+     "beat_id": "s8_b2",
+     "start_seconds": 47.9,
+     "end_seconds": 50.14,
+     "description": "The sunrise glow widens behind the settlement, lifting it beyond a mere space achievement.",
+     "element_ids": [
+      "mars_dawn_bg",
+      "habitat_domes"
+     ]
+    },
+    {
+     "beat_id": "s8_b3",
+     "start_seconds": 50.14,
+     "end_seconds": 52.54,
+     "description": "The open-book symbol and the caption 'A new chapter' appear.",
+     "element_ids": [
+      "chapter_icon",
+      "new_chapter_text",
+      "habitat_domes"
+     ]
+    }
+   ],
+   "validation_notes": [
+    {
+     "code": "uncertainty",
+     "severity": "info",
+     "message": "The look of a Mars habitat is speculative; simple generic domes are used"
+    }
+   ]
+  },
+  {
+   "scene_id": "scene_09",
+   "plan_scene_id": 9,
+   "source_mapping": {
+    "source": "scene_segmentation",
+    "segmentation_scene_id": "scene_009",
+    "segmentation_scene_index": 9,
+    "plan_scene_id": 9,
+    "plan_start": 52.85,
+    "plan_end": 57.43,
+    "timeline_start": 52.85,
+    "timeline_end": 57.61,
+    "gap_after_seconds": null
+   },
+   "source_segment_ids": [
+    12
+   ],
+   "narration": {
+    "text": "ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+    "text_en": "The day when humans truly become a multi-planet species will surely come.",
+    "start_seconds": 52.85,
+    "end_seconds": 57.43,
+    "timestamp_source": "scene_segmentation"
+   },
+   "scene_objective": {
+    "core_meaning": "The narration closes with confidence that humanity will one day live on more than one planet.",
+    "audience_takeaway": "Humans becoming a multi-planet species is a matter of when, not if.",
+    "narrative_role": "conclusion"
+   },
+   "visual_concept": {
+    "description": "Earth and Mars side by side as two homes, joined in the middle by a human emblem whose arc reaches both worlds.",
+    "representation": "comparison",
+    "primary_focus": "The human emblem bridging Earth and Mars",
+    "priority": "primary",
+    "accuracy_constraints": [
+     "This is a future aspiration, not an achieved fact; show no date",
+     "Do not imply true relative sizes or distance of the planets",
+     "Do not imply that Earth is abandoned; both worlds are homes"
+    ]
+   },
+   "elements": [
+    {
+     "element_id": "human_bridge_emblem",
+     "type": "graphic",
+     "role": "primary",
+     "required": true,
+     "visual_description": "A simple cream human figure emblem in the middle with a glowing arc extending from it to both sides, joining the two worlds",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#f2e6d0"
+     },
+     "placement": {
+      "region": "center",
+      "priority": 1,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "earth_home_world",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat teal disc representing Earth with small warm lights of habitation",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#2a9d9f"
+     },
+     "placement": {
+      "region": "left",
+      "priority": 2,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "mars_home_world",
+     "type": "graphic",
+     "role": "supporting",
+     "required": true,
+     "visual_description": "A flat orange-red disc representing Mars with small teal lights of habitation",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#d9582b"
+     },
+     "placement": {
+      "region": "right",
+      "priority": 3,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "multi_planet_text",
+     "type": "text",
+     "role": "explanatory",
+     "required": true,
+     "visual_description": "Cream headline with the word 'multi-planet' accented in orange",
+     "content": "A multi-planet species",
+     "language": "en",
+     "text_purpose": "title",
+     "appearance": {
+      "color": "#f2e6d0",
+      "accent_color": "#d9582b"
+     },
+     "placement": {
+      "region": "upper_safe_area",
+      "priority": 4,
+      "avoid_overlap": true
+     },
+     "registry_requirements": null,
+     "constraints": []
+    },
+    {
+     "element_id": "starfield_bg",
+     "type": "background",
+     "role": "environment",
+     "required": true,
+     "visual_description": "Deep navy space with faint stars and a gentle warm glow at the centre",
+     "content": null,
+     "language": null,
+     "text_purpose": null,
+     "appearance": {
+      "color": "#0b1220"
+     },
+     "placement": {
+      "region": "full_frame",
+      "priority": 5,
+      "avoid_overlap": false
+     },
+     "registry_requirements": null,
+     "constraints": []
+    }
+   ],
+   "element_relationships": [
+    {
+     "source": "human_bridge_emblem",
+     "target": "earth_home_world",
+     "relation": "connects_to",
+     "description": "Humanity's first home"
+    },
+    {
+     "source": "human_bridge_emblem",
+     "target": "mars_home_world",
+     "relation": "connects_to",
+     "description": "Humanity's second home"
+    },
+    {
+     "source": "earth_home_world",
+     "target": "mars_home_world",
+     "relation": "compares_with",
+     "description": "Two worlds shown as equal homes"
+    },
+    {
+     "source": "multi_planet_text",
+     "target": "human_bridge_emblem",
+     "relation": "labels",
+     "description": "Names what humanity becomes"
+    }
+   ],
+   "asset_requirements": [],
+   "motion_hints": [
+    {
+     "element_id": "human_bridge_emblem",
+     "intent": "connect_two_worlds",
+     "description": "The arc reaches out to both planets"
+    },
+    {
+     "element_id": "mars_home_world",
+     "intent": "emphasize_growth",
+     "description": "Lights of habitation appear on Mars to match Earth"
+    },
+    {
+     "element_id": "multi_planet_text",
+     "intent": "emphasize_key_word",
+     "description": "Stress 'multi-planet'"
+    }
+   ],
+   "continuity": {
+    "previous_scene_id": "scene_08",
+    "next_scene_id": null,
+    "motifs": [
+     "Earth on the left in teal",
+     "Mars on the right in orange",
+     "teal lights of human presence"
+    ],
+    "transition_intent": "Hold on the two worlds as the final image",
+    "note": "Closes the Earth-left, Mars-right motif used since scene 2; the link is now a bond between homes, not a journey"
+   },
+   "beats": [
+    {
+     "beat_id": "s9_b1",
+     "start_seconds": 52.85,
+     "end_seconds": 54.39,
+     "description": "Earth and the human emblem appear against the starfield.",
+     "element_ids": [
+      "starfield_bg",
+      "earth_home_world",
+      "human_bridge_emblem"
+     ]
+    },
+    {
+     "beat_id": "s9_b2",
+     "start_seconds": 54.39,
+     "end_seconds": 56.01,
+     "description": "The arc reaches Mars, lights appear on it and the headline 'A multi-planet species' is shown.",
+     "element_ids": [
+      "human_bridge_emblem",
+      "mars_home_world",
+      "earth_home_world",
+      "multi_planet_text"
+     ]
+    },
+    {
+     "beat_id": "s9_b3",
+     "start_seconds": 56.01,
+     "end_seconds": 57.43,
+     "description": "Both worlds glow together as a settled, confident closing image.",
+     "element_ids": [
+      "earth_home_world",
+      "mars_home_world",
+      "human_bridge_emblem",
+      "multi_planet_text"
+     ]
+    }
+   ],
+   "validation_notes": []
+  }
+ ],
+ "stages": [
+  {
+   "n": 1,
+   "name": "Semantic Understanding",
+   "status": "completed",
+   "detail": "meaning, narrative role and takeaway of 9 scenes"
+  },
+  {
+   "n": 2,
+   "name": "Scene Objective & Visual Concept",
+   "status": "completed",
+   "detail": "a visual concept for each of 9 scenes"
+  },
+  {
+   "n": 3,
+   "name": "Element Breakdown",
+   "status": "completed",
+   "detail": "45 elements"
+  },
+  {
+   "n": 4,
+   "name": "Relationships & Visual Hierarchy",
+   "status": "completed",
+   "detail": "31 relationships"
+  },
+  {
+   "n": 5,
+   "name": "Mode-Aware Planning",
+   "status": "completed",
+   "detail": "Motion-Only: no pictures required"
+  },
+  {
+   "n": 6,
+   "name": "Audio Timing & Text",
+   "status": "completed",
+   "detail": "times and narration from the source; on-screen text checked against it"
+  },
+  {
+   "n": 7,
+   "name": "Style & Continuity",
+   "status": "completed",
+   "detail": "style, previous/next links and repeated concepts"
+  },
+  {
+   "n": 8,
+   "name": "Validation & Confidence",
+   "status": "completed",
+   "detail": "deterministic checks, 9 planned scenes against 9 Scene Segmentation scenes"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "checks": {
+   "passed": 372,
+   "total": 372,
+   "by_rule": {
+    "scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "source_scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "source_start": {
+     "passed": 9,
+     "total": 9
+    },
+    "source_end": {
+     "passed": 9,
+     "total": 9
+    },
+    "source_mapping_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "gaps_preserved": {
+     "passed": 8,
+     "total": 8
+    },
+    "no_conflicting_intervals": {
+     "passed": 8,
+     "total": 8
+    },
+    "plan_interval": {
+     "passed": 9,
+     "total": 9
+    },
+    "gap_after": {
+     "passed": 9,
+     "total": 9
+    },
+    "timeline_interval": {
+     "passed": 9,
+     "total": 9
+    },
+    "no_overlapping_timeline": {
+     "passed": 8,
+     "total": 8
+    },
+    "element_ids_unique": {
+     "passed": 9,
+     "total": 9
+    },
+    "primary_element": {
+     "passed": 9,
+     "total": 9
+    },
+    "required_element": {
+     "passed": 9,
+     "total": 9
+    },
+    "element_count": {
+     "passed": 9,
+     "total": 9
+    },
+    "text_count": {
+     "passed": 9,
+     "total": 9
+    },
+    "hierarchy": {
+     "passed": 9,
+     "total": 9
+    },
+    "regions": {
+     "passed": 9,
+     "total": 9
+    },
+    "no_placeholders": {
+     "passed": 9,
+     "total": 9
+    },
+    "text_safe_area": {
+     "passed": 9,
+     "total": 9
+    },
+    "text_over_primary": {
+     "passed": 9,
+     "total": 9
+    },
+    "layout_overlap": {
+     "passed": 9,
+     "total": 9
+    },
+    "references_valid": {
+     "passed": 9,
+     "total": 9
+    },
+    "path_element": {
+     "passed": 9,
+     "total": 9
+    },
+    "concept_consistent": {
+     "passed": 9,
+     "total": 9
+    },
+    "timing": {
+     "passed": 9,
+     "total": 9
+    },
+    "beats_inside_parent": {
+     "passed": 22,
+     "total": 22
+    },
+    "beats_on_words": {
+     "passed": 22,
+     "total": 22
+    },
+    "beats_ordered": {
+     "passed": 9,
+     "total": 9
+    },
+    "ordered": {
+     "passed": 9,
+     "total": 9
+    },
+    "narration_present": {
+     "passed": 9,
+     "total": 9
+    },
+    "no_pictures": {
+     "passed": 9,
+     "total": 9
+    },
+    "text_content": {
+     "passed": 11,
+     "total": 11
+    },
+    "numbers_grounded": {
+     "passed": 11,
+     "total": 11
+    },
+    "text_grounded": {
+     "passed": 11,
+     "total": 11
+    },
+    "text_short": {
+     "passed": 11,
+     "total": 11
+    },
+    "text_not_narration": {
+     "passed": 11,
+     "total": 11
+    },
+    "palette": {
+     "passed": 9,
+     "total": 9
+    },
+    "motion_not_presets": {
+     "passed": 9,
+     "total": 9
+    },
+    "path_connected": {
+     "passed": 4,
+     "total": 4
+    },
+    "variety": {
+     "passed": 8,
+     "total": 8
+    }
+   }
+  },
+  "confidence": "supported_by_llm",
+  "note": "no probability is claimed: confidence is whether Claude judged the meaning, plus the deterministic checks that passed"
+ },
+ "needs_review": false,
+ "llm": {
+  "status": "applied",
+  "problems": [],
+  "scenes_from_llm": 9
+ },
+ "timings_seconds": {
+  "assemble": 0.008
+ },
+ "warning_fix": {
+  "at": "2026-10-14T07:03:52",
+  "scenes": [
+   "scene_02",
+   "scene_03",
+   "scene_05",
+   "scene_07"
+  ],
+  "before": 5,
+  "status": "solved",
+  "after": 0
+ }
+}

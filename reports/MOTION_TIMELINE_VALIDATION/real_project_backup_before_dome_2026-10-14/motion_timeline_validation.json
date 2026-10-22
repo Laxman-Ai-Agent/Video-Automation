@@ -1,0 +1,870 @@
+{
+ "schema_version": "1.0",
+ "phase": "motion_timeline_validation",
+ "phase_status": "completed",
+ "readiness": "blocked",
+ "created_at": "2026-10-14T17:50:06",
+ "project_id": "my-video-project-c2e8",
+ "validator": {
+  "version": 1,
+  "rule_set_version": "1.0"
+ },
+ "rule_set": "1.0",
+ "config": {
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30,
+  "duration_seconds": 57.611,
+  "mode": "motion_only",
+  "motion_speed": 1.4
+ },
+ "policy": {
+  "timing": {
+   "frame_rounding_policy": "floor(seconds x fps + 0.5), the end frame is exclusive (the project's one rule, motion_planning.fr)",
+   "emphasis_alignment_tolerance_ms": 60,
+   "preserve_intentional_gaps": true
+  },
+  "layout": {
+   "safe_area_source": "config.SAFE_AREA",
+   "use_actual_drawn_boxes_when_available": true,
+   "unknown_geometry_is_not_a_pass": true
+  },
+  "readiness": {
+   "required_undrawn_blocks_by_default": true,
+   "explicit_exceptions_required": true,
+   "stale_inputs_block": true,
+   "validation_is_read_only": true
+  },
+  "preview": {
+   "sample_changed_or_flagged_scenes": true,
+   "separate_still_and_motion_review": true,
+   "human_review_required_for_human_review_status": true
+  }
+ },
+ "source_fingerprint": "de33015a0f049bb0",
+ "inputs": {
+  "visual_plan_fingerprint": "10620efffe73712084c96e048688a5037603388f",
+  "scene_segmentation_fingerprint": "c8b8566651b2c27324dc8b93919eb5774d7de7a2",
+  "motion_plan_fingerprint": "d8965fcc739efbdc",
+  "motion_generation_fingerprint": "84aa68bae588abb4",
+  "composition_fingerprint": "0ff441e2ca7275b1",
+  "renderer_registry_fingerprint": "72ac0da462d6397578afd22417d609229aa268d4",
+  "artifacts": {
+   "project": {
+    "file": "project.json",
+    "sha": "41652fe7feafdcc8"
+   },
+   "segmentation": {
+    "file": "scene_segmentation.json",
+    "sha": "35e46d7b6669b229"
+   },
+   "visual_plan": {
+    "file": "visual_planning.json",
+    "sha": "9255d84cb8b3f754"
+   },
+   "motion_plan": {
+    "file": "motion_plan.json",
+    "sha": "651a6c774bc862dc"
+   },
+   "motion_planning": {
+    "file": "motion_planning.json",
+    "sha": "2b007f2e538ec1c3"
+   },
+   "motion_generation": {
+    "file": "motion_generation.json",
+    "sha": "228751bb7ef2df7f"
+   },
+   "composition": {
+    "file": "composition.json",
+    "sha": "0ff441e2ca7275b1"
+   },
+   "fixes": {
+    "file": "motion_fixes.json",
+    "sha": "589c07ad17781958"
+   }
+  },
+  "audio": "audio.wav:2765370",
+  "transcript_words": "78893eb15d712430"
+ },
+ "summary": {
+  "scenes_expected": 0,
+  "scenes_checked": 0,
+  "blockers": 1,
+  "errors": 0,
+  "warnings": 0,
+  "info": 0,
+  "accepted_exceptions": 0,
+  "unresolved_review_items": 0,
+  "required_not_drawn": 0,
+  "optional_not_drawn": 0,
+  "approximate": 0,
+  "stages_blocked": 9,
+  "checks_passed": 124,
+  "checks_total": 125,
+  "checks_skipped": 0
+ },
+ "stages": [
+  {
+   "n": 1,
+   "stage_id": "input_provenance",
+   "name": "Input Reader & Provenance",
+   "label": "Input Reader",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 33,
+   "checks_total": 33,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "3c2723c030033829",
+   "duration_ms": 1,
+   "cache": {
+    "hit": false,
+    "reason": "an input of this stage changed"
+   }
+  },
+  {
+   "n": 2,
+   "stage_id": "fingerprint_freshness",
+   "name": "Fingerprint & Freshness",
+   "label": "Fingerprint Check",
+   "status": "blocked",
+   "progress_percent": 100,
+   "checks_passed": 8,
+   "checks_total": 9,
+   "checks_skipped": 0,
+   "finding_ids": [
+    "input.fingerprint_current:project:motion_planning"
+   ],
+   "input_fingerprint": "bc3ba1751f44fc77",
+   "duration_ms": 25,
+   "cache": {
+    "hit": false,
+    "reason": "an input of this stage changed"
+   }
+  },
+  {
+   "n": 3,
+   "stage_id": "scene_mapping",
+   "name": "Scene Mapping & Coverage",
+   "label": "Scene Mapping",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "e19941a426451b38",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 4,
+   "stage_id": "timing_frame",
+   "name": "Timing & Frame Integrity",
+   "label": "Timing & Frames",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "86bc9742b96e2f54",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 5,
+   "stage_id": "element_completeness",
+   "name": "Element Completeness & Drawn Support",
+   "label": "Element Coverage",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "0fef52382d1f9a0f",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 6,
+   "stage_id": "animation_preset",
+   "name": "Animation & Preset Validity",
+   "label": "Preset & Animation",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "397c5bb02b5efd65",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 7,
+   "stage_id": "layout_collision",
+   "name": "Layout & Collision",
+   "label": "Layout & Collisions",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "3ae917454131a20c",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 8,
+   "stage_id": "audio_text_sync",
+   "name": "Audio & Text Synchronization",
+   "label": "Audio & Text Sync",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "84c51823f23ecbb6",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 9,
+   "stage_id": "transition_readiness",
+   "name": "Transition & Continuity Readiness",
+   "label": "Transition Readiness",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "0c4fcdcdf063d72e",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 10,
+   "stage_id": "buildability",
+   "name": "Composition Buildability & Determinism",
+   "label": "Buildability",
+   "status": "skipped_due_to_dependency",
+   "progress_percent": 0,
+   "checks_passed": 0,
+   "checks_total": 0,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "007e335b3b9482e2",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "not run"
+   },
+   "detail": "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
+  },
+  {
+   "n": 11,
+   "stage_id": "preview_validation",
+   "name": "Preview Validation & Visual Evidence",
+   "label": "Preview Validation",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 80,
+   "checks_total": 80,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "e3402c1ff22c110e",
+   "duration_ms": 39,
+   "cache": {
+    "hit": false,
+    "reason": "an input of this stage changed"
+   }
+  },
+  {
+   "n": 12,
+   "stage_id": "readiness_gate",
+   "name": "Findings, Report & Timeline Readiness Gate",
+   "label": "Readiness Gate",
+   "status": "completed",
+   "progress_percent": 100,
+   "checks_passed": 3,
+   "checks_total": 3,
+   "checks_skipped": 0,
+   "finding_ids": [],
+   "input_fingerprint": "",
+   "duration_ms": 0,
+   "cache": {
+    "hit": false,
+    "reason": "always recomputed"
+   }
+  }
+ ],
+ "findings": [
+  {
+   "finding_id": "input.fingerprint_current:project:motion_planning",
+   "rule_id": "input.fingerprint_current",
+   "stage_id": "fingerprint_freshness",
+   "severity": "blocker",
+   "status": "unresolved",
+   "scene_id": null,
+   "element_id": "motion_planning",
+   "message": "the motion plan is out of date (the Visual Plan, the motion library or the rules changed): run Motion Planning again",
+   "evidence": {
+    "stored": "d8965fcc739efbdc",
+    "now": "cd2f9ca39899e9e2"
+   },
+   "owner_stage": "motion_planning",
+   "suggested_action": "run Motion Planning again",
+   "can_auto_fix": false,
+   "exceptionable": false,
+   "exception": null,
+   "occurrences": 1
+  }
+ ],
+ "elements": [],
+ "preview_evidence": [
+  {
+   "scene_id": "scene_01",
+   "kind": "entry",
+   "frame": 17,
+   "file": "scene_01_entry_00017.png",
+   "time_s": 0.567,
+   "sha": "ac31ade2949c87da",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 30.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "mid",
+   "frame": 71,
+   "file": "scene_01_mid_00071.png",
+   "time_s": 2.367,
+   "sha": "feecd178ed4f0d9d",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 40.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "pre_exit",
+   "frame": 128,
+   "file": "scene_01_pre_exit_00128.png",
+   "time_s": 4.267,
+   "sha": "a8b2f44fea967c70",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 47.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_01",
+   "kind": "transition",
+   "frame": 136,
+   "file": "scene_01_transition_00136.png",
+   "time_s": 4.533,
+   "sha": "9ceefcb04d17de74",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 45.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "entry",
+   "frame": 174,
+   "file": "scene_02_entry_00174.png",
+   "time_s": 5.8,
+   "sha": "09d211d85b7f41b5",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 45.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "mid",
+   "frame": 275,
+   "file": "scene_02_mid_00275.png",
+   "time_s": 9.167,
+   "sha": "d1ceed34e991f7b1",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 45.1,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "pre_exit",
+   "frame": 381,
+   "file": "scene_02_pre_exit_00381.png",
+   "time_s": 12.7,
+   "sha": "2893a2ddbb30eaa2",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 44.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_02",
+   "kind": "transition",
+   "frame": 402,
+   "file": "scene_02_transition_00402.png",
+   "time_s": 13.4,
+   "sha": "97908b2a3ee23168",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 43.3,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "entry",
+   "frame": 430,
+   "file": "scene_03_entry_00430.png",
+   "time_s": 14.333,
+   "sha": "32c0440b18350925",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 43.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "mid",
+   "frame": 498,
+   "file": "scene_03_mid_00498.png",
+   "time_s": 16.6,
+   "sha": "dbadff5594525c93",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 56.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "pre_exit",
+   "frame": 569,
+   "file": "scene_03_pre_exit_00569.png",
+   "time_s": 18.967,
+   "sha": "89aaa0c2bbf7446b",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 55.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_03",
+   "kind": "transition",
+   "frame": 581,
+   "file": "scene_03_transition_00581.png",
+   "time_s": 19.367,
+   "sha": "6614e5ea1b2f99fa",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 46.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_04",
+   "kind": "entry",
+   "frame": 611,
+   "file": "scene_04_entry_00611.png",
+   "time_s": 20.367,
+   "sha": "1ccedc835d37bbc2",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 47.9,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_04",
+   "kind": "mid",
+   "frame": 685,
+   "file": "scene_04_mid_00685.png",
+   "time_s": 22.833,
+   "sha": "8b399d41b923396a",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 39.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_04",
+   "kind": "pre_exit",
+   "frame": 763,
+   "file": "scene_04_pre_exit_00763.png",
+   "time_s": 25.433,
+   "sha": "92066406fcad1c87",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 39.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_04",
+   "kind": "transition",
+   "frame": 776,
+   "file": "scene_04_transition_00776.png",
+   "time_s": 25.867,
+   "sha": "5820e5b6593bdd01",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 39.2,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_05",
+   "kind": "entry",
+   "frame": 815,
+   "file": "scene_05_entry_00815.png",
+   "time_s": 27.167,
+   "sha": "1501326c6c40ffef",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 30.3,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_05",
+   "kind": "mid",
+   "frame": 917,
+   "file": "scene_05_mid_00917.png",
+   "time_s": 30.567,
+   "sha": "97d9b53051c40547",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 28.0,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_05",
+   "kind": "pre_exit",
+   "frame": 1025,
+   "file": "scene_05_pre_exit_01025.png",
+   "time_s": 34.167,
+   "sha": "9f915750b9fe97a4",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 30.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_05",
+   "kind": "transition",
+   "frame": 1045,
+   "file": "scene_05_transition_01045.png",
+   "time_s": 34.833,
+   "sha": "0280e8f4a3651d77",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 29.6,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_06",
+   "kind": "entry",
+   "frame": 1067,
+   "file": "scene_06_entry_01067.png",
+   "time_s": 35.567,
+   "sha": "2c2c41bba4b45f31",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 23.1,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_06",
+   "kind": "mid",
+   "frame": 1117,
+   "file": "scene_06_mid_01117.png",
+   "time_s": 37.233,
+   "sha": "6c1643de0ff7ef4d",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 35.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_06",
+   "kind": "pre_exit",
+   "frame": 1170,
+   "file": "scene_06_pre_exit_01170.png",
+   "time_s": 39.0,
+   "sha": "29aec6e0f2290469",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 35.5,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_06",
+   "kind": "transition",
+   "frame": 1176,
+   "file": "scene_06_transition_01176.png",
+   "time_s": 39.2,
+   "sha": "dccaed1e7cb130e2",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 35.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_07",
+   "kind": "entry",
+   "frame": 1206,
+   "file": "scene_07_entry_01206.png",
+   "time_s": 40.2,
+   "sha": "42dedf1b8fcd6913",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 31.6,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_07",
+   "kind": "mid",
+   "frame": 1279,
+   "file": "scene_07_mid_01279.png",
+   "time_s": 42.633,
+   "sha": "e77eea8a36f106a5",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 50.1,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_07",
+   "kind": "pre_exit",
+   "frame": 1356,
+   "file": "scene_07_pre_exit_01356.png",
+   "time_s": 45.2,
+   "sha": "575bbd47dd4e474d",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 48.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_07",
+   "kind": "transition",
+   "frame": 1369,
+   "file": "scene_07_transition_01369.png",
+   "time_s": 45.633,
+   "sha": "e316f0511dd79dd7",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 47.3,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_08",
+   "kind": "entry",
+   "frame": 1400,
+   "file": "scene_08_entry_01400.png",
+   "time_s": 46.667,
+   "sha": "0e8336244526f19a",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 44.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_08",
+   "kind": "mid",
+   "frame": 1480,
+   "file": "scene_08_mid_01480.png",
+   "time_s": 49.333,
+   "sha": "e5d72c955f332536",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 39.3,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_08",
+   "kind": "pre_exit",
+   "frame": 1564,
+   "file": "scene_08_pre_exit_01564.png",
+   "time_s": 52.133,
+   "sha": "8660e5f7bd688c4e",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 38.9,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_08",
+   "kind": "transition",
+   "frame": 1579,
+   "file": "scene_08_transition_01579.png",
+   "time_s": 52.633,
+   "sha": "bb0e3adda13f3b0f",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 38.7,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_09",
+   "kind": "entry",
+   "frame": 1603,
+   "file": "scene_09_entry_01603.png",
+   "time_s": 53.433,
+   "sha": "5329553329ac7a1b",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 29.4,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_09",
+   "kind": "mid",
+   "frame": 1657,
+   "file": "scene_09_mid_01657.png",
+   "time_s": 55.233,
+   "sha": "b5b386f7f8d57ae3",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 44.8,
+   "blank": false,
+   "human_reviewed": false
+  },
+  {
+   "scene_id": "scene_09",
+   "kind": "pre_exit",
+   "frame": 1714,
+   "file": "scene_09_pre_exit_01714.png",
+   "time_s": 57.133,
+   "sha": "84007605673de6e3",
+   "decode_ok": true,
+   "width": 480,
+   "height": 270,
+   "std": 46.1,
+   "blank": false,
+   "human_reviewed": false
+  }
+ ],
+ "preview": {
+  "evidence_generated": true,
+  "technical_checks_passed": true,
+  "stills_reviewed_by_person": false,
+  "motion_playback_reviewed": false,
+  "samples": 35,
+  "scenes_sampled": 9,
+  "reviews": []
+ },
+ "exceptions": [],
+ "cache": {
+  "stages_reused": 0,
+  "stages_run": 12
+ },
+ "next_action": "resolve_blockers_in_the_owner_stage_or_record_an_explicit_exception",
+ "error": null,
+ "note": "read-only: nothing upstream was changed; a timeline that is not built yet is not validated here (the pre-render check after the build does that)",
+ "timings_seconds": {
+  "validate": 0.107
+ }
+}

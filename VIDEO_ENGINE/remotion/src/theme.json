@@ -1,0 +1,44 @@
+{
+  "safeMargin": 0.05,
+  "palette": ["#0B1D26", "#F2A541", "#2A9D8F"],
+  "type": { "map": 34, "chart": 44, "body": 56, "unit": 90, "display": 144, "hero": 224 },
+  "scrim": 0.45,
+  "backing": { "color": "#0B1D26", "opacity": 0.8, "pad": 0.3 },
+  "camera": {
+    "easing": { "push": [0.45, 0.05, 0.55, 0.95], "pan": [0.37, 0, 0.63, 1], "focus": [0.25, 0.1, 0.25, 1] },
+    "maxScale": 1.15,
+    "focusScale": 1.25,
+    "drift": { "maxShiftPct": 0.3, "maxRotateDeg": 0.15, "period": 60, "headroom": 0.012 }
+  },
+  "accent": { "pulseScale": 1.045, "upFrames": 6, "downFrames": 12 },
+  "boxes": {
+    "full": [0, 0, 1, 1],
+    "left-third": [0, 0, 0.34, 1], "right-third": [0.66, 0, 0.34, 1],
+    "left-half": [0, 0, 0.5, 1], "right-half": [0.5, 0, 0.5, 1],
+    "center": [0.2, 0.1, 0.6, 0.8], "small-center": [0.33, 0.22, 0.34, 0.56],
+    "top-left": [0.03, 0.05, 0.3, 0.4], "top-right": [0.67, 0.05, 0.3, 0.4],
+    "bottom-left": [0.03, 0.55, 0.3, 0.4], "bottom-right": [0.67, 0.55, 0.3, 0.4],
+    "grid-0": [0.03, 0.04, 0.46, 0.44], "grid-1": [0.51, 0.04, 0.46, 0.44],
+    "grid-2": [0.03, 0.52, 0.46, 0.44], "grid-3": [0.51, 0.52, 0.46, 0.44]
+  },
+  "portrait": {
+    "width": 1080, "height": 1920, "typeScale": 0.85, "captionBottom": "18%", "lowerThirdBottom": "20%", "labelTop": "10%",
+    "boxes": {
+      "full": [0, 0, 1, 1],
+      "left-third": [0, 0, 1, 0.34], "right-third": [0, 0.66, 1, 0.34],
+      "left-half": [0, 0, 1, 0.5], "right-half": [0, 0.5, 1, 0.5],
+      "center": [0.08, 0.18, 0.84, 0.64], "small-center": [0.17, 0.33, 0.66, 0.34],
+      "top-left": [0.05, 0.07, 0.55, 0.22], "top-right": [0.4, 0.07, 0.55, 0.22],
+      "bottom-left": [0.05, 0.6, 0.55, 0.22], "bottom-right": [0.4, 0.6, 0.55, 0.22],
+      "grid-0": [0.04, 0.04, 0.92, 0.215], "grid-1": [0.04, 0.275, 0.92, 0.215],
+      "grid-2": [0.04, 0.51, 0.92, 0.215], "grid-3": [0.04, 0.745, 0.92, 0.215]
+    }
+  },
+  "minContrast": 3,
+  "neutrals": ["#ffffff", "#000000", "#111111"],
+  "grades": {
+    "warm": ["rgba(255,176,96,0.16)", "rgba(255,120,64,0.10)"],
+    "cool": ["rgba(110,160,255,0.14)", "rgba(40,90,170,0.12)"],
+    "teal-orange": ["rgba(42,157,143,0.20)", "rgba(242,165,65,0.16)"]
+  }
+}

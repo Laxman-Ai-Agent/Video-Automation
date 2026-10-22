@@ -1,0 +1,24 @@
+{
+ "at": "2026-10-15T07:34:02",
+ "verified": [
+  "effect.cinematic.particles-float"
+ ],
+ "failed": [],
+ "results": {
+  "effect.cinematic.particles-float": {
+   "aspects": {
+    "16:9": {
+     "ok": true,
+     "changed_ratio": 0.004,
+     "preview": "resource-library/previews/16x9/effect.cinematic.particles-float.jpg"
+    },
+    "9:16": {
+     "ok": true,
+     "changed_ratio": 0.0041,
+     "preview": "resource-library/previews/9x16/effect.cinematic.particles-float.jpg"
+    }
+   },
+   "deterministic": true
+  }
+ }
+}

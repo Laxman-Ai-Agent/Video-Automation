@@ -1,0 +1,10 @@
+{
+  "agent_id": "skill_factory",
+  "category": "system",
+  "timeout_seconds": 120,
+  "allowed_tools": [
+    "skill_registry",
+    "static_auditor",
+    "file_storage"
+  ]
+}

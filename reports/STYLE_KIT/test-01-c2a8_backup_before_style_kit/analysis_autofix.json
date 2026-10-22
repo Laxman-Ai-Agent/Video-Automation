@@ -1,0 +1,19 @@
+{
+ "status": "clean",
+ "run_key": "1792036005387511800:7075",
+ "attempts": 1,
+ "rounds": 0,
+ "changes": [
+  {
+   "word_index": 21,
+   "word": "భవిష్యత్తు",
+   "segment": 2,
+   "start_before": 8.77,
+   "start_after": 9.475,
+   "end": 10.03,
+   "evidence": "first voiced audio frame inside the segment"
+  }
+ ],
+ "remaining": [],
+ "at": "2026-10-15T09:42:38"
+}

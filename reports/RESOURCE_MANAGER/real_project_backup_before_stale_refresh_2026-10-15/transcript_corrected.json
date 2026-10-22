@@ -1,0 +1,1046 @@
+{
+ "language": "te",
+ "duration": 57.611,
+ "segments": [
+  {
+   "id": 0,
+   "start": 0.0,
+   "end": 4.58,
+   "text": "ఇవి కేవలం శారీరక సవాల్లు మాత్రమే కావు, మానసిక సవాల్లు ఇంకా పెద్దవి.",
+   "words": [
+    {
+     "w": "ఇవి",
+     "start": 0.0,
+     "end": 0.26,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కేవలం",
+     "start": 0.26,
+     "end": 0.68,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "శారీరక",
+     "start": 0.7,
+     "end": 1.24,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "సవాల్లు",
+     "start": 1.24,
+     "end": 1.68,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మాత్రమే",
+     "start": 1.68,
+     "end": 2.04,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కావు,",
+     "start": 2.04,
+     "end": 2.4,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మానసిక",
+     "start": 2.44,
+     "end": 3.1,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సవాల్లు",
+     "start": 3.1,
+     "end": 3.66,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఇంకా",
+     "start": 3.66,
+     "end": 4.18,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "పెద్దవి.",
+     "start": 4.18,
+     "end": 4.58,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 1,
+   "start": 4.75,
+   "end": 13.41,
+   "text": "మార్స్కు చేరడానికి సుమారు ఎనిమిది నెలల ప్రయాణం చేయాలి ఆ సమయం లో కుటుంబం భూమి సాధారణ జీవితం అన్నిటి నించి దూరంగా ఉండాలి",
+   "words": [
+    {
+     "w": "మార్స్కు",
+     "start": 4.75,
+     "end": 5.29,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "చేరడానికి",
+     "start": 5.29,
+     "end": 5.79,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సుమారు",
+     "start": 5.79,
+     "end": 6.37,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఎనిమిది",
+     "start": 6.37,
+     "end": 6.890000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నెలల",
+     "start": 6.89,
+     "end": 7.15,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ప్రయాణం",
+     "start": 7.15,
+     "end": 7.65,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "చేయాలి",
+     "start": 7.65,
+     "end": 8.05,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఆ",
+     "start": 8.05,
+     "end": 8.51,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సమయం",
+     "start": 8.51,
+     "end": 8.87,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "లో",
+     "start": 8.91,
+     "end": 9.11,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కుటుంబం",
+     "start": 9.11,
+     "end": 10.030000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "భూమి",
+     "start": 10.030000000000001,
+     "end": 10.61,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సాధారణ",
+     "start": 10.61,
+     "end": 11.309999999999999,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "జీవితం",
+     "start": 11.31,
+     "end": 11.79,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "అన్నిటి",
+     "start": 11.79,
+     "end": 12.469999999999999,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నించి",
+     "start": 12.469999999999999,
+     "end": 12.690000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "దూరంగా",
+     "start": 12.690000000000001,
+     "end": 13.09,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఉండాలి",
+     "start": 13.09,
+     "end": 13.41,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 2,
+   "start": 13.600000000000001,
+   "end": 17.1,
+   "text": "అక్కడికి చేరుకున్నాక కూడా భూమితో సంభాషణ తక్షణం జరగదు",
+   "words": [
+    {
+     "w": "అక్కడికి",
+     "start": 13.600000000000001,
+     "end": 14.080000000000002,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "చేరుకున్నాక",
+     "start": 14.080000000000002,
+     "end": 14.620000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కూడా",
+     "start": 14.620000000000001,
+     "end": 14.940000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "భూమితో",
+     "start": 14.940000000000001,
+     "end": 15.620000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సంభాషణ",
+     "start": 15.62,
+     "end": 16.08,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "తక్షణం",
+     "start": 16.08,
+     "end": 16.68,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "జరగదు",
+     "start": 16.700000000000003,
+     "end": 17.1,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 3,
+   "start": 17.1,
+   "end": 19.42,
+   "text": "సందేశాలకు నిమిషాల ఆలస్యం ఉంటుంది",
+   "words": [
+    {
+     "w": "సందేశాలకు",
+     "start": 16.8,
+     "end": 18.06,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "నిమిషాల",
+     "start": 18.020000000000003,
+     "end": 18.6,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఆలస్యం",
+     "start": 18.62,
+     "end": 19.0,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "ఉంటుంది",
+     "start": 19.040000000000003,
+     "end": 19.580000000000002,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 4,
+   "start": 19.580000000000002,
+   "end": 22.240000000000002,
+   "text": "చుట్టు ఎర్రటి ఎడారి నిశ్శబ్ద వాతావరణం",
+   "words": [
+    {
+     "w": "చుట్టు",
+     "start": 19.580000000000002,
+     "end": 20.020000000000003,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఎర్రటి",
+     "start": 20.020000000000003,
+     "end": 20.5,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఎడారి",
+     "start": 20.5,
+     "end": 20.900000000000002,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నిశ్శబ్ద",
+     "start": 20.9,
+     "end": 21.64,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "వాతావరణం",
+     "start": 21.64,
+     "end": 22.24,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 5,
+   "start": 22.5,
+   "end": 26.08,
+   "text": "పరిమితమైన మనుష్యులు మాత్రమే ఇవన్ని మనసును గట్టిగా పరీక్షిస్తాయి",
+   "words": [
+    {
+     "w": "పరిమితమైన",
+     "start": 22.5,
+     "end": 23.1,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనుష్యులు",
+     "start": 23.1,
+     "end": 23.6,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మాత్రమే",
+     "start": 23.6,
+     "end": 23.92,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఇవన్ని",
+     "start": 23.92,
+     "end": 24.5,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనసును",
+     "start": 24.5,
+     "end": 25.04,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "గట్టిగా",
+     "start": 25.04,
+     "end": 25.54,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "పరీక్షిస్తాయి",
+     "start": 25.54,
+     "end": 26.26,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 6,
+   "start": 26.08,
+   "end": 30.1,
+   "text": "ఏదేనా అత్యవసర పరిస్థితి వచ్చిన వెంటనే భూమినుంచి సహాయం అందదు",
+   "words": [
+    {
+     "w": "ఏదేనా",
+     "start": 26.08,
+     "end": 26.8,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అత్యవసర",
+     "start": 26.82,
+     "end": 27.22,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "పరిస్థితి",
+     "start": 27.22,
+     "end": 27.68,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "వచ్చిన",
+     "start": 27.68,
+     "end": 28.02,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "వెంటనే",
+     "start": 28.02,
+     "end": 28.68,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "భూమినుంచి",
+     "start": 28.68,
+     "end": 29.28,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "సహాయం",
+     "start": 29.28,
+     "end": 29.740000000000002,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అందదు",
+     "start": 29.740000000000002,
+     "end": 30.1,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 7,
+   "start": 30.200000000000003,
+   "end": 34.900000000000006,
+   "text": "అక్కడి బృందం తమ జ్ఞానం శిక్షణ పరస్పర నమ్మకం తోనే నిర్ణయాలు తీసుకోవాలి",
+   "words": [
+    {
+     "w": "అక్కడి",
+     "start": 30.200000000000003,
+     "end": 30.720000000000002,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "బృందం",
+     "start": 30.7,
+     "end": 31.04,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "తమ",
+     "start": 31.040000000000003,
+     "end": 31.360000000000003,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "జ్ఞానం",
+     "start": 31.34,
+     "end": 31.84,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "శిక్షణ",
+     "start": 31.84,
+     "end": 32.46,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "పరస్పర",
+     "start": 32.440000000000005,
+     "end": 33.220000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నమ్మకం",
+     "start": 33.220000000000006,
+     "end": 33.620000000000005,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "తోనే",
+     "start": 33.620000000000005,
+     "end": 33.86,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నిర్ణయాలు",
+     "start": 33.86,
+     "end": 34.36,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "తీసుకోవాలి",
+     "start": 34.36,
+     "end": 34.9,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 8,
+   "start": 35.050000000000004,
+   "end": 39.730000000000004,
+   "text": "అందుకే బలమైన మనోధైర్యం క్రమశిక్షణ జట్టు భావన అత్యంత కీలకం",
+   "words": [
+    {
+     "w": "అందుకే",
+     "start": 35.050000000000004,
+     "end": 35.61000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "బలమైన",
+     "start": 35.61000000000001,
+     "end": 36.290000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనోధైర్యం",
+     "start": 36.29,
+     "end": 36.95,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "క్రమశిక్షణ",
+     "start": 36.95,
+     "end": 37.73,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "జట్టు",
+     "start": 37.730000000000004,
+     "end": 38.43000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "భావన",
+     "start": 38.43000000000001,
+     "end": 38.67,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అత్యంత",
+     "start": 38.67,
+     "end": 39.31,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కీలకం",
+     "start": 39.31,
+     "end": 39.71,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    }
+   ]
+  },
+  {
+   "id": 9,
+   "start": 39.730000000000004,
+   "end": 40.61000000000001,
+   "text": "అయినా కూడా",
+   "words": [
+    {
+     "w": "అయినా",
+     "start": 39.43,
+     "end": 40.39,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "కూడా",
+     "start": 40.410000000000004,
+     "end": 40.61000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 10,
+   "start": 40.800000000000004,
+   "end": 47.720000000000006,
+   "text": "ఇదే మనిషి తదుపరి లక్ష్యం మొదట చంద్రుడి తర్వాత మార్స్ మన గమ్యం ఒక రోజు అక్కడ మనిషి విజయవంతంగా స్థిరపడితే",
+   "words": [
+    {
+     "w": "ఇదే",
+     "start": 40.800000000000004,
+     "end": 41.06,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనిషి",
+     "start": 41.06,
+     "end": 41.440000000000005,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "తదుపరి",
+     "start": 41.440000000000005,
+     "end": 41.86000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "లక్ష్యం",
+     "start": 41.86,
+     "end": 42.18,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "మొదట",
+     "start": 42.6,
+     "end": 42.86,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "చంద్రుడి",
+     "start": 42.86,
+     "end": 43.56,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "తర్వాత",
+     "start": 43.540000000000006,
+     "end": 43.84,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మార్స్",
+     "start": 43.84,
+     "end": 44.6,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మన",
+     "start": 44.6,
+     "end": 44.74,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "గమ్యం",
+     "start": 44.74,
+     "end": 45.1,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఒక",
+     "start": 45.1,
+     "end": 45.50000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "రోజు",
+     "start": 45.50000000000001,
+     "end": 45.84,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అక్కడ",
+     "start": 45.84,
+     "end": 46.06,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనిషి",
+     "start": 46.06,
+     "end": 46.480000000000004,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "విజయవంతంగా",
+     "start": 46.48,
+     "end": 47.16,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "స్థిరపడితే",
+     "start": 47.160000000000004,
+     "end": 47.720000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 11,
+   "start": 47.900000000000006,
+   "end": 52.540000000000006,
+   "text": "అది కేవలం అంతరిక్ష విజయం మాత్రమే కాదు మానవ చరిత్ర లో ఒక కొత్త అధ్యాయం",
+   "words": [
+    {
+     "w": "అది",
+     "start": 47.900000000000006,
+     "end": 48.2,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కేవలం",
+     "start": 48.2,
+     "end": 48.660000000000004,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "అంతరిక్ష",
+     "start": 48.660000000000004,
+     "end": 49.120000000000005,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "విజయం",
+     "start": 49.12,
+     "end": 49.5,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "మాత్రమే",
+     "start": 49.480000000000004,
+     "end": 49.82000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కాదు",
+     "start": 49.82000000000001,
+     "end": 50.14000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మానవ",
+     "start": 50.14000000000001,
+     "end": 50.82000000000001,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "చరిత్ర",
+     "start": 50.82000000000001,
+     "end": 51.220000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "లో",
+     "start": 51.220000000000006,
+     "end": 51.38,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "ఒక",
+     "start": 51.38,
+     "end": 51.540000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "కొత్త",
+     "start": 51.54,
+     "end": 51.98,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "అధ్యాయం",
+     "start": 52.040000000000006,
+     "end": 52.540000000000006,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  },
+  {
+   "id": 12,
+   "start": 52.85,
+   "end": 57.43,
+   "text": "ఆ రోజు మనిషి నిజంగా బహుగ్రహ జీవిగా పరిణమించిన రోజు తప్పకుండా వస్తుంది.",
+   "words": [
+    {
+     "w": "ఆ",
+     "start": 52.85,
+     "end": 52.99,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "రోజు",
+     "start": 52.99,
+     "end": 53.370000000000005,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "మనిషి",
+     "start": 53.370000000000005,
+     "end": 53.95,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "నిజంగా",
+     "start": 53.95,
+     "end": 54.410000000000004,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "బహుగ్రహ",
+     "start": 54.39,
+     "end": 54.91,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "జీవిగా",
+     "start": 54.91,
+     "end": 55.41,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "పరిణమించిన",
+     "start": 55.41,
+     "end": 56.01,
+     "p": null,
+     "timing": "aligned",
+     "edit": "llm"
+    },
+    {
+     "w": "రోజు",
+     "start": 56.010000000000005,
+     "end": 56.33,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "తప్పకుండా",
+     "start": 56.33,
+     "end": 57.050000000000004,
+     "p": null,
+     "timing": null,
+     "edit": null
+    },
+    {
+     "w": "వస్తుంది.",
+     "start": 57.050000000000004,
+     "end": 57.43,
+     "p": null,
+     "timing": null,
+     "edit": null
+    }
+   ]
+  }
+ ]
+}

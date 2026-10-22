@@ -1,0 +1,93 @@
+{
+  "timestamp": "2026-10-17T05:35:00Z",
+  "active_strategy": {
+    "version": "1.0.0",
+    "name": "Canonical Baseline Architecture Strategy",
+    "composite_score": 1.0,
+    "planning_score": 1.0,
+    "routing_score": 1.0,
+    "hard_gate_passed": true,
+    "planning_cases_passed": 5,
+    "planning_cases_total": 5,
+    "routing_cases_passed": 5,
+    "routing_cases_total": 5
+  },
+  "benchmark_suites": {
+    "planning_cases": [
+      {
+        "case_id": "plan_case_video_01",
+        "goal": "Generate video from narration audio with dynamic motion graphics",
+        "expected_family": "video_generation",
+        "status": "passed",
+        "hard_gate": "valid_dag"
+      },
+      {
+        "case_id": "plan_case_skill_01",
+        "goal": "Create custom skill for neon text animations",
+        "expected_family": "skill_authoring",
+        "status": "passed",
+        "hard_gate": "valid_dag"
+      },
+      {
+        "case_id": "plan_case_audio_01",
+        "goal": "Transcribe speech narration and segment audio",
+        "expected_family": "audio_processing",
+        "status": "passed",
+        "hard_gate": "valid_dag"
+      },
+      {
+        "case_id": "plan_case_discovery_01",
+        "goal": "Inspect capabilities and discover system status",
+        "expected_family": "system_discovery",
+        "status": "passed",
+        "hard_gate": "valid_dag"
+      },
+      {
+        "case_id": "plan_case_fallback_01",
+        "goal": "Something completely novel that has no matching keywords",
+        "expected_family": "fallback_discovery",
+        "status": "passed",
+        "hard_gate": "valid_dag"
+      }
+    ],
+    "routing_cases": [
+      {
+        "case_id": "route_case_audio_ingest",
+        "action": "audio_ingest",
+        "expected_agent": "audio_input",
+        "actual_agent": "audio_input",
+        "status": "passed"
+      },
+      {
+        "case_id": "route_case_transcribe",
+        "action": "speech_transcription",
+        "expected_agent": "audio_analyzer",
+        "actual_agent": "audio_analyzer",
+        "status": "passed"
+      },
+      {
+        "case_id": "route_case_scene_segmentation",
+        "action": "semantic_segmentation",
+        "expected_agent": "scene_segmentation",
+        "actual_agent": "scene_segmentation",
+        "status": "passed"
+      },
+      {
+        "case_id": "route_case_motion_fallback",
+        "action": "motion_template_selection",
+        "expected_agent": "motion_planning",
+        "actual_agent": "motion_planning",
+        "status": "passed",
+        "routing_reason": "Action fallback route applied (motion_template_selection -> motion_planning)"
+      },
+      {
+        "case_id": "route_case_unregistered_fallback",
+        "action": "unknown_action_xyz",
+        "expected_agent": "capability_finder",
+        "actual_agent": "capability_finder",
+        "status": "passed",
+        "routing_reason": "Default unregistered fallback applied -> capability_finder"
+      }
+    ]
+  }
+}

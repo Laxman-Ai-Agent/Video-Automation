@@ -1,0 +1,17 @@
+{
+  "agent_id": "final_qc",
+  "stage_id": "qc",
+  "max_retries": 3,
+  "timeout_seconds": 300,
+  "allowed_tools": [
+    "ffprobe",
+    "ffmpeg",
+    "qc_runner"
+  ],
+  "capabilities": [
+    "automated-qc",
+    "black-frame-detection",
+    "freeze-frame-detection",
+    "audio-clipping-detection"
+  ]
+}

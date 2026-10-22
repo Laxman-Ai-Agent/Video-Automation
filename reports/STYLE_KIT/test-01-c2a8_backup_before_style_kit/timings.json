@@ -1,0 +1,75 @@
+{
+ "last_build": {},
+ "steps": {
+  "cuts": {
+   "last_run": "2026-10-15T09:19:37",
+   "runs": 1,
+   "seconds": 1.8,
+   "status": "ran",
+   "total_seconds": 1.8
+  },
+  "motion-build": {
+   "last_run": "2026-10-15T11:35:49",
+   "runs": 7,
+   "seconds": 10.2,
+   "status": "ran",
+   "total_seconds": 91.3
+  },
+  "motion-plan": {
+   "last_run": "2026-10-15T11:35:37",
+   "runs": 8,
+   "seconds": 18.8,
+   "status": "ran",
+   "total_seconds": 127.4
+  },
+  "motion-validate": {
+   "last_run": "2026-10-15T12:38:28",
+   "runs": 6,
+   "seconds": 0.6,
+   "status": "ran",
+   "total_seconds": 2.8
+  },
+  "motion-validation": {
+   "last_run": "2026-10-15T11:38:50",
+   "runs": 7,
+   "seconds": 0.2,
+   "status": "ran",
+   "total_seconds": 1.6
+  },
+  "motion-validation-preview": {
+   "last_run": "2026-10-15T11:38:50",
+   "runs": 3,
+   "seconds": 107.1,
+   "status": "ran",
+   "total_seconds": 376.1
+  },
+  "refine": {
+   "last_run": "2026-10-15T09:19:36",
+   "runs": 1,
+   "seconds": 170.5,
+   "status": "ran",
+   "total_seconds": 170.5
+  },
+  "segment": {
+   "last_run": "2026-10-15T09:49:09",
+   "runs": 1,
+   "seconds": 9.4,
+   "status": "ran",
+   "total_seconds": 9.4
+  },
+  "timeline-build": {
+   "last_run": "2026-10-15T11:45:20",
+   "runs": 1,
+   "seconds": 9.9,
+   "status": "fresh",
+   "total_seconds": 9.9
+  },
+  "transcribe": {
+   "last_run": "2026-10-15T09:16:45",
+   "runs": 1,
+   "seconds": 341.5,
+   "status": "ran",
+   "total_seconds": 341.5
+  }
+ }
+}

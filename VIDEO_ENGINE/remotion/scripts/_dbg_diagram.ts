@@ -1,0 +1,12 @@
+import { readFileSync } from "node:fs";
+import { planDiagram } from "../src/motion/diagram";
+const vp = JSON.parse(readFileSync(process.argv[2] + "/visual_planning.json", "utf-8"));
+const s = vp.scenes.find((x: any) => x.scene_id === "scene_05");
+const els = s.elements.map((e: any) => ({ id: e.element_id, type: e.type, role: e.role, required: e.required, desc: e.visual_description, region: e.placement.region }));
+const rels = s.element_relationships.map((r: any) => ({ source: r.source, target: r.target, relation: r.relation }));
+const items: any[] = [{ id: "5:node-network", preset: "node-network", kind: "gfx", box: [0.62, 0.06, 0.32, 0.3], start: 26.5 }, { id: "5:bracket-frame", preset: "bracket-frame", kind: "gfx", box: [0.06, 0.3, 0.88, 0.3] }];
+const o = planDiagram({ els, rels, start: 26.08, end: 35.05, tall: false, W: 1920, H: 1080, speed: 1.4, texts: [[0.27, 0.862, 0.73, 0.92]], items, fixed: new Set(), obstacles: [], colors: { earth: "#2a9d9f", mars: "#d9582b", moon: "#b9b2a3", line: "#f2e6d0" } });
+console.log(JSON.stringify({ placed: o.placed.map((p) => [p.element_id, p.id, p.box]), skipped: o.skipped, moved: o.moved, newItems: o.newItems.length }));
+import * as D from "../src/motion/diagram";
+console.log(JSON.stringify({ layers: o.layers.map((l: any) => [l.type, l.elementId, l.lucide ?? null]) }));
+console.log(JSON.stringify(els.map((e: any) => [e.id, e.type, !!D.iconOf(e), D.bodyOf(e)])));

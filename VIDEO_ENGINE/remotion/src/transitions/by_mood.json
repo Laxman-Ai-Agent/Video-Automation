@@ -1,0 +1,10 @@
+{
+  "calm": ["fade", "blur", "match-move"],
+  "majestic": ["zoom-through", "fade", "light-leak"],
+  "tense": ["wipe", "flip", "particle"],
+  "energetic": ["slide", "wipe", "zoom-through", "flip"],
+  "hopeful": ["light-leak", "fade", "mask-shape"],
+  "sad": ["blur", "fade"],
+  "playful": ["mask-shape", "flip", "slide", "clock-wipe"],
+  "dramatic": ["zoom-through", "particle", "clock-wipe"]
+}

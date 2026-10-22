@@ -1,0 +1,1006 @@
+{
+  "6b7c70dee99361f308b6f2c9866f21f157b29409e8714c8bbe5d6b731bcfd0be": {
+    "cache_key": "6b7c70dee99361f308b6f2c9866f21f157b29409e8714c8bbe5d6b731bcfd0be",
+    "skill_id": "motion.zeta_vortex_29e192d0",
+    "version": "1.0.0",
+    "content_sha256": "db37c19eb76927a87f770f6b2b5546bcf5f9e3e0d9419457d23cb90f01907964",
+    "spec_hash": "968b85dad68ebb9981d63597721cbe91836604ba01ba5c14b1ac3c5a04ec8776",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:52.479668+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.12,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "db37c19eb76927a87f770f6b2b5546bcf5f9e3e0d9419457d23cb90f01907964",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "948b019b82a528fd96047bb0af3cc0ae0489a224114d3d12779617e68d5e2351": {
+    "cache_key": "948b019b82a528fd96047bb0af3cc0ae0489a224114d3d12779617e68d5e2351",
+    "skill_id": "test.env_scrub",
+    "version": "1.0.0",
+    "content_sha256": "cadf8d7a1e093708e500a312521e26bb2cb4612014f5ad65d3c1bb769ba6a599",
+    "spec_hash": "cbacf15c290798791074206522ccdc9a3306a984e8c0a3ee5fada67424f7293f",
+    "policy_hash": "37f9318ff228d799f92348e1f7cb65eb0dedc6632e53563c347a22c5c19ad8c8",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:52.805766+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 74.73,
+      "stdout": "SECRET_EXISTS=False\nTOKEN_EXISTS=False\nSkill execution harness completed successfully.\n",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "cadf8d7a1e093708e500a312521e26bb2cb4612014f5ad65d3c1bb769ba6a599",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "0900e27c93d7a4d02b0bd44b5227048f0aff39d4b583947cf98d1b77133f814e": {
+    "cache_key": "0900e27c93d7a4d02b0bd44b5227048f0aff39d4b583947cf98d1b77133f814e",
+    "skill_id": "test.key_purity",
+    "version": "1.0.0",
+    "content_sha256": "0ee8721ef2991385591bb947078db3e26d1e62a5e5d5c61756772ac8aedfd518",
+    "spec_hash": "a74e2a01040fd91c3b72fdc1bef9f9ddae4f03e52bf1c02e0c9d037e05a44810",
+    "policy_hash": "37f9318ff228d799f92348e1f7cb65eb0dedc6632e53563c347a22c5c19ad8c8",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:52.943027+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 130.23,
+      "stdout": "ENV_KEYS:[\"COMSPEC\", \"PATH\", \"PATHEXT\", \"PYTHONDONTWRITEBYTECODE\", \"PYTHONPATH\", \"PYTHONUNBUFFERED\", \"PYTHONUTF8\", \"SYSTEMROOT\", \"TEMP\", \"TMP\"]\nSkill execution harness completed successfully.\n",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "0ee8721ef2991385591bb947078db3e26d1e62a5e5d5c61756772ac8aedfd518",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "08ae56e8326226bafe53977d7191371c31305e828ce312f4f259648cd2bdc1b1": {
+    "cache_key": "08ae56e8326226bafe53977d7191371c31305e828ce312f4f259648cd2bdc1b1",
+    "skill_id": "test.output_flood",
+    "version": "1.0.0",
+    "content_sha256": "df91d17e944d6507086b5c09161e6b93bced5846b66b5c251adc0d1acd01b843",
+    "spec_hash": "5563a7c76a0d219ee23e9c5442e874cfc800957651e161846b5feec85d796a5c",
+    "policy_hash": "5dec1b1c08815d6e05a7b959fa1b083b2799ee2c920a9f13685f1c441aa79693",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:54.280663+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 84.66,
+      "stdout": "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX\n[TRUNCATED: Output exceeded sandbox limit of 4096 bytes]",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "df91d17e944d6507086b5c09161e6b93bced5846b66b5c251adc0d1acd01b843",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "6ce68624f4b8a0097701971b9307cefde6ae3d7d85c8453580954eeb9edb2e66": {
+    "cache_key": "6ce68624f4b8a0097701971b9307cefde6ae3d7d85c8453580954eeb9edb2e66",
+    "skill_id": "test.crypto_binding",
+    "version": "1.0.0",
+    "content_sha256": "3594e65ab5256de4a70408e8d8cbe93996ea5b7e1b52522ab7faedc353eb1250",
+    "spec_hash": "34d30b8a3c216270494e614b3352ea67f34b2df9d7faaa4c2eec61ace320fa58",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:54.385562+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 84.75,
+      "stdout": "Skill execution harness completed successfully.\n",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "3594e65ab5256de4a70408e8d8cbe93996ea5b7e1b52522ab7faedc353eb1250",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "1fa47589a7b6611b7dd59a53d4e92aa9db41b0e113e8ec9e24e9c4329ae8aae6": {
+    "cache_key": "1fa47589a7b6611b7dd59a53d4e92aa9db41b0e113e8ec9e24e9c4329ae8aae6",
+    "skill_id": "motion.declarative_guidelines",
+    "version": "1.0.0",
+    "content_sha256": "95c73aa1807d44e13eac179f29c09a47130ef94be2b86e1f27b6b963052655cb",
+    "spec_hash": "ab795782d89b790e6c072be63889b9af8336854dd10e70191cece7690c075bfd",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:54.484126+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.14,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "95c73aa1807d44e13eac179f29c09a47130ef94be2b86e1f27b6b963052655cb",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "546b027a273d7388ff845f1131e2a81bccb057cd5d55ee4c981427592bb12bd4": {
+    "cache_key": "546b027a273d7388ff845f1131e2a81bccb057cd5d55ee4c981427592bb12bd4",
+    "skill_id": "test.side_effect_integrity",
+    "version": "1.0.0",
+    "content_sha256": "e0c7ae8f1b31bf9259694fd5befcd88fef2c9f9e991057872c9c5d9416d9acb1",
+    "spec_hash": "d43acec221ddfe6686658af09c4ae04bc722d03567b3de451dc58acadd0a8c9d",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:54.605132+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 111.59,
+      "stdout": "Skill execution harness completed successfully.\n",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "e0c7ae8f1b31bf9259694fd5befcd88fef2c9f9e991057872c9c5d9416d9acb1",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "264453f8a79356846c5a0669dd47c6e94667e722c7864cdc7c612f2a489141df": {
+    "cache_key": "264453f8a79356846c5a0669dd47c6e94667e722c7864cdc7c612f2a489141df",
+    "skill_id": "test.safe_exec",
+    "version": "1.0.0",
+    "content_sha256": "f4cd2b5ee7dd529d73e723ae194e235d124b65712cac83e9fd3990d928edfa78",
+    "spec_hash": "aa863d528821d3902f080d34e6ae3eca708f1efec01edf020c3c043dfca9c244",
+    "policy_hash": "e40c94b5ecc47fea1847a70f85aac55f7bd9f6c46e9a6107c9638b523f77bde7",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:53:55.952455+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 1,
+      "tests_passed": 1,
+      "tests_failed": 0,
+      "duration_ms": 76.44,
+      "stdout": "Skill execution harness completed successfully.\n",
+      "stderr": "",
+      "isolation_strategy": "governed_windows_job_object",
+      "tested_content_sha256": "f4cd2b5ee7dd529d73e723ae194e235d124b65712cac83e9fd3990d928edfa78",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "isolated_execution",
+          "exit_code": 0,
+          "passed": true
+        }
+      ]
+    }
+  },
+  "b468a59e45ac8ecc7f24663da9002eaae0b6f44feab4323da56102ceba9a695b": {
+    "cache_key": "b468a59e45ac8ecc7f24663da9002eaae0b6f44feab4323da56102ceba9a695b",
+    "skill_id": "motion.zeta_vortex_e5131fe2",
+    "version": "1.0.0",
+    "content_sha256": "e2c543d01de36b503a4f6b3f74503ccfe61eae5f478bdb9ef2b2f460e8cc26e8",
+    "spec_hash": "86634aa319ba02331031d41a5268e9aed981cdb1e0767ab7fde253f8669248b7",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T03:56:59.403734+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.18,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "e2c543d01de36b503a4f6b3f74503ccfe61eae5f478bdb9ef2b2f460e8cc26e8",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "bb0ada879aa9d6d9fd3fb6b334de6fef1024894b01d3c867f1848ee6475cd63d": {
+    "cache_key": "bb0ada879aa9d6d9fd3fb6b334de6fef1024894b01d3c867f1848ee6475cd63d",
+    "skill_id": "motion.zeta_vortex_4c7191f2",
+    "version": "1.0.0",
+    "content_sha256": "2f955f5b043b69a65ed0aa587e78bb72a6963e21ea7abaaa740e3b7d91a0ee32",
+    "spec_hash": "276306582a2beb75dcce76599e253b451518019981dbf281e0477b0658efa066",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T04:15:00.323639+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.1,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "2f955f5b043b69a65ed0aa587e78bb72a6963e21ea7abaaa740e3b7d91a0ee32",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "7aec68abda33c62556851cc04fc2146e2fbf54e2dffdbe674f20dd67536334a8": {
+    "cache_key": "7aec68abda33c62556851cc04fc2146e2fbf54e2dffdbe674f20dd67536334a8",
+    "skill_id": "motion.zeta_vortex_50e138e5",
+    "version": "1.0.0",
+    "content_sha256": "e3e519e86e688b2951e987df9938d0158508d53c53ceac778044ab42639e8776",
+    "spec_hash": "f33b559771ff780f891dac3cbeab63b46d56dd5e7c93acd1e4589902630d007f",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T05:14:59.673425+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.12,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "e3e519e86e688b2951e987df9938d0158508d53c53ceac778044ab42639e8776",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "695d639b54118a34da7583916a2f82d7dfc7c7365da76541980f2e55b448ad11": {
+    "cache_key": "695d639b54118a34da7583916a2f82d7dfc7c7365da76541980f2e55b448ad11",
+    "skill_id": "motion.zeta_vortex_5ede50a7",
+    "version": "1.0.0",
+    "content_sha256": "f10a6a6ac73a476d8d0b03357fbf23ba87b806d828ea6529042f6f71a3b09368",
+    "spec_hash": "42652542af32e2be7fa3b894c0a5054231b9f5e9e95e3200537620ec32df92ac",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-17T06:41:18.816315+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.26,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "f10a6a6ac73a476d8d0b03357fbf23ba87b806d828ea6529042f6f71a3b09368",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "16ad949de80290982d0dd7c1c95646be0aa669291c8c4f5afc4cc3329228a8d9": {
+    "cache_key": "16ad949de80290982d0dd7c1c95646be0aa669291c8c4f5afc4cc3329228a8d9",
+    "skill_id": "visual.cinematic_composition",
+    "version": "1.0.0",
+    "content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+    "spec_hash": "dbdc01808a8242edd58e423059f848e68a9493eed863e30f21b3a7b0b93e66f3",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T00:35:40.418470+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.35,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "930b1656d351740ee7e7912e52233ffa58085917b32a3ada420e643f6adbed6c",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "4efbe80ff593e2778700ec23b598e1e18f49e06eb3d2581c2869b1f29c77f02d": {
+    "cache_key": "4efbe80ff593e2778700ec23b598e1e18f49e06eb3d2581c2869b1f29c77f02d",
+    "skill_id": "visual.narrative_semantic_mapping",
+    "version": "1.0.0",
+    "content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+    "spec_hash": "fcfb065b62a3c0793ca6eeab88d6c45b83a9916c77d9438b1e7ff583b02388c2",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T00:35:40.974857+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.73,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "cb2935bc8ccd4cedd91ff2f1b6afdf83067211ae8776adb573266e4a78735109",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "7bf54bb5139b035cf261b6b1f218aaf345bc0a297d099911103fc07e8b4a3d30": {
+    "cache_key": "7bf54bb5139b035cf261b6b1f218aaf345bc0a297d099911103fc07e8b4a3d30",
+    "skill_id": "visual.word_semantic_animation",
+    "version": "1.0.0",
+    "content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+    "spec_hash": "712d8b0d295656925f9ff2b93b44866f1612f5d5a3466c012cdb24214a2b0e0c",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T00:35:41.984920+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.69,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "3dd3b69297543a7ecc6fcc3a02a4e22c6f04e5bc3612430ace2def632f506c91",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "d73681b49140bcdcbb3da10531195f431f4730e83db161f2a059c980fbc7b785": {
+    "cache_key": "d73681b49140bcdcbb3da10531195f431f4730e83db161f2a059c980fbc7b785",
+    "skill_id": "visual.scene_variety_pacing",
+    "version": "1.0.0",
+    "content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+    "spec_hash": "03f08c1f6978cf5e21639f2f884f8da9dd3b4f301aabcf5e76fc9f828ed352fa",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T00:35:43.999720+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.36,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "f46d1a0b2ba5da9863d22a6c7944e7d4ebb2b7e6a77d4accbb33f2686199ed09",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "166cbbebea69529745a445952a27b5b15617052379abb6a566d3c13b5f2245b1": {
+    "cache_key": "166cbbebea69529745a445952a27b5b15617052379abb6a566d3c13b5f2245b1",
+    "skill_id": "motion.zeta_vortex_f3b5cf3f",
+    "version": "1.0.0",
+    "content_sha256": "e6182afe29fa169158d91d49ddef4d46fd6a12d705fa2d8c8fdfffa4d05a9e27",
+    "spec_hash": "b6e7edb0470e07edb80a75501a73b7b29ee85cc608398042303618585eec9197",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T04:39:48.057476+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.65,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "e6182afe29fa169158d91d49ddef4d46fd6a12d705fa2d8c8fdfffa4d05a9e27",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "85da5906d5729678d94473b5d284ab42f5d0312b109c58dbabf19c5c06c5e8c7": {
+    "cache_key": "85da5906d5729678d94473b5d284ab42f5d0312b109c58dbabf19c5c06c5e8c7",
+    "skill_id": "motion.zeta_vortex_ad42d091",
+    "version": "1.0.0",
+    "content_sha256": "f124a4536f6113d19411c67074f03fa7ac7f19bc42a911e3915b2b2ebdfdb372",
+    "spec_hash": "f6d6a61d6bc083be631c9fede059213a2521ea3812ee10ffbf6dd2b067e6d459",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:03:32.515600+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.26,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "f124a4536f6113d19411c67074f03fa7ac7f19bc42a911e3915b2b2ebdfdb372",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "2d96d32df489ffd943d944426733b5567a15c63ee873cd64411364e87dd173c6": {
+    "cache_key": "2d96d32df489ffd943d944426733b5567a15c63ee873cd64411364e87dd173c6",
+    "skill_id": "motion.repaired_spring",
+    "version": "1.0.0",
+    "content_sha256": "849b051a3a4a1cec8a05854b639a514a9bf9fd0bd222b82140e34e64602ff618",
+    "spec_hash": "c8577a88d8045fdd9a5524b8981a56efd302e99e54853f6e0a0513b93053521f",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:05:12.672678+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "duration_ms": 3.87,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "remotion_tsx_contract_validation",
+      "tested_content_sha256": "849b051a3a4a1cec8a05854b639a514a9bf9fd0bd222b82140e34e64602ff618",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        },
+        {
+          "name": "props_contract",
+          "passed": true
+        },
+        {
+          "name": "remotion_invariants",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "c98d9a01f32f900eb8ccb7a6ab919759ba7b697d6e0e326ede0ca0b204cd56cf": {
+    "cache_key": "c98d9a01f32f900eb8ccb7a6ab919759ba7b697d6e0e326ede0ca0b204cd56cf",
+    "skill_id": "motion.remotion_tsx_particle",
+    "version": "1.0.0",
+    "content_sha256": "a4bd1e9060f15ce67b36a54722d311763c64f03dad81bb10205fa33a5b954eca",
+    "spec_hash": "cfb5c3c10f9d9a7f2c58bf9300b4533018acd328b1aafd3f63f356191e5b8c3e",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:05:12.801490+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "duration_ms": 2.91,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "remotion_tsx_contract_validation",
+      "tested_content_sha256": "a4bd1e9060f15ce67b36a54722d311763c64f03dad81bb10205fa33a5b954eca",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        },
+        {
+          "name": "props_contract",
+          "passed": true
+        },
+        {
+          "name": "remotion_invariants",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "cf322bd10928fc748e4d17712e02e9297397336c48b9b8d5a401588a4d08ea20": {
+    "cache_key": "cf322bd10928fc748e4d17712e02e9297397336c48b9b8d5a401588a4d08ea20",
+    "skill_id": "motion.remotion_tsx_particle",
+    "version": "1.0.0",
+    "content_sha256": "ac1f5cf6a8b16f65b62486e9f3c31756ea722eb30bbe23f66e90fe0fde0ca583",
+    "spec_hash": "cfb5c3c10f9d9a7f2c58bf9300b4533018acd328b1aafd3f63f356191e5b8c3e",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:08:31.505010+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "duration_ms": 1.83,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "remotion_tsx_contract_validation",
+      "tested_content_sha256": "ac1f5cf6a8b16f65b62486e9f3c31756ea722eb30bbe23f66e90fe0fde0ca583",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        },
+        {
+          "name": "props_contract",
+          "passed": true
+        },
+        {
+          "name": "remotion_invariants",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "0c1421919908f91699ea9d19c2f02f2959aa742c79ca13bb85306a1266b95420": {
+    "cache_key": "0c1421919908f91699ea9d19c2f02f2959aa742c79ca13bb85306a1266b95420",
+    "skill_id": "motion.remotion_tsx_particle",
+    "version": "1.0.0",
+    "content_sha256": "a85af99a0a7f31fbc5fc995ab3bed4203b6d44c1d7e35b01eee066a9973fcd7c",
+    "spec_hash": "cfb5c3c10f9d9a7f2c58bf9300b4533018acd328b1aafd3f63f356191e5b8c3e",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:08:58.325856+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "duration_ms": 4.21,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "remotion_tsx_contract_validation",
+      "tested_content_sha256": "a85af99a0a7f31fbc5fc995ab3bed4203b6d44c1d7e35b01eee066a9973fcd7c",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        },
+        {
+          "name": "props_contract",
+          "passed": true
+        },
+        {
+          "name": "remotion_invariants",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "575f616dd9806d27a4c0ae4edb732488e8fcfe37fdbcd9a14bda2adb5287a44c": {
+    "cache_key": "575f616dd9806d27a4c0ae4edb732488e8fcfe37fdbcd9a14bda2adb5287a44c",
+    "skill_id": "motion.zeta_vortex_cc3b72c0",
+    "version": "1.0.0",
+    "content_sha256": "b8ecc55fbcf67f98a55473b201887060a9268967ca908253e3114510d4c4a01c",
+    "spec_hash": "60b15c615c2df126627a5213110c49ca5a571b4ae570a051a0cbfd499b0e8c01",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:09:20.494242+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.58,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "b8ecc55fbcf67f98a55473b201887060a9268967ca908253e3114510d4c4a01c",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "e6e4ad97abd6f4df3252e66bccd6a1dc0f8bd69e82a3faf6c63941f439c8a6f2": {
+    "cache_key": "e6e4ad97abd6f4df3252e66bccd6a1dc0f8bd69e82a3faf6c63941f439c8a6f2",
+    "skill_id": "test.cache_verification",
+    "version": "1.0.0",
+    "content_sha256": "e3dee0dc58c4a95648cb8673df46dacdf509b0c1b932dec49b8fc0a86ffeb9f7",
+    "spec_hash": "546fd7651bc4518f704a08b66d2ef54dcdb14905af7a081d02f6c116b3485c23",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:09:30.630669+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.64,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "e3dee0dc58c4a95648cb8673df46dacdf509b0c1b932dec49b8fc0a86ffeb9f7",
+      "diagnostics": [
+        "Result retrieved from verified cryptographic evaluation cache."
+      ],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "8177fd48ccb219a4e2febf38ad55864a49d308c3abd0e58445b9c232d4af32b5": {
+    "cache_key": "8177fd48ccb219a4e2febf38ad55864a49d308c3abd0e58445b9c232d4af32b5",
+    "skill_id": "test.cache_verification",
+    "version": "1.0.0",
+    "content_sha256": "51559f06e416bc5cd7cf196ae88cf55fb1589ed327652310155336c864009f28",
+    "spec_hash": "546fd7651bc4518f704a08b66d2ef54dcdb14905af7a081d02f6c116b3485c23",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T05:09:30.651406+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 3,
+      "tests_passed": 3,
+      "tests_failed": 0,
+      "duration_ms": 0.32,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "declarative_contract_validation",
+      "tested_content_sha256": "51559f06e416bc5cd7cf196ae88cf55fb1589ed327652310155336c864009f28",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "32313c2c0ea819ecd20634e3c25a31f6680c2afb2e018dcbcf9a2d866c4ed6ee": {
+    "cache_key": "32313c2c0ea819ecd20634e3c25a31f6680c2afb2e018dcbcf9a2d866c4ed6ee",
+    "skill_id": "motion.remotion_tsx_particle",
+    "version": "1.0.0",
+    "content_sha256": "a16c7bfc90fa8677ca56662500c31e8e3b1a6d98993e7ea5bfee7a96b9e949e0",
+    "spec_hash": "cfb5c3c10f9d9a7f2c58bf9300b4533018acd328b1aafd3f63f356191e5b8c3e",
+    "policy_hash": "7800b631daa0300a79c31dee8b345f96ce15d0439a7d07bb54fdd7da46c546d2",
+    "env_fingerprint": "win32:3.12.10",
+    "cached_at": "2026-10-19T07:35:52.621953+00:00",
+    "result_type": "test_result",
+    "data": {
+      "passed": true,
+      "status": "passed",
+      "tests_run": 5,
+      "tests_passed": 5,
+      "tests_failed": 0,
+      "duration_ms": 1.49,
+      "stdout": "",
+      "stderr": "",
+      "isolation_strategy": "remotion_tsx_contract_validation",
+      "tested_content_sha256": "a16c7bfc90fa8677ca56662500c31e8e3b1a6d98993e7ea5bfee7a96b9e949e0",
+      "diagnostics": [],
+      "test_cases": [
+        {
+          "name": "capability_coverage",
+          "passed": true
+        },
+        {
+          "name": "heading_structure",
+          "passed": true
+        },
+        {
+          "name": "contract_schema",
+          "passed": true
+        },
+        {
+          "name": "props_contract",
+          "passed": true
+        },
+        {
+          "name": "remotion_invariants",
+          "passed": true
+        }
+      ]
+    }
+  }
+}

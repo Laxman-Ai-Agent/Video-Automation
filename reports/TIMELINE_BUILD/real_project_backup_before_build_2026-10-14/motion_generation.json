@@ -1,0 +1,2559 @@
+{
+ "schema_version": "1.0",
+ "version": 1,
+ "source": "motion_plan",
+ "project": {
+  "mode": "motion_only",
+  "aspect_ratio": "16:9",
+  "width": 1920,
+  "height": 1080,
+  "fps": 30
+ },
+ "input": {
+  "file": "motion_planning.json",
+  "plan_version": 2,
+  "plan_fingerprint": "daf7f39c307c57f3",
+  "motion_plan_file": "motion_plan.json",
+  "motion_plan_sha": "46cfe7eed67f9217"
+ },
+ "scenes": [
+  {
+   "scene_id": "scene_01",
+   "plan_scene_id": 1,
+   "timing": {
+    "start": 0,
+    "end": 4.75,
+    "start_frame": 0,
+    "end_frame": 143
+   },
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_01:scene_01_layer_01:background:None",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 0,
+     "end": 4.75,
+     "start_frame": 0,
+     "end_frame": 143,
+     "duration_frames": 143,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_01:scene_01_layer_02:shape:None",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_layer_02",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": null,
+     "props": {
+      "kind": "line"
+     },
+     "start": 0.2,
+     "end": 4.75,
+     "start_frame": 6,
+     "end_frame": 143,
+     "duration_frames": 137,
+     "z": 3,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_01:headline_mental:motion_text:char-scale",
+     "scene_id": "scene_01",
+     "element_id": "headline_mental",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "char-scale",
+     "props": {
+      "text": "Mental challenges",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "glow",
+      "dir": "down",
+      "k": 1.24,
+      "mark": "Mental",
+      "emphasisAt": [
+       2.44
+      ],
+      "dur": 0.39,
+      "exitDur": 0.36
+     },
+     "start": 2,
+     "end": 4.75,
+     "start_frame": 60,
+     "end_frame": 143,
+     "duration_frames": 83,
+     "z": 10,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:subline_physical:motion_text:word-pop",
+     "scene_id": "scene_01",
+     "element_id": "subline_physical",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "word-pop",
+     "props": {
+      "text": "Greater than physical",
+      "style": "label",
+      "exitPreset": "fade-out",
+      "emphasis": "glow",
+      "dir": "right",
+      "k": 1.24,
+      "dur": 0.36,
+      "exitDur": 0.36
+     },
+     "start": 2,
+     "end": 4.75,
+     "start_frame": 60,
+     "end_frame": 143,
+     "duration_frames": 83,
+     "z": 10,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_text_02_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:scene_01_gfx_01:motion_scene:scan-line",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "scan-line",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.26,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 0.04,
+     "end": 4.75,
+     "start_frame": 1,
+     "end_frame": 143,
+     "duration_frames": 142,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_01_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:headline_mental:motion_scene:targeting-ring",
+     "scene_id": "scene_01",
+     "element_id": "headline_mental",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "targeting-ring",
+     "props": {
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "boxTall": [
+       0.64,
+       0.06,
+       0.3,
+       0.16
+      ],
+      "k": 1.26,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 0.25,
+     "end": 4.75,
+     "start_frame": 8,
+     "end_frame": 143,
+     "duration_frames": 135,
+     "z": 9,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_01:scene_01_gfx_03:motion_scene:double-line",
+     "scene_id": "scene_01",
+     "element_id": "scene_01_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "double-line",
+     "props": {
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "boxTall": [
+       0.2,
+       0.14,
+       0.6,
+       0.03
+      ],
+      "k": 1.26,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 0.46,
+     "end": 4.75,
+     "start_frame": 14,
+     "end_frame": 143,
+     "duration_frames": 129,
+     "z": 10,
+     "depends_on": [
+      "scene_01_a_gfx_01"
+     ],
+     "plan_action_id": "scene_01_a_gfx_03",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_02",
+   "plan_scene_id": 2,
+   "timing": {
+    "start": 4.75,
+    "end": 13.6,
+    "start_frame": 143,
+    "end_frame": 408
+   },
+   "transition_out": {
+    "type": "slide",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_02:scene_02_layer_01:background:None",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 4.75,
+     "end": 13.6,
+     "start_frame": 143,
+     "end_frame": 408,
+     "duration_frames": 265,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_02:duration_text:motion_text:elastic",
+     "scene_id": "scene_02",
+     "element_id": "duration_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "elastic",
+     "props": {
+      "text": "About eight months",
+      "style": "headline",
+      "exitPreset": "scale-out",
+      "emphasis": "scale",
+      "dir": "up",
+      "k": 1.18,
+      "mark": "months",
+      "emphasisAt": [
+       6.89
+      ],
+      "dur": 0.79,
+      "exitDur": 0.36
+     },
+     "start": 5.4,
+     "end": 13.6,
+     "start_frame": 162,
+     "end_frame": 408,
+     "duration_frames": 246,
+     "z": 10,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:scene_02_gfx_01:motion_scene:floating-dots",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "floating-dots",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 4.79,
+     "end": 13.6,
+     "start_frame": 144,
+     "end_frame": 408,
+     "duration_frames": 264,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_02_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:route_earth_mars:motion_scene:route-line",
+     "scene_id": "scene_02",
+     "element_id": "route_earth_mars",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "route-line",
+     "props": {
+      "box": [
+       0.125,
+       0.662,
+       0.3,
+       0.2
+      ],
+      "boxTall": [
+       0.08,
+       0.06,
+       0.5,
+       0.12
+      ],
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 5,
+     "end": 13.6,
+     "start_frame": 150,
+     "end_frame": 408,
+     "duration_frames": 258,
+     "z": 9,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:scene_02_gfx_03:motion_scene:bracket-frame",
+     "scene_id": "scene_02",
+     "element_id": "scene_02_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "bracket-frame",
+     "props": {
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "boxTall": [
+       0.06,
+       0.28,
+       0.88,
+       0.26
+      ],
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 5.21,
+     "end": 13.6,
+     "start_frame": 156,
+     "end_frame": 408,
+     "duration_frames": 252,
+     "z": 10,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:earth_home:shape:shape:circle",
+     "scene_id": "scene_02",
+     "element_id": "earth_home",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       221,
+       823
+      ],
+      "to": [
+       286,
+       823
+      ],
+      "color": "#2a9d9f",
+      "fill": "#2a9d9f"
+     },
+     "start": 4.964,
+     "end": 13.6,
+     "start_frame": 149,
+     "end_frame": 408,
+     "duration_frames": 259,
+     "z": 12,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_draw_earth_home",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:mars_destination:shape:shape:circle",
+     "scene_id": "scene_02",
+     "element_id": "mars_destination",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       705,
+       698
+      ],
+      "to": [
+       770,
+       698
+      ],
+      "color": "#d9582b",
+      "fill": "#d9582b"
+     },
+     "start": 5.214,
+     "end": 13.6,
+     "start_frame": 156,
+     "end_frame": 408,
+     "duration_frames": 252,
+     "z": 12,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_draw_mars_destination",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_02:lone_spacecraft:icon:icon:rocket",
+     "scene_id": "scene_02",
+     "element_id": "lone_spacecraft",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "icon:rocket",
+     "props": {
+      "lucide": "rocket",
+      "pos": [
+       496,
+       828
+      ],
+      "size": 108,
+      "color": "#f2e6d0"
+     },
+     "start": 6.064,
+     "end": 13.6,
+     "start_frame": 182,
+     "end_frame": 408,
+     "duration_frames": 226,
+     "z": 12,
+     "depends_on": [
+      "scene_02_a_gfx_01"
+     ],
+     "plan_action_id": "scene_02_a_draw_lone_spacecraft",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_03",
+   "plan_scene_id": 3,
+   "timing": {
+    "start": 13.6,
+    "end": 19.58,
+    "start_frame": 408,
+    "end_frame": 587
+   },
+   "transition_out": {
+    "type": "blur",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_03:scene_03_layer_01:background:None",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 13.6,
+     "end": 19.58,
+     "start_frame": 408,
+     "end_frame": 587,
+     "duration_frames": 179,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_icon_01:icon:clock",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_icon_01",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "clock",
+     "props": {
+      "lucide": "clock",
+      "pos": [
+       1560,
+       250
+      ]
+     },
+     "start": 14.8,
+     "end": 19.58,
+     "start_frame": 444,
+     "end_frame": 587,
+     "duration_frames": 143,
+     "z": 10,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_icon_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_layer_03:effect:sparkle",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_layer_03",
+     "element_type": "effect",
+     "component_id": "effect",
+     "preset_id": "sparkle",
+     "props": {
+      "name": "sparkle",
+      "pos": [
+       1560,
+       250
+      ]
+     },
+     "start": 14.9,
+     "end": 19.58,
+     "start_frame": 447,
+     "end_frame": 587,
+     "duration_frames": 140,
+     "z": 11,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_03:delay_text:motion_text:word-pop",
+     "scene_id": "scene_03",
+     "element_id": "delay_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "word-pop",
+     "props": {
+      "text": "Delayed by minutes",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "mask",
+      "dir": "right",
+      "k": 1.18,
+      "dur": 0.36,
+      "exitDur": 0.36
+     },
+     "start": 13.74,
+     "end": 19.58,
+     "start_frame": 412,
+     "end_frame": 587,
+     "duration_frames": 175,
+     "z": 11,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_gfx_01:motion_scene:scan-line",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "scan-line",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 13.64,
+     "end": 19.58,
+     "start_frame": 409,
+     "end_frame": 587,
+     "duration_frames": 178,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_03_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:message_pulse:motion_scene:dashed-flow",
+     "scene_id": "scene_03",
+     "element_id": "message_pulse",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "dashed-flow",
+     "props": {
+      "box": [
+       0.232,
+       0.65,
+       0.536,
+       0.035
+      ],
+      "boxTall": [
+       0.1,
+       0.14,
+       0.8,
+       0.015
+      ],
+      "k": 1.22,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 13.85,
+     "end": 19.58,
+     "start_frame": 416,
+     "end_frame": 587,
+     "duration_frames": 171,
+     "z": 9,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:scene_03_gfx_03:motion_scene:frame-in",
+     "scene_id": "scene_03",
+     "element_id": "scene_03_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "frame-in",
+     "props": {
+      "box": [
+       0.04,
+       0.06,
+       0.92,
+       0.8
+      ],
+      "boxTall": [
+       0.05,
+       0.05,
+       0.9,
+       0.74
+      ],
+      "k": 1.22,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 14.06,
+     "end": 19.58,
+     "start_frame": 422,
+     "end_frame": 587,
+     "duration_frames": 165,
+     "z": 10,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:earth_receiver:shape:shape:circle",
+     "scene_id": "scene_03",
+     "element_id": "earth_receiver",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       300,
+       648
+      ],
+      "to": [
+       365,
+       648
+      ],
+      "color": "#2a9d9f",
+      "fill": "#2a9d9f"
+     },
+     "start": 13.814,
+     "end": 19.58,
+     "start_frame": 414,
+     "end_frame": 587,
+     "duration_frames": 173,
+     "z": 12,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_draw_earth_receiver",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_03:mars_sender:shape:shape:circle",
+     "scene_id": "scene_03",
+     "element_id": "mars_sender",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       1490,
+       648
+      ],
+      "to": [
+       1555,
+       648
+      ],
+      "color": "#d9582b",
+      "fill": "#d9582b"
+     },
+     "start": 14.064,
+     "end": 19.58,
+     "start_frame": 422,
+     "end_frame": 587,
+     "duration_frames": 165,
+     "z": 12,
+     "depends_on": [
+      "scene_03_a_gfx_01"
+     ],
+     "plan_action_id": "scene_03_a_draw_mars_sender",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_04",
+   "plan_scene_id": 4,
+   "timing": {
+    "start": 19.58,
+    "end": 26.08,
+    "start_frame": 587,
+    "end_frame": 782
+   },
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_04:scene_04_layer_01:background:None",
+     "scene_id": "scene_04",
+     "element_id": "scene_04_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 19.58,
+     "end": 26.08,
+     "start_frame": 587,
+     "end_frame": 782,
+     "duration_frames": 195,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_04:mind_test_caption:motion_text:layered-depth",
+     "scene_id": "scene_04",
+     "element_id": "mind_test_caption",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "layered-depth",
+     "props": {
+      "text": "A test of the mind",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "tracking",
+      "dir": "up",
+      "k": 1,
+      "dur": 0.71,
+      "exitDur": 0.36
+     },
+     "start": 19.72,
+     "end": 26.08,
+     "start_frame": 592,
+     "end_frame": 782,
+     "duration_frames": 190,
+     "z": 11,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "plan_action_id": "scene_04_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_04:scene_04_gfx_01:motion_scene:light-sweep",
+     "scene_id": "scene_04",
+     "element_id": "scene_04_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "light-sweep",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.1,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 19.62,
+     "end": 26.08,
+     "start_frame": 589,
+     "end_frame": 782,
+     "duration_frames": 193,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_04_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_04:small_crew_group:motion_scene:crosshair",
+     "scene_id": "scene_04",
+     "element_id": "small_crew_group",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "crosshair",
+     "props": {
+      "box": [
+       0.76,
+       0.1,
+       0.16,
+       0.28
+      ],
+      "boxTall": [
+       0.68,
+       0.06,
+       0.26,
+       0.14
+      ],
+      "k": 1.1,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 19.83,
+     "end": 26.08,
+     "start_frame": 595,
+     "end_frame": 782,
+     "duration_frames": 187,
+     "z": 9,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "plan_action_id": "scene_04_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_04:scene_04_gfx_03:motion_scene:divider-grow",
+     "scene_id": "scene_04",
+     "element_id": "scene_04_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "divider-grow",
+     "props": {
+      "box": [
+       0.35,
+       0.16,
+       0.3,
+       0.03
+      ],
+      "boxTall": [
+       0.3,
+       0.14,
+       0.4,
+       0.02
+      ],
+      "k": 1.1,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 20.04,
+     "end": 26.08,
+     "start_frame": 601,
+     "end_frame": 782,
+     "duration_frames": 181,
+     "z": 10,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "plan_action_id": "scene_04_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_04:small_crew_group:icon:icon:users",
+     "scene_id": "scene_04",
+     "element_id": "small_crew_group",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "icon:users",
+     "props": {
+      "lucide": "users",
+      "pos": [
+       960,
+       713
+      ],
+      "size": 108,
+      "color": "#f2e6d0"
+     },
+     "start": 19.794,
+     "end": 26.08,
+     "start_frame": 594,
+     "end_frame": 782,
+     "duration_frames": 188,
+     "z": 12,
+     "depends_on": [
+      "scene_04_a_gfx_01"
+     ],
+     "plan_action_id": "scene_04_a_draw_small_crew_group",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_05",
+   "plan_scene_id": 5,
+   "timing": {
+    "start": 26.08,
+    "end": 35.05,
+    "start_frame": 782,
+    "end_frame": 1052
+   },
+   "transition_out": {
+    "type": "wipe",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_05:scene_05_layer_01:background:None",
+     "scene_id": "scene_05",
+     "element_id": "scene_05_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 26.08,
+     "end": 35.05,
+     "start_frame": 782,
+     "end_frame": 1052,
+     "duration_frames": 270,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_05:supports_text:motion_text:slide-left",
+     "scene_id": "scene_05",
+     "element_id": "supports_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "slide-left",
+     "props": {
+      "text": "Knowledge · Training · Trust",
+      "style": "caption",
+      "exitPreset": "slide-out",
+      "emphasis": "glow",
+      "dir": "left",
+      "k": 1.18,
+      "dur": 0.5,
+      "exitDur": 0.36
+     },
+     "start": 31.88,
+     "end": 35.05,
+     "start_frame": 956,
+     "end_frame": 1052,
+     "duration_frames": 96,
+     "z": 10,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:scene_05_gfx_01:motion_scene:glow-orb",
+     "scene_id": "scene_05",
+     "element_id": "scene_05_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "glow-orb",
+     "props": {
+      "box": [
+       0.3,
+       0.2,
+       0.4,
+       0.6
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 26.12,
+     "end": 35.05,
+     "start_frame": 784,
+     "end_frame": 1052,
+     "duration_frames": 268,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_05_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:three_supports_ring:motion_scene:node-network",
+     "scene_id": "scene_05",
+     "element_id": "three_supports_ring",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "node-network",
+     "props": {
+      "box": [
+       0.75,
+       0.09,
+       0.2,
+       0.22
+      ],
+      "boxTall": [
+       0.5,
+       0.05,
+       0.44,
+       0.16
+      ],
+      "k": 1.22,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 26.33,
+     "end": 35.05,
+     "start_frame": 790,
+     "end_frame": 1052,
+     "duration_frames": 262,
+     "z": 9,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:scene_05_gfx_03:motion_scene:bracket-frame",
+     "scene_id": "scene_05",
+     "element_id": "scene_05_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "bracket-frame",
+     "props": {
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "boxTall": [
+       0.06,
+       0.28,
+       0.88,
+       0.26
+      ],
+      "k": 1.22,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 26.54,
+     "end": 35.05,
+     "start_frame": 796,
+     "end_frame": 1052,
+     "duration_frames": 256,
+     "z": 10,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:scene_05_gfx_04:motion_scene:dashed-flow",
+     "scene_id": "scene_05",
+     "element_id": "scene_05_gfx_04",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "dashed-flow",
+     "props": {
+      "box": [
+       0.182,
+       0.183,
+       0.548,
+       0.035
+      ],
+      "boxTall": [
+       0.182,
+       0.188,
+       0.548,
+       0.025
+      ],
+      "k": 0.8,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 27.223,
+     "end": 35.05,
+     "start_frame": 817,
+     "end_frame": 1052,
+     "duration_frames": 235,
+     "z": 9,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_gfx_04",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:distant_earth:shape:shape:circle",
+     "scene_id": "scene_05",
+     "element_id": "distant_earth",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       204,
+       151
+      ],
+      "to": [
+       269,
+       151
+      ],
+      "color": "#2a9d9f",
+      "fill": "#2a9d9f"
+     },
+     "start": 26.294,
+     "end": 35.05,
+     "start_frame": 789,
+     "end_frame": 1052,
+     "duration_frames": 263,
+     "z": 12,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_draw_distant_earth",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_05:crew_team:icon:icon:users",
+     "scene_id": "scene_05",
+     "element_id": "crew_team",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "icon:users",
+     "props": {
+      "lucide": "users",
+      "pos": [
+       1651,
+       216
+      ],
+      "size": 108,
+      "color": "#f2e6d0"
+     },
+     "start": 26.544,
+     "end": 35.05,
+     "start_frame": 796,
+     "end_frame": 1052,
+     "duration_frames": 256,
+     "z": 12,
+     "depends_on": [
+      "scene_05_a_gfx_01"
+     ],
+     "plan_action_id": "scene_05_a_draw_crew_team",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_06",
+   "plan_scene_id": 6,
+   "timing": {
+    "start": 35.05,
+    "end": 39.43,
+    "start_frame": 1052,
+    "end_frame": 1183
+   },
+   "transition_out": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_06:scene_06_layer_01:background:None",
+     "scene_id": "scene_06",
+     "element_id": "scene_06_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 35.05,
+     "end": 39.43,
+     "start_frame": 1052,
+     "end_frame": 1183,
+     "duration_frames": 131,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_06:scene_06_layer_02:shape:None",
+     "scene_id": "scene_06",
+     "element_id": "scene_06_layer_02",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": null,
+     "props": {
+      "kind": "line"
+     },
+     "start": 35.25,
+     "end": 39.43,
+     "start_frame": 1058,
+     "end_frame": 1183,
+     "duration_frames": 125,
+     "z": 3,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_06:resilience_word:motion_text:word-pop",
+     "scene_id": "scene_06",
+     "element_id": "resilience_word",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "word-pop",
+     "props": {
+      "text": "Resilience",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "glow",
+      "dir": "left",
+      "k": 1.18,
+      "mark": "Resilience",
+      "emphasisAt": [
+       36.29
+      ],
+      "dur": 0.36,
+      "exitDur": 0.36
+     },
+     "start": 35.6,
+     "end": 39.43,
+     "start_frame": 1068,
+     "end_frame": 1183,
+     "duration_frames": 115,
+     "z": 10,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "plan_action_id": "scene_06_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_06:virtues_subline:motion_text:elastic",
+     "scene_id": "scene_06",
+     "element_id": "virtues_subline",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "elastic",
+     "props": {
+      "text": "Discipline · Team spirit",
+      "style": "label",
+      "exitPreset": "scale-out",
+      "emphasis": "mask",
+      "dir": "up",
+      "k": 1.18,
+      "dur": 0.79,
+      "exitDur": 0.36
+     },
+     "start": 35.6,
+     "end": 39.43,
+     "start_frame": 1068,
+     "end_frame": 1183,
+     "duration_frames": 115,
+     "z": 10,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "plan_action_id": "scene_06_a_text_02_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_06:scene_06_gfx_01:motion_scene:particles-float",
+     "scene_id": "scene_06",
+     "element_id": "scene_06_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "particles-float",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 35.09,
+     "end": 39.43,
+     "start_frame": 1053,
+     "end_frame": 1183,
+     "duration_frames": 130,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_06_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_06:resilience_word:motion_scene:ring-pulse",
+     "scene_id": "scene_06",
+     "element_id": "resilience_word",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "ring-pulse",
+     "props": {
+      "box": [
+       0.76,
+       0.1,
+       0.16,
+       0.28
+      ],
+      "boxTall": [
+       0.66,
+       0.06,
+       0.28,
+       0.15
+      ],
+      "k": 1.22,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 35.3,
+     "end": 39.43,
+     "start_frame": 1059,
+     "end_frame": 1183,
+     "duration_frames": 124,
+     "z": 9,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "plan_action_id": "scene_06_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_06:scene_06_gfx_03:motion_scene:double-line",
+     "scene_id": "scene_06",
+     "element_id": "scene_06_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "double-line",
+     "props": {
+      "box": [
+       0.3,
+       0.16,
+       0.4,
+       0.04
+      ],
+      "boxTall": [
+       0.2,
+       0.14,
+       0.6,
+       0.03
+      ],
+      "k": 1.22,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 35.51,
+     "end": 39.43,
+     "start_frame": 1065,
+     "end_frame": 1183,
+     "duration_frames": 118,
+     "z": 10,
+     "depends_on": [
+      "scene_06_a_gfx_01"
+     ],
+     "plan_action_id": "scene_06_a_gfx_03",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_07",
+   "plan_scene_id": 7,
+   "timing": {
+    "start": 39.43,
+    "end": 45.84,
+    "start_frame": 1183,
+    "end_frame": 1375
+   },
+   "transition_out": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_07:scene_07_layer_01:background:None",
+     "scene_id": "scene_07",
+     "element_id": "scene_07_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 39.43,
+     "end": 45.84,
+     "start_frame": 1183,
+     "end_frame": 1375,
+     "duration_frames": 192,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_07:moon_then_mars_text:motion_text:rotate-in",
+     "scene_id": "scene_07",
+     "element_id": "moon_then_mars_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "rotate-in",
+     "props": {
+      "text": "First the Moon, then Mars",
+      "style": "headline",
+      "exitPreset": "scale-out",
+      "emphasis": "glow",
+      "dir": "right",
+      "k": 1.18,
+      "mark": "Mars",
+      "emphasisAt": [
+       42.18
+      ],
+      "dur": 0.57,
+      "exitDur": 0.36
+     },
+     "start": 42,
+     "end": 45.84,
+     "start_frame": 1260,
+     "end_frame": 1375,
+     "duration_frames": 115,
+     "z": 10,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:scene_07_gfx_01:motion_scene:scan-line",
+     "scene_id": "scene_07",
+     "element_id": "scene_07_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "scan-line",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.22,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 39.47,
+     "end": 45.84,
+     "start_frame": 1184,
+     "end_frame": 1375,
+     "duration_frames": 191,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_07_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:scene_07_gfx_02:motion_scene:timeline-dots",
+     "scene_id": "scene_07",
+     "element_id": "scene_07_gfx_02",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "timeline-dots",
+     "props": {
+      "box": [
+       0.1,
+       0.75,
+       0.8,
+       0.12
+      ],
+      "boxTall": [
+       0.5,
+       0.05,
+       0.44,
+       0.16
+      ],
+      "k": 1.22,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 39.68,
+     "end": 45.84,
+     "start_frame": 1190,
+     "end_frame": 1375,
+     "duration_frames": 185,
+     "z": 9,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:scene_07_gfx_03:motion_scene:bracket-frame",
+     "scene_id": "scene_07",
+     "element_id": "scene_07_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "bracket-frame",
+     "props": {
+      "box": [
+       0.06,
+       0.3,
+       0.88,
+       0.3
+      ],
+      "boxTall": [
+       0.06,
+       0.28,
+       0.88,
+       0.26
+      ],
+      "k": 1.22,
+      "dir": "down",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 39.89,
+     "end": 45.84,
+     "start_frame": 1197,
+     "end_frame": 1375,
+     "duration_frames": 178,
+     "z": 10,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:earth_origin:shape:shape:circle",
+     "scene_id": "scene_07",
+     "element_id": "earth_origin",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       383,
+       810
+      ],
+      "to": [
+       448,
+       810
+      ],
+      "color": "#2a9d9f",
+      "fill": "#2a9d9f"
+     },
+     "start": 39.644,
+     "end": 45.84,
+     "start_frame": 1189,
+     "end_frame": 1375,
+     "duration_frames": 186,
+     "z": 12,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_draw_earth_origin",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:moon_stop:shape:shape:circle",
+     "scene_id": "scene_07",
+     "element_id": "moon_stop",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       895,
+       810
+      ],
+      "to": [
+       960,
+       810
+      ],
+      "color": "#b9b2a3",
+      "fill": "#b9b2a3"
+     },
+     "start": 39.894,
+     "end": 45.84,
+     "start_frame": 1197,
+     "end_frame": 1375,
+     "duration_frames": 178,
+     "z": 12,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_draw_moon_stop",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_07:mars_goal:shape:shape:circle",
+     "scene_id": "scene_07",
+     "element_id": "mars_goal",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       1407,
+       810
+      ],
+      "to": [
+       1472,
+       810
+      ],
+      "color": "#d9582b",
+      "fill": "#d9582b"
+     },
+     "start": 40.144,
+     "end": 45.84,
+     "start_frame": 1204,
+     "end_frame": 1375,
+     "duration_frames": 171,
+     "z": 12,
+     "depends_on": [
+      "scene_07_a_gfx_01"
+     ],
+     "plan_action_id": "scene_07_a_draw_mars_goal",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_08",
+   "plan_scene_id": 8,
+   "timing": {
+    "start": 45.84,
+    "end": 52.85,
+    "start_frame": 1375,
+    "end_frame": 1586
+   },
+   "transition_out": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "descriptors": [
+    {
+     "descriptor_id": "scene_08:scene_08_layer_01:background:None",
+     "scene_id": "scene_08",
+     "element_id": "scene_08_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 45.84,
+     "end": 52.85,
+     "start_frame": 1375,
+     "end_frame": 1586,
+     "duration_frames": 211,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_08:new_chapter_text:motion_text:underline-draw",
+     "scene_id": "scene_08",
+     "element_id": "new_chapter_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "underline-draw",
+     "props": {
+      "text": "A new chapter",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "underline",
+      "dir": "right",
+      "k": 1,
+      "dur": 0.64,
+      "exitDur": 0.36
+     },
+     "start": 45.98,
+     "end": 52.85,
+     "start_frame": 1379,
+     "end_frame": 1586,
+     "duration_frames": 207,
+     "z": 11,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "plan_action_id": "scene_08_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_08:scene_08_gfx_01:motion_scene:light-sweep",
+     "scene_id": "scene_08",
+     "element_id": "scene_08_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "light-sweep",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.1,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 45.88,
+     "end": 52.85,
+     "start_frame": 1376,
+     "end_frame": 1586,
+     "duration_frames": 210,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_08_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_08:mars_dawn_bg:motion_scene:targeting-ring",
+     "scene_id": "scene_08",
+     "element_id": "mars_dawn_bg",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "targeting-ring",
+     "props": {
+      "box": [
+       0.74,
+       0.08,
+       0.2,
+       0.36
+      ],
+      "boxTall": [
+       0.64,
+       0.06,
+       0.3,
+       0.16
+      ],
+      "k": 1.1,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 46.09,
+     "end": 52.85,
+     "start_frame": 1383,
+     "end_frame": 1586,
+     "duration_frames": 203,
+     "z": 9,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "plan_action_id": "scene_08_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_08:scene_08_gfx_03:motion_scene:divider-grow",
+     "scene_id": "scene_08",
+     "element_id": "scene_08_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "divider-grow",
+     "props": {
+      "box": [
+       0.35,
+       0.16,
+       0.3,
+       0.03
+      ],
+      "boxTall": [
+       0.3,
+       0.14,
+       0.4,
+       0.02
+      ],
+      "k": 1.1,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 46.3,
+     "end": 52.85,
+     "start_frame": 1389,
+     "end_frame": 1586,
+     "duration_frames": 197,
+     "z": 10,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "plan_action_id": "scene_08_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_08:chapter_icon:icon:icon:book-open",
+     "scene_id": "scene_08",
+     "element_id": "chapter_icon",
+     "element_type": "icon",
+     "component_id": "icon",
+     "preset_id": "icon:book-open",
+     "props": {
+      "lucide": "book-open",
+      "pos": [
+       960,
+       713
+      ],
+      "size": 108,
+      "color": "#f2e6d0"
+     },
+     "start": 46.054,
+     "end": 52.85,
+     "start_frame": 1382,
+     "end_frame": 1586,
+     "duration_frames": 204,
+     "z": 12,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "plan_action_id": "scene_08_a_draw_chapter_icon",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_08:habitat_domes:shape:shape:dome",
+     "scene_id": "scene_08",
+     "element_id": "habitat_domes",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:dome",
+     "props": {
+      "kind": "dome",
+      "from": [
+       691,
+       378
+      ],
+      "to": [
+       1229,
+       378
+      ],
+      "color": "#f2e6d0",
+      "fill": "#f2e6d0"
+     },
+     "start": 46.304,
+     "end": 52.85,
+     "start_frame": 1389,
+     "end_frame": 1586,
+     "duration_frames": 197,
+     "z": 12,
+     "depends_on": [
+      "scene_08_a_gfx_01"
+     ],
+     "plan_action_id": "scene_08_a_draw_habitat_domes",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  },
+  {
+   "scene_id": "scene_09",
+   "plan_scene_id": 9,
+   "timing": {
+    "start": 52.85,
+    "end": 57.61,
+    "start_frame": 1586,
+    "end_frame": 1728
+   },
+   "transition_out": null,
+   "descriptors": [
+    {
+     "descriptor_id": "scene_09:scene_09_layer_01:background:None",
+     "scene_id": "scene_09",
+     "element_id": "scene_09_layer_01",
+     "element_type": "background",
+     "component_id": "background",
+     "preset_id": null,
+     "props": {},
+     "start": 52.85,
+     "end": 57.61,
+     "start_frame": 1586,
+     "end_frame": 1728,
+     "duration_frames": 142,
+     "z": 0,
+     "depends_on": [],
+     "plan_action_id": null,
+     "from_plan": false
+    },
+    {
+     "descriptor_id": "scene_09:multi_planet_text:motion_text:kinetic",
+     "scene_id": "scene_09",
+     "element_id": "multi_planet_text",
+     "element_type": "text",
+     "component_id": "motion_text",
+     "preset_id": "kinetic",
+     "props": {
+      "text": "A multi-planet species",
+      "style": "headline",
+      "exitPreset": "fade-out",
+      "emphasis": "glow",
+      "dir": "up",
+      "k": 1.24,
+      "mark": "multi-planet",
+      "emphasisAt": [
+       54.39
+      ],
+      "dur": 0.57,
+      "exitDur": 0.36
+     },
+     "start": 53.6,
+     "end": 57.61,
+     "start_frame": 1608,
+     "end_frame": 1728,
+     "duration_frames": 120,
+     "z": 10,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "plan_action_id": "scene_09_a_text_01_enter",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_09:scene_09_gfx_01:motion_scene:scan-line",
+     "scene_id": "scene_09",
+     "element_id": "scene_09_gfx_01",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "scan-line",
+     "props": {
+      "box": [
+       0,
+       0,
+       1,
+       1
+      ],
+      "boxTall": null,
+      "k": 1.26,
+      "dir": "left",
+      "speed": 1.4,
+      "bleed": true,
+      "exitDur": 0.36
+     },
+     "start": 52.89,
+     "end": 57.61,
+     "start_frame": 1587,
+     "end_frame": 1728,
+     "duration_frames": 141,
+     "z": 2,
+     "depends_on": [],
+     "plan_action_id": "scene_09_a_gfx_01",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_09:human_bridge_emblem:motion_scene:node-network",
+     "scene_id": "scene_09",
+     "element_id": "human_bridge_emblem",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "node-network",
+     "props": {
+      "box": [
+       0.232,
+       0.71,
+       0.536,
+       0.2
+      ],
+      "boxTall": [
+       0.5,
+       0.05,
+       0.44,
+       0.16
+      ],
+      "k": 1.26,
+      "dir": "up",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 53.1,
+     "end": 57.61,
+     "start_frame": 1593,
+     "end_frame": 1728,
+     "duration_frames": 135,
+     "z": 9,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "plan_action_id": "scene_09_a_gfx_02",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_09:scene_09_gfx_03:motion_scene:double-line",
+     "scene_id": "scene_09",
+     "element_id": "scene_09_gfx_03",
+     "element_type": "graphic",
+     "component_id": "motion_scene",
+     "preset_id": "double-line",
+     "props": {
+      "box": [
+       0.175,
+       0.265,
+       0.4,
+       0.04
+      ],
+      "boxTall": [
+       0.2,
+       0.14,
+       0.6,
+       0.03
+      ],
+      "k": 1.26,
+      "dir": "right",
+      "speed": 1.4,
+      "bleed": false,
+      "exitDur": 0.36
+     },
+     "start": 53.31,
+     "end": 57.61,
+     "start_frame": 1599,
+     "end_frame": 1728,
+     "duration_frames": 129,
+     "z": 10,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "plan_action_id": "scene_09_a_gfx_03",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_09:earth_home_world:shape:shape:circle",
+     "scene_id": "scene_09",
+     "element_id": "earth_home_world",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       300,
+       810
+      ],
+      "to": [
+       365,
+       810
+      ],
+      "color": "#2a9d9f",
+      "fill": "#2a9d9f"
+     },
+     "start": 53.064,
+     "end": 57.61,
+     "start_frame": 1592,
+     "end_frame": 1728,
+     "duration_frames": 136,
+     "z": 12,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "plan_action_id": "scene_09_a_draw_earth_home_world",
+     "from_plan": true
+    },
+    {
+     "descriptor_id": "scene_09:mars_home_world:shape:shape:circle",
+     "scene_id": "scene_09",
+     "element_id": "mars_home_world",
+     "element_type": "shape",
+     "component_id": "shape",
+     "preset_id": "shape:circle",
+     "props": {
+      "kind": "circle",
+      "from": [
+       1490,
+       810
+      ],
+      "to": [
+       1555,
+       810
+      ],
+      "color": "#d9582b",
+      "fill": "#d9582b"
+     },
+     "start": 53.314,
+     "end": 57.61,
+     "start_frame": 1599,
+     "end_frame": 1728,
+     "duration_frames": 129,
+     "z": 12,
+     "depends_on": [
+      "scene_09_a_gfx_01"
+     ],
+     "plan_action_id": "scene_09_a_draw_mars_home_world",
+     "from_plan": true
+    }
+   ],
+   "validation_notes": []
+  }
+ ],
+ "reuse": {
+  "presets_used": 29,
+  "new_presets_added": 0,
+  "fallbacks_carried": 3
+ },
+ "output": {
+  "composition_file": "composition.json",
+  "composition_sha": "950f26250bff7ed3",
+  "scenes": 9,
+  "layers": 48,
+  "texts": 11,
+  "graphics": 28,
+  "shapes": 13,
+  "icons": 5,
+  "pictures": 0,
+  "descriptors": 67,
+  "persisted": true
+ },
+ "stages": [
+  {
+   "n": 1,
+   "name": "Plan Reader",
+   "status": "completed",
+   "detail": "7 of 7 inputs checks passed"
+  },
+  {
+   "n": 2,
+   "name": "Element Resolver",
+   "status": "completed",
+   "detail": "66 of 66 elements checks passed"
+  },
+  {
+   "n": 3,
+   "name": "Preset Registry",
+   "status": "completed",
+   "detail": "84 of 84 ids checks passed"
+  },
+  {
+   "n": 4,
+   "name": "Effect Reuse",
+   "status": "completed",
+   "detail": "67 of 67 reuse checks passed"
+  },
+  {
+   "n": 5,
+   "name": "Animation Builder",
+   "status": "completed",
+   "detail": "147 of 147 descriptors checks passed"
+  },
+  {
+   "n": 6,
+   "name": "Engine Adapter",
+   "status": "completed",
+   "detail": "3 of 3 engine checks passed"
+  },
+  {
+   "n": 7,
+   "name": "Composition Builder",
+   "status": "completed",
+   "detail": "74 of 74 composition checks passed"
+  },
+  {
+   "n": 8,
+   "name": "Audio Sync",
+   "status": "completed",
+   "detail": "74 of 74 timing checks passed"
+  },
+  {
+   "n": 9,
+   "name": "Layout Validation",
+   "status": "completed",
+   "detail": "85 of 85 layout checks passed"
+  },
+  {
+   "n": 10,
+   "name": "Code Validation",
+   "status": "completed",
+   "detail": "63 of 63 contract checks passed"
+  },
+  {
+   "n": 11,
+   "name": "Motion Testing",
+   "status": "completed",
+   "detail": "4 of 4 tests checks passed"
+  },
+  {
+   "n": 12,
+   "name": "Error Repair",
+   "status": "completed",
+   "detail": "nothing needed repair"
+  },
+  {
+   "n": 13,
+   "name": "Remotion Adapter",
+   "status": "completed",
+   "detail": "48 layers in 9 scenes ready for Remotion (no pictures)"
+  }
+ ],
+ "validation": {
+  "status": "ok",
+  "errors": [],
+  "warnings": [],
+  "checks": {
+   "passed": 677,
+   "total": 677,
+   "by_rule": {
+    "plan_present": {
+     "passed": 1,
+     "total": 1
+    },
+    "plan_current": {
+     "passed": 1,
+     "total": 1
+    },
+    "plan_without_errors": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "aspect_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "fps_matches": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_count": {
+     "passed": 1,
+     "total": 1
+    },
+    "element_drawn": {
+     "passed": 66,
+     "total": 66
+    },
+    "registry_id": {
+     "passed": 76,
+     "total": 76
+    },
+    "transition_known": {
+     "passed": 16,
+     "total": 16
+    },
+    "no_new_presets": {
+     "passed": 1,
+     "total": 1
+    },
+    "fallback_recorded": {
+     "passed": 66,
+     "total": 66
+    },
+    "descriptor_ids_unique": {
+     "passed": 9,
+     "total": 9
+    },
+    "action_built": {
+     "passed": 55,
+     "total": 55
+    },
+    "timing_matches_plan": {
+     "passed": 55,
+     "total": 55
+    },
+    "box_matches_plan": {
+     "passed": 28,
+     "total": 28
+    },
+    "validator_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "component_registered": {
+     "passed": 1,
+     "total": 1
+    },
+    "frame_driven": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_ids_unique": {
+     "passed": 1,
+     "total": 1
+    },
+    "scene_interval": {
+     "passed": 9,
+     "total": 9
+    },
+    "transition_not_repeated": {
+     "passed": 8,
+     "total": 8
+    },
+    "transition_fits": {
+     "passed": 8,
+     "total": 8
+    },
+    "transition_as_planned": {
+     "passed": 8,
+     "total": 8
+    },
+    "z_order_defined": {
+     "passed": 9,
+     "total": 9
+    },
+    "scenes_in_order": {
+     "passed": 8,
+     "total": 8
+    },
+    "one_owner": {
+     "passed": 15,
+     "total": 15
+    },
+    "frames_in_scene": {
+     "passed": 67,
+     "total": 67
+    },
+    "emphasis_on_a_word": {
+     "passed": 5,
+     "total": 5
+    },
+    "audio_file": {
+     "passed": 1,
+     "total": 1
+    },
+    "duration_is_audio": {
+     "passed": 1,
+     "total": 1
+    },
+    "text_in_safe_area": {
+     "passed": 11,
+     "total": 11
+    },
+    "graphic_in_safe_area": {
+     "passed": 15,
+     "total": 15
+    },
+    "graphic_clear_of_text": {
+     "passed": 19,
+     "total": 19
+    },
+    "node_in_safe_area": {
+     "passed": 15,
+     "total": 15
+    },
+    "node_clear_of_text": {
+     "passed": 15,
+     "total": 15
+    },
+    "nodes_apart": {
+     "passed": 10,
+     "total": 10
+    },
+    "renderer_schema": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_code": {
+     "passed": 1,
+     "total": 1
+    },
+    "intensity_range": {
+     "passed": 11,
+     "total": 11
+    },
+    "min_duration": {
+     "passed": 22,
+     "total": 22
+    },
+    "speed_range": {
+     "passed": 28,
+     "total": 28
+    },
+    "motion_checks": {
+     "passed": 1,
+     "total": 1
+    },
+    "motion_checks_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "deterministic": {
+     "passed": 1,
+     "total": 1
+    },
+    "deterministic_ran": {
+     "passed": 1,
+     "total": 1
+    },
+    "mode_flags": {
+     "passed": 1,
+     "total": 1
+    },
+    "no_pictures_in_motion_only": {
+     "passed": 1,
+     "total": 1
+    },
+    "scenes_present": {
+     "passed": 1,
+     "total": 1
+    }
+   }
+  },
+  "note": "no probability is claimed: the result is the list of checks that passed; a still-frame preview is a separate, manual check"
+ },
+ "repairs": [],
+ "repair_passes": 0,
+ "tests": {
+  "motion_checks": {
+   "ok": true,
+   "count": 163,
+   "failed": [],
+   "error": null,
+   "cached": true
+  },
+  "determinism": {
+   "identical": true,
+   "note": "built twice, compared byte for byte"
+  },
+  "renderer": {
+   "zod": true,
+   "unknown_layer_types": [],
+   "wallclock_files": [],
+   "registered_components": 30
+  }
+ },
+ "needs_review": false,
+ "source_fingerprint": "b312e936cbf571a0",
+ "timings_seconds": {
+  "build": 4.163
+ }
+}

@@ -1,0 +1,93 @@
+{
+ "aspect": "16:9",
+ "events": [
+  {
+   "aspect": "16:9",
+   "comments": [],
+   "decided_at": "2026-10-15T05:36:00",
+   "decided_by": "Claude (decision delegated by the user)",
+   "decided_by_source": "self_declared",
+   "decision": "approved",
+   "event_id": "decision_c5746819b527ce2e",
+   "idempotency_key": "delegated-approval-ad1b6d1feb23c8de-1792022760",
+   "kind": "decision",
+   "notes": [
+    "The user delegated this decision to Claude in chat ('don't ask, the final decision is yours').",
+    "Claude looked at the proxy stills (all 9 scene mid frames and the scene-2 emphasis stills, after fixing the scale-emphasis overlap in the renderer). No person has looked at them.",
+    "Nobody has watched the motion or the transitions play. This record is NOT a human visual review; Final QC still needs a person who watched the rendered video with sound."
+   ],
+   "project_id": "my-video-project-c2e8",
+   "review_coverage": {
+    "motion_playback_reviewed": false,
+    "stills_reviewed_by_person": false
+   },
+   "review_manifest_id": "review_ad1b6d1feb23",
+   "source_fingerprints": {
+    "audio": "audio.wav:2765370",
+    "composition": "b0b79ab1428bb704",
+    "motion_generation": "d8123e2ab5231d64",
+    "motion_plan": "46cfe7eed67f9217",
+    "motion_planning": "455b7794c0eee124",
+    "renderer": "cdf5f33028052d6e97578400738513ce970bb298",
+    "stage10": "5e6315642883bc8d",
+    "timeline_build": "109f522e604c9959",
+    "visual_plan": "9255d84cb8b3f754"
+   },
+   "supersedes": null,
+   "timeline_build_id": "timeline_109f522e604c",
+   "timeline_fingerprint": "ad1b6d1feb23c8de",
+   "warning_acknowledgements": [
+    {
+     "acknowledged": true,
+     "category": "limitation",
+     "code": "audio_tail_not_rendered",
+     "element_id": "audio",
+     "key": "audio_tail_not_rendered:audio",
+     "scene_id": null
+    },
+    {
+     "acknowledged": true,
+     "category": "approximation",
+     "code": "approximate_visual",
+     "element_id": "small_crew_group",
+     "key": "approximate_visual:small_crew_group",
+     "scene_id": "scene_04"
+    },
+    {
+     "acknowledged": true,
+     "category": "approximation",
+     "code": "approximate_visual",
+     "element_id": "crew_team",
+     "key": "approximate_visual:crew_team",
+     "scene_id": "scene_05"
+    },
+    {
+     "acknowledged": true,
+     "category": "approximation",
+     "code": "approximate_visual",
+     "element_id": "help_line",
+     "key": "approximate_visual:help_line",
+     "scene_id": "scene_05"
+    },
+    {
+     "acknowledged": true,
+     "category": "review_coverage",
+     "code": "stills_not_reviewed_by_person",
+     "element_id": null,
+     "key": "stills_not_reviewed_by_person:-",
+     "scene_id": null
+    },
+    {
+     "acknowledged": true,
+     "category": "review_coverage",
+     "code": "motion_playback_not_reviewed",
+     "element_id": null,
+     "key": "motion_playback_not_reviewed:-",
+     "scene_id": null
+    }
+   ]
+  }
+ ],
+ "project_id": "my-video-project-c2e8",
+ "schema_version": "1.0"
+}

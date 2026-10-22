@@ -1,0 +1,1959 @@
+{
+ "version": 1,
+ "aspect": "16:9",
+ "mode": "motion-only",
+ "speed": 1.4,
+ "fps": 30,
+ "visual_plan_used": true,
+ "scenes": [
+  {
+   "id": 1,
+   "start": 0,
+   "end": 4.75,
+   "pattern": "quote_type",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "Mental challenges",
+     "style": "headline",
+     "preset": "char-scale",
+     "exit": "fade-out",
+     "emphasis": "glow",
+     "enter_s": 0.39,
+     "at": 2,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      2.44
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.089,
+      0.333,
+      0.883,
+      0.483
+     ]
+    },
+    {
+     "text": "Greater than physical",
+     "style": "label",
+     "preset": "word-pop",
+     "exit": "fade-out",
+     "emphasis": "glow",
+     "enter_s": 0.36,
+     "at": 2,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.083,
+      0.741,
+      0.435,
+      0.799
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "scan-line",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.04,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "targeting-ring",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.25,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.74,
+      0.08,
+      0.2,
+      0.36
+     ],
+     "why": "hint:emphasize_key_word"
+    },
+    {
+     "preset": "double-line",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 0.46,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.3,
+      0.16,
+      0.4,
+      0.04
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "scan-line": "atmosphere",
+     "targeting-ring": "hint:emphasize_key_word",
+     "double-line": "accent"
+    },
+    "intents": [
+     "emphasize_key_word",
+     "reveal_in_sequence"
+    ],
+    "mood": "dramatic, tense",
+    "importance": 0.9
+   },
+   "diagram": null,
+   "resources": [
+    "background.look.spotlight"
+   ]
+  },
+  {
+   "id": 2,
+   "start": 4.75,
+   "end": 13.6,
+   "pattern": "hero_text",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "About eight months",
+     "style": "headline",
+     "preset": "elastic",
+     "exit": "scale-out",
+     "emphasis": "scale",
+     "enter_s": 0.79,
+     "at": 5.4,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      6.89
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.092,
+      0.38,
+      0.908,
+      0.529
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "floating-dots",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 4.79,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "route-line",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 5,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.125,
+      0.662,
+      0.3,
+      0.2
+     ],
+     "why": "hint:show_flow_direction"
+    },
+    {
+     "preset": "bracket-frame",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 5.21,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.06,
+      0.3,
+      0.88,
+      0.3
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "slide",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "floating-dots": "atmosphere",
+     "route-line": "hint:show_flow_direction",
+     "bracket-frame": "accent"
+    },
+    "intents": [
+     "show_flow_direction",
+     "travel_along_path",
+     "emphasize_distance"
+    ],
+    "mood": "calm, sad",
+    "importance": 0.8
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "earth_home",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.115,
+       0.762,
+       0.067,
+       0.12
+      ],
+      "at": 4.964,
+      "status": "resolved",
+      "note": "plain flat disc; land shapes / habitation lights not drawn"
+     },
+     {
+      "element_id": "mars_destination",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.367,
+       0.646,
+       0.067,
+       0.12
+      ],
+      "at": 5.214,
+      "status": "resolved",
+      "note": "plain flat disc; glow / habitation lights not drawn"
+     },
+     {
+      "element_id": "lone_spacecraft",
+      "kind": "icon",
+      "layer": "icon",
+      "id": "icon:rocket",
+      "box": [
+       0.23,
+       0.716,
+       0.056,
+       0.1
+      ],
+      "at": 6.064,
+      "status": "resolved",
+      "note": "a rocket icon placed on the route; it does not travel along it"
+     },
+     {
+      "element_id": "route_earth_mars",
+      "kind": "link",
+      "layer": "motion_scene",
+      "id": "route-line",
+      "box": [
+       0.125,
+       0.662,
+       0.3,
+       0.2
+      ],
+      "at": 5,
+      "status": "resolved",
+      "note": "drawn by route-line between the worlds"
+     }
+    ],
+    "skipped": [],
+    "moved": [],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.aurora"
+   ]
+  },
+  {
+   "id": 3,
+   "start": 13.6,
+   "end": 19.58,
+   "pattern": "hero_icon",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "Delayed by minutes",
+     "style": "headline",
+     "preset": "word-pop",
+     "exit": "fade-out",
+     "emphasis": "mask",
+     "enter_s": 0.36,
+     "at": 13.74,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.092,
+      0.38,
+      0.908,
+      0.529
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "scan-line",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 13.639999999999999,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "dashed-flow",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": true,
+     "start": 13.85,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.232,
+      0.65,
+      0.536,
+      0.035
+     ],
+     "why": "hint:travel_slowly_along_path"
+    },
+    {
+     "preset": "frame-in",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 14.06,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.04,
+      0.06,
+      0.92,
+      0.8
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "blur",
+    "dur": 0.43
+   },
+   "icons": [
+    {
+     "name": "clock",
+     "at": 14.799999999999999
+    }
+   ],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "effect",
+    "shape",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "scan-line": "atmosphere",
+     "dashed-flow": "hint:travel_slowly_along_path",
+     "frame-in": "accent"
+    },
+    "intents": [
+     "travel_slowly_along_path",
+     "show_flow_direction"
+    ],
+    "mood": "tense, calm",
+    "importance": 0.8
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "earth_receiver",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.156,
+       0.6,
+       0.067,
+       0.12
+      ],
+      "at": 13.814,
+      "status": "resolved",
+      "note": "plain flat disc; land shapes / habitation lights not drawn"
+     },
+     {
+      "element_id": "mars_sender",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.776,
+       0.6,
+       0.067,
+       0.12
+      ],
+      "at": 14.064,
+      "status": "resolved",
+      "note": "plain flat disc; glow / habitation lights not drawn"
+     },
+     {
+      "element_id": "signal_link",
+      "kind": "link",
+      "layer": "motion_scene",
+      "id": "dashed-flow",
+      "box": [
+       0.232,
+       0.65,
+       0.536,
+       0.035
+      ],
+      "at": 13.85,
+      "status": "resolved",
+      "note": "dashes march along the line (dotted is drawn as dashed)"
+     }
+    ],
+    "skipped": [],
+    "moved": [
+     {
+      "preset": "dashed-flow",
+      "box": [
+       0.232,
+       0.65,
+       0.536,
+       0.035
+      ]
+     }
+    ],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.spotlight"
+   ]
+  },
+  {
+   "id": 4,
+   "start": 19.58,
+   "end": 26.08,
+   "pattern": "hero_only",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "A test of the mind",
+     "style": "headline",
+     "preset": "layered-depth",
+     "exit": "fade-out",
+     "emphasis": "tracking",
+     "enter_s": 0.71,
+     "at": 19.72,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.117,
+      0.38,
+      0.883,
+      0.529
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "light-sweep",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 19.619999999999997,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "crosshair",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 19.83,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.76,
+      0.1,
+      0.16,
+      0.28
+     ],
+     "why": "hint:emphasize_isolation"
+    },
+    {
+     "preset": "divider-grow",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 20.04,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.35,
+      0.16,
+      0.3,
+      0.03
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "light-sweep": "atmosphere",
+     "crosshair": "hint:emphasize_isolation",
+     "divider-grow": "accent"
+    },
+    "intents": [
+     "reveal_vast_emptiness",
+     "emphasize_isolation",
+     "reveal_in_sequence"
+    ],
+    "mood": "sad, calm",
+    "importance": 0.5
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "small_crew_group",
+      "kind": "icon",
+      "layer": "icon",
+      "id": "icon:users",
+      "box": [
+       0.472,
+       0.61,
+       0.056,
+       0.1
+      ],
+      "at": 19.794,
+      "status": "approximate",
+      "note": "a generic people icon: the astronaut silhouettes are not drawn"
+     }
+    ],
+    "skipped": [],
+    "moved": [],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.aurora"
+   ]
+  },
+  {
+   "id": 5,
+   "start": 26.08,
+   "end": 35.05,
+   "pattern": "split_two",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "Knowledge \u00b7 Training \u00b7 Trust",
+     "style": "caption",
+     "preset": "slide-left",
+     "exit": "slide-out",
+     "emphasis": "glow",
+     "enter_s": 0.5,
+     "at": 31.88,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.27,
+      0.862,
+      0.73,
+      0.92
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "glow-orb",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 26.119999999999997,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.3,
+      0.2,
+      0.4,
+      0.6
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "node-network",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": true,
+     "start": 26.33,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.75,
+      0.09,
+      0.2,
+      0.22
+     ],
+     "why": "hint:reveal_in_sequence"
+    },
+    {
+     "preset": "bracket-frame",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 26.54,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.06,
+      0.3,
+      0.88,
+      0.3
+     ],
+     "why": "accent"
+    },
+    {
+     "preset": "dashed-flow",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 27.223,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.182,
+      0.183,
+      0.548,
+      0.035
+     ],
+     "why": "topic"
+    }
+   ],
+   "transition": {
+    "type": "wipe",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "glow-orb": "atmosphere",
+     "node-network": "hint:reveal_in_sequence",
+     "bracket-frame": "accent"
+    },
+    "intents": [
+     "show_help_falling_short",
+     "reveal_in_sequence",
+     "emphasize_self_reliance"
+    ],
+    "mood": "tense, dramatic",
+    "importance": 0.8
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "distant_earth",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.106,
+       0.14,
+       0.067,
+       0.12
+      ],
+      "at": 26.294,
+      "status": "resolved",
+      "note": "plain flat disc; land shapes / habitation lights not drawn"
+     },
+     {
+      "element_id": "crew_team",
+      "kind": "icon",
+      "layer": "icon",
+      "id": "icon:users",
+      "box": [
+       0.832,
+       0.15,
+       0.056,
+       0.1
+      ],
+      "at": 26.544,
+      "status": "approximate",
+      "note": "a generic people icon: the astronaut silhouettes are not drawn"
+     },
+     {
+      "element_id": "help_line",
+      "kind": "link",
+      "layer": "motion_scene",
+      "id": "dashed-flow",
+      "box": [
+       0.182,
+       0.183,
+       0.548,
+       0.035
+      ],
+      "at": 27.223,
+      "status": "approximate",
+      "note": "a dashed line from the world toward the crew; its fade before arrival is not drawn"
+     }
+    ],
+    "skipped": [],
+    "moved": [
+     {
+      "preset": "node-network",
+      "box": [
+       0.75,
+       0.09,
+       0.2,
+       0.22
+      ]
+     }
+    ],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.spotlight"
+   ]
+  },
+  {
+   "id": 6,
+   "start": 35.05,
+   "end": 39.43,
+   "pattern": "quote_type",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "Resilience",
+     "style": "headline",
+     "preset": "word-pop",
+     "exit": "fade-out",
+     "emphasis": "glow",
+     "enter_s": 0.36,
+     "at": 35.6,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      36.29
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.089,
+      0.333,
+      0.572,
+      0.483
+     ]
+    },
+    {
+     "text": "Discipline \u00b7 Team spirit",
+     "style": "label",
+     "preset": "elastic",
+     "exit": "scale-out",
+     "emphasis": "mask",
+     "enter_s": 0.79,
+     "at": 35.6,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.083,
+      0.741,
+      0.48,
+      0.799
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "particles-float",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 35.089999999999996,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "ring-pulse",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 35.3,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.76,
+      0.1,
+      0.16,
+      0.28
+     ],
+     "why": "hint:emphasize_key_word"
+    },
+    {
+     "preset": "double-line",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 35.51,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.3,
+      0.16,
+      0.4,
+      0.04
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "zoom-through",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "particles-float": "atmosphere",
+     "ring-pulse": "hint:emphasize_key_word",
+     "double-line": "accent"
+    },
+    "intents": [
+     "emphasize_key_word",
+     "reveal_in_sequence"
+    ],
+    "mood": "hopeful, energetic",
+    "importance": 0.8
+   },
+   "diagram": null,
+   "resources": [
+    "background.look.mesh"
+   ]
+  },
+  {
+   "id": 7,
+   "start": 39.43,
+   "end": 45.84,
+   "pattern": "hero_text",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "First the Moon, then Mars",
+     "style": "headline",
+     "preset": "rotate-in",
+     "exit": "scale-out",
+     "emphasis": "glow",
+     "enter_s": 0.57,
+     "at": 42,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      42.18
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.054,
+      0.38,
+      0.946,
+      0.679
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "scan-line",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 39.47,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "timeline-dots",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": true,
+     "start": 39.68,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.1,
+      0.75,
+      0.8,
+      0.12
+     ],
+     "why": "topic"
+    },
+    {
+     "preset": "bracket-frame",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 39.89,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.06,
+      0.3,
+      0.88,
+      0.3
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "light-leak",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape",
+    "shape",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "scan-line": "atmosphere",
+     "grid-lines": "hint:reveal_in_sequence",
+     "bracket-frame": "accent"
+    },
+    "intents": [
+     "reveal_in_sequence",
+     "emphasize_destination"
+    ],
+    "mood": "hopeful, majestic",
+    "importance": 0.8
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "earth_origin",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.2,
+       0.75,
+       0.067,
+       0.12
+      ],
+      "at": 39.644,
+      "status": "resolved",
+      "note": "plain flat disc; land shapes / habitation lights not drawn"
+     },
+     {
+      "element_id": "moon_stop",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.466,
+       0.75,
+       0.067,
+       0.12
+      ],
+      "at": 39.894,
+      "status": "resolved",
+      "note": "plain flat disc; craters not drawn"
+     },
+     {
+      "element_id": "mars_goal",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.733,
+       0.75,
+       0.067,
+       0.12
+      ],
+      "at": 40.144,
+      "status": "resolved",
+      "note": "plain flat disc; glow / habitation lights not drawn"
+     },
+     {
+      "element_id": "goal_route",
+      "kind": "link",
+      "layer": "motion_scene",
+      "id": "timeline-dots",
+      "box": [
+       0.1,
+       0.75,
+       0.8,
+       0.12
+      ],
+      "at": 39.68,
+      "status": "resolved",
+      "note": "drawn by timeline-dots between the worlds"
+     }
+    ],
+    "skipped": [],
+    "moved": [
+     {
+      "preset": "timeline-dots",
+      "box": [
+       0.1,
+       0.75,
+       0.8,
+       0.12
+      ]
+     }
+    ],
+    "replaced": [
+     {
+      "from": "grid-lines",
+      "to": "timeline-dots",
+      "why": "3 stops along one route"
+     }
+    ]
+   },
+   "resources": [
+    "background.look.mesh"
+   ]
+  },
+  {
+   "id": 8,
+   "start": 45.84,
+   "end": 52.85,
+   "pattern": "hero_only",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "A new chapter",
+     "style": "headline",
+     "preset": "underline-draw",
+     "exit": "fade-out",
+     "emphasis": "underline",
+     "enter_s": 0.64,
+     "at": 45.98,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.212,
+      0.38,
+      0.788,
+      0.529
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "light-sweep",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 45.88,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "targeting-ring",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 46.09,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.74,
+      0.08,
+      0.2,
+      0.36
+     ],
+     "why": "hint:emphasize_sunrise"
+    },
+    {
+     "preset": "divider-grow",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 46.300000000000004,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.35,
+      0.16,
+      0.3,
+      0.03
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": {
+    "type": "fade",
+    "dur": 0.43
+   },
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "light-sweep": "atmosphere",
+     "targeting-ring": "hint:emphasize_sunrise",
+     "divider-grow": "accent"
+    },
+    "intents": [
+     "reveal_settlement",
+     "emphasize_sunrise",
+     "reveal_in_sequence"
+    ],
+    "mood": "majestic, hopeful",
+    "importance": 0.5
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "chapter_icon",
+      "kind": "icon",
+      "layer": "icon",
+      "id": "icon:book-open",
+      "box": [
+       0.472,
+       0.61,
+       0.056,
+       0.1
+      ],
+      "at": 46.054,
+      "status": "resolved",
+      "note": "an open-book icon"
+     },
+     {
+      "element_id": "habitat_domes",
+      "kind": "dome",
+      "layer": "shape",
+      "id": "shape:dome",
+      "box": [
+       0.36,
+       0.242,
+       0.28,
+       0.108
+      ],
+      "at": 46.304,
+      "status": "resolved",
+      "note": "a cluster of 3 domes with lit window arches; shading and surface detail are not drawn"
+     }
+    ],
+    "skipped": [],
+    "moved": [],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.mesh"
+   ]
+  },
+  {
+   "id": 9,
+   "start": 52.85,
+   "end": 57.61,
+   "pattern": "hero_text",
+   "pictures": 0,
+   "texts": [
+    {
+     "text": "A multi-planet species",
+     "style": "headline",
+     "preset": "kinetic",
+     "exit": "fade-out",
+     "emphasis": "glow",
+     "enter_s": 0.57,
+     "at": 53.6,
+     "until": null,
+     "exit_s": 0.36,
+     "emphasis_at": [
+      54.39
+     ],
+     "source": "visual_plan",
+     "drawn_box": [
+      0.175,
+      0.38,
+      0.825,
+      0.679
+     ]
+    }
+   ],
+   "graphics": [
+    {
+     "preset": "scan-line",
+     "atmosphere": true,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 52.89,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0,
+      0,
+      1,
+      1
+     ],
+     "why": "atmosphere"
+    },
+    {
+     "preset": "node-network",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": true,
+     "start": 53.1,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.232,
+      0.71,
+      0.536,
+      0.2
+     ],
+     "why": "hint:connect_two_worlds"
+    },
+    {
+     "preset": "double-line",
+     "atmosphere": false,
+     "speed": 1.4,
+     "anchored": false,
+     "start": 53.31,
+     "end": null,
+     "exit_s": 0.36,
+     "box": [
+      0.175,
+      0.265,
+      0.4,
+      0.04
+     ],
+     "why": "accent"
+    }
+   ],
+   "transition": null,
+   "icons": [],
+   "classic_texts": [],
+   "other_layers": [
+    "background",
+    "shape",
+    "shape"
+   ],
+   "why": {
+    "texts": "visual_plan",
+    "decor": {
+     "scan-line": "atmosphere",
+     "node-network": "hint:connect_two_worlds",
+     "double-line": "accent"
+    },
+    "intents": [
+     "connect_two_worlds",
+     "emphasize_growth",
+     "emphasize_key_word"
+    ],
+    "mood": "majestic, hopeful",
+    "importance": 0.9
+   },
+   "diagram": {
+    "placed": [
+     {
+      "element_id": "earth_home_world",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.156,
+       0.75,
+       0.067,
+       0.12
+      ],
+      "at": 53.064,
+      "status": "resolved",
+      "note": "plain flat disc; land shapes / habitation lights not drawn"
+     },
+     {
+      "element_id": "mars_home_world",
+      "kind": "disc",
+      "layer": "shape",
+      "id": "shape:circle",
+      "box": [
+       0.776,
+       0.75,
+       0.067,
+       0.12
+      ],
+      "at": 53.314,
+      "status": "resolved",
+      "note": "plain flat disc; glow / habitation lights not drawn"
+     }
+    ],
+    "skipped": [],
+    "moved": [
+     {
+      "preset": "node-network",
+      "box": [
+       0.232,
+       0.71,
+       0.536,
+       0.2
+      ]
+     }
+    ],
+    "replaced": []
+   },
+   "resources": [
+    "background.look.mesh"
+   ]
+  }
+ ],
+ "visual_plan": {
+  "file": "visual_planning.json",
+  "source": "llm",
+  "fingerprint": "10620efffe73712084c96e048688a5037603388f",
+  "validation": "ok",
+  "scenes": [
+   {
+    "scene_id": "scene_01",
+    "plan_scene_id": 1,
+    "concept": "typography",
+    "start": 0.0,
+    "end": 4.58,
+    "plan_start": 0.0,
+    "plan_end": 4.58,
+    "segmentation_scene_id": "scene_001",
+    "timeline_start": 0.0,
+    "timeline_end": 4.75,
+    "gap_after_seconds": 0.17,
+    "elements": [
+     {
+      "element_id": "headline_mental",
+      "type": "text",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "subline_physical",
+      "type": "text",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "mind_icon",
+      "type": "icon",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "dark_space_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "headline_mental",
+      "intent": "emphasize_key_word",
+      "description": "Draw attention to the word 'Mental'"
+     },
+     {
+      "element_id": "subline_physical",
+      "intent": "reveal_in_sequence",
+      "description": "The comparison line arrives after the headline"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_02",
+    "plan_scene_id": 2,
+    "concept": "route_path_diagram",
+    "start": 4.75,
+    "end": 13.41,
+    "plan_start": 4.75,
+    "plan_end": 13.41,
+    "segmentation_scene_id": "scene_002",
+    "timeline_start": 4.75,
+    "timeline_end": 13.6,
+    "gap_after_seconds": 0.19,
+    "elements": [
+     {
+      "element_id": "route_earth_mars",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "earth_home",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "mars_destination",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "lone_spacecraft",
+      "type": "icon",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "duration_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     },
+     {
+      "element_id": "deep_space_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "route_earth_mars",
+      "intent": "show_flow_direction",
+      "description": "The route extends from Earth toward Mars"
+     },
+     {
+      "element_id": "lone_spacecraft",
+      "intent": "travel_along_path",
+      "description": "The spacecraft moves slowly away from Earth"
+     },
+     {
+      "element_id": "earth_home",
+      "intent": "emphasize_distance",
+      "description": "Earth feels further and further behind"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_03",
+    "plan_scene_id": 3,
+    "concept": "signal_path_diagram",
+    "start": 13.6,
+    "end": 19.58,
+    "plan_start": 13.6,
+    "plan_end": 19.58,
+    "segmentation_scene_id": "scene_003",
+    "timeline_start": 13.6,
+    "timeline_end": 19.58,
+    "gap_after_seconds": 0.0,
+    "elements": [
+     {
+      "element_id": "signal_link",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "mars_sender",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "earth_receiver",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "message_pulse",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "delay_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     },
+     {
+      "element_id": "space_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "message_pulse",
+      "intent": "travel_slowly_along_path",
+      "description": "The pulse is visibly slow, not instant"
+     },
+     {
+      "element_id": "signal_link",
+      "intent": "show_flow_direction",
+      "description": "Direction from Mars toward Earth"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_04",
+    "plan_scene_id": 4,
+    "concept": "object_in_context",
+    "start": 19.58,
+    "end": 26.08,
+    "plan_start": 19.58,
+    "plan_end": 26.08,
+    "segmentation_scene_id": "scene_004",
+    "timeline_start": 19.58,
+    "timeline_end": 26.08,
+    "gap_after_seconds": 0.0,
+    "elements": [
+     {
+      "element_id": "small_crew_group",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "red_desert_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     },
+     {
+      "element_id": "silence_icon",
+      "type": "icon",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "mind_test_caption",
+      "type": "text",
+      "role": "explanatory",
+      "required": false
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "red_desert_bg",
+      "intent": "reveal_vast_emptiness",
+      "description": "The landscape feels wide and still"
+     },
+     {
+      "element_id": "small_crew_group",
+      "intent": "emphasize_isolation",
+      "description": "The group stays small against the surroundings"
+     },
+     {
+      "element_id": "mind_test_caption",
+      "intent": "reveal_in_sequence",
+      "description": "The caption arrives last"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_05",
+    "plan_scene_id": 5,
+    "concept": "comparison",
+    "start": 26.08,
+    "end": 34.9,
+    "plan_start": 26.08,
+    "plan_end": 34.9,
+    "segmentation_scene_id": "scene_005",
+    "timeline_start": 26.08,
+    "timeline_end": 35.05,
+    "gap_after_seconds": 0.15,
+    "elements": [
+     {
+      "element_id": "crew_team",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "three_supports_ring",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "distant_earth",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "help_line",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "supports_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     },
+     {
+      "element_id": "dark_mars_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "help_line",
+      "intent": "show_help_falling_short",
+      "description": "The line from Earth fades before reaching the crew"
+     },
+     {
+      "element_id": "three_supports_ring",
+      "intent": "reveal_in_sequence",
+      "description": "The three supports appear one after another as they are named"
+     },
+     {
+      "element_id": "crew_team",
+      "intent": "emphasize_self_reliance",
+      "description": "Focus settles on the team"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_06",
+    "plan_scene_id": 6,
+    "concept": "typography",
+    "start": 35.05,
+    "end": 39.43,
+    "plan_start": 35.05,
+    "plan_end": 39.43,
+    "segmentation_scene_id": "scene_006",
+    "timeline_start": 35.05,
+    "timeline_end": 39.43,
+    "gap_after_seconds": 0.0,
+    "elements": [
+     {
+      "element_id": "resilience_word",
+      "type": "text",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "virtues_subline",
+      "type": "text",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "triad_emblem",
+      "type": "graphic",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "warm_dark_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "resilience_word",
+      "intent": "emphasize_key_word",
+      "description": "The word lands with strength"
+     },
+     {
+      "element_id": "virtues_subline",
+      "intent": "reveal_in_sequence",
+      "description": "Discipline, then team spirit"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_07",
+    "plan_scene_id": 7,
+    "concept": "route_path_diagram",
+    "start": 39.43,
+    "end": 45.84,
+    "plan_start": 39.43,
+    "plan_end": 45.84,
+    "segmentation_scene_id": "scene_007",
+    "timeline_start": 39.43,
+    "timeline_end": 45.84,
+    "gap_after_seconds": 0.0,
+    "elements": [
+     {
+      "element_id": "goal_route",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "earth_origin",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "moon_stop",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "mars_goal",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "moon_then_mars_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     },
+     {
+      "element_id": "hopeful_space_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "goal_route",
+      "intent": "reveal_in_sequence",
+      "description": "The route extends stop by stop"
+     },
+     {
+      "element_id": "mars_goal",
+      "intent": "emphasize_destination",
+      "description": "Mars brightens as the final goal"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_08",
+    "plan_scene_id": 8,
+    "concept": "object_in_context",
+    "start": 45.84,
+    "end": 52.54,
+    "plan_start": 45.84,
+    "plan_end": 52.54,
+    "segmentation_scene_id": "scene_008",
+    "timeline_start": 45.84,
+    "timeline_end": 52.85,
+    "gap_after_seconds": 0.31,
+    "elements": [
+     {
+      "element_id": "habitat_domes",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "mars_dawn_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     },
+     {
+      "element_id": "chapter_icon",
+      "type": "icon",
+      "role": "supporting",
+      "required": false
+     },
+     {
+      "element_id": "new_chapter_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "habitat_domes",
+      "intent": "reveal_settlement",
+      "description": "The domes come to life with lit windows"
+     },
+     {
+      "element_id": "mars_dawn_bg",
+      "intent": "emphasize_sunrise",
+      "description": "The dawn light grows, suggesting a beginning"
+     },
+     {
+      "element_id": "new_chapter_text",
+      "intent": "reveal_in_sequence",
+      "description": "The caption arrives with the final phrase"
+     }
+    ]
+   },
+   {
+    "scene_id": "scene_09",
+    "plan_scene_id": 9,
+    "concept": "comparison",
+    "start": 52.85,
+    "end": 57.43,
+    "plan_start": 52.85,
+    "plan_end": 57.43,
+    "segmentation_scene_id": "scene_009",
+    "timeline_start": 52.85,
+    "timeline_end": 57.61,
+    "gap_after_seconds": null,
+    "elements": [
+     {
+      "element_id": "human_bridge_emblem",
+      "type": "graphic",
+      "role": "primary",
+      "required": true
+     },
+     {
+      "element_id": "earth_home_world",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "mars_home_world",
+      "type": "graphic",
+      "role": "supporting",
+      "required": true
+     },
+     {
+      "element_id": "multi_planet_text",
+      "type": "text",
+      "role": "explanatory",
+      "required": true
+     },
+     {
+      "element_id": "starfield_bg",
+      "type": "background",
+      "role": "environment",
+      "required": true
+     }
+    ],
+    "motion_hints": [
+     {
+      "element_id": "human_bridge_emblem",
+      "intent": "connect_two_worlds",
+      "description": "The arc reaches out to both planets"
+     },
+     {
+      "element_id": "mars_home_world",
+      "intent": "emphasize_growth",
+      "description": "Lights of habitation appear on Mars to match Earth"
+     },
+     {
+      "element_id": "multi_planet_text",
+      "intent": "emphasize_key_word",
+      "description": "Stress 'multi-planet'"
+     }
+    ]
+   }
+  ]
+ }
+}
