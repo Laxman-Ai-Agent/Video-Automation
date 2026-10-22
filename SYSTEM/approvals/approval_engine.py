@@ -5,7 +5,7 @@ Owns:
 2. Cryptographic action fingerprint binding (exact input SHA-256).
 3. Thread-safe persistence in config/approvals_queue.json.
 4. Append-only audit logging in config/approvals_audit.jsonl.
-5. The decision itself: llm_decide asks the LLM reviewer (llm_review.ask_reviewer) and records its verdict; nothing else approves.
+5. The decision itself: llm_decide asks the LLM reviewer (llm_reviewer.ask_reviewer) and records its verdict; nothing else approves.
 6. Guard boundaries for single-use consumption and stale invalidation.
 """
 from __future__ import annotations
@@ -21,13 +21,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Literal, Optional
 
-try:
-    from SYSTEM.core import config
-except ImportError:
-    try:
-        from backend import config
-    except ImportError:
-        import config
+from SYSTEM.core import config
 
 logger = logging.getLogger("laxman_approval.engine")
 
@@ -381,14 +375,14 @@ class ApprovalEngine:
         """The LLM reviewer decides a pending request from what the request itself says (action, risk, evidence, files, outcomes, rollback).
         Only `passed` with score >= 0.80 and no blocker/error approves; `blocked` or `failed` rejects; anything else (needs_review, unavailable LLM) asks for changes.
         The verdict is recorded through decide() with the reviewer `llm:<provider>/<model>`."""
-        from SYSTEM.policies import llm_review
+        from SYSTEM.policies import llm_reviewer
         req = self.get_request(request_id)
         if req is None:
             raise ApprovalNotFoundError(request_id)
         facts = {k: v for k, v in req.to_dict().items() if k in (
             "requester_agent_id", "category", "action_type", "risk_level", "action_summary", "affected_files", "upstream_evidence",
             "expected_outcomes", "reversibility", "rollback_plan", "project_id")}
-        verdict = llm_review.ask_reviewer(
+        verdict = llm_reviewer.ask_reviewer(
             project_id=req.project_id or "system",
             stage_id="approval",
             agent_id=req.requester_agent_id,

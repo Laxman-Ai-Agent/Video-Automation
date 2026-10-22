@@ -15,10 +15,7 @@ from pathlib import Path
 from typing import Any, AsyncGenerator
 
 from SYSTEM.memory import store
-try:
-    from backend import config
-except ImportError:
-    import config
+from SYSTEM.core import config
 from SYSTEM.core.resilience import redact_secrets
 from .contracts import AgentMessage, ArtifactRef, MessageType
 

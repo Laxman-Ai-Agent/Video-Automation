@@ -14,6 +14,9 @@ import pytest
 
 ROOT = Path(__file__).resolve().parent
 
+# This checkout holds the video project next to the Agent System: connect it for every test, including the SYSTEM/**/tests that never import VIDEO_ENGINE themselves.
+os.environ.setdefault("AGENT_SYSTEM_INTEGRATIONS", "VIDEO_ENGINE.agent_system_integration")
+
 # Browser (Playwright) checks drive a running UI at http://localhost:5173 and need a browser: they are opt-in (A2V_BROWSER_TESTS=1), not part of a plain `pytest`.
 collect_ignore_glob = [] if os.environ.get("A2V_BROWSER_TESTS") == "1" else ["tests/test_playwright_*.py", "tests/test_verify_*.py", "verify_timeline_ui.py"]
 STATE_DIRS = ("SYSTEM", "config", "VIDEO_ENGINE/remotion/src/generated")

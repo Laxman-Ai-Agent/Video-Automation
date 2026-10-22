@@ -26,13 +26,7 @@ from typing import Any, Literal
 
 from SYSTEM.core.resilience import redact_secrets
 
-try:
-    from SYSTEM.core import config
-except ImportError:
-    try:
-        from backend import config
-    except ImportError:
-        import config
+from SYSTEM.core import config
 
 MemoryKind = Literal["fact", "pattern", "decision", "lesson", "heuristic"]
 MemoryScope = Literal["global", "agent", "project"]

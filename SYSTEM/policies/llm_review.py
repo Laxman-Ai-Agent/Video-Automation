@@ -21,25 +21,12 @@ import time
 from pathlib import Path
 from typing import Any, Literal, TypedDict
 
-try:
-    from backend import llm_client
-except ImportError:
-    import llm_client
-from SYSTEM.core import llm_gateway
+from SYSTEM.core import llm_client, llm_gateway
 from SYSTEM.memory import store
+from SYSTEM.policies.llm_reviewer import LlmFinding, LlmReviewStatus, ask_reviewer   # the generic reviewer is the Agent System's; this module is the video stage gate on top of it
 
 SCHEMA = "1.0"
 VERSION = 1
-
-LlmReviewStatus = Literal["passed", "needs_review", "blocked", "failed"]
-
-
-class LlmFinding(TypedDict, total=False):
-    severity: Literal["blocker", "error", "warning", "info"]
-    category: str
-    message: str
-    scene_id: str | int | None
-    recommendation: str | None
 
 
 class LlmReviewResult(TypedDict):
@@ -214,12 +201,8 @@ def save_review(pdir: Path, stage: str, aspect: str, result: LlmReviewResult) ->
     tmp.write_text(json.dumps(result, indent=2, sort_keys=True, ensure_ascii=False), encoding="utf-8")
     tmp.replace(path)
     try:
-        try:
-            from SYSTEM.agents.shared import communication
-            from SYSTEM.agents.shared.contracts import ArtifactRef
-        except ImportError:
-            from backend.agents import communication
-            from backend.agents.contracts import ArtifactRef
+        from SYSTEM.agents.shared import communication
+        from SYSTEM.agents.shared.contracts import ArtifactRef
         from SYSTEM.core.pipeline_state import STAGE_TO_AGENT_MAP as stage_to_agent             # the one stage-to-agent map (imported here: pipeline_state imports this module)
         target_agent = stage_to_agent.get(stage, "main_orchestrator")
         communication.publish_review_feedback(
@@ -926,110 +909,6 @@ def run_stage_llm_review(
     }
     save_review(pdir, stage, aspect, result)
     return result
-
-
-def ask_reviewer(
-    *,
-    project_id: str,
-    stage_id: str,
-    agent_id: str,
-    system_prompt: str,
-    user_prompt: str,
-    timeout: int = 60,
-    input_fingerprint: str | None = None,
-    artifact_refs: list[dict[str, str]] | None = None,
-    metadata: dict[str, Any] | None = None,
-    auto_pilot: bool = False,
-) -> dict[str, Any]:
-    """The one LLM reviewer call: returns status, score, summary, findings, provider, model, latency_ms, error.
-    Fails closed: an unavailable LLM or a malformed answer is status='blocked' with a blocker finding."""
-    t0 = time.perf_counter()
-    structured_schema = {
-        "status": "passed | needs_review | blocked | failed",
-        "score": 0.85,
-        "summary": "review summary",
-        "findings": [
-            {
-                "severity": "blocker | error | warning | info",
-                "category": "quality | technical | narrative",
-                "message": "finding description",
-                "scene_id": "optional scene number",
-                "recommendation": "optional action recommendation",
-            }
-        ],
-    }
-
-    def unavailable(err_msg: str, provider: str | None, model: str | None, latency: float) -> dict[str, Any]:
-        return {
-            "status": "blocked",
-            "score": 0.0,
-            "summary": f"LLM review unavailable or failed: {err_msg}",
-            "findings": [{
-                "severity": "blocker",
-                "category": "llm_unavailable",
-                "message": f"LLM review failed: {err_msg}. Nothing can be approved without a successful LLM review.",
-            }],
-            "provider": provider,
-            "model": model,
-            "latency_ms": latency,
-            "error": err_msg,
-        }
-
-    req = llm_gateway.LlmGatewayRequest(
-        project_id=project_id,
-        stage_id=stage_id,
-        agent_id=agent_id,
-        purpose="review",
-        user_prompt=user_prompt,
-        system_prompt=system_prompt,
-        model_profile="reasoning_review",
-        structured_schema=structured_schema,
-        timeout=timeout,
-        input_fingerprint=input_fingerprint,
-        input_artifact_refs=artifact_refs or [],
-        metadata=metadata or {},
-    )
-    try:
-        resp = llm_gateway.get_gateway().execute(req)
-    except Exception as e:
-        prov, mdl, _, _ = llm_client.resolve_provider_config()
-        return unavailable(str(e), prov, mdl, round((time.perf_counter() - t0) * 1000))
-    if resp.error or not resp.structured_data:
-        return unavailable(resp.error or "LLM returned invalid or malformed structured JSON response", resp.provider, resp.model, resp.latency_ms)
-
-    data = resp.structured_data
-    status_val: LlmReviewStatus = data.get("status", "needs_review")
-    if status_val not in ("passed", "needs_review", "blocked", "failed"):
-        status_val = "needs_review"
-    score = float(data.get("score", 0.8 if status_val == "passed" else 0.4))
-    findings: list[LlmFinding] = [
-        {
-            "severity": f.get("severity", "warning"),
-            "category": str(f.get("category", "quality")),
-            "message": str(f.get("message", "")),
-            "scene_id": f.get("scene_id"),
-            "recommendation": f.get("recommendation"),
-        }
-        for f in data.get("findings", []) if isinstance(f, dict)
-    ]
-    # Fail-closed guard: blockers or errors must never be marked passed
-    if any(f.get("severity") == "blocker" for f in findings):
-        status_val = "blocked"
-    elif any(f.get("severity") == "error" for f in findings) and status_val == "passed":
-        status_val = "needs_review"
-    elif auto_pilot and status_val == "needs_review" and not any(f.get("severity") in ("blocker", "error") for f in findings):
-        status_val = "passed"
-        score = max(score, 0.85)
-    return {
-        "status": status_val,
-        "score": score,
-        "summary": str(data.get("summary", f"{stage_id} LLM review completed")),
-        "findings": findings,
-        "provider": resp.provider,
-        "model": resp.model,
-        "latency_ms": resp.latency_ms,
-        "error": resp.error,
-    }
 
 
 class StageReviewResult:

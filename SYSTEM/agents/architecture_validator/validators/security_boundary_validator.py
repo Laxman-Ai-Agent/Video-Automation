@@ -87,27 +87,40 @@ class SecurityBoundaryValidator:
 
         # 2. Sole Execution Engine Verification
         # Ensure PipelineOrchestrator exists and MainArchitectureAgent does not claim video pipeline execution
-        try:
-            from VIDEO_ENGINE.pipeline.orchestrator import PipelineOrchestrator
+        from SYSTEM.core import integrations
+        engine = integrations.get("pipeline_orchestrator")
+        broken = integrations.failures().get("pipeline_orchestrator")
+        if engine is not None:
             findings.append(
                 ArchitectureFinding(
                     category=FindingCategory.SECURITY_BOUNDARY,
                     severity=FindingSeverity.INFO,
                     component="PipelineOrchestrator",
                     message="PipelineOrchestrator is verified as the sole canonical video execution engine.",
-                    evidence=f"class={PipelineOrchestrator.__name__}",
+                    evidence=f"class={engine.__name__}",
                     remediation="Maintain sole execution engine boundary.",
                 )
             )
-        except Exception as e:
+        elif broken:
             findings.append(
                 ArchitectureFinding(
                     category=FindingCategory.SECURITY_BOUNDARY,
                     severity=FindingSeverity.BLOCKING_ERROR,
-                    component="VIDEO_ENGINE.pipeline.orchestrator.PipelineOrchestrator",
-                    message=f"Failed to resolve canonical PipelineOrchestrator: {e}",
-                    evidence=str(e),
-                    remediation="Ensure PipelineOrchestrator is defined in VIDEO_ENGINE/pipeline/orchestrator.py.",
+                    component="integration:pipeline_orchestrator",
+                    message=f"Failed to resolve the connected domain project's execution engine: {broken}",
+                    evidence=broken,
+                    remediation="Fix the domain project's Agent System integration (see SYSTEM/core/integrations.py).",
+                )
+            )
+        else:
+            findings.append(
+                ArchitectureFinding(
+                    category=FindingCategory.SECURITY_BOUNDARY,
+                    severity=FindingSeverity.INFO,
+                    component="PipelineOrchestrator",
+                    message="No domain project is connected: the execution-engine check does not apply.",
+                    evidence="integration 'pipeline_orchestrator' is not registered",
+                    remediation="None required.",
                 )
             )
 

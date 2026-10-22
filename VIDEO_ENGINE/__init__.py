@@ -10,3 +10,7 @@ Consists of:
 from SYSTEM.core.backend_alias import install
 
 install()   # engine modules import through the `backend` alias: register it before any of them loads
+
+from VIDEO_ENGINE import agent_system_integration  # noqa: E402
+
+agent_system_integration.register()   # tell the Agent System what the video project provides (it never imports VIDEO_ENGINE itself)

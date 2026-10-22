@@ -34,15 +34,7 @@ from SYSTEM.observability import llm_usage
 from SYSTEM.memory import shared_memory, store
 from SYSTEM.registries import skill_registry
 from SYSTEM.core.errors import ApiError
-try:
-    from SYSTEM.core import config
-    from VIDEO_ENGINE.pipeline import orchestrator
-except ImportError:
-    try:
-        from backend import config, orchestrator
-    except ImportError:
-        import config
-        from VIDEO_ENGINE.pipeline import orchestrator
+from SYSTEM.core import config, integrations
 
 logger = logging.getLogger("evaluation")
 
@@ -812,7 +804,8 @@ def evaluate_case(
         overall_status = "passed"
         composite_score = llm_res.composite_score if llm_res else 1.0
 
-    caps = orchestrator.check_system_capabilities()
+    check_capabilities = integrations.get("system_capabilities")        # what a connected domain runtime needs (browser, ffmpeg...); nothing without one
+    caps = check_capabilities() if check_capabilities else {}
 
     return EvaluationResult(
         suite_id=case.suite_id,

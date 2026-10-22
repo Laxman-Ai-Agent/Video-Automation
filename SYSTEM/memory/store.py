@@ -9,10 +9,7 @@ import threading
 import time
 from pathlib import Path
 
-try:
-    from backend import config
-except ImportError:
-    import config
+from SYSTEM.core import config
 from SYSTEM.core.errors import ApiError
 
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$")     # slugs made here are lowercase; CLI projects (e.g. demo) also fit

@@ -21,13 +21,7 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Callable, Literal
 
-try:
-    from SYSTEM.core import llm_client
-except ImportError:
-    try:
-        from backend import llm_client
-    except ImportError:
-        import llm_client
+from SYSTEM.core import llm_client
 from SYSTEM.observability import llm_usage
 from SYSTEM.core.resilience import circuit_breaker, sanitize_secrets, calculate_backoff
 
@@ -390,12 +384,8 @@ class LlmGateway:
             return
 
         try:
-            try:
-                from SYSTEM.agents.shared import communication
-                from SYSTEM.agents.shared.contracts import ArtifactRef
-            except ImportError:
-                from backend.agents import communication
-                from backend.agents.contracts import ArtifactRef
+            from SYSTEM.agents.shared import communication
+            from SYSTEM.agents.shared.contracts import ArtifactRef
 
             event_type = "tool_result" if req.purpose != "review" else "review_feedback"
             msg = (

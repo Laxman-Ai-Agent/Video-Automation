@@ -28,7 +28,6 @@ from SYSTEM.agents.shared.contracts import (
     ArtifactRef,
     MessageType,
 )
-from SYSTEM.agents.video_generation_agents import stage_adapters
 
 
 # Virtual backward-compatibility package for legacy SYSTEM.agents.system_agents imports

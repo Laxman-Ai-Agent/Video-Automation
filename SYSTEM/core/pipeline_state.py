@@ -22,10 +22,7 @@ from SYSTEM.core import artifact_contracts
 from SYSTEM.policies import llm_review
 from SYSTEM.memory import store
 from SYSTEM.core.errors import ApiError
-try:
-    from SYSTEM.agents.shared import communication
-except ImportError:
-    from backend.agents import communication
+from SYSTEM.agents.shared import communication
 
 StageStatus = Literal[
     "pending",
@@ -238,10 +235,10 @@ def update_pipeline_state(pdir: Path, updater: Callable[[PipelineState], None]) 
 
 def reconcile_orphaned_jobs(pdir: Path) -> list[str]:
     """Detects stages marked 'running' whose background execution died or was interrupted."""
-    try:
-        from VIDEO_ENGINE.pipeline import jobs_adapter as jobs
-    except ImportError:
-        from backend import jobs
+    from SYSTEM.core import integrations
+    jobs = integrations.get("jobs")
+    if jobs is None:                       # no domain project runs background jobs here, so none can have been orphaned
+        return []
     reconciled = []
     is_job_active = jobs.is_running(pdir.name)
     current_job = jobs.current(pdir.name)

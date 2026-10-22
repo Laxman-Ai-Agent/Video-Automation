@@ -59,18 +59,18 @@ class DependencyGraphValidator:
         if custom_pipeline_deps is not None:
             pipeline_deps = custom_pipeline_deps
         else:
-            try:
-                from VIDEO_ENGINE.pipeline.orchestrator import STAGE_DEPENDENCIES
-                pipeline_deps = STAGE_DEPENDENCIES
-            except Exception as e:
+            from SYSTEM.core import integrations
+            pipeline_deps = integrations.get("stage_dependencies") or {}     # no domain pipeline connected: nothing to check, not an error
+            broken = integrations.failures().get("stage_dependencies")
+            if broken:
                 findings.append(
                     ArchitectureFinding(
                         category=FindingCategory.DEPENDENCY_GRAPH,
                         severity=FindingSeverity.WARNING,
-                        component="VIDEO_ENGINE.pipeline.orchestrator.STAGE_DEPENDENCIES",
-                        message=f"Could not import pipeline STAGE_DEPENDENCIES: {e}",
-                        evidence=str(e),
-                        remediation="Verify VIDEO_ENGINE/pipeline/orchestrator.py defines STAGE_DEPENDENCIES.",
+                        component="integration:stage_dependencies",
+                        message=f"The connected domain project could not provide its pipeline STAGE_DEPENDENCIES: {broken}",
+                        evidence=broken,
+                        remediation="Fix the domain project's Agent System integration (see SYSTEM/core/integrations.py).",
                     )
                 )
 
