@@ -55,16 +55,13 @@ def test_the_export_keeps_the_agent_system_and_leaves_out_video_runtime_data_and
         assert left_out not in exported, left_out
 
 
-def test_the_skill_data_ships_empty_but_keeps_its_schema_version(tmp_path):
+def test_the_category_taxonomy_ships_empty_and_the_runtime_skill_state_is_not_exported(tmp_path):
     source = _git_tree(tmp_path / "video", SOURCE)
     target = tmp_path / "abs"
     ex.export(source, target)
-    catalog = json.loads((target / "SYSTEM/skills/catalog.json").read_text(encoding="utf-8"))
-    installed = json.loads((target / "SYSTEM/skills/installed_skills.json").read_text(encoding="utf-8"))
     categories = json.loads((target / "SYSTEM/skills/categories.json").read_text(encoding="utf-8"))
-    assert catalog["skills"] == {} and installed["installed_skills"] == {} and installed["total_installed"] == 0
-    assert categories["categories"] == [] and categories["total_categories"] == 0
-    assert catalog["version"] == installed["version"] == categories["version"] == "2.0.0"
+    assert categories["categories"] == [] and categories["total_categories"] == 0 and categories["version"] == "2.0.0"
+    assert not (target / "SYSTEM/skills/catalog.json").exists() and not (target / "SYSTEM/skills/installed_skills.json").exists()
 
 
 def test_the_video_alias_in_exported_tests_is_rewritten_to_the_canonical_imports(tmp_path):
@@ -99,4 +96,5 @@ def test_the_manifest_records_what_was_exported(tmp_path):
     summary = ex.export(source, target)
     manifest = json.loads((target / "EXPORT_MANIFEST.json").read_text(encoding="utf-8"))
     assert manifest["files"] == sorted(manifest["files"]) and len(manifest["files"]) == summary["files"]
-    assert "SYSTEM/skills/catalog.json" in manifest["files"] and "SYSTEM/core/pipeline_state.py" not in manifest["files"]
+    assert "SYSTEM/skills/categories.json" in manifest["files"] and "SYSTEM/core/pipeline_state.py" not in manifest["files"]
+    assert "SYSTEM/skills/catalog.json" not in manifest["files"]
