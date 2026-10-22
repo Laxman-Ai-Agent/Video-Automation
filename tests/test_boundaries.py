@@ -72,6 +72,16 @@ def test_the_video_alias_is_forbidden_in_both_modes(tmp_path):
     assert cb.check(root, standalone=True) == ["SYSTEM/core/a.py: imports ['backend']"]
 
 
+def test_in_a_git_repository_only_what_a_commit_would_contain_is_checked(tmp_path):
+    import subprocess
+    root = _tree(tmp_path, {".gitignore": "projects/\n", "SYSTEM/core/ok.py": "import json\n",
+                            "projects/p/log.jsonl": "{}\n", "docs/clip.mp4": b"\x00"})
+    subprocess.run(["git", "init", "-q"], cwd=root, check=True)
+    problems = "\n".join(cb.check(root, standalone=True))
+    assert "docs/clip.mp4: media file" in problems          # not ignored: a commit would contain it
+    assert "projects" not in problems                       # ignored runtime data can never be committed
+
+
 def test_a_clean_standalone_tree_passes(tmp_path):
     root = _tree(tmp_path, {"SYSTEM/core/ok.py": "import json\nfrom SYSTEM.core import integrations\n", "README.md": "# Agent System\n"})
     assert cb.check(root, standalone=True) == []

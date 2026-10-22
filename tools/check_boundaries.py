@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import os
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,6 +20,11 @@ SKIP_DIRS = {".git", ".venv", "node_modules", "__pycache__", "dist", ".pytest_ca
 
 
 def tracked_files(root: Path) -> list[str]:
+    """What a commit would contain: the files git tracks plus untracked files that are not ignored (git-ignored runtime data can never be committed).
+    Outside a git repository: every file, minus dependency and cache folders."""
+    git = subprocess.run(["git", "ls-files", "--cached", "--others", "--exclude-standard"], cwd=root, capture_output=True, text=True)
+    if git.returncode == 0 and git.stdout.strip():
+        return sorted(f for f in git.stdout.splitlines() if f and (root / f).is_file())
     out = []
     for folder, dirs, names in os.walk(root):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
