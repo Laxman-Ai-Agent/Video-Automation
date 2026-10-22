@@ -83,33 +83,36 @@ class ContractValidator:
                 )
             )
 
-        # 2. Pipeline State Lifecycle Legal Transitions
-        try:
-            from SYSTEM.core.pipeline_state import LEGAL_TRANSITIONS as PIPELINE_TRANSITIONS
-            # Verify basic state machine completeness
-            for state in ["pending", "running", "completed", "failed", "blocked"]:
-                if state not in PIPELINE_TRANSITIONS:
-                    findings.append(
-                        ArchitectureFinding(
-                            category=FindingCategory.CONTRACT,
-                            severity=FindingSeverity.BLOCKING_ERROR,
-                            component="pipeline_state.LEGAL_TRANSITIONS",
-                            message=f"State machine missing legal transitions for stage state '{state}'.",
-                            evidence=f"state='{state}'",
-                            remediation=f"Define allowed transitions from '{state}' in pipeline_state.LEGAL_TRANSITIONS.",
+        # 2. Pipeline State Lifecycle Legal Transitions (only when a connected domain project keeps a stage state machine)
+        from SYSTEM.core import integrations
+        domain_state = integrations.get("pipeline_state")
+        if domain_state is not None:
+            try:
+                PIPELINE_TRANSITIONS = domain_state.LEGAL_TRANSITIONS
+                # Verify basic state machine completeness
+                for state in ["pending", "running", "completed", "failed", "blocked"]:
+                    if state not in PIPELINE_TRANSITIONS:
+                        findings.append(
+                            ArchitectureFinding(
+                                category=FindingCategory.CONTRACT,
+                                severity=FindingSeverity.BLOCKING_ERROR,
+                                component="pipeline_state.LEGAL_TRANSITIONS",
+                                message=f"State machine missing legal transitions for stage state '{state}'.",
+                                evidence=f"state='{state}'",
+                                remediation=f"Define allowed transitions from '{state}' in pipeline_state.LEGAL_TRANSITIONS.",
+                            )
                         )
+            except Exception as e:
+                findings.append(
+                    ArchitectureFinding(
+                        category=FindingCategory.CONTRACT,
+                        severity=FindingSeverity.BLOCKING_ERROR,
+                        component="SYSTEM.core.pipeline_state",
+                        message=f"Failed to inspect pipeline state transitions: {e}",
+                        evidence=str(e),
+                        remediation="Verify SYSTEM/core/pipeline_state.py defines LEGAL_TRANSITIONS.",
                     )
-        except Exception as e:
-            findings.append(
-                ArchitectureFinding(
-                    category=FindingCategory.CONTRACT,
-                    severity=FindingSeverity.BLOCKING_ERROR,
-                    component="SYSTEM.core.pipeline_state",
-                    message=f"Failed to inspect pipeline state transitions: {e}",
-                    evidence=str(e),
-                    remediation="Verify SYSTEM/core/pipeline_state.py defines LEGAL_TRANSITIONS.",
                 )
-            )
 
         # 3. Skill Lifecycle Legal Transitions
         try:

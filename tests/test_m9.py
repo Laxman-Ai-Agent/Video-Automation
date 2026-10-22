@@ -408,7 +408,7 @@ def third_party_imports() -> set[str]:
                     found |= {a.name.split(".")[0] for a in node.names}
                 elif isinstance(node, ast.ImportFrom) and node.level == 0 and node.module:
                     found.add(node.module.split(".")[0])
-    local = {"backend", "tests", "UI", "VIDEO_ENGINE", "SYSTEM", "scripts", "conftest", "config", "llm_client"} | {f.stem for f in (ROOT / "tests").glob("*.py")}     # this repository's own packages and test modules
+    local = {"backend", "tests", "UI", "VIDEO_ENGINE", "SYSTEM", "scripts", "conftest", "config", "llm_client"} | {f.stem for f in (ROOT / "tests").glob("*.py")} | {f.stem for f in (ROOT / "tools").glob("*.py")}     # this repository's own packages, test modules and tools
     return {m for m in found if m not in sys.stdlib_module_names and m not in local}
 
 

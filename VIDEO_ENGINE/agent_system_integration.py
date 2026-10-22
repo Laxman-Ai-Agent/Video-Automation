@@ -34,7 +34,25 @@ def _agent_entries():
     return video_agent_entries()
 
 
+def _pipeline_state():
+    from SYSTEM.core import pipeline_state
+    return pipeline_state
+
+
+def _stage_gate():
+    from SYSTEM.policies import llm_review
+    return llm_review
+
+
+def _pipeline_validator():
+    from SYSTEM.agents.architecture_validator.validators.video_pipeline_validator import VideoPipelineValidator
+    return VideoPipelineValidator
+
+
 def register() -> None:
+    integrations.register("pipeline_state", factory=_pipeline_state)
+    integrations.register("stage_gate", factory=_stage_gate)
+    integrations.register("pipeline_validator", factory=_pipeline_validator)
     integrations.register("agent_entries", factory=_agent_entries)
     integrations.register("stage_dependencies", factory=_stage_dependencies)
     integrations.register("pipeline_orchestrator", factory=_pipeline_orchestrator)

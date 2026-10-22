@@ -21,7 +21,6 @@ from .validators import (
     ContractValidator,
     DependencyGraphValidator,
     SecurityBoundaryValidator,
-    VideoPipelineValidator,
 )
 
 __all__ = [
@@ -36,5 +35,14 @@ __all__ = [
     "ContractValidator",
     "DependencyGraphValidator",
     "SecurityBoundaryValidator",
-    "VideoPipelineValidator",
 ]
+
+
+def __getattr__(name: str):
+    """VideoPipelineValidator belongs to the video project: it is available here only while that project is connected."""
+    if name == "VideoPipelineValidator":
+        from SYSTEM.core import integrations
+        cls = integrations.get("pipeline_validator")
+        if cls is not None:
+            return cls
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")

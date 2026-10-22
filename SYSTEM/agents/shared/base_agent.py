@@ -519,8 +519,9 @@ class BaseAgent(abc.ABC):
             return result
 
         try:
-            from SYSTEM.policies import llm_review
-            if sid not in llm_review.STAGE_DESCRIPTIONS:
+            from SYSTEM.core import integrations
+            llm_review = integrations.get("stage_gate")     # the connected domain project's mandatory per-stage LLM review (the video pipeline's); an agent without one has no stage gate
+            if llm_review is None or sid not in llm_review.STAGE_DESCRIPTIONS:
                 return result
 
             if result.status != "succeeded":
@@ -573,9 +574,11 @@ class BaseAgent(abc.ABC):
             aspect = params["aspect"]
 
         use_pipeline_state = False
+        pipeline_state = None
         try:
-            from SYSTEM.core import pipeline_state
-            if sid in pipeline_state.ACTIVE_STAGES and (project_dir / "pipeline_state.json").exists() and not params.get("skip_pipeline_state"):
+            from SYSTEM.core import integrations
+            pipeline_state = integrations.get("pipeline_state")     # the domain project's stage state machine; none connected means no stage bookkeeping
+            if pipeline_state is not None and sid in pipeline_state.ACTIVE_STAGES and (project_dir / "pipeline_state.json").exists() and not params.get("skip_pipeline_state"):
                 use_pipeline_state = True
                 pipeline_state.transition_stage(project_dir, sid, "running", aspect=aspect)
         except Exception:

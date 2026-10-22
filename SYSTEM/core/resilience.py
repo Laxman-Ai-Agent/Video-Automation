@@ -508,7 +508,10 @@ def reconcile_interrupted_run(
     Safely moves interrupted running stages to 'failed' with diagnostic evidence,
     while preserving approved gates and reusable completed checkpoints.
     """
-    from SYSTEM.core import pipeline_state
+    from SYSTEM.core import integrations
+    pipeline_state = integrations.get("pipeline_state")
+    if pipeline_state is None:          # no domain project keeps stage state here, so no stage can have been interrupted
+        return {"project_id": project_id, "reconciled_stages": [], "can_resume": False, "earliest_invalid_stage": None, "reusable_count": 0}
 
     reconciled_stages: list[str] = []
     state = pipeline_state.load_pipeline_state(pdir)

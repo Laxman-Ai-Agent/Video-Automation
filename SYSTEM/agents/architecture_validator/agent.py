@@ -31,9 +31,9 @@ from SYSTEM.agents.architecture_validator.validators import (
     ContractValidator,
     DependencyGraphValidator,
     SecurityBoundaryValidator,
-    VideoPipelineValidator,
 )
 from SYSTEM.agents.shared.base_agent import BaseAgent
+from SYSTEM.core import integrations
 from SYSTEM.agents.shared.contracts import (
     AgentCategory,
     AgentMetadata,
@@ -54,6 +54,13 @@ SUPPORTED_ACTIONS: set[str] = {
     "security_boundary_audit",
     "targeted_audit",
 }
+
+
+class _NoPipelineValidator:
+    """No domain project is connected: it has no pipeline, so there is nothing to validate."""
+
+    def validate(self, *args, **kwargs) -> list:
+        return []
 
 
 class ArchitectureValidatorAgent(BaseAgent):
@@ -90,9 +97,15 @@ class ArchitectureValidatorAgent(BaseAgent):
         self.agent_validator = AgentRegistryValidator()
         self.capability_validator = CapabilityRegistryValidator()
         self.dependency_validator = DependencyGraphValidator()
-        self.pipeline_validator = VideoPipelineValidator()
         self.contract_validator = ContractValidator()
         self.security_validator = SecurityBoundaryValidator()
+
+    @property
+    def pipeline_validator(self):
+        """The connected domain project's pipeline validator (the video project's), looked up on use so a project that connects later is honoured;
+        with none connected there is no pipeline to validate."""
+        validator_cls = integrations.get("pipeline_validator")
+        return validator_cls() if validator_cls is not None else _NoPipelineValidator()
 
     def validate(self, project_dir: Path, request: AgentRequest) -> list[str]:
         """Validates that the incoming request specifies a supported audit action."""
