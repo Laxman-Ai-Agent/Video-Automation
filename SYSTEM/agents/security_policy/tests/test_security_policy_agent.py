@@ -79,7 +79,7 @@ class TestAgentPermissionsAndAntiSpoofing:
     def test_registered_agent_allowed_for_safe_action(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="file_read",
             resource="README.md",
         )
@@ -101,7 +101,7 @@ class TestAgentPermissionsAndAntiSpoofing:
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         # Caller claims elevated 'system_admin' role without an Approval
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="update_config",
             role="system_admin",
             approval_request_id=None,
@@ -115,7 +115,7 @@ class TestAgentPermissionsAndAntiSpoofing:
     def test_unrecognized_role_rejected(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="update_config",
             role="super_supreme_overlord",
         )
@@ -165,7 +165,7 @@ class TestFileBoundariesAndFrozenFiles:
     def test_access_to_protected_secret_denied_without_auth(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="file_read",
             resource="config/.env",
         )
@@ -178,7 +178,7 @@ class TestFileBoundariesAndFrozenFiles:
     def test_path_traversal_outside_project_denied(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="file_read",
             resource="../../windows/system32/cmd.exe",
         )
@@ -194,7 +194,7 @@ class TestToolPermissions:
     def test_tool_not_in_registry_blocked(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="invoke_tool",
             resource="unknown_thirdparty_miner",
             parameters={"tool_id": "unknown_thirdparty_miner"},
@@ -205,10 +205,10 @@ class TestToolPermissions:
 
     def test_tool_not_in_agent_allowlist_denied(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
-        # audio_input allowed tools: ffmpeg, ffprobe, store
+        # capability_finder allowed tools: agent_registry, skill_registry, tool_registry
         # trying to invoke llm_gateway
         req = SecurityRequest(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="invoke_tool",
             resource="llm_gateway",
             parameters={"tool_id": "llm_gateway"},
@@ -263,7 +263,7 @@ class TestSkillSecurityAndApprovals:
     def test_nonexistent_approval_request_denied(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         req = SecurityRequest(
-            agent_id="render_video",
+            agent_id="capability_finder",
             operation="render_video",
             approval_request_id="appr_non_existent_12345",
         )
@@ -294,7 +294,7 @@ class TestEnforcementBoundary:
         executed = False
 
         @enforcer.guard(
-            agent_id="audio_input",
+            agent_id="capability_finder",
             operation="file_write",
             resource="VIDEO_ENGINE/stages/transcribe.py",
         )

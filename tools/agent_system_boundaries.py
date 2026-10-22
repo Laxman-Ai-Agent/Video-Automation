@@ -23,6 +23,7 @@ VIDEO_OWNED = (
     "SYSTEM/skills/visual_planning/*",
     "SYSTEM/skills/media/*",
     "SYSTEM/skills/graphics/*",
+    "SYSTEM/skills/video_seed_skills.py",             # the 21 seed skills the skill registry takes from the video project
     "SYSTEM/skills/library/*",                        # installed skill packs (Remotion charts, layouts, ...) and their version archive and staging
     "SYSTEM/skills/archive/*",
     "SYSTEM/skills/staging/*",
@@ -34,6 +35,7 @@ VIDEO_OWNED = (
     "SYSTEM/observability/evaluation.py",             # evaluation suites over the video stages
     "SYSTEM/agents/architecture_validator/validators/video_pipeline_validator.py",
     "SYSTEM/agents/architecture_validator/tests/test_video_pipeline_validator.py",
+    "SYSTEM/agents/skill_factory/tests/test_video_skill_benchmarks.py",
 )
 
 # Top-level modules the Agent System must never import: the video project and the libraries only it needs.

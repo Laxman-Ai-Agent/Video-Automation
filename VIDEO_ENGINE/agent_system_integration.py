@@ -34,6 +34,11 @@ def _agent_entries():
     return video_agent_entries()
 
 
+def _skill_seeds():
+    from SYSTEM.skills.video_seed_skills import video_seed_skills
+    return video_seed_skills()
+
+
 def _pipeline_state():
     from SYSTEM.core import pipeline_state
     return pipeline_state
@@ -50,6 +55,7 @@ def _pipeline_validator():
 
 
 def register() -> None:
+    integrations.register("skill_seeds", factory=_skill_seeds)
     integrations.register("pipeline_state", factory=_pipeline_state)
     integrations.register("stage_gate", factory=_stage_gate)
     integrations.register("pipeline_validator", factory=_pipeline_validator)

@@ -6,7 +6,8 @@ The Agent System's files are copied unchanged from the files git tracks here (no
 (tools/agent_system_boundaries.py) and minus accumulated runtime data. Exceptions, all listed here and nowhere else:
   - SEEDS: the skill catalog, installed-skills list and category taxonomy ship empty (the packs in them are video skill packs).
   - TESTS: the few tests under tests/ that exercise the Agent System, with TEST_REWRITES for the video project's `backend` alias.
-Files that exist only in the standalone repository (README, requirements, UI, docs, hooks) are never touched. Nothing is ever deleted.
+Files that exist only in the standalone repository (README, requirements, UI, docs, hooks) are never touched. The only files removed are
+ones a previous export wrote (listed in its EXPORT_MANIFEST.json) that this export no longer selects.
 """
 from __future__ import annotations
 
@@ -38,7 +39,7 @@ SEEDS = {
     "SYSTEM/skills/categories.json": {"total_categories": 0, "categories": []},
 }
 
-TOOLS = ("tools/agent_system_boundaries.py", "tools/check_boundaries.py", "tools/export_agent_system.py")
+TOOLS = ("tools/agent_system_boundaries.py", "tools/check_boundaries.py")       # the export tool itself stays with the video project
 TESTS = ("tests/test_integrations.py", "tests/test_boundaries.py", "tests/test_llm_client.py")
 TEST_REWRITES = (
     (r"from backend\.main import app", "from UI.backend.main import app"),
@@ -82,8 +83,16 @@ def export(root: Path, target: Path) -> dict:
         (target / rel).write_text(json.dumps({"version": version, **seed}, indent=2) + "\n", encoding="utf-8")
     commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=root, capture_output=True, text=True).stdout.strip()
     manifest = {"source_commit": commit, "files": sorted(files + list(SEEDS))}
-    (target / "EXPORT_MANIFEST.json").write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
-    return {"files": len(manifest["files"]), "source_commit": commit}
+    manifest_file = target / "EXPORT_MANIFEST.json"
+    pruned = []
+    if manifest_file.exists():
+        for rel in set(json.loads(manifest_file.read_text(encoding="utf-8")).get("files", [])) - set(manifest["files"]):
+            stale = target / rel
+            if stale.is_file():
+                stale.unlink()
+                pruned.append(rel)
+    manifest_file.write_text(json.dumps(manifest, indent=1) + "\n", encoding="utf-8")
+    return {"files": len(manifest["files"]), "source_commit": commit, "pruned": sorted(pruned)}
 
 
 def main() -> int:
@@ -92,6 +101,8 @@ def main() -> int:
     args = parser.parse_args()
     summary = export(ROOT, Path(args.target).resolve())
     print(f"exported {summary['files']} files from {summary['source_commit'][:7]} to {args.target}")
+    for rel in summary["pruned"]:
+        print(f"  removed (no longer exported): {rel}")
     return 0
 
 

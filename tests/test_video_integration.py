@@ -1,7 +1,8 @@
 """The video project's side of the Agent System interface: importing VIDEO_ENGINE connects it, and its 15 agents then join a registry that on its own holds only the Agent System's 7."""
 from SYSTEM.core import integrations
 
-CAPABILITIES = {"agent_entries", "stage_dependencies", "pipeline_orchestrator", "system_capabilities", "jobs"}
+CAPABILITIES = {"agent_entries", "skill_seeds", "stage_dependencies", "pipeline_orchestrator", "system_capabilities", "jobs",
+                "pipeline_state", "stage_gate", "pipeline_validator"}
 
 
 def _empty_registry(monkeypatch):
@@ -38,6 +39,36 @@ def test_the_registry_holds_the_video_agents_only_because_the_video_project_is_c
     alone = AgentRegistry()
     assert alone.list_video_agents() == [] and len(alone.list_system_agents()) == 7
     assert {m.agent_id for m in alone.list_all_agents()} >= {"main_architecture_agent", "skill_factory", "capability_finder"}
+
+
+def _private_skill_catalog(monkeypatch, tmp_path):
+    from SYSTEM.registries import skill_registry
+    monkeypatch.setattr(skill_registry, "SKILLS_DIR", tmp_path / "skills")
+    monkeypatch.setattr(skill_registry, "STAGING_DIR", tmp_path / "staging")
+    monkeypatch.setattr(skill_registry, "CATALOG_FILE", tmp_path / "catalog.json")
+    return skill_registry
+
+
+def test_the_skill_registry_holds_the_video_seed_skills_only_because_the_video_project_is_connected(monkeypatch, tmp_path):
+    import VIDEO_ENGINE  # noqa: F401
+    skill_registry = _private_skill_catalog(monkeypatch, tmp_path)
+    assert len(skill_registry.SkillRegistry().list_skills()) == 21
+
+    (tmp_path / "catalog.json").unlink()
+    _empty_registry(monkeypatch)
+    assert skill_registry.SkillRegistry().list_skills() == []
+
+
+def test_a_project_that_connects_later_adds_its_seed_skills_to_an_existing_registry(monkeypatch, tmp_path):
+    import VIDEO_ENGINE  # noqa: F401
+    from SYSTEM.skills.video_seed_skills import video_seed_skills
+    skill_registry = _private_skill_catalog(monkeypatch, tmp_path)
+    _empty_registry(monkeypatch)
+    registry = skill_registry.SkillRegistry()
+    assert registry.list_skills() == []
+
+    integrations.register("skill_seeds", video_seed_skills())
+    assert len(registry.list_skills()) == 21
 
 
 def test_a_project_that_connects_later_adds_its_agents_to_an_existing_registry(monkeypatch):
