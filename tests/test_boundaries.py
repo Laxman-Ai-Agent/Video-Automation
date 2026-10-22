@@ -59,6 +59,19 @@ def test_the_standalone_check_flags_media_video_code_video_folders_and_big_files
     assert "ok.py" not in problems
 
 
+def test_ui_is_forbidden_in_the_video_checkout_but_is_the_agent_systems_own_in_the_standalone_repo(tmp_path):
+    root = _tree(tmp_path, {"SYSTEM/core/a.py": "from UI.backend import main\n", "UI/backend/main.py": "x = 1\n"})
+    assert cb.check(root, standalone=False) == ["SYSTEM/core/a.py: imports ['UI']"]
+    assert cb.check(root, standalone=True) == []
+    assert rules.import_violations(root, rules.python_files(root, ("SYSTEM",)), standalone=True) == []
+
+
+def test_the_video_alias_is_forbidden_in_both_modes(tmp_path):
+    root = _tree(tmp_path, {"SYSTEM/core/a.py": "from backend import config\n"})
+    assert cb.check(root, standalone=False) == ["SYSTEM/core/a.py: imports ['backend']"]
+    assert cb.check(root, standalone=True) == ["SYSTEM/core/a.py: imports ['backend']"]
+
+
 def test_a_clean_standalone_tree_passes(tmp_path):
     root = _tree(tmp_path, {"SYSTEM/core/ok.py": "import json\nfrom SYSTEM.core import integrations\n", "README.md": "# Agent System\n"})
     assert cb.check(root, standalone=True) == []

@@ -88,16 +88,22 @@ def imports_of(root: Path, rel: str) -> set[str]:
     return found
 
 
-def import_violations(root: Path, files: list[str]) -> list[str]:
+def forbidden_imports(standalone: bool) -> frozenset[str]:
+    """In the video checkout `UI` is the video product's UI; in the standalone repository it is the Agent System's own."""
+    return FORBIDDEN_IMPORTS - {"UI"} if standalone else FORBIDDEN_IMPORTS
+
+
+def import_violations(root: Path, files: list[str], standalone: bool = False) -> list[str]:
     """Agent System files (not video-owned) that import video-owned modules, the video project or a video-only library."""
     video_modules = {module_name(f) for f in files if is_video_owned(f)}
+    forbidden = forbidden_imports(standalone)
     problems = []
     for rel in files:
         if is_video_owned(rel):
             continue
         bad = set()
         for name in imports_of(root, rel):
-            if name.split(".")[0] in FORBIDDEN_IMPORTS:
+            if name.split(".")[0] in forbidden:
                 bad.add(name.split(".")[0])
             elif any(name == m or name.startswith(m + ".") for m in video_modules):
                 bad.add(name)

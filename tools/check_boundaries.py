@@ -28,7 +28,7 @@ def tracked_files(root: Path) -> list[str]:
 
 def check(root: Path, standalone: bool) -> list[str]:
     folders = ("SYSTEM", "UI", "tools", "tests") if standalone else ("SYSTEM",)
-    problems = rules.import_violations(root, rules.python_files(root, folders))
+    problems = rules.import_violations(root, rules.python_files(root, folders), standalone)
     if standalone:
         for rel in tracked_files(root):
             path = root / rel
