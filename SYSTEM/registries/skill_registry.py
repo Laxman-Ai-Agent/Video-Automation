@@ -230,9 +230,12 @@ class SkillRegistry:
                 except Exception:
                     pass
 
-            # Ensure canonical seed skills exist
+            # Ensure canonical seed skills exist. The catalog is rewritten (new updated_at) only when something changed or it does not exist yet:
+            # starting the system must not dirty a catalog that is tracked in git.
+            known = set(self._skills)
             self._ensure_seed_skills()
-            self._save()
+            if set(self._skills) != known or not CATALOG_FILE.exists():
+                self._save()
             self._initialized = True
 
     def _sync_seed_provider(self) -> None:

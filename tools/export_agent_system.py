@@ -4,8 +4,7 @@
 
 The Agent System's files are copied unchanged from the files git tracks here (no patching), minus what the video project owns
 (tools/agent_system_boundaries.py) and minus accumulated runtime data. Exceptions, all listed here and nowhere else:
-  - SEEDS: the skill category taxonomy ships empty (its categories are video skill categories). The skill catalog and installed-skills list are
-    runtime state the registry creates itself, so they are not exported at all.
+  - SEEDS: the skill catalog, installed-skills list and category taxonomy ship empty (the packs and categories in them are video skills).
   - TESTS: the few tests under tests/ that exercise the Agent System, with TEST_REWRITES for the video project's `backend` alias.
 Files that exist only in the standalone repository (README, requirements, UI, docs, hooks) are never touched. The only files removed are
 ones a previous export wrote (listed in its EXPORT_MANIFEST.json) that this export no longer selects.
@@ -32,12 +31,14 @@ RUNTIME_DATA = (
     "SYSTEM/agents/*/memory/*.jsonl",
     "SYSTEM/agents/*/history/experiences.jsonl",
     "SYSTEM/config/*",
-    "SYSTEM/skills/catalog.json",               # the skill registry (re)creates and rewrites these on every run: runtime state, never tracked
-    "SYSTEM/skills/installed_skills.json",
 )
 
+# The skill catalog must exist: the skill registry picks its folder by checking for SYSTEM/skills/catalog.json. All three ship empty
+# (the entries and categories in the video project's copies are video skills).
 SEEDS = {
-    "SYSTEM/skills/categories.json": {"total_categories": 0, "categories": []},     # the static taxonomy ships empty: its categories are video skill categories
+    "SYSTEM/skills/catalog.json": {"updated_at": "", "skills": {}},
+    "SYSTEM/skills/installed_skills.json": {"updated_at": "", "total_installed": 0, "installed_skills": {}},
+    "SYSTEM/skills/categories.json": {"total_categories": 0, "categories": []},
 }
 
 TOOLS = ("tools/agent_system_boundaries.py", "tools/check_boundaries.py")       # the export tool itself stays with the video project

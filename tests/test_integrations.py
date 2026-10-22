@@ -16,6 +16,20 @@ def clean_registry(monkeypatch):
     monkeypatch.setattr(integrations, "_configured_loaded", False)
 
 
+def test_starting_the_skill_registry_creates_the_catalog_once_and_never_rewrites_an_unchanged_one(tmp_path, monkeypatch):
+    from SYSTEM.registries import skill_registry
+    skills = tmp_path / "skills"
+    monkeypatch.setattr(skill_registry, "SKILLS_DIR", skills)
+    monkeypatch.setattr(skill_registry, "STAGING_DIR", skills / "staging")
+    monkeypatch.setattr(skill_registry, "CATALOG_FILE", skills / "catalog.json")
+    skill_registry.SkillRegistry().initialize()
+    assert (skills / "catalog.json").is_file()
+    first = (skills / "catalog.json").read_bytes()
+    skill_registry.SkillRegistry().initialize()
+    skill_registry.SkillRegistry().list_skills()
+    assert (skills / "catalog.json").read_bytes() == first          # no new updated_at: a tracked catalog stays clean
+
+
 def test_a_missing_capability_is_none_or_the_default():
     assert integrations.get("jobs") is None
     assert integrations.get("jobs", "fallback") == "fallback"
