@@ -40,7 +40,7 @@ SEEDS = {
 }
 
 TOOLS = ("tools/agent_system_boundaries.py", "tools/check_boundaries.py")       # the export tool itself stays with the video project
-TESTS = ("tests/test_integrations.py", "tests/test_boundaries.py", "tests/test_llm_client.py")
+TESTS = ("tests/test_integrations.py", "tests/test_boundaries.py", "tests/test_llm_client.py", "tests/test_env_file.py")
 TEST_REWRITES = (
     (r"from backend\.main import app", "from UI.backend.main import app"),
     (r"from backend import llm_client", "from SYSTEM.core import llm_client"),
