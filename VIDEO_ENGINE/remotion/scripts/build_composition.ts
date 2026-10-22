@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { PATTERNS, buildScene, type PP } from "../src/patterns";
 import { paceFor, richenScene } from "../src/motion/integrate";
 import type { Choice } from "../src/motion/select";
-import { breakLines, estWidth, fitSize } from "../src/motion/core";
+import { breakLines, estWidth, fitSize, textRoom } from "../src/motion/core";
 import { layoutPhrase } from "../src/motion/phrase";
 import { kitByName, kitLook } from "../src/styleKit";
 import { planDiagram, type DEl, type DRel, type DiagramOut } from "../src/motion/diagram";
@@ -68,7 +68,7 @@ const lay = layoutFor(W, H);
 const pct = (s: string, of: number) => (s.endsWith("%") ? (parseFloat(s) / 100) * of : parseFloat(s));
 function drawnBox(t: any): number[] {
   const head = t.style === "headline" || t.style === "quote";
-  const boxW = W * (1 - 2 * SAFE) * (head || lay.portrait ? 1 : 0.7);
+  const boxW = textRoom(W * (1 - 2 * SAFE) * (head || lay.portrait ? 1 : 0.7), W, SAFE, Array.isArray(t.pos) ? t.pos : undefined, t.center);      // the same width as MotionTextLayer (motion/text.tsx)
   const weight = t.style === "headline" ? 800 : 600;
   let w: number, h: number;
   if (Array.isArray(t.runs)) {                                   // a phrase: the words have their own sizes, so the box is measured with the same layout the renderer uses

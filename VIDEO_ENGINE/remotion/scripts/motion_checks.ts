@@ -430,6 +430,20 @@ import { DOME_GAP, DOME_RATIOS, domeBodies, domeCount, domeLayout, domeWindows, 
   check("kit_light_look_has_no_vignette_graphic", (() => { const light = { ...kit, looks: kit.looks.filter((l) => l.id === "paper") }; for (let s = 0; s < 40; s++) { const r = richenScene(hero, { tall: false, seed: `v${s}`, importance: 0.8, mood: "dramatic", kit: kitLook(light, 0, `v${s}`) }); const ms = (r.scene.layers as unknown as { type: string; items?: { preset: string }[] }[]).find((l) => l.type === "motion_scene"); if (ms?.items?.some((i) => i.preset === "vignette-focus")) return false; } return true; })());
 }
 
+// A positioned text only has the room from its position to the safe margin: it wraps or shrinks there instead of leaving the frame (the quote_type scene of a 9:16 video drew "A new chapter" out to 99.8% of the width)
+import { SAFE, layoutFor } from "../src/theme";
+import { fitSize, textRoom } from "../src/motion/core";
+check("text_room_is_unchanged_without_a_position", textRoom(900, 1080, SAFE) === 900);
+check("text_room_of_a_positioned_text_ends_at_the_safe_margin", Math.abs(140 + textRoom(1e6, 1080, SAFE, [140, 640]) - 1080 * (1 - SAFE)) < 1e-6);
+check("text_room_of_a_centered_text_is_symmetric_about_its_middle", Math.abs(textRoom(1e6, 1080, SAFE, [540, 640], true) - 1080 * (1 - 2 * SAFE)) < 1e-6 && textRoom(1e6, 1080, SAFE, [300, 640], true) < textRoom(1e6, 1080, SAFE, [540, 640], true));
+check("text_room_keeps_a_usable_width_for_a_position_outside_the_margin", textRoom(1e6, 1080, SAFE, [1070, 0]) === 1080 * 0.2);
+check("a_headline_at_the_quote_position_stays_inside_the_safe_margin", [["A new chapter", 1080, 1920, [140, 640]], ["Beyond simple automation", 1080, 1920, [140, 640]], ["A new chapter", 1920, 1080, [170, 360]]].every(([text, w, h, pos]) => {
+  const lay = layoutFor(w as number, h as number), p = pos as [number, number];
+  const room = textRoom((w as number) * (1 - 2 * SAFE), w as number, SAFE, p);
+  const size = fitSize(text as string, lay.type.display, 800, room, 3);
+  return p[0] + Math.max(...breakLines(text as string, size, 800, room).map((l) => estWidth(l.join(" "), size, 800))) <= (w as number) * (1 - SAFE) + 1e-6;
+}));
+
 // ===== SECTIONS-APPEND-HERE =====
 
 const failed = Object.entries(checks).filter(([, v]) => !v).map(([k]) => k);

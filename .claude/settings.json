@@ -6,12 +6,13 @@
       "Bash(pip:*)", "Bash(python:*)", "Bash(pytest:*)", "Bash(uvicorn:*)",
       "Bash(ffmpeg:*)", "Bash(ffprobe:*)",
       "Bash(git status:*)", "Bash(git add:*)", "Bash(git commit:*)", "Bash(git diff:*)", "Bash(git log:*)",
+      "Bash(git push -u origin main)",
       "Bash(mkdir:*)", "Bash(ls:*)", "Bash(dir:*)", "Bash(cat:*)", "Bash(head:*)", "Bash(tail:*)", "Bash(cp:*)", "Bash(copy:*)"
     ],
     "deny": [
       "Read(./.env)",
       "Bash(rm:*)", "Bash(del:*)", "Bash(rmdir:*)", "Bash(Remove-Item:*)",
-      "Bash(git push:*)", "Bash(git reset:*)", "Bash(git clean:*)"
+      "Bash(git reset:*)", "Bash(git clean:*)"
     ]
   }
 }

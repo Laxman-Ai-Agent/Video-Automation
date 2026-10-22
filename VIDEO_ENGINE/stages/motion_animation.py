@@ -125,8 +125,10 @@ _TSC_SCENE_ERROR = re.compile(r"^src[/\\]generated[/\\]scene_([\w-]+)\.tsx\((\d+
 
 
 def run_tsc(remotion_dir: Path) -> tuple[bool, str]:
-    """The project's own type check (`npm run tsc` in the Remotion folder): (passed, its output)."""
-    r = subprocess.run("npm run tsc", cwd=remotion_dir, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
+    """The project's own type check (`npm run tsc` in the Remotion folder): (passed, its output). The output format is pinned (plain, no colour) whatever the caller's environment
+    (FORCE_COLOR makes tsc print a coloured `file:line:col - error` layout that `tsc_errors_by_scene` cannot read, so no compile error would ever reach the repair loop)."""
+    env = {**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1"}
+    r = subprocess.run("npm run tsc -- --pretty false", cwd=remotion_dir, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, env=env)
     return r.returncode == 0, (r.stdout or "") + (r.stderr or "")
 
 
@@ -147,13 +149,14 @@ def tsc_errors_by_scene(output: str) -> dict[str, list[str]]:
 
 
 def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[str]) -> str | None:
-    """Ask the LLM to fix the compiler errors of ONE scene; the answer must still pass the security/import audit. None when the LLM is unavailable or answers unusably (the stage then fails with the errors)."""
+    """Ask the LLM to fix the errors of ONE scene (compiler errors, or a runtime error raised while a frame is drawn); the answer must still pass the security/import audit. None when the LLM is unavailable or answers unusably (the stage then fails with the errors)."""
     try:
         resp = llm_gateway.gateway.execute(llm_gateway.LlmGatewayRequest(
             project_id=pdir.name, stage_id="motion_gen", agent_id="motion_animation", purpose="repair", model_profile="code_generation",
-            system_prompt=("You fix TypeScript compiler errors in one Remotion scene component and return the COMPLETE corrected TSX only. Keep the design, text and animation; change only what the errors require "
-                           "(e.g. remove a prop the component does not have, fix a type). Approved libraries only: " + approved_libraries_hint()),
-            user_prompt=f"Scene{sid} fails the TypeScript check with these errors:\n- " + "\n- ".join(errors[:8]) + f"\n\n```tsx\n{code}\n```",
+            system_prompt=("You fix the errors of one Remotion scene component (TypeScript compiler errors, or an error thrown while a frame is drawn, e.g. `interpolate` needs a strictly increasing input range) "
+                           "and return the COMPLETE corrected TSX only. Keep the design, text and animation; change only what the errors require "
+                           "(e.g. remove a prop the component does not have, fix a type, make an input range increasing). Approved libraries only: " + approved_libraries_hint()),
+            user_prompt=f"Scene{sid} fails with these errors:\n- " + "\n- ".join(errors[:8]) + f"\n\n```tsx\n{code}\n```",
             correlation_id=f"gen-scene-{sid}-tsc-{uuid.uuid4().hex[:6]}"))
     except Exception as e:
         logger.warning(f"Scene {sid} compile repair call failed: {e}")
@@ -168,6 +171,84 @@ def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[st
 
 class AnimationCodegenError(Exception):
     """Raised when custom animation code generation or validation fails."""
+
+
+def custom_composition(pdir: Path, aspect: str, scenes: list[dict[str, Any]], palette: Any) -> dict[str, Any]:
+    """The composition of the custom-code scenes (composition.json): one `custom_scene` layer per scene, the planned transitions and the spoken words. Made before the render check
+    (which draws it) and written after it."""
+    from . import motion_generation as mg
+    sfx = "_9x16" if aspect == "9:16" else ""
+    w, h = (1080, 1920) if aspect == "9:16" else (1920, 1080)
+    audio_file = next(iter(sorted(pdir.glob("audio.*"))), None)
+    total_dur = scenes[-1].get("end", 0) if scenes else 0
+
+    mpl_scenes = {}
+    mpl_path = pdir / f"motion_planning{sfx}.json"
+    if mpl_path.exists():
+        try:
+            m = json.loads(mpl_path.read_text(encoding="utf-8"))
+            for s in m.get("scenes", []):
+                psid = s.get("plan_scene_id")
+                if psid is not None:
+                    mpl_scenes[psid] = s
+        except Exception:
+            pass
+
+    comp_scenes = []
+    for sc in scenes:
+        sid = sc.get("id")
+        sc_obj = {
+            "id": sid,
+            "start": sc.get("start", 0),
+            "end": sc.get("end", 3),
+            "pattern": "custom_motion",
+            "camera": {"move": "static", "from": 1, "to": 1, "focus": [0.5, 0.5]},
+            "layers": [
+                {
+                    "type": "custom_scene",
+                    "z": 10,
+                    "scene_id": sid,
+                    "component": f"Scene{sid}",
+                }
+            ],
+        }
+        t_out = (mpl_scenes.get(sid) or {}).get("transition_out") or sc.get("transition")
+        if t_out:
+            sc_obj["transition_out"] = t_out
+        comp_scenes.append(sc_obj)
+
+    spoken = [{"w": str(x.get("w") or x.get("word") or ""), "start": float(x["start"]), "end": float(x["end"])} for x in mg.words(pdir)
+              if isinstance(x.get("start"), (int, float)) and isinstance(x.get("end"), (int, float))]
+    return {
+        "words": spoken,
+        "meta": {
+            "fps": 30,
+            "width": w,
+            "height": h,
+            "audio": audio_file.name if audio_file else "audio.wav",
+            "duration": total_dur,
+            "subtitles": False,
+            "palette": palette,
+            "motion": "rich",
+            "motionOnly": not store.uses_images(pdir),
+            "customCode": True,
+            "reusable_motion_templates": False,
+        },
+        "scenes": comp_scenes,
+    }
+
+
+def render_errors_by_scene(pdir: Path, aspect: str, scenes: list[dict[str, Any]], palette: Any) -> dict[str, list[str]]:
+    """Runtime errors of the staged scenes, by scene id ('2': ['runtime error while the scene was drawn at frame 120: ...']): a scene that type-checks can still throw when a frame is drawn
+    (for example `interpolate` with an input range of [1, 1]); the type check cannot see that, the preview stills of Motion Validation can, too late. One still per scene, drawn by the real
+    renderer. `MOTION_RENDER_CHECK=0` turns it off (tests that have no browser); a check that cannot run fails the stage, it is never skipped silently."""
+    if os.environ.get("MOTION_RENDER_CHECK", "1") == "0":
+        return {}
+    from . import motion_validation_preview as pv
+    try:
+        return pv.smoke(pdir, aspect, custom_composition(pdir, aspect, scenes, palette))
+    except (pv.ValidationError, subprocess.TimeoutExpired) as e:
+        raise AnimationCodegenError(f"the render check of the generated scenes could not run: {e}") from e
 
 
 def names(aspect: str) -> str:
@@ -943,10 +1024,10 @@ export default customSceneRegistry;
             try:
                 ok, output = run_tsc(remotion_dir)
                 rounds = 0
-                while not ok and rounds < MAX_COMPILE_REPAIR_ROUNDS:                # type errors of a generated scene go back to the LLM (with the compiler's messages); only the failing scenes are redone
-                    failing = tsc_errors_by_scene(output)
-                    if not failing:
-                        break                                                      # errors outside the generated scenes: nothing to repair here
+                while True:                                                        # errors of a generated scene go back to the LLM (with the messages); only the failing scenes are redone
+                    failing = tsc_errors_by_scene(output) if not ok else render_errors_by_scene(pdir, aspect, scenes, palette)       # type errors first; once it compiles, the errors of drawing a frame
+                    if not failing or rounds >= MAX_COMPILE_REPAIR_ROUNDS:
+                        break                                                      # clean; or errors outside the generated scenes (nothing to repair here); or no round left
                     rounds += 1
                     for sid_s, errs in failing.items():
                         sc_man = next((m for m in scenes_manifest if str(m["scene_id"]) == sid_s), None)
@@ -962,14 +1043,16 @@ export default customSceneRegistry;
                             sc_man["generation"]["repaired"] = True
                             sc_man["generation"]["compile_repairs"] = sc_man["generation"].get("compile_repairs", 0) + 1
                     ok, output = run_tsc(remotion_dir)
-                if ok:
+                if ok and not failing:
                     compile_passed = True
                     for sc_man in scenes_manifest:
                         sc_man["compile_status"] = "passed"
                 else:
                     for sc_man in scenes_manifest:
                         sc_man["compile_status"] = "failed"
-                    raise AnimationCodegenError(f"TypeScript compilation failed for generated scenes: {output[-500:]}")
+                    if not ok:
+                        raise AnimationCodegenError(f"TypeScript compilation failed for generated scenes: {output[-500:]}")
+                    raise AnimationCodegenError("a generated scene fails when it is drawn: " + "; ".join(f"scene {sid_s}: {errs[0]}" for sid_s, errs in failing.items()))
             except subprocess.TimeoutExpired:
                 raise AnimationCodegenError("TypeScript compilation check timed out")
 
@@ -1011,66 +1094,7 @@ export default customSceneRegistry;
     }
     save_animation(pdir, aspect, manifest)
 
-    # Build composition.json referencing custom_scene layer
-    w, h = (1080, 1920) if aspect == "9:16" else (1920, 1080)
-    audio_file = next(iter(sorted(pdir.glob("audio.*"))), None)
-    total_dur = scenes[-1].get("end", 0) if scenes else 0
-
-    mpl_scenes = {}
-    mpl_path = pdir / f"motion_planning{sfx}.json"
-    if mpl_path.exists():
-        try:
-            m = json.loads(mpl_path.read_text(encoding="utf-8"))
-            for s in m.get("scenes", []):
-                psid = s.get("plan_scene_id")
-                if psid is not None:
-                    mpl_scenes[psid] = s
-        except Exception:
-            pass
-
-    comp_scenes = []
-    for sc in scenes:
-        sid = sc.get("id")
-        sc_obj = {
-            "id": sid,
-            "start": sc.get("start", 0),
-            "end": sc.get("end", 3),
-            "pattern": "custom_motion",
-            "camera": {"move": "static", "from": 1, "to": 1, "focus": [0.5, 0.5]},
-            "layers": [
-                {
-                    "type": "custom_scene",
-                    "z": 10,
-                    "scene_id": sid,
-                    "component": f"Scene{sid}",
-                }
-            ],
-        }
-        t_out = (mpl_scenes.get(sid) or {}).get("transition_out") or sc.get("transition")
-        if t_out:
-            sc_obj["transition_out"] = t_out
-        comp_scenes.append(sc_obj)
-
-    from . import motion_generation as mg
-    spoken = [{"w": str(w.get("w") or w.get("word") or ""), "start": float(w["start"]), "end": float(w["end"])} for w in mg.words(pdir)
-              if isinstance(w.get("start"), (int, float)) and isinstance(w.get("end"), (int, float))]
-    comp_data = {
-        "words": spoken,
-        "meta": {
-            "fps": 30,
-            "width": w,
-            "height": h,
-            "audio": audio_file.name if audio_file else "audio.wav",
-            "duration": total_dur,
-            "subtitles": False,
-            "palette": palette,
-            "motion": "rich",
-            "motionOnly": not store.uses_images(pdir),
-            "customCode": True,
-            "reusable_motion_templates": False,
-        },
-        "scenes": comp_scenes,
-    }
+    comp_data = custom_composition(pdir, aspect, scenes, palette)               # composition.json referencing the custom_scene layers
     comp_name = f"composition{sfx}.json"
     (pdir / comp_name).write_text(json.dumps(comp_data, indent=2, sort_keys=True, ensure_ascii=False), encoding="utf-8")
 

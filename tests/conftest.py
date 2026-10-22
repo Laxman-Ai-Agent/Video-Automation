@@ -2,9 +2,15 @@ from SYSTEM.core.backend_alias import install
 
 install()   # the same `backend` alias the API and the CLI use (SYSTEM registers it on import); kept explicit so the tests never depend on import order
 
+import os
+
 import pytest
 
 from UI.backend import autoplan
+
+# Motion Generation draws one still per scene in a browser after the type check (motion_animation.render_errors_by_scene). Off in the suite, for the module-scoped fixtures too (a function-scoped
+# fixture would come too late for them); the tests that cover the check turn it on with monkeypatch.
+os.environ.setdefault("MOTION_RENDER_CHECK", "0")
 
 
 @pytest.fixture(autouse=True)

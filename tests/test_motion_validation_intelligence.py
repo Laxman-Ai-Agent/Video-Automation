@@ -301,6 +301,22 @@ def test_a_planned_text_drawn_verbatim_counts_as_drawn_without_its_element_id(mo
     assert "text_verbatim_x" not in missing and "text_absent_y" in missing
 
 
+def test_a_short_planned_text_drawn_on_its_own_counts_as_drawn(mock_project: Path):
+    """"5G" is two characters: it was only looked for by its element id, which no scene writes, so a drawn title was reported as a missing required element (an error that stopped the pipeline).
+    It is found when it stands alone in the code, not inside a name, and still reported when it is not drawn."""
+    vp_file = mock_project / "visual_planning.json"
+    vp = json.loads(vp_file.read_text(encoding="utf-8"))
+    vp["scenes"][0]["elements"] += [{"element_id": "label_5g", "type": "text", "required": True, "content": "5G"},
+                                   {"element_id": "label_9z", "type": "label", "required": True, "content": "9Z"},
+                                   {"element_id": "label_7q", "type": "label", "required": True, "content": "7Q"}]
+    vp_file.write_text(json.dumps(vp), encoding="utf-8")
+    tsx = next((mock_project / "generated_motion").glob("scene_*.tsx"))
+    tsx.write_text(tsx.read_text(encoding="utf-8") + "\nconst m9Zx = 1; // <div>\n          5G\n</div>\n", encoding="utf-8")
+    missing = {f["element_id"] for f in SemanticAlignmentEngine().evaluate(mock_project, aspect="16:9")["findings"] if f["category"] == "missing_visual"}
+    assert "label_5g" not in missing                                          # drawn on its own
+    assert {"label_9z", "label_7q"} <= missing                               # "9Z" only inside a name, "7Q" nowhere
+
+
 def test_quality_score_aggregator_4d_separation():
     """Verifies the 4-Dimensional Quality Architecture and category classification."""
     deterministic_rep = {

@@ -6,6 +6,7 @@ import { useAbsFrame, useScene } from "../sceneContext";
 import type { LayerT } from "../schema";
 import { SAFE, SCRIM, useLayout, usePalette } from "../theme";
 import type { Run } from "./phrase";
+import { textRoom } from "./core";
 import { type TextFrame, type TextParams, textFrame } from "./textFrame";
 
 const SPAN: CSSProperties = { display: "inline-block", whiteSpace: "pre" };
@@ -85,7 +86,7 @@ export const MotionTextLayer: React.FC<{ layer: LayerT }> = ({ layer }) => {
   const { hasImage } = useScene();
   const { accent } = usePalette();
   const style = (STYLES as readonly string[]).includes(l.style ?? "") ? (l.style as (typeof STYLES)[number]) : "headline";
-  const boxW = width * (1 - 2 * SAFE) * (style === "headline" || style === "quote" || lay.portrait ? 1 : 0.7);
+  const boxW = textRoom(width * (1 - 2 * SAFE) * (style === "headline" || style === "quote" || lay.portrait ? 1 : 0.7), width, SAFE, l.pos, l.center);
   const size = l.size ?? (style === "headline" || style === "quote" ? lay.type.display : lay.type.body);
   const at = l.at ?? l.enter?.at ?? 0;
   // the layer's own `exit` is the classic {at, anim, dur} object of the schema: the exit PRESET of the library is `exitPreset`

@@ -87,6 +87,14 @@ export function fitSize(text: string, size: number, weight: number, maxWidth: nu
   return Math.max(size * floor, s);
 }
 
+/** The widest a text may be: `boxW`, but a positioned text (left edge, or middle when `center`) only has the room from its position to the safe margin, so it wraps or shrinks instead of leaving the frame. */
+export function textRoom(boxW: number, frameW: number, safe: number, pos?: [number, number], center?: boolean): number {
+  if (!pos) return boxW;
+  const edge = frameW * (1 - safe);
+  const room = center ? 2 * Math.min(pos[0] - frameW * safe, edge - pos[0]) : edge - pos[0];
+  return Math.min(boxW, Math.max(room, frameW * 0.2));      // a position already outside the margin keeps a usable width (the layout check still reports it)
+}
+
 // ---------- geometry ----------
 export type Dir = "left" | "right" | "up" | "down";
 /** Unit vector of a direction ("left" = comes from / moves toward the left). */

@@ -74,6 +74,20 @@ def test_compiler_errors_are_grouped_by_scene():
     assert set(got) == {"1", "2"} and "minValue" in got["1"][0] and got["2"][0].startswith("line 10: TS2304")
 
 
+def test_the_type_check_pins_a_plain_output_so_its_errors_can_be_parsed(tmp_path, monkeypatch):
+    """With FORCE_COLOR in the environment tsc prints a coloured `file:line:col - error` layout that no compile error of a scene could be parsed from, so the repair loop never ran."""
+    seen = {}
+
+    def fake_run(cmd, **kw):
+        seen.update(cmd=cmd, env=kw["env"])
+        return type("R", (), {"returncode": 1, "stdout": "src/generated/scene_2.tsx(3,10): error TS2305: no member\n", "stderr": ""})()
+    monkeypatch.setenv("FORCE_COLOR", "1")
+    monkeypatch.setattr(ma.subprocess, "run", fake_run)
+    ok, out = ma.run_tsc(tmp_path)
+    assert not ok and "--pretty false" in seen["cmd"] and seen["env"]["FORCE_COLOR"] == "0" and seen["env"]["NO_COLOR"] == "1"
+    assert set(ma.tsc_errors_by_scene(out)) == {"2"}
+
+
 def _project(tmp_path):
     d, *_ = _mp.make(tmp_path / "proj_tsc")
     store.set_reusable_motion_templates(d, False)
@@ -98,6 +112,63 @@ def test_a_type_error_that_cannot_be_repaired_fails_the_stage(tmp_path, monkeypa
     monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda *a: None)
     with pytest.raises(ma.AnimationCodegenError, match="TypeScript compilation failed"):
         ma.generate_custom_motion_code(d, "16:9")
+
+
+RUNTIME_ERROR = "runtime error while the scene was drawn at frame 9: Error  inputRange must be strictly monotonically increasing but got [1,1]"
+
+
+def test_a_scene_that_throws_when_drawn_is_sent_back_to_the_llm_and_drawn_again(tmp_path, monkeypatch):
+    """The type check passes, the scene still throws at runtime (interpolate with an input range of [1, 1]): the error goes to the same repair as a compiler error."""
+    d = _project(tmp_path)
+    monkeypatch.setattr(ma, "run_tsc", lambda remotion_dir: (True, ""))
+    results = iter([{"1": [RUNTIME_ERROR]}, {}])
+    monkeypatch.setattr(ma, "render_errors_by_scene", lambda *a: next(results))
+    repairs = []
+    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda pdir, sid, code, errs: repairs.append((sid, errs)) or code + "\n// fixed\n")
+    manifest = ma.generate_custom_motion_code(d, "16:9")
+    assert [r[0] for r in repairs] == ["1"] and "inputRange" in repairs[0][1][0]
+    assert manifest["status"] == "generated" and manifest["scenes"][0]["generation"]["compile_repairs"] == 1
+    assert "// fixed" in (d / "generated_motion" / "scene_1.tsx").read_text(encoding="utf-8")
+
+
+def test_a_scene_that_throws_when_drawn_and_cannot_be_repaired_fails_the_stage(tmp_path, monkeypatch):
+    d = _project(tmp_path)
+    monkeypatch.setattr(ma, "run_tsc", lambda remotion_dir: (True, ""))
+    monkeypatch.setattr(ma, "render_errors_by_scene", lambda *a: {"1": [RUNTIME_ERROR]})
+    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda *a: None)
+    with pytest.raises(ma.AnimationCodegenError, match="fails when it is drawn: scene 1: runtime error.*inputRange"):
+        ma.generate_custom_motion_code(d, "16:9")
+
+
+def test_the_render_check_can_be_turned_off_and_a_check_that_cannot_run_fails_closed(tmp_path, monkeypatch):
+    pv = importlib.import_module("VIDEO_ENGINE.stages.motion_validation_preview")
+    assert ma.render_errors_by_scene(tmp_path, "9:16", [], []) == {}                  # MOTION_RENDER_CHECK=0 (the suite's default): nothing is drawn
+    monkeypatch.setenv("MOTION_RENDER_CHECK", "1")
+    monkeypatch.setattr(ma, "custom_composition", lambda *a: {})
+    monkeypatch.setattr(pv, "smoke", lambda *a: (_ for _ in ()).throw(pv.ValidationError("the Remotion bundle could not be made")))
+    with pytest.raises(ma.AnimationCodegenError, match="render check of the generated scenes could not run"):
+        ma.render_errors_by_scene(tmp_path, "9:16", [], [])
+
+
+def test_the_smoke_render_draws_one_still_per_scene_once_and_names_the_scene_that_throws(tmp_path, monkeypatch):
+    import contextlib
+    import types
+    pv = importlib.import_module("VIDEO_ENGINE.stages.motion_validation_preview")
+    monkeypatch.setattr(pv, "_pipeline_modules", lambda: (types.SimpleNamespace(cleaned_after=contextlib.nullcontext), types.SimpleNamespace(RENDER_LOCK=contextlib.nullcontext()), None))
+    monkeypatch.setattr(importlib.import_module("VIDEO_ENGINE.stages.render"), "stage_audio", lambda *a: None)
+    monkeypatch.setattr(importlib.import_module("VIDEO_ENGINE.stages.asset_collection"), "stage_assets", lambda *a: None)
+    monkeypatch.setattr(pv, "_bundle", lambda dest: None)
+    drawn = []
+
+    def still(bundle, comp_file, frame, dest, attempts=pv.ATTEMPTS):
+        drawn.append((frame, attempts))
+        if frame == 90:
+            raise pv.ValidationError(f"the still at frame {frame} could not be rendered after {attempts} tries:  Error  inputRange must be strictly monotonically increasing but got [1,1]")
+    monkeypatch.setattr(pv, "_still", still)
+    comp = {"meta": {"fps": 30}, "scenes": [{"id": 1, "start": 0, "end": 2}, {"id": 2, "start": 2, "end": 4}]}
+    errors = pv.smoke(tmp_path, "9:16", comp)
+    assert drawn == [(30, 1), (90, 1)]                                                  # the middle of each scene, one try each (a real error fails every time)
+    assert list(errors) == ["2"] and "frame 90" in errors["2"][0] and "inputRange" in errors["2"][0]
 
 
 def test_a_scenes_own_helper_named_like_a_legacy_preset_is_not_a_prohibited_preset():

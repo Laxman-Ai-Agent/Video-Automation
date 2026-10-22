@@ -58,7 +58,7 @@ def _bundle(dest: Path) -> None:
         raise ValidationError(f"the Remotion bundle could not be made: {(r.stderr or r.stdout)[-240:]}")
 
 
-def _still(bundle: Path, comp_file: Path, frame: int, dest: Path) -> None:
+def _still(bundle: Path, comp_file: Path, frame: int, dest: Path, attempts: int = ATTEMPTS) -> None:
     from . import render
     b_posix = bundle.resolve().as_posix()
     d_posix = dest.resolve().as_posix()
@@ -69,12 +69,12 @@ def _still(bundle: Path, comp_file: Path, frame: int, dest: Path) -> None:
         f"--frame={frame}", f"--scale={SCALE}",
         f"--props={c_posix}", f"--port={render._free_port()}"
     ]
-    for attempt in range(ATTEMPTS):                                              # the page fetches its web fonts: one slow or failed fetch is tried again, a real error fails every time
+    for attempt in range(attempts):                                              # the page fetches its web fonts: one slow or failed fetch is tried again, a real error fails every time
         r = subprocess.run(cmd, cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
         if r.returncode == 0 and dest.exists():
             return
         time.sleep(3 * (attempt + 1))                                            # back off: a network blip lasts longer than three immediate retries
-    raise ValidationError(f"the still at frame {frame} could not be rendered after {ATTEMPTS} tries: {(r.stderr or r.stdout)[-240:]}")
+    raise ValidationError(f"the still at frame {frame} could not be rendered after {attempts} tries: {(r.stderr or r.stdout)[-240:]}")
 
 
 def _measure(path: Path) -> dict:
@@ -89,7 +89,7 @@ def _measure(path: Path) -> dict:
         return {"decode_ok": False, "width": None, "height": None, "std": None, "blank": True, "error": str(e)[:120]}
 
 
-def generate(pdir: Path, aspect: str, progress=None) -> dict:
+def _pipeline_modules():
     try:
         from VIDEO_ENGINE.pipeline import browser_profiles, jobs, pipeline
     except ImportError:
@@ -97,6 +97,36 @@ def generate(pdir: Path, aspect: str, progress=None) -> dict:
             from backend import browser_profiles, jobs, pipeline
         except ImportError:
             from . import browser_profiles, jobs, pipeline
+    return browser_profiles, jobs, pipeline
+
+
+def smoke(pdir: Path, aspect: str, comp: dict) -> dict[str, list[str]]:
+    """The runtime errors of a composition's scenes, by scene id: what the type check cannot see (an `interpolate` input range of [1, 1], a value that is undefined). ONE still at the middle of
+    every scene and one try each (a real error fails every time). Nothing is kept: this is a check made by Motion Generation, not the preview evidence of `generate`."""
+    from . import asset_collection, render
+    browser_profiles, jobs, _ = _pipeline_modules()
+    fps, errors = int(comp["meta"].get("fps") or mp.FPS), {}
+    tmp = Path(tempfile.mkdtemp(prefix="a2v_smoke_"))
+    try:
+        comp_file = tmp / "composition.json"
+        comp_file.write_text(json.dumps(comp, ensure_ascii=False), encoding="utf-8")
+        with jobs.RENDER_LOCK, browser_profiles.cleaned_after():
+            render.stage_audio(pdir, aspect)
+            asset_collection.stage_assets(pdir)
+            _bundle(tmp / "b")
+            for s in comp["scenes"]:
+                frame = mp.fr((s["start"] + s["end"]) / 2, fps)
+                try:
+                    _still(tmp / "b", comp_file, frame, tmp / f"scene_{s['id']}.png", attempts=1)
+                except ValidationError as e:
+                    errors.setdefault(str(s["id"]), []).append(f"runtime error while the scene was drawn at frame {frame}: {str(e).split('tries: ', 1)[-1].strip()}")
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return errors
+
+
+def generate(pdir: Path, aspect: str, progress=None) -> dict:
+    browser_profiles, jobs, pipeline = _pipeline_modules()
     from . import asset_collection, motion_gen_report, render
     say = progress or (lambda p, eta=None: None)
     gen = motion_gen_report.load(pdir, aspect)
