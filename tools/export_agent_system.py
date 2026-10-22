@@ -30,6 +30,7 @@ RUNTIME_DATA = (
     "SYSTEM/agents/*/memory/*.json",
     "SYSTEM/agents/*/memory/*.jsonl",
     "SYSTEM/agents/*/history/experiences.jsonl",
+    "SYSTEM/agents/*/history/learning_cases.jsonl",     # cases the video project's test runs appended; the case collector recreates the file
     "SYSTEM/config/*",
 )
 

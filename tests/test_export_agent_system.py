@@ -29,6 +29,7 @@ SOURCE = {
     "SYSTEM/agents/capability_finder/memory/experiences.json": "[]",
     "SYSTEM/agents/capability_finder/memory/.gitkeep": "",
     "SYSTEM/config/llm_usage.json": "{}",
+    "SYSTEM/agents/capability_finder/history/learning_cases.jsonl": "{}\n",
     "SYSTEM/skills/catalog.json": json.dumps({"version": "2.0.0", "updated_at": "now", "skills": {"motion.x": {}}}),
     "SYSTEM/skills/installed_skills.json": json.dumps({"version": "2.0.0", "updated_at": "now", "total_installed": 1, "installed_skills": {"a": {}}}),
     "SYSTEM/skills/categories.json": json.dumps({"version": "2.0.0", "total_categories": 1, "categories": [{"category_id": "motion"}]}),
@@ -51,7 +52,7 @@ def test_the_export_keeps_the_agent_system_and_leaves_out_video_runtime_data_and
     assert {"tests/test_llm_client.py", "tests/test_integrations.py", "tools/check_boundaries.py"} <= exported
     for left_out in ("SYSTEM/agents/video_generation_agents/audio_input/agent.py", "SYSTEM/core/pipeline_state.py", "VIDEO_ENGINE/stage.py",
                      "SYSTEM/agents/capability_finder/knowledge/archive/old.json", "SYSTEM/agents/capability_finder/memory/experiences.json",
-                     "SYSTEM/config/llm_usage.json", "tests/test_m9.py", "README.md"):
+                     "SYSTEM/config/llm_usage.json", "SYSTEM/agents/capability_finder/history/learning_cases.jsonl", "tests/test_m9.py", "README.md"):
         assert left_out not in exported, left_out
 
 
