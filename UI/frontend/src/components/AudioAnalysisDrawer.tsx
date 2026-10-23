@@ -27,8 +27,9 @@ import {
   Square,
   HelpCircle
 } from 'lucide-react';
-import { fetchAudioAnalysis, AudioAnalysisResult } from '../services/api';
+import { fetchAudioAnalysis, fetchTranscriptComparison, AudioAnalysisResult, TranscriptComparisonData } from '../services/api';
 import { AgentAboutTab } from './AgentAboutTab';
+import { TranscriptComparison } from './TranscriptComparison';
 
 interface AudioAnalysisDrawerProps {
   projectId: string;
@@ -56,6 +57,7 @@ export const AudioAnalysisDrawer: React.FC<AudioAnalysisDrawerProps> = ({
   const [expandedUtterances, setExpandedUtterances] = useState<Record<string, boolean>>({});
   const [rawJsonExpanded, setRawJsonExpanded] = useState<boolean>(true);
   const [wordSearch, setWordSearch] = useState<string>('');
+  const [comparison, setComparison] = useState<TranscriptComparisonData | null>(null);
 
   const loadAnalysisData = async () => {
     if (!projectId) return;
@@ -63,6 +65,7 @@ export const AudioAnalysisDrawer: React.FC<AudioAnalysisDrawerProps> = ({
     try {
       const res = await fetchAudioAnalysis(projectId);
       setResult(res);
+      setComparison(await fetchTranscriptComparison(projectId));
       // Default to expand first 2 utterances
       if (res.data?.utterances && res.data.utterances.length > 0) {
         setExpandedUtterances({
@@ -910,6 +913,9 @@ export const AudioAnalysisDrawer: React.FC<AudioAnalysisDrawerProps> = ({
                       </div>
                     </div>
                   )}
+
+                  {/* Raw Whisper output next to the final LLM-corrected transcript */}
+                  {comparison && <TranscriptComparison data={comparison} />}
 
                   {/* Word Search Filter */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>

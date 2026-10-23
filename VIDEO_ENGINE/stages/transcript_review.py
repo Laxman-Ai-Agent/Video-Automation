@@ -2,7 +2,8 @@
 
   transcript.json            the raw ASR output. NEVER edited.
   transcript_review.json     what this stage found and did: vocabulary, uncertain words, the Claude answer's corrections (applied or rejected, each with a reason), what stays unresolved.
-  transcript_corrected.json  written only when at least one correction was applied (same schema as transcript.json, so every consumer reads it through load_transcript()).
+  transcript_corrected.json  the ONE final, LLM-verified transcript (same schema as transcript.json, so every consumer reads it through load_transcript()): written whenever the LLM checked
+                             the transcript, with its corrections applied and re-aligned, or with the same words when it found nothing to fix. Not written when the LLM did not check it.
 
 Rules: confidence is Whisper's own word probability (`p`), never made up; without it (older transcripts) nothing is flagged and the stage says so. Claude may only change words in a
 span that touches a flagged word, the "from" text must match the raw words exactly, and nothing it says is applied without these checks. Words it writes get `edit: "llm"` and an
@@ -19,10 +20,10 @@ import sys
 from pathlib import Path
 
 from . import config
-from .transcribe import Segment, Transcript, Word
+from .transcribe import TRANSCRIPT_FILES, Segment, Transcript, Word
 
 SCHEMA = "transcript-review-1"
-VERSION = 3                       # bump when the rules or the instructions to Claude change (it is part of the step fingerprint)
+VERSION = 4                       # bump when the rules or the instructions to Claude change (it is part of the step fingerprint); 4: the request carries the word times, the verified final JSON is always written
 LOW_P = float(os.environ.get("A2V_ASR_LOW_CONFIDENCE", "0.5"))      # a word below this Whisper probability is "uncertain"
 MAX_SEGMENTS = 40                 # segments sent to Claude in one call
 MAX_SPAN = 6                      # words one correction may replace
@@ -33,7 +34,7 @@ PAD = 0.3                         # seconds of audio around an edited segment gi
 
 SYSTEM = (
     "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
-    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p). "
+    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p, and s/e: the second the word starts and ends in the audio). "
     "Fix mis-heard words, phonetically distorted words, noise artifacts, and convert English words written in Telugu script into correct English spelling. "
     "Guidelines: "
     "1. Convert English words and technical loanwords written in Telugu script into correct standard English spelling. "
@@ -71,13 +72,15 @@ SYSTEM = (
     "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
     "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
     "5. Keep the speaker's meaning; never add words that were not spoken; never summarize or translate whole sentences; when unsure change nothing. "
+    "6. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
+    "probably mis-heard or noise; a confident word that fits its time is probably right. Change a word only when the evidence and the sentence support it. "
     'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
     '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
 )
 
 SYSTEM_ALL = (
     "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
-    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p). "
+    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p, and s/e: the second the word starts and ends in the audio). "
     "Check every word and fix those that are mis-heard, phonetically distorted, or English words written in Telugu script. "
     "Guidelines: "
     "1. Convert English words and technical loanwords written in Telugu script into correct standard English spelling. "
@@ -115,6 +118,8 @@ SYSTEM_ALL = (
     "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
     "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
     "5. Keep the speaker's original intended meaning. Never add words that were not spoken; never summarize or translate whole sentences; keep numbers and names accurate. "
+    "6. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
+    "probably mis-heard or noise; a confident word that fits its time is probably right. Change a word only when the evidence and the sentence support it. "
     'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
     '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
 )
@@ -194,7 +199,7 @@ def _json_from(text: str) -> dict:
 
 def _request(t: Transcript, ids: list[int]) -> str:
     by = {s.id: s for s in t.segments}
-    rows = [{"id": i, "text": by[i].text, "words": [{"i": k, "w": w.w, **({"p": w.p} if w.p is not None else {})} for k, w in enumerate(by[i].words)]} for i in ids]
+    rows = [{"id": i, "text": by[i].text, "words": [{"i": k, "w": w.w, **({"p": w.p} if w.p is not None else {}), "s": round(w.start, 2), "e": round(w.end, 2)} for k, w in enumerate(by[i].words)]} for i in ids]
     return json.dumps({"segments": rows}, ensure_ascii=False)
 
 
@@ -501,8 +506,9 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = 
                                                                   for x in fixed.segments if any(w.edit for w in x.words)]}
     out = pdir / "transcript_corrected.json"
     down = llm["status"] in ("unavailable", "failed")
+    checked = llm["status"] in ("applied", "cached")             # the LLM answered for this transcript
     kept = bool(down and not edited and out.exists() and out.stat().st_mtime >= (pdir / "transcript.json").stat().st_mtime)
-    if edited:
+    if edited or checked:                                        # the one final, LLM-verified JSON: the corrected words, or the same words when the LLM checked them and found nothing to fix
         out.write_text(fixed.model_dump_json(indent=1), encoding="utf-8")
     elif kept:
         llm["kept_earlier_correction"] = True      # the LLM is not available now: the transcript it verified earlier (made after the current raw transcript) is NOT thrown away
@@ -510,7 +516,7 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = 
         out.unlink()            # a derived file of an earlier run that no longer applies (the raw text is the transcript again, or it was made from an older raw transcript)
     done = {(c["segment"], k) for c in corrections if c["status"] == "applied" for k in range(c["from_index"], c["to_index"] + 1)}
     review = {
-        "schema_version": SCHEMA, "version": VERSION, "raw_file": "transcript.json", "corrected_file": "transcript_corrected.json" if edited or kept else None,
+        "schema_version": SCHEMA, "version": VERSION, "raw_file": "transcript.json", "corrected_file": "transcript_corrected.json" if edited or checked or kept else None,
         "vocabulary": {"terms": vocab, "project_list": (pdir / "vocabulary.txt").exists()},
         "confidence": conf, "llm": llm, "corrections": corrections,
         "unresolved": [f for f in conf["flagged"] if (f["segment"], f["index"]) not in done],
@@ -536,6 +542,34 @@ def is_verified(pdir: Path) -> bool:
             return False
         return (review.get("llm") or {}).get("status") in ("applied", "cached") and (review.get("alignment") or {}).get("status") not in ("partial", "estimated_for_edits")
     return corrected.exists() and corrected.stat().st_mtime >= raw.stat().st_mtime        # no current review file: an older project that has only the corrected transcript
+
+
+def comparison(pdir: Path) -> dict:
+    """The raw Whisper output next to the final transcript, segment by segment, for the Audio Analyzer page. Read-only: transcript.json (never edited), the final transcript (the user's fix,
+    else transcript_corrected.json, else the raw one), the review record and the stage's LLM review. `changed` segments carry `final_words` with the `edit` / `timing` of every word."""
+    raw = Transcript.model_validate_json((pdir / "transcript.json").read_text(encoding="utf-8"))
+    final_file = next((n for n in TRANSCRIPT_FILES if (pdir / n).exists()), "transcript.json")
+    final = raw if final_file == "transcript.json" else Transcript.model_validate_json((pdir / final_file).read_text(encoding="utf-8"))
+    review, stage = {}, {}
+    for name, target in (("transcript_review.json", review), ("llm_review_analyzer.json", stage)):
+        try:
+            target.update(json.loads((pdir / name).read_text(encoding="utf-8")))
+        except (OSError, ValueError):
+            pass
+    raw_by = {s.id: s for s in raw.segments}
+    segments = []
+    for s in final.segments:
+        r = raw_by.get(s.id)
+        changed = r is None or r.text != s.text
+        segments.append({"id": s.id, "start": s.start, "end": s.end, "raw_text": r.text if r else "", "final_text": s.text, "changed": changed,
+                         **({"final_words": [{"w": w.w, "start": w.start, "end": w.end, "timing": w.timing, "edit": w.edit} for w in s.words]} if changed else {})})
+    corrections = review.get("corrections") or []
+    return {"raw_file": "transcript.json", "final_file": final_file, "verified": is_verified(pdir), "language": final.language, "duration": final.duration,
+            "llm": {k: (review.get("llm") or {}).get(k) for k in ("status", "model", "segments_sent", "error")},
+            "alignment": (review.get("alignment") or {}).get("status"),
+            "stage_review": {"status": stage.get("status"), "score": stage.get("score")} if stage else None,
+            "corrections_applied": sum(c.get("status") == "applied" for c in corrections), "corrections_rejected": sum(c.get("status") != "applied" for c in corrections),
+            "corrections": corrections, "segments": segments}
 
 
 if __name__ == "__main__":

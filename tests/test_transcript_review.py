@@ -132,7 +132,7 @@ def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_correcte
     make(tmp_path)
     assert not tr.is_verified(tmp_path)                                                     # no review yet
     tr.refine(tmp_path, ask=Ask(answer()), all_words=True)                                  # the LLM answers: nothing to correct
-    assert not (tmp_path / "transcript_corrected.json").exists() and tr.is_verified(tmp_path)
+    assert (tmp_path / "transcript_corrected.json").exists() and tr.is_verified(tmp_path)
     _review(tmp_path, **{"llm.status": "unavailable"})
     assert not tr.is_verified(tmp_path)                                                     # the LLM did not check it
     _review(tmp_path, **{"llm.status": "cached", "alignment.status": "estimated_for_edits"})
@@ -148,15 +148,50 @@ def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_correcte
     assert tr.is_verified(tmp_path)                                                         # an older project that has only the corrected transcript, made after the raw one
 
 
+def test_the_one_final_json_exists_whenever_the_llm_checked_the_transcript_and_is_not_written_when_it_did_not(tmp_path):
+    """transcript_corrected.json is the final, LLM-verified transcript: the same words when the LLM found nothing to fix, never written when the LLM did not check."""
+    make(tmp_path)
+    raw = (tmp_path / "transcript.json").read_bytes()
+    r = tr.refine(tmp_path, ask=Ask(answer()), all_words=True)
+    assert r["corrected_file"] == "transcript_corrected.json" and (tmp_path / "transcript.json").read_bytes() == raw
+    final = Transcript.model_validate_json((tmp_path / "transcript_corrected.json").read_text(encoding="utf-8"))
+    assert final == Transcript.model_validate_json(raw) and all(w.edit is None and w.timing is None for s in final.segments for w in s.words)       # same words, Whisper's own timestamps
+    other = tmp_path / "unchecked"
+    other.mkdir()
+    make(other)
+    r = tr.refine(other, ask=Ask(promptgen.GenError("not signed in")), all_words=True)
+    assert r["corrected_file"] is None and not (other / "transcript_corrected.json").exists()
+
+
+def test_the_llm_gets_the_word_times_as_evidence_from_the_audio(tmp_path):
+    t = make(tmp_path)
+    words = json.loads(tr._request(t, [0]))["segments"][0]["words"]
+    assert words[1] == {"i": 1, "w": "ఫాస్ట్", "p": 0.2, "s": 1.0, "e": 2.0}                  # the LLM cannot hear: probability and times are what the audio tells it
+    assert "s/e" in tr.SYSTEM and "s/e" in tr.SYSTEM_ALL
+
+
+def test_the_comparison_puts_the_raw_whisper_text_next_to_the_final_one_with_the_llm_edits_marked(tmp_path):
+    make(tmp_path)
+    tr.refine(tmp_path, ask=Ask(answer(GOOD)), all_words=True)
+    c = tr.comparison(tmp_path)
+    assert c["raw_file"] == "transcript.json" and c["final_file"] == "transcript_corrected.json" and c["llm"]["status"] == "applied" and c["corrections_applied"] == 1
+    first, second = c["segments"]
+    assert first["changed"] and first["raw_text"] == "a" and "ఫాస్ట్ఏపీఐ" in first["final_text"]
+    assert [w["edit"] for w in first["final_words"]] == [None, "llm", None, None] and first["final_words"][1]["timing"] == "estimated"        # no model in tests: the time is estimated, and it says so
+    assert not second["changed"] and "final_words" not in second
+    assert c["alignment"] == "estimated_for_edits" and not c["verified"]                    # corrected words still wait for their timestamps
+
+
 def test_the_analysis_runs_whisper_only_when_there_is_no_transcript_and_the_llm_check_before_the_cuts(tmp_path, monkeypatch):
     ran = []
     monkeypatch.setattr(pipeline, "execute", lambda pdir, name, ctx: ran.append(name) or {"name": name, "status": "ran"})
+    monkeypatch.setattr(pipeline.llm_review, "run_stage_llm_review", lambda pdir, stage, *a, **k: ran.append(f"review:{stage}"))
     pipeline.run_analysis(tmp_path)
-    assert ran == ["transcribe", "refine", "cuts"]
+    assert ran == ["transcribe", "refine", "cuts", "review:analyzer"]                       # the LLM approval of the final transcript comes last (a cached answer costs nothing)
     ran.clear()
     make(tmp_path)
     pipeline.run_analysis(tmp_path)
-    assert ran == ["refine", "cuts"]                                                        # the project has its transcript: Whisper does not run again
+    assert ran == ["refine", "cuts", "review:analyzer"]                                                        # the project has its transcript: Whisper does not run again
 
 
 def test_a_stale_corrected_file_is_removed_when_nothing_applies_any_more(tmp_path):

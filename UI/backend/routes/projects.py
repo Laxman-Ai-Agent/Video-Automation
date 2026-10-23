@@ -203,12 +203,16 @@ def _final_transcript(pdir) -> dict:
 @router.get("/{pid}/transcript")
 def transcript(pid: str, view: str = "final"):
     """The JSON the Audio Analyzer made from the audio: language, duration, segments with their words and times. `view=final` (default): the transcript the video is made from (LLM-corrected
-    when the correction exists); `view=original`: transcript.json exactly as the speech recognizer wrote it. Read-only."""
+    when the correction exists); `view=original`: transcript.json exactly as the speech recognizer wrote it; `view=compare`: both side by side per segment, with the LLM's corrections, the
+    alignment of the corrected words and the review status (the Audio Analyzer page). Read-only."""
+    from .. import transcript_review
     pdir = store.project_dir(pid)
     f = pdir / "transcript.json"
     if not f.exists():
         raise ApiError(409, "transcript_missing", "the audio has not been analyzed yet", "start the analysis first")
     try:
+        if view == "compare":
+            return transcript_review.comparison(pdir)
         return json.loads(f.read_text(encoding="utf-8")) if view == "original" else _final_transcript(pdir)
     except ValueError as e:
         raise ApiError(409, "transcript_unreadable", "the transcript could not be read", str(e)) from e

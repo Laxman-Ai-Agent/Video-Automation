@@ -78,6 +78,21 @@ def test_claude_unavailable_keeps_the_original_as_the_final_transcript_and_says_
     assert not (config.PROJECTS_DIR / pid / "transcript_corrected.json").exists()
 
 
+def test_the_compare_view_serves_the_raw_and_the_final_transcript_side_by_side(client, monkeypatch):
+    pid = create(client).json()["id"]
+    assert client.get(f"/projects/{pid}/transcript?view=compare").json()["error"]["code"] == "transcript_missing"
+    raw = _put(pid, p=0.95)
+    before = (config.PROJECTS_DIR / pid / "transcript.json").read_bytes()
+    monkeypatch.setattr(promptgen, "run_claude", lambda user, system="", timeout=0: FIX if system == tr.SYSTEM_ALL else "{}")
+    assert client.post(f"/projects/{pid}/transcript/correct").status_code == 200
+    c = client.get(f"/projects/{pid}/transcript?view=compare").json()
+    seg = c["segments"][0]
+    assert c["raw_file"] == "transcript.json" and c["final_file"] == "transcript_corrected.json" and c["corrections_applied"] == 1
+    assert seg["raw_text"] == raw["segments"][0]["text"] and seg["changed"] and seg["final_text"] != seg["raw_text"] and seg["final_words"][0]["edit"] == "llm"
+    assert (config.PROJECTS_DIR / pid / "transcript.json").read_bytes() == before                  # the original is untouched; view=original still serves it as it is
+    assert client.get(f"/projects/{pid}/transcript?view=original").json() == raw
+
+
 def test_correction_is_refused_while_a_job_runs(client, monkeypatch):
     from backend import jobs
     pid = create(client).json()["id"]

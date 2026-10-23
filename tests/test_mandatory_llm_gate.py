@@ -351,3 +351,21 @@ def test_visual_planning_waits_for_the_transcript_the_audio_analyzer_verified(te
     with patch.object(store, "project_dir", return_value=pdir), pytest.raises(ApiError) as exc:
         routes.run_visual_plan("test-proj")
     assert exc.value.code == "llm_verification_required" and "Audio Analyzer" in exc.value.message
+
+
+def test_the_audio_analyzer_approval_judges_the_final_transcript_and_is_bound_to_it(temp_project: Path):
+    """The stage review read only the raw transcript, so it reported phonetic words the correction had already fixed (needs_review) and a changed final transcript did not invalidate it."""
+    pdir = temp_project
+    word = lambda w, a, b, **kw: {"w": w, "start": a, "end": b, **kw}
+    raw = {"language": "te", "duration": 2.0, "segments": [{"id": 0, "start": 0.0, "end": 2.0, "text": "క్వేష్యం అడిగితే", "words": [word("క్వేష్యం", 0.0, 1.0), word("అడిగితే", 1.0, 2.0)]}]}
+    final = {**raw, "segments": [{"id": 0, "start": 0.0, "end": 2.0, "text": "question అడిగితే", "words": [word("question", 0.0, 1.0, edit="llm", timing="aligned"), word("అడిగితే", 1.0, 2.0)]}]}
+    (pdir / "transcript.json").write_text(json.dumps(raw, ensure_ascii=False), encoding="utf-8")
+    (pdir / "cuts.json").write_text(json.dumps({"cuts": [1.0]}), encoding="utf-8")
+    before = llm_review.compute_stage_output_fingerprint(pdir, "analyzer")
+    (pdir / "transcript_corrected.json").write_text(json.dumps(final, ensure_ascii=False), encoding="utf-8")
+    (pdir / "transcript_review.json").write_text(json.dumps({"llm": {"status": "applied"}, "alignment": {"status": "aligned_for_edits"}, "corrections": [{"from": "క్వేష్యం", "to": "question", "status": "applied", "reason": "english"}]}, ensure_ascii=False), encoding="utf-8")
+    assert llm_review.compute_stage_output_fingerprint(pdir, "analyzer") != before                  # the final transcript is part of what the approval covers
+    p = llm_review.build_stage_payload(pdir, "analyzer")
+    assert p["final_transcript_file"] == "transcript_corrected.json" and p["final_transcript"][0]["text"] == "question అడిగితే" and p["cuts_count"] == 1
+    assert p["word_timing"] == {"words": 2, "llm_edited": 1, "aligned": 1, "estimated": 0, "overlapping": 0}
+    assert p["llm_correction"]["applied"] == 1 and p["llm_correction"]["corrections"][0]["to"] == "question" and "transcript_sample" not in p

@@ -675,6 +675,39 @@ export async function fetchSceneSegmentation(projectId: string): Promise<SceneSe
   }
 }
 
+export interface TranscriptComparisonData {
+  raw_file: string;
+  final_file: string;
+  verified: boolean;
+  language: string;
+  duration: number;
+  llm: { status: string | null; model: string | null; segments_sent: number | null; error: string | null };
+  alignment: string | null;
+  stage_review: { status: string | null; score: number | null } | null;
+  corrections_applied: number;
+  corrections_rejected: number;
+  corrections: any[];
+  segments: {
+    id: number;
+    start: number;
+    end: number;
+    raw_text: string;
+    final_text: string;
+    changed: boolean;
+    final_words?: { w: string; start: number; end: number; timing: string | null; edit: string | null }[];
+  }[];
+}
+
+/** The raw Whisper transcript next to the final LLM-verified one (read-only); null when the audio has not been analyzed yet. */
+export async function fetchTranscriptComparison(projectId: string): Promise<TranscriptComparisonData | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/transcript?view=compare`);
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function runLlmReview(projectId: string): Promise<any> {
   const res = await fetch(`${API_BASE}/projects/${projectId}/llm-review/run`, {
     method: 'POST'

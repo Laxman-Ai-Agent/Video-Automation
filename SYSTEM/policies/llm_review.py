@@ -141,7 +141,7 @@ def stage_output_files(pdir: Path, stage: str, aspect: str = "16:9") -> list[Pat
             outs.append(manifest)
         return outs
     elif stage == "analyzer":
-        return [pdir / "transcript.json", pdir / "cuts.json"]
+        return [pdir / "transcript.json", pdir / "transcript_corrected.json", pdir / "transcript_review.json", pdir / "cuts.json"]       # the approval is bound to the final transcript too
     elif stage == "segmentation":
         return [pdir / "scene_segmentation.json"]
     elif stage == "planning":
@@ -288,10 +288,26 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
             except Exception:
                 pass
     elif stage == "analyzer":
-        tf = pdir / "transcript.json"
+        # The approval judges the FINAL transcript (the user's fix, else the LLM-corrected one, else the raw one), what the correction changed, and the word times: not the raw ASR text.
         cf = pdir / "cuts.json"
-        payload["transcript_sample"] = tf.read_text(encoding="utf-8")[:3000] if tf.exists() else None
-        payload["cuts_count"] = len(json.loads(cf.read_text(encoding="utf-8"))) if cf.exists() else 0
+        cuts = json.loads(cf.read_text(encoding="utf-8")) if cf.exists() else {}
+        payload["cuts_count"] = len(cuts.get("cuts", [])) if isinstance(cuts, dict) else len(cuts)
+        final_f = next((pdir / n for n in ("transcript_fixed.json", "transcript_corrected.json", "transcript.json") if (pdir / n).exists()), None)
+        payload["final_transcript_file"] = final_f.name if final_f else None
+        if final_f:
+            segs = json.loads(final_f.read_text(encoding="utf-8")).get("segments", [])
+            words = [w for s in segs for w in s.get("words", [])]
+            payload["final_transcript"] = [{"segment": s.get("id"), "start": round(s.get("start", 0), 2), "end": round(s.get("end", 0), 2), "text": s.get("text")} for s in segs][:80]
+            payload["word_timing"] = {"words": len(words), "llm_edited": sum(1 for w in words if w.get("edit")), "aligned": sum(1 for w in words if w.get("timing") == "aligned"),
+                                      "estimated": sum(1 for w in words if w.get("timing") == "estimated"),
+                                      "overlapping": sum(1 for a, b in zip(words, words[1:]) if b.get("start", 0) < a.get("end", 0) - 0.05)}
+        rf = pdir / "transcript_review.json"
+        if rf.exists():
+            review = json.loads(rf.read_text(encoding="utf-8"))
+            corrections = review.get("corrections") or []
+            payload["llm_correction"] = {"llm_status": (review.get("llm") or {}).get("status"), "alignment": (review.get("alignment") or {}).get("status"),
+                                         "applied": sum(c.get("status") == "applied" for c in corrections), "rejected": sum(c.get("status") != "applied" for c in corrections),
+                                         "corrections": [{"from": c.get("from"), "to": c.get("to"), "status": c.get("status"), "reason": c.get("reason")} for c in corrections][:40]}
     elif stage == "segmentation":
         sf = pdir / "scene_segmentation.json"
         if sf.exists():
@@ -773,9 +789,9 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         )
     elif stage == "analyzer":
         user_prompt += (
-            "- Verify that English words written phonetically in Telugu script are properly reviewed.\n"
-            "- Genuine Telugu words must remain in Telugu script.\n"
-            "- Verify cuts and timestamps are coherent."
+            "- Judge `final_transcript`: it is the transcript AFTER the LLM correction. The words the correction already fixed are listed in `llm_correction.corrections` (from -> to): never report a raw word that was corrected.\n"
+            "- English technical terms must be in English script and genuine Telugu words in Telugu script; report only what is still wrong in `final_transcript`.\n"
+            "- `word_timing`: corrected words should be `aligned` (estimated times are a warning), words must not overlap. Verify cuts and timestamps are coherent."
         )
     elif stage == "segmentation":
         user_prompt += (

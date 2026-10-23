@@ -663,9 +663,11 @@ class PipelineOrchestrator:
             return run
 
     def _analysis_needed(self) -> bool:
-        """The Audio Analyzer has work: there is no transcript yet, or the LLM has not checked it (an analysis made before the check was part of it, or one whose check could not finish)."""
+        """The Audio Analyzer has work: there is no transcript yet, the LLM has not checked it (an analysis made before the check was part of it, or one whose check could not finish), or its
+        approval of the final transcript is missing or out of date."""
         from VIDEO_ENGINE.stages import transcript_review
-        return not (self.pdir / "transcript.json").exists() or not transcript_review.is_verified(self.pdir)
+        return (not (self.pdir / "transcript.json").exists() or not transcript_review.is_verified(self.pdir)
+                or not llm_review.is_stage_review_passed(self.pdir, "analyzer")[0])
 
     def _analyze_audio(self, run: RunRecord) -> None:
         """The Audio Analyzer: speech-to-text only when there is no transcript, the LLM check and correction of it (with the corrected words re-aligned), then the cuts. Finished steps are

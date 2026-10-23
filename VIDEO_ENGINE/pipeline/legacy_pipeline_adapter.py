@@ -208,7 +208,9 @@ def run_analysis(pdir: Path, ctx: Ctx | None = None) -> list[dict]:
     transcript.json; a step whose inputs did not change is skipped by the executor, so a finished analysis costs nothing. The one implementation: the orchestrator and the LLM verification
     button of the Scene Segmentation page both call it."""
     ctx = ctx or Ctx()
-    return [execute(pdir, n, ctx) for n in CHAINS["transcribe"] if n != "transcribe" or not (pdir / "transcript.json").exists()]
+    results = [execute(pdir, n, ctx) for n in CHAINS["transcribe"] if n != "transcribe" or not (pdir / "transcript.json").exists()]
+    llm_review.run_stage_llm_review(pdir, "analyzer")      # the LLM approval of the final transcript: asked only when it is missing or its inputs changed (a cached answer costs nothing)
+    return results
 
 
 def run_chain(pdir: Path, names, label: str, ctx: Ctx | None = None) -> list[dict]:
