@@ -11,6 +11,7 @@ import os
 import shutil
 import subprocess
 import tempfile
+import threading
 from pathlib import Path
 
 from pydantic import ValidationError
@@ -188,6 +189,43 @@ def _plan(pdir: Path, replace: bool = False) -> None:
         shutil.rmtree(d, ignore_errors=True)
 
 
+def _generate(pdir: Path, replace: bool = False) -> None:
+    """Stages 1 and 2 of the plan job: translate the narration, then write and publish the plan."""
+    promptgen._record(pdir, current=1, done=0)
+    _translate(pdir)
+    promptgen._record(pdir, current=2, done=1)
+    _plan(pdir, replace)
+
+
+def _begin(pdir: Path) -> None:
+    promptgen._record(pdir, kind="plan", n=None, total=len(STAGES), done=0, failed=[], skipped=[], current=1, error=None,
+                      started=review.now(), finished=None, state="running")
+
+
+def run(pdir: Path, replace: bool = False) -> None:
+    """The plan job of start(), done in the caller's thread (the orchestrator's planning stage waits for it). Raises GenError with the cause when no plan was published;
+    an existing plan is left alone unless `replace` (same rules as start())."""
+    with promptgen._guard:
+        if str(pdir) in promptgen._running:
+            raise review.ReviewError("this project is being planned right now: wait until that finishes")
+        if replace and (why := replace_blocker(pdir)):
+            raise review.ReviewError(why)
+        _begin(pdir)
+        promptgen._running[str(pdir)] = threading.current_thread()
+    try:
+        _generate(pdir, replace)
+        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+    except _Kept:
+        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+    except Exception as e:
+        stage = promptgen.state(pdir).get("current") or 1
+        err_msg = f"{STAGES[min(stage, 3) - 1]}: {e}"
+        promptgen._record(pdir, state="failed", error=err_msg, current=None, finished=review.now())
+        raise GenError(err_msg) from e
+    finally:
+        promptgen._release(pdir)
+
+
 def _work(pdir: Path, replace: bool = False) -> None:
     try:
         from SYSTEM.agents.shared import communication
@@ -202,10 +240,7 @@ def _work(pdir: Path, replace: bool = False) -> None:
         pass
 
     try:
-        promptgen._record(pdir, current=1, done=0)
-        _translate(pdir)
-        promptgen._record(pdir, current=2, done=1)
-        _plan(pdir, replace)
+        _generate(pdir, replace)
         llm_review.run_stage_llm_review(pdir, "planning")
         promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
         try:
@@ -313,8 +348,7 @@ def start(pdir: Path, replace: bool = False) -> dict:
                 raise review.ReviewError(why)
         elif not needs_plan(pdir):
             return promptgen.state(pdir)
-        promptgen._record(pdir, kind="plan", n=None, total=len(STAGES), done=0, failed=[], skipped=[], current=1, error=None,
-                          started=review.now(), finished=None, state="running")
+        _begin(pdir)
         promptgen.launch(pdir, _work, replace)
     return promptgen.state(pdir)
 

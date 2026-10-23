@@ -48,6 +48,8 @@ def auto(client, monkeypatch):
     llm = Llm()
     monkeypatch.setattr(promptgen, "run_claude", llm)
     monkeypatch.setattr(autoplan, "ENABLED", True)
+    from backend import transcript_review
+    monkeypatch.setattr(transcript_review, "is_verified", lambda pdir: True)       # the Audio Analyzer's LLM check is tested elsewhere; here the plan job is
     real = subprocess.run
 
     def run(cmd, *a, **k):
@@ -89,7 +91,8 @@ def upload_and_transcribe(c, run_plan=True):
     assert c.post(f"/projects/{pid}/transcribe").status_code == 202
     wait_job(c, pid)
     if run_plan:
-        assert c.post(f"/projects/{pid}/prompts/generate").status_code == 202
+        r = c.post(f"/projects/{pid}/visual-planning/run")
+        assert r.status_code == 202, r.text
     return pid, _m7.config.PROJECTS_DIR / pid
 
 
@@ -150,13 +153,14 @@ def test_retry_continues_without_repeating_finished_work_and_without_a_second_jo
     pid, pdir = upload_and_transcribe(c)
     settle(c, pid)
     assert llm.calls == ["translate", "plan"]
-    r = c.post(f"/projects/{pid}/prompts/generate")
+    r = c.post(f"/projects/{pid}/visual-planning/run")
     assert r.status_code == 202 and r.json()["kind"] == "plan"
     g = settle(c, pid)
     assert g["state"] == "done" and all((pdir / f).exists() for f in PLAN_FILES)
     assert llm.calls == ["translate", "plan", "plan"]                                  # the translation was not asked again
-    again = c.post(f"/projects/{pid}/prompts/generate")                                 # the plan exists: nothing starts
-    assert again.status_code == 409 and llm.calls == ["translate", "plan", "plan"]      # (now it means "prompts", which wait for the analysis approval)
+    again = c.post(f"/projects/{pid}/visual-planning/run")                                 # the plan exists: only the visual plan is made over it, the scene plan is not planned again
+    assert again.status_code == 202 and llm.calls[:3] == ["translate", "plan", "plan"] and llm.calls.count("translate") == 1
+    settle(c, pid)
 
 
 def test_clicking_retry_repeatedly_runs_one_job(auto):
@@ -165,8 +169,8 @@ def test_clicking_retry_repeatedly_runs_one_job(auto):
     pid, _ = upload_and_transcribe(c)
     settle(c, pid)
     llm.gate = threading.Event()
-    first = c.post(f"/projects/{pid}/prompts/generate").json()
-    second = c.post(f"/projects/{pid}/prompts/generate").json()
+    first = c.post(f"/projects/{pid}/visual-planning/run").json()
+    second = c.post(f"/projects/{pid}/visual-planning/run").json()
     assert first["state"] == second["state"] == "running" and first["started"] == second["started"]
     llm.gate.set()
     assert settle(c, pid)["state"] == "done"
@@ -198,7 +202,7 @@ def test_a_plan_made_by_hand_meanwhile_is_never_replaced(auto):
     llm.during = user_runs_plan
     c.post(f"/projects/{pid}/transcribe")
     wait_job(c, pid)
-    assert c.post(f"/projects/{pid}/prompts/generate").status_code == 202          # the user clicks Run Visual Planning
+    assert c.post(f"/projects/{pid}/visual-planning/run").status_code == 202          # the user clicks Run Visual Planning
     g = settle(c, pid)
     assert g["state"] == "done" and (pdir / "scene_plan.json").read_text(encoding="utf-8") == mine and not (pdir / "composition.json").exists()
 
@@ -213,8 +217,10 @@ def test_existing_projects_with_a_plan_are_not_planned_again(auto):
     time.sleep(0.3)
     assert llm.calls == [] and generation(c, pid)["state"] == "idle"
     assert {f: (pdir / f).read_bytes() for f in before} == before
-    # the generate endpoint on a project with a plan still means "prompts, after the analysis approval" (unchanged behaviour)
-    assert c.post(f"/projects/{pid}/prompts/generate").status_code == 409
+    # the run endpoint on a project with a plan makes the visual plan over it (the scene plan, prompts and composition are never changed)
+    assert c.post(f"/projects/{pid}/visual-planning/run").status_code == 202
+    settle(c, pid)
+    assert {f: (pdir / f).read_bytes() for f in before} == before
 
 
 def test_a_project_that_was_already_waiting_is_planned_from_the_generate_endpoint(auto, monkeypatch):
@@ -222,14 +228,28 @@ def test_a_project_that_was_already_waiting_is_planned_from_the_generate_endpoin
     monkeypatch.setattr(autoplan, "ENABLED", False)                       # transcribed earlier, before the automation existed
     pid, pdir = upload_and_transcribe(c)
     assert llm.calls == [] and c.get(f"/projects/{pid}/status").json()["waiting_for"] == "plan"
-    assert c.post(f"/projects/{pid}/prompts/generate").status_code == 202
+    assert c.post(f"/projects/{pid}/visual-planning/run").status_code == 202
     assert settle(c, pid)["state"] == "done" and (pdir / "prompts_map.json").exists()
 
 
-def test_prompts_are_still_written_only_after_the_analysis_is_approved(auto):
+def test_a_run_request_on_a_planned_project_never_changes_the_prompts(auto):
     c, llm = auto
     pid, pdir = upload_and_transcribe(c)
     settle(c, pid)
     texts = [p["text"] for p in c.get(f"/projects/{pid}/review").json()["prompts"]]
-    assert c.post(f"/projects/{pid}/prompts/generate").status_code == 409            # plan exists, analysis not approved
-    assert [p["text"] for p in c.get(f"/projects/{pid}/review").json()["prompts"]] == texts and llm.calls == ["translate", "plan"]
+    assert c.post(f"/projects/{pid}/visual-planning/run").status_code == 202            # plan exists: the visual plan is made over it
+    settle(c, pid)
+    assert [p["text"] for p in c.get(f"/projects/{pid}/review").json()["prompts"]] == texts and llm.calls[:2] == ["translate", "plan"]
+
+
+def test_run_waits_for_the_plan_and_raises_the_cause_when_it_fails(auto):
+    """autoplan.run is the plan job in the caller's thread (the orchestrator's planning stage): a failure names its cause and leaves no half plan, the next call plans."""
+    c, llm = auto
+    pid, pdir = upload_and_transcribe(c, run_plan=False)
+    llm.fail["plan"] = 1
+    with pytest.raises(promptgen.GenError, match="not signed in"):
+        autoplan.run(pdir)
+    assert generation(c, pid)["state"] == "failed" and not promptgen._running
+    assert not any((pdir / f).exists() for f in PLAN_FILES)
+    autoplan.run(pdir)
+    assert generation(c, pid)["state"] == "done" and all((pdir / f).exists() for f in PLAN_FILES) and not promptgen._running

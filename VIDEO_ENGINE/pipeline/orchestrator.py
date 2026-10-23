@@ -252,12 +252,15 @@ def ensure_motion_planning_artifacts(pdir: Path, aspect: str = "16:9") -> None:
     if seg_file.exists():
         try:
             seg_data = json.loads(seg_file.read_text(encoding="utf-8"))
-            for sc in seg_data.get("scenes", []):
-                meaning_text = sc.get("text", "") or f"Scene {sc.get('id', len(scenes)+1)}"
+            from VIDEO_ENGINE.stages import visual_planning
+            canon = visual_planning.canonical(seg_data)
+            for k, c in enumerate(canon):
+                meaning_text = c["text"] or f"Scene {c['index'] + 1}"
+                end_of_audio = seg_data.get("audio_duration_seconds", c["end"])
                 scenes.append({
-                    "id": int(sc.get("id", len(scenes) + 1)),
-                    "start": float(sc.get("start", 0.0)),
-                    "end": float(sc.get("end", 3.0)),
+                    "id": k + 1,
+                    "start": 0.0 if k == 0 else c["start"],                          # a planned scene holds its pause: it runs to where the next one starts
+                    "end": canon[k + 1]["start"] if k + 1 < len(canon) else end_of_audio,
                     "meaning": meaning_text,
                     "concept": f"Visualizing {meaning_text[:30]}",
                     "mood": "modern, futuristic, digital",
@@ -689,6 +692,28 @@ class PipelineOrchestrator:
         from VIDEO_ENGINE.stages import scene_segmentation
         return scene_segmentation.load_fresh(self.pdir) is None
 
+    def _planning_needed(self) -> bool:
+        """No scene plan yet, or one that does not follow the current Scene Segmentation (and nothing depends on it)."""
+        from VIDEO_ENGINE.stages import autoplan, visual_planning
+        if autoplan.needs_plan(self.pdir):
+            return True
+        return bool(visual_planning.plan_mismatch(self.pdir)) and autoplan.replace_blocker(self.pdir) is None
+
+    def _plan_scenes(self, run: RunRecord) -> None:
+        """The real planner (translation, scene plan, visual plan from Scene Segmentation's scenes), never a placeholder; a plan that does not follow the segmentation is replaced (the old one is
+        kept in plan_backups/). Failing to plan stops the stage with the cause."""
+        from VIDEO_ENGINE.stages import autoplan
+        communication.publish_lifecycle_event(
+            project_id=self.project_id,
+            stage_id="planning",
+            sender_agent_id="visual_planning",
+            event="stage_progress",
+            detail="Planning the scenes from the Scene Segmentation scenes...",
+            run_id=run.run_id,
+            correlation_id=run.correlation_id,
+        )
+        autoplan.run(self.pdir, replace=not autoplan.needs_plan(self.pdir))
+
     def _segment_scenes(self, run: RunRecord) -> None:
         """Scene Segmentation cuts the scenes from the transcript the Audio Analyzer checked with the LLM (`transcript_corrected.json` when it corrected something); its own LLM only decides the
         scene boundaries and grouping. A transcript the LLM has not verified stops here with the cause, it is never corrected a second time inside this stage."""
@@ -919,8 +944,8 @@ class PipelineOrchestrator:
                         elif stage_id == "segmentation" and self._segmentation_needed():
                             self._segment_scenes(run)
 
-                        elif stage_id == "planning" and not (self.pdir / "scene_plan.json").exists():
-                            ensure_motion_planning_artifacts(self.pdir, self.aspect)
+                        elif stage_id == "planning" and self._planning_needed():
+                            self._plan_scenes(run)
 
                         # Validate input constraints
                         val_errs = agent_adapter.validate(self.pdir, req)

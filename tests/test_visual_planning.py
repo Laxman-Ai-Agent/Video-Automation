@@ -1117,6 +1117,21 @@ def test_a_journey_needs_a_drawn_path_that_joins_its_places_and_something_that_f
     assert "mover_not_on_path" in codes(base_plan(tmp_path, travel([path], ok[:2]))[3])                        # the traveller is not related to the path
 
 
+def test_a_graphic_in_the_path_region_that_joins_nothing_is_moved_out_of_it(tmp_path):
+    """The planner put a row of cards in the path region: nothing travels along it and it joins no place, so it is a misplaced graphic (moved, noted), not a path with a warning."""
+    cards = vp._el("worker_cards", "graphic", "primary", "row of person cards", region="path_across_frame", prio=1)
+
+    def mutate(raw):
+        s = raw["scenes"][0]
+        s["elements"], s["element_relationships"], s["motion_hints"], s["asset_requirements"] = [cards], [], [], []
+        s["visual_concept"]["primary_focus"] = "worker_cards"
+    seg, sp, pm, plan = base_plan(tmp_path, mutate)
+    s = plan["scenes"][0]
+    assert "path_not_connected" not in codes(plan)
+    assert [e["placement"]["region"] for e in s["elements"]] != ["path_across_frame"]
+    assert [n for n in s["validation_notes"] if n["code"] == "path_region_replaced" and n["severity"] == "info"]
+
+
 def test_a_progression_through_three_stops_is_one_scene_with_its_stops_a_path_and_beats_on_spoken_words(tmp_path):
     from backend.transcribe import load_transcript
     seg, sp, pm = seg_project(tmp_path, images=False)

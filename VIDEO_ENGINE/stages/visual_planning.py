@@ -608,6 +608,11 @@ def _snap_word_events(events: list[dict], nar: dict, words: list, sid: str, iss:
     return events
 
 
+def _path_joins(rels: list[dict], eid: str) -> set[str]:
+    """The elements a path element joins (connects_to / flows_from relationships)."""
+    return {y for r in rels if r["relation"] in ("connects_to", "flows_from") and eid in (r["source"], r["target"]) for y in (r["source"], r["target"])} - {eid}
+
+
 def _repair(sc: dict, ctx: dict, sid: str, iss: Issues) -> dict:
     """Safe repairs of one scene (stages 3-5): each is recorded, nothing the planner meant is deleted silently, and a required element is never dropped."""
     for e in sc["elements"]:                                         # layout (stage 3): a region that is not a supported one (or is a placeholder) is replaced by the free region that fits the element
@@ -662,6 +667,12 @@ def _repair(sc: dict, ctx: dict, sid: str, iss: Issues) -> dict:
         else:
             iss.add(4, "warning", "relationship_removed", sid, f"relationship {r['source']} {r['relation']} {r['target']} named an element that does not exist (or itself): removed; no element was deleted")
     sc["element_relationships"] = good
+    on_path = [e for e in sc["elements"] if e["placement"]["region"] == PATH_REGION and e["type"] not in TEXT_TYPES]
+    if not any(e["type"] not in ("graphic", "diagram") for e in on_path):          # nothing travels along it: a graphic there that joins fewer than two elements is a misplaced graphic, not a path
+        for e in on_path:
+            if len(_path_joins(good, e["element_id"])) < 2:
+                e["placement"]["region"] = _free_region(e, sc["elements"], ctx["aspect"])
+                iss.add(3, "info", "path_region_replaced", sid, f"{e['element_id']} was placed in the path region but joins fewer than two elements, so it is not a path: placed in '{e['placement']['region']}' instead")
     for e in sc["elements"]:                                         # registry (stage 3): a concrete icon id must exist, else a search descriptor for the downstream resolver
         reg = e.get("registry_requirements")
         if reg and reg.get("icon"):
@@ -843,7 +854,7 @@ def _check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
         movers = [e for e in on_path if e["type"] not in ("graphic", "diagram")]
         rule("path_element", sid, bool(movers) and not paths, 4, "warning", "moving_without_path", f"{sid}: {movers[0]['element_id'] if movers else ''} travels across the frame but the scene has no path element to travel along")
         for p in paths:
-            joined = {y for r in s["element_relationships"] if r["relation"] in ("connects_to", "flows_from") and p["element_id"] in (r["source"], r["target"]) for y in (r["source"], r["target"])} - {p["element_id"]}
+            joined = _path_joins(s["element_relationships"], p["element_id"])
             rule("path_connected", sid, len(joined) < 2, 4, "warning", "path_not_connected", f"{sid}: the path {p['element_id']} joins {len(joined)} element(s): a path connects at least two places")
         for mv in movers:
             rule("mover_on_path", sid, bool(paths) and not any({r["source"], r["target"]} == {mv["element_id"], p["element_id"]} for p in paths for r in s["element_relationships"]), 4, "warning",

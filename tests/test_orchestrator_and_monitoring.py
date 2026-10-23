@@ -189,6 +189,43 @@ def test_scene_segmentation_uses_the_verified_transcript_and_never_corrects_it_a
         assert orch._segmentation_needed() is False
 
 
+def test_planning_runs_the_real_planner_never_a_placeholder_plan(test_project: Path, mock_no_asr):
+    """The planning stage used to write a placeholder scene_plan.json ("Scene N", 0-3 s for every scene: it read fields Scene Segmentation does not write) and so the real planner never ran
+    for the project. It now runs the planner when there is no plan, and again (the old plan is kept) when the plan does not follow the current segmentation."""
+    from VIDEO_ENGINE.stages import autoplan, visual_planning
+    orch = orchestrator.PipelineOrchestrator(test_project.name, "16:9")
+    run = MagicMock(run_id="run_x", correlation_id="corr_x")
+    called: list[bool] = []
+    with patch.object(autoplan, "needs_plan", return_value=True), patch.object(autoplan, "run", lambda pdir, replace=False: called.append(replace)):
+        assert orch._planning_needed() is True
+        orch._plan_scenes(run)
+    assert called == [False]                                                                  # a project without a plan: planned, nothing replaced
+    called.clear()
+    with patch.object(autoplan, "needs_plan", return_value=False), patch.object(autoplan, "run", lambda pdir, replace=False: called.append(replace)), \
+            patch.object(visual_planning, "plan_mismatch", return_value=["the scene plan was made from other scene boundaries"]), patch.object(autoplan, "replace_blocker", return_value=None):
+        assert orch._planning_needed() is True
+        orch._plan_scenes(run)
+    assert called == [True]                                                                   # a plan that does not follow the segmentation: made again
+    with patch.object(autoplan, "needs_plan", return_value=False), patch.object(visual_planning, "plan_mismatch", return_value=["x"]), patch.object(autoplan, "replace_blocker", return_value="images uploaded"):
+        assert orch._planning_needed() is False                                               # the user's work depends on it: never replaced
+    with patch.object(autoplan, "needs_plan", return_value=False), patch.object(visual_planning, "plan_mismatch", return_value=[]):
+        assert orch._planning_needed() is False                                               # it follows the segmentation: reused
+
+
+def test_the_baseline_scene_plan_follows_the_scene_segmentation_scenes(tmp_path: Path):
+    """The baseline plan is built from the real segmentation schema (scene_id, start_time, end_time, transcript): each scene holds its pause until the next one starts."""
+    seg = {"audio_duration_seconds": 20.0, "scenes": [
+        {"scene_id": "scene_001", "scene_index": 0, "start_time": 0.4, "end_time": 7.5, "transcript": "first scene text", "source_segment_ids": [0]},
+        {"scene_id": "scene_002", "scene_index": 1, "start_time": 7.6, "end_time": 13.7, "transcript": "second scene text", "source_segment_ids": [1]},
+        {"scene_id": "scene_003", "scene_index": 2, "start_time": 13.9, "end_time": 19.5, "transcript": "third scene text", "source_segment_ids": [2]}]}
+    (tmp_path / "scene_segmentation.json").write_text(json.dumps(seg), encoding="utf-8")
+    with patch.object(orchestrator.subprocess, "run"):
+        orchestrator.ensure_motion_planning_artifacts(tmp_path)
+    scenes = json.loads((tmp_path / "scene_plan.json").read_text(encoding="utf-8"))["scenes"]
+    assert [(s["id"], s["start"], s["end"], s["meaning"]) for s in scenes] == [
+        (1, 0.0, 7.6, "first scene text"), (2, 7.6, 13.9, "second scene text"), (3, 13.9, 20.0, "third scene text")]
+
+
 def test_safe_resume_reuses_valid_checkpoints(test_project: Path, mock_no_asr):
     """Verify orchestrator uses Phase 3 resume plan and skips already completed, fresh stages."""
     pstate = pipeline_state.load_pipeline_state(test_project)
