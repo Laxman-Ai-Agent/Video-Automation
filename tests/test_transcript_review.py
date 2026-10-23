@@ -214,6 +214,27 @@ def test_the_analysis_runs_whisper_only_when_there_is_no_transcript_and_the_llm_
     assert ran == ["refine", "cuts", "review:analyzer"]                                                        # the project has its transcript: Whisper does not run again
 
 
+def test_a_low_confidence_word_the_llm_checked_and_kept_is_reviewed_not_unresolved(tmp_path):
+    """The LLM looks at every word: a word below the confidence threshold that it leaves unchanged was reviewed and kept. It used to stay "unresolved" and raise a warning that stopped the pipeline
+    until a person ran the auto-fix; only when the LLM did NOT check, the uncertain word stays unresolved."""
+    from backend import audio_analysis as aa
+    make(tmp_path)                                                                           # "ఫాస్ట్" has p 0.2
+    wav(tmp_path)
+    (tmp_path / "audio.wav").write_bytes((tmp_path / "audio_16k.wav").read_bytes())
+    r = tr.refine(tmp_path, ask=Ask(answer()))
+    assert r["unresolved"] == [] and [c["text"] for c in r["confirmed"]] == ["ఫాస్ట్"] and r["confirmed"][0]["reason"] == "checked by the LLM and kept"
+    codes = [w["code"] for w in aa.build(tmp_path)["validation"]["warnings"]]
+    assert "uncertain_words" not in codes and "unresolved_words" not in codes
+    other = tmp_path / "unchecked"
+    other.mkdir()
+    make(other)
+    wav(other)
+    (other / "audio.wav").write_bytes((other / "audio_16k.wav").read_bytes())
+    r = tr.refine(other, ask=Ask(promptgen.GenError("not signed in")))                      # the LLM did not check: the uncertain word stays unresolved and says so
+    assert [f["text"] for f in r["unresolved"]] == ["ఫాస్ట్"] and r["confirmed"] == []
+    assert "unresolved_words" in [w["code"] for w in aa.build(other)["validation"]["warnings"]]
+
+
 def test_a_stale_corrected_file_is_replaced_by_the_final_json_of_the_new_transcript(tmp_path):
     make(tmp_path)
     tr.refine(tmp_path, ask=Ask(answer(GOOD)))

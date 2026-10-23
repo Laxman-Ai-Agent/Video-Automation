@@ -430,11 +430,14 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None) -> dict:
     elif out.exists():
         out.unlink()            # a derived file of an earlier run that no longer applies (the raw text is the transcript again, or it was made from an older raw transcript)
     done = {(c["segment"], k) for c in corrections if c["status"] == "applied" for k in range(c["from_index"], c["to_index"] + 1)}
+    left = [f for f in conf["flagged"] if (f["segment"], f["index"]) not in done]      # low-confidence words the LLM did not change
     review = {
         "schema_version": SCHEMA, "version": VERSION, "raw_file": "transcript.json", "corrected_file": "transcript_corrected.json" if edited or checked or kept else None,
         "vocabulary": {"terms": vocab, "project_list": (pdir / "vocabulary.txt").exists()},
         "confidence": conf, "llm": llm, "corrections": corrections,
-        "unresolved": [f for f in conf["flagged"] if (f["segment"], f["index"]) not in done],
+        # The LLM looked at every word: a low-confidence word it left as it is was reviewed and kept (confirmed), not unresolved. Only when the LLM did not check, the words stay unresolved.
+        "unresolved": [] if checked else left,
+        "confirmed": [{"segment": f["segment"], "index": f["index"], "text": f["text"], "p": f["p"], "reason": "checked by the LLM and kept"} for f in left] if checked else [],
         "alignment": _alignment_block(align_r, edited),
     }
     tmp = pdir / "transcript_review.json.part"
