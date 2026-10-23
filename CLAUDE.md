@@ -118,7 +118,7 @@ audio-to-video/
 - Never repeat completed work or a successful test without a reason. Re-run tests only when the code they cover changed, to investigate a regression, or when extra verification is needed; run the tests of the changed code and its integrations, not the whole suite by default.
 - Reuse existing outputs and validation results while they are valid (fingerprints, caches, finished steps). Never re-run Whisper or a finished stage for a project that already has valid outputs.
 - No duplicate implementations, no unnecessary LLM calls, no token waste, no repeated processing. One job, one implementation; callers use it.
-- Work incrementally: validate the current stage, then move to the next. Use an isolated copy of a project for integration tests; never overwrite or delete user data or assets.
+- Work incrementally: validate the current stage, then move to the next. Never create a copy of a project or a new test project: modify and test directly in the existing project; never delete user data or assets (audio, transcripts).
 
 ## Approvals & Pipeline Automation (no human gates)
 - Automatic stage progression advances autonomously through every stage, including Final QC, when complete, with no unresolved warnings (or only warnings the stage's own rules permit) and LLM review passed. Never ask a person to accept a warning to continue: fix its root cause.
