@@ -27,8 +27,8 @@ It converts a Telugu spoken audio narration into a broadcast-ready MP4 video usi
 ## Active 13-Stage Autonomous Pipeline
 Execution sequence (strictly ordered):
 1. **Audio Input** (`audio`): Audio intake, format probing, project descriptor creation.
-2. **Audio Analyzer** (`analyzer`) [FROZEN]: Local faster-whisper transcription, sentence/silence cuts, bilingual transcript review.
-3. **Scene Segmentation** (`segmentation`) [FROZEN]: Semantic scene boundary grouping, duration constraints, narrative coherence.
+2. **Audio Analyzer** (`analyzer`): Local faster-whisper transcription (`transcript.json`, never edited), sentence/silence cuts, and the LLM transcript review: `transcript_review.json` (vocabulary, uncertain words, corrections, alignment record) and `transcript_corrected.json` (the verified transcript: Telugu kept in Telugu script, English technical terms in English, corrected words re-aligned against the audio). Steps `transcribe` -> `refine` -> `cuts`; a finished step is reused, Whisper is never re-run for a project that has `transcript.json`.
+3. **Scene Segmentation** (`segmentation`): Semantic scene boundary grouping, duration constraints (a last scene shorter than the minimum joins the one before it), narrative coherence. It consumes `transcript_corrected.json` and uses its LLM only for scene boundaries and grouping, never to correct the transcript again.
 4. **Visual Planning** (`planning`): Visual concept generation, scene-by-scene design, color palette, and kinetic emphasis.
 5. **Asset Collection** (`assets`): OPTIONAL real photographs and video clips for scenes whose narration is about a concrete real-world subject (one LLM planner call, licensed sources via `VIDEO_ENGINE/stages/stock.py`, ffmpeg clip preparation). Writes `asset_requirements.json`, `assets_manifest.json`, `credits.json`, `assets/collected/*`. A video where no scene needs real media completes this stage with zero requirements. Rights classes: A (known free) is used; C (rights not established) is collected but listed in the Final QC report (`QC_ASSET_RIGHTS_REVIEW`) for the Final QC LLM review to judge; D (no licence) is never downloaded. Every asset keeps source URL, licence, hash and `authenticity: real`; a requirement that cannot be met falls back to the scene's generated motion graphics (recorded), and one marked `must_be_real` fails the stage with the exact cause. A requirement of kind `page` is a screenshot of one infobox/table of a Wikipedia or official reference page (`VIDEO_ENGINE/stages/web_capture.py`: https only, host allowlist re-checked on every redirect hop, robots.txt honoured, no login/CAPTCHA; always rights class C). General web or news search and news-site screenshots are NOT part of this stage (they need a search API).
 6. **Motion Planning** (`motion_plan`): Kinetic typography pacing, visual hierarchy, spring curve timing math, transition scheduling.
@@ -43,8 +43,8 @@ Execution sequence (strictly ordered):
 ## Target 15-Agent Architecture
 All agents inherit from `BaseAgent` and register in the central `AgentRegistry`:
 1. `audio_intake`: Audio Intake & Processing Agent
-2. `audio_analyzer`: Audio Analysis Agent [FROZEN]
-3. `scene_segmentation`: Scene Segmentation Agent [FROZEN]
+2. `audio_analyzer`: Audio Analysis Agent
+3. `scene_segmentation`: Scene Segmentation Agent
 4. `visual_concept`: Visual Concept Agent
 5. `asset_collection`: Asset Collection Agent (one agent for the whole stage; its search, capture and validation are modules, not agents)
 6. `motion_architect`: Motion Architecture Agent
@@ -112,9 +112,13 @@ audio-to-video/
   - Frontend typecheck: `cd UI/frontend && npm run typecheck`
   - Remotion typecheck: `cd VIDEO_ENGINE/remotion && npx tsc --noEmit`
 
-## Frozen Stages Policy
-- Stage 2 Audio Analyzer (`VIDEO_ENGINE/stages/transcribe.py`, `VIDEO_ENGINE/stages/transcript_review.py`) and Stage 3 Scene Segmentation (`VIDEO_ENGINE/stages/scene_segmentation.py`) are strictly frozen.
-- No modifications to prompts, logic, rules, or schemas of these stages without explicit user authorization.
+## Working Rules (permanent)
+- No stage is frozen. Any stage may be changed when the work needs it; keep its output contract (file names and schemas that later stages read) or update every reader and test together.
+- Inspect the existing implementation, `CLAUDE.md`, the docs and the existing test results before working. Do not rebuild what works.
+- Never repeat completed work or a successful test without a reason. Re-run tests only when the code they cover changed, to investigate a regression, or when extra verification is needed; run the tests of the changed code and its integrations, not the whole suite by default.
+- Reuse existing outputs and validation results while they are valid (fingerprints, caches, finished steps). Never re-run Whisper or a finished stage for a project that already has valid outputs.
+- No duplicate implementations, no unnecessary LLM calls, no token waste, no repeated processing. One job, one implementation; callers use it.
+- Work incrementally: validate the current stage, then move to the next. Use an isolated copy of a project for integration tests; never overwrite or delete user data or assets.
 
 ## Approvals & Pipeline Automation (no human gates)
 - Automatic stage progression advances autonomously through every stage, including Final QC, when complete, with no unresolved warnings (or only warnings the stage's own rules permit) and LLM review passed. Never ask a person to accept a warning to continue: fix its root cause.

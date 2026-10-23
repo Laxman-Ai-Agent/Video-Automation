@@ -113,6 +113,52 @@ def test_no_uncertain_words_means_no_call(tmp_path):
     assert ask.calls == 0 and r["llm"]["status"] == "not_needed"
 
 
+def _review(tmp_path, **changes):
+    """transcript_review.json of a run, with the given top-level or nested ('llm.status') fields changed, written after the raw transcript."""
+    f = tmp_path / "transcript_review.json"
+    data = json.loads(f.read_text(encoding="utf-8"))
+    for key, value in changes.items():
+        node = data
+        *path, last = key.split(".")
+        for part in path:
+            node = node[part]
+        node[last] = value
+    f.write_text(json.dumps(data), encoding="utf-8")
+
+
+def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_corrected(tmp_path):
+    """transcript_corrected.json exists only when something was corrected, so the gate cannot look for the file: a transcript the LLM checked and left as it was is verified too."""
+    import os
+    make(tmp_path)
+    assert not tr.is_verified(tmp_path)                                                     # no review yet
+    tr.refine(tmp_path, ask=Ask(answer()), all_words=True)                                  # the LLM answers: nothing to correct
+    assert not (tmp_path / "transcript_corrected.json").exists() and tr.is_verified(tmp_path)
+    _review(tmp_path, **{"llm.status": "unavailable"})
+    assert not tr.is_verified(tmp_path)                                                     # the LLM did not check it
+    _review(tmp_path, **{"llm.status": "cached", "alignment.status": "estimated_for_edits"})
+    assert not tr.is_verified(tmp_path)                                                     # corrected words still wait for their timestamps
+    _review(tmp_path, **{"alignment.status": "aligned_for_edits"})
+    assert tr.is_verified(tmp_path)
+    later = (tmp_path / "transcript_review.json").stat().st_mtime + 5
+    os.utime(tmp_path / "transcript.json", (later, later))
+    assert not tr.is_verified(tmp_path)                                                     # the review was made from an older raw transcript
+    (tmp_path / "transcript_review.json").unlink()
+    (tmp_path / "transcript_corrected.json").write_text("{}", encoding="utf-8")
+    os.utime(tmp_path / "transcript_corrected.json", (later + 1, later + 1))
+    assert tr.is_verified(tmp_path)                                                         # an older project that has only the corrected transcript, made after the raw one
+
+
+def test_the_analysis_runs_whisper_only_when_there_is_no_transcript_and_the_llm_check_before_the_cuts(tmp_path, monkeypatch):
+    ran = []
+    monkeypatch.setattr(pipeline, "execute", lambda pdir, name, ctx: ran.append(name) or {"name": name, "status": "ran"})
+    pipeline.run_analysis(tmp_path)
+    assert ran == ["transcribe", "refine", "cuts"]
+    ran.clear()
+    make(tmp_path)
+    pipeline.run_analysis(tmp_path)
+    assert ran == ["refine", "cuts"]                                                        # the project has its transcript: Whisper does not run again
+
+
 def test_a_stale_corrected_file_is_removed_when_nothing_applies_any_more(tmp_path):
     make(tmp_path)
     tr.refine(tmp_path, ask=Ask(answer(GOOD)))

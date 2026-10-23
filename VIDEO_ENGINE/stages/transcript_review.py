@@ -522,6 +522,22 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = 
     return review
 
 
+def is_verified(pdir: Path) -> bool:
+    """True when the transcript the later stages read has been checked by the LLM: it answered for the current raw transcript (applied or cached) and no corrected word is still waiting for its
+    timestamps. `transcript_corrected.json` exists only when something was corrected, so a transcript the LLM checked and left as it was is verified too; a corrected file newer than the raw
+    transcript also counts (projects checked before the review file recorded this)."""
+    raw, review_f, corrected = pdir / "transcript.json", pdir / "transcript_review.json", pdir / "transcript_corrected.json"
+    if not raw.exists():
+        return False
+    if review_f.exists() and review_f.stat().st_mtime >= raw.stat().st_mtime:
+        try:
+            review = json.loads(review_f.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return False
+        return (review.get("llm") or {}).get("status") in ("applied", "cached") and (review.get("alignment") or {}).get("status") not in ("partial", "estimated_for_edits")
+    return corrected.exists() and corrected.stat().st_mtime >= raw.stat().st_mtime        # no current review file: an older project that has only the corrected transcript
+
+
 if __name__ == "__main__":
     r = refine(config.project_dir(sys.argv[1]))
     print(r["llm"]["status"], f"flagged={len(r['confidence']['flagged'])} corrections={sum(c['status'] == 'applied' for c in r['corrections'])}")

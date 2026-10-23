@@ -15,7 +15,7 @@ from SYSTEM.memory import store
 
 
 class AudioAnalyzerAgent(BaseAgent):
-    """A03: Audio Analyzer Agent (Frozen Implementation Wrapper). Wraps existing faster-whisper transcribe and audio analysis without ASR re-runs."""
+    """A03: Audio Analyzer Agent. Wraps the faster-whisper transcription, the LLM transcript review and the audio analysis; finished outputs are reused, never re-run."""
 
     def validate(self, project_dir: Path, request: AgentRequest) -> list[str]:
         audio = next(iter(project_dir.glob("audio.*")), None)

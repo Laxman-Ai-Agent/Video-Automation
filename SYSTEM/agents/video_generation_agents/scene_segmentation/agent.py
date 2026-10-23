@@ -22,7 +22,7 @@ logger = logging.getLogger("scene_segmentation.agent")
 class SceneSegmentationAgent(BaseAgent):
     """A04: Scene Segmentation Agent (v2.0.0 Semantic Intelligence Upgrade).
     Combines LLM narrative reasoning, cross-lingual topic modeling, Telugu-English vocabulary
-    standardization, and adaptive pacing telemetry with bit-for-bit frozen core invariants.
+    standardization, and adaptive pacing telemetry; the deterministic core keeps its timing and coverage invariants.
     """
 
     def __init__(self, metadata: AgentMetadata | None = None) -> None:

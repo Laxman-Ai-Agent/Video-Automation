@@ -9,7 +9,7 @@
 **Current Milestone:** Intelligent Category-Based Video Editing Skill Library (COMPLETE)  
 **Overall Development State:** **Production Release Ready (v2.0.0)**  
 **Active Working Tree:** `E:\audio-to-video` (branch: `agents-building`)  
-**Core Invariants:** All 3 frozen algorithm hashes verified identical bit-for-bit. Zero unauthorized commits or remote pushes.
+**Core Invariants:** No stage is frozen (the SHA-256 freeze guard was removed). Zero unauthorized commits or remote pushes.
 
 ### Recent Verified Milestones (2026-10-18)
 | Milestone | Status | Verification & Evidence |
@@ -72,7 +72,6 @@
 | `[x]` | **AST Security Sandbox** | `SYSTEM/agents/security_policy/ast_sandbox.py` | Python AST | Blocks unsafe OS commands and unauthorized calls. |
 | `[x]` | **Per-Agent Memory & Experience** | `config/shared_memory.json`, `SYSTEM/agents/shared/` | JSON Store | Reflection and task score persistence. |
 | `[x]` | **Production Release Packaging** | `scripts/package_production_release.py`, `dist/` | Packaging | `laxman_video_engine_v2.0.0.zip` verified. |
-| `[x]` | **Frozen Algorithm Integrity** | `VIDEO_ENGINE/stages/*.py` | Cryptography | Bit-for-bit SHA-256 match. |
 | `[ ]` | **Stage 10 Style Kit Preview Refresh** | `POST /projects/{id}/motion-timeline-validation/preview` | Remotion | Optional preview generation for style kit. |
 | `[ ]` | **Style Kit Phases P2–P6** | `remotion/src/styleKit.ts`, `docs/motion.md` | User Review | Explainer cards, 3D reel objects, camera sync. |
 
@@ -137,12 +136,7 @@ All test suites were executed and verified against live running services:
 
 ## 7. Important Constraints & Rules
 
-1. **Frozen Algorithm Invariants:**
-   The following 3 files must never be edited, and their SHA-256 hashes must remain bit-for-bit identical:
-   - `VIDEO_ENGINE/stages/transcribe.py` -> `07A200319D41C2BD1550DFD5704F3BBCC5FAC8331A0AEB09DCCA4BF46D61376E`
-   - `VIDEO_ENGINE/stages/transcript_review.py` -> `7290EA210D922514C011C799CAF73AAD61398F0229CC6799DD2F10072B38D049`
-   - `VIDEO_ENGINE/stages/scene_segmentation.py` -> `2D9EA882B8C53A6CFCD43B048481F72140A1A6792B8F05578E16FD56A9B37042`
-2. **Git Commit & Push Policy:**
+1. **Git Commit & Push Policy:**
    - Commit locally only when explicitly requested (e.g. for documentation handoff).
    - Strictly NEVER push to a remote repository without explicit user authorization.
    - Never stage untracked runtime artifacts or unrelated working directory files.
@@ -173,7 +167,6 @@ All test suites were executed and verified against live running services:
   - Head commit: `e3f3495` (`docs: update project status and session handoff`).
   - Documentation files updated: `PROJECT_OVERVIEW.md`, `PROJECT_STATUS.md`.
   - Untracked runtime artifacts left untouched and intact.
-- **Frozen Hashes:** 100% verified bit-for-bit identical.
 
 ### Next Exact Action
 1. Review any new user request or feature specification.
@@ -181,7 +174,6 @@ All test suites were executed and verified against live running services:
    - Check `UI/frontend/src/App.tsx`, `Sidebar.tsx`, and `components/` for component structure.
    - Run `tests/test_playwright_fixed_layout_scroll.py` to ensure layout invariants remain satisfied.
 3. If continuing video engine / pipeline work:
-   - Ensure `VIDEO_ENGINE/stages/` frozen files are untouched.
    - Use `tests/test_stage9_final_release_acceptance.py` to verify pipeline contracts.
 
 ### Files to Inspect First
@@ -198,16 +190,11 @@ All test suites were executed and verified against live running services:
   .venv\Scripts\python -m pytest tests/test_playwright_fixed_layout_scroll.py tests/test_playwright_visual_ai_editor.py tests/test_playwright_no_blinking.py tests/test_playwright_pipeline_tabs.py tests/test_playwright_new_project_compact.py
   .venv\Scripts\python -m pytest tests/test_stage9_final_release_acceptance.py tests/test_agent_routes.py
   ```
-- **Check Frozen File Hashes:**
-  ```powershell
-  Get-FileHash VIDEO_ENGINE/stages/transcribe.py, VIDEO_ENGINE/stages/transcript_review.py, VIDEO_ENGINE/stages/scene_segmentation.py -Algorithm SHA256
-  ```
 
 ### What NOT to Repeat
 - Do NOT rewrite or re-implement the Visual AI Editor (it is complete with 5 tabs and verified).
 - Do NOT revert the New Project or Agent Communication tabs to modals/popups (they are inline).
 - Do NOT remove `height: 100vh` / `overflow: hidden` from `App.tsx` or `index.css` (it preserves the fixed layout).
-- Do NOT modify the 3 frozen algorithm files.
 
 ---
 

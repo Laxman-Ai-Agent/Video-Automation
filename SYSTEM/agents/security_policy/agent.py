@@ -52,7 +52,6 @@ class SecurityPolicyAgent(BaseAgent):
                     "approval-verification",
                     "risk-classification",
                     "security-audit",
-                    "frozen-file-protection",
                 ],
                 allowed_tools=[
                     "agent_registry",
@@ -270,7 +269,7 @@ class SecurityPolicyAgent(BaseAgent):
                 "rules": [
                     "SEC-AGT-001..002 (Identity & Registration)",
                     "SEC-AUTH-001..003 (Anti-spoofing & Role claims)",
-                    "SEC-FILE-001..005 (Frozen files, secrets, path confinement)",
+                    "SEC-FILE-000, SEC-FILE-002..005 (Secrets, path confinement, destructive operations)",
                     "SEC-TOOL-001..004 (Tool allowlists & permissions)",
                     "SEC-SKILL-001..004 (Declarative vs executable, sandbox, promotion)",
                     "SEC-APPR-001..006 (Approval engine, fingerprints)",

@@ -9,7 +9,7 @@ Maintains an evidence-based learning loop:
    - failed_strategies: Explicitly cataloged failed actions to prevent repeated failure loops.
 4. Retrieves relevant lessons during future planning and recovery.
 5. Strictly enforces that learned lessons cannot override security policies, approval gates,
-   or frozen file invariance.
+   or the protected-file rules.
 """
 from __future__ import annotations
 

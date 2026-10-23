@@ -32,7 +32,6 @@ class TestSecurityPolicyAgentBasics:
         assert agent.metadata.name == "Security Policy Agent"
         assert "policy-evaluation" in agent.metadata.capabilities
         assert "agent-authorization" in agent.metadata.capabilities
-        assert "frozen-file-protection" in agent.metadata.capabilities
         assert "approval_engine" in agent.metadata.allowed_tools
 
     def test_status_action(self):
@@ -137,30 +136,8 @@ class TestAgentPermissionsAndAntiSpoofing:
         assert "cannot self-approve" in dec.reason
 
 
-class TestFileBoundariesAndFrozenFiles:
-    """Verifies file access controls and frozen algorithm protection."""
-
-    @pytest.mark.parametrize(
-        "frozen_file",
-        [
-            "VIDEO_ENGINE/stages/transcribe.py",
-            "VIDEO_ENGINE/stages/transcript_review.py",
-            "VIDEO_ENGINE/stages/scene_segmentation.py",
-            "video_engine/stages/transcribe.py",
-        ],
-    )
-    def test_modification_of_frozen_files_strictly_denied(self, frozen_file: str):
-        evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
-        req = SecurityRequest(
-            agent_id="skill_factory",
-            operation="file_write",
-            resource=frozen_file,
-        )
-        dec = evaluator.evaluate(req)
-        assert dec.state == PolicyState.DENY
-        assert dec.rule_id == "SEC-FILE-001"
-        assert dec.risk_level == RiskLevel.CRITICAL
-        assert "Modification of frozen video algorithm stage file" in dec.reason
+class TestFileBoundaries:
+    """Verifies file access controls (secrets, path confinement)."""
 
     def test_access_to_protected_secret_denied_without_auth(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
@@ -281,12 +258,12 @@ class TestEnforcementBoundary:
         req = SecurityRequest(
             agent_id="skill_factory",
             operation="file_write",
-            resource="VIDEO_ENGINE/stages/transcribe.py",
+            resource=".env",
         )
         with pytest.raises(SecurityPolicyViolationError) as exc_info:
             enforcer.enforce(req)
 
-        assert exc_info.value.decision.rule_id == "SEC-FILE-001"
+        assert exc_info.value.decision.rule_id == "SEC-FILE-002"
         assert exc_info.value.decision.state == PolicyState.DENY
 
     def test_guard_decorator_prevents_execution_on_denial(self):
@@ -296,7 +273,7 @@ class TestEnforcementBoundary:
         @enforcer.guard(
             agent_id="capability_finder",
             operation="file_write",
-            resource="VIDEO_ENGINE/stages/transcribe.py",
+            resource=".env",
         )
         def sensitive_mutator():
             nonlocal executed

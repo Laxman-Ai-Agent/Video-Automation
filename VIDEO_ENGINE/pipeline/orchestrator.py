@@ -2,8 +2,8 @@
 
 Coordinates the 12 active stages in the Motion-Only pipeline dependency graph:
 1. audio (Audio Input)
-2. analyzer (Audio Analyzer - frozen, reuse outputs)
-3. segmentation (Scene Segmentation - frozen, reuse outputs)
+2. analyzer (Audio Analyzer - reuse outputs)
+3. segmentation (Scene Segmentation - reuse outputs)
 4. planning (Visual Planning)
 5. motion_plan (Motion Planning)
 6. motion_gen (Motion Animation - custom executable React/TSX)
@@ -662,6 +662,49 @@ class PipelineOrchestrator:
 
             return run
 
+    def _analysis_needed(self) -> bool:
+        """The Audio Analyzer has work: there is no transcript yet, or the LLM has not checked it (an analysis made before the check was part of it, or one whose check could not finish)."""
+        from VIDEO_ENGINE.stages import transcript_review
+        return not (self.pdir / "transcript.json").exists() or not transcript_review.is_verified(self.pdir)
+
+    def _analyze_audio(self, run: RunRecord) -> None:
+        """The Audio Analyzer: speech-to-text only when there is no transcript, the LLM check and correction of it (with the corrected words re-aligned), then the cuts. Finished steps are
+        reused (`legacy_pipeline_adapter.run_analysis`), Whisper never runs again for a project that has its transcript."""
+        from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter
+        communication.publish_lifecycle_event(
+            project_id=self.project_id,
+            stage_id="analyzer",
+            sender_agent_id="audio_analyzer",
+            event="stage_progress",
+            detail="Analyzing the audio: transcript, LLM check and correction, cuts...",
+            run_id=run.run_id,
+            correlation_id=run.correlation_id,
+        )
+        legacy_pipeline_adapter.run_analysis(self.pdir)
+
+    def _segmentation_needed(self) -> bool:
+        """The scenes are missing or out of date (another transcript, or made under older scene rules)."""
+        from VIDEO_ENGINE.stages import scene_segmentation
+        return scene_segmentation.load_fresh(self.pdir) is None
+
+    def _segment_scenes(self, run: RunRecord) -> None:
+        """Scene Segmentation cuts the scenes from the transcript the Audio Analyzer checked with the LLM (`transcript_corrected.json` when it corrected something); its own LLM only decides the
+        scene boundaries and grouping. A transcript the LLM has not verified stops here with the cause, it is never corrected a second time inside this stage."""
+        from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter
+        from VIDEO_ENGINE.stages import transcript_review
+        if not transcript_review.is_verified(self.pdir):
+            raise legacy_pipeline_adapter.StepError("The transcript has not been verified by the LLM yet: run the Audio Analyzer (it checks and corrects the transcript) before Scene Segmentation.")
+        communication.publish_lifecycle_event(
+            project_id=self.project_id,
+            stage_id="segmentation",
+            sender_agent_id="scene_segmentation",
+            event="stage_progress",
+            detail="Segmenting scenes based on speech and pause boundaries...",
+            run_id=run.run_id,
+            correlation_id=run.correlation_id,
+        )
+        legacy_pipeline_adapter.execute(self.pdir, "segment", legacy_pipeline_adapter.Ctx())
+
     def _execute_run(
         self,
         run: RunRecord,
@@ -868,35 +911,11 @@ class PipelineOrchestrator:
                         )
 
                         # If brand-new project has unanalyzed uploaded audio, coordinate initial upstream pipeline steps
-                        if stage_id == "analyzer" and not (self.pdir / "transcript.json").exists():
-                            from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter
-                            ctx = legacy_pipeline_adapter.Ctx()
-                            communication.publish_lifecycle_event(
-                                project_id=self.project_id,
-                                stage_id=stage_id,
-                                sender_agent_id="audio_analyzer",
-                                event="stage_progress",
-                                detail="Transcribing audio with faster-whisper...",
-                                run_id=run.run_id,
-                                correlation_id=run.correlation_id,
-                            )
-                            legacy_pipeline_adapter.execute(self.pdir, "transcribe", ctx)
-                            if not (self.pdir / "cuts.json").exists():
-                                legacy_pipeline_adapter.execute(self.pdir, "cuts", ctx)
+                        if stage_id == "analyzer" and self._analysis_needed():
+                            self._analyze_audio(run)
 
-                        elif stage_id == "segmentation" and not (self.pdir / "scene_segmentation.json").exists():
-                            from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter
-                            ctx = legacy_pipeline_adapter.Ctx()
-                            communication.publish_lifecycle_event(
-                                project_id=self.project_id,
-                                stage_id=stage_id,
-                                sender_agent_id="scene_segmentation",
-                                event="stage_progress",
-                                detail="Segmenting scenes based on speech and pause boundaries...",
-                                run_id=run.run_id,
-                                correlation_id=run.correlation_id,
-                            )
-                            legacy_pipeline_adapter.execute(self.pdir, "segment", ctx)
+                        elif stage_id == "segmentation" and self._segmentation_needed():
+                            self._segment_scenes(run)
 
                         elif stage_id == "planning" and not (self.pdir / "scene_plan.json").exists():
                             ensure_motion_planning_artifacts(self.pdir, self.aspect)

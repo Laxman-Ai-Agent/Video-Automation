@@ -67,6 +67,13 @@ def words_of(out):
     return " ".join(s["transcript"] for s in out["scenes"])
 
 
+@pytest.fixture
+def short_scenes(monkeypatch):
+    """Synthetic fixtures with scenes of one or two seconds: the minimum scene length (configurable, A2V_SEG_SOFT_MIN) is lowered so the test is about what its name says, not about a too short
+    last scene joining the one before it (that rule has its own tests below)."""
+    monkeypatch.setattr(ss, "SOFT_MIN", 1.0)
+
+
 ALL = "మన గుండె కొట్టుకుంటుంది. అది రక్తాన్ని పంపిస్తుంది. కానీ వ్యాయామం అవసరం."
 
 
@@ -81,7 +88,7 @@ def test_one_sentence_one_scene_with_exact_narration_and_word_times(tmp_path):
     assert [s["status"] for s in out["stages"]] == ["completed"] * 7 and [s["name"] for s in out["stages"]] == list(ss.STAGES)
 
 
-def test_related_sentences_merge_and_a_topic_change_splits_and_it_is_not_one_scene_per_sentence(tmp_path):
+def test_related_sentences_merge_and_a_topic_change_splits_and_it_is_not_one_scene_per_sentence(tmp_path, short_scenes):
     three_sentences(tmp_path)
     out = ss.run(tmp_path, ask=Ask(scenes_of([1, 2], [3])))
     assert [len(s["source_sentence_ids"]) for s in out["scenes"]] == [2, 1] and out["segmentation_method"] == "llm_semantic_grouping"
@@ -144,7 +151,45 @@ def test_a_short_pause_does_not_force_a_new_scene_but_a_pause_after_enough_narra
     assert len(long["scenes"]) == 2 and long["scenes"][0]["boundary_after"]["type"] == "pause"
 
 
-def test_scenes_never_overlap_when_the_words_of_the_source_overlap(tmp_path):
+def _tail_project(tmp_path, first_words, last_words):
+    """Two sentences 0.3 s apart: `first_words` and `last_words` are numbers of words (0.5 s each)."""
+    names = ["ఒకటి", "రెండు", "మూడు", "నాలుగు", "ఐదు", "ఆరు", "ఏడు", "ఎనిమిది", "తొమ్మిది", "పది", "పదకొండు", "పన్నెండు"]
+    texts = lambda n: [names[i % len(names)] for i in range(n)]
+    a = sentence(texts(first_words - 1) + [names[0] + "."], 0.0)
+    b = sentence(texts(last_words - 1) + [names[1] + "."], a[-1].end + 0.3)
+    project(tmp_path, [a, b])
+
+
+def test_a_last_scene_that_is_too_short_joins_the_one_before_it_whoever_made_the_grouping(tmp_path):
+    """Claude is told the length guideline but nothing checked it: a last scene of two seconds stayed alone, was reported as a "short scene" warning and the warning stopped the pipeline."""
+    _tail_project(tmp_path, 5, 4)                                                          # 2.45 s, then 1.95 s
+    out = ss.run(tmp_path, ask=Ask(by_words((1, 5), (6, 9))))
+    assert out["segmentation_method"] == "llm_semantic_grouping" and len(out["scenes"]) == 1 and out["scenes"][0]["word_range"] == [0, 8]
+    assert out["scenes"][0]["boundary_after"]["type"] == "end" and not [w for w in out["validation"]["warnings"] if "short scene" in w]
+    assert ss.tiny_last_joins_previous(ss.read_input(tmp_path)["words"], [(0, 4), (5, 8)]) and not ss.tiny_last_joins_previous(ss.read_input(tmp_path)["words"], [(0, 8)])
+    project(tmp_path, [sentence(["ఒకటి", "రెండు", "మూడు", "నాలుగు", "ఐదు", "ఆరు", "ఏడు."], 0.0), sentence(["ఎనిమిది", "తొమ్మిది", "పది."], 4.4)])       # without Claude: the same rule
+    fb = ss.run(tmp_path, ask=Ask(RuntimeError("x")))
+    assert fb["segmentation_method"] == "deterministic_fallback" and len(fb["scenes"]) == 1
+
+
+def test_a_short_last_scene_stays_alone_when_joining_it_would_make_the_scene_before_too_long(tmp_path):
+    _tail_project(tmp_path, 22, 4)                                                         # 10.95 s, then 1.95 s: together 13.2 s, above the 12 s guideline
+    out = ss.run(tmp_path, ask=Ask(by_words((1, 22), (23, 26))))
+    assert len(out["scenes"]) == 2 and [d["code"] for d in out["scenes"][1]["warning_details"]] == ["short_scene"]
+
+
+def test_a_segmentation_made_under_older_scene_rules_is_not_fresh(tmp_path):
+    three_sentences(tmp_path)
+    ss.run(tmp_path, ask=Ask(scenes_of([1, 2], [3])))
+    assert ss.load_fresh(tmp_path) is not None
+    f = tmp_path / "scene_segmentation.json"
+    data = json.loads(f.read_text(encoding="utf-8"))
+    data["timing_rules"] = ss.TIMING_RULES - 1                                             # made before the tiny-last-scene rule
+    f.write_text(json.dumps(data), encoding="utf-8")
+    assert ss.load_fresh(tmp_path) is None
+
+
+def test_scenes_never_overlap_when_the_words_of_the_source_overlap(tmp_path, short_scenes):
     a = sentence(["మన", "గుండె", "కొట్టుకుంటుంది."], 0.0)
     b = sentence(["అది", "రక్తాన్ని", "పంపిస్తుంది."], 1.6)
     a[-1].end = 1.9                                                       # the last word of the first sentence ends 0.3 s after the next one starts
@@ -262,7 +307,7 @@ def test_the_segment_step_is_cached_and_a_changed_transcript_invalidates_it_and_
     assert pipeline.STEPS["plan-input"].fingerprint(tmp_path, pipeline.Ctx()) != pi
 
 
-def test_visual_planning_receives_the_segmentation_scenes_and_ignores_a_stale_one(tmp_path):
+def test_visual_planning_receives_the_segmentation_scenes_and_ignores_a_stale_one(tmp_path, short_scenes):
     three_sentences(tmp_path)
     (tmp_path / "audio_analysis.json").write_text("{}", encoding="utf-8")
     (tmp_path / "cuts.json").write_text(json.dumps({"cuts": [{"t": 1.0, "reason": "silence", "silence": 0.3}]}), encoding="utf-8")
@@ -351,7 +396,7 @@ def long_segment_project(tmp_path):
     return project(tmp_path, [a, b])
 
 
-def test_a_long_segment_with_two_ideas_is_split_inside_the_segment_at_an_allowed_cut_and_every_word_keeps_its_time(tmp_path):
+def test_a_long_segment_with_two_ideas_is_split_inside_the_segment_at_an_allowed_cut_and_every_word_keeps_its_time(tmp_path, short_scenes):
     t = long_segment_project(tmp_path)
     inp = ss.read_input(tmp_path)
     cuts = ss.allowed_cuts(inp, ss.build_units(inp))

@@ -87,7 +87,7 @@ class PolicyEvaluator:
             if dec:
                 return self._record_and_return(dec, request)
 
-            # 2. File and Path Boundary Verification (Frozen files, secrets, path traversal)
+            # 2. File and Path Boundary Verification (secrets, path traversal)
             dec = evaluate_file_access(request, self.project_root)
             if dec:
                 return self._record_and_return(dec, request)

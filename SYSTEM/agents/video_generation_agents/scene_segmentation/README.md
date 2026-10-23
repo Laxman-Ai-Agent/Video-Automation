@@ -24,4 +24,4 @@ Partitions narration transcript into semantic scenes obeying strict duration and
 ## Architecture Notes
 This agent operates as a dedicated autonomous component inheriting from `SYSTEM.agents.shared.BaseAgent`.
 It possesses isolated private memory (`self.memory`), execution history logging, and connects directly to the central skill catalog and tool registry.
-The deterministic core in `VIDEO_ENGINE/stages/scene_segmentation.py` remains frozen and bit-for-bit locked via SHA-256 invariance checks. Semantic intelligence is orchestrated via `SYSTEM.agents.video_generation_agents.scene_segmentation.semantic_analyzer.SemanticAnalyzer` and guarded by `DeterministicInvariantGuard`.
+The deterministic core in `VIDEO_ENGINE/stages/scene_segmentation.py` groups the words of `transcript_corrected.json` into scenes; its timing and coverage invariants are checked by `DeterministicInvariantGuard`. Semantic intelligence is orchestrated via `SYSTEM.agents.video_generation_agents.scene_segmentation.semantic_analyzer.SemanticAnalyzer` and guarded by `DeterministicInvariantGuard`.

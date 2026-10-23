@@ -26,7 +26,7 @@ from .transcribe import TRANSCRIPT_FILES, Transcript
 
 SCHEMA = "1.1"
 VERSION = 2                                  # bump when the rules or the instructions to Claude change (part of the step fingerprint and of the cache key of Claude's answers)
-TIMING_RULES = 2                             # bump when only the rules for the scene times change (2: a scene ends where the next one starts when their words overlap): old results are stale, Claude's cached answers stay valid
+TIMING_RULES = 3                             # bump when only the rules for the scene times change (2: a scene ends where the next one starts when their words overlap; 3: a tiny last scene joins the one before it, for Claude's grouping too): old results are stale, Claude's cached answers stay valid
 # configurable guidance (environment A2V_SEG_*), soft limits: meaning comes first
 PAUSE_MIN = float(os.environ.get("A2V_SEG_PAUSE_MIN", "0.35"))         # a gap this long between two words is evidence of a boundary, never a boundary by itself
 PAUSE_SCENE = float(os.environ.get("A2V_SEG_PAUSE_SCENE", "0.5"))      # the fallback may start a new scene at a pause this long
@@ -243,6 +243,15 @@ def check_grouping(answer: dict, inp: dict, units: list[dict], cuts: dict[int, s
     return out, problems
 
 
+def tiny_last_joins_previous(ws: list[dict], bounds: list) -> bool:
+    """True when the last scene (`bounds`: one (first_word, last_word) per scene) is shorter than SOFT_MIN and the scene before it can take it without becoming longer than SOFT_MAX. The same rule
+    for the fallback and for Claude's grouping: a last scene of two or three seconds cannot carry its own picture, and Claude's answer is only guided (not checked) on scene length."""
+    if len(bounds) < 2:
+        return False
+    (first_prev, _), (first_last, last_last) = bounds[-2], bounds[-1]
+    return ws[last_last]["end"] - ws[first_last]["start"] < SOFT_MIN and ws[last_last]["end"] - ws[first_prev]["start"] <= SOFT_MAX
+
+
 def fallback_grouping(inp: dict, units: list[dict], cuts: dict[int, str]) -> list[dict]:
     """No LLM: close a scene at a sentence end when it is long enough and a measured pause or a discourse marker follows (or it would become too long); then cut a scene that is still
     longer than SOFT_MAX at the strongest allowed place inside it. Meaning is NOT judged."""
@@ -255,7 +264,7 @@ def fallback_grouping(inp: dict, units: list[dict], cuts: dict[int, str]) -> lis
         if (u["sentence_end"] and dur >= SOFT_MIN and (u["pause_after"] >= PAUSE_SCENE or u["marker_next"] or nxt_dur > SOFT_MAX)) or i == len(units) - 1:
             groups.append([cur[0]["first"], cur[-1]["last"]])
             cur = []
-    if len(groups) > 1 and ws[groups[-1][1]]["end"] - ws[groups[-1][0]]["start"] < SOFT_MIN:       # a tiny last scene joins the one before it
+    if tiny_last_joins_previous(ws, groups):                           # a tiny last scene joins the one before it
         last = groups.pop()
         groups[-1][1] = last[1]
     out = []
@@ -318,6 +327,9 @@ def group(pdir: Path, inp: dict, units: list[dict], cuts: dict[int, str], ask=No
                 scenes, problems = [], [f"the answer is not valid JSON ({e})"]
             call["check_s"], call["problems"] = round(time.perf_counter() - t2, 4), problems[:4]      # what made the answer unusable (a retry costs a whole second call)
             if not problems:
+                if tiny_last_joins_previous(inp["words"], [(s["first"], s["last"]) for s in scenes]):         # Claude was told the length guideline, nothing checks it
+                    last = scenes.pop()
+                    scenes[-1]["last"] = last["last"]
                 return scenes, llm
         llm["status"], llm["problems"] = "rejected", problems[:6]
     except Exception as e:     # CLI missing / not signed in / timeout

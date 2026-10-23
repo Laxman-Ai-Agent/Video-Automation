@@ -2,7 +2,6 @@
 
 Defines schemas, path traversal guards, and domain validators for all active stage artifacts.
 Enforces fail-closed validation on missing, corrupted, or incompatible artifact versions.
-Audio Analyzer and Scene Segmentation implementations remain strictly frozen.
 """
 from __future__ import annotations
 
@@ -123,7 +122,7 @@ def validate_audio_artifacts(pdir: Path, aspect: str = "16:9") -> list[ArtifactM
 
 
 def validate_analyzer_artifacts(pdir: Path, aspect: str = "16:9") -> list[ArtifactManifestRecord]:
-    """Validates transcript.json and cuts.json produced by frozen transcribe.py."""
+    """Validates transcript.json and cuts.json produced by transcribe.py."""
     tf = verify_path_confinement(pdir, pdir / "transcript.json")
     cf = verify_path_confinement(pdir, pdir / "cuts.json")
 
@@ -175,7 +174,7 @@ def validate_analyzer_artifacts(pdir: Path, aspect: str = "16:9") -> list[Artifa
 
 
 def validate_segmentation_artifacts(pdir: Path, aspect: str = "16:9") -> list[ArtifactManifestRecord]:
-    """Validates scene_segmentation.json produced by frozen scene_segmentation.py."""
+    """Validates scene_segmentation.json produced by scene_segmentation.py."""
     sf = verify_path_confinement(pdir, pdir / "scene_segmentation.json")
     if not sf.exists():
         raise ContractValidationError("Missing scene_segmentation.json")

@@ -89,7 +89,6 @@ class TestSecurityPolicyClassAndRegistration:
         assert meta.status == AgentStatus.IMPLEMENTED
         assert "policy-evaluation" in meta.capabilities
         assert "agent-authorization" in meta.capabilities
-        assert "frozen-file-protection" in meta.capabilities
         assert "approval_engine" in meta.allowed_tools
 
         agent_inst = reg.get_agent("security_policy")
@@ -142,7 +141,7 @@ class TestMainArchitectureAgentSecurityIntegration:
                 "action": "enforce_security_policy",
                 "sub_parameters": {
                     "operation": "file_write",
-                    "resource": "VIDEO_ENGINE/stages/transcribe.py",
+                    "resource": ".env",
                     "target_agent_id": "audio_input",
                 },
             },
@@ -164,7 +163,7 @@ class TestMainArchitectureAgentSecurityIntegration:
                 "target_agent": "audio_input",
                 "sub_parameters": {
                     "action": "file_write",
-                    "resource": "VIDEO_ENGINE/stages/transcribe.py",
+                    "resource": ".env",
                 },
             },
         )
@@ -176,29 +175,29 @@ class TestMainArchitectureAgentSecurityIntegration:
 class TestProtectedOperationTraceAndEnforcement:
     """Traces protected operations from evaluation through enforcement to ensure fail-closed blocking."""
 
-    def test_trace_frozen_file_modification_blocked(self):
+    def test_trace_protected_file_modification_blocked(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)
         enforcer = SecurityPolicyEnforcer(evaluator)
 
         req = SecurityRequest(
             agent_id="skill_factory",
             operation="file_write",
-            resource="VIDEO_ENGINE/stages/transcribe.py",
+            resource=".env",
         )
 
         # 1. Trace evaluation
         dec = evaluator.evaluate(req)
         assert dec.state == PolicyState.DENY
         assert dec.allowed is False
-        assert dec.rule_id == "SEC-FILE-001"
+        assert dec.rule_id == "SEC-FILE-002"
         assert dec.risk_level == RiskLevel.CRITICAL
 
         # 2. Trace enforcement boundary
         with pytest.raises(SecurityPolicyViolationError) as exc_info:
             enforcer.enforce(req)
 
-        assert exc_info.value.decision.rule_id == "SEC-FILE-001"
-        assert "Modification of frozen video algorithm stage file" in exc_info.value.decision.reason
+        assert exc_info.value.decision.rule_id == "SEC-FILE-002"
+        assert "protected credential/secret pattern" in exc_info.value.decision.reason
 
     def test_trace_unauthenticated_role_spoofing_blocked(self):
         evaluator = PolicyEvaluator(project_root=PROJECT_ROOT)

@@ -149,7 +149,6 @@ class AgentRegistry:
                         "approval-verification",
                         "risk-classification",
                         "security-audit",
-                        "frozen-file-protection",
                     ],
                     allowed_tools=[
                         "agent_registry",

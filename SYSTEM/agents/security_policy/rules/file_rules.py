@@ -12,12 +12,6 @@ from SYSTEM.agents.security_policy.contracts import (
     SecurityRequest,
 )
 
-FROZEN_STAGE_FILES = {
-    "video_engine/stages/transcribe.py",
-    "video_engine/stages/transcript_review.py",
-    "video_engine/stages/scene_segmentation.py",
-}
-
 PROTECTED_SECRET_PATTERNS = [
     ".env",
     ".git",
@@ -29,7 +23,7 @@ PROTECTED_SECRET_PATTERNS = [
 
 
 def evaluate_file_access(request: SecurityRequest, project_root: Path) -> Optional[PolicyDecision]:
-    """Validates file operations (read, write, modify, delete) against path boundaries and frozen files."""
+    """Validates file operations (read, write, modify, delete) against path boundaries and protected secrets."""
     operation = (request.operation or "").lower()
     if not (operation.startswith("file_") or "file" in operation or operation in ("read", "write", "delete", "modify", "patch", "overwrite")):
         return None
@@ -51,22 +45,7 @@ def evaluate_file_access(request: SecurityRequest, project_root: Path) -> Option
     norm_path = resource_str.replace("\\", "/").strip()
     norm_lower = norm_path.lower()
 
-    # 1. Enforce Bit-for-bit Frozen Algorithm Stage Files Protection
-    is_write_op = any(w in operation for w in ("write", "modify", "patch", "overwrite", "delete", "truncate", "create"))
-    for frozen_rel in FROZEN_STAGE_FILES:
-        if frozen_rel in norm_lower:
-            if is_write_op:
-                return PolicyDecision(
-                    state=PolicyState.DENY,
-                    rule_id="SEC-FILE-001",
-                    requesting_agent_id=request.agent_id,
-                    operation=request.operation,
-                    resource=resource_str,
-                    risk_level=RiskLevel.CRITICAL,
-                    reason=f"CRITICAL: Modification of frozen video algorithm stage file '{frozen_rel}' is strictly forbidden.",
-                )
-
-    # 2. Protected secrets and credentials
+    # 1. Protected secrets and credentials
     for sec_pat in PROTECTED_SECRET_PATTERNS:
         if sec_pat in norm_lower:
             # Check if request has verified elevated authentication
@@ -86,7 +65,7 @@ def evaluate_file_access(request: SecurityRequest, project_root: Path) -> Option
                     missing_evidence=["elevated_operator_credentials"],
                 )
 
-    # 3. Path traversal outside project root
+    # 2. Path traversal outside project root
     try:
         raw_path = Path(resource_str)
         if raw_path.is_absolute():
@@ -119,7 +98,7 @@ def evaluate_file_access(request: SecurityRequest, project_root: Path) -> Option
             reason=f"Malformed or unsafe filesystem path: {e}",
         )
 
-    # 4. Destructive deletion operations require confirmation or approval
+    # 3. Destructive deletion operations require confirmation or approval
     if "delete" in operation or operation == "file_delete":
         if not request.approval_request_id:
             return PolicyDecision(

@@ -2,7 +2,7 @@
 
 Consists of:
 - pipeline: Canonical PipelineOrchestrator and execution adapters
-- stages: 12-stage video generation modules (including frozen ASR and segmentation)
+- stages: 12-stage video generation modules (including ASR and segmentation)
 - config: Engine-level configuration and render settings
 - remotion: Remotion motion graphics compositions and bundle assets (Batch 4)
 - ffmpeg: Media probing, conversion, and muxing utilities (Batch 4)

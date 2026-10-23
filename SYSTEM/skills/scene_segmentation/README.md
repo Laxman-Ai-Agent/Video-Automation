@@ -13,6 +13,6 @@ Skills in the `scene_segmentation` domain partition narration transcripts into c
 - Preserve all algorithm invariants in `VIDEO_ENGINE/stages/scene_segmentation.py`.
 
 ## Contribution Guidelines
-1. Validate semantic splitting algorithms without modifying the frozen core pipeline stage.
+1. Validate semantic splitting algorithms against the corrected transcript (`transcript_corrected.json`).
 2. Stage proposed segmentation heuristics in `SYSTEM/skills/staging/`.
 3. Promote approved skills into `SYSTEM/skills/scene_segmentation/<skill_name>/SKILL.md`.

@@ -1,7 +1,5 @@
 """Pipeline page endpoints: the stage list, each stage's page and run action, the timeline approval and the separate Render Video action. Each action is idempotent
 (a second request returns the job that is already running) and every rule is checked here again: a disabled button is never the security."""
-import threading
-
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
 
@@ -241,68 +239,28 @@ def run_segmentation(pid: str):
     return _started(jobs.start(pid, "segment", CHAINS["segment"], Ctx()))
 
 
-_aligning: set[str] = set()
-
-
-def _align_in_background(pid: str, pdir) -> None:
-    """Finish what the quick LLM review skipped: re-align the corrected words against the audio (minutes on CPU, so not inside the request), then segment again so the
-    scenes use the measured word times instead of estimated ones. One run per project at a time; the segmentation is left to the next pipeline run while a job is running."""
-    import logging
-    if pid in _aligning:
-        return
-    _aligning.add(pid)
-
-    def work():
-        from .. import scene_segmentation, transcript_review
-        try:
-            res = transcript_review.complete_alignment(pdir)
-            if res.get("status") in ("aligned_for_edits", "partial") and not jobs.is_running(pid):
-                scene_segmentation.run(pdir)
-        except Exception:
-            logging.getLogger("pipeline").exception("background word alignment failed for %s", pid)
-        finally:
-            _aligning.discard(pid)
-
-    threading.Thread(target=work, daemon=True, name=f"align-{pid}").start()
-
-
 @router.post("/llm-review/run")
 def run_llm_review(pid: str):
-    """Run stage-specific LLM Review & Vocabulary Standardization:
-    1. Runs transcript_review to standardize English loanwords into standard English spelling and verify Telugu grammar.
-    2. Writes transcript_corrected.json.
-    3. Re-segments the narration using the LLM-corrected words so all scenes are immediately synchronized.
-    4. Returns updated scene segmentation data with both whisper_transcript and llm_transcript."""
-    from .. import llm_review, pipeline_view, scene_segmentation, transcript_review
+    """The "Run LLM Verification" button of the Scene Segmentation page. The check and correction of the transcript belongs to the Audio Analyzer (its `refine` step, with the corrected
+    words re-aligned): this runs the analysis through the one implementation (`run_analysis`: finished steps are reused, Whisper never runs again), then cuts the scenes from the verified
+    transcript (the `segment` step, skipped when they are current). Returns the scenes with both transcripts, for the page."""
+    from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter as adapter
+    from .. import scene_segmentation, transcript_review
     pdir = store.project_dir(pid)
     if not (pdir / "transcript.json").exists():
         raise ApiError(409, "transcript_missing", "Cannot run LLM Review: audio has not been transcribed yet")
-
+    _idle(pid)
     try:
-        rev = transcript_review.refine(pdir, all_words=True, align=False)
+        adapter.run_analysis(pdir)
+        if not transcript_review.is_verified(pdir):
+            raise ApiError(409, "llm_verification_incomplete", "The LLM check of the transcript did not finish: some corrected words still wait for their timestamps", "run the Audio Analyzer again")
+        adapter.execute(pdir, "segment", adapter.Ctx())
+    except ApiError:
+        raise
     except Exception as e:
         raise ApiError(500, "llm_review_failed", f"LLM Review execution failed: {str(e)}") from e
-    if (rev.get("alignment") or {}).get("status") == "estimated_for_edits":
-        _align_in_background(pid, pdir)                                        # the corrected words get measured times shortly after this quick answer
-
-    seg_data = None
-    try:
-        seg_data = scene_segmentation.run(pdir)
-    except Exception:
-        f = pdir / "scene_segmentation.json"
-        if f.exists():
-            try:
-                seg_data = json.loads(f.read_text(encoding="utf-8"))
-            except Exception:
-                pass
-
-    if seg_data:
-        seg_data = _enrich_scenes_with_transcripts(pdir, seg_data)
-
-    try:
-        llm_review.run_stage_llm_review(pdir, "segmentation", aspect=pipeline_view.aspect_of(pdir), force=True)
-    except Exception:
-        pass
+    rev = json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8")) if (pdir / "transcript_review.json").exists() else {}
+    seg_data = _enrich_scenes_with_transcripts(pdir, json.loads((pdir / "scene_segmentation.json").read_text(encoding="utf-8")))
 
     return {
         "ok": True,
@@ -356,12 +314,12 @@ def get_visual_plan(pid: str):
 def run_visual_plan(pid: str):
     """Run Visual Planning (the only way it starts). A project without a scene plan gets the whole planner (translation, scene plan, prompts, visual plan, checks); a project that has
     its scene plan gets the visual plan made over it (the scene plan and the prompts are never changed). A second request while it runs returns the same job."""
-    from .. import autoplan, visual_planning
+    from .. import autoplan, transcript_review, visual_planning
     pdir = store.project_dir(pid)
 
-    # Mandatory LLM verification gate: do not go to next step without verified LLM narration
-    if not (pdir / "transcript_corrected.json").exists():
-        raise ApiError(409, "llm_verification_required", "LLM Transcript Verification is mandatory before proceeding to Visual Planning. Run LLM Review in Scene Segmentation.", "Run LLM Review to standardize English loanwords and verify narration")
+    # Mandatory LLM verification gate: do not go to next step without verified LLM narration (the Audio Analyzer's check; a transcript the LLM checked and left as it was is verified too)
+    if not transcript_review.is_verified(pdir):
+        raise ApiError(409, "llm_verification_required", "LLM Transcript Verification is mandatory before proceeding to Visual Planning. Run the Audio Analyzer (it checks and corrects the transcript with the LLM).", "Run the Audio Analyzer, or press Run LLM Verification on the Scene Segmentation page")
 
     try:
         if autoplan.needs_plan(pdir):

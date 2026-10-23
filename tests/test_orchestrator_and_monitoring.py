@@ -164,6 +164,44 @@ def test_idempotent_run_start_and_conflict_handling(test_project: Path, mock_no_
         orch.cancel_run(run1.run_id)
 
 
+def test_the_audio_analyzer_runs_when_there_is_no_transcript_or_the_llm_has_not_checked_it(test_project: Path, mock_no_asr):
+    """The analyzer ran only `transcribe` and `cuts`: the LLM check and correction of the transcript never ran, the card said "LLM Verified" for the segmentation alone and Visual Planning stopped at
+    the LLM verification gate. The analyzer now has work until the transcript is verified, and runs the one analysis implementation (finished steps and Whisper are reused)."""
+    from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter as adapter
+    from VIDEO_ENGINE.stages import transcript_review
+    orch = orchestrator.PipelineOrchestrator(test_project.name, "16:9")
+    assert orch._analysis_needed() is True                                                    # no transcript yet
+    (test_project / "transcript.json").write_text("{}", encoding="utf-8")
+    with patch.object(transcript_review, "is_verified", return_value=False):
+        assert orch._analysis_needed() is True                                                # a transcript the LLM has not checked
+    with patch.object(transcript_review, "is_verified", return_value=True):
+        assert orch._analysis_needed() is False                                               # checked: nothing to do, nothing re-run
+    ran = []
+    with patch.object(adapter, "run_analysis", lambda pdir, ctx=None: ran.append(pdir)):
+        orch._analyze_audio(MagicMock(run_id="run_x", correlation_id="corr_x"))
+    assert ran == [test_project]
+
+
+def test_scene_segmentation_uses_the_verified_transcript_and_never_corrects_it_again(test_project: Path, mock_no_asr):
+    """Scene Segmentation stops with the cause when the LLM has not verified the transcript (the Audio Analyzer does that); it only runs its own `segment` step, never `refine`."""
+    from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter as adapter
+    from VIDEO_ENGINE.stages import scene_segmentation, transcript_review
+    orch = orchestrator.PipelineOrchestrator(test_project.name, "16:9")
+    ran: list[str] = []
+    run = MagicMock(run_id="run_x", correlation_id="corr_x")
+    with patch.object(adapter, "execute", lambda pdir, name, ctx: ran.append(name)):
+        with patch.object(transcript_review, "is_verified", return_value=False), pytest.raises(adapter.StepError, match="not been verified by the LLM"):
+            orch._segment_scenes(run)
+        assert ran == []
+        with patch.object(transcript_review, "is_verified", return_value=True):
+            orch._segment_scenes(run)
+    assert ran == ["segment"]
+    with patch.object(scene_segmentation, "load_fresh", return_value=None):
+        assert orch._segmentation_needed() is True                                           # missing, or made under older scene rules or from another transcript
+    with patch.object(scene_segmentation, "load_fresh", return_value={"scenes": []}):
+        assert orch._segmentation_needed() is False
+
+
 def test_safe_resume_reuses_valid_checkpoints(test_project: Path, mock_no_asr):
     """Verify orchestrator uses Phase 3 resume plan and skips already completed, fresh stages."""
     pstate = pipeline_state.load_pipeline_state(test_project)

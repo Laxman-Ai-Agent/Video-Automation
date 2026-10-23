@@ -80,11 +80,11 @@ E:\audio-to-video/
 │       │   └── index.css   # Global styles and subtle scrollbars
 │       ├── package.json
 │       └── vite.config.ts
-└── VIDEO_ENGINE/           # Video processing pipelines and frozen core stages
+└── VIDEO_ENGINE/           # Video processing pipelines and stages
     └── stages/
-        ├── transcribe.py           # [FROZEN] Faster-Whisper ASR
-        ├── transcript_review.py    # [FROZEN] LLM transcript review
-        └── scene_segmentation.py   # [FROZEN] Semantic scene boundary grouping
+        ├── transcribe.py           # Faster-Whisper ASR
+        ├── transcript_review.py    # LLM transcript review and correction (transcript_review.json, transcript_corrected.json)
+        └── scene_segmentation.py   # Semantic scene boundary grouping (reads transcript_corrected.json)
 ```
 
 ---
@@ -110,7 +110,7 @@ flowchart LR
 
 1. **`01_audio` (Audio Ingestion):** Ingests Telugu audio (.mp3, .wav, .m4a, .flac, .ogg, .aac), validates stream integrity, extracts ffprobe metadata, and records project aspect ratio (16:9 or 9:16).
 2. **`02_analyzer` (Audio Analyzer):** Faster-Whisper speech-to-text, Telugu loanword conversion, word probability scoring, and cross-attention forced alignment.
-3. **`03_segmentation` (Scene Segmentation):** Meaning-driven grouping of words into semantic scenes with strict boundary and timestamp alignment. *(FROZEN)*
+3. **`03_segmentation` (Scene Segmentation):** Meaning-driven grouping of words into semantic scenes with strict boundary and timestamp alignment.
 4. **`04_planning` (Visual Planning):** Semantic scene breakdown, visual concept hierarchy, asset requirements, and safe-area geometry layout.
 5. **`05_motion_plan` (Motion Planning):** Motion intent synthesis, layer sequencing, animation presets, and transition routing.
 6. **`06_motion_gen` (Motion Generation):** Procedural Remotion composition assembly (`composition.json`), kinetic typography, and graphic descriptors.
@@ -189,17 +189,10 @@ The **Visual AI Editor** is an in-app workspace accessible from the main sidebar
 
 ---
 
-## 8. Frozen Invariants & Integrity Constraints
+## 8. Integrity Constraints
 
-> [!IMPORTANT]
-> The following files contain core mathematical and semantic algorithms. Their contents must NOT be edited, and their SHA-256 hashes must remain bit-for-bit identical:
-> - `VIDEO_ENGINE/stages/transcribe.py`  
->   SHA-256: `07A200319D41C2BD1550DFD5704F3BBCC5FAC8331A0AEB09DCCA4BF46D61376E`
-> - `VIDEO_ENGINE/stages/transcript_review.py`  
->   SHA-256: `7290EA210D922514C011C799CAF73AAD61398F0229CC6799DD2F10072B38D049`
-> - `VIDEO_ENGINE/stages/scene_segmentation.py`  
->   SHA-256: `2D9EA882B8C53A6CFCD43B048481F72140A1A6792B8F05578E16FD56A9B37042`
-
+- `transcript.json` is the raw Whisper output and is never edited; the LLM review writes `transcript_review.json` and `transcript_corrected.json` beside it, and Scene Segmentation reads the corrected transcript.
+- No stage is frozen: a stage may be changed when the work needs it, keeping the files later stages read (or updating every reader and test together).
 ---
 
 ## 9. Development & Verification Guide
@@ -232,8 +225,4 @@ The **Visual AI Editor** is an in-app workspace accessible from the main sidebar
 - **Backend Acceptance Tests:**
   ```powershell
   .venv\Scripts\python -m pytest tests/test_stage9_final_release_acceptance.py tests/test_agent_routes.py
-  ```
-- **Verify Frozen Algorithm Hashes:**
-  ```powershell
-  Get-FileHash VIDEO_ENGINE/stages/transcribe.py, VIDEO_ENGINE/stages/transcript_review.py, VIDEO_ENGINE/stages/scene_segmentation.py -Algorithm SHA256
   ```

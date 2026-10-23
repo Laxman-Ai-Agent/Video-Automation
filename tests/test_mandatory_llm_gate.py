@@ -340,3 +340,14 @@ def test_human_approval_gates_strictly_enforced(temp_project: Path):
         pv = pipeline_view.build("test-proj")
         ap_stage = next(s for s in pv["stages"] if s["id"] == "approval")
         assert ap_stage["status"] != "completed"
+
+
+def test_visual_planning_waits_for_the_transcript_the_audio_analyzer_verified(temp_project: Path):
+    """The gate asks the Audio Analyzer's verification (the LLM checked the transcript), not for a file that exists only when something was corrected."""
+    from backend.errors import ApiError
+    from UI.backend.routes import pipeline as routes
+    pdir = temp_project
+    (pdir / "transcript.json").write_text("{}", encoding="utf-8")
+    with patch.object(store, "project_dir", return_value=pdir), pytest.raises(ApiError) as exc:
+        routes.run_visual_plan("test-proj")
+    assert exc.value.code == "llm_verification_required" and "Audio Analyzer" in exc.value.message

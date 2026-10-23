@@ -203,6 +203,14 @@ def execute(pdir: Path, name: str, ctx: Ctx) -> dict:
     return {"name": name, "status": status, "seconds": round(secs, 1), "msg": msg}
 
 
+def run_analysis(pdir: Path, ctx: Ctx | None = None) -> list[dict]:
+    """The Audio Analyzer: the steps of the "transcribe" chain (speech-to-text, the LLM check and correction of the transcript, the cuts). Whisper runs only for a project that has no
+    transcript.json; a step whose inputs did not change is skipped by the executor, so a finished analysis costs nothing. The one implementation: the orchestrator and the LLM verification
+    button of the Scene Segmentation page both call it."""
+    ctx = ctx or Ctx()
+    return [execute(pdir, n, ctx) for n in CHAINS["transcribe"] if n != "transcribe" or not (pdir / "transcript.json").exists()]
+
+
 def run_chain(pdir: Path, names, label: str, ctx: Ctx | None = None) -> list[dict]:
     """Run steps in order; stop at the first error (earlier outputs stay). Records last_build in timings.json."""
     ctx = ctx or Ctx()

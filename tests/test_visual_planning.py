@@ -4,6 +4,7 @@ import importlib
 import json
 import shutil
 import time
+from unittest.mock import patch
 
 import pytest
 
@@ -586,7 +587,8 @@ def seg_project(d, images=False, info=True, bounds=None, step=None):
         a = _seg.sentence(["మన", "గుండె", "కొట్టుకుంటుంది."], 0.0, step)
         b = _seg.sentence(["అది", "రక్తాన్ని", "పంపిస్తుంది."], a[-1].end + 0.3, step)
         _seg.project(d, [a, b, _seg.sentence(["కానీ", "వ్యాయామం", "అవసరం."], b[-1].end + 0.3, step)])
-    seg = scene_segmentation.run(d, ask=_seg.Ask(_seg.scenes_of([1], [2], [3])))
+    with patch.object(scene_segmentation, "SOFT_MIN", 1.0 if step is None else scene_segmentation.SOFT_MIN):      # scenes of ~1.5 s: a last scene this short would join the one before it (own tests), these tests need three scenes
+        seg = scene_segmentation.run(d, ask=_seg.Ask(_seg.scenes_of([1], [2], [3])))
     duration = json.loads((d / "transcript.json").read_text(encoding="utf-8"))["duration"]
     b = bounds or [0.0, *[s["start_time"] for s in seg["scenes"][1:]], duration]
     scenes = [{"id": k, "start": b[k - 1], "end": b[k], "meaning": f"idea {k}", "concept": f"concept {k}", "mood": "calm", "mode": "image-composite", "pattern": "hero_text",
