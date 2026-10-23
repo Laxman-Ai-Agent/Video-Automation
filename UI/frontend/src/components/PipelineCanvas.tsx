@@ -194,7 +194,8 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
         const prevStage = i > 0 ? CANONICAL_12_STAGES[i - 1] : null;
         const prevCompleted = prevStage ? projectState.stages[prevStage.id]?.status === 'completed' : !isAudioMissing;
 
-        if (prevCompleted && (stageState?.status === 'waiting' || stageState?.status === 'queued' || stageState?.status === 'idle')) {
+        // the backend names what a stage still waits for (the stage before it, or that stage's unresolved issues): it starts only when nothing is named
+        if (prevCompleted && !stageState?.waitingFor && (stageState?.status === 'waiting' || stageState?.status === 'queued' || stageState?.status === 'idle')) {
           // Do not automatically advance past motion_gen into motion_validation without generation completing
           if (stage.id === 'motion_validation') {
             break;

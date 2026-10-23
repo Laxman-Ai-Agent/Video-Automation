@@ -62,18 +62,14 @@ def _video(pdir: Path, aspect: str) -> Path:
 def _enrich_stages_with_timings(pdir: Path, stages: list[dict], pid: str) -> list[dict]:
     aspect = aspect_of(pdir)
     from VIDEO_ENGINE.pipeline import stage_gate
-    blocker = None                                                                  # the first stage (in pipeline order) whose own errors / warnings are unresolved
-    prev = None
+    prev, prev_issues = None, []                                                    # the stage before, and its own errors / warnings that are still unresolved
     for s in stages:
-        if blocker is not None and s["status"] == "queued":                         # not started yet: it waits BLOCKED, never "ready" or running
-            s["status"] = "blocked"
-            s["detail"] = f"blocked by '{blocker[0]}': {blocker[1]}"
-        elif s["status"] in ("queued", "waiting_for_approval") and prev is not None and prev["status"] not in ("completed", "skipped"):
-            s["status"] = "waiting"                                                 # its prerequisite has not completed (running, failed, queued, waiting for an LLM review): not runnable yet
-            s["waiting_for"] = f"{prev['label']} ({prev['status'].replace('_', ' ')})"
-            s["detail"] = f"waits for '{prev['label']}' to complete ({prev['status'].replace('_', ' ')})"
-        elif blocker is None and s["status"] in ("completed", "failed") and (open_issues := stage_gate.unresolved(pdir, s["id"], aspect)):
-            blocker = (s["label"], stage_gate.describe(open_issues))
+        if s["status"] in ("queued", "waiting_for_approval") and prev is not None and (prev["status"] not in ("completed", "skipped") or prev_issues):
+            s["status"] = "waiting"                                                 # a stage starts only after the one before it completed with nothing unresolved: until then it is inactive, never "blocked"
+            why = f"unresolved: {stage_gate.describe(prev_issues)}" if prev_issues else prev["status"].replace("_", " ")
+            s["waiting_for"] = f"{prev['label']} ({'unresolved issues' if prev_issues else why})"
+            s["detail"] = f"waits for '{prev['label']}' to complete ({why})"
+        prev_issues = stage_gate.unresolved(pdir, s["id"], aspect) if s["status"] in ("completed", "failed") else []
         prev = s
     for s in stages:                                                                # the card shows "LLM verified" only when the stage's stored LLM review passed
         try:

@@ -84,6 +84,7 @@ except ImportError:
 logger = logging.getLogger("orchestrator")
 
 ACTIVE_STAGES: tuple[str, ...] = pipeline_state.ACTIVE_STAGES
+MAX_AUTOFIX_ROUNDS = 2                                                      # rounds of a stage's own warning fixer before the next stage is activated
 STAGE_TO_AGENT: dict[str, str] = pipeline_state.STAGE_TO_AGENT_MAP
 
 STAGE_DEPENDENCIES: dict[str, tuple[str, ...]] = {
@@ -692,6 +693,30 @@ class PipelineOrchestrator:
         from VIDEO_ENGINE.stages import scene_segmentation
         return scene_segmentation.load_fresh(self.pdir) is None
 
+    def _resolve_stage_issues(self, stage_id: str, run: RunRecord) -> None:
+        """The next stage starts only after this one finished with nothing unresolved, and nobody has to accept a warning for that: the stage's own fixer solves its warnings here (bounded rounds,
+        each followed by a fresh LLM review of the changed report). What the fixer cannot solve stays, the event names the cause, and the next stage waits for it."""
+        from VIDEO_ENGINE.stages import visual_planning
+        from VIDEO_ENGINE.stages.promptgen import GenError
+        fixer = {"planning": visual_planning.fix_warnings}.get(stage_id)
+        for _ in range(MAX_AUTOFIX_ROUNDS):
+            open_issues = stage_gate.unresolved(self.pdir, stage_id, self.aspect)
+            if fixer is None or not open_issues:
+                return
+            communication.publish_lifecycle_event(
+                project_id=self.project_id, stage_id=stage_id, sender_agent_id="main_orchestrator", event="stage_progress",
+                detail=f"Fixing the stage's own warnings before the next stage starts: {stage_gate.describe(open_issues)}", run_id=run.run_id, correlation_id=run.correlation_id,
+            )
+            try:
+                fixer(self.pdir)
+            except GenError as e:
+                communication.publish_lifecycle_event(
+                    project_id=self.project_id, stage_id=stage_id, sender_agent_id="main_orchestrator", event="stage_progress",
+                    detail=f"The warnings of '{stage_id}' could not be fixed automatically: {e}", run_id=run.run_id, correlation_id=run.correlation_id,
+                )
+                return
+            llm_review.run_stage_llm_review(self.pdir, stage_id, aspect=self.aspect, auto_pilot=self.auto_pilot_mode)
+
     def _planning_needed(self) -> bool:
         """No scene plan yet, or one that does not follow the current Scene Segmentation (and nothing depends on it)."""
         from VIDEO_ENGINE.stages import autoplan, visual_planning
@@ -966,6 +991,8 @@ class PipelineOrchestrator:
                                 )
                             except Exception as review_err:
                                 logger.warning(f"Stage {stage_id} review execution: {review_err}")
+
+                            self._resolve_stage_issues(stage_id, run)
 
                             # Strict fail-closed completion transition
                             pipeline_state.transition_stage(
