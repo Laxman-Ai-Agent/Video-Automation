@@ -84,6 +84,10 @@ except ImportError:
 logger = logging.getLogger("orchestrator")
 
 ACTIVE_STAGES: tuple[str, ...] = pipeline_state.ACTIVE_STAGES
+class StageFixError(Exception):
+    """A stage's own warning fixer could not solve what is left (the cause is the message)."""
+
+
 MAX_AUTOFIX_ROUNDS = 2                                                      # rounds of a stage's own warning fixer before the next stage is activated
 STAGE_TO_AGENT: dict[str, str] = pipeline_state.STAGE_TO_AGENT_MAP
 
@@ -693,12 +697,23 @@ class PipelineOrchestrator:
         from VIDEO_ENGINE.stages import scene_segmentation
         return scene_segmentation.load_fresh(self.pdir) is None
 
-    def _resolve_stage_issues(self, stage_id: str, run: RunRecord) -> None:
+    def _resolve_stage_issues(self, stage_id: str, run: RunRecord, rerun) -> None:
         """The next stage starts only after this one finished with nothing unresolved, and nobody has to accept a warning for that: the stage's own fixer solves its warnings here (bounded rounds,
-        each followed by a fresh LLM review of the changed report). What the fixer cannot solve stays, the event names the cause, and the next stage waits for it."""
-        from VIDEO_ENGINE.stages import visual_planning
+        each followed by a fresh LLM review of the changed report). `rerun` executes the stage again (a fixer that only decides, like Motion Planning's, needs it to apply the decisions).
+        What the fixer cannot solve stays, the event names the cause, and the next stage waits for it."""
+        from VIDEO_ENGINE.stages import motion_autofix, motion_planning, visual_planning
         from VIDEO_ENGINE.stages.promptgen import GenError
-        fixer = {"planning": visual_planning.fix_warnings}.get(stage_id)
+
+        def fix_motion_plan() -> None:
+            done = motion_planning.solve(self.pdir, self.aspect)
+            if not (done["moved"] or done["earlier"] or done["accepted"]):
+                raise StageFixError("no warning is left that can be solved automatically")
+            motion_autofix.count(self.pdir, done)                      # at most MAX_AUTO_FIXES attempts per scene plan, counted on disk
+            res = rerun()
+            if res.status != "succeeded":
+                raise StageFixError(res.error or res.summary or "the stage failed when it ran again with the fixes")
+
+        fixer = {"planning": lambda: visual_planning.fix_warnings(self.pdir), "motion_plan": fix_motion_plan}.get(stage_id)
         for _ in range(MAX_AUTOFIX_ROUNDS):
             open_issues = stage_gate.unresolved(self.pdir, stage_id, self.aspect)
             if fixer is None or not open_issues:
@@ -708,8 +723,8 @@ class PipelineOrchestrator:
                 detail=f"Fixing the stage's own warnings before the next stage starts: {stage_gate.describe(open_issues)}", run_id=run.run_id, correlation_id=run.correlation_id,
             )
             try:
-                fixer(self.pdir)
-            except GenError as e:
+                fixer()
+            except (GenError, motion_planning.MotionError, motion_autofix.Exhausted, StageFixError) as e:
                 communication.publish_lifecycle_event(
                     project_id=self.project_id, stage_id=stage_id, sender_agent_id="main_orchestrator", event="stage_progress",
                     detail=f"The warnings of '{stage_id}' could not be fixed automatically: {e}", run_id=run.run_id, correlation_id=run.correlation_id,
@@ -992,7 +1007,7 @@ class PipelineOrchestrator:
                             except Exception as review_err:
                                 logger.warning(f"Stage {stage_id} review execution: {review_err}")
 
-                            self._resolve_stage_issues(stage_id, run)
+                            self._resolve_stage_issues(stage_id, run, lambda: agent_adapter.execute(self.pdir, req))
 
                             # Strict fail-closed completion transition
                             pipeline_state.transition_stage(

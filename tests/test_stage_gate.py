@@ -217,7 +217,7 @@ def test_a_stages_own_warnings_are_fixed_before_the_next_stage_is_activated(pdir
         _report(p, "visual_planning.json", [("completed", "ok")])
     monkeypatch.setattr(visual_planning, "fix_warnings", solves)
     _report(pdir, "visual_planning.json", [("warning", "scene_03 path")])
-    _orch(pdir)._resolve_stage_issues("planning", run)
+    _orch(pdir)._resolve_stage_issues("planning", run, None)
     assert calls == ["fix"] and stage_gate.unresolved(pdir, "planning", "16:9") == [] and reviews.call_count == 1       # fixed once, then the LLM review of the changed report
 
     def cannot(p):
@@ -226,17 +226,47 @@ def test_a_stages_own_warnings_are_fixed_before_the_next_stage_is_activated(pdir
     monkeypatch.setattr(visual_planning, "fix_warnings", cannot)
     calls.clear()
     _report(pdir, "visual_planning.json", [("warning", "scene_03 path")])
-    _orch(pdir)._resolve_stage_issues("planning", run)                                                                  # does not raise: the warning stays and the next stage waits for it
+    _orch(pdir)._resolve_stage_issues("planning", run, None)                                                                  # does not raise: the warning stays and the next stage waits for it
     assert calls == ["try"] and stage_gate.unresolved(pdir, "planning", "16:9")
 
     def never_better(p):
         calls.append("again")
     monkeypatch.setattr(visual_planning, "fix_warnings", never_better)
     calls.clear()
-    _orch(pdir)._resolve_stage_issues("planning", run)
+    _orch(pdir)._resolve_stage_issues("planning", run, None)
     assert len(calls) == orchestrator.MAX_AUTOFIX_ROUNDS                                                                # bounded
 
     calls.clear()
     _report(pdir, "motion_generation.json", [("warning", "w")])
-    _orch(pdir)._resolve_stage_issues("motion_gen", run)                                                                # a stage without its own fixer is left to its own rules
+    _orch(pdir)._resolve_stage_issues("motion_gen", run, None)                                                                # a stage without its own fixer is left to its own rules
     assert calls == []
+
+
+def test_motion_planning_warnings_are_solved_and_the_stage_run_again_before_the_next_stage(pdir, monkeypatch):
+    from unittest.mock import MagicMock
+    from VIDEO_ENGINE.stages import motion_autofix, motion_planning
+    monkeypatch.setattr(orchestrator.communication, "publish_lifecycle_event", MagicMock())
+    monkeypatch.setattr(orchestrator.llm_review, "run_stage_llm_review", MagicMock())
+    run = SimpleNamespace(run_id="r", correlation_id="c")
+    _report(pdir, "motion_planning.json", [("warning", "scene_02: 1 required element is not drawn one by one")])
+    decided, reruns = {"moved": 0, "earlier": 0, "accepted": 1}, []
+    monkeypatch.setattr(motion_planning, "solve", lambda p, a: decided)
+    monkeypatch.setattr(motion_autofix, "count", lambda p, d, name="plan": None)
+
+    def rerun():
+        reruns.append(1)
+        _report(pdir, "motion_planning.json", [("completed", "ok")])
+        return SimpleNamespace(status="succeeded", error=None, summary="")
+    _orch(pdir)._resolve_stage_issues("motion_plan", run, rerun)
+    assert reruns == [1] and stage_gate.unresolved(pdir, "motion_plan", "16:9") == []             # decided, run again with the decisions, nothing left
+
+    _report(pdir, "motion_planning.json", [("warning", "w")])
+    reruns.clear()
+    decided.update(accepted=0)
+    _orch(pdir)._resolve_stage_issues("motion_plan", run, rerun)                                    # nothing a machine can decide: no second run, the warning stays with its cause
+    assert reruns == [] and stage_gate.unresolved(pdir, "motion_plan", "16:9")
+
+    decided.update(accepted=1)
+    monkeypatch.setattr(motion_autofix, "count", lambda p, d, name="plan": (_ for _ in ()).throw(motion_autofix.Exhausted("used up")))
+    _orch(pdir)._resolve_stage_issues("motion_plan", run, rerun)                                    # the per-scene-plan limit of automatic attempts holds
+    assert reruns == []

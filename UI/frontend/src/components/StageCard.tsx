@@ -86,6 +86,7 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
   const isCompleted = status === 'completed';
   const isFailed = status === 'failed';
   const isBlocked = status === 'blocked';
+  const isWaitingForPrevious = !!state?.waitingFor;                            // inactive until the stage before it is completed with nothing unresolved
   const isCancelled = status === 'cancelled';
 
   // Live timer for elapsed duration while running / retrying
@@ -529,25 +530,25 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
             <button
               onClick={(e) => {
                 e.stopPropagation();
-                if (!isBlocked && !isRunning) onRunStage(config.id);
+                if (!isBlocked && !isRunning && !isWaitingForPrevious) onRunStage(config.id);
               }}
-              disabled={isBlocked || isRunning || !!state?.waitingFor}
+              disabled={isBlocked || isRunning || isWaitingForPrevious}
               data-testid={`stage-run-btn-${config.id}`}
               title={state?.waitingFor ? `Waits for ${state.waitingFor} to complete` : isBlocked ? (state?.blockers?.[0] || 'Prerequisites required') : (isRunning ? 'Stage is running' : `Run ${config.label}`)}
               style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '3px',
-                backgroundColor: isBlocked || isRunning ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 216, 245, 0.15)',
-                border: `1px solid ${isBlocked || isRunning ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 216, 245, 0.4)'}`,
+                backgroundColor: isBlocked || isRunning || isWaitingForPrevious ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 216, 245, 0.15)',
+                border: `1px solid ${isBlocked || isRunning || isWaitingForPrevious ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 216, 245, 0.4)'}`,
                 borderRadius: '3px',
                 padding: '2px 6px',
-                color: isBlocked || isRunning ? 'var(--text-muted)' : 'var(--accent-cyan)',
+                color: isBlocked || isRunning || isWaitingForPrevious ? 'var(--text-muted)' : 'var(--accent-cyan)',
                 fontSize: '10px',
                 fontWeight: 700,
-                cursor: isBlocked || isRunning ? 'not-allowed' : 'pointer',
-                opacity: isBlocked || isRunning ? 0.6 : 1,
-                boxShadow: (!isBlocked && !isRunning) ? '0 0 6px rgba(0, 216, 245, 0.25)' : 'none',
+                cursor: isBlocked || isRunning || isWaitingForPrevious ? 'not-allowed' : 'pointer',
+                opacity: isBlocked || isRunning || isWaitingForPrevious ? 0.6 : 1,
+                boxShadow: (!isBlocked && !isRunning && !isWaitingForPrevious) ? '0 0 6px rgba(0, 216, 245, 0.25)' : 'none',
                 transition: 'all 0.15s ease'
               }}
               onMouseEnter={(e) => {

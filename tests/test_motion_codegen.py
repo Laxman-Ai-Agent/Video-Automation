@@ -11,6 +11,7 @@ Covers:
 import hashlib
 import importlib
 import json
+import os
 from pathlib import Path
 
 import pytest
@@ -123,6 +124,19 @@ export const Scene1: React.FC = () => {
     prohibited = motion_animation.scan_prohibited_presets(dirty_code)
     assert "MotionTextLayer" in prohibited
     assert "HighlightText" in prohibited
+
+
+def test_the_scene_registry_loads_under_plain_node(tmp_path):
+    """The Remotion scripts (motion_validate.ts ...) import src/registry, which imports src/generated: require.context exists only inside the webpack bundle, so the registry must not use it
+    while the module loads (it did, and Motion & Timeline Validation failed with "require.context is not a function")."""
+    import shutil
+    import subprocess
+    remotion = motion_animation.config.REMOTION_DIR
+    if not (remotion / "node_modules" / "tsx").exists() or not shutil.which("npx"):
+        pytest.skip("the Remotion dependencies are not installed")
+    script = "import('./src/generated/index.ts').then(m => console.log(typeof m.getCustomScene, typeof m.CustomSceneLayer))"
+    r = subprocess.run(["npx", "tsx", "-e", script], cwd=remotion, shell=(os.name == "nt"), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
+    assert r.returncode == 0 and r.stdout.split() == ["function", "function"], r.stdout + r.stderr
 
 
 def test_generating_scenes_never_rewrites_the_tracked_scene_registry(tmp_path):
