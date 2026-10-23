@@ -228,7 +228,6 @@ class ExecutionReport:
     unresolved_blockers: list[str] = field(default_factory=list)
     retry_stats: dict[str, Any] = field(default_factory=dict)
     verification_verdict: str = "UNVERIFIED"
-    frozen_file_check: dict[str, Any] = field(default_factory=dict)
     evidence: dict[str, Any] = field(default_factory=dict)
     error: str | None = None
 

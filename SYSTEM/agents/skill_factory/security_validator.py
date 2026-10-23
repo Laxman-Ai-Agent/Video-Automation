@@ -3,7 +3,7 @@
 Performs:
 1. Multi-tier pattern inspection (prompt injection, token exfiltration, shell commands).
 2. Deep AST structural analysis for embedded Python blocks and standalone code.
-3. Frozen pipeline file tampering detection.
+3. Pipeline stage file tampering detection.
 4. Direct approval/registry bypass detection.
 5. Path traversal and unauthorized filesystem access detection.
 """
@@ -19,14 +19,7 @@ from SYSTEM.core.resilience import CREDENTIAL_KINDS, redact_secrets
 
 SkillRiskLevel = Literal["low", "medium", "high", "critical"]
 
-FROZEN_PIPELINE_FILES = {
-    "transcribe.py",
-    "transcript_review.py",
-    "scene_segmentation.py",
-    "VIDEO_ENGINE/stages/transcribe.py",
-    "VIDEO_ENGINE/stages/transcript_review.py",
-    "VIDEO_ENGINE/stages/scene_segmentation.py",
-}
+PIPELINE_STAGES_PATH = "video_engine/stages/"
 
 DISALLOWED_IMPORTS = {
     "ctypes",
@@ -99,17 +92,15 @@ class SecurityValidator:
                 risk_level = "critical"
 
         # -------------------------------------------------------------
-        # 2. Frozen Pipeline Tampering Checks
+        # 2. Pipeline Stage Tampering Checks
         # -------------------------------------------------------------
-        for f in FROZEN_PIPELINE_FILES:
-            if f.lower() in content.lower():
-                # Check if referenced with intent to modify
-                tamper_pattern = re.compile(
-                    rf"(?i)(modify|alter|overwrite|patch|rewrite|delete|remove|replace)\s+.*{re.escape(f)}"
-                )
-                if tamper_pattern.search(content) or "open(" in content:
-                    findings.append(f"Security violation: Attempt to tamper with frozen pipeline file '{f}'.")
-                    risk_level = "critical"
+        if PIPELINE_STAGES_PATH in content.lower():
+            tamper_pattern = re.compile(
+                rf"(?i)(modify|alter|overwrite|patch|rewrite|delete|remove|replace)\s+.*{re.escape(PIPELINE_STAGES_PATH)}"
+            )
+            if tamper_pattern.search(content) or "open(" in content:
+                findings.append("Security violation: Attempt to tamper with a pipeline stage file.")
+                risk_level = "critical"
 
         # -------------------------------------------------------------
         # 3. Direct Registry & Approval Bypass Checks

@@ -48,7 +48,6 @@ class RecoveryManager:
             "access denied",
             "permission denied",
             "violates security boundary",
-            "frozen file protection",
         ]):
             return FailureCategory.SECURITY_DENIED
 

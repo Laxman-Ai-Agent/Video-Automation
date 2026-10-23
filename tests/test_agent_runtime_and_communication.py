@@ -68,9 +68,6 @@ def test_registry_contains_all_15_logical_agents():
     assert registry.get("audio_analyzer").category == AgentCategory.VIDEO_ENGINE_AGENT
     assert registry.get("motion_template_selection").category == AgentCategory.VIDEO_ENGINE_AGENT
 
-    # Frozen stage verification
-    assert registry.get("audio_analyzer").is_frozen is False                    # the FROZEN markers were removed (2026-10-20); the stage files stay protected by the sandbox rules
-    assert registry.get("scene_segmentation").is_frozen is False
 
 
 def test_registry_rejects_empty_id_or_invalid_adapter():

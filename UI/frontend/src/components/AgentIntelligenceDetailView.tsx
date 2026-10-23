@@ -190,25 +190,6 @@ export const AgentIntelligenceDetailView: React.FC<AgentIntelligenceDetailViewPr
               {isVideo ? 'VIDEO PIPELINE' : 'SYSTEM SUBAGENT'}
             </span>
 
-            {aboutData.isFrozen && (
-              <span
-                style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  padding: '4px 10px',
-                  borderRadius: 'var(--radius-full)',
-                  backgroundColor: 'rgba(239, 68, 68, 0.12)',
-                  color: '#EF4444',
-                  border: '1px solid rgba(239, 68, 68, 0.3)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}
-              >
-                FROZEN CORE
-              </span>
-            )}
-
             <span
               style={{
                 fontSize: '11px',

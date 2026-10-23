@@ -77,7 +77,6 @@ export interface AgentAboutData {
   category: string;
   version: string;
   owner: string;
-  isFrozen?: boolean;
   badge?: string;
   
   overview: {
@@ -159,7 +158,6 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     category: 'audio',
     version: '1.0.0',
     owner: 'agent-system',
-    isFrozen: false,
     badge: 'STAGE 1',
     overview: {
       purpose: 'Performs high-fidelity acoustic inspection, faster-whisper word-level speech-to-text transcription, silence/pause segmentation, and bilingual Telugu-English phonetic preservation.',
@@ -405,7 +403,6 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     category: 'visual',
     version: '1.0.0',
     owner: 'agent-system',
-    isFrozen: false,
     badge: 'STAGE 2',
     overview: {
       purpose: 'Partitions continuous audio transcript into discrete, paced narrative scenes obeying strict duration thresholds (2s to 8s) and exact word-level boundaries.',
@@ -3041,7 +3038,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     ],
     whatItDoesNotDo: [
       'Does NOT execute video rendering or ffmpeg commands directly (delegates to Video Pipeline Orchestrator)',
-      'Does NOT bypass SecurityPolicyAgent permissions or modify frozen core algorithms'
+      'Does NOT bypass SecurityPolicyAgent permissions'
     ],
     missingCapabilities: [
       { title: 'Distributed Multi-Host Agent Coordination', status: 'NOT IMPLEMENTED', gapDescription: 'Agents run within local process tree; distributed network worker clustering is not yet implemented.', impact: 'Execution is bounded to single workstation resources.', plannedResolution: 'Add Celery / Ray distributed actor backend.' }
@@ -3207,14 +3204,14 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       implementedResponsibilities: [
         'Evaluates Reuse / Adapt / Create decision resolution via DecisionEngine',
         'Synthesizes candidate skills adhering to standard SKILL.md format and YAML frontmatter',
-        'Executes static security and AST audit detecting injection, secret leakage, and frozen file tampering',
+        'Executes static security and AST audit detecting injection, secret leakage, and pipeline stage file tampering',
         'Runs isolated behavioral tests with strict execution timeouts and zero persistent side-effects',
         'Verifies Laxman Approval tokens before promoting candidate skills',
         'Performs atomic versioned promotion to SYSTEM/skills/ and updates CapabilityRegistry',
         'Executes safe rollbacks of published skills to prior versions if regressions occur'
       ],
       productionReadyFeatures: [
-        'Static security validator enforcing frozen file protection (transcribe, transcript_review, scene_segmentation)',
+        'Static security validator enforcing pipeline stage file protection',
         'Sandboxed test runner with strict CPU and wall-clock execution bounds',
         'Atomic directory-swap skill promotion with rollback journal'
       ]
@@ -3225,7 +3222,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { step: 1, title: 'Specification Intake', detail: 'Normalizes SkillSpecification with input/output types and security constraints.', type: 'deterministic' },
         { step: 2, title: 'Reuse/Adapt Decision', detail: 'DecisionEngine checks existing skill library to determine whether to reuse, adapt, or create from scratch.', type: 'deterministic' },
         { step: 3, title: 'Skill Synthesis', detail: 'SkillGenerator creates candidate markdown skill with YAML frontmatter, execution instructions, and test fixtures.', type: 'llm' },
-        { step: 4, title: 'Security & AST Audit', detail: 'SecurityValidator inspects candidate code for dangerous imports, system calls, and frozen-file touches.', type: 'deterministic' },
+        { step: 4, title: 'Security & AST Audit', detail: 'SecurityValidator inspects candidate code for dangerous imports, system calls, and pipeline stage file touches.', type: 'deterministic' },
         { step: 5, title: 'Isolated Behavioral Test', detail: 'SkillTestRunner executes candidate in isolated subprocess against defined test cases.', type: 'external' },
         { step: 6, title: 'Atomic Promotion', detail: 'SkillPublisher installs approved skill into SYSTEM/skills/ and notifies CapabilityRegistry.', type: 'deterministic' }
       ],
@@ -3256,20 +3253,18 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       fallbackStrategy: 'Template-based generation for standard data transformation skills',
       deterministicGuardrails: [
         'SecurityValidator AST audit detects dangerous calls (os.system, subprocess with shell=True)',
-        'Bit-for-bit protection preventing modifications to frozen core video algorithm files',
         'Mandatory test pass before promotion eligibility'
       ],
       purelyDeterministicParts: ['Security audit', 'Test execution', 'Atomic file installation', 'Registry registration']
     },
     currentCapabilities: [
-      { name: 'Static security validation', status: 'VERIFIED WORKING', description: 'Detects shell injection, unauthorized file access, and frozen algorithm tampering.', evidence: 'Verified in SYSTEM/agents/skill_factory/security_validator.py' },
+      { name: 'Static security validation', status: 'VERIFIED WORKING', description: 'Detects shell injection, unauthorized file access, and pipeline stage tampering.', evidence: 'Verified in SYSTEM/agents/skill_factory/security_validator.py' },
       { name: 'Isolated test execution', status: 'VERIFIED WORKING', description: 'Executes skill test fixtures in bounded subprocesses.', evidence: 'Verified in SYSTEM/agents/skill_factory/test_runner.py' },
       { name: 'Atomic skill promotion', status: 'VERIFIED WORKING', description: 'Safely installs validated skills with zero-downtime registry updates.', evidence: 'Verified in SYSTEM/agents/skill_factory/publisher.py' }
     ],
     whatItDoesNotDo: [
       'Does NOT promote skills that fail security checks or test suites',
-      'Does NOT bypass Laxman Approval gate on production skill promotion',
-      'Does NOT modify frozen video algorithm core files'
+      'Does NOT bypass Laxman Approval gate on production skill promotion'
     ],
     missingCapabilities: [
       { title: 'Multi-Language Skill Synthesis (TypeScript / Rust)', status: 'PARTIALLY IMPLEMENTED', gapDescription: 'Currently specializes in Python skills; TypeScript and Rust skill generation are in prototype status.', impact: 'Remotion TSX skills require manual or template generation.', plannedResolution: 'Add TypeScript AST validator and ts-node test runner.' }
@@ -3328,13 +3323,12 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         'Audits SkillRegistry and CapabilityRegistry for path confinement, missing files, and duplicate keys',
         'Validates dependency graphs for cycle detection, topological reachability, and orphan nodes',
         'Validates video pipeline 12-stage ordering, artifact contracts, and mandatory LLM-decided approval gates',
-        'Enforces architecture and security boundaries (sole execution engine rule, frozen file invariance)',
+        'Enforces architecture and security boundaries (sole execution engine rule)',
         'Produces structured AuditResult with severity-classified findings (INFO, WARNING, ERROR, CRITICAL)'
       ],
       productionReadyFeatures: [
         'Read-only audit execution by default with zero persistent side-effects',
-        'Full architecture audit covering 7 core validation subsystems',
-        'Cryptographic hash verification for frozen video algorithm files'
+        'Full architecture audit covering 7 core validation subsystems'
       ]
     },
     howItWorks: {
@@ -3344,7 +3338,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { step: 2, title: 'Registry Consistency Check', detail: 'AgentRegistryValidator and CapabilityRegistryValidator inspect all metadata records.', type: 'deterministic' },
         { step: 3, title: 'Dependency Graph Audit', detail: 'DependencyGraphValidator performs topological sort to verify absence of cycles.', type: 'deterministic' },
         { step: 4, title: 'Video Pipeline Validation', detail: 'VideoPipelineValidator checks 12-stage sequential ordering and artifact handoffs.', type: 'deterministic' },
-        { step: 5, title: 'Security Boundary Inspection', detail: 'SecurityBoundaryValidator checks path confinement and compares frozen SHA-256 hashes.', type: 'deterministic' },
+        { step: 5, title: 'Security Boundary Inspection', detail: 'SecurityBoundaryValidator checks path confinement and the sole execution engine rule.', type: 'deterministic' },
         { step: 6, title: 'Finding Aggregation', detail: 'Compiles findings, assigns overall pass/fail status, and formats structured report.', type: 'deterministic' }
       ],
       concurrencyAndCaching: 'Read-only concurrent execution safe.',
@@ -3362,7 +3356,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { name: 'audit_report', format: 'JSON / AuditResult', description: 'Audit summary, finding counts, severity breakdown, and actionable fix hints', pathExample: 'memory', consumers: ['MainArchitectureAgent', 'VerificationAndTestAgent'] }
       ],
       sideEffects: ['Zero filesystem side-effects (read-only audit)'],
-      errorStates: ['AUDIT_FAILED', 'REGISTRY_CORRUPTED', 'FROZEN_FILE_MODIFIED']
+      errorStates: ['AUDIT_FAILED', 'REGISTRY_CORRUPTED']
     },
     llmDecisionMaking: {
       usesLlm: false,
@@ -3374,8 +3368,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     },
     currentCapabilities: [
       { name: 'Agent registry consistency audit', status: 'VERIFIED WORKING', description: 'Validates all 20 canonical agents have valid metadata and adapters.', evidence: 'Verified in SYSTEM/agents/architecture_validator/validators.py' },
-      { name: 'Video pipeline contract audit', status: 'VERIFIED WORKING', description: 'Asserts canonical 12-stage ordering and approval gate placement.', evidence: 'Tested in tests/test_architecture_validator.py' },
-      { name: 'Frozen file SHA-256 verification', status: 'VERIFIED WORKING', description: 'Bit-for-bit SHA-256 verification of transcribe, transcript_review, scene_segmentation.', evidence: 'Verified across all test runs' }
+      { name: 'Video pipeline contract audit', status: 'VERIFIED WORKING', description: 'Asserts canonical 12-stage ordering and approval gate placement.', evidence: 'Tested in tests/test_architecture_validator.py' }
     ],
     whatItDoesNotDo: [
       'Does NOT automatically mutate or fix code (strictly read-only diagnostic auditor)',
@@ -3383,7 +3376,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     ],
     missingCapabilities: [],
     validationTesting: {
-      validationLogic: ['Validates detection of injected cycles', 'Validates detection of tampered frozen hashes', 'Validates detection of broken stage sequences'],
+      validationLogic: ['Validates detection of injected cycles', 'Validates detection of broken stage sequences'],
       testFiles: ['tests/test_architecture_validator.py'],
       failureModesAndRecovery: ['Integrity error detected: Immediately reports CRITICAL finding and halts downstream actions.']
     },
@@ -3419,7 +3412,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     owner: 'system',
     badge: 'EVIDENCE & TEST VERIFIER',
     overview: {
-      purpose: 'Executes evidence-driven verification, component-mapped testing, failure diagnosis, frozen-file integrity checks, and regression protection.',
+      purpose: 'Executes evidence-driven verification, component-mapped testing, failure diagnosis, and regression protection.',
       problemSolved: 'Replaces guessing with empirical test evidence, maps modified files to required test suites, and diagnoses root causes.',
       position: 'System verification engine invoked before promoting changes or declaring task completion.',
       upstream: 'AutonomousExecutionAgent, MainArchitectureAgent, and developer commands.',
@@ -3433,7 +3426,6 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         'Executes pytest subprocesses with strict execution bounds and timeouts via TestExecutor',
         'Captures and bounds stdout/stderr output to prevent memory exhaustion',
         'Diagnoses root causes from test tracebacks and error messages via Diagnostician',
-        'Verifies frozen video algorithm SHA-256 hashes bit-for-bit',
         'Computes evidence-based verdicts (PASS, FAIL, BLOCKED, CONDITIONAL)'
       ],
       productionReadyFeatures: [
@@ -3443,10 +3435,9 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       ]
     },
     howItWorks: {
-      summary: 'Resolves tests from component map, executes pytest with bounded capture, verifies frozen hashes, diagnoses failures if any, and issues verdict.',
+      summary: 'Resolves tests from component map, executes pytest with bounded capture, diagnoses failures if any, and issues verdict.',
       stepByStepFlow: [
         { step: 1, title: 'Component Mapping', detail: 'ComponentMapper maps changed files to authoritative pytest files.', type: 'deterministic' },
-        { step: 2, title: 'Frozen Hash Check', detail: 'Compares SHA-256 of protected core files against authoritative baseline values.', type: 'deterministic' },
         { step: 3, title: 'Test Execution', detail: 'TestExecutor launches pytest in isolated subprocess with bounded stdout capture.', type: 'external' },
         { step: 4, title: 'Result Parsing', detail: 'Parses pytest exit code, passed/failed counts, durations, and failure tracebacks.', type: 'deterministic' },
         { step: 5, title: 'Failure Diagnosis', detail: 'Diagnostician classifies root cause (assertion, syntax, import, timeout, resource).', type: 'llm' },
@@ -3457,7 +3448,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     },
     inputsDependencies: {
       inputs: [
-        { name: 'verification_request', required: true, format: 'JSON dict', description: 'Action (verify, run_tests, verify_frozen_hashes) and target components or test paths', pathExample: '{"action": "verify", "changed_files": ["VIDEO_ENGINE/stages/visual_planning.py"]}' }
+        { name: 'verification_request', required: true, format: 'JSON dict', description: 'Action (verify, run_tests, verify_regression) and target components or test paths', pathExample: '{"action": "verify", "changed_files": ["VIDEO_ENGINE/stages/visual_planning.py"]}' }
       ],
       externalTools: ['pytest_runner', 'hash_verifier', 'agent_registry', 'component_mapper', 'diagnostician'],
       systemDependencies: ['Python subprocess', 'pytest binary', 'hashlib']
@@ -3467,7 +3458,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { name: 'VerificationReport', format: 'JSON', description: 'Overall verdict (PASS/FAIL), test suite results, failure diagnoses, and evidence refs', pathExample: 'memory', consumers: ['AutonomousExecutionAgent', 'MainArchitectureAgent'] }
       ],
       sideEffects: ['Writes temporary test artifacts to .pytest_cache'],
-      errorStates: ['TEST_EXECUTION_TIMEOUT', 'SUBPROCESS_CRASH', 'FROZEN_FILE_TAMPERED']
+      errorStates: ['TEST_EXECUTION_TIMEOUT', 'SUBPROCESS_CRASH']
     },
     llmDecisionMaking: {
       usesLlm: true,
@@ -3483,7 +3474,6 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     },
     currentCapabilities: [
       { name: 'Automated component-to-test mapping', status: 'VERIFIED WORKING', description: 'Maps system modifications to relevant test suites.', evidence: 'Verified in SYSTEM/agents/verification_and_test/component_mapper.py' },
-      { name: 'Frozen algorithm SHA-256 verification', status: 'VERIFIED WORKING', description: 'Guarantees core video algorithms remain strictly unchanged.', evidence: 'Tested across test_verification_and_test.py' },
       { name: 'Subprocess test isolation', status: 'VERIFIED WORKING', description: 'Runs tests with timeouts and memory bounding.', evidence: 'Verified in SYSTEM/agents/verification_and_test/test_executor.py' }
     ],
     whatItDoesNotDo: [
@@ -3526,7 +3516,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     agentId: 'security_policy',
     stageId: 'security_policy',
     name: 'Security Policy Agent',
-    role: 'Access Control, Sandbox Confinement & Frozen Core Guard',
+    role: 'Access Control & Sandbox Confinement',
     category: 'system_subagent',
     version: '1.0.0',
     owner: 'system',
@@ -3540,18 +3530,16 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       architectureRole: 'Security policy evaluator and boundary enforcer.'
     },
     whatItDoes: {
-      summary: 'Evaluates action risks, checks agent tool permissions, enforces path confinement, verifies approval tokens, and protects frozen algorithm files.',
+      summary: 'Evaluates action risks, checks agent tool permissions, enforces path confinement, and verifies approval tokens.',
       implementedResponsibilities: [
         'Evaluates security policies and agent authorizations via PolicyEvaluator',
         'Enforces tool access control lists according to AgentMetadata.allowed_tools',
         'Enforces directory confinement and prevents path traversal (Path.resolve sandboxing)',
         'Classifies action risks into LOW, MEDIUM, HIGH, and CRITICAL levels',
-        'Verifies Laxman Approval requirements for high-risk operations',
-        'Protects frozen core video algorithm files by verifying SHA-256 hashes before and after execution'
+        'Verifies Laxman Approval requirements for high-risk operations'
       ],
       productionReadyFeatures: [
         'Zero-trust path verification rejecting directory traversal',
-        'Frozen file immutable protection rules',
         'Atomic policy enforcement raising SecurityPolicyViolationError on breach'
       ]
     },
@@ -3561,7 +3549,6 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { step: 1, title: 'Request Intake', detail: 'Receives SecurityRequest containing agent_id, action, target_paths, and tool_name.', type: 'deterministic' },
         { step: 2, title: 'Tool Whitelist Verification', detail: 'Asserts requested tool is present in calling agent allowed_tools metadata.', type: 'deterministic' },
         { step: 3, title: 'Path Confinement Check', detail: 'Verifies target_paths resolve strictly within approved project sandbox root.', type: 'deterministic' },
-        { step: 4, title: 'Frozen File Inspection', detail: 'Blocks any write or delete attempts targeting protected video engine stages.', type: 'deterministic' },
         { step: 5, title: 'Risk & Approval Assessment', detail: 'Determines RiskLevel; requires verified approval token for HIGH or CRITICAL operations.', type: 'deterministic' },
         { step: 6, title: 'Decision Issuance', detail: 'Returns PolicyDecision (ALLOW, DENY, REQUIRE_APPROVAL).', type: 'deterministic' }
       ],
@@ -3580,7 +3567,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         { name: 'PolicyDecision', format: 'JSON', description: 'Decision (ALLOW, DENY, REQUIRE_APPROVAL), risk level, and rationale', pathExample: 'memory', consumers: ['Tool execution dispatcher', 'Agent orchestrator'] }
       ],
       sideEffects: ['Logs security decisions to security_audit.jsonl'],
-      errorStates: ['SECURITY_POLICY_VIOLATION', 'PATH_TRAVERSAL_DETECTED', 'FROZEN_FILE_TAMPER_ATTEMPT']
+      errorStates: ['SECURITY_POLICY_VIOLATION', 'PATH_TRAVERSAL_DETECTED']
     },
     llmDecisionMaking: {
       usesLlm: false,
@@ -3596,11 +3583,9 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
     },
     currentCapabilities: [
       { name: 'Path traversal confinement', status: 'VERIFIED WORKING', description: 'Guarantees file operations remain strictly within project directories.', evidence: 'Verified in SYSTEM/agents/security_policy/enforcer.py' },
-      { name: 'Tool access control enforcement', status: 'VERIFIED WORKING', description: 'Blocks agents from executing tools outside their allowed_tools list.', evidence: 'Tested in tests/test_security_policy.py' },
-      { name: 'Frozen file invariance guard', status: 'VERIFIED WORKING', description: 'Guards transcribe, transcript_review, and scene_segmentation against modification.', evidence: 'Verified across all test suites' }
+      { name: 'Tool access control enforcement', status: 'VERIFIED WORKING', description: 'Blocks agents from executing tools outside their allowed_tools list.', evidence: 'Tested in tests/test_security_policy.py' }
     ],
     whatItDoesNotDo: [
-      'Does NOT permit bypass of frozen core file protection under any circumstance',
       'Does NOT permit path traversal outside verified sandbox directories'
     ],
     missingCapabilities: [],
@@ -3826,7 +3811,6 @@ export function generateAgentMarkdownExport(
 - **Category**: \`${data.category}\` (${isVideo ? 'Video Generation Pipeline' : 'System Subagent'})
 - **Version**: \`${data.version}\`
 - **Owner**: \`${data.owner}\`
-- **Frozen Status**: ${data.isFrozen ? '**FROZEN CORE** (Protected by Bit-for-Bit SHA-256 Invariance Lock)' : 'Active / Extensible'}
 - **Operational Badge**: \`${data.badge || 'PRODUCTION-READY'}\`
 
 ## 2. Executive Overview & Architectural Purpose
@@ -3898,7 +3882,6 @@ ${data.llmDecisionMaking.purelyDeterministicParts.map(p => `  - ${p}`).join('\n'
 
 ## 13. Security Boundaries & Permissions
 - **Filesystem Confinement**: Confined to active project sandbox or SYSTEM/ registries.
-- **Frozen File Protection**: ${data.isFrozen ? 'STRICTLY FROZEN. Bit-for-bit SHA-256 hash locked.' : 'Standard agent implementation.'}
 - **Approval Requirements**: Enforces human or cryptographic approval gate before critical state transitions.
 
 ## 14. Current Capabilities & Maturity Classification

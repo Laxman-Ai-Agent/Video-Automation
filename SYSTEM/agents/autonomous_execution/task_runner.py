@@ -5,11 +5,10 @@ Coordinates:
 2. Security policy enforcement before step execution.
 3. Bounded recovery loop (transient retries, backoff, attempt budget, infinite loop detection).
 4. Atomic checkpoint persistence at each milestone.
-5. Independent completion verification via VerificationAndTestAgent and frozen file SHA-256 verification.
+5. Independent completion verification via VerificationAndTestAgent.
 """
 from __future__ import annotations
 
-import hashlib
 import logging
 import time
 from pathlib import Path
@@ -30,7 +29,6 @@ from .recovery_manager import RecoveryManager
 
 logger = logging.getLogger("autonomous_execution.task_runner")
 
-FROZEN_FILE_HASHES: dict[str, str]  = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 class TaskRunner:
@@ -271,24 +269,6 @@ class TaskRunner:
         verif_report = self._run_independent_verification(spec, checkpoint, project_dir)
         checkpoint.verification_summary = verif_report
 
-        # Frozen file SHA-256 verification
-        hash_check = self._verify_frozen_file_hashes()
-
-        if not hash_check["all_matched"]:
-            checkpoint.state = TaskLifecycleState.FAILED.value
-            checkpoint.unresolved_blockers.append("Frozen video algorithm SHA-256 hash mismatch detected.")
-            self.checkpoint_manager.save_checkpoint(checkpoint, custom_dir=project_dir)
-            return ExecutionReport(
-                task_id=spec.task_id,
-                final_state=TaskLifecycleState.FAILED.value,
-                success=False,
-                completed_steps=checkpoint.completed_steps,
-                verification_verdict="FAIL",
-                frozen_file_check=hash_check,
-                evidence={"verification": verif_report},
-                error="Frozen video algorithm files modified during execution; fail-closed integrity tripwire.",
-            )
-
         if not verif_report.get("is_valid"):
             checkpoint.state = TaskLifecycleState.FAILED.value
             checkpoint.unresolved_blockers.extend(verif_report.get("unverified_criteria", []))
@@ -299,7 +279,6 @@ class TaskRunner:
                 success=False,
                 completed_steps=checkpoint.completed_steps,
                 verification_verdict="FAIL",
-                frozen_file_check=hash_check,
                 evidence={"verification": verif_report},
                 error=f"Independent acceptance verification failed: {'; '.join(verif_report.get('errors', []))}",
             )
@@ -315,7 +294,6 @@ class TaskRunner:
             completed_steps=checkpoint.completed_steps,
             retry_stats={"task_retries": checkpoint.task_retry_count},
             verification_verdict="PASS",
-            frozen_file_check=hash_check,
             evidence={
                 "checkpoint": checkpoint.to_dict(),
                 "verification": verif_report,
@@ -404,27 +382,3 @@ class TaskRunner:
             "unverified_criteria": unverified,
             "verified_criteria": [c for c in spec.acceptance_criteria if c not in unverified],
         }
-
-    def _verify_frozen_file_hashes(self) -> dict[str, Any]:
-        """Calculates actual SHA-256 hashes of the three frozen video algorithm files."""
-        results: dict[str, Any] = {}
-        all_matched = True
-
-        for rel_path, expected_hash in FROZEN_FILE_HASHES.items():
-            abs_path = self.project_root / rel_path
-            if not abs_path.exists():
-                results[rel_path] = {"exists": False, "match": False, "expected": expected_hash}
-                all_matched = False
-                continue
-            actual_hash = hashlib.sha256(abs_path.read_bytes()).hexdigest()
-            matched = actual_hash == expected_hash
-            if not matched:
-                all_matched = False
-            results[rel_path] = {
-                "exists": True,
-                "match": matched,
-                "expected": expected_hash,
-                "actual": actual_hash,
-            }
-
-        return {"all_matched": all_matched, "files": results}

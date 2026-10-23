@@ -6,7 +6,7 @@ Executes and verifies skills in controlled, bounded workspaces with:
 3. Strict environment variable allowlist scrubbing (no parent secrets or API keys).
 4. Windows Job Object governance with guaranteed process tree termination on timeout.
 5. Workspace path confinement, symlink escape guards, and output byte bounding.
-6. Zero side-effect guarantees (production registries & frozen files verified untouched).
+6. Zero side-effect guarantees (production registries & pipeline stage files verified untouched).
 7. Cryptographic evidence binding via tested_content_sha256.
 8. Distinction between executable code testing and declarative contract validation.
 """
@@ -472,7 +472,7 @@ class SkillTestRunner:
         workspace = tempfile.mkdtemp(prefix="sf_sandbox_ws_")
         ws_path = Path(workspace)
 
-        # Baseline hash tracking for frozen files
+        # Baseline hash tracking for the pipeline stage files
         baseline_hashes = compute_baseline_hashes()
 
         try:
@@ -528,7 +528,7 @@ class SkillTestRunner:
                 # Verify workspace confinement & symlinks
                 verify_no_symlink_escapes(ws_path, ws_path)
 
-                # Verify zero side effects on frozen pipeline files
+                # Verify zero side effects on pipeline stage files
                 verify_baseline_hashes_unchanged(baseline_hashes)
 
                 diagnostics = []

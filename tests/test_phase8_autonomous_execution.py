@@ -28,11 +28,9 @@ Validates:
 5. Verification and Completion:
    - Tasks cannot reach COMPLETED with unverified mandatory criteria.
    - Independent verification via VerificationAndTestAgent.
-   - Frozen video algorithm files bit-for-bit SHA-256 hash preservation.
 """
 from __future__ import annotations
 
-import hashlib
 import tempfile
 import time
 from pathlib import Path
@@ -70,7 +68,6 @@ from SYSTEM.registries.agent_registry import AgentRegistry, get_agent_registry
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-FROZEN_FILE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 class MockSpecialistAgent(BaseAgent):
@@ -276,26 +273,25 @@ class TestBoundedRecoveryAndLoopPrevention:
             rm = RecoveryManager()
             runner = TaskRunner(project_root=tmppath, checkpoint_manager=cm, recovery_manager=rm, registry=reg)
 
-            with patch.object(runner, "_verify_frozen_file_hashes", return_value={"all_matched": True, "files": {}}):
-                with patch.object(runner, "_run_independent_verification", return_value={"is_valid": True, "errors": []}):
-                    spec = TaskRequirementSpec(
-                        task_id="t_transient_ok",
-                        purpose="Recover from transient glitch",
-                        requested_outcome="Step succeeds on 2nd attempt",
-                        acceptance_criteria=["Step succeeded"],
-                        retry_policy={"backoff_base_seconds": 0.01, "max_backoff_seconds": 0.02},
-                    )
-                    step = StepExecutionRecord(
-                        step_id="step_transient",
-                        assigned_agent_id="mock_transient_agent",
-                        action="retry_action",
-                        max_attempts=3,
-                    )
-                    report = runner.execute_task(spec, [step], project_dir=tmppath)
-                    assert report.success is True
-                    assert report.final_state == TaskLifecycleState.COMPLETED.value
-                    assert mock_inst.call_count == 2
-                    assert report.retry_stats.get("task_retries") == 1
+            with patch.object(runner, "_run_independent_verification", return_value={"is_valid": True, "errors": []}):
+                spec = TaskRequirementSpec(
+                    task_id="t_transient_ok",
+                    purpose="Recover from transient glitch",
+                    requested_outcome="Step succeeds on 2nd attempt",
+                    acceptance_criteria=["Step succeeded"],
+                    retry_policy={"backoff_base_seconds": 0.01, "max_backoff_seconds": 0.02},
+                )
+                step = StepExecutionRecord(
+                    step_id="step_transient",
+                    assigned_agent_id="mock_transient_agent",
+                    action="retry_action",
+                    max_attempts=3,
+                )
+                report = runner.execute_task(spec, [step], project_dir=tmppath)
+                assert report.success is True
+                assert report.final_state == TaskLifecycleState.COMPLETED.value
+                assert mock_inst.call_count == 2
+                assert report.retry_stats.get("task_retries") == 1
 
     def test_permanent_failure_halts_immediately_without_retry(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -526,15 +522,14 @@ class TestCheckpointAndResume:
             mock_inst.behaviors = ["succeed"]
             mock_inst.call_count = 0  # reset call counter
 
-            with patch.object(runner, "_verify_frozen_file_hashes", return_value={"all_matched": True, "files": {}}):
-                with patch.object(runner, "_run_independent_verification", return_value={"is_valid": True, "errors": []}):
-                    rep2 = runner.execute_task(spec, [s1, s2], project_dir=tmppath, resume=True)
-                    assert rep2.success is True
-                    assert rep2.final_state == TaskLifecycleState.COMPLETED.value
-                    assert "step_1" in rep2.completed_steps
-                    assert "step_2" in rep2.completed_steps
-                    # Step 1 was SKIPPED, only Step 2 executed!
-                    assert mock_inst.call_count == 1
+            with patch.object(runner, "_run_independent_verification", return_value={"is_valid": True, "errors": []}):
+                rep2 = runner.execute_task(spec, [s1, s2], project_dir=tmppath, resume=True)
+                assert rep2.success is True
+                assert rep2.final_state == TaskLifecycleState.COMPLETED.value
+                assert "step_1" in rep2.completed_steps
+                assert "step_2" in rep2.completed_steps
+                # Step 1 was SKIPPED, only Step 2 executed!
+                assert mock_inst.call_count == 1
 
     def test_stale_checkpoint_hash_mismatch_rejected_on_resume(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -563,10 +558,10 @@ class TestCheckpointAndResume:
 
 
 # -----------------------------------------------------------------------------
-# 5. INDEPENDENT VERIFICATION AND FROZEN HASH INTEGRITY TESTS
+# 5. INDEPENDENT VERIFICATION TESTS
 # -----------------------------------------------------------------------------
-class TestIndependentVerificationAndFrozenHashes:
-    """Verifies that acceptance criteria and frozen-file SHA-256 hashes are strictly verified."""
+class TestIndependentVerification:
+    """Verifies that acceptance criteria are strictly verified."""
 
     def test_unverified_acceptance_criteria_prevents_completed_verdict(self):
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -588,45 +583,9 @@ class TestIndependentVerificationAndFrozenHashes:
                 "unverified_criteria": ["Non-negotiable QC criteria"],
             }
 
-            with patch.object(runner, "_verify_frozen_file_hashes", return_value={"all_matched": True, "files": {}}):
-                with patch.object(runner, "_run_independent_verification", return_value=failing_verif):
-                    rep = runner.execute_task(spec, [], project_dir=tmppath)
-                    assert rep.success is False
-                    assert rep.final_state == TaskLifecycleState.FAILED.value
-                    assert rep.verification_verdict == "FAIL"
-                    assert "Independent acceptance verification failed" in str(rep.error)
-
-    def test_frozen_file_hash_tamper_detection(self):
-        runner = TaskRunner()
-        # Verify the actual frozen files in the repository first
-        actual_check = runner._verify_frozen_file_hashes()
-        assert actual_check["all_matched"] is True
-
-        for rel, data in actual_check["files"].items():
-            assert data["match"] is True
-            assert data["actual"] == FROZEN_FILE_HASHES[rel]
-
-        # Simulate a frozen file hash mismatch: MUST prevent completion
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmppath = Path(tmpdir)
-            cm = CheckpointManager(base_tasks_dir=tmppath)
-            runner = TaskRunner(project_root=tmppath, checkpoint_manager=cm)
-
-            spec = TaskRequirementSpec(
-                task_id="t_tamper",
-                purpose="Detect tampered frozen file",
-                requested_outcome="Halt fail-closed",
-                acceptance_criteria=["Pass verification"],
-            )
-            tampered_hash_check = {
-                "all_matched": False,
-                "files": {
-                    "VIDEO_ENGINE/stages/transcribe.py": {"match": False, "expected": "...", "actual": "mismatched"}
-                },
-            }
-            with patch.object(runner, "_verify_frozen_file_hashes", return_value=tampered_hash_check):
-                with patch.object(runner, "_run_independent_verification", return_value={"is_valid": True, "errors": []}):
-                    rep = runner.execute_task(spec, [], project_dir=tmppath)
-                    assert rep.success is False
-                    assert rep.final_state == TaskLifecycleState.FAILED.value
-                    assert "Frozen video algorithm files modified" in str(rep.error)
+            with patch.object(runner, "_run_independent_verification", return_value=failing_verif):
+                rep = runner.execute_task(spec, [], project_dir=tmppath)
+                assert rep.success is False
+                assert rep.final_state == TaskLifecycleState.FAILED.value
+                assert rep.verification_verdict == "FAIL"
+                assert "Independent acceptance verification failed" in str(rep.error)

@@ -1,12 +1,10 @@
 """Phase 3 Verification Test Suite: Capability Finder Self-Learning Subsystem.
 
 Verifies:
-1. Frozen video engine file checksums (transcribe.py, transcript_review.py, scene_segmentation.py).
 2. CapabilityFinderAgent end-to-end self-learning actions (record_outcome, submit_feedback, generate_lessons, evaluate_proposal, promote_lesson, rollback_knowledge).
 3. Active knowledge impact on capability discovery routing.
 4. Schema validation, secret sanitization, and prompt injection defense.
 """
-import hashlib
 import json
 from pathlib import Path
 import pytest
@@ -33,23 +31,6 @@ def approved_request(key: str) -> str:
     return req.request_id
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-
-FROZEN_FILES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
-
-def test_frozen_algorithm_files_integrity():
-    """Verifies that core pipeline stages remain 100% frozen with exact SHA-256 checksums."""
-    for rel_path, expected_hash in FROZEN_FILES.items():
-        file_path = PROJECT_ROOT / rel_path
-        assert file_path.exists(), f"Frozen file missing: {rel_path}"
-        hasher = hashlib.sha256()
-        with open(file_path, "rb") as f:
-            hasher.update(f.read())
-        actual_hash = hasher.hexdigest().lower()
-        assert actual_hash == expected_hash.lower(), (
-            f"Frozen file integrity check failed for {rel_path}!\n"
-            f"Expected: {expected_hash}\nActual:   {actual_hash}"
-        )
 
 
 def test_capability_finder_agent_self_learning_lifecycle(tmp_path: Path, monkeypatch, llm_review_says):

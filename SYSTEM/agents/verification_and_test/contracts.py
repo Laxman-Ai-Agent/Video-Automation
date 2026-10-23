@@ -83,18 +83,6 @@ class CheckResult:
 
 
 @dataclass
-class FrozenFileCheck:
-    """Hash verification result for an immutable algorithm stage file."""
-    file_path: str
-    expected_sha256: str
-    actual_sha256: str
-    matches: bool
-
-    def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
-
-
-@dataclass
 class FailureDiagnosis:
     """Structured failure diagnosis with root cause attribution and minimal follow-up."""
     check_id: str
@@ -121,7 +109,6 @@ class VerificationReport:
     requirements_verified: list[str]
     unverified_requirements: list[str]
     checks: list[CheckResult] = field(default_factory=list)
-    frozen_file_checks: list[FrozenFileCheck] = field(default_factory=list)
     failure_diagnoses: list[FailureDiagnosis] = field(default_factory=list)
     verdict: VerificationVerdict = VerificationVerdict.PASS
     verdict_explanation: str = ""
@@ -165,7 +152,6 @@ class VerificationReport:
             "verdict": self.verdict.value if isinstance(self.verdict, Enum) else self.verdict,
             "verdict_explanation": self.verdict_explanation,
             "checks": [c.to_dict() for c in self.checks],
-            "frozen_file_checks": [f.to_dict() for f in self.frozen_file_checks],
             "failure_diagnoses": [d.to_dict() for d in self.failure_diagnoses],
             "timestamp": self.timestamp,
             "metadata": self.metadata,

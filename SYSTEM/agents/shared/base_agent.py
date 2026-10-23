@@ -425,7 +425,7 @@ class BaseAgent(abc.ABC):
             elif aid == "security_policy":
                 takeaway = "Security policy evaluated; all operations verified within permission boundaries."
             elif aid == "verification_and_test":
-                takeaway = "Test execution completed; frozen file hashes and contracts confirmed."
+                takeaway = "Test execution completed; contracts confirmed."
             elif aid == "autonomous_execution":
                 takeaway = "Autonomous execution succeeded within retry and approval bounds."
 

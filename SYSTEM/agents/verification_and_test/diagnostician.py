@@ -99,8 +99,6 @@ class Diagnostician:
         diagnostics: list[str] = []
         target = check.check_id.replace("pytest_", "").replace("_", "/")
         diagnostics.append(f"Run targeted isolated test: pytest {target} -vv -x --tb=short")
-        if check.component == "frozen_files":
-            diagnostics.append("Verify git status of VIDEO_ENGINE/stages/ to inspect accidental modifications.")
-        elif check.failure_category == FailureCategory.MISSING_DEPENDENCY:
+        if check.failure_category == FailureCategory.MISSING_DEPENDENCY:
             diagnostics.append("Inspect virtual environment and requirements.txt for missing package.")
         return diagnostics

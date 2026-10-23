@@ -13,11 +13,9 @@ Validates:
 10. Truthful monitoring reporting capabilities and Phase 7 headless Chromium limitation.
 11. Mandatory human approval gates (Timeline Approval & Final QC playback) cannot be bypassed.
 12. FastAPI orchestrator endpoints validation and sanitized error responses.
-13. Frozen baseline SHA-256 hashes match and zero ASR calls occurred.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import threading
 import time
@@ -41,8 +39,6 @@ from backend.errors import ApiError
 from backend.main import app
 
 client = TestClient(app)
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -81,17 +77,6 @@ def test_project(tmp_path: Path):
         yield pdir
 
 
-def test_frozen_baseline_hashes_unchanged(mock_no_asr):
-    """Verify SHA-256 hashes of all 3 protected files remain strictly unmodified."""
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        full_path = Path("e:/audio-to-video") / rel_path
-        assert full_path.exists(), f"Protected file {rel_path} does not exist"
-        computed = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert computed == expected_hash, (
-            f"CRITICAL: Protected file {rel_path} has been modified!\n"
-            f"Expected: {expected_hash}\n"
-            f"Observed: {computed}"
-        )
 
 
 def test_orchestrator_dag_ordering_and_stage_eligibility(test_project: Path, mock_no_asr):

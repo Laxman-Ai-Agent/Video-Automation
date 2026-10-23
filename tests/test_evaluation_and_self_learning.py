@@ -14,11 +14,9 @@ Validates:
 11. Unverified memory candidates and quarantined skills are excluded from production retrieval.
 12. Truthful capability reporting: headless Chromium prerequisite remains explicitly unverified.
 13. API endpoints for evaluation run, compare, candidate propose, decision, promote, and rollback.
-14. Frozen baseline SHA-256 hashes match exactly and zero ASR calls occurred.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -31,8 +29,6 @@ from backend.errors import ApiError
 from backend.main import app
 
 client = TestClient(app)
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -61,19 +57,6 @@ def isolated_eval_env(tmp_path: Path):
         reg.initialize()
         with patch("backend.evaluation.get_evaluation_registry", return_value=reg):
             yield reg
-
-
-def test_frozen_baseline_hashes_unchanged(mock_no_asr):
-    """Verify SHA-256 hashes of all 3 protected files remain strictly unmodified."""
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        full_path = Path("e:/audio-to-video") / rel_path
-        assert full_path.exists(), f"Protected file {rel_path} does not exist"
-        computed = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert computed == expected_hash, (
-            f"CRITICAL: Protected file {rel_path} has been modified!\n"
-            f"Expected: {expected_hash}\n"
-            f"Observed: {computed}"
-        )
 
 
 def test_evaluation_registry_and_seed_suites(isolated_eval_env: evaluation.EvaluationRegistry, mock_no_asr):

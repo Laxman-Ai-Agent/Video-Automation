@@ -1,7 +1,6 @@
 """Comprehensive test suite for Scene Segmentation Semantic Intelligence Upgrade (v2.0.0).
 
 Validates:
-1. Bit-for-bit SHA-256 invariance of frozen video engine files.
 2. Narrative topic & chapter modeling across bilingual Telugu-English narration.
 3. Telugu-English technical vocabulary normalization without transcript corruption.
 4. Adaptive pacing calculations (WPM, pause density, pacing profiles) from real telemetry.
@@ -13,7 +12,6 @@ Validates:
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 from unittest.mock import MagicMock, patch
@@ -26,8 +24,6 @@ from SYSTEM.agents.video_generation_agents.scene_segmentation.semantic_analyzer 
     DeterministicInvariantGuard,
     SemanticAnalyzer,
 )
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -136,19 +132,6 @@ def test_project(tmp_path: Path) -> Path:
     (pdir / "cuts.json").write_text(json.dumps(cuts_data), encoding="utf-8")
 
     return pdir
-
-
-# ------------------ TEST 1: Frozen Baseline File Invariance ------------------
-def test_frozen_video_engine_files_invariance():
-    """Confirms that locked deterministic core files have not been modified."""
-    root_dir = Path(__file__).resolve().parent.parent
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        target = root_dir / rel_path
-        assert target.exists(), f"Frozen file missing: {rel_path}"
-        actual_hash = hashlib.sha256(target.read_bytes()).hexdigest().lower()
-        assert actual_hash == expected_hash.lower(), (
-            f"FROZEN FILE VIOLATION: {rel_path} was modified! Expected {expected_hash}, got {actual_hash}"
-        )
 
 
 # ------------------ TEST 2: Semantic Analyzer Fallback Analysis ------------------

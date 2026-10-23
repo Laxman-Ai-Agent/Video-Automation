@@ -1,8 +1,7 @@
 """Test Suite E: End-to-End Integration Flow across Main Architecture, Capability Finder, and Skill Factory."""
-import hashlib
+from pathlib import Path
 import shutil
 import uuid
-from pathlib import Path
 import pytest
 
 from SYSTEM.agents.capability_finder.agent import CapabilityFinderAgent
@@ -10,26 +9,13 @@ from SYSTEM.agents.capability_finder.learning.authorization import Authenticated
 from SYSTEM.agents.main_architecture_agent.agent import MainArchitectureAgent
 from SYSTEM.agents.shared.contracts import AgentRequest
 from SYSTEM.agents.skill_factory.agent import SkillFactoryAgent
+from SYSTEM.agents.skill_factory.sandbox_policy import compute_baseline_hashes, verify_baseline_hashes_unchanged
 from SYSTEM.agents.skill_factory.specification import SkillSpecification
 from SYSTEM.registries.capability_registry import get_capability_registry
 from SYSTEM.registries.skill_registry import SKILLS_DIR, get_skill_registry
 
-FROZEN_EXPECTED_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
-
-def _verify_frozen_hashes():
-    files = [
-        Path("VIDEO_ENGINE/stages/transcribe.py"),
-        Path("VIDEO_ENGINE/stages/transcript_review.py"),
-        Path("VIDEO_ENGINE/stages/scene_segmentation.py"),
-    ]
-    for f in files:
-        h = hashlib.sha256(f.read_bytes()).hexdigest()
-        assert h == FROZEN_EXPECTED_HASHES[f.name], f"Frozen file hash mismatch on {f.name}"
-
-
 def test_e2e_capability_finder_to_skill_factory_to_rediscovery(tmp_path: Path):
-    _verify_frozen_hashes()
+    baseline = compute_baseline_hashes()
 
     unique_suffix = uuid.uuid4().hex[:8]
     unique_cap = f"zeta_vortex_{unique_suffix}"
@@ -133,8 +119,8 @@ def test_e2e_capability_finder_to_skill_factory_to_rediscovery(tmp_path: Path):
         assert new_gap_data.get("recommended_action") == "REUSE"
         assert new_gap_data.get("suggested_delegate_id") == new_skill_id
 
-        # Step 5: Final Frozen Hash Verification
-        _verify_frozen_hashes()
+        # Step 5: pipeline stage files untouched
+        verify_baseline_hashes_unchanged(baseline)
 
     finally:
         # Clean up created test skill from registry and filesystem

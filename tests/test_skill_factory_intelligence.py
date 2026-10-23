@@ -7,9 +7,7 @@ Covers:
 4. Multi-turn bounded self-repair generation loop with failure classification (SkillGenerator, FailureCategory).
 5. Controlled self-learning and benchmark-gated knowledge promotion (SkillLearningEngine).
 6. Agent action dispatch (spec_intake, decision, generate_skill, evaluate_learning).
-7. Frozen pipeline file invariance.
 """
-import hashlib
 import json
 import pytest
 from pathlib import Path
@@ -38,8 +36,6 @@ from SYSTEM.agents.skill_factory.ts_validator import ts_validator
 from SYSTEM.registries.skill_registry import get_skill_registry
 
 WORKSPACE = Path("e:/audio-to-video")
-
-PROTECTED_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 # =====================================================================
@@ -424,17 +420,3 @@ def test_skill_factory_agent_actions():
     res_learn = agent.execute(WORKSPACE, req_learn)
     assert res_learn.status == "succeeded"
     assert "active_lessons" in res_learn.metadata
-
-
-# =====================================================================
-# 7. Protected Video Algorithm Files SHA-256 Invariance
-# =====================================================================
-
-def test_protected_video_algorithm_files_unmodified():
-    for rel_path, expected_hash in PROTECTED_HASHES.items():
-        full_path = WORKSPACE / rel_path
-        assert full_path.exists(), f"Protected file missing: {rel_path}"
-        computed = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert computed == expected_hash, (
-            f"PROTECTED FILE TAMPERING DETECTED for {rel_path}! Expected {expected_hash}, got {computed}."
-        )

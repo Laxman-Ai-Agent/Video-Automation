@@ -17,7 +17,6 @@ import {
   Sparkles,
   HelpCircle,
   Database,
-  Lock,
   GitBranch,
   Wrench,
   Compass,
@@ -206,24 +205,6 @@ export const AgentAboutTab: React.FC<AgentAboutTabProps> = ({
                     }}
                   >
                     {data.badge}
-                  </span>
-                )}
-                {data.isFrozen && (
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      fontWeight: 700,
-                      backgroundColor: 'rgba(255, 77, 79, 0.15)',
-                      color: '#FF4D4F',
-                      border: '1px solid rgba(255, 77, 79, 0.35)',
-                      padding: '2px 8px',
-                      borderRadius: '4px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '4px'
-                    }}
-                  >
-                    <Lock size={11} /> FROZEN REPO CONTRACT
                   </span>
                 )}
               </div>

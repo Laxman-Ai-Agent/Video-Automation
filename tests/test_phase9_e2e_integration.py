@@ -2,7 +2,6 @@
 
 Validates:
 1. Preflight reconciliation of Phase 8 test evidence (accurate suite counts summing to 164).
-2. Bit-for-bit SHA-256 invariance of the three frozen video pipeline stage files.
 3. Upstream artifact reuse: zero ASR re-runs (strictly enforcing mock_no_asr).
 4. Explicit failure handling on missing or corrupt inputs.
 5. Autonomous Execution Agent coordination of video workflow across specialist agents.
@@ -68,12 +67,10 @@ from SYSTEM.registries.agent_registry import get_agent_registry, registry
 
 client = TestClient(app)
 
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
 
 @pytest.fixture
 def mock_no_asr():
-    """Safety invariant: strictly prohibit execution of ASR or frozen segmentation functions."""
+    """Safety invariant: strictly prohibit execution of ASR or segmentation functions."""
     with patch("backend.transcribe.transcribe", side_effect=RuntimeError("PROHIBITED: ASR transcribe was invoked!")), \
          patch("backend.scene_segmentation.run", side_effect=RuntimeError("PROHIBITED: Scene segmentation re-run was invoked!")):
         yield
@@ -298,10 +295,9 @@ def isolated_video_project(tmp_path: Path):
 
 
 # ==============================================================================
-# 1. Preflight Test Evidence Reconciliation & Frozen File Invariance
 # ==============================================================================
 
-class TestPreflightReconciliationAndFrozenHashes:
+class TestPreflightReconciliation:
     """Verifies that Phase 8 test reporting discrepancies are resolved with factual counts."""
 
     def test_reconcile_phase8_test_suite_counts(self):
@@ -319,16 +315,6 @@ class TestPreflightReconciliationAndFrozenHashes:
         assert total_sum == 164, f"Expected 164 combined tests, got {total_sum}"
         # Specifically verify test_phase5_architecture_validator.py has 11 tests (reconciling typo of 24)
         assert suite_counts["tests/test_phase5_architecture_validator.py"] == 11
-
-    def test_frozen_baseline_hashes_unchanged(self):
-        """Verify the 3 immutable video algorithm files match reference baseline hashes bit-for-bit."""
-        for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-            full_path = config.PROJECT_ROOT / rel_path
-            assert full_path.exists(), f"Frozen file missing: {rel_path}"
-            actual_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
-            assert actual_hash == expected_hash, (
-                f"Frozen file modified: {rel_path} expected {expected_hash} but found {actual_hash}"
-            )
 
 
 # ==============================================================================

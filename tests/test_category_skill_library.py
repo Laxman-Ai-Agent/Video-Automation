@@ -11,11 +11,10 @@ Verifies:
 8. Idempotency and safe version updates without duplicate proliferation.
 9. Agent role-based access control and category permissions matrix.
 10. FastAPI integration routes.
-11. Invariance of frozen algorithm files and existing seed skills.
+11. Invariance of existing seed skills.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import shutil
 from pathlib import Path
@@ -511,10 +510,10 @@ def test_fastapi_endpoints_integration(client: TestClient):
 
 
 # ---------------------------------------------------------------------------
-# Test 12: Invariance of Frozen Files & Seed Skills
+# Test 12: Invariance of Seed Skills
 # ---------------------------------------------------------------------------
 
-def test_existing_skills_invariance():   # the pinned hashes of the former FROZEN stage files were removed: those stages were unfrozen by the user (2026-10-20)
+def test_existing_skills_invariance():
     # Existing seed skills remain approved in catalog
     registry = get_skill_registry()
     registry.initialize()

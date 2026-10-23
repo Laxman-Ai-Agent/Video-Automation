@@ -5,118 +5,28 @@ bounds stdout/stderr capture, and guarantees read-only execution.
 """
 from __future__ import annotations
 
-import hashlib
 import os
 import re
 import subprocess
 import sys
 import time
 from pathlib import Path
-from typing import Any
 
 from SYSTEM.agents.verification_and_test.contracts import (
     CheckResult,
     FailureCategory,
-    FrozenFileCheck,
     TestExecutionStatus,
 )
-
-# Reference SHA-256 hashes for immutable video algorithm files
-FROZEN_ALGORITHM_FILES: dict[str, str]  = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 MAX_OUTPUT_BYTES = 50_000  # 50 KB output bounding to prevent memory exhaustion
 
 
 class TestExecutor:
-    """Safely executes targeted tests and verifies file integrity in the repository."""
+    """Safely executes targeted tests ."""
     __test__ = False
 
     def __init__(self, project_root: Path | None = None) -> None:
         self.project_root = project_root or Path(__file__).resolve().parents[3]
-
-    def verify_frozen_algorithm_hashes(self) -> tuple[CheckResult, list[FrozenFileCheck]]:
-        """Verifies bit-for-bit SHA-256 hashes for the three immutable video stage files."""
-        start_time = time.time()
-        file_checks: list[FrozenFileCheck] = []
-        all_match = True
-        error_messages: list[str] = []
-
-        for rel_path, expected_hash in FROZEN_ALGORITHM_FILES.items():
-            full_path = self.project_root / rel_path
-            if not full_path.exists():
-                all_match = False
-                err = f"Frozen file missing: {rel_path}"
-                error_messages.append(err)
-                file_checks.append(
-                    FrozenFileCheck(
-                        file_path=rel_path,
-                        expected_sha256=expected_hash,
-                        actual_sha256="MISSING",
-                        matches=False,
-                    )
-                )
-                continue
-
-            try:
-                with open(full_path, "rb") as f:
-                    actual_hash = hashlib.sha256(f.read()).hexdigest()
-                matches = actual_hash.lower() == expected_hash.lower()
-                if not matches:
-                    all_match = False
-                    error_messages.append(
-                        f"Hash mismatch on {rel_path}: expected {expected_hash}, got {actual_hash}"
-                    )
-                file_checks.append(
-                    FrozenFileCheck(
-                        file_path=rel_path,
-                        expected_sha256=expected_hash,
-                        actual_sha256=actual_hash,
-                        matches=matches,
-                    )
-                )
-            except Exception as e:
-                all_match = False
-                error_messages.append(f"Failed to read {rel_path}: {e}")
-                file_checks.append(
-                    FrozenFileCheck(
-                        file_path=rel_path,
-                        expected_sha256=expected_hash,
-                        actual_sha256=f"ERROR: {e}",
-                        matches=False,
-                    )
-                )
-
-        duration_ms = (time.time() - start_time) * 1000.0
-
-        if all_match:
-            check_result = CheckResult(
-                check_id="frozen_algorithm_hash_verification",
-                component="frozen_files",
-                check_type="hash_verification",
-                status=TestExecutionStatus.EXECUTED,
-                exit_code=0,
-                duration_ms=duration_ms,
-                stdout="All 3 frozen algorithm files matched reference SHA-256 hashes bit-for-bit.",
-                passed_count=3,
-                failed_count=0,
-                failure_category=FailureCategory.NONE,
-            )
-        else:
-            check_result = CheckResult(
-                check_id="frozen_algorithm_hash_verification",
-                component="frozen_files",
-                check_type="hash_verification",
-                status=TestExecutionStatus.EXECUTED,
-                exit_code=1,
-                duration_ms=duration_ms,
-                stderr="\n".join(error_messages),
-                passed_count=sum(1 for c in file_checks if c.matches),
-                failed_count=sum(1 for c in file_checks if not c.matches),
-                failure_category=FailureCategory.INTEGRITY_TAMPER,
-                failure_diagnosis="Frozen algorithm file SHA-256 hash does not match immutable baseline.",
-            )
-
-        return check_result, file_checks
 
     def execute_pytest_target(
         self,

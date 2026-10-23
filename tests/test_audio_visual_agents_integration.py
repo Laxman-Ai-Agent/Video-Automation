@@ -11,12 +11,10 @@ Validates:
 8. Bounded repair and gateway error handling.
 9. Mandatory Phase 2 review fail-closed gate.
 10. Truthful agent communication and Phase 3 state tracking.
-11. Frozen files' SHA-256 hashes match baseline exactly.
 12. Zero calls into ASR or full video pipeline rendering.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import shutil
 import tempfile
@@ -37,8 +35,6 @@ from backend.artifact_contracts import (
     verify_path_confinement,
 )
 from backend import llm_gateway, llm_review
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -513,18 +509,6 @@ def test_agent_lifecycle_and_truthful_communication(sample_project):
     assert result.stage_id == "audio"
     assert "manifest" in result.metadata
     assert result.metadata["manifest"]["project_id"] == "proj_test_01"
-
-
-# ------------------ TEST 11: Frozen Files Baseline Integrity ------------------
-def test_frozen_files_integrity():
-    """Verify that transcribe.py, transcript_review.py, and scene_segmentation.py match SHA-256 hashes."""
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        file_path = Path(rel_path)
-        assert file_path.exists(), f"Protected file {rel_path} does not exist"
-        current_hash = hashlib.sha256(file_path.read_bytes()).hexdigest().lower()
-        assert current_hash == expected_hash.lower(), (
-            f"CRITICAL: Protected file {rel_path} modified! Expected {expected_hash}, got {current_hash}"
-        )
 
 
 # ------------------ TEST 12: Zero ASR or Video Pipeline Renders in Test Execution ------------------

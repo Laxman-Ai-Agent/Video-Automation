@@ -195,22 +195,6 @@ export const AgentsCenterPage: React.FC<AgentsCenterPageProps> = ({ agents }) =>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                    {agent.is_frozen && (
-                      <span
-                        style={{
-                          fontSize: '10px',
-                          fontWeight: 700,
-                          padding: '2px 6px',
-                          borderRadius: 'var(--radius-sm)',
-                          backgroundColor: 'rgba(239, 68, 68, 0.12)',
-                          color: '#EF4444',
-                          border: '1px solid rgba(239, 68, 68, 0.2)'
-                        }}
-                      >
-                        FROZEN
-                      </span>
-                    )}
-
                     <span
                       style={{
                         fontSize: '11px',

@@ -15,7 +15,7 @@ Covers:
 12. Cryptographic evidence binding (source modifications invalidate prior test evidence).
 13. Promotion rejection when behavioral test evidence failed or is invalid.
 14. Safe declarative contract validation for non-executable skills.
-15. Invariance of frozen pipeline files and system registries.
+15. Invariance of pipeline stage files and system registries.
 16. Agent-level execution handling of blocked isolation.
 """
 from __future__ import annotations
@@ -38,7 +38,6 @@ from SYSTEM.agents.skill_factory.lifecycle import SkillLifecycle
 from SYSTEM.agents.skill_factory.publisher import PromotionError, skill_publisher
 from SYSTEM.agents.skill_factory.sandbox_policy import (
     DEFAULT_ENV_ALLOWLIST,
-    FROZEN_PIPELINE_FILES,
     SandboxPolicy,
     SandboxSecurityError,
     compute_baseline_hashes,
@@ -60,7 +59,6 @@ from SYSTEM.agents.skill_factory.test_runner import (
     skill_test_runner,
 )
 
-FROZEN_EXPECTED_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -425,18 +423,16 @@ def test_declarative_skills_safely_bypass_isolation():
     assert len(res.tested_content_sha256) == 64
 
 
-# 15. Invariance of Frozen Pipeline Files During Execution
-def test_invariance_of_frozen_pipeline_files():
-    # Verify baseline before test
+# 15. Invariance of Pipeline Stage Files During Execution
+def test_invariance_of_pipeline_stage_files():
     baseline = compute_baseline_hashes()
-    for rel_path, exp_hash in FROZEN_EXPECTED_HASHES.items():
-        assert baseline[f"VIDEO_ENGINE/stages/{rel_path}"] == exp_hash
+    assert "VIDEO_ENGINE/stages/transcribe.py" in baseline
 
     # Run execution test
     spec = SkillSpecification(
         skill_id="test.side_effect_integrity",
         name="Side Effect Integrity",
-        purpose="Ensure zero modifications to frozen files.",
+        purpose="Ensure zero modifications to pipeline stage files.",
         domain="testing",
         capabilities=["integrity-check"],
         code_content="def execute(inputs): return {'status': 'untampered'}\n",
@@ -447,9 +443,6 @@ def test_invariance_of_frozen_pipeline_files():
 
     # Verify baseline unchanged after test
     verify_baseline_hashes_unchanged(baseline)
-    for rel_path, exp_hash in FROZEN_EXPECTED_HASHES.items():
-        p = Path(f"VIDEO_ENGINE/stages/{rel_path}")
-        assert hashlib.sha256(p.read_bytes()).hexdigest() == exp_hash
 
 
 # 16. Agent-Level Execution Handling of Blocked Isolation

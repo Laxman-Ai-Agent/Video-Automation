@@ -9,7 +9,6 @@ Validates:
 6. Detection of forbidden cycles in dependency graphs.
 7. Detection of path traversal in skill entrypoint configurations.
 8. Detection of missing physical artifacts for active approved production skills.
-9. Verification of bit-for-bit SHA-256 hash preservation of frozen algorithm files.
 10. MainArchitectureAgent delegation via validate_architecture action.
 11. MainArchitectureAgent delegation via general delegate action.
 12. Read-only validation execution preserving catalogs and registries unmutated.
@@ -163,11 +162,11 @@ class TestArchitectureValidatorAudits:
         blocking = [f for f in findings if f.severity == FindingSeverity.BLOCKING_ERROR]
         assert any("missing its physical artifact file on disk" in f.message for f in blocking)
 
-    def test_frozen_algorithm_file_hashes_intact(self):
+    def test_security_boundary_has_no_blocking_findings(self):
         validator = SecurityBoundaryValidator()
         findings = validator.validate()
         blocking = [f for f in findings if f.severity == FindingSeverity.BLOCKING_ERROR]
-        assert len(blocking) == 0, f"Frozen algorithm file modified: {[f.message for f in blocking]}"
+        assert len(blocking) == 0, f"Security boundary violation: {[f.message for f in blocking]}"
 
 
 class TestMainArchitectureAgentIntegration:

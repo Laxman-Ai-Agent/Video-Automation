@@ -111,7 +111,7 @@ class AgentRegistry:
                     version="1.0.0",
                     category=AgentCategory.SYSTEM_SUBAGENT,
                     status=AgentStatus.IMPLEMENTED,
-                    purpose="Executes evidence-driven verification, component-mapped testing, failure diagnosis, frozen-file integrity checks, and regression protection for the video automation system.",
+                    purpose="Executes evidence-driven verification, component-mapped testing, failure diagnosis, and regression protection for the video automation system.",
                     capabilities=[
                         "change-verification",
                         "component-test-mapping",
@@ -119,7 +119,6 @@ class AgentRegistry:
                         "result-capture",
                         "failure-diagnosis",
                         "regression-protection",
-                        "frozen-hash-verification",
                         "evidence-based-verdict",
                     ],
                     allowed_tools=[

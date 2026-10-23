@@ -30,7 +30,6 @@ class PlannedStage:
     dependencies: list[str]
     input_artifacts: list[str]
     output_artifacts: list[str]
-    is_frozen: bool = False
     is_gate: bool = False
     notes: str = ""
 
@@ -141,7 +140,6 @@ class OrchestratorPlanner:
 
         for sid in active_stages:
             agent_id = orchestrator.STAGE_TO_AGENT.get(sid, "main_orchestrator")
-            is_frozen = False                                                   # no stage is frozen any more
             is_gate = sid in approval_gates
             weight = orchestrator.STAGE_WEIGHTS.get(sid, 0.08)
             est_dur = round(max(2.0, audio_duration * weight * 1.5), 1)
@@ -165,7 +163,6 @@ class OrchestratorPlanner:
                     dependencies=list(orchestrator.STAGE_DEPENDENCIES.get(sid, ())),
                     input_artifacts=[f"{sid}_in"],
                     output_artifacts=[f"{sid}_out"],
-                    is_frozen=is_frozen,
                     is_gate=is_gate,
                     notes=f"Weight: {weight:.2f}",
                 )

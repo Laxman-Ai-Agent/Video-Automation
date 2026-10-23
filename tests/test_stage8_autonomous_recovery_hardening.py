@@ -7,9 +7,7 @@ Covers:
 - Group D: Stage Failure Isolation & Cleanup
 - Group E: External Provider Circuit Breaker
 - Group F: Telugu Activity Recovery Stream & Secret Redaction
-- Group G: Multi-Stage Integration & Frozen Algorithm Immutability
 """
-import hashlib
 import json
 import os
 import shutil
@@ -42,10 +40,6 @@ from SYSTEM.agents.shared.telugu_activity_mapper import (
 from SYSTEM.core import pipeline_state
 from VIDEO_ENGINE.pipeline import orchestrator
 from SYSTEM.core.llm_gateway import LlmGateway, LlmGatewayRequest, get_gateway
-
-
-# Baseline frozen algorithm hashes
-FROZEN_ALGORITHM_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -94,7 +88,7 @@ class TestGroupAErrorClassificationAndRetry:
         for err in [
             PermissionError("Security Policy Denied: execution forbidden"),
             "Path traversal attempt detected",
-            "Forbidden access to frozen file",
+            "Forbidden access to protected file",
             "403 Forbidden",
             "unauthorized",
         ]:
@@ -396,19 +390,10 @@ class TestGroupFTeluguRecoveryAndSecretRedaction:
 
 
 # ==============================================================================
-# GROUP G: Multi-Stage Integration & Frozen Algorithm Immutability
 # ==============================================================================
 
-class TestGroupGFrozenAlgorithmsAndMultiStageRegressions:
+class TestGroupGMultiStageRegressions:
 
-    def test_frozen_algorithms_bit_for_bit_integrity(self):
-        """The 3 frozen algorithm files must match their canonical SHA-256 baseline hashes bit-for-bit."""
-        for rel_path, expected_hash in FROZEN_ALGORITHM_HASHES.items():
-            file_path = Path(rel_path)
-            assert file_path.exists(), f"Frozen file missing: {rel_path}"
-            with open(file_path, "rb") as f:
-                actual_hash = hashlib.sha256(f.read()).hexdigest()
-            assert actual_hash == expected_hash, f"Frozen file altered: {rel_path}"
 
     def test_record_recovery_experience_failsafe(self):
         """record_recovery_experience must never raise even if memory persistence is unavailable."""

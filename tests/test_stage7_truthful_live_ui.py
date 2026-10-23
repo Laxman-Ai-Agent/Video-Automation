@@ -8,10 +8,8 @@ Comprehensive test suite verifying Groups A through H:
 - Group E: In-Flight LLM Active Request Tracking (gateway thread-safe tracking, /llm/active endpoint)
 - Group F: Zero-Touch Controls & Cooperative Cancellation (auto-pilot default, cancel_run())
 - Group G: Final Delivery Summary Integration & Desktop Provenance
-- Group H: Frozen Algorithm File Immutability (bit-for-bit SHA-256 digests)
 """
 
-import hashlib
 import json
 import os
 import time
@@ -43,8 +41,6 @@ from VIDEO_ENGINE.pipeline.orchestrator import (
 
 
 client = TestClient(app)
-
-FROZEN_FILES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 # ==============================================================================
@@ -342,27 +338,5 @@ def test_group_g_delivery_summary_endpoint():
 
 
 # ==============================================================================
-# GROUP H: Frozen Algorithm Immutability (Bit-for-bit SHA-256)
 # ==============================================================================
 
-@pytest.mark.parametrize("filename,expected_sha256", list(FROZEN_FILES.items()))
-def test_group_h_frozen_algorithms_bit_for_bit(filename, expected_sha256):
-    """Verify that the 3 core frozen algorithm files are bit-for-bit identical to their SHA-256 digests."""
-    matches = list(Path(".").rglob(filename))
-    assert matches, f"Frozen file {filename} not found in workspace"
-
-    found = False
-    for path in matches:
-        hasher = hashlib.sha256()
-        with open(path, "rb") as f:
-            hasher.update(f.read())
-        digest = hasher.hexdigest()
-        if digest == expected_sha256:
-            found = True
-            break
-
-    assert found, (
-        f"Frozen algorithm file {filename} does not match required SHA-256 digest!\n"
-        f"Expected: {expected_sha256}\n"
-        f"Found digest(s): {[hashlib.sha256(open(p, 'rb').read()).hexdigest() for p in matches]}"
-    )

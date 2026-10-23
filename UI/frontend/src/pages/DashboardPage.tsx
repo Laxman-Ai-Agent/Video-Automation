@@ -1031,43 +1031,6 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
               <div>[Remotion Engine] 1080p HD: <strong style={{ color: 'var(--status-completed)' }}>READY</strong></div>
             </div>
           </div>
-
-          {/* Core Invariants Card */}
-          <div style={{
-            backgroundColor: 'var(--bg-card)',
-            borderRadius: 'var(--radius-sm)',
-            border: '1px solid var(--border-card)',
-            boxShadow: 'var(--shadow-card)',
-            padding: '20px 24px'
-          }}>
-            <h4 style={{
-              fontSize: '13px',
-              fontWeight: 700,
-              color: 'var(--status-completed)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              marginBottom: '8px'
-            }}>
-              <ShieldCheck size={16} />
-              Frozen Algorithm Integrity
-            </h4>
-            <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginBottom: '8px' }}>
-              SHA-256 bit-for-bit identical hashes verified:
-            </p>
-            <div style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-mono)',
-              color: 'var(--text-secondary)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '4px'
-            }}>
-              <div>• transcribe.py (07A200...)</div>
-              <div>• transcript_review.py (7290EA...)</div>
-              <div>• scene_segmentation.py (2D9EA8...)</div>
-            </div>
-          </div>
         </div>
       </div>
     </div>

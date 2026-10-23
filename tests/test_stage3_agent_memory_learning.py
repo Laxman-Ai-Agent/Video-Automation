@@ -27,7 +27,6 @@ Verifies:
    - Candidate with benchmark regression is rejected by LearningGate.
    - Rollback manager restores previous verified baseline.
    - Security policy rules cannot be weakened by learning.
-   - Frozen algorithm files cannot be modified.
 
 5. Integration:
    - BaseAgent experience hooks work for representative agents.
@@ -44,7 +43,6 @@ from __future__ import annotations
 
 import concurrent.futures
 import copy
-import hashlib
 import json
 import time
 from datetime import datetime, timezone
@@ -542,16 +540,6 @@ def test_rollback_manager_restores_verified_baseline(tmp_path, trusted_operator)
     assert rb_res["restored_version"] == "1.1.0"
     restored = promoter.load_active_knowledge()
     assert restored["version"] == "1.1.0"
-
-
-def test_frozen_files_cannot_be_modified_by_learning():
-    """Verifies that the three canonical algorithm files match their expected SHA-256 hashes bit-for-bit."""
-    files = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-    for rel_path, expected in files.items():
-        full_path = config.PROJECT_ROOT / rel_path
-        assert full_path.exists(), f"Frozen file missing: {rel_path}"
-        actual = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert actual == expected, f"Frozen file {rel_path} modified! Hash: {actual} vs {expected}"
 
 
 # ==============================================================================

@@ -5,7 +5,7 @@ version: 4.0.537
 ---
 
 > **Project overrides (Dark World pipeline).** Source: official `remotion-dev/skills` v4.0.537 (no LICENSE file in that repo; part of the Remotion project, whose license is at remotion.dev/license), copied unchanged except this block.
-> - Transcription is Stage 2 (local faster-whisper, frozen) — do not use `transcribe-captions.md` or install whisper.cpp. Captions come from the project's word timings (`useSceneData().words` → `Caption[]` with `startMs`/`endMs`).
+> - Transcription is Stage 2 (local faster-whisper) — do not use `transcribe-captions.md` or install whisper.cpp. Captions come from the project's word timings (`useSceneData().words` → `Caption[]` with `startMs`/`endMs`).
 > - Use `@remotion/captions` (`createTikTokStyleCaptions`, `Caption`) for display; Telugu captions use `FONT` from `../fonts` (Noto Sans Telugu).
 
 All captions must be processed in JSON. The captions must use the [`Caption`](https://www.remotion.dev/docs/captions/caption.md) type which is the following:

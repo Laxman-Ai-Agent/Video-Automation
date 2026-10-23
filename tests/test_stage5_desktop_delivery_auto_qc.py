@@ -25,8 +25,6 @@ Verifies:
    - PipelineOrchestrator supports auto_pilot_mode=True with 0 intermediate clicks.
    - Bounded retries (<= 3) for transient failures.
    - Idempotent execution and resume support.
-6. Bit-for-bit Frozen Algorithm Integrity:
-   - All 3 frozen algorithm files match reference SHA-256 hashes bit-for-bit.
 """
 from __future__ import annotations
 
@@ -78,8 +76,6 @@ from VIDEO_ENGINE.pipeline.orchestrator import (
 from VIDEO_ENGINE.stages import final_qc, timeline_approval, timeline_gate
 
 client = TestClient(app)
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -568,19 +564,5 @@ class TestGroupE_OrchestratorAutoPilot:
 
 
 # ==============================================================================
-# TEST GROUP F: Bit-for-bit Frozen Algorithm Integrity
 # ==============================================================================
 
-class TestGroupF_FrozenAlgorithmIntegrity:
-    """Guarantees zero modifications to the three frozen reference algorithm files."""
-
-    @pytest.mark.parametrize("filepath, expected_hash", FROZEN_BASELINE_HASHES.items())
-    def test_frozen_files_match_reference_hashes(self, filepath: str, expected_hash: str):
-        path = Path(filepath)
-        assert path.exists(), f"Frozen algorithm file '{filepath}' is missing"
-        actual_hash = hashlib.sha256(path.read_bytes()).hexdigest()
-        assert actual_hash == expected_hash, (
-            f"FROZEN ALGORITHM FILE ALTERED: {filepath}\n"
-            f"Expected SHA-256: {expected_hash}\n"
-            f"Actual SHA-256:   {actual_hash}"
-        )

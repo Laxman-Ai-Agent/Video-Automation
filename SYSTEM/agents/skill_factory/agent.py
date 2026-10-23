@@ -4,7 +4,7 @@ Responsible for:
 1. Intake and normalization of SkillSpecifications.
 2. Reuse / Adapt / Create decision resolution.
 3. Synthesizing or adapting candidate skills adhering to standard SKILL.md format.
-4. Static security and AST audit detecting injection, secret leakage, and frozen file tampering.
+4. Static security and AST audit detecting injection, secret leakage, and pipeline stage file tampering.
 5. Isolated behavioral testing with strict timeouts and zero side-effects.
 6. Approval engine integration and anti-spoofing verification.
 7. Atomic versioned promotion to SYSTEM/skills/ and automatic CapabilityRegistry synchronization.

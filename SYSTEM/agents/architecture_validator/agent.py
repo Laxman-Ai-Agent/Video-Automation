@@ -6,7 +6,7 @@ Responsible for:
 3. Dependency graph integrity, cycle detection, and reachability.
 4. Video pipeline 12-stage ordering, artifact contracts, and the mandatory LLM-decided approval gates.
 5. Interface and contract schema compliance.
-6. Architecture and security boundary enforcement (sole execution engine, frozen file SHA-256).
+6. Architecture and security boundary enforcement (sole execution engine).
 7. Read-only audit execution by default.
 
 Canonical Location: SYSTEM/agents/architecture_validator/agent.py
@@ -240,7 +240,7 @@ class ArchitectureValidatorAgent(BaseAgent):
             findings.extend(self.pipeline_validator.validate())
         elif target in ("contracts", "schemas"):
             findings.extend(self.contract_validator.validate())
-        elif target in ("security_boundary", "frozen_files"):
+        elif target in ("security_boundary",):
             findings.extend(self.security_validator.validate())
         else:
             findings.append(

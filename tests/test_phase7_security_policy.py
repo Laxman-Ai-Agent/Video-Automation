@@ -10,11 +10,9 @@ Validates:
 7. Declarative vs executable skill security policies.
 8. Phase 6 dependency check: confirmation that agent delegation does not create a false cycle.
 9. Verification & Test Agent compatibility.
-10. Bit-for-bit SHA-256 preservation of the three frozen video pipeline stage files.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 from unittest.mock import MagicMock
@@ -60,7 +58,6 @@ from SYSTEM.agents.architecture_validator.contracts import FindingSeverity
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-FROZEN_FILE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 class TestSecurityPolicyClassAndRegistration:
@@ -132,7 +129,7 @@ class TestMainArchitectureAgentSecurityIntegration:
 
     def test_maa_enforce_security_policy_action(self):
         maa = MainArchitectureAgent()
-        # Enforce action on a forbidden frozen file write
+        # Enforce action on a forbidden file write
         req = AgentRequest(
             project_id="test_system",
             agent_id="main_architecture_agent",
@@ -153,7 +150,7 @@ class TestMainArchitectureAgentSecurityIntegration:
     def test_maa_delegation_security_gate_blocks_violation(self):
         """Demonstrates that an unauthorized action cannot proceed through MAA delegation."""
         maa = MainArchitectureAgent()
-        # Attempt to delegate a task to audio_input that attempts to write to a frozen file
+        # Attempt to delegate a task to audio_input that attempts to write to a protected file
         req = AgentRequest(
             project_id="test_system",
             agent_id="main_architecture_agent",
@@ -340,18 +337,3 @@ class TestPhase6DependencyPreflightVerification:
         # Verify that all 5 canonical system subagents are recognized delegation targets
         unknown_target_findings = [f for f in findings if "not in AgentRegistry" in f.message]
         assert len(unknown_target_findings) == 0, f"Unregistered delegation targets: {unknown_target_findings}"
-
-
-class TestFrozenAlgorithmPreservation:
-    """Verifies bit-for-bit SHA-256 preservation of the three frozen video pipeline stage files."""
-
-    @pytest.mark.parametrize("file_rel, expected_hash", FROZEN_FILE_HASHES.items())
-    def test_frozen_algorithm_file_integrity(self, file_rel: str, expected_hash: str):
-        full_path = PROJECT_ROOT / file_rel
-        assert full_path.is_file(), f"Frozen file missing: {file_rel}"
-        actual_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert actual_hash == expected_hash, (
-            f"CRITICAL SECURITY VIOLATION: Frozen file '{file_rel}' hash mismatch!\n"
-            f"Expected: {expected_hash}\n"
-            f"Actual:   {actual_hash}"
-        )

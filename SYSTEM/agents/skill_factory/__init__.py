@@ -39,7 +39,7 @@ from .publisher import (
 )
 from .sandbox_policy import (
     DEFAULT_ENV_ALLOWLIST,
-    FROZEN_PIPELINE_FILES,
+    PROTECTED_PIPELINE_DIR,
     SandboxPolicy,
     SandboxSecurityError,
     compute_baseline_hashes,
@@ -101,7 +101,7 @@ __all__ = [
     "SandboxCapabilities",
     "SandboxSecurityError",
     "DEFAULT_ENV_ALLOWLIST",
-    "FROZEN_PIPELINE_FILES",
+    "PROTECTED_PIPELINE_DIR",
     "probe_sandbox_capabilities",
     "check_docker_runtime",
     "check_windows_job_objects",

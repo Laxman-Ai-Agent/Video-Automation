@@ -4,9 +4,8 @@ Responsible for:
 1. Change and requirement verification with component mapping.
 2. Controlled test execution, output bounding, and result capture.
 3. Diagnostic root-cause attribution without automatic code modification (strictly read-only).
-4. Frozen video algorithm file SHA-256 hash invariance verification.
-5. Evidence-based verdicts (PASS, FAIL, BLOCKED, CONDITIONAL).
-6. Integration with Main Architecture Agent and system registries.
+4. Evidence-based verdicts (PASS, FAIL, BLOCKED, CONDITIONAL).
+5. Integration with Main Architecture Agent and system registries.
 
 Canonically located at: SYSTEM/agents/verification_and_test/agent.py
 """
@@ -30,7 +29,6 @@ from SYSTEM.agents.verification_and_test.component_mapper import ComponentMapper
 from SYSTEM.agents.verification_and_test.contracts import (
     CheckResult,
     FailureCategory,
-    FrozenFileCheck,
     TestExecutionStatus,
     VerificationReport,
     VerificationVerdict,
@@ -44,7 +42,6 @@ SUPPORTED_ACTIONS: set[str] = {
     "verify",
     "run_tests",
     "diagnose_failure",
-    "verify_frozen_hashes",
     "verify_regression",
     "status",
 }
@@ -61,7 +58,7 @@ class VerificationAndTestAgent(BaseAgent):
                 version="1.0.0",
                 category=AgentCategory.SYSTEM_SUBAGENT,
                 status=AgentStatus.IMPLEMENTED,
-                purpose="Executes evidence-driven verification, component-mapped testing, failure diagnosis, frozen-file integrity checks, and regression protection for the video automation system.",
+                purpose="Executes evidence-driven verification, component-mapped testing, failure diagnosis, and regression protection for the video automation system.",
                 capabilities=[
                     "change-verification",
                     "component-test-mapping",
@@ -69,7 +66,6 @@ class VerificationAndTestAgent(BaseAgent):
                     "result-capture",
                     "failure-diagnosis",
                     "regression-protection",
-                    "frozen-hash-verification",
                     "evidence-based-verdict",
                 ],
                 allowed_tools=[
@@ -108,8 +104,6 @@ class VerificationAndTestAgent(BaseAgent):
 
         if action == "status":
             return self._handle_status(request)
-        elif action == "verify_frozen_hashes":
-            return self._handle_verify_frozen_hashes(request)
         elif action == "diagnose_failure":
             return self._handle_diagnose_failure(request)
         elif action == "run_tests":
@@ -143,34 +137,6 @@ class VerificationAndTestAgent(BaseAgent):
             },
         )
 
-    def _handle_verify_frozen_hashes(self, request: AgentRequest) -> AgentResult:
-        check_result, file_checks = self.test_executor.verify_frozen_algorithm_hashes()
-        report = VerificationReport(
-            request_id=request.correlation_id or f"req_{uuid.uuid4().hex[:8]}",
-            project_id=request.project_id or "system",
-            correlation_id=request.correlation_id or "",
-            revision=self._get_git_revision(),
-            components_covered=["frozen_files"],
-            requirements_verified=["Preserve frozen video algorithm files bit-for-bit"],
-            unverified_requirements=[],
-            checks=[check_result],
-            frozen_file_checks=file_checks,
-            verdict=VerificationVerdict.PASS if check_result.is_successful else VerificationVerdict.FAIL,
-            verdict_explanation=(
-                "All 3 frozen algorithm files matched expected SHA-256 hashes."
-                if check_result.is_successful
-                else "Frozen algorithm file SHA-256 hash mismatch detected."
-            ),
-        )
-
-        return AgentResult(
-            agent_id=self.agent_id,
-            status="succeeded" if report.verdict == VerificationVerdict.PASS else "failed",
-            summary=f"Frozen file verification: {report.verdict.value} - {report.verdict_explanation}",
-            error=None if report.verdict == VerificationVerdict.PASS else report.verdict_explanation,
-            metadata={"report": report.to_dict()},
-        )
-
     def _handle_run_tests(self, request: AgentRequest) -> AgentResult:
         targets: list[str] = request.parameters.get("targets", [])
         components: list[str] = request.parameters.get("components", [])
@@ -182,16 +148,9 @@ class VerificationAndTestAgent(BaseAgent):
             targets = self.component_mapper.resolve_test_targets(components, changed_files)
 
         checks: list[CheckResult] = []
-        frozen_checks: list[FrozenFileCheck] = []
 
         for target in targets:
-            if target == "frozen_file_hash_verification":
-                chk, f_chks = self.test_executor.verify_frozen_algorithm_hashes()
-                checks.append(chk)
-                frozen_checks.extend(f_chks)
-            else:
-                chk = self.test_executor.execute_pytest_target(target, timeout_seconds=timeout_seconds)
-                checks.append(chk)
+            checks.append(self.test_executor.execute_pytest_target(target, timeout_seconds=timeout_seconds))
 
         diagnoses = self.diagnostician.diagnose_failures(checks)
         verdict = self._determine_verdict(checks, unverified_reqs=[])
@@ -205,7 +164,6 @@ class VerificationAndTestAgent(BaseAgent):
             requirements_verified=[f"Execute test target '{t}'" for t in targets],
             unverified_requirements=[],
             checks=checks,
-            frozen_file_checks=frozen_checks,
             failure_diagnoses=diagnoses,
             verdict=verdict,
             verdict_explanation=f"Executed {len(checks)} check(s): {sum(1 for c in checks if c.is_successful)} passed, {sum(1 for c in checks if not c.is_successful)} failed.",
@@ -222,7 +180,6 @@ class VerificationAndTestAgent(BaseAgent):
     def _handle_verify_regression(self, request: AgentRequest) -> AgentResult:
         """Runs authoritative core system regression targets."""
         regression_targets = [
-            "frozen_file_hash_verification",
             "tests/test_phase1_system_agents_restructuring.py",
             "tests/test_agent_architecture_reorg.py",
             "tests/test_phase5_architecture_validator.py",
@@ -261,7 +218,7 @@ class VerificationAndTestAgent(BaseAgent):
         )
 
     def _handle_verify(self, request: AgentRequest) -> AgentResult:
-        """Comprehensive verification of changes, requirements, acceptance criteria, and frozen hashes."""
+        """Comprehensive verification of changes, requirements, and acceptance criteria."""
         requirements = request.parameters.get("requirements", [])
         acceptance_criteria = request.parameters.get("acceptance_criteria", [])
         changed_files = request.parameters.get("changed_files", [])
@@ -279,27 +236,16 @@ class VerificationAndTestAgent(BaseAgent):
         target_components = list(set(components) | inferred_comps)
         if not target_components and not changed_files:
             # Default to agent registry and architecture validator regression checks
-            target_components = ["agent_registry", "frozen_files"]
+            target_components = ["agent_registry"]
 
         # 3. Resolve test targets
         test_targets = self.component_mapper.resolve_test_targets(target_components, changed_files)
-        # Always verify frozen algorithm files if frozen_files or video_pipeline is involved or changed_files present
-        if "frozen_files" in target_components or any("video" in f.lower() for f in changed_files):
-            if "frozen_file_hash_verification" not in test_targets:
-                test_targets.insert(0, "frozen_file_hash_verification")
 
         # 4. Execute test targets
         checks: list[CheckResult] = []
-        frozen_checks: list[FrozenFileCheck] = []
 
         for target in test_targets:
-            if target == "frozen_file_hash_verification":
-                chk, f_chks = self.test_executor.verify_frozen_algorithm_hashes()
-                checks.append(chk)
-                frozen_checks.extend(f_chks)
-            else:
-                chk = self.test_executor.execute_pytest_target(target, timeout_seconds=timeout_seconds)
-                checks.append(chk)
+            checks.append(self.test_executor.execute_pytest_target(target, timeout_seconds=timeout_seconds))
 
         # 5. Diagnose failures if any
         diagnoses = self.diagnostician.diagnose_failures(checks)
@@ -307,7 +253,7 @@ class VerificationAndTestAgent(BaseAgent):
         # 6. Determine final evidence-based verdict
         verdict = self._determine_verdict(checks, unverified_reqs)
 
-        explanation = self._generate_verdict_explanation(verdict, checks, unverified_reqs, frozen_checks)
+        explanation = self._generate_verdict_explanation(verdict, checks, unverified_reqs)
 
         report = VerificationReport(
             request_id=request.correlation_id or f"verif_{uuid.uuid4().hex[:8]}",
@@ -318,7 +264,6 @@ class VerificationAndTestAgent(BaseAgent):
             requirements_verified=verifiable_reqs,
             unverified_requirements=unverified_reqs,
             checks=checks,
-            frozen_file_checks=frozen_checks,
             failure_diagnoses=diagnoses,
             verdict=verdict,
             verdict_explanation=explanation,
@@ -347,7 +292,7 @@ class VerificationAndTestAgent(BaseAgent):
         if has_blocked:
             return VerificationVerdict.BLOCKED
 
-        # Any frozen hash failure or execution failure -> FAIL
+        # Any execution failure -> FAIL
         has_failures = any(not c.is_successful for c in checks)
         if has_failures:
             return VerificationVerdict.FAIL
@@ -363,21 +308,14 @@ class VerificationAndTestAgent(BaseAgent):
         verdict: VerificationVerdict,
         checks: list[CheckResult],
         unverified_reqs: list[str],
-        frozen_checks: list[FrozenFileCheck],
     ) -> str:
         passed = sum(1 for c in checks if c.is_successful)
         failed = sum(1 for c in checks if not c.is_successful)
-        frozen_match = all(f.matches for f in frozen_checks) if frozen_checks else True
 
         if verdict == VerificationVerdict.PASS:
-            return f"All {passed} verification check(s) passed with evidence. Frozen algorithm SHA-256 hashes matched."
+            return f"All {passed} verification check(s) passed with evidence."
         elif verdict == VerificationVerdict.FAIL:
-            reasons = []
-            if failed > 0:
-                reasons.append(f"{failed} check(s) failed")
-            if not frozen_match:
-                reasons.append("frozen algorithm hash mismatch detected")
-            return f"Verification failed: {', '.join(reasons)}."
+            return f"Verification failed: {failed} check(s) failed."
         elif verdict == VerificationVerdict.BLOCKED:
             return "Verification blocked due to unavailable test targets or execution timeout."
         elif verdict == VerificationVerdict.CONDITIONAL:

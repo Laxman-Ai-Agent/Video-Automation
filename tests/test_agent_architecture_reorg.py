@@ -10,11 +10,9 @@ Validates:
 7. History Service: durable execution, decision, and audit tracking.
 8. Central ToolRegistry registration and capability checks.
 9. Central Skills 10-domain folder layout and README descriptors.
-10. Byte-level SHA-256 preservation of the 3 frozen algorithm files.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 from pathlib import Path
 
@@ -58,7 +56,6 @@ from SYSTEM.registries.tool_registry import tool_registry
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 
-FROZEN_FILE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 EXPECTED_VIDEO_AGENT_IDS = [
     "main_orchestrator",
@@ -557,18 +554,3 @@ class TestCentralSkillsDomainStructure:
         assert readme.is_file(), f"README.md descriptor missing in skills/{domain}/"
         content = readme.read_text(encoding="utf-8")
         assert len(content) > 50, f"README.md in skills/{domain}/ is too short or empty"
-
-
-class TestFrozenAlgorithmFiles:
-    """Verifies that all three frozen algorithm files are 100% byte-for-byte identical to baseline."""
-
-    @pytest.mark.parametrize("file_rel, expected_hash", FROZEN_FILE_HASHES.items())
-    def test_frozen_file_integrity(self, file_rel: str, expected_hash: str):
-        full_path = PROJECT_ROOT / file_rel
-        assert full_path.is_file(), f"Frozen file missing: {file_rel}"
-        actual_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert actual_hash == expected_hash, (
-            f"CRITICAL SECURITY VIOLATION: Frozen file '{file_rel}' hash mismatch!\n"
-            f"Expected: {expected_hash}\n"
-            f"Actual:   {actual_hash}"
-        )

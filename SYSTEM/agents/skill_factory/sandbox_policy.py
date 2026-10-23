@@ -36,12 +36,8 @@ DEFAULT_ENV_ALLOWLIST: frozenset[str] = frozenset({
     "LC_ALL",
 })
 
-# Protected system files that must never be modified by untrusted skills
-FROZEN_PIPELINE_FILES: tuple[str, ...] = (
-    "VIDEO_ENGINE/stages/transcribe.py",
-    "VIDEO_ENGINE/stages/transcript_review.py",
-    "VIDEO_ENGINE/stages/scene_segmentation.py",
-)
+# Pipeline stage code that untrusted skills must never modify (the engine's own developers may)
+PROTECTED_PIPELINE_DIR = "VIDEO_ENGINE/stages"
 
 PROTECTED_SYSTEM_PATHS: tuple[str, ...] = (
     "SYSTEM/skills/catalog.json",
@@ -143,26 +139,24 @@ def verify_no_symlink_escapes(directory: Path, sandbox_root: Path) -> None:
 
 
 def compute_baseline_hashes(base_dir: Path | None = None) -> dict[str, str]:
-    """Calculates SHA-256 baseline hashes for all frozen and protected pipeline files."""
+    """Calculates SHA-256 baseline hashes for every pipeline stage file."""
     root = base_dir or Path.cwd()
-    hashes: dict[str, str] = {}
-    for rel_path in FROZEN_PIPELINE_FILES:
-        target = root / rel_path
-        if target.exists():
-            hashes[rel_path] = hashlib.sha256(target.read_bytes()).hexdigest()
-    return hashes
+    return {
+        p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest()
+        for p in sorted((root / PROTECTED_PIPELINE_DIR).glob("*.py"))
+    }
 
 
 def verify_baseline_hashes_unchanged(baseline: dict[str, str], base_dir: Path | None = None) -> None:
-    """Verifies that none of the frozen pipeline files were altered during sandbox execution."""
+    """Verifies that none of the pipeline stage files were altered during sandbox execution."""
     root = base_dir or Path.cwd()
     for rel_path, expected_hash in baseline.items():
         target = root / rel_path
         if not target.exists():
-            raise SandboxSecurityError(f"Frozen pipeline file was deleted: '{rel_path}'")
+            raise SandboxSecurityError(f"Pipeline stage file was deleted: '{rel_path}'")
         actual_hash = hashlib.sha256(target.read_bytes()).hexdigest()
         if actual_hash != expected_hash:
             raise SandboxSecurityError(
-                f"Frozen pipeline file tampered during execution! '{rel_path}' "
+                f"Pipeline stage file tampered during execution! '{rel_path}' "
                 f"expected={expected_hash}, actual={actual_hash}"
             )

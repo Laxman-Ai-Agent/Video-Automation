@@ -46,9 +46,6 @@ COMPONENT_TEST_MAP: dict[str, list[str]] = {
     "video_pipeline": [
         "tests/test_agent_architecture_reorg.py",
     ],
-    "frozen_files": [
-        "frozen_file_hash_verification",
-    ],
 }
 
 # Path patterns to component mapping
@@ -63,7 +60,6 @@ PATH_COMPONENT_PATTERNS: list[tuple[str, str]] = [
     ("SYSTEM/agents/security_policy/", "security_policy"),
     ("SYSTEM/agents/autonomous_execution/", "autonomous_execution"),
     ("SYSTEM/agents/system_agents/", "agent_registry"),
-    ("VIDEO_ENGINE/stages/", "frozen_files"),
     ("VIDEO_ENGINE/", "video_pipeline"),
 ]
 

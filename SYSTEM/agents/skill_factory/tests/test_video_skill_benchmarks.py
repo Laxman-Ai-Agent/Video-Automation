@@ -15,13 +15,11 @@ Validates:
 12. Parameterized multi-variant reuse decisions (bar/donut charts, timeline transitions).
 13. Discoverability of all 5 foundational video skills in SkillRegistry & CapabilityRegistry.
 14. End-to-end SkillFactoryAgent 'evaluate_quality' action integration.
-15. Strict invariance of frozen video engine pipeline files.
 """
 from __future__ import annotations
 
-import copy
-import hashlib
 from pathlib import Path
+import copy
 
 import pytest
 
@@ -43,7 +41,6 @@ from SYSTEM.agents.skill_factory.video_quality_evaluator import video_quality_ev
 from SYSTEM.registries.capability_registry import get_capability_registry
 from SYSTEM.registries.skill_registry import get_skill_registry
 
-FROZEN_EXPECTED_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -284,11 +281,3 @@ def test_agent_evaluate_quality_action(tmp_path: Path):
     report = res.metadata.get("quality_report", {})
     assert report.get("passed") is True
     assert report.get("domain") == "visual_planning"
-
-
-# 15. Invariance of Frozen Pipeline Files
-def test_frozen_pipeline_hashes_invariance():
-    for fname, exp_hash in FROZEN_EXPECTED_HASHES.items():
-        p = Path("VIDEO_ENGINE/stages") / fname
-        actual_hash = hashlib.sha256(p.read_bytes()).hexdigest()
-        assert actual_hash == exp_hash, f"Frozen pipeline hash mismatch on {fname}!"

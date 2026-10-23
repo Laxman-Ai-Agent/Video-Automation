@@ -33,7 +33,6 @@ class SceneSegmentationAgent(BaseAgent):
                 version="2.0.0",
                 status=AgentStatus.IMPLEMENTED,
                 stage_id="segmentation",
-                is_frozen=False,
                 capabilities=[
                     "semantic-chunking",
                     "boundary-snapping",

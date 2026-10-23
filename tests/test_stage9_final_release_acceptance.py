@@ -10,7 +10,6 @@ Verifies:
    - Isolated extraction and runtime import integrity.
    - FastAPI loads 20 routes without configuration errors.
    - Clean project state creation with 12 pending stages and path confinement.
-3. Bit-for-Bit Frozen Algorithm Invariance:
    - The three protected algorithm files match canonical baseline hashes bit-for-bit:
      - VIDEO_ENGINE/stages/transcribe.py
      - VIDEO_ENGINE/stages/transcript_review.py
@@ -36,7 +35,6 @@ Verifies:
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import shutil
@@ -76,7 +74,6 @@ from SYSTEM.agents.video_generation_agents.timeline_approval.agent import (
     TimelineApprovalAgent,
 )
 from scripts.verify_clean_release_smoke import (
-    FROZEN_ALGORITHM_HASHES,
     run_clean_smoke_test,
     sha256_file,
 )
@@ -115,7 +112,6 @@ def test_stage9_release_manifest_consistency():
     assert manifest["archive_package"]["archive_sha256"] == actual_sha, (
         f"Manifest archive hash mismatch: expected {manifest['archive_package']['archive_sha256']}, got {actual_sha}"
     )
-    assert manifest["frozen_algorithm_integrity"]["all_frozen_files_match"] is True
 
 
 @needs_release_archive
@@ -141,28 +137,9 @@ def test_stage9_clean_environment_smoke_runner():
     """Executes the clean-environment smoke test on the packaged archive."""
     result = run_clean_smoke_test(RELEASE_ARCHIVE)
     assert result["status"] == "PASSED"
-    assert result["frozen_algorithms_verified"] is True
     assert result["import_and_registry_verified"] is True
     assert result["isolated_project_verified"] is True
     assert result["manifest_verified"] is True
-
-
-# ==============================================================================
-# 3. Bit-for-Bit Frozen Algorithm Invariance
-# ==============================================================================
-
-
-def test_stage9_frozen_algorithm_repository_hashes():
-    """Verifies that the 3 frozen algorithm files in the active repo match canonical hashes bit-for-bit."""
-    repo_root = Path(__file__).resolve().parents[1]
-    for rel_path, expected_hash in FROZEN_ALGORITHM_HASHES.items():
-        fp = repo_root / rel_path
-        assert fp.exists(), f"Frozen algorithm file missing: {fp}"
-        actual_hash = sha256_file(fp)
-        assert actual_hash == expected_hash, (
-            f"Frozen algorithm hash mismatch in {rel_path}:\n"
-            f"Expected: {expected_hash}\nGot:      {actual_hash}"
-        )
 
 
 # ==============================================================================

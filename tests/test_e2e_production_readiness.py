@@ -1,7 +1,6 @@
 """Phase 10: End-to-End Testing & Production Readiness Test Suite.
 
 Validates:
-1. Frozen baseline SHA-256 integrity (backend/transcribe.py, backend/transcript_review.py, backend/scene_segmentation.py).
 2. Environment capabilities introspection (Node, npx, FFmpeg, FFprobe, and host system Chrome/Puppeteer).
 3. Dedicated synthetic project fixture isolation and strict path confinement.
 4. Complete 12-stage Motion-Only pipeline orchestration with artifact contracts and fingerprint lineage (Tier B).
@@ -54,12 +53,10 @@ from backend.main import app
 
 client = TestClient(app)
 
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
 
 @pytest.fixture
 def mock_no_asr():
-    """Safety invariant: strictly prohibit execution of ASR or frozen segmentation functions."""
+    """Safety invariant: strictly prohibit execution of ASR or segmentation functions."""
     with patch("backend.transcribe.transcribe", side_effect=RuntimeError("PROHIBITED: ASR transcribe was invoked!")), \
          patch("backend.scene_segmentation.run", side_effect=RuntimeError("PROHIBITED: Scene segmentation re-run was invoked!")):
         yield
@@ -272,16 +269,6 @@ def synthetic_e2e_project(tmp_path: Path):
 # ==============================================================================
 # 1. Baseline Integrity
 # ==============================================================================
-
-def test_frozen_baseline_hashes_unchanged():
-    """Verify protected audio/segmentation files match immutable baseline hashes."""
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        full_path = config.PROJECT_ROOT / rel_path
-        assert full_path.exists(), f"Frozen file missing: {rel_path}"
-        actual_hash = hashlib.sha256(full_path.read_bytes()).hexdigest()
-        assert actual_hash == expected_hash, (
-            f"Frozen file modified: {rel_path} declared {expected_hash} vs actual {actual_hash}"
-        )
 
 
 # ==============================================================================

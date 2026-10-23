@@ -7,11 +7,9 @@ Verifies:
 4. Persistent self-learning engine across 3 tiers (verified, candidate, failed) with promotion/demotion.
 5. MainOrchestratorAgent action dispatching (plan, diagnose, recover, lessons, model_budget, status).
 6. Human approval gate inviolability (Stage 8 & Stage 10 safe-stop guarantees).
-7. Frozen baseline algorithm file SHA256 invariance.
 """
 from __future__ import annotations
 
-import hashlib
 import json
 import shutil
 import tempfile
@@ -381,21 +379,5 @@ def test_safety_and_approval_gates_inviolable(temp_project: Path):
 
 
 # ---------------------------------------------------------------------------
-# TEST 7: Frozen Baseline Algorithm Files Invariance
 # ---------------------------------------------------------------------------
 
-FROZEN_FILES_EXPECTED_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
-def test_frozen_baseline_algorithm_hashes():
-    """Validates that the 3 frozen video algorithm files remain 100% bit-for-bit invariant."""
-    base_dir = Path(__file__).resolve().parent.parent
-    for rel_path, expected_hash in FROZEN_FILES_EXPECTED_HASHES.items():
-        file_path = base_dir / rel_path
-        assert file_path.exists(), f"Protected file {rel_path} does not exist"
-        data = file_path.read_bytes()
-        actual_hash = hashlib.sha256(data).hexdigest()
-        assert actual_hash == expected_hash, (
-            f"MUTATION DETECTED in protected file {rel_path}!\n"
-            f"Expected: {expected_hash}\n"
-            f"Actual:   {actual_hash}"
-        )

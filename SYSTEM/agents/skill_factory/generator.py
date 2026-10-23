@@ -190,8 +190,8 @@ class SkillGenerator:
 
             if not validation_passed:
                 cat = classify_failure("; ".join(validation_errors))
-                # Never allow LLM to bypass critical security rules like frozen-file tamper or prompt injection
-                if cat == "SECURITY_VIOLATION" and any("frozen" in e.lower() or "injection" in e.lower() for e in validation_errors):
+                # Never allow LLM to bypass critical security rules like stage-file tamper or prompt injection
+                if cat == "SECURITY_VIOLATION" and any("tamper" in e.lower() or "injection" in e.lower() for e in validation_errors):
                     logger.warning(f"Unrecoverable critical security violation in draft: {validation_errors}")
                     draft.failure_history.append({
                         "attempt": attempt,

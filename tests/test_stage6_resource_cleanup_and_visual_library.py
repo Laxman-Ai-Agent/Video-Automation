@@ -14,7 +14,6 @@ Verifies:
 10. Resource manifest correctness after cleanup.
 11. Rollback or recovery behavior for cleanup operations.
 12. Stage 5 audio loudness carryover check (-23 to -14 LUFS enforced when applicable).
-13. Bit-for-bit integrity of all 3 frozen algorithm files.
 """
 from __future__ import annotations
 
@@ -261,21 +260,5 @@ class TestGroupF_LoudnessCarryover:
 
 
 # ==============================================================================
-# TEST GROUP G: Bit-for-Bit Frozen Algorithm Integrity
 # ==============================================================================
 
-class TestGroupG_FrozenAlgorithmIntegrity:
-    """Verifies that the three frozen algorithm files are bit-for-bit unaltered."""
-
-    FROZEN_REFERENCES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
-
-    @pytest.mark.parametrize("file_path,expected_sha", FROZEN_REFERENCES.items())
-    def test_frozen_files_match_reference_hashes(self, file_path: str, expected_sha: str):
-        path = Path(file_path)
-        assert path.exists(), f"Frozen algorithm file missing: {file_path}"
-        actual_sha = hashlib.sha256(path.read_bytes()).hexdigest()
-        assert actual_sha == expected_sha, (
-            f"FROZEN FILE INTEGRITY VIOLATION in {file_path}:\n"
-            f"  Expected: {expected_sha}\n"
-            f"  Actual:   {actual_sha}"
-        )

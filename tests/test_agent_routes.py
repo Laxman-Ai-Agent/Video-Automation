@@ -32,7 +32,6 @@ def test_get_agent_detail_and_404():
     assert res.status_code == 200
     data = res.json()
     assert data["agent_id"] == "audio_analyzer"
-    assert data["is_frozen"] is False                                   # the FROZEN markers were removed (2026-10-20)
     assert data["status"] == "implemented"
 
     res_404 = client.get("/agents/unknown_agent_xyz")

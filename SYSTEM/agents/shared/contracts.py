@@ -172,7 +172,6 @@ class AgentMetadata:
     allowed_tools: list[str] = field(default_factory=list)
     skills: list[str] = field(default_factory=list)
     owner: str = "agent-system"
-    is_frozen: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         d = asdict(self)

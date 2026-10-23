@@ -192,7 +192,7 @@ class CapabilityRegistry:
                             tags=[meta.agent_id, cap, "agent_capability"],
                             keywords=[meta.name.lower(), cap.lower()],
                             dependencies=meta.allowed_tools,
-                            constraints={"is_frozen": getattr(meta, "is_frozen", False)},
+                            constraints={},
                             provenance="agent_registry",
                             verification_status="registered",
                             evidence_refs=[{"registry": "agent_registry", "agent_id": meta.agent_id}],

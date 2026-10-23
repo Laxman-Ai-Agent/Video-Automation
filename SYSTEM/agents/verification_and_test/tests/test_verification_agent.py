@@ -23,7 +23,6 @@ from SYSTEM.agents.verification_and_test.contracts import (
     CheckResult,
     FailureCategory,
     FailureDiagnosis,
-    FrozenFileCheck,
     TestExecutionStatus,
     VerificationReport,
     VerificationVerdict,
@@ -42,7 +41,6 @@ def test_agent_initialization_and_metadata():
     assert "change-verification" in agent.metadata.capabilities
     assert "test-execution" in agent.metadata.capabilities
     assert "failure-diagnosis" in agent.metadata.capabilities
-    assert "frozen-hash-verification" in agent.metadata.capabilities
     assert "pytest_runner" in agent.metadata.allowed_tools
     assert "hash_verifier" in agent.metadata.allowed_tools
 
@@ -66,7 +64,6 @@ def test_validate_action_handling():
     # Valid actions
     assert agent.validate(proj_dir, AgentRequest("verification_and_test", parameters={"action": "verify"})) == []
     assert agent.validate(proj_dir, AgentRequest("verification_and_test", parameters={"action": "status"})) == []
-    assert agent.validate(proj_dir, AgentRequest("verification_and_test", parameters={"action": "verify_frozen_hashes"})) == []
     assert agent.validate(proj_dir, AgentRequest("verification_and_test", parameters={"action": "verify_regression"})) == []
 
     # Invalid action
@@ -90,46 +87,6 @@ def test_status_action_execution():
     assert "verify" in res.metadata["supported_actions"]
 
 
-def test_frozen_hash_verification_success():
-    agent = VerificationAndTestAgent()
-    req = AgentRequest("verification_and_test", parameters={"action": "verify_frozen_hashes"})
-    res = agent.execute(Path("."), req)
-    assert res.status == "succeeded"
-    assert "PASS" in res.summary
-    report = res.metadata["report"]
-    assert report["verdict"] == "PASS"
-    assert len(report["frozen_file_checks"]) == 3
-    assert all(c["matches"] for c in report["frozen_file_checks"])
-
-
-def test_frozen_hash_verification_detects_tamper():
-    agent = VerificationAndTestAgent()
-    # Mock verify_frozen_algorithm_hashes to simulate tamper
-    tampered_check = CheckResult(
-        check_id="frozen_algorithm_hash_verification",
-        component="frozen_files",
-        check_type="hash_verification",
-        status=TestExecutionStatus.EXECUTED,
-        exit_code=1,
-        failed_count=1,
-        failure_category=FailureCategory.INTEGRITY_TAMPER,
-        failure_diagnosis="Hash mismatch on VIDEO_ENGINE/stages/transcribe.py",
-    )
-    tampered_files = [
-        FrozenFileCheck("VIDEO_ENGINE/stages/transcribe.py", "expected", "wrong", False),
-        FrozenFileCheck("VIDEO_ENGINE/stages/transcript_review.py", "expected", "expected", True),
-        FrozenFileCheck("VIDEO_ENGINE/stages/scene_segmentation.py", "expected", "expected", True),
-    ]
-
-    with patch.object(agent.test_executor, "verify_frozen_algorithm_hashes", return_value=(tampered_check, tampered_files)):
-        req = AgentRequest("verification_and_test", parameters={"action": "verify_frozen_hashes"})
-        res = agent.execute(Path("."), req)
-        assert res.status == "failed"
-        report = res.metadata["report"]
-        assert report["verdict"] == "FAIL"
-        assert any(not c["matches"] for c in report["frozen_file_checks"])
-
-
 def test_component_mapper_resolution():
     mapper = ComponentMapper()
     # File mapping
@@ -140,7 +97,7 @@ def test_component_mapper_resolution():
     ])
     assert "agent_registry" in comps
     assert "architecture_validator" in comps
-    assert "frozen_files" in comps
+    assert "video_pipeline" in comps
 
     # Target resolution
     targets = mapper.resolve_test_targets(["agent_registry", "architecture_validator"])
@@ -153,7 +110,7 @@ def test_component_mapper_requirement_partitioning():
     mapper = ComponentMapper()
     verifiable, unverified = mapper.analyze_requirements([
         "All unit tests must pass",
-        "Preserve frozen video algorithm file hashes",
+        "Keep the video stage outputs unchanged",
         "Require manual review and human sign-off on staging video",
         "Connect to live internet external cloud cluster",
     ])
@@ -260,7 +217,7 @@ def test_read_only_guarantee(tmp_path: Path):
         "verification_and_test",
         parameters={
             "action": "verify",
-            "components": ["frozen_files"],
+            "components": ["video_pipeline"],
             "changed_files": [str(test_file)],
             "requirements": ["Source file check"],
         },

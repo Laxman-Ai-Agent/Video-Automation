@@ -146,7 +146,6 @@ def classify_error(
         "forbidden",
         "unauthorized",
         "permission denied",
-        "frozen file protection",
         "path traversal",
         "security_policy",
         "human approval",

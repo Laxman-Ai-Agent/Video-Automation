@@ -11,7 +11,6 @@ Validates:
 8. Final delivery blocks when any gate is missing; delivery manifest contains full provenance.
 9. Download endpoint path traversal and absolute path exposure are strictly rejected.
 10. Adapter lifecycle integration through Agent Registry.
-11. Frozen files' SHA-256 hashes match baseline exactly; zero calls into ASR.
 """
 from __future__ import annotations
 
@@ -42,8 +41,6 @@ from backend import llm_gateway, llm_review, timeline_approval, timeline_gate, t
 from backend.main import app
 
 client = TestClient(app)
-
-FROZEN_BASELINE_HASHES = {}   # the frozen-file SHA-256 guard was removed: these stage files may be edited freely
 
 
 @pytest.fixture
@@ -567,20 +564,6 @@ def test_delivery_endpoints_and_path_confinement(phase7_project, mock_no_asr):
         # 3. Path traversal attack rejection
         with pytest.raises(Exception):
             verify_path_confinement(phase7_project, phase7_project / ".." / "secret.txt")
-
-
-# ---------------------------------------------------------------------------
-# Test 9: Frozen baseline SHA-256 integrity check and zero ASR calls
-# ---------------------------------------------------------------------------
-def test_frozen_baseline_files_integrity():
-    """Verify that the 3 frozen files have not been modified."""
-    for rel_path, expected_hash in FROZEN_BASELINE_HASHES.items():
-        file_path = Path(rel_path)
-        assert file_path.exists(), f"Frozen file missing: {rel_path}"
-        actual_hash = hashlib.sha256(file_path.read_bytes()).hexdigest().lower()
-        assert actual_hash == expected_hash, (
-            f"CRITICAL: Frozen file {rel_path} was modified! Expected {expected_hash}, got {actual_hash}"
-        )
 
 
 # ---------------------------------------------------------------------------

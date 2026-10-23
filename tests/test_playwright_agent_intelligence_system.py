@@ -138,7 +138,7 @@ def test_agent_intelligence_system():
         assert page.locator('[data-testid="agents-center-page"]').is_visible()
         print("Returned to Agents Swarm Grid successfully.")
 
-        # 8. The Audio Analyzer detail view opens too (the FROZEN CORE badge was removed with the frozen flag)
+        # 8. The Audio Analyzer detail view opens too
         print("Testing the Audio Analyzer agent detail view...")
         audio_card = page.locator('[data-testid="agent-card-audio_analyzer"]')
         audio_card.click()
