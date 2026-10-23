@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_timeline_validation",
-  "updated_at": "2026-10-20T04:32:48.200983+00:00",
-  "total_experiences": 33,
+  "updated_at": "2026-10-22T18:18:53.022564+00:00",
+  "total_experiences": 35,
   "experiences": {
     "exp-motion_timeline_validation-040def26b9": {
       "experience_id": "exp-motion_timeline_validation-040def26b9",
@@ -328,6 +328,33 @@
       "timestamp": "2026-10-20T03:19:54.817833+00:00",
       "schema_version": 1
     },
+    "exp-motion_timeline_validation-7701a4db6f": {
+      "experience_id": "exp-motion_timeline_validation-7701a4db6f",
+      "agent_id": "motion_timeline_validation",
+      "task_type": "motion_timeline_validation",
+      "task_id": "task-eb5fef6310",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "overall_score": 92.0,
+        "technical_score": 100.0,
+        "visual_score": 68.0,
+        "semantic_score": 100.0,
+        "runtime_score": 100.0,
+        "total_findings": 4,
+        "repaired_count": 0,
+        "readiness": "ready_with_warnings"
+      },
+      "reflection": "Motion Validation evaluated with overall quality 92.0 (Tech: 100.0, Visual: 68.0, Semantic: 100.0, Runtime: 100.0). Readiness: ready_with_warnings. Repaired 0 defects.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T18:18:52.969985+00:00",
+      "schema_version": 1
+    },
     "exp-motion_timeline_validation-77741a9102": {
       "experience_id": "exp-motion_timeline_validation-77741a9102",
       "agent_id": "motion_timeline_validation",
@@ -461,6 +488,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:35:20.363767+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_timeline_validation-8cb88af84a": {
+      "experience_id": "exp-motion_timeline_validation-8cb88af84a",
+      "agent_id": "motion_timeline_validation",
+      "task_type": "recovery_motion_validation",
+      "task_id": "run_8fca9517",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {
+        "stage_id": "motion_validation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "6g-speed-headroom-0b11",
+            "task_id": "run_8fca9517",
+            "agent_id": "motion_timeline_validation",
+            "stage_id": "motion_validation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "the still at frame 829 could not be rendered after 5 tries: \u001b[31m\u001b[41m\u001b[37m Error \u001b[39m\u001b[31m\u001b[49m\u001b[39m \u001b[31minputRange must be strictly monotonically increasing but got [1,1]\u001b[39m\n",
+            "timestamp": "2026-10-22T17:32:57.733733+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_validation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_validation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T17:33:06.649819+00:00",
       "schema_version": 1
     },
     "exp-motion_timeline_validation-9b711fc599": {

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-20T08:57:05.973941+00:00",
+  "updated_at": "2026-10-23T01:52:37.315363+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -4335,6 +4335,32 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-5b497db4f526": {
+      "memory_id": "mem-5b497db4f526",
+      "title": "Motion Animation Execution - proj_adapter",
+      "content": "{\"project_id\": \"proj_adapter\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 1, \"elements_generated\": 0, \"fallbacks_applied\": 0, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c08cc61bd0ae3ed55e13943a37d565b6001633580fe8dd88360475f31f997f55",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-22T17:37:39.053331+00:00",
+      "updated_at": "2026-10-22T17:37:39.053331+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "proj_adapter"
+      }
+    },
     "mem-5b95ac56a7d7": {
       "memory_id": "mem-5b95ac56a7d7",
       "title": "Experience exp_ee5099948121: Goal 2",
@@ -5841,6 +5867,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-7b95e415aa2e": {
+      "memory_id": "mem-7b95e415aa2e",
+      "title": "Motion Animation Execution - 6g-speed-headroom-0b11",
+      "content": "{\"project_id\": \"6g-speed-headroom-0b11\", \"aspect\": \"9:16\", \"status\": \"succeeded\", \"total_scenes\": 5, \"elements_generated\": 17, \"fallbacks_applied\": 0, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "495796c1b1f37e4a9c792635b60ede1514a86facb41ad3eba42aa4d2840777ea",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-22T16:59:29.939514+00:00",
+      "updated_at": "2026-10-22T16:59:29.939514+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "6g-speed-headroom-0b11"
       }
     },
     "mem-7ca64064a3a4": {
@@ -8217,6 +8269,32 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-aac8fb9083cd": {
+      "memory_id": "mem-aac8fb9083cd",
+      "title": "Motion Animation Execution - proj_agent_v2",
+      "content": "{\"project_id\": \"proj_agent_v2\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 1, \"elements_generated\": 1, \"fallbacks_applied\": 0, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "de78d192457f7f7487bed5769808e978432f0c67c79abd8eaf77923dabe29b07",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-22T17:36:44.404796+00:00",
+      "updated_at": "2026-10-22T17:36:44.404796+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "proj_agent_v2"
+      }
+    },
     "mem-ac0bfb88b1e8": {
       "memory_id": "mem-ac0bfb88b1e8",
       "title": "Experience exp_0a8dcd0cb5d1: Delegated action to capability_finder",
@@ -10041,6 +10119,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_e2e_capability_finder_to_0"
+      }
+    },
+    "mem-c6bd817ce7d1": {
+      "memory_id": "mem-c6bd817ce7d1",
+      "title": "Motion Animation Execution - 6g-speed-headroom-0b11",
+      "content": "{\"project_id\": \"6g-speed-headroom-0b11\", \"aspect\": \"9:16\", \"status\": \"succeeded\", \"total_scenes\": 5, \"elements_generated\": 17, \"fallbacks_applied\": 0, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "495796c1b1f37e4a9c792635b60ede1514a86facb41ad3eba42aa4d2840777ea",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-22T17:19:10.770473+00:00",
+      "updated_at": "2026-10-22T17:19:10.770473+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "6g-speed-headroom-0b11"
       }
     },
     "mem-c751856ca826": {

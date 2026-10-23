@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-20T04:21:32.410261+00:00",
-  "total_experiences": 43,
+  "updated_at": "2026-10-22T17:37:39.048434+00:00",
+  "total_experiences": 48,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -102,6 +102,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:36:20.010405+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-2e95ef0e37": {
+      "experience_id": "exp-motion_animation-2e95ef0e37",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-e6d93fccd7",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 5,
+        "elements_generated": 17,
+        "fallbacks_applied": 0,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 0 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T16:59:29.939514+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-2f1d9730e0": {
@@ -277,6 +302,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:36:08.982515+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-48371ffbf4": {
+      "experience_id": "exp-motion_animation-48371ffbf4",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-cc070f0fd8",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 5,
+        "elements_generated": 17,
+        "fallbacks_applied": 0,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 0 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T17:19:10.770473+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-49eecc3379": {
@@ -577,6 +627,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:34:52.230587+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-8b3b7e0075": {
+      "experience_id": "exp-motion_animation-8b3b7e0075",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-42a0b783b7",
+      "project_id": "proj_adapter",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 1,
+        "elements_generated": 0,
+        "fallbacks_applied": 0,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 0 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T17:37:39.047313+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-a30f401f23": {
@@ -1052,6 +1127,74 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:19:26.389183+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-f311e23c5e": {
+      "experience_id": "exp-motion_animation-f311e23c5e",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_4513a738",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "6g-speed-headroom-0b11",
+            "task_id": "run_4513a738",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build-9x16 failed: TypeScript compilation failed for generated scenes: \n> remotion-app@0.1.0 tsc\n> tsc --noEmit\n\n\u001b[96msrc/generated/scene_2.tsx\u001b[0m:\u001b[93m3\u001b[0m:\u001b[93m10\u001b[0m - \u001b[91merror\u001b[0m\u001b[90m TS2305: \u001b[0mModule '\"@phosphor-icons/react\"' has no exported member 'Telescope'.\n\n\u001b[7m3\u001b[0m import { Telescope } from \"@phosphor-icons/react\";\n\u001b[7m \u001b[0m \u001b[91m         ~~~~~~~~~\u001b[0m\n\n\nFound 1 error in src/generated/scene_2.tsx\u001b[90m:3\u001b[0m\n\n (details in projects/6g-speed-headroom-0b11/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-22T16:50:59.931761+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T16:51:07.624766+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-f84cda32cb": {
+      "experience_id": "exp-motion_animation-f84cda32cb",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-d786de4b6a",
+      "project_id": "proj_agent_v2",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 1,
+        "elements_generated": 1,
+        "fallbacks_applied": 0,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 0 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T17:36:44.395800+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-fb3635966f": {

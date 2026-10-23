@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-20T06:10:19.503806+00:00",
-  "total_experiences": 19,
+  "updated_at": "2026-10-22T18:24:41.161017+00:00",
+  "total_experiences": 20,
   "experiences": {
     "exp-render_video-092004efd0": {
       "experience_id": "exp-render_video-092004efd0",
@@ -442,6 +442,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:49:46.747921+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-f9bcc97384": {
+      "experience_id": "exp-render_video-f9bcc97384",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-7c8399d07e",
+      "project_id": "6g-speed-headroom-0b11",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 14047015,
+        "sha256_short": "4612559c31a1",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-22T18:24:41.161017+00:00",
       "schema_version": 1
     }
   }
