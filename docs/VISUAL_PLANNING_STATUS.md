@@ -22,7 +22,7 @@ This file records the state of the Visual Planning redesign and what is still op
 1. **Run the whole pipeline** (stages 6-13) on a project that has a real photo, a reference page and a video, to prove the scenes draw `real_media` of kinds photo / video / page. Only stages 1-6 were exercised for real.
 2. **Re-run the full Python suite** once: the last full run was before the `reference` kind and the keyless providers.
 3. **Restart the backend on :8000** (it still runs the old code). Vite on :5173 reloads by itself.
-4. Committed locally as 922f0a4; the push to `origin main` still has to be run (git push origin main).
+4. Committed and pushed to `origin main` (922f0a4).
 5. Optional: Pexels/Pixabay keys (`PEXELS_API_KEY`, `PIXABAY_API_KEY` in `.env`) for better video B-roll; keyless sources have few office/people clips.
 6. AI pictures: only the ready prompt (`media.ai_prompt`) is written; no image generator is connected.
 7. Frontend has no unit tests in this copy (no vitest script); only `npx tsc --noEmit` was run. Docs besides `CLAUDE.md` (`docs/architecture.md`, `schemas.md`) were not updated. The old visual_planning agent skills and memory files were left as they were.
