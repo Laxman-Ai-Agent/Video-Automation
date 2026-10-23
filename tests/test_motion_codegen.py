@@ -125,6 +125,18 @@ export const Scene1: React.FC = () => {
     assert "HighlightText" in prohibited
 
 
+def test_generating_scenes_never_rewrites_the_tracked_scene_registry(tmp_path):
+    """src/generated/index.ts is tracked and fixed: it finds scene_*.tsx itself. Generating (and staging) scenes used to overwrite it with the project's imports, which left the tracked file
+    dirty after every run and importing scene files a fresh checkout does not have."""
+    registry = motion_animation.config.REMOTION_DIR / "src" / "generated" / "index.ts"
+    before = registry.read_bytes()
+    assert b"require.context" in before and b"import Scene" not in before
+    d, *_ = make_project(tmp_path / "proj_registry")
+    store.set_reusable_motion_templates(d, False)
+    motion_animation.generate_custom_motion_code(d, "16:9")
+    assert registry.read_bytes() == before
+
+
 def test_motion_animation_custom_code_generation(tmp_path):
     d, *_ = make_project(tmp_path / "proj_codegen")
     store.set_reusable_motion_templates(d, False)
@@ -140,7 +152,7 @@ def test_motion_animation_custom_code_generation(tmp_path):
     # Source files exist on disk
     gen_dir = d / "generated_motion"
     assert gen_dir.exists()
-    assert (gen_dir / "index.ts").exists()
+    assert not (gen_dir / "index.ts").exists()                                      # no registry is generated: the fixed src/generated/index.ts finds the scenes
 
     for sc in manifest["scenes"]:
         spath = Path(sc["source_path"])

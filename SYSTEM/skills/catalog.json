@@ -1236,7 +1236,7 @@
     "remotion.captions": {
       "skill_id": "remotion.captions",
       "name": "Official Remotion Captions",
-      "summary": "Official Remotion guidance for displaying and animating captions with @remotion/captions (Caption type, TikTok-style pages, SRT import); transcription stays in the frozen Stage 2.",
+      "summary": "Official Remotion guidance for displaying and animating captions with @remotion/captions (Caption type, TikTok-style pages, SRT import); transcription stays in Stage 2.",
       "domain": "remotion",
       "tags": [
         "remotion",
@@ -1249,7 +1249,7 @@
       "source": "remote",
       "repository_url": "https://github.com/remotion-dev/skills",
       "commit_sha": "039e8a2fc78b67efc228d5645367838b85818a1c",
-      "content_sha256": "b21b90e87ffb2566502fe623693f3bc3be152c3c956f89c5f42170561838388b",
+      "content_sha256": "6beab494b27778cf5d52644f1b08b164018433fed8a97e9ea573e55e5b452147",
       "license": "Remotion License (https://www.remotion.dev/license); repo ships no LICENSE file",
       "license_evidence": "Official Remotion Agent Skills; copied with a project override block. Needs operator review (Laxman approval) before status approved.",
       "capabilities": [

@@ -68,9 +68,6 @@ def stage_motion(pdir: Path) -> None:
     target_gen.mkdir(parents=True, exist_ok=True)
     for f in gen_dir.glob("*.tsx"):
         shutil.copyfile(f, target_gen / f.name)
-    idx = gen_dir / "index.ts"
-    if idx.is_file():
-        shutil.copyfile(idx, target_gen / "index.ts")
     asset_collection.stage_assets(pdir)                       # the real photos/clips the scenes draw (staticFile("projects/<id>/assets/..."))
 
 

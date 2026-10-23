@@ -794,7 +794,6 @@ def generate_custom_motion_code(
 ) -> dict[str, Any]:
     """Execute Motion Animation custom code generation for all scenes.
     - Generates project-isolated scene-specific TSX under projects/<pid>/generated_motion/
-    - Writes project custom scene registry projects/<pid>/generated_motion/index.ts
     - Synchronously stages to VIDEO_ENGINE/remotion/src/generated/ under _remotion_staging_lock for race-free tsc compilation
     - Computes SHA-256 hashes for all generated files
     - Emits versioned manifest motion_animation.json (schema v2.0)
@@ -841,8 +840,6 @@ def generate_custom_motion_code(
     reporter = StructuredGenerationReporter()
 
     scenes_manifest = []
-    index_imports = []
-    index_registry_entries = []
     template_warnings = []
     all_clean = True
     prohibited_found_total = 0
@@ -962,40 +959,6 @@ def generate_custom_motion_code(
             "repair_attempts": gen_meta.get("attempt_count", 1),
         })
 
-        index_imports.append(f'import Scene{sid} from "./scene_{sid}";')
-        index_registry_entries.append(f'  "{sid}": Scene{sid},')
-        index_registry_entries.append(f'  "scene_{sid}": Scene{sid},')
-
-    # Build index.ts for project's generated_motion/
-    index_code = f"""import React from "react";
-import type {{ ComponentType }} from "react";
-import type {{ LayerT }} from "../schema";
-
-{chr(10).join(index_imports)}
-
-export const customSceneRegistry: Record<string, ComponentType<any>> = {{
-{chr(10).join(index_registry_entries)}
-}};
-
-export function getCustomScene(name: string | number): ComponentType<any> | null {{
-  return customSceneRegistry[String(name)] || customSceneRegistry[`scene_${{name}}`] || null;
-}}
-
-export const CustomSceneLayer: React.FC<{{ layer: LayerT }}> = ({{ layer }}) => {{
-  const sceneId = (layer as any).scene_id ?? (layer as any).id;
-  const Comp = getCustomScene(sceneId);
-  if (!Comp) {{
-    return null;
-  }}
-  return React.createElement(Comp, {{ layer }});
-}};
-
-export default customSceneRegistry;
-"""
-    tmp_index = (out_dir / "index.ts").with_suffix(".tmp")
-    tmp_index.write_text(index_code, encoding="utf-8")
-    tmp_index.replace(out_dir / "index.ts")
-
     # Race-free compilation under global staging mutex lock
     compile_passed = False
     # `remotion_dir` is config.REMOTION_DIR (set above): the folder the scenes are staged into is the folder that must be type-checked. A second folder (<root>/remotion) used to be
@@ -1003,7 +966,7 @@ export default customSceneRegistry;
 
     with _remotion_staging_lock:
         remotion_gen_dir.mkdir(parents=True, exist_ok=True)
-        # Copy scenes and index to VIDEO_ENGINE/remotion/src/generated/
+        # Copy the scenes to VIDEO_ENGINE/remotion/src/generated/ (its fixed index.ts finds them)
         for sc in scenes:
             sid = sc.get("id")
             sfile = out_dir / f"scene_{sid}.tsx"
@@ -1012,8 +975,6 @@ export default customSceneRegistry;
                 r_tmp = r_file.with_suffix(".tmp")
                 r_tmp.write_text(sfile.read_text(encoding="utf-8"), encoding="utf-8")
                 r_tmp.replace(r_file)
-
-        (remotion_gen_dir / "index.ts").write_text(index_code, encoding="utf-8")
 
         if not (remotion_dir / "package.json").exists():
             # Test environment without remotion directory

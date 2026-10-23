@@ -418,9 +418,6 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                 # Add sample source code if custom_code
                 if ma.get("mode") == "custom_code":
                     gen_dir = pdir / "generated_motion"
-                    index_ts = gen_dir / "index.ts"
-                    if index_ts.exists():
-                        payload["index_ts"] = index_ts.read_text(encoding="utf-8")
                     first_tsx = next(iter(gen_dir.glob("scene_*.tsx")), None)
                     if first_tsx and first_tsx.exists():
                         payload["sample_tsx"] = first_tsx.read_text(encoding="utf-8")[:4000]
