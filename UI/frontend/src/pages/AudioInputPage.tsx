@@ -1,4 +1,6 @@
 import React, { useState, useRef } from 'react';
+import { MediaMixPicker } from '../components/MediaMixPicker';
+import { DEFAULT_MEDIA, MediaMix, total } from '../services/mediaMix';
 import { 
   UploadCloud, 
   FileAudio, 
@@ -20,8 +22,9 @@ interface AudioInputPageProps {
   onAnalyze: (
     title: string, 
     audioFile: File, 
-    aspect: string, 
-    reusableTemplates: boolean
+    aspect: string,
+    reusableTemplates: boolean,
+    media: MediaMix
   ) => Promise<void>;
   onCancel: () => void;
 }
@@ -36,6 +39,7 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [aspect, setAspect] = useState<'16:9' | '9:16'>('16:9');
   const [reusableTemplates, setReusableTemplates] = useState(false);
+  const [media, setMedia] = useState<MediaMix>(DEFAULT_MEDIA);
   const [dragOver, setDragOver] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
@@ -85,9 +89,14 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
       return;
     }
 
+    if (total(media) !== 100) {
+      setError(`The media mix must add up to 100% (it adds up to ${total(media)}%).`);
+      return;
+    }
+
     try {
       setSubmitting(true);
-      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates);
+      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates, media);
     } catch (err: any) {
       setError(err?.message || 'Failed to initialize project and start analysis.');
       setSubmitting(false);
@@ -649,6 +658,8 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
                     Motion-Only Mode
                   </span>
                 </div>
+
+                <MediaMixPicker value={media} onChange={setMedia} disabled={submitting} />
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px' }}>
                   <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>

@@ -35,6 +35,26 @@ def cand(i=1, kind="image", rights=True, license_name="Pexels License", w=1920, 
                             attribution_text="Photo by Ann on Pexels", commercial_use_known=True if rights else None, search_query="river", retrieved_at="2026-10-21T00:00:00").model_dump()
 
 
+_PDIR: dict = {}
+
+
+def write_plan(pdir, reqs):
+    """The Visual Plan that asks for `reqs` (rows: scene, kind, query, alt_queries, must_be_real, why): one scene for each scene of the scene plan, every real element a media requirement.
+    Asset Collection reads these; the stage has no planner of its own any more."""
+    sp = json.loads((pdir / "scene_plan.json").read_text(encoding="utf-8"))
+    scenes, per = [], {}
+    for s in sp["scenes"]:
+        mine = []
+        for r in reqs:
+            if r.get("scene") == s["id"]:
+                per[s["id"]] = n = per.get(s["id"], 0) + 1
+                mine.append({"requirement_id": f"req_asset_{s['id']}_{n}", "element_id": f"asset_{s['id']}_{n}", "media_type": {"video": "video", "page": "reference"}.get(r["kind"], "image"), "query": r["query"], "section": r.get("section"),
+                             "alt_queries": r.get("alt_queries", []), "why": r.get("why", ""), "must_be_real": r.get("must_be_real", False), "ai_prompt": None,
+                             "fallback": "a flat graphic of the same idea", "required": True, "region": "full_frame", "semantic_content": r["query"]})
+        scenes.append({"plan_scene_id": s["id"], "media_requirements": mine})
+    (pdir / "visual_planning.json").write_text(json.dumps({"source_fingerprint": "fp-" + json.dumps(reqs, sort_keys=True), "scenes": scenes}), encoding="utf-8")
+
+
 @pytest.fixture
 def pdir(tmp_path, monkeypatch):
     p = tmp_path / "projects" / "p1"
@@ -43,11 +63,14 @@ def pdir(tmp_path, monkeypatch):
               {"id": 2, "start": 6.0, "end": 12.0, "meaning": "Why compound interest grows", "concept": "a chart", "keywords": []}]
     (p / "scene_plan.json").write_text(json.dumps({"scenes": scenes}), encoding="utf-8")
     monkeypatch.setattr(ac, "cache_dir", lambda: tmp_path / "cache")
+    monkeypatch.setattr(ac.visual_planning, "blockers", lambda pd: None)                 # the Visual Plan is current: its own tests are in test_visual_planning.py
+    _PDIR["p"] = p
+    write_plan(p, [])
     return p
 
 
 class LLM:
-    """Replaces the gateway: answers by the system prompt, counts the calls."""
+    """Replaces the gateway for the ranking call (the stage has no planner call any more): counts the calls. `requirements` = what the Visual Plan asks for (written by use())."""
 
     def __init__(self, requirements=None, choice=0, fail=False):
         self.requirements, self.choice, self.fail, self.calls = requirements if requirements is not None else [], choice, fail, []
@@ -56,14 +79,14 @@ class LLM:
         self.calls.append(req.system_prompt[:12])
         if self.fail:
             return SimpleNamespace(error="down", structured_data=None, provider="stub", model="stub")
-        if "Asset Planner" in req.system_prompt:
-            return SimpleNamespace(error=None, structured_data={"requirements": self.requirements}, provider="stub", model="stub")
         body = json.loads(req.user_prompt.split("\n", 1)[1])
         return SimpleNamespace(error=None, structured_data={"choices": [{"requirement_id": b["requirement_id"], "index": self.choice} for b in body]}, provider="stub", model="stub")
 
 
 def use(monkeypatch, llm, results=None, files=None):
     monkeypatch.setattr(llm_gateway.gateway, "execute", llm)
+    if isinstance(llm, LLM) and _PDIR:
+        write_plan(_PDIR["p"], llm.requirements)
     searches, downloads = [], []
 
     def fake_search(q, aspect="16:9", kind="image"):
@@ -88,26 +111,29 @@ def test_rights_classes_never_claim_unclear_rights_as_free():
     assert ac.rights_class(cand(license_name="")) == "D"
 
 
-def test_planner_output_is_sanitised_capped_and_reused(pdir, monkeypatch):
-    bad = [{"scene": 99, "kind": "photo", "query": "x"}, {"scene": 1, "kind": "gif", "query": "x"}, {"scene": 1, "kind": "photo", "query": "  "}, "junk",
-           {**REQ, "query": "Nile; river flood"}, {**REQ, "query": "second"}, {**REQ, "query": "third"}]
-    llm = LLM(bad)
+def test_a_provider_that_cannot_serve_more_than_1024_px_gets_its_own_width_floor():
+    assert ac._usable(cand(1, w=1024, h=683, provider="openverse"), "photo") and not ac._usable(cand(2, w=1024, h=683, provider="pexels"), "photo")
+    assert not ac._usable(cand(3, w=800, h=600, provider="openverse"), "photo") and ac._usable(cand(4, w=640, h=480, kind="video", dur=60.0, provider="archive"), "video")
+
+
+def test_requirements_come_from_the_visual_plan_without_any_llm_call_and_are_reused_while_it_is_unchanged(pdir, monkeypatch):
+    llm = LLM([REQ, {**REQ, "query": "Nile; river flood", "alt_queries": ["a", "b", "c"]}, {**REQ, "kind": "video", "query": "second", "must_be_real": True}])
     use(monkeypatch, llm)
     data = ac.plan_requirements(pdir, "16:9")
-    qs = [r["query"] for r in data["requirements"]]
-    assert qs == ["Nile  river flood", "second"]                                     # invalid ones dropped, punctuation stripped, at most 2 per scene
-    assert [r["requirement_id"] for r in data["requirements"]] == ["req_1_1", "req_1_2"] and data["requirements"][0]["element_id"] == "asset_1_1"
-    assert len(llm.calls) == 1
-    ac.plan_requirements(pdir, "16:9")
-    assert len(llm.calls) == 1                                                       # same scenes: no second LLM call
-    (pdir / "scene_plan.json").write_text(json.dumps({"scenes": [{"id": 1, "start": 0, "end": 6, "meaning": "something else", "concept": "c", "keywords": []}]}), encoding="utf-8")
-    ac.plan_requirements(pdir, "16:9")
-    assert len(llm.calls) == 2                                                       # the narration changed: planned again
+    reqs = data["requirements"]
+    assert [r["query"] for r in reqs] == ["Nile river flood", "Nile  river flood", "second"]              # punctuation stripped
+    assert [r["requirement_id"] for r in reqs] == ["req_1_1", "req_1_2", "req_1_3"] and [r["kind"] for r in reqs] == ["photo", "photo", "video"]
+    assert reqs[1]["alt_queries"] == ["a", "b"] and reqs[2]["must_be_real"] is True and reqs[0]["fallback"] and reqs[0]["element_id"] == "asset_1_1" and data["source"] == "visual_planning.json"
+    assert llm.calls == []                                                                              # the stage has no planner
+    assert ac.plan_requirements(pdir, "16:9")["generated_at"] == data["generated_at"] and ac.load_requirements(pdir) == data     # same Visual Plan: the file is reused
+    write_plan(pdir, [{**REQ, "query": "something else"}])
+    assert [r["query"] for r in ac.plan_requirements(pdir, "16:9")["requirements"]] == ["something else"]    # the plan changed: written again
 
 
-def test_planner_failure_fails_closed_with_the_cause(pdir, monkeypatch):
-    use(monkeypatch, LLM(fail=True))
-    with pytest.raises(ac.AssetError, match="asset planner"):
+def test_a_missing_or_stale_visual_plan_stops_the_stage_with_the_cause(pdir, monkeypatch):
+    use(monkeypatch, LLM())
+    monkeypatch.setattr(ac.visual_planning, "blockers", lambda pd: "there is no Visual Plan yet: run Visual Planning")
+    with pytest.raises(ac.AssetError, match="Visual Planning must be current.*no Visual Plan yet"):
         ac.run(pdir)
 
 
@@ -201,8 +227,6 @@ def test_when_the_llm_is_down_the_providers_ranking_decides(pdir, monkeypatch):
     calls = {"n": 0}
 
     def flaky(req):
-        if "Asset Planner" in req.system_prompt:
-            return llm(req)
         calls["n"] += 1
         raise RuntimeError("down")
     monkeypatch.setattr(llm_gateway.gateway, "execute", flaky)
@@ -261,13 +285,13 @@ def test_motion_generation_gets_the_collected_assets_as_elements_it_must_draw(tm
     """Scenes draw what Asset Collection found: every asset becomes a required element (never read as a 3D request, even with "model" in its title) and the LLM prompt says how to draw real media."""
     import importlib
     from VIDEO_ENGINE.stages import motion_animation as ma
-    d, *_ = importlib.import_module("test_motion_planning").make(tmp_path / "proj_assets")
-    sid = json.loads((d / "scene_plan.json").read_text(encoding="utf-8"))["scenes"][0]["id"]
+    sid = 1
+    d, *_ = importlib.import_module("test_motion_planning").make(tmp_path / "proj_assets", real={sid: "image"})              # scene 1 has a real primary element, element id image_main
     media = d / "assets" / "collected" / "abc.jpg"
     media.parent.mkdir(parents=True)
     media.write_bytes(jpeg())
     ac._save(ac.manifest_path(d), {"schema": ac.SCHEMA_MAN, "assets": [{
-        "asset_id": "abc", "requirement_id": f"req_{sid}_1", "scene_id": sid, "element_id": f"asset_{sid}_1", "kind": "photo", "file": "assets/collected/abc.jpg", "public_file": "projects/x/assets/abc.jpg",
+        "asset_id": "abc", "requirement_id": f"req_{sid}_1", "scene_id": sid, "element_id": "image_main", "kind": "photo", "file": "assets/collected/abc.jpg", "public_file": "projects/x/assets/abc.jpg",
         "title": "Wooden model ship with camera crew", "attribution_text": "Photo by Ann on Pexels", "width": 1600, "height": 900}], "fallbacks": []})
     seen = []
     real = llm_gateway.gateway.execute
@@ -278,10 +302,10 @@ def test_motion_generation_gets_the_collected_assets_as_elements_it_must_draw(tm
     monkeypatch.setattr(llm_gateway.gateway, "execute", spy)
     man = ma.generate_custom_motion_code(d, "16:9")
     code = (d / "generated_motion" / f"scene_{sid}.tsx").read_text(encoding="utf-8")
-    assert f'data-element-id="asset_{sid}_1"' in code
+    assert 'data-element-id="image_main"' in code
     sc = next(s for s in man["scenes"] if s["scene_id"] == sid)
-    assert f"asset_{sid}_1" in sc["required_elements"] and f"asset_{sid}_1" in sc["implemented_elements"] and f"asset_{sid}_1" not in sc["missing_required_elements"]
-    assert next(c for c in sc["element_classifications"] if c["element_id"] == f"asset_{sid}_1")["is_3d"] is False
+    assert "image_main" in sc["required_elements"] and "image_main" in sc["implemented_elements"] and "image_main" not in sc["missing_required_elements"]
+    assert next(c for c in sc["element_classifications"] if c["element_id"] == "image_main")["is_3d"] is False
     gen = next(r for r in seen if f"Scene {sid}." in r.user_prompt and "real_media" in r.user_prompt)
     assert "staticFile(real_media.file)" in gen.system_prompt and "Photo by Ann on Pexels" in gen.user_prompt and "projects/x/assets/abc.jpg" in gen.user_prompt
 
@@ -430,14 +454,13 @@ def _fake_capture(url, dest, section="infobox", **kw):
 def test_a_reference_page_capture_is_collected_with_its_capture_record_and_flagged_for_a_person(pdir, monkeypatch):
     from VIDEO_ENGINE.stages import web_capture
     from SYSTEM.core import artifact_contracts as contracts
-    monkeypatch.setattr(llm_gateway.gateway, "execute", LLM([{**REQ, "kind": "page", "query": "Mount Everest", "section": "table"}, {**REQ, "kind": "page", "query": "bad section", "section": "../etc"}]))
+    use(monkeypatch, LLM([{**REQ, "kind": "page", "query": "Mount Everest", "section": "table"}, {**REQ, "kind": "page", "query": "bad section", "section": "../etc"}]))      # the Visual Plan asks for pages with a reference element
     searched = []
     monkeypatch.setattr(web_capture, "search_pages", lambda q: searched.append(q) or [stock.StockAsset(**_page_cand(1))])
     got = {}
     monkeypatch.setattr(web_capture, "capture", lambda url, dest, section="infobox", **kw: got.update(url=url, section=section) or _fake_capture(url, dest, section))
     man = ac.run(pdir)
-    reqs = ac.load_requirements(pdir)["requirements"]
-    assert [r["section"] for r in reqs] == ["table", "infobox"]                                      # an unknown section falls back to the infobox
+    assert [r["section"] for r in ac.load_requirements(pdir)["requirements"]] == ["table", "infobox"]  # an unknown section falls back to the infobox
     (a,) = man["assets"]                                                                              # the second requirement wanted the same page: the same source item is not collected twice
     assert a["kind"] == "page" and a["capture_method"] == "browser_screenshot" and a["file"].endswith(".png") and a["rights_class"] == "C" and a["needs_human_review"] is True
     assert a["capture"]["selector"] == ".infobox" and a["capture"]["region"]["width"] == 520.0 and a["capture"]["text_sha256"] == "a" * 64 and a["width"] == 520
@@ -449,7 +472,7 @@ def test_a_reference_page_capture_is_collected_with_its_capture_record_and_flagg
 
 def test_a_capture_that_is_refused_falls_back_and_never_fails_the_stage_unless_the_asset_must_be_real(pdir, monkeypatch):
     from VIDEO_ENGINE.stages import web_capture
-    monkeypatch.setattr(llm_gateway.gateway, "execute", LLM([{**REQ, "kind": "page"}]))
+    use(monkeypatch, LLM([{**REQ, "kind": "page"}]))
     monkeypatch.setattr(web_capture, "search_pages", lambda q: [stock.StockAsset(**_page_cand(1))])
 
     def refused(*a, **k):
@@ -541,3 +564,15 @@ def test_a_project_still_before_the_stage_keeps_it_pending(tmp_path):
     assert pipeline_state.load_pipeline_state(pdir).stages["assets"].status == "pending"
     mp = orchestrator.evaluate_stage_eligibility(pdir, "motion_plan", "16:9")
     assert mp["eligible"] is False and any("assets" in b for b in mp["blockers"])
+
+
+def test_the_search_cache_is_not_used_for_a_different_set_of_providers(pdir, monkeypatch):
+    req = {"requirement_id": "r", "scene_id": 1, "kind": "photo", "query": "river", "alt_queries": []}
+    searches, _ = use(monkeypatch, LLM(), results={"*": [cand(1)]})
+    monkeypatch.delenv("PEXELS_API_KEY", raising=False)
+    ac.search(req, "16:9")
+    ac.search(req, "16:9")
+    assert len(searches) == 1                                                        # the same providers: served from the cache
+    monkeypatch.setenv("PEXELS_API_KEY", "k")
+    ac.search(req, "16:9")
+    assert len(searches) == 2                                                        # a key was set: a provider that was not asked before is asked now

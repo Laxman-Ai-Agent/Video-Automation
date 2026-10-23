@@ -12,6 +12,7 @@ import SYSTEM.core.errors as errors
 from .routes import (
     agents,
     approvals,
+    assets,
     evaluation,
     llm,
     memory,
@@ -61,6 +62,7 @@ for module in (
     run,
     results,
     review,
+    assets,
     visual,
     visual_editor,
     pipeline,

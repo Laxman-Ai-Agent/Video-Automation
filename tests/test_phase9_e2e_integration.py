@@ -443,7 +443,9 @@ class TestAutonomousExecutionVideoWorkflow:
         ]
 
         runner = TaskRunner(project_root=config.PROJECT_ROOT)
-        with patch("SYSTEM.policies.llm_review.is_stage_review_passed", return_value=(True, "passed", {"status": "passed"})):
+        stored = {**json.loads((pdir / "visual_planning.json").read_text(encoding="utf-8")), "stale": False, "stored": True}      # this fixture's visual plan stands for a current one (a stale plan is planned again)
+        with patch("SYSTEM.policies.llm_review.is_stage_review_passed", return_value=(True, "passed", {"status": "passed"})), \
+             patch("VIDEO_ENGINE.stages.visual_planning.load", return_value=stored):
             report = runner.execute_task(spec, steps, project_dir=pdir)
 
         assert report.success is True

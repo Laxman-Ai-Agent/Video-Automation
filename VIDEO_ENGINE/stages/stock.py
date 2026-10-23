@@ -1,5 +1,5 @@
-"""Asset Collection providers: stock image and video search for the requirements of a project (NASA, Wikimedia Commons, Pexels, Pixabay).
-Official APIs only, standard library only, keys from the environment (PEXELS_API_KEY, PIXABAY_API_KEY; NASA and Commons need none). A provider without
+"""Asset Collection providers: stock image and video search for the requirements of a project (NASA, Wikimedia Commons, Openverse, Internet Archive, Pexels, Pixabay).
+Official APIs only, standard library only, keys from the environment (PEXELS_API_KEY, PIXABAY_API_KEY; NASA, Commons, Openverse and the Internet Archive need none). A provider without
 its key is reported "unavailable" and skipped. Every result keeps its source page, author, licence and attribution: rights are decided per item, never per
 provider, and anything unclear is marked commercial_use_known=None for the user to judge. Nothing is downloaded until the user picks one result."""
 import json
@@ -18,7 +18,10 @@ MAX_BYTES = 30 * 1024 * 1024
 MAX_VIDEO_BYTES = 150 * 1024 * 1024
 PER_PROVIDER = 6
 UA = "audio-to-video/1.0 (local tool)"
-DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com")
+DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com", "staticflickr.com", "archive.org")
+FREE_LICENSES = {"by": "CC BY", "by-sa": "CC BY-SA", "cc0": "CC0", "pdm": "Public Domain Mark"}      # Openverse licence codes that allow commercial use AND changes (a crop or a dim is a change: no -nd, no -nc)
+OPENVERSE_TIMEOUT = 45                       # an anonymous Openverse query answers in 15 to 20 s
+MAX_ARCHIVE_SECONDS = 900                    # a recording of hours says nothing about its title: only short items of the Internet Archive
 
 
 class StockError(Exception):
@@ -50,12 +53,12 @@ def _now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%S")
 
 
-def _open(url: str, headers: dict | None = None, limit: int = MAX_BYTES) -> bytes:
+def _open(url: str, headers: dict | None = None, limit: int = MAX_BYTES, timeout: float = TIMEOUT) -> bytes:
     """The only network call (tests replace it). One bounded retry for timeouts and 5xx; 429 is reported, never hammered. Reads at most limit+1 bytes."""
     req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
     for attempt in (0, 1):
         try:
-            with urllib.request.urlopen(req, timeout=TIMEOUT) as r:
+            with urllib.request.urlopen(req, timeout=timeout) as r:
                 return r.read(limit + 1)
         except urllib.error.HTTPError as e:
             if e.code == 429:
@@ -70,9 +73,9 @@ def _open(url: str, headers: dict | None = None, limit: int = MAX_BYTES) -> byte
     raise StockError("provider did not answer")
 
 
-def _json(url: str, headers: dict | None = None) -> dict:
+def _json(url: str, headers: dict | None = None, timeout: float | None = None) -> dict:
     try:
-        data = json.loads(_open(url, headers))
+        data = json.loads(_open(url, headers) if timeout is None else _open(url, headers, timeout=timeout))
     except ValueError as e:
         raise StockError("provider sent an unreadable answer") from e
     if not isinstance(data, dict):
@@ -165,7 +168,36 @@ def pixabay(q: str) -> list[StockAsset]:
     return out
 
 
-PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY")}
+def _host_ok(url: str) -> bool:
+    u = urllib.parse.urlparse(url or "")
+    return u.scheme == "https" and any((u.hostname or "") == h or (u.hostname or "").endswith("." + h) for h in DOWNLOAD_HOSTS)
+
+
+def openverse(q: str) -> list[StockAsset]:
+    """Openverse (the open-licence search of WordPress, no key; anonymous use is rate limited, which the 24 h query cache keeps small). Only items whose file lives on a permitted host and whose licence
+    allows commercial use and changes; Flickr serves them at 1024 px at most."""
+    d = _json("https://api.openverse.org/v1/images/?" + urllib.parse.urlencode({"q": q, "license_type": "commercial", "page_size": PER_PROVIDER * 3, "mature": "false"}), timeout=OPENVERSE_TIMEOUT)
+    out = []
+    for r in d.get("results", []):
+        try:
+            lic = str(r["license"]).lower()
+            if lic not in FREE_LICENSES or not _host_ok(r["url"]):
+                continue
+            ver = f" {r['license_version']}" if r.get("license_version") else ""
+            name = f"{FREE_LICENSES[lic]}{ver}"
+            creator = r.get("creator") or ""
+            out.append(StockAsset(id=f"openverse:{r['id']}", provider="openverse", provider_asset_id=str(r["id"]), source_page_url=r.get("foreign_landing_url", ""), download_url=r["url"],
+                                  thumbnail_url=r.get("thumbnail"), title=r.get("title") or "", width=r.get("width"), height=r.get("height"), license_name=name, license_url=r.get("license_url") or "",
+                                  author=creator, attribution_text=(r.get("attribution") or f"{creator} / {r.get('source', 'Openverse')} / {name}").strip(" /"), commercial_use_known=True,
+                                  search_query=q, retrieved_at=_now()))
+        except (KeyError, TypeError):
+            continue
+        if len(out) >= PER_PROVIDER:
+            break
+    return out
+
+
+PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "openverse": (openverse, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY")}
 
 
 # ---------- video adapters (same rules: official APIs, one malformed item is skipped) ----------
@@ -266,7 +298,49 @@ def wikimedia_videos(q: str) -> list[StockAsset]:
     return out
 
 
-VIDEO_PROVIDERS = {"nasa": (nasa_videos, None), "wikimedia": (wikimedia_videos, None), "pexels": (pexels_videos, "PEXELS_API_KEY"), "pixabay": (pixabay_videos, "PIXABAY_API_KEY")}
+def _archive_licence(url: str) -> str | None:
+    """The licence of an Internet Archive item from its licenseurl; None when it does not allow commercial use and changes (or is unknown)."""
+    u = (url or "").lower()
+    if "publicdomain/zero" in u:
+        return "CC0 1.0"
+    if "publicdomain/mark" in u:
+        return "Public Domain Mark 1.0"
+    m = re.search(r"creativecommons\.org/licenses/(by|by-sa)/([\d.]+)", u)
+    return f"{FREE_LICENSES[m.group(1)]} {m.group(2)}" if m else None
+
+
+def archive_videos(q: str) -> list[StockAsset]:
+    """Internet Archive (no key): short items with a free licence, the H.264 derivative the Archive makes of every upload. The item's metadata gives the file list and the duration."""
+    d = _json("https://archive.org/advancedsearch.php?" + urllib.parse.urlencode({"q": f"({q}) AND mediatype:movies AND licenseurl:*", "fl[]": ["identifier", "title", "creator", "licenseurl"], "rows": 30,
+                                                                              "sort[]": "downloads desc", "output": "json"}, doseq=True))
+    out = []
+    for doc in d.get("response", {}).get("docs", []):
+        if len(out) >= 3:                                                   # each item needs a second request for its files
+            break
+        lic = _archive_licence(doc.get("licenseurl") if isinstance(doc.get("licenseurl"), str) else "")
+        if not lic:
+            continue
+        try:
+            ident = doc["identifier"]
+            files = _json(f"https://archive.org/metadata/{urllib.parse.quote(ident)}").get("files", [])
+            mp4 = [f for f in files if str(f.get("name", "")).lower().endswith(".mp4") and f.get("format") in ("h.264", "MPEG4") and str(f.get("width", "")).isdigit()]
+            best = _best_video([{"url": f["name"], "width": int(f["width"]), "height": int(f.get("height") or 0), "length": f.get("length")} for f in mp4])
+            length = float(best["length"]) if best and best.get("length") else None
+            if not best or not length or length > MAX_ARCHIVE_SECONDS:
+                continue
+            creator = doc.get("creator") if isinstance(doc.get("creator"), str) else ""
+            title = doc.get("title") if isinstance(doc.get("title"), str) else ident
+            out.append(StockAsset(id=f"archive-video:{ident}", provider="archive", provider_asset_id=ident, source_page_url=f"https://archive.org/details/{urllib.parse.quote(ident)}",
+                                  download_url=f"https://archive.org/download/{urllib.parse.quote(ident)}/{urllib.parse.quote(best['url'])}", media_type="video",
+                                  thumbnail_url=f"https://archive.org/services/img/{urllib.parse.quote(ident)}", title=title, width=best["width"], height=best.get("height") or None, duration_s=length,
+                                  license_name=lic, license_url=doc["licenseurl"], author=creator, attribution_text=f"{creator or 'Unknown'} / Internet Archive / {lic}",
+                                  commercial_use_known=True, search_query=q, retrieved_at=_now()))
+        except (KeyError, TypeError, ValueError, StockError):
+            continue
+    return out
+
+
+VIDEO_PROVIDERS = {"nasa": (nasa_videos, None), "wikimedia": (wikimedia_videos, None), "archive": (archive_videos, None), "pexels": (pexels_videos, "PEXELS_API_KEY"), "pixabay": (pixabay_videos, "PIXABAY_API_KEY")}
 
 
 def providers_status() -> dict:
@@ -278,6 +352,12 @@ def providers_status() -> dict:
 def _rank(a: StockAsset, want_ratio: float | None) -> tuple:
     ratio_gap = abs(a.width / a.height - want_ratio) if want_ratio and a.width and a.height else 1.0
     return (0 if a.commercial_use_known else 1, round(ratio_gap, 1), -(a.width or 0), a.id)
+
+
+def available_providers(kind: str = "image") -> tuple[str, ...]:
+    """The providers that would be asked for this kind of media now (those whose key, if they need one, is set): part of the key of the query cache, so a provider that is added or a key that is
+    set is used at once instead of after the 24 h of the cache."""
+    return tuple(n for n, (_, key) in (VIDEO_PROVIDERS if kind == "video" else PROVIDERS).items() if key is None or os.environ.get(key))
 
 
 def search(query: str, aspect: str = "16:9", kind: str = "image") -> tuple[list[StockAsset], dict]:

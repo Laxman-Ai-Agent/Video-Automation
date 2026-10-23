@@ -5,6 +5,8 @@ from fastapi import APIRouter, File, Form, UploadFile
 from fastapi.responses import PlainTextResponse
 from pydantic import BaseModel
 
+from SYSTEM.core import media_kinds
+
 from .. import jobs, pipeline, store
 from ..api_models import Deleted, ProjectInfo, Status
 from ..api_status import build_status
@@ -22,14 +24,22 @@ async def create_project(
     aspect: str | None = Form(None),
     reusable_motion_templates: bool = Form(False),
     reusable_templates: bool | None = Form(None),
+    media_motion: int = Form(media_kinds.DEFAULT_MEDIA["motion"]),
+    media_image: int = Form(media_kinds.DEFAULT_MEDIA["image"]),
+    media_video: int = Form(media_kinds.DEFAULT_MEDIA["video"]),
+    ai_images: bool = Form(False),
 ):
     if not name.strip():
         raise ApiError(422, "invalid_name", "the project needs a name", "send a non-empty name")
+    try:
+        media = media_kinds.normalise({"motion": media_motion, "image": media_image, "video": media_video, "ai_images": ai_images})
+    except ValueError as e:
+        raise ApiError(422, "invalid_media_mix", str(e), "send media_motion, media_image and media_video as whole numbers that add up to 100") from e
     if aspect is not None and aspect not in store.ASPECTS:
         raise ApiError(422, "invalid_aspect", f"aspect must be one of {', '.join(store.ASPECTS)}", "send 9:16 or 16:9, or leave it out")
     ext = Path(audio.filename or "").suffix.lower()
     check_ext(f"audio{ext}", store.AUDIO_EXTS, "audio")
-    pdir = store.create(name, aspect, reusable_motion_templates=False)
+    pdir = store.create(name, aspect, reusable_motion_templates=False, media=media)
     dest = pdir / f"audio{ext}"
     try:
         await receive(audio, dest, store.MAX_AUDIO_BYTES)

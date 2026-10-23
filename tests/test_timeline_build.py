@@ -24,7 +24,7 @@ ASPECT = "16:9"
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    d, *_ = make(tmp_path_factory.mktemp("tlb"), with_vp=False)
+    d, *_ = make(tmp_path_factory.mktemp("tlb"))
     (d / "motion_plan.json").unlink()
     assert pipeline.execute(d, "motion-plan", pipeline.Ctx())["status"] == "ran"
     assert pipeline.execute(d, "motion-build", pipeline.Ctx())["status"] == "ran"

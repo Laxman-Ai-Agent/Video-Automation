@@ -13,6 +13,14 @@ class AudioRef(BaseModel):
     duration: float | None = None       # seconds; None for projects made before this was stored
 
 
+class MediaMix(BaseModel):
+    """How much of the video each family carries (a share of the time, the three sum to 100) and whether AI-made pictures are wanted."""
+    motion: int
+    image: int
+    video: int
+    ai_images: bool = False
+
+
 class ProjectInfo(BaseModel):
     id: str
     name: str
@@ -22,6 +30,7 @@ class ProjectInfo(BaseModel):
     use_images: bool = True                            # Use Images toggle: False = Motion-Only mode (no image stages)
     motion_branch: bool = False                        # the run has the Motion Planning -> Motion Generation branch (projects made before it existed: false)
     reusable_motion_templates: bool = True             # Reusable Motion Templates toggle: True = Template Mode, False = Custom Code Mode
+    media: MediaMix | None = None                      # the share of motion / image / video chosen at upload (SYSTEM/core/media_kinds.py); projects made before it existed have none (defaults apply)
     audio: AudioRef | None = None
 
 

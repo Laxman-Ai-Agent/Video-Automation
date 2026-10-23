@@ -8,6 +8,7 @@ import { SkillsPage } from './pages/SkillsPage';
 import { LlmPage } from './pages/LlmPage';
 import { WorkLogPage } from './pages/WorkLogPage';
 import { AudioInputPage } from './pages/AudioInputPage';
+import { DEFAULT_MEDIA, type MediaMix } from './services/mediaMix';
 import { DashboardPage } from './pages/DashboardPage';
 import { VisualAiEditorPage } from './components/visual-editor/VisualAiEditorPage';
 import { 
@@ -493,10 +494,11 @@ export const App: React.FC = () => {
     title: string, 
     audioFile: File, 
     aspect: string,
-    reusableTemplates: boolean = false
+    reusableTemplates: boolean = false,
+    media: MediaMix = DEFAULT_MEDIA
   ) => {
-    // 1. Create project with audio upload and visual settings
-    const res = await createProjectWithAudio(title, audioFile, aspect, reusableTemplates);
+    // 1. Create project with audio upload and visual settings (the media mix is set here and never changes afterwards)
+    const res = await createProjectWithAudio(title, audioFile, aspect, reusableTemplates, media);
     const newId = res.id || res.project_id || res.name;
     
     // 2. Refresh projects list

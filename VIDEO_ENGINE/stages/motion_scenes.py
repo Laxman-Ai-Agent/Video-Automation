@@ -2,6 +2,8 @@
 repairs. Split from motion_planning.py only to keep each file readable; it has no state of its own."""
 from __future__ import annotations
 
+from SYSTEM.core import media_kinds as mk
+
 from .motion_planning import EPS, MIN_DUR, PHASE_RANK, Run, fr, norm
 
 
@@ -9,8 +11,9 @@ def intensity(importance: float) -> str:
     return "energetic" if importance >= 0.7 else "restrained" if importance <= 0.5 else "moderate"
 
 
-def resolve(vps: dict | None, m: dict, images: bool, sid: str, run: Run) -> tuple[list[dict], dict[int, str], dict[int, str], dict[int, str]]:
-    """Stage 2: every Visual Plan element -> what draws it. Returns the elements and the ids to use as the target of each planned text / graphic / icon."""
+def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dict] | None = None) -> tuple[list[dict], dict[int, str], dict[int, str], dict[int, str]]:
+    """Stage 2: every Visual Plan element -> what draws it. Returns the elements and the ids to use as the target of each planned text / graphic / icon.
+    `assets` = the real media Asset Collection kept for this scene, by element_id."""
     texts = [(i, norm(t["text"])) for i, t in enumerate(m["texts"])]
     classic = [norm(c["text"]) for c in m.get("classic_texts", [])]
     hints = (vps or {}).get("motion_hints", [])
@@ -38,7 +41,7 @@ def resolve(vps: dict | None, m: dict, images: bool, sid: str, run: Run) -> tupl
         t, eid, req = e["type"], e["element_id"], bool(e["required"])
         el = {"element_id": eid, "source_element_id": eid, "type": t, "semantic_role": e["role"], "required": req, "registry_id": None, "registry_kind": None,
               "status": "unresolved", "fallback": None, "note": None}
-        if t in ("text", "label"):
+        if mk.is_text(t):
             c = norm(e.get("content") or "")
             idx = next((i for i, n in texts if n == c and i not in used), None)
             run.rule("text_kept", 2, sid, idx is None and c not in classic and bool(c), "error" if req else "warning", "required_text_missing",
@@ -52,12 +55,13 @@ def resolve(vps: dict | None, m: dict, images: bool, sid: str, run: Run) -> tupl
         elif t == "background":
             el.update(status="resolved", registry_id=atmos[0]["preset"] if atmos else "scene_background", registry_kind="graphic_preset" if atmos else "layer",
                       note="the atmosphere layer" if atmos else "the scene's own gradient background")
-        elif t in ("image", "video"):
-            run.rule("mode_asset", 2, sid, not images, "error" if req else "warning", "mode_asset_conflict", f"{sid}: {eid} is a {t} but this project has Use Images OFF")
-            if images:
-                slot = next((a["prompt_slot"] for a in (vps or {}).get("asset_requirements", []) if a["element_id"] == eid), None)
-                have = m.get("pictures", 0) > 0 or slot is not None
-                el.update(status="resolved" if have else "unresolved", registry_id=slot, registry_kind="asset_slot", note=None if have else "no asset requirement for it")
+        elif mk.is_real(t):                                             # a real picture / clip: drawn from the file Asset Collection kept, else the motion fallback the plan wrote for it
+            a, fb = (assets or {}).get(eid), (e.get("media") or {}).get("fallback") or "a flat motion graphic of the same idea"
+            if a:
+                el.update(status="resolved", registry_id=a["file"], registry_kind="real_media", note=f"a collected {a['kind']} ({a.get('credit') or 'no credit line'}), drawn by the scene's own code")
+            else:
+                el.update(status="fallback", fallback={"id": "motion_graphic", "kind": "flat_graphic", "reason": fb})
+                run.note(2, "error" if req and (e.get("media") or {}).get("must_be_real") else "info", "media_fallback", sid, f"{sid}: no real {t} was collected for {eid}: the scene draws {fb}")
         elif eid in drawn:
             d = drawn[eid]
             el.update(status=d["status"], registry_id=d["id"], registry_kind="primitive" if ":" in d["id"] else "graphic_preset", note=d["note"])

@@ -30,6 +30,7 @@ from pathlib import Path
 from typing import Any
 
 from . import asset_collection, config, llm_gateway, llm_review, shared_memory, skill_registry, store
+from SYSTEM.core import media_kinds as mk
 from SYSTEM.core.resilience import CREDENTIAL_KINDS, redact_secrets
 
 logger = logging.getLogger("motion_animation")
@@ -869,17 +870,26 @@ def generate_custom_motion_code(
                     "dependency": e.get("template_id") or e.get("preset") or "reusable_template",
                 })
 
-        texts = [e.get("content", "") for e in vp_sc.get("elements", []) if e.get("type") in ("text", "label") and e.get("content")]
+        texts = [e.get("content", "") for e in vp_sc.get("elements", []) if mk.is_text(e.get("type", "")) and e.get("content")]
         headline = texts[0] if texts else sc.get("meaning") or sc.get("concept") or f"Scene {sid}"
         subtext = texts[1] if len(texts) > 1 else ""
 
-        visual_els = [e for e in vp_sc.get("elements", []) if e.get("type") not in ("text", "label")]
-        # Real photos/clips Asset Collection found for this scene: elements the scene must draw (the same "drawn with its data-element-id" check applies to them)
-        media_els = [{"element_id": a["element_id"], "type": "video" if a["kind"] == "video" else "image", "role": "supporting", "required": True, "real_media": a,
-                      "visual_description": f"A real {'video clip' if a['kind'] == 'video' else 'screenshot of a reference page element' if a['kind'] == 'page' else 'photograph'} ({a['description'] or 'see real_media'}), already prepared; draw it, do not recreate it"}
-                     for a in asset_collection.assets_for_scene(pdir, sid)]
-        req_els = [*req_els, *(m["element_id"] for m in media_els)]
-        visual_els = [*visual_els, *media_els]
+        # A real element of the Visual Plan (type image or video) is drawn from the file Asset Collection kept for it (the same "drawn with its data-element-id" check applies); when none was
+        # collected, the scene draws the motion fallback the plan wrote for it instead.
+        assets = {a["element_id"]: a for a in asset_collection.assets_for_scene(pdir, sid)}
+        visual_els = []
+        for e in vp_sc.get("elements", []):
+            if mk.is_text(e.get("type", "")):
+                continue
+            a = assets.get(e.get("element_id"))
+            if mk.is_real(e.get("type", "")) and a:
+                what = "video clip" if a["kind"] == "video" else "screenshot of a reference page element" if a["kind"] == "page" else "photograph"
+                visual_els.append({**e, "real_media": a, "required": True, "visual_description": f"A real {what} ({a['description'] or e.get('visual_description')}), already prepared; draw it, do not recreate it"})
+            elif mk.is_real(e.get("type", "")):
+                visual_els.append({**e, "type": "graphic", "visual_description": (e.get("media") or {}).get("fallback") or e.get("visual_description", ""),
+                                   "constraints": [*e.get("constraints", []), "no real media was found for this element: draw it as a flat motion graphic"]})
+            else:
+                visual_els.append(e)
         transformed_visual_els, el_classifications = fallback_engine.transform_elements_for_codegen(visual_els)
 
         # Generate TSX via LLM Gateway with bounded repair loop
@@ -915,7 +925,7 @@ def generate_custom_motion_code(
         sha_hash = file_sha256(scene_file)
         gen_missing = set(gen_meta.get("missing_elements", []))
         visual_ids = {e.get("element_id") for e in visual_els}
-        implemented_els = [e["element_id"] for e in [*vp_sc.get("elements", []), *media_els] if e.get("element_id") and e["element_id"] not in gen_missing]
+        implemented_els = [e["element_id"] for e in vp_sc.get("elements", []) if e.get("element_id") and e["element_id"] not in gen_missing]
         missing_req = [i for i in req_els if i in visual_ids and i in gen_missing]
         for el_id in missing_req:
             w_msg = f"Scene {sid}: required element '{el_id}' is not drawn by the generated code."

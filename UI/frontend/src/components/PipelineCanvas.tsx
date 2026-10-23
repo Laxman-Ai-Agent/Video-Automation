@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import type { MediaMix } from '../services/mediaMix';
 import { 
   Play, 
   Pause, 
@@ -46,8 +47,9 @@ interface PipelineCanvasProps {
   onAnalyze?: (
     title: string, 
     audioFile: File, 
-    aspect: string, 
-    reusableTemplates: boolean
+    aspect: string,
+    reusableTemplates: boolean,
+    media: MediaMix
   ) => Promise<void>;
   activeTab?: 'flow' | 'approvals' | 'communication' | 'new-project' | 'projects';
   onTabChange?: (tab: 'flow' | 'approvals' | 'communication' | 'new-project' | 'projects') => void;
@@ -969,9 +971,9 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
         {activeTab === 'new-project' && (
           <div style={{ padding: '16px 20px' }}>
             <AudioInputPage
-              onAnalyze={async (title, audioFile, aspect, reusableTemplates) => {
+              onAnalyze={async (title, audioFile, aspect, reusableTemplates, media) => {
                 if (onAnalyze) {
-                  await onAnalyze(title, audioFile, aspect, reusableTemplates);
+                  await onAnalyze(title, audioFile, aspect, reusableTemplates, media);
                 }
                 handleTabChange('flow');
               }}

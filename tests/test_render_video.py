@@ -42,7 +42,7 @@ def encode(path: Path, w=1920, h=1080, frames=2104, fps=30, audio=True, src="tes
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory):
-    d, *_ = make(tmp_path_factory.mktemp("rv"), with_vp=False)
+    d, *_ = make(tmp_path_factory.mktemp("rv"))
     (d / "motion_plan.json").unlink()
     assert pipeline.execute(d, "motion-plan", pipeline.Ctx())["status"] == "ran"
     assert pipeline.execute(d, "motion-build", pipeline.Ctx())["status"] == "ran"

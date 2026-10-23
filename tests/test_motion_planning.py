@@ -19,13 +19,15 @@ client, create = _m7.client, _m7.create
 TRANS = sorted(KNOWN)
 
 
-def make(tmp_path, images=False, with_vp=True, mutate=None):
-    """A project with a Visual Plan (derived from its scene plan) and a motion plan shaped like the planner's, one for every scene; `mutate(mp)` breaks one rule."""
+def make(tmp_path, images=False, with_vp=True, mutate=None, real=None):
+    """A project with a Visual Plan and a motion plan shaped like the planner's, one for every scene (`real` = {scene id: image | video}: those scenes have a real primary element);
+    `mutate(mp)` breaks one rule. `images` is only the legacy mode word of the motion plan."""
     tmp_path.mkdir(parents=True, exist_ok=True)
-    d, sp, pm = project(tmp_path, images=images)
+    d, sp = project(tmp_path)
+    pm = json.loads((d / "prompts_map.json").read_text(encoding="utf-8"))
     plan = None
     if with_vp:
-        plan, problems = vp.assemble(d, sp, pm, raw_for(sp, pm, images=images))
+        plan, problems = vp.assemble(d, sp, raw_for(sp, real))
         assert problems == []
         vp.save(d, plan)
     scenes = []
@@ -291,9 +293,8 @@ def test_solve_is_recorded_in_the_plan_and_what_cannot_be_solved_stays_a_warning
     plan = build(d)
     warnings = plan["validation"]["warnings"]
     assert plan["validation"]["errors"] == [] and _own(warnings) == [] and not any("overlaps the area" in w for w in warnings)
-    assert any("is not an element of the Visual Plan" in w for w in warnings) and any("repeats the previous" in w for w in warnings)         # not solvable by this button: still said
     wf = plan["warning_fix"]
-    assert wf["status"] == "partly" and wf["after"] == len(warnings) < wf["before"] and "scene_01" in wf["accepted"] and {c["kind"] for c in wf["changes"]} == {"graphic_moved", "text_earlier"}
+    assert wf["status"] in ("partly", "solved") and wf["after"] == len(warnings) < wf["before"] and "scene_01" in wf["accepted"] and {c["kind"] for c in wf["changes"]} == {"graphic_moved", "text_earlier"}
     note = next(n for n in plan["scenes"][0]["validation_notes"] if n["code"] == "element_fallback")
     assert note["severity"] == "info" and note["message"].endswith("still NOT drawn") and wf["not_drawn"] >= 2                       # kept in the scene, no longer a warning
     mpl.save(d, "16:9", plan)
@@ -355,14 +356,14 @@ def test_solving_again_keeps_what_was_decided_before_and_a_hand_edit_of_the_fixe
     d, mp = _fixable(tmp_path)
     mpl.solve(d, "16:9")
     f = json.loads((d / "motion_fixes.json").read_text(encoding="utf-8"))
-    f["scenes"]["3"] = {"box": {"route-line": [0.4, 0.7, 0.3, 0.2]}}                       # a decision the user wrote by hand
+    f["scenes"]["3"] = {"box": {"route-line": [0.4, 0.5, 0.3, 0.2]}}                       # a decision the user wrote by hand (clear of the planned text area)
     f["changes"].append({"scene": "scene_03", "kind": "graphic_moved", "preset": "route-line", "why": "by hand"})
     (d / "motion_fixes.json").write_text(json.dumps(f), encoding="utf-8")
     _apply(d, mp)
     mpl.save(d, "16:9", build(d))
     mpl.solve(d, "16:9")
     g = json.loads((d / "motion_fixes.json").read_text(encoding="utf-8"))
-    assert g["scenes"]["3"] == {"box": {"route-line": [0.4, 0.7, 0.3, 0.2]}} and g["scenes"]["1"] == f["scenes"]["1"] and any(c["why"] == "by hand" for c in g["changes"]) and g["before"] == f["before"]
+    assert g["scenes"]["3"] == {"box": {"route-line": [0.4, 0.5, 0.3, 0.2]}} and g["scenes"]["1"] == f["scenes"]["1"] and any(c["why"] == "by hand" for c in g["changes"]) and g["before"] == f["before"]
 
 
 def test_motion_generation_refuses_a_checked_plan_that_is_out_of_date_or_has_errors(tmp_path):

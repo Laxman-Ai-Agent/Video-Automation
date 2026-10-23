@@ -54,7 +54,7 @@ export const CANONICAL_SUB_STAGES: Record<string, SubStageConfig[]> = {
     { id: 'plan_scene_objective', order: 2, label: 'Scene Objective & Visual Concept', description: 'Primary visual metaphor and layout concept design', weight: 0.13 },
     { id: 'plan_element_breakdown', order: 3, label: 'Element Breakdown', description: 'Assigning typography anchors, graphics, and backgrounds', weight: 0.13 },
     { id: 'plan_relationships', order: 4, label: 'Relationships & Visual Hierarchy', description: 'Establishing visual flow and component dependencies', weight: 0.13 },
-    { id: 'plan_mode_aware', order: 5, label: 'Mode-Aware Planning', description: 'Configuring layout for Motion-Only vs Image-Assisted mode', weight: 0.12 },
+    { id: 'plan_mode_aware', order: 5, label: 'Media Mix', description: 'Choosing real photos and clips against the motion / image / video shares set at upload', weight: 0.12 },
     { id: 'plan_audio_timing', order: 6, label: 'Audio Timing & Text', description: 'Synchronizing visual cues with spoken keyword timings', weight: 0.12 },
     { id: 'plan_style_continuity', order: 7, label: 'Style & Continuity', description: 'Enforcing consistent palette, styling & typography rhythm', weight: 0.12 },
     { id: 'plan_validation', order: 8, label: 'Validation & Confidence', description: 'Writing authoritative visual_planning.json and scene_plan.json', weight: 0.12 }

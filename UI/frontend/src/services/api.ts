@@ -1,3 +1,5 @@
+import { DEFAULT_MEDIA, MediaMix } from './mediaMix';
+
 export const API_BASE = ''; // proxied via Vite to http://127.0.0.1:8000
 
 export async function fetchHealth(): Promise<{ ok: boolean }> {
@@ -225,13 +227,18 @@ export async function createProjectWithAudio(
   name: string,
   audioFile: File,
   aspect: string = '16:9',
-  reusableTemplates: boolean = false
+  reusableTemplates: boolean = false,
+  media: MediaMix = DEFAULT_MEDIA
 ): Promise<any> {
   const formData = new FormData();
   formData.append('name', name);
   formData.append('audio', audioFile);
   formData.append('aspect', aspect);
   formData.append('reusable_motion_templates', reusableTemplates ? 'true' : 'false');
+  formData.append('media_motion', String(media.motion));            // the shares of the video are set here and never change afterwards
+  formData.append('media_image', String(media.image));
+  formData.append('media_video', String(media.video));
+  formData.append('ai_images', media.ai_images ? 'true' : 'false');
 
   const res = await fetch(`${API_BASE}/projects`, {
     method: 'POST',
@@ -248,6 +255,16 @@ export async function createProjectWithAudio(
     throw new Error(msg);
   }
   return await res.json();
+}
+
+/** Asset Collection: what the Visual Plan asked for and what was collected for each request (GET /projects/{id}/assets). null when the project has none. */
+export async function fetchAssets(projectId: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/assets`);
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function createProject(title: string, aspectRatio: string = '16:9'): Promise<any> {

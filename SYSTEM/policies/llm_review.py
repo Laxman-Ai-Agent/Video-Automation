@@ -51,7 +51,7 @@ STAGE_DESCRIPTIONS: dict[str, str] = {
     "audio": "Audio Input Semantic & Narration Feasibility Review",
     "analyzer": "Audio Analyzer Transcript Accuracy & Bilingual Terminology Review",
     "segmentation": "Scene Segmentation Narrative Coherence & Boundary Review",
-    "planning": "Visual Planning Scene Plan & Image Prompt Quality Review",
+    "planning": "Visual Planning Scene Plan & Media Mix Quality Review",
     "assets": "Asset Collection Real-Media Relevance, Rights & Provenance Review",
     "motion_plan": "Motion Planning Kinetic Rhythm & Typography Layout Review",
     "motion_gen": "Motion Animation React/TSX Source Code & Composition Review",
@@ -343,6 +343,11 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                 payload["scenes_planned"] = len(vp.get("scenes", []))
                 payload["errors"] = vp.get("validation", {}).get("errors", [])
                 payload["warnings"] = vp.get("validation", {}).get("warnings", [])
+                payload["media_mix"] = vp.get("media_mix")                       # the shares chosen at upload against what the plan reached
+                payload["totals"] = vp.get("totals")
+                payload["scenes_overview"] = [{"scene": s.get("scene_id"), "meaning": (s.get("scene_objective") or {}).get("core_meaning"), "primary": s.get("hero"), "counts": s.get("counts"),
+                                               "real_media": [{"type": r.get("media_type"), "query": r.get("query"), "fallback": r.get("fallback")} for r in s.get("media_requirements", [])]}
+                                              for s in vp.get("scenes", [])]
             except Exception:
                 pass
     elif stage == "motion_plan":
@@ -798,8 +803,11 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         )
     elif stage == "planning":
         user_prompt += (
-            "- Evaluate visual plan prompts, thematic imagery, and visual diversity across scenes.\n"
-            "- Verify prompt coverage matches all planned scenes with zero blocking errors."
+            "- Evaluate the visual plan: does every scene show its narration's meaning, and is there visual diversity across scenes (motion graphics, real photos, real clips)?\n"
+            "- media_mix compares the shares the user chose at upload (target) with what the plan reached (actual). A mix that is off because the narration has too few things a camera can show is acceptable "
+            "when the plan says so; a real photo or clip chosen only as decoration, or a scene whose narration is a concrete filmable subject that is drawn although the user asked for more real media, is a finding.\n"
+            "- Every real element (scenes_overview[].real_media) needs a plain-English query that names what is visible (never a brand or a person) and a motion fallback.\n"
+            "- Verify all planned scenes are covered with zero blocking errors."
         )
     elif stage == "assets":
         user_prompt += (

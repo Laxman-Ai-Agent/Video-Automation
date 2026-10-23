@@ -45,14 +45,16 @@ def test_skills_installed_and_discoverable_in_skill_factory():
         assert skill_identifier in agent.metadata.skills, f"Skill {skill_identifier} not in VisualPlanningAgent metadata"
 
 
-def test_visual_planning_depth_layers_and_word_events_on_project():
-    """Verify that project 01-2f64 has depth layers and synchronized word animation events across all scenes."""
-    pdir = PROJECT_ROOT / "projects" / "01-2f64"
-    assert (pdir / "visual_planning.json").exists(), "visual_planning.json does not exist in project 01-2f64"
-
-    vp = json.loads((pdir / "visual_planning.json").read_text(encoding="utf-8"))
+def test_visual_planning_depth_layers_and_word_events_on_project(tmp_path):
+    """Verify that a visual plan has depth layers and synchronized word animation events across all scenes."""
+    import importlib
+    _v = importlib.import_module("test_visual_planning")
+    pdir, sp = _v.project(tmp_path)
+    plan, problems = visual_planning.assemble(pdir, sp, _v.raw_for(sp))
+    assert problems == []
+    vp = plan
     scenes = vp.get("scenes", [])
-    assert len(scenes) == 6, f"Expected 6 scenes, got {len(scenes)}"
+    assert len(scenes) == len(sp["scenes"]), f"Expected {len(sp['scenes'])} scenes, got {len(scenes)}"
 
     total_we = 0
     valid_depths = {"foreground", "midground", "background"}
@@ -93,7 +95,7 @@ def test_visual_planning_depth_layers_and_word_events_on_project():
 
 def test_semantic_lexicon_keyword_matching():
     """Verify semantic lexicon correctly categorizes key action verbs and narrative terms."""
-    from VIDEO_ENGINE.stages.visual_planning import SEMANTIC_LEXICON
+    from VIDEO_ENGINE.stages.visual_planning_rules import SEMANTIC_LEXICON
 
     test_words = [
         ("పుడుతోంది", "ignite_birth"),
@@ -115,10 +117,11 @@ def test_semantic_lexicon_keyword_matching():
         assert matched_intent == expected_intent, f"Word '{word}' mapped to {matched_intent}, expected {expected_intent}"
 
 
-def test_downstream_motion_planning_compatibility():
-    """Verify that downstream Motion Planning accepts the enhanced Visual Plan without blocking errors."""
-    pdir = PROJECT_ROOT / "projects" / "01-2f64"
+def test_downstream_motion_planning_compatibility(tmp_path):
+    """Verify that downstream Motion Planning accepts the Visual Plan (with real elements) without blocking errors."""
+    import importlib
+    pdir, sp, *_ = importlib.import_module("test_motion_planning").make(tmp_path / "proj", real={1: "image", 7: "video"})
     plan = motion_planning.build(pdir, "16:9", run_tests=False)
     assert plan is not None
     assert len(plan["validation"]["errors"]) == 0, f"Motion Planning encountered blocking errors: {plan['validation']['errors']}"
-    assert len(plan["scenes"]) == 6, f"Expected 6 scenes in motion plan, got {len(plan['scenes'])}"
+    assert len(plan["scenes"]) == len(sp["scenes"]), f"Expected {len(sp['scenes'])} scenes in motion plan, got {len(plan['scenes'])}"

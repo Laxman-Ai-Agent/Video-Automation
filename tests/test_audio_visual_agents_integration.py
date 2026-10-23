@@ -329,7 +329,6 @@ def test_visual_planning_structured_generation_via_gateway(sample_project):
                         }
                     ],
                     "element_relationships": [],
-                    "asset_requirements": [],
                     "motion_hints": [{"intent": "reveal_elements", "description": "spring reveal"}],
                     "continuity": {"motifs": [], "transition_intent": "smooth"},
                     "uncertainty": [],
@@ -368,7 +367,6 @@ def test_visual_planning_structured_generation_via_gateway(sample_project):
                         }
                     ],
                     "element_relationships": [],
-                    "asset_requirements": [],
                     "motion_hints": [{"intent": "show_flow_direction", "description": "flow nodes"}],
                     "continuity": {"motifs": [], "transition_intent": "connected"},
                     "uncertainty": [],
@@ -470,9 +468,9 @@ def test_visual_planning_gateway_repair_and_retry(sample_project):
         )
 
         res = adapter.execute(sample_project, req)
-    # the planner LLM failed: the plan is derived from the scene plan and says so (never claims the LLM made it); the stage's mandatory LLM review decides next
-    plan = json.loads((sample_project / "visual_planning.json").read_text(encoding="utf-8"))
-    assert res.status == "succeeded" and plan["source"] == "derived_from_scene_plan" and plan["needs_review"] is True and plan["llm"]["status"] != "applied"
+    # the planner LLM failed: nothing is derived in its place (the plan would claim what no planner judged); the stage fails with the cause
+    assert res.status == "failed" and "planner could not be asked" in res.summary and "Invalid JSON after retries" in res.summary
+    assert not (sample_project / "visual_planning.json").exists()
 
 
 # ------------------ TEST 9: Mandatory Review Gate Fails Closed on Blockers ------------------
@@ -489,6 +487,7 @@ def test_visual_planning_mandatory_review_gate(sample_project):
     )
 
     with patch("backend.artifact_contracts.validate_planning_artifacts"), \
+         patch("VIDEO_ENGINE.stages.visual_planning.load", return_value={"scenes": [], "stale": False}), \
          patch("backend.llm_review.is_stage_review_passed", return_value=(False, "Critical blocker: Safe zone layout violated", {"status": "blocked", "findings": [{"severity": "blocker"}]})):
 
         res = adapter.invoke(sample_project, req)

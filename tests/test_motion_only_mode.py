@@ -62,10 +62,10 @@ def with_plan(pid: str) -> Path:
     (pdir / "scene_plan.json").write_text(json.dumps(sp, ensure_ascii=False, indent=1), encoding="utf-8")
     def hint_main(raw):                                                 # a good planner answer says how its main drawn concept moves (Motion Planning draws a hinted graphic for it)
         for s in raw["scenes"]:
-            if any(e["element_id"] == "visual_main" for e in s["elements"]):
-                s["motion_hints"].insert(0, {"element_id": "visual_main", "intent": "show_connected_structure", "description": None})
-    raw = importlib.import_module("test_visual_planning").raw_for(sp, pm, images=store.uses_images(pdir), mutate=hint_main)
-    plan, problems = vp.assemble(pdir, sp, pm, raw)
+            if any(e["element_id"] == "gfx_main" for e in s["elements"]):
+                s["motion_hints"].insert(0, {"element_id": "gfx_main", "intent": "show_connected_structure", "description": None})
+    raw = importlib.import_module("test_visual_planning").raw_for(sp, mutate=hint_main)
+    plan, problems = vp.assemble(pdir, sp, raw)
     assert problems == [], problems
     vp.save(pdir, plan)                                                 # a Visual Plan, as Stage 4 leaves it (without one, Motion Planning warns and the warnings block the next stage)
     aspect = pipeline_view.aspect_of(pdir)

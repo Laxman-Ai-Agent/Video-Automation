@@ -9,7 +9,7 @@ import threading
 import time
 from pathlib import Path
 
-from SYSTEM.core import config
+from SYSTEM.core import config, media_kinds
 from SYSTEM.core.errors import ApiError
 
 ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_-]{0,39}$")     # slugs made here are lowercase; CLI projects (e.g. demo) also fit
@@ -62,7 +62,8 @@ def write_info(pdir: Path, info: dict) -> None:
 ASPECTS = ("9:16", "16:9")
 
 
-def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False) -> Path:
+def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None) -> Path:
+    media = media_kinds.normalise(media)                  # ValueError before anything is made: the shares are set here, at upload, and never change afterwards
     pid = slug(name)
     while (config.PROJECTS_DIR / pid).exists():
         pid = slug(name)
@@ -74,8 +75,14 @@ def create(name: str, aspect: str | None = None, reusable_motion_templates: bool
     info["use_images"] = False                            # Motion-Only: kept in project.json for the readers and fingerprints that include it
     info["motion_branch"] = True                          # new projects run the Motion Planning -> Motion Generation branch
     info["reusable_motion_templates"] = bool(reusable_motion_templates)
+    info["media"] = media
     write_info(pdir, info)
     return pdir
+
+
+def media(pdir: Path) -> dict:
+    """The media mix of the project: {"motion", "image", "video"} shares (sum 100) and "ai_images". Set at upload; a project made before it existed gets the defaults."""
+    return media_kinds.options(read_info(pdir))
 
 
 def motion_branch(pdir: Path) -> bool:

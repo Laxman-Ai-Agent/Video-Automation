@@ -22,7 +22,7 @@ from .promptgen import GenError
 from .validate import validate_project
 
 ENABLED = os.environ.get("AUTOPLAN", "1") != "0"
-STAGES = ("Translating the narration", "Writing the scene plan", "Checking the plan")
+STAGES = ("Translating the narration", "Writing the scene plan", "Checking the plan", "Planning the visuals")
 TRANSLATE_TIMEOUT, PLAN_TIMEOUT = 300, 900
 CODE_ROOT = Path(__file__).resolve().parent.parent
 AUDIO_NAMES = ("audio.mp3", "audio.wav", "audio.m4a")
@@ -30,7 +30,7 @@ AUDIO_NAMES = ("audio.mp3", "audio.wav", "audio.m4a")
 TRANSLATE_SYSTEM = ('Translate Telugu narration lines to clean English (keep the meaning, fix obvious ASR slips, keep the ids). '
                     'Output ONLY one JSON object: {"segments":[{"id":0,"en":"..."}]} with every id of the input. No markdown, no comments.')
 PLAN_SYSTEM = ("You plan a documentary video from an English narration. TEXT ONLY, English only, no images. Output ONLY one JSON object "
-               '{"scene_plan": {...}, "prompts_map": {...}, "visual_plan": {...}} that follows the given schemas exactly. No markdown, no comments, no extra keys.')
+               '{"scene_plan": {...}, "prompts_map": {...}} that follows the given schemas exactly. No markdown, no comments, no extra keys. (The visual plan is a separate step: Visual Planning.)')
 
 
 class _Kept(Exception):
@@ -55,7 +55,7 @@ def _json_from(text: str) -> dict:
     return data
 
 
-def _instructions(images: bool = True) -> str:
+def _instructions() -> str:
     """Steps 3-5 of the /plan command (scene splitting, scene_plan fields, prompts_map fields), plus the exact schemas and the pattern image counts."""
     plan_md = CODE_ROOT / ".claude" / "commands" / "plan.md"
     if not plan_md.exists():
@@ -66,7 +66,7 @@ def _instructions(images: bool = True) -> str:
         raise GenError("the planning instructions (.claude/commands/plan.md) were not found")
     patterns = (config.REMOTION_DIR / "src" / "patterns" / "images.json").read_text(encoding="utf-8")
     return (f"{text[a:b].strip()}\n\nPattern -> number of image slots:\n{patterns}\n\nscene_plan schema:\n{json.dumps(ScenePlan.model_json_schema())}\n\n"
-            f"prompts_map schema:\n{json.dumps(PromptsMap.model_json_schema())}\n\n{visual_planning.spec(images)}\nplan_input.txt:\n")
+            f"prompts_map schema:\n{json.dumps(PromptsMap.model_json_schema())}\n\nplan_input.txt:\n")
 
 
 # ---------- stage 1 ----------
@@ -145,7 +145,7 @@ def _publish(pdir: Path, d: Path, replace: bool = False) -> None:
         _backup(pdir)
     elif (pdir / "scene_plan.json").exists() or (pdir / "prompts_map.json").exists():
         raise _Kept()
-    for name in ("composition.json", "prompts.txt", visual_planning.FILE, "scene_plan.json", "prompts_map.json"):      # the file that makes the plan "ready" goes last
+    for name in ("composition.json", "prompts.txt", "scene_plan.json", "prompts_map.json"):      # the file that makes the plan "ready" goes last
         if (d / name).exists():
             tmp = pdir / (name + ".tmp")
             shutil.copyfile(d / name, tmp)
@@ -155,27 +155,15 @@ def _publish(pdir: Path, d: Path, replace: bool = False) -> None:
 def _plan(pdir: Path, replace: bool = False) -> None:
     pi = plan_input.build(pdir)
     (pdir / "plan_input.txt").write_text(pi, encoding="utf-8")
-    asked = _instructions(store.uses_images(pdir)) + pi
+    asked = _instructions() + pi
     answer = promptgen.run_claude(asked, system=PLAN_SYSTEM, timeout=PLAN_TIMEOUT)
-    promptgen._record(pdir, done=2, current=3)                                  # the answer is here: what follows is checking (the legacy checks, then stages 6-8 of the visual plan)
+    promptgen._record(pdir, done=2, current=3)                                  # the answer is here: what follows is checking (the scene plan and the prompts against the legacy checks)
     d = Path(tempfile.mkdtemp(prefix="autoplan-"))
     try:
         for attempt in (0, 1):
             try:
                 data = _json_from(answer)
                 errors = _stage(pdir, data["scene_plan"], data["prompts_map"], d)
-                if not errors:                                                  # the visual plan of the same answer; without one (or after a failed retry) it is derived and flagged
-                    vp, problems = visual_planning.assemble(pdir, data["scene_plan"], data["prompts_map"], data.get("visual_plan"), plan_dir=d)
-                    if problems and not attempt:
-                        errors = [f"visual_plan: {m}" for m in problems[:8]]
-                    elif problems:                                              # Claude's visual plan failed twice: the plan derived from the (valid) scene plan, flagged; if even that is invalid nothing is published
-                        derived, again = visual_planning.assemble(pdir, data["scene_plan"], data["prompts_map"], None, plan_dir=d)
-                        if again:
-                            errors = [f"visual_plan: {m}" for m in again[:8]]
-                        derived["llm"] = {"status": "rejected", "problems": problems[:6], "scenes_from_llm": 0}
-                        vp = derived
-                    if not errors:
-                        visual_planning.save(d, vp)
             except (GenError, KeyError, TypeError) as e:
                 errors = [f"the answer needs both scene_plan and prompts_map as JSON objects ({e})"]
             if not errors:
@@ -195,6 +183,8 @@ def _generate(pdir: Path, replace: bool = False) -> None:
     _translate(pdir)
     promptgen._record(pdir, current=2, done=1)
     _plan(pdir, replace)
+    promptgen._record(pdir, current=4, done=3)
+    visual_planning.run(pdir)                                           # the visuals of the scene plan that was just published (the planner call of Visual Planning, its own checks)
 
 
 def _begin(pdir: Path) -> None:
@@ -214,12 +204,12 @@ def run(pdir: Path, replace: bool = False) -> None:
         promptgen._running[str(pdir)] = threading.current_thread()
     try:
         _generate(pdir, replace)
-        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+        promptgen._record(pdir, state="done", done=len(STAGES), current=None, error=None, finished=review.now())
     except _Kept:
-        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+        promptgen._record(pdir, state="done", done=len(STAGES), current=None, error=None, finished=review.now())
     except Exception as e:
         stage = promptgen.state(pdir).get("current") or 1
-        err_msg = f"{STAGES[min(stage, 3) - 1]}: {e}"
+        err_msg = f"{STAGES[min(stage, len(STAGES)) - 1]}: {e}"
         promptgen._record(pdir, state="failed", error=err_msg, current=None, finished=review.now())
         raise GenError(err_msg) from e
     finally:
@@ -242,7 +232,7 @@ def _work(pdir: Path, replace: bool = False) -> None:
     try:
         _generate(pdir, replace)
         llm_review.run_stage_llm_review(pdir, "planning")
-        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+        promptgen._record(pdir, state="done", done=len(STAGES), current=None, error=None, finished=review.now())
         try:
             from SYSTEM.agents.shared import communication
             from SYSTEM.agents.shared.contracts import ArtifactRef
@@ -281,10 +271,10 @@ def _work(pdir: Path, replace: bool = False) -> None:
         except Exception:
             pass
     except _Kept:
-        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+        promptgen._record(pdir, state="done", done=len(STAGES), current=None, error=None, finished=review.now())
     except GenError as e:
         stage = promptgen.state(pdir).get("current") or 1
-        err_msg = f"{STAGES[min(stage, 3) - 1]}: {e}"
+        err_msg = f"{STAGES[min(stage, len(STAGES)) - 1]}: {e}"
         promptgen._record(pdir, state="failed", error=err_msg, current=None, finished=review.now())
         try:
             from SYSTEM.agents.shared import communication
@@ -293,7 +283,7 @@ def _work(pdir: Path, replace: bool = False) -> None:
                 stage_id="planning",
                 sender_agent_id="visual_planning",
                 recipient_agent_ids=["main_orchestrator"],
-                content=f"Visual Planning execution failed at stage {stage} ({STAGES[min(stage, 3) - 1]}): {e}",
+                content=f"Visual Planning execution failed at stage {stage} ({STAGES[min(stage, len(STAGES)) - 1]}): {e}",
                 status="failed",
                 metadata={"error": err_msg, "stage": stage},
             )

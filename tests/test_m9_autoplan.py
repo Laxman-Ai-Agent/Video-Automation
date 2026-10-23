@@ -12,6 +12,7 @@ from pathlib import Path
 
 import pytest
 
+from VIDEO_ENGINE.stages import visual_planning
 from backend import autoplan, plan_checks, promptgen  # plan_checks is imported now: it reads VIDEO_ENGINE/remotion/src/patterns/images.json when first imported
 
 _m7 = importlib.import_module("test_m7")
@@ -28,10 +29,13 @@ class Llm:
         self.during = None
 
     def __call__(self, user, system=promptgen.SYSTEM, timeout=0):
-        stage = "translate" if system == autoplan.TRANSLATE_SYSTEM else "plan"
+        stage = "translate" if system == autoplan.TRANSLATE_SYSTEM else "visual" if system == visual_planning.VISUAL_SYSTEM else "plan"
         self.calls.append(stage)
         if self.gate:
             self.gate.wait(5)
+        if stage == "visual":                # the Visual Planning call over the scene plan that was just published (within the shares of the default 60/30/10: one ask)
+            _v = importlib.import_module("test_visual_planning")
+            return json.dumps({"visual_plan": _v.raw_for(json.loads((FIXTURE / "scene_plan.json").read_text(encoding="utf-8")), _v.REAL)})
         if self.during and stage == "plan":
             self.during()
         if self.fail.get(stage, 0) > 0:
@@ -107,9 +111,9 @@ def test_planning_runs_on_the_run_request_and_builds_the_plan_files(auto):
     c, llm = auto
     pid, pdir = upload_and_transcribe(c)
     g = settle(c, pid)
-    assert g["kind"] == "plan" and g["state"] == "done" and g["done"] == g["total"] == 3 and g["error"] is None
+    assert g["kind"] == "plan" and g["state"] == "done" and g["done"] == g["total"] == 4 and g["error"] is None
     assert all((pdir / f).exists() for f in (*PLAN_FILES, "translation.json", "transcript_en.json", "plan_input.txt"))
-    assert llm.calls == ["translate", "plan"]
+    assert llm.calls == ["translate", "plan", "visual"]
     r = c.get(f"/projects/{pid}/review").json()
     assert r["plan_ready"] is True and r["gates"]["analysis"]["approved"] is False       # the analysis still waits for the user
     assert r["analysis"]["scenes"] and "generated_for" not in (pdir / "review.json").read_text(encoding="utf-8")   # no prompt was written
@@ -131,7 +135,7 @@ def test_progress_is_visible_while_it_runs(auto):
         if g["state"] == "running":
             break
         time.sleep(0.05)
-    assert g["state"] == "running" and g["kind"] == "plan" and g["total"] == 3 and g["current"] == 1
+    assert g["state"] == "running" and g["kind"] == "plan" and g["total"] == 4 and g["current"] == 1
     llm.gate.set()
     assert settle(c, pid)["state"] == "done"
 
@@ -152,12 +156,12 @@ def test_retry_continues_without_repeating_finished_work_and_without_a_second_jo
     llm.fail["plan"] = 1
     pid, pdir = upload_and_transcribe(c)
     settle(c, pid)
-    assert llm.calls == ["translate", "plan"]
+    assert llm.calls == ["translate", "plan"]                                           # the plan failed once: nothing was planned over it
     r = c.post(f"/projects/{pid}/visual-planning/run")
     assert r.status_code == 202 and r.json()["kind"] == "plan"
     g = settle(c, pid)
     assert g["state"] == "done" and all((pdir / f).exists() for f in PLAN_FILES)
-    assert llm.calls == ["translate", "plan", "plan"]                                  # the translation was not asked again
+    assert llm.calls == ["translate", "plan", "plan", "visual"]                                  # the translation was not asked again
     again = c.post(f"/projects/{pid}/visual-planning/run")                                 # the plan exists: only the visual plan is made over it, the scene plan is not planned again
     assert again.status_code == 202 and llm.calls[:3] == ["translate", "plan", "plan"] and llm.calls.count("translate") == 1
     settle(c, pid)
@@ -181,7 +185,7 @@ def test_a_plan_that_fails_the_checks_is_corrected_once_and_a_second_failure_pub
     c, llm = auto
     llm.problems += [["scene 2: 3 prompts but pattern 'hero_only' shows 1 images"], []]
     pid, pdir = upload_and_transcribe(c)
-    assert settle(c, pid)["state"] == "done" and llm.calls == ["translate", "plan", "plan"]
+    assert settle(c, pid)["state"] == "done" and llm.calls == ["translate", "plan", "plan", "visual"]
 
     llm.problems += [["coverage: first scene starts at 1"], ["coverage: first scene starts at 1"]]
     pid2, pdir2 = upload_and_transcribe(c)

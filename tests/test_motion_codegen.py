@@ -28,7 +28,7 @@ make_project = _mp.make
 
 
 def make_off_project(pdir):
-    d, *_ = _g.make(pdir, with_vp=False)
+    d, *_ = _g.make(pdir)
     (d / "motion_plan.json").unlink()
     store.set_reusable_motion_templates(d, False)
     pipeline.execute(d, "motion-plan", pipeline.Ctx())

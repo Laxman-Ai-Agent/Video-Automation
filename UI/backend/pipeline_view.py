@@ -232,7 +232,7 @@ def build(pid: str) -> dict:
         else:
             passed, reason, rev = llm_review.is_stage_review_passed(pdir, "planning", aspect)
             if passed:
-                stages.append(_stage("planning", "Visual Planning", "completed", "scene plan, visual plan and image prompts ready (LLM reviewed)"))
+                stages.append(_stage("planning", "Visual Planning", "completed", "scene plan and visual plan (motion / image / video mix) ready (LLM reviewed)"))
             elif reason in ("llm_review_blocked", "llm_review_has_blockers"):
                 stages.append(_stage("planning", "Visual Planning", "failed", f"LLM visual plan review blocked: {rev['summary'] if rev else reason}", action={"kind": "retry_plan", "label": "Retry"}))
             elif reason == "llm_review_needs_review":

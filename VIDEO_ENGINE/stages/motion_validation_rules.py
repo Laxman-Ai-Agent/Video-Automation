@@ -7,6 +7,8 @@ import json
 import wave
 from pathlib import Path
 
+from SYSTEM.core import media_kinds as mk
+
 from . import config, motion_generation as mg, motion_gen_report as mgr, motion_planning as mp, scene_segmentation, store, visual_planning
 from .motion_gen_rules import SAFE, _box_rect, _item_box, _outside, _share
 from .motion_validation import EMPHASIS_TOLERANCE_S, EPS, V, sha
@@ -38,12 +40,8 @@ class X:
         self.vp, self.seg, self.mplan, self.comp, self.fixes = raw.get("visual_plan"), raw.get("segmentation"), raw.get("motion_plan"), raw.get("composition"), raw.get("fixes")
         self.plan = mp.load(pdir, aspect) if "motion_planning" in raw else None
         self.gen = mgr.load(pdir, aspect) if "motion_generation" in raw else None
-        # A project made before Scene Segmentation / the stored Visual Plan existed has a Visual Plan DERIVED from its scene plan (the motion plan says so). It is checked, but said: never silently.
-        pv = (self.plan or {}).get("visual_plan") or {}
-        self.derived = bool(self.plan and (not pv.get("file") or "derived" in str(pv.get("source", ""))) and self.seg is None)
-        if self.derived and self.vp is None:
-            self.vp = visual_planning.load(pdir)
-            self.derived = self.vp is not None
+        # A project whose Visual Plan had no Scene Segmentation to follow (its `source_segmentation` is null: the scene plan is the only source of the scene boundaries) is checked, but said: never silently.
+        self.derived = bool(self.plan and self.vp is not None and self.seg is None and not self.vp.get("source_segmentation"))
         if "motion_planning" in raw:
             try:
                 mp.PlanM.model_validate(raw["motion_planning"])
@@ -144,8 +142,8 @@ def stage_input_provenance(x: X, v: V) -> None:
         if role in ("fixes", "motion_template_selection", "motion_animation") and not p.exists():
             continue                                                               # optional / backward compatible for legacy projects
         ok = p.exists()
-        legacy = x.derived and role in ("visual_plan", "segmentation")
-        v.check(S, "input.exists", ok, "warning" if legacy else "blocker", f"{p.name} is missing" + (" (a project made before it existed: the Visual Plan is derived from the scene plan, and the scene boundaries are the scene plan's, not checked against the narration)" if legacy else ""),
+        legacy = x.derived and role == "segmentation"
+        v.check(S, "input.exists", ok, "warning" if legacy else "blocker", f"{p.name} is missing" + (" (this project has no Scene Segmentation: the scene boundaries are the scene plan's, not checked against the narration)" if legacy else ""),
                 None, p.name, {"file": p.name, "legacy_derived": legacy}, OWNER_OF[role], f"make it in {OWNER_OF[role].replace('_', ' ')}")
         if ok:
             v.check(S, "input.parseable", role not in x.bad, "blocker", f"{p.name} cannot be read as its schema: {x.bad.get(role)}", None, p.name, {"file": p.name, "error": x.bad.get(role)}, OWNER_OF[role],
@@ -344,7 +342,7 @@ def stage_element_completeness(x: X, v: V) -> None:
         cs = next((s for s in x.scenes() if s["id"] == pls["plan_scene_id"]), None)
         owners = {l.get("elementId") for l in (cs or {}).get("layers", []) if l.get("elementId")}
         els = {(e.get("source_element_id") or e["element_id"]): e for e in pls["elements"]}
-        # without a stored Visual Plan the elements are the motion plan's own (derived from the scene plan): they are checked against the composition, but not against a Visual Plan that does not exist
+        # without Scene Segmentation the elements are the motion plan's own (it resolved them from the Visual Plan): they are checked against the composition
         for ve in ([{"element_id": e["element_id"], "type": e["type"], "required": e["required"]} for e in pls["elements"]] if x.derived else vs["elements"]):
             eid, req = ve["element_id"], bool(ve["required"])
             pe = els.get(eid)
@@ -586,7 +584,7 @@ def stage_audio_text_sync(x: X, v: V) -> None:
             ms = x.ms_by_id.get(pls["plan_scene_id"]) or {}
             grounded[pls["plan_scene_id"]] = ({mp.norm(e.get("content") or "") for e in vs["elements"] if e.get("content")} | {mp.norm(t["text"]) for t in ms.get("texts", [])}
                                               | {mp.norm(t.get("text", "") if isinstance(t, dict) else str(t)) for t in ms.get("classic_texts", [])})
-    planned = {pls["plan_scene_id"]: [(e["content"], bool(e.get("required"))) for e in vs["elements"] if e.get("content") and e.get("type") in ("text", "label")]
+    planned = {pls["plan_scene_id"]: [(e["content"], bool(e.get("required"))) for e in vs["elements"] if e.get("content") and mk.is_text(e.get("type", ""))]
                for vs in x.vp["scenes"] if (pls := x.ps_by_vid.get(vs["scene_id"]))}
     for s in x.scenes():
         sid = sid_of(s["id"])

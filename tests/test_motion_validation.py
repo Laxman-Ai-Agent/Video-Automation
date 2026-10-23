@@ -23,7 +23,7 @@ REASON = "accepted for this test run"
 
 @pytest.fixture(scope="module")
 def built(tmp_path_factory, llm_codegen_stub_module):
-    d, *_ = make(tmp_path_factory.mktemp("val"), with_vp=False)
+    d, *_ = make(tmp_path_factory.mktemp("val"))
     (d / "motion_plan.json").unlink()
     assert pipeline.execute(d, "motion-plan", pipeline.Ctx())["status"] == "ran"
     assert pipeline.execute(d, "motion-build", pipeline.Ctx())["status"] == "ran"

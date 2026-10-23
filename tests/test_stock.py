@@ -16,6 +16,22 @@ COMMONS = {"query": {"pages": {"1": {"pageid": 1, "title": "File:Nile.jpg", "ima
     "descriptionurl": "https://commons.wikimedia.org/wiki/File:Nile.jpg", "thumburl": "https://upload.wikimedia.org/t/Nile.jpg", "width": 1600, "height": 900,
     "extmetadata": {"LicenseShortName": {"value": "CC BY-SA 4.0"}, "Artist": {"value": "<a href='x'>Ann</a>"}, "LicenseUrl": {"value": "https://cc/by-sa"}}}]},
     "2": {"pageid": 2, "title": "File:Nc.jpg", "imageinfo": [{"thumburl": "https://upload.wikimedia.org/t/Nc.jpg", "extmetadata": {"LicenseShortName": {"value": "CC BY-NC 4.0"}}}]}}}}
+OPENVERSE = {"results": [
+    {"id": "ov1", "title": "Office", "creator": "Gus", "license": "by", "license_version": "2.0", "license_url": "https://creativecommons.org/licenses/by/2.0/", "url": "https://live.staticflickr.com/1/a_b.jpg",
+     "foreign_landing_url": "https://www.flickr.com/photos/1/2", "width": 1024, "height": 683, "source": "flickr", "attribution": "\"Office\" by Gus is licensed under CC BY 2.0."},
+    {"id": "ov2", "title": "NoDerivs", "creator": "X", "license": "by-nd", "url": "https://live.staticflickr.com/1/nd.jpg", "width": 1024, "height": 683},                    # no changes allowed: skipped
+    {"id": "ov3", "title": "Elsewhere", "creator": "Y", "license": "cc0", "url": "https://evil.example.org/x.jpg", "width": 2000, "height": 1000},                         # a host that is not permitted: skipped
+    {"id": "ov4", "title": "Public", "creator": "", "license": "pdm", "url": "https://live.staticflickr.com/4/p.jpg", "width": 1024, "height": 768, "source": "flickr"},
+    {"title": "malformed"}]}
+ARCHIVE_SEARCH = {"response": {"docs": [
+    {"identifier": "short-cc", "title": "A short film", "creator": "Zed", "licenseurl": "https://creativecommons.org/licenses/by/4.0/"},
+    {"identifier": "nc-film", "title": "NC film", "licenseurl": "https://creativecommons.org/licenses/by-nc/4.0/"},                                                             # not commercial: skipped
+    {"identifier": "long-pd", "title": "A long recording", "licenseurl": "https://creativecommons.org/publicdomain/mark/1.0/"},                                                  # too long to judge by its title: skipped
+    {"identifier": "pd-mark", "title": "Old city", "creator": ["A", "B"], "licenseurl": "https://creativecommons.org/publicdomain/mark/1.0/"}]}}
+ARCHIVE_META = {"short-cc": {"files": [{"name": "film.mp4", "format": "h.264", "width": "640", "height": "480", "length": "120.5"}, {"name": "film.ogv", "format": "Ogg Video", "width": "640"},
+                                       {"name": "film_512kb.mp4", "format": "512Kb MPEG4", "width": "320", "length": "120.5"}]},
+                "long-pd": {"files": [{"name": "rec.mp4", "format": "h.264", "width": "640", "height": "480", "length": "7200"}]},
+                "pd-mark": {"files": [{"name": "city.mp4", "format": "MPEG4", "width": "480", "height": "360", "length": "300"}]}}
 PEXELS = {"photos": [{"id": 7, "url": "https://pexels.com/photo/7", "photographer": "Bo", "width": 4000, "height": 2250, "alt": "river",
                       "src": {"large2x": "https://images.pexels.com/7.jpg", "medium": "https://images.pexels.com/7m.jpg"}}, {"id": 8}]}
 PIXABAY = {"hits": [{"id": 9, "pageURL": "https://pixabay.com/p/9", "user": "Cy", "largeImageURL": "https://pixabay.com/9.jpg", "imageWidth": 3000, "imageHeight": 2000, "tags": "sea"}]}
@@ -26,9 +42,9 @@ def net(monkeypatch):
     monkeypatch.setenv("PEXELS_API_KEY", "k1")
     monkeypatch.setenv("PIXABAY_API_KEY", "k2")
 
-    def fake(url, headers=None):
+    def fake(url, headers=None, **kw):
         host = url.split("/")[2]
-        data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY}[host]
+        data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.openverse.org": OPENVERSE, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY}[host]
         return json.dumps(data).encode()
     monkeypatch.setattr(stock, "_open", fake)
 
@@ -37,7 +53,7 @@ def test_every_adapter_normalises_to_one_schema_and_keeps_rights(net):
     found, state = stock.search("river sunrise", "16:9")
     by = {a.provider: a for a in reversed(found)}      # the best-ranked result of each provider
     by["wikimedia"] = next(a for a in found if a.id == "wikimedia:1")
-    assert set(by) == {"nasa", "wikimedia", "pexels", "pixabay"} and all(s["ok"] for s in state.values())
+    assert set(by) == {"nasa", "wikimedia", "openverse", "pexels", "pixabay"} and all(s["ok"] for s in state.values())
     assert by["pexels"].attribution_text == "Photo by Bo on Pexels" and by["pexels"].commercial_use_known is True and by["pexels"].source_page_url
     assert by["nasa"].commercial_use_known is None and "credit" in by["nasa"].license_name.lower()             # unclear rights are never claimed as free
     assert by["wikimedia"].author == "Ann" and by["wikimedia"].license_name == "CC BY-SA 4.0" and by["wikimedia"].commercial_use_known is True
@@ -55,31 +71,31 @@ def test_missing_keys_mark_a_provider_unavailable_without_a_request(monkeypatch)
     monkeypatch.delenv("PEXELS_API_KEY", raising=False)
     monkeypatch.delenv("PIXABAY_API_KEY", raising=False)
     calls = []
-    monkeypatch.setattr(stock, "_open", lambda url, headers=None: calls.append(url) or json.dumps(NASA if "nasa" in url else COMMONS).encode())
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: calls.append(url) or json.dumps(NASA if "nasa" in url else COMMONS).encode())
     found, state = stock.search("x")
     assert not state["pexels"]["ok"] and "PEXELS_API_KEY" in state["pexels"]["error"] and not any("pexels" in c or "pixabay" in c for c in calls)
     status = stock.providers_status()
     assert status["nasa"]["available"] and not status["pixabay"]["available"] and "PIXABAY_API_KEY" in status["pixabay"]["reason"]
-    assert {a.provider for a in found} == {"nasa", "wikimedia"}
+    assert {a.provider for a in found} == {"nasa", "wikimedia"} or {a.provider for a in found} == {"nasa", "wikimedia", "openverse"}
 
 
 def test_one_failing_provider_never_fails_the_search(net, monkeypatch):
     real = stock._open
 
-    def flaky(url, headers=None):
+    def flaky(url, headers=None, **kw):
         if "pexels" in url:
             raise stock.StockError("rate limit reached, try again later")
         if "nasa" in url:
             return b"{ not json"
-        return real(url, headers)
+        return real(url, headers, **kw)
     monkeypatch.setattr(stock, "_open", flaky)
     found, state = stock.search("river")
     assert state["pexels"]["error"].startswith("rate limit") and not state["nasa"]["ok"] and state["pixabay"]["ok"]
-    assert {a.provider for a in found} == {"wikimedia", "pixabay"}
+    assert {a.provider for a in found} == {"wikimedia", "openverse", "pixabay"}
 
 
 def test_empty_results(monkeypatch):
-    monkeypatch.setattr(stock, "_open", lambda url, headers=None: b"{}")
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: b"{}")
     found, state = stock.search("nothing")
     assert found == [] and state["nasa"] == {"ok": True, "count": 0}
 
@@ -122,12 +138,12 @@ def test_http_errors_timeouts_and_retry(monkeypatch):
 
 def test_download_only_from_permitted_https_hosts_and_only_images(monkeypatch):
     png = b"\x89PNG\r\n\x1a\n" + b"0" * 20
-    monkeypatch.setattr(stock, "_open", lambda url, headers=None: png)
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: png)
     assert stock.download({"download_url": "https://images.pexels.com/a.png"}) == png
     for bad in ("http://images.pexels.com/a.png", "https://evil.example/a.png", "https://images.pexels.com.evil.example/a.png", "file:///etc/passwd", None):
         with pytest.raises(stock.StockError, match="permitted"):
             stock.download({"download_url": bad})
-    monkeypatch.setattr(stock, "_open", lambda url, headers=None: b"<html>not an image</html>")
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: b"<html>not an image</html>")
     with pytest.raises(stock.StockError, match="not an image"):
         stock.download({"download_url": "https://images.pexels.com/a.png"})
 
@@ -157,6 +173,10 @@ def vnet(monkeypatch):
     def fake(url, headers=None, limit=0):
         if url.endswith("collection.json"):
             return json.dumps(NASA_V_FILES).encode()
+        if url.startswith("https://archive.org/advancedsearch.php"):
+            return json.dumps(ARCHIVE_SEARCH).encode()
+        if url.startswith("https://archive.org/metadata/"):
+            return json.dumps(ARCHIVE_META[url.rsplit("/", 1)[1]]).encode()
         data = {"images-api.nasa.gov": NASA_V, "commons.wikimedia.org": COMMONS_V, "api.pexels.com": PEXELS_V, "pixabay.com": PIXABAY_V}[url.split("/")[2]]
         return json.dumps(data).encode()
     monkeypatch.setattr(stock, "_open", fake)
@@ -165,7 +185,7 @@ def vnet(monkeypatch):
 def test_video_adapters_pick_a_cpu_friendly_file_and_keep_rights(vnet):
     found, state = stock.search("harbour", "16:9", kind="video")
     by = {a.provider: a for a in found}
-    assert set(by) == {"nasa", "wikimedia", "pexels", "pixabay"} and all(s["ok"] for s in state.values()) and all(a.media_type == "video" for a in found)
+    assert set(by) == {"nasa", "wikimedia", "archive", "pexels", "pixabay"} and all(s["ok"] for s in state.values()) and all(a.media_type == "video" for a in found)
     assert by["pexels"].download_url == "https://videos.pexels.com/5-hd.mp4" and by["pexels"].duration_s == 12 and by["pexels"].attribution_text == "Video by Di on Pexels"      # not the 4K file, not webm
     assert by["pixabay"].download_url == "https://cdn.pixabay.com/3m.mp4" and by["pixabay"].commercial_use_known is True                                                  # the empty "large" slot is skipped
     assert by["nasa"].download_url == "https://images-assets.nasa.gov/video/V1/V1~medium.mp4" and by["nasa"].commercial_use_known is None                                # https, medium, no preview file
@@ -205,3 +225,38 @@ def test_commons_credits_are_short_and_readable():
     long = "A" * 200
     assert len(stock._clean_author(long)) <= 80 and stock._clean_author(long).endswith("…")
     assert stock._clean_author("Luca Galuzzi (Lucag)") == "Luca Galuzzi (Lucag)"
+
+
+# ---------- the providers that need no key: Openverse (photos) and the Internet Archive (videos) ----------
+def test_openverse_keeps_only_free_licences_that_allow_changes_on_permitted_hosts(net):
+    found, state = stock.search("office", "16:9")
+    ov = {a.provider_asset_id: a for a in found if a.provider == "openverse"}
+    assert state["openverse"]["ok"] and set(ov) == {"ov1", "ov4"}                                    # by-nd (no changes) and a host that is not permitted are skipped, so is the malformed item
+    a = ov["ov1"]
+    assert a.license_name == "CC BY 2.0" and a.commercial_use_known is True and a.download_url == "https://live.staticflickr.com/1/a_b.jpg" and a.author == "Gus"
+    assert a.attribution_text == '"Office" by Gus is licensed under CC BY 2.0.' and a.source_page_url == "https://www.flickr.com/photos/1/2"
+    assert ov["ov4"].license_name == "Public Domain Mark" and ov["ov4"].attribution_text == "flickr / Public Domain Mark"
+    assert stock.permitted_url(a.model_dump()) == a.download_url                                       # Flickr's host is on the download allowlist
+
+
+def test_internet_archive_videos_are_short_free_and_come_as_the_h264_file(vnet):
+    found, _ = stock.search("film", "16:9", kind="video")
+    ar = {a.provider_asset_id: a for a in found if a.provider == "archive"}
+    assert set(ar) == {"short-cc", "pd-mark"}                                                          # a non-commercial licence and a two-hour recording are skipped
+    a = ar["short-cc"]
+    assert a.download_url == "https://archive.org/download/short-cc/film.mp4" and a.duration_s == 120.5 and a.width == 640 and a.media_type == "video"
+    assert a.license_name == "CC BY 4.0" and a.commercial_use_known is True and a.attribution_text == "Zed / Internet Archive / CC BY 4.0"
+    assert ar["pd-mark"].license_name == "Public Domain Mark 1.0" and ar["pd-mark"].author == "" and stock.permitted_url(a.model_dump()) == a.download_url
+
+
+def test_archive_licences_allow_only_what_a_crop_or_a_dim_may_do():
+    ok = stock._archive_licence
+    assert ok("https://creativecommons.org/licenses/by/4.0/") == "CC BY 4.0" and ok("https://creativecommons.org/licenses/by-sa/3.0/") == "CC BY-SA 3.0"
+    assert ok("https://creativecommons.org/publicdomain/zero/1.0/") == "CC0 1.0" and ok("https://creativecommons.org/publicdomain/mark/1.0/") == "Public Domain Mark 1.0"
+    assert ok("https://creativecommons.org/licenses/by-nc/4.0/") is None and ok("https://creativecommons.org/licenses/by-nd/4.0/") is None and ok("") is None
+
+
+def test_the_slow_anonymous_openverse_query_gets_a_longer_timeout(monkeypatch):
+    seen = {}
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: seen.update(kw) or b'{"results": []}')
+    assert stock.openverse("x") == [] and seen == {"timeout": stock.OPENVERSE_TIMEOUT} and stock.OPENVERSE_TIMEOUT > stock.TIMEOUT
