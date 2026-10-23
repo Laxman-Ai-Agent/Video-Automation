@@ -206,17 +206,6 @@ def build(pdir: Path, progress=None) -> dict:
             add(warnings, S_PRE, "preprocessing_duration_changed", f"the 16 kHz copy is {derived}s, the original {dur}s")
     say(75)
     llm = (review or {}).get("llm") or {}
-    suspicious_patterns = [
-        re.compile(r"^\d+\.\s*$"),
-        re.compile(r".*ట్రిసే.*"),
-        re.compile(r".*కటింగే.*"),
-        re.compile(r".*సెంసర్.*"),
-        re.compile(r".*టెక్గి.*"),
-        re.compile(r".*స్మాట్\b.*"),
-    ]
-    raw_flagged_count = sum(1 for u in utterances for w in u["words"] if any(p.search(w["text"]) for p in suspicious_patterns))
-    if raw_flagged_count > 0:
-        add(warnings, S_LLM, "phonetic_loanwords_detected", f"{raw_flagged_count} word(s) appear to be distorted phonetic transliterations or noise artifacts and need LLM correction")
     if unresolved:
         add(warnings, S_LLM, "unresolved_words", f"{unresolved} uncertain word(s) were not corrected and need LLM review")
     if llm.get("status") in ("unavailable", "failed"):
@@ -257,7 +246,7 @@ def build(pdir: Path, progress=None) -> dict:
         (S_CONF, state(S_CONF) if review and conf.get("status") == "available" else "skipped",
          f"{flagged} word(s) below p={conf.get('threshold')} (Whisper's own probability)" if conf.get("status") == "available" else
          ("no word confidences were saved for this transcript (made before they were recorded); nothing is flagged" if review else no_review)),
-        (S_LLM, state(S_LLM, "warning" if (raw_flagged_count or unresolved) else ("completed" if llm.get("status") in ("applied", "cached") else "skipped")) if review else "skipped", llm_text),
+        (S_LLM, state(S_LLM, "warning" if unresolved else ("completed" if llm.get("status") in ("applied", "cached") else "skipped")) if review else "skipped", llm_text),
         (S_ALIGN, state(S_ALIGN),
          {"aligned_for_edits": f"{ck.get('edited_words')} corrected word(s) re-aligned against the original audio (forced alignment, model-inferred), cross-checked against the unchanged words; the others keep Whisper's timestamps",
           "partial": f"{ck.get('edited_words')} corrected word(s): some re-aligned, the rest ESTIMATED (not measured)",

@@ -101,11 +101,9 @@ def _fix_uncertain_words(pdir: Path, warnings: list[dict]) -> tuple[list[dict], 
         word_text = item.get("text", "")
         clean_word = word_text.strip(".,!?:;\"' ")
 
-        # 1. Recognized technical vocabulary term (exclude stray list numbers like '2.' and distorted phonetics)
+        # 1. Recognized technical vocabulary term (exclude stray list numbers like '2.')
         is_stray_number = bool(re.match(r"^\d+\.$", word_text.strip()))
-        from .transcript_review import _SUSPICIOUS_PHONETIC_RE
-        is_suspicious = bool(_SUSPICIOUS_PHONETIC_RE.search(word_text))
-        if not is_stray_number and not is_suspicious and (clean_word.lower() in terms or (clean_word.isdigit() and len(clean_word) < 6)):
+        if not is_stray_number and (clean_word.lower() in terms or (clean_word.isdigit() and len(clean_word) < 6)):
             changes.append({
                 "word": word_text,
                 "segment": sid,

@@ -1,12 +1,13 @@
-"""Stages 6-9 of the Audio Analyzer: technical vocabulary, confidence-based correction, raw vs corrected transcript (Claude), word timings of the corrected text.
+"""Stages 6-9 of the Audio Analyzer: technical vocabulary, uncertain words, the Claude check of every word, the final corrected transcript, word timings of the corrected text.
 
   transcript.json            the raw ASR output. NEVER edited.
   transcript_review.json     what this stage found and did: vocabulary, uncertain words, the Claude answer's corrections (applied or rejected, each with a reason), what stays unresolved.
   transcript_corrected.json  the ONE final, LLM-verified transcript (same schema as transcript.json, so every consumer reads it through load_transcript()): written whenever the LLM checked
                              the transcript, with its corrections applied and re-aligned, or with the same words when it found nothing to fix. Not written when the LLM did not check it.
 
-Rules: confidence is Whisper's own word probability (`p`), never made up; without it (older transcripts) nothing is flagged and the stage says so. Claude may only change words in a
-span that touches a flagged word, the "from" text must match the raw words exactly, and nothing it says is applied without these checks. Words it writes get `edit: "llm"` and an
+Rules: confidence is Whisper's own word probability (`p`), never made up; without it (older transcripts) nothing is flagged and the stage says so. Claude checks every word (the request carries
+`p` and the word times as its audio evidence) and may replace a span of at most MAX_SPAN words, the "from" text must match the raw words exactly, and nothing it says is applied without these
+checks. Words it writes get `edit: "llm"` and an
 timing re-derived against the ORIGINAL audio: the edited segment's text is force-aligned with faster-whisper's own cross-attention alignment (the method behind Whisper's word
 timestamps, so the result is model-inferred, never "ground truth") and accepted only if the segment's unchanged words land within MAX_SHIFT of the timestamps Whisper measured
 for them; otherwise the new words keep an ESTIMATED timing inside the span of the words they replace and the stage reports a warning. Nothing keeps a stale timestamp of a word
@@ -33,60 +34,6 @@ ONSET_GAP = 0.15                  # seconds: a corrected word whose aligned star
 PAD = 0.3                         # seconds of audio around an edited segment given to the aligner
 
 SYSTEM = (
-    "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
-    "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p, and s/e: the second the word starts and ends in the audio). "
-    "Fix mis-heard words, phonetically distorted words, noise artifacts, and convert English words written in Telugu script into correct English spelling. "
-    "Guidelines: "
-    "1. Convert English words and technical loanwords written in Telugu script into correct standard English spelling. "
-    "   Examples: "
-    "   - 'స్మార్ట్' -> 'smart' "
-    "   - 'సెన్సార్స్' -> 'sensors' "
-    "   - 'బ్యాటరీ' -> 'battery' "
-    "   - 'మినియేచరైజేషన్' -> 'miniaturization' "
-    "   - 'కటింగ్ ఎడ్జ్' -> 'cutting edge' "
-    "   - 'ఐ ట్రాకింగ్' -> 'eye tracking' "
-    "   - 'టెక్నాలజీస్' -> 'technologies' "
-    "   - 'ఇంటిగ్రేషన్' -> 'integration' "
-    "   - 'డిస్ప్లేస్' -> 'displays' "
-    "   - 'మైక్రో ఎల్ఈడీ' -> 'micro LED' "
-    "   - 'ఫ్యూచర్ లెవెల్' -> 'future level' "
-    "   - 'టాప్ టెక్ జెయింట్స్' -> 'top tech giants' "
-    "   - 'ఫైనల్ ఫేజ్ డెవలప్మెంట్' -> 'final phase development' "
-    "   - 'స్టేబుల్' -> 'stable' "
-    "   - 'టెస్టింగ్' -> 'testing' "
-    "   - 'ప్రోటోటైప్స్' -> 'prototypes' "
-    "   - 'అడ్వాన్స్డ్ వెర్షన్స్' -> 'advanced versions' "
-    "   - 'రియల్ వరల్డ్' -> 'real world' "
-    "   - 'హోలోగ్రామ్ విజువల్స్' -> 'hologram visuals' "
-    "   - 'అల్ట్రా థిన్' -> 'ultra thin' "
-    "   - 'వాయిస్ కమాండ్స్' -> 'voice commands' "
-    "   - 'రెస్పాండ్' -> 'respond' "
-    "   - 'సిస్టమ్స్' -> 'systems' "
-    "   - 'వర్కింగ్ స్టేజ్' -> 'working stage' "
-    "   - 'ఎక్స్పర్ట్స్' -> 'experts' "
-    "   - 'ఇయర్స్' -> 'years' "
-    "   - 'పవర్డ్' -> 'powered' "
-    "   - 'మాస్ ప్రొడక్షన్' -> 'mass production' "
-    "2. Genuine Telugu words MUST remain in Telugu script. Never convert or translate genuine Telugu words into English! "
-    "   Examples: 'మన', 'కావడానికి', 'ఉంటుంది', 'భవిష్యత్తు', 'వైపు', 'దూసుకుపోతున్న', 'ఇప్పుడు', 'లో', 'ఉన్నాయి', 'కానీ', 'ఇవింకా', 'నిజమైన', 'మాత్రం', 'త్వరలోనే', 'అందుబాటులోకి', 'వస్తాయి', 'లాంటి', 'ప్రపంచంలోని', 'అంతా', 'పని చేస్తున్నారు', 'చివరి', 'జరుగుతోంది', 'కాదు', 'ఇప్పటికే', 'కూడా', 'కళ్ల ముందే', 'చూపించే', 'వెంటనే', 'అయ్యే', 'అన్నీ', 'చేరుకున్నాయి', 'చెప్తున్నట్లుగా', 'ఇంకో', 'రెండు', 'మూడు', 'వెళ్లి', 'సాధారణ', 'ప్రజలకు', 'రానుంది' must ALL stay in Telugu. "
-    "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
-    "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
-    "5. Keep the speaker's meaning; never add words that were not spoken; never summarize or translate whole sentences; when unsure change nothing. "
-    "6. Telugu spelling and grammar: use the whole sentence to fix misspelled, mis-heard or ungrammatical Telugu words and endings, and join words that Telugu grammar writes as one. "
-    "   Examples: 'ఇంక' -> 'ఇంకా', 'మనుం' -> 'మనం', 'ఉండాల అంటే' -> 'ఉండాలంటే' (two words become one: ONE correction from_index..to_index whose 'to' is the single joined word). "
-    "7. English words: write them in standard English spelling inside the Telugu sentence and keep the Telugu ending as a separate Telugu word: 'ఫ్యూచర్ లో' -> 'future లో', 'సేఫ్గా' -> 'safe గా'. "
-    "   Decide the capital letters from the sentence and the situation, like a careful editor: proper nouns, company, product and brand names and acronyms are capitalized (ChatGPT, Gemini, AI), and so is a word that "
-    "starts a sentence or is clearly a title or an emphasized term ('Future' when the sentence stresses it); ordinary English words in the middle of a sentence stay lowercase ('smart phones', 'integration'). "
-    "   Do this ONLY when the Telugu-script word is clearly the sound of an English word spoken in English; "
-    "never turn a genuine Telugu word into English, never translate, and never force an English word that is already in Latin script into Telugu. "
-    "8. Punctuation: put the missing sentence-ending mark on the last word of a sentence ('.', or '?' for a question): 'చేయాలి' -> 'చేయాలి?'. "
-    "9. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
-    "probably mis-heard or noise; a confident word that fits its time is probably right. Change a word only when the evidence and the sentence support it. "
-    'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
-    '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
-)
-
-SYSTEM_ALL = (
     "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
     "You get segments with the full sentence 'text' and individual 'words' with their index i and word w (and Whisper probability p, and s/e: the second the word starts and ends in the audio). "
     "Check every word and fix those that are mis-heard, phonetically distorted, or English words written in Telugu script. "
@@ -173,34 +120,19 @@ def _listed(pdir: Path) -> set[str]:
 
 
 # ---------- stage 7: confidence & linguistic uncertainty ----------
-_SUSPICIOUS_PHONETIC_RE = re.compile(
-    r"(?:^\d+\.$)|"                     # stray list numbering e.g. "2."
-    r"(?:.*ట్రిసే.*)|"                   # -trization phonetic distortion e.g. మినియట్రిసేసిం
-    r"(?:.*కటింగే.*)|"                  # cutting edge distortion e.g. కటింగేజ్
-    r"(?:.*సెంసర్.*)|"                  # sensors distortion e.g. సెంసర్స్
-    r"(?:.*టెక్గి.*)|"                   # tech distortion e.g. టెక్గి
-    r"(?:.*స్మాట్\b.*)|"                 # smart distortion e.g. స్మాట్
-    r"(?:.*ఆయ్\s*ట్రాకిం.*)|"            # eye tracking distortion
-    r"(?:.*ఎలా\s*డిస్ప్లే.*)|"          # led display distortion
-    r"(?:.*హెూలోగ్రామ్.*)"               # hologram variant
-)
-
-
 def uncertain(t: Transcript, low: float = LOW_P) -> dict:
     words = [w for s in t.segments for w in s.words]
     with_p = [w for w in words if w.p is not None]
     flagged = []
     for s in t.segments:
         for i, w in enumerate(s.words):
-            is_low = w.p is not None and w.p < low
-            is_suspicious = bool(_SUSPICIOUS_PHONETIC_RE.search(w.w))
-            if is_low or is_suspicious:
+            if w.p is not None and w.p < low:
                 flagged.append({
                     "segment": s.id,
                     "index": i,
                     "text": w.w,
                     "p": w.p,
-                    "reason": "low_confidence" if is_low else "phonetic_distortion",
+                    "reason": "low_confidence",
                 })
     return {"status": "available" if with_p else "unavailable", "threshold": low, "words_total": len(words), "words_with_confidence": len(with_p), "flagged": flagged}
 
@@ -219,10 +151,9 @@ def _request(t: Transcript, ids: list[int]) -> str:
     return json.dumps({"segments": rows}, ensure_ascii=False)
 
 
-def validate_corrections(t: Transcript, answer: list, flagged: list[dict]) -> list[dict]:
+def validate_corrections(t: Transcript, answer: list) -> list[dict]:
     """Every proposed correction with status applied/rejected and the reason for a rejection. Only checked, non-overlapping ones are 'applied'."""
     by = {s.id: s for s in t.segments}
-    flag = {(f["segment"], f["index"]): f for f in flagged}
     used: set[tuple[int, int]] = set()
     out = []
     for n, c in enumerate(answer if isinstance(answer, list) else []):
@@ -251,8 +182,6 @@ def validate_corrections(t: Transcript, answer: list, flagged: list[dict]) -> li
             why = "empty_or_unchanged"
         elif len(to.split()) > (j - i + 1) + 2:
             why = "adds_words"
-        elif not any(k in flag for k in cells):
-            why = "not_uncertain"
         elif cells & used:
             why = "overlaps_another"
         else:
@@ -427,27 +356,6 @@ def _alignment_block(align_r: dict, edited: int) -> dict:
                        "estimated_for_edits": "ESTIMATED timestamps for the corrected words (not aligned or alignment failed, see segments)"}[align_r["status"]]}
 
 
-def complete_alignment(pdir: Path, aligner=None) -> dict:
-    """Give the corrected words that still have ESTIMATED times their measured ones: re-align the saved corrected transcript against the audio (the slow step a quick correction skipped)
-    and rewrite transcript_corrected.json and the alignment record of transcript_review.json. Nothing to do when no word is estimated. Returns the new alignment record (or the old one)."""
-    review_f, corrected_f = pdir / "transcript_review.json", pdir / "transcript_corrected.json"
-    if not review_f.exists() or not corrected_f.exists():
-        return {"status": "unchanged", "segments": []}
-    fixed = Transcript.model_validate_json(corrected_f.read_text(encoding="utf-8"))
-    if not any(w.timing == "estimated" for s in fixed.segments for w in s.words):
-        return json.loads(review_f.read_text(encoding="utf-8")).get("alignment") or {"status": "unchanged", "segments": []}
-    align_r = realign(pdir, fixed, aligner)
-    edited = sum(1 for s in fixed.segments for w in s.words if w.edit)
-    if align_r["status"] in ("aligned_for_edits", "partial"):                              # at least some words got measured times: keep them
-        corrected_f.write_text(fixed.model_dump_json(indent=1), encoding="utf-8")
-    review = json.loads(review_f.read_text(encoding="utf-8"))
-    review["alignment"] = _alignment_block(align_r, edited)
-    tmp = pdir / "transcript_review.json.part"
-    tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
-    os.replace(tmp, review_f)
-    return review["alignment"]
-
-
 def last_alignment(pdir: Path) -> str:
     """The alignment status the last run recorded. While corrected words are ESTIMATED the `refine` step counts as unfinished (its outputs list a file that never exists), so every new run
     tries the alignment again (resume) until it succeeds; the Claude answer comes from the cache, no second call."""
@@ -466,10 +374,9 @@ def _model() -> str | None:
         return os.environ.get("PROMPTGEN_MODEL") or None
 
 
-def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = False, align: bool = True) -> dict:
-    """Run stages 6-9 and write transcript_review.json (and transcript_corrected.json when something was corrected). `ask(user, system=, timeout=)` defaults to the Claude CLI.
-    `all_words`: the LLM checks every word (the final transcript is the LLM-corrected one); otherwise only the uncertain ones (Whisper's probability below LOW_P) may be corrected.
-    `align=False`: skip the slow forced re-alignment (the corrected words keep their ESTIMATED timing and the step is retried with the alignment on the next pipeline run)."""
+def refine(pdir: Path, progress=None, ask=None, aligner=None) -> dict:
+    """Run stages 6-9 and write transcript_review.json and the final, LLM-verified transcript_corrected.json. The LLM checks every word (`ask(user, system=, timeout=)` defaults to the Claude CLI);
+    the corrected words are re-aligned against the audio (or keep an ESTIMATED timing, and the step is retried with the alignment on the next run)."""
     say = progress or (lambda p, eta=None: None)
     t = Transcript.model_validate_json((pdir / "transcript.json").read_text(encoding="utf-8"))
     vocab = vocabulary(t, _listed(pdir))
@@ -480,31 +387,26 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = 
     cache = json.loads(cache_f.read_text(encoding="utf-8")) if cache_f.exists() else {}
     llm = {"status": "not_needed", "error": None, "model": _model(), "segments_sent": 0}
     corrections: list[dict] = []
-    eligible = conf["flagged"]
-    system = SYSTEM
-    if all_words:
-        eligible = [{"segment": s.id, "index": i, "text": w.w, "p": w.p} for s in t.segments for i, w in enumerate(s.words)]
-        system = SYSTEM_ALL
-    if eligible:
-        ids = sorted({f["segment"] for f in eligible})
+    if any(s.words for s in t.segments):
+        ids = sorted(s.id for s in t.segments)
         answers, statuses = [], []
         try:
             for n in range(0, len(ids), MAX_SEGMENTS):
                 user = _request(t, ids[n:n + MAX_SEGMENTS])
-                key = hashlib.sha1(f"{VERSION}|{_model()}|{system}|{user}".encode()).hexdigest()
+                key = hashlib.sha1(f"{VERSION}|{_model()}|{SYSTEM}|{user}".encode()).hexdigest()
                 llm["segments_sent"] += len(ids[n:n + MAX_SEGMENTS])
                 if key in cache:
                     answers.append(cache[key])
                     statuses.append("cached")                                 # the same question was answered before: no second call
                 else:
                     from . import promptgen
-                    cache[key] = (ask or promptgen.run_claude)(user, system=system, timeout=TIMEOUT)
+                    cache[key] = (ask or promptgen.run_claude)(user, system=SYSTEM, timeout=TIMEOUT)
                     cache_f.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
                     answers.append(cache[key])
                     statuses.append("applied")
             llm["status"] = "applied" if "applied" in statuses else "cached"
             for ans in answers:
-                corrections += validate_corrections(t, _json_from(ans).get("corrections", []), eligible)
+                corrections += validate_corrections(t, _json_from(ans).get("corrections", []))
             for n, c in enumerate(corrections):
                 c["id"] = f"c{n + 1:03d}"
         except Exception as e:     # CLI missing / not signed in / timeout / an answer that is not the JSON asked for: the raw transcript stays
@@ -515,11 +417,8 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None, all_words: bool = 
     fixed, edited = apply_corrections(t, corrections)
     if not edited:
         align_r = {"status": "unchanged", "segments": []}
-    elif align:
-        align_r = realign(pdir, fixed, aligner)
     else:
-        align_r = {"status": "estimated_for_edits", "segments": [{"segment": x.id, "status": "estimated", "reason": "not re-aligned yet (quick correction)", "median_shift": None, "snapped": []}
-                                                                  for x in fixed.segments if any(w.edit for w in x.words)]}
+        align_r = realign(pdir, fixed, aligner)
     out = pdir / "transcript_corrected.json"
     down = llm["status"] in ("unavailable", "failed")
     checked = llm["status"] in ("applied", "cached")             # the LLM answered for this transcript

@@ -52,7 +52,7 @@ def test_the_final_transcript_is_the_llm_corrected_one_with_the_same_timestamps_
     raw = _put(pid, p=0.95)                                               # confident words: with the LLM option on, every word is still checked
     assert client.get(f"/projects/{pid}/transcript").json() == raw        # nothing corrected yet: the final is the original
     calls = []
-    monkeypatch.setattr(promptgen, "run_claude", lambda user, system="", timeout=0: (calls.append(1) or FIX) if system == tr.SYSTEM_ALL else "{}")     # only the correction prompt counts: a thread of an earlier test must not
+    monkeypatch.setattr(promptgen, "run_claude", lambda user, system="", timeout=0: (calls.append(1) or FIX) if system == tr.SYSTEM else "{}")     # only the correction prompt counts: a thread of an earlier test must not
     before = (config.PROJECTS_DIR / pid / "transcript.json").read_bytes()
     r = client.post(f"/projects/{pid}/transcript/correct")
     d = r.json()
@@ -83,7 +83,7 @@ def test_the_compare_view_serves_the_raw_and_the_final_transcript_side_by_side(c
     assert client.get(f"/projects/{pid}/transcript?view=compare").json()["error"]["code"] == "transcript_missing"
     raw = _put(pid, p=0.95)
     before = (config.PROJECTS_DIR / pid / "transcript.json").read_bytes()
-    monkeypatch.setattr(promptgen, "run_claude", lambda user, system="", timeout=0: FIX if system == tr.SYSTEM_ALL else "{}")
+    monkeypatch.setattr(promptgen, "run_claude", lambda user, system="", timeout=0: FIX if system == tr.SYSTEM else "{}")
     assert client.post(f"/projects/{pid}/transcript/correct").status_code == 200
     c = client.get(f"/projects/{pid}/transcript?view=compare").json()
     seg = c["segments"][0]

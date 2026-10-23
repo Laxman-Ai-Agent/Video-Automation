@@ -111,5 +111,3 @@ def project_dir(project: str | Path) -> Path:
     return p if p.exists() else PROJECTS_DIR / str(project)
 
 
-# The final transcript is the LLM-corrected one: the `refine` step lets Claude check every word (A2V_LLM_CORRECT=0: only words below the confidence threshold).
-LLM_CORRECT_ALL = os.environ.get("A2V_LLM_CORRECT", "1") != "0"

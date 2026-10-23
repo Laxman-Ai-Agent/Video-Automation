@@ -55,16 +55,15 @@ def test_uncertain_uses_only_real_probabilities(tmp_path):
 
 def test_only_checked_corrections_are_applied(tmp_path):
     t = make(tmp_path)
-    flagged = tr.uncertain(t)["flagged"]
-    bad = [{**GOOD, "from": "వేరే"}, {**GOOD, "from_index": 0, "to_index": 0, "from": "నమస్తే"}, {**GOOD, "to": "ఒకటి రెండు మూడు నాలుగు"}, {"segment": 9}, GOOD, GOOD]
-    out = tr.validate_corrections(t, bad, flagged)
-    assert [c["why"] for c in out] == ["from_mismatch", "not_uncertain", "adds_words", "malformed", None, "overlaps_another"]
+    bad = [{**GOOD, "from": "వేరే"}, {**GOOD, "to": "ఒకటి రెండు మూడు నాలుగు"}, {"segment": 9}, GOOD, GOOD]
+    out = tr.validate_corrections(t, bad)
+    assert [c["why"] for c in out] == ["from_mismatch", "adds_words", "malformed", None, "overlaps_another"]
     assert [c["status"] for c in out].count("applied") == 1
 
 
 def test_corrected_words_get_estimated_times_inside_the_replaced_span_and_raw_is_untouched(tmp_path):
     t = make(tmp_path)
-    c = tr.validate_corrections(t, [{**GOOD, "to": "ఫాస్ట్ ఏపీఐ"}], tr.uncertain(t)["flagged"])
+    c = tr.validate_corrections(t, [{**GOOD, "to": "ఫాస్ట్ ఏపీఐ"}])
     fixed, n = tr.apply_corrections(t, c)
     ws = fixed.segments[0].words
     assert n == 2 and [w.w for w in ws] == ["నమస్తే", "ఫాస్ట్", "ఏపీఐ", "API", "2024"]
@@ -106,13 +105,6 @@ def test_an_answer_that_is_not_json_is_a_failure_not_a_correction(tmp_path):
     assert r["llm"]["status"] == "failed" and not (tmp_path / "transcript_corrected.json").exists()
 
 
-def test_no_uncertain_words_means_no_call(tmp_path):
-    make(tmp_path, p_bad=0.95)
-    ask = Ask(answer(GOOD))
-    r = tr.refine(tmp_path, ask=ask)
-    assert ask.calls == 0 and r["llm"]["status"] == "not_needed"
-
-
 def _review(tmp_path, **changes):
     """transcript_review.json of a run, with the given top-level or nested ('llm.status') fields changed, written after the raw transcript."""
     f = tmp_path / "transcript_review.json"
@@ -131,7 +123,7 @@ def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_correcte
     import os
     make(tmp_path)
     assert not tr.is_verified(tmp_path)                                                     # no review yet
-    tr.refine(tmp_path, ask=Ask(answer()), all_words=True)                                  # the LLM answers: nothing to correct
+    tr.refine(tmp_path, ask=Ask(answer()))                                  # the LLM answers: nothing to correct
     assert (tmp_path / "transcript_corrected.json").exists() and tr.is_verified(tmp_path)
     _review(tmp_path, **{"llm.status": "unavailable"})
     assert not tr.is_verified(tmp_path)                                                     # the LLM did not check it
@@ -152,14 +144,14 @@ def test_the_one_final_json_exists_whenever_the_llm_checked_the_transcript_and_i
     """transcript_corrected.json is the final, LLM-verified transcript: the same words when the LLM found nothing to fix, never written when the LLM did not check."""
     make(tmp_path)
     raw = (tmp_path / "transcript.json").read_bytes()
-    r = tr.refine(tmp_path, ask=Ask(answer()), all_words=True)
+    r = tr.refine(tmp_path, ask=Ask(answer()))
     assert r["corrected_file"] == "transcript_corrected.json" and (tmp_path / "transcript.json").read_bytes() == raw
     final = Transcript.model_validate_json((tmp_path / "transcript_corrected.json").read_text(encoding="utf-8"))
     assert final == Transcript.model_validate_json(raw) and all(w.edit is None and w.timing is None for s in final.segments for w in s.words)       # same words, Whisper's own timestamps
     other = tmp_path / "unchecked"
     other.mkdir()
     make(other)
-    r = tr.refine(other, ask=Ask(promptgen.GenError("not signed in")), all_words=True)
+    r = tr.refine(other, ask=Ask(promptgen.GenError("not signed in")))
     assert r["corrected_file"] is None and not (other / "transcript_corrected.json").exists()
 
 
@@ -167,12 +159,12 @@ def test_the_llm_gets_the_word_times_as_evidence_from_the_audio(tmp_path):
     t = make(tmp_path)
     words = json.loads(tr._request(t, [0]))["segments"][0]["words"]
     assert words[1] == {"i": 1, "w": "ఫాస్ట్", "p": 0.2, "s": 1.0, "e": 2.0}                  # the LLM cannot hear: probability and times are what the audio tells it
-    assert "s/e" in tr.SYSTEM and "s/e" in tr.SYSTEM_ALL
+    assert "s/e" in tr.SYSTEM
 
 
 def test_the_comparison_puts_the_raw_whisper_text_next_to_the_final_one_with_the_llm_edits_marked(tmp_path):
     make(tmp_path)
-    tr.refine(tmp_path, ask=Ask(answer(GOOD)), all_words=True)
+    tr.refine(tmp_path, ask=Ask(answer(GOOD)))
     c = tr.comparison(tmp_path)
     assert c["raw_file"] == "transcript.json" and c["final_file"] == "transcript_corrected.json" and c["llm"]["status"] == "applied" and c["corrections_applied"] == 1
     first, second = c["segments"]
@@ -195,7 +187,7 @@ def test_the_specified_sentence_is_corrected_word_for_word_and_the_original_stay
     raw = (tmp_path / "transcript.json").read_bytes()
     fix = lambda i, j, to: {"segment": 0, "from_index": i, "to_index": j, "from": " ".join(ws[i:j + 1]), "to": to, "reason": "spec"}
     ask = Ask(answer(fix(0, 0, "ఇంకా"), fix(1, 1, "Future"), fix(3, 3, "మనం"), fix(4, 4, "Safe గా"), fix(5, 6, "ఉండాలంటే"), fix(8, 8, "చేయాలి?")))
-    r = tr.refine(tmp_path, ask=ask, all_words=True, align=False)
+    r = tr.refine(tmp_path, ask=ask)
     assert [c["status"] for c in r["corrections"]] == ["applied"] * 6
     c = tr.comparison(tmp_path)["segments"][0]
     assert c["raw_text"] == SPEC_RAW and c["final_text"] == SPEC_FINAL and (tmp_path / "transcript.json").read_bytes() == raw
@@ -205,7 +197,7 @@ def test_the_specified_sentence_is_corrected_word_for_word_and_the_original_stay
 
 
 def test_the_instructions_ask_for_telugu_grammar_english_spelling_only_for_spoken_english_and_punctuation():
-    for system in (tr.SYSTEM, tr.SYSTEM_ALL):
+    for system in (tr.SYSTEM,):
         assert "'ఉండాల అంటే' -> 'ఉండాలంటే'" in system and "'ఫ్యూచర్ లో' -> 'future లో'" in system and "Decide the capital letters from the sentence and the situation" in system and "'చేయాలి' -> 'చేయాలి?'" in system
         assert "ONLY when the Telugu-script word is clearly the sound of an English word" in system and "never turn a genuine Telugu word into English" in system
 
@@ -222,13 +214,13 @@ def test_the_analysis_runs_whisper_only_when_there_is_no_transcript_and_the_llm_
     assert ran == ["refine", "cuts", "review:analyzer"]                                                        # the project has its transcript: Whisper does not run again
 
 
-def test_a_stale_corrected_file_is_removed_when_nothing_applies_any_more(tmp_path):
+def test_a_stale_corrected_file_is_replaced_by_the_final_json_of_the_new_transcript(tmp_path):
     make(tmp_path)
     tr.refine(tmp_path, ask=Ask(answer(GOOD)))
-    assert (tmp_path / "transcript_corrected.json").exists()
-    make(tmp_path, p_bad=0.95)                                                                # the transcript changed: nothing is uncertain now
-    tr.refine(tmp_path, ask=Ask(answer()))
-    assert not (tmp_path / "transcript_corrected.json").exists()
+    assert load_transcript(tmp_path).segments[0].words[1].w == "ఫాస్ట్ఏపీఐ"
+    make(tmp_path, p_bad=0.95)                                                                # the transcript changed
+    tr.refine(tmp_path, ask=Ask(answer()))                                                    # the LLM checks it and finds nothing to fix
+    assert load_transcript(tmp_path).segments[0].words[1].w == "ఫాస్ట్"                         # the old correction no longer applies: the final JSON has the new transcript's words
 
 
 def test_refine_step_is_cached_and_a_changed_transcript_reruns_only_what_depends_on_it(tmp_path, monkeypatch):
@@ -249,7 +241,7 @@ def test_refine_step_is_cached_and_a_changed_transcript_reruns_only_what_depends
 
 def test_correction_keeps_every_timestamp_valid(tmp_path):
     t = make(tmp_path)
-    c = tr.validate_corrections(t, [{**GOOD, "to": "అ ఆ ఇ"}], tr.uncertain(t)["flagged"])
+    c = tr.validate_corrections(t, [{**GOOD, "to": "అ ఆ ఇ"}])
     fixed, _ = tr.apply_corrections(t, c)
     last = 0.0
     for s in fixed.segments:
@@ -433,8 +425,6 @@ def test_refine_with_unchanged_inputs_is_not_run_again(tmp_path, monkeypatch):
     monkeypatch.setattr(promptgen, "run_claude", asked)
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran" and asked.calls == 1
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "fresh" and asked.calls == 1
-    monkeypatch.setattr(pipeline.config, "LLM_CORRECT_ALL", False)                         # turned off: only uncertain words may be corrected, and nobody is uncertain
-    assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran" and asked.calls == 1
 
 
 def test_the_pipeline_step_lets_the_llm_check_every_word(tmp_path, monkeypatch):

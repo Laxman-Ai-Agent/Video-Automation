@@ -121,7 +121,7 @@ def correct_transcript(pid: str):
         raise ApiError(409, "transcript_missing", "the audio has not been analyzed yet", "start the analysis first")
     if jobs.is_running(pid):
         raise ApiError(409, "job_running", "a job is running for this project", "try again when it has finished")
-    review = transcript_review.refine(pdir, all_words=True)
+    review = transcript_review.refine(pdir)
     (pdir / "analysis_autofix.json").unlink(missing_ok=True)
     try:
         audio_analysis.write(pdir)          # the analysis file follows the transcript that is now the final one
