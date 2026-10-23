@@ -23,7 +23,7 @@ from . import config
 from .transcribe import TRANSCRIPT_FILES, Segment, Transcript, Word
 
 SCHEMA = "transcript-review-1"
-VERSION = 4                       # bump when the rules or the instructions to Claude change (it is part of the step fingerprint); 4: the request carries the word times, the verified final JSON is always written
+VERSION = 5                       # bump when the rules or the instructions to Claude change (it is part of the step fingerprint); 4: the request carries the word times, the verified final JSON is always written; 5: Telugu grammar, English capitalization, punctuation rules
 LOW_P = float(os.environ.get("A2V_ASR_LOW_CONFIDENCE", "0.5"))      # a word below this Whisper probability is "uncertain"
 MAX_SEGMENTS = 40                 # segments sent to Claude in one call
 MAX_SPAN = 6                      # words one correction may replace
@@ -72,7 +72,15 @@ SYSTEM = (
     "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
     "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
     "5. Keep the speaker's meaning; never add words that were not spoken; never summarize or translate whole sentences; when unsure change nothing. "
-    "6. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
+    "6. Telugu spelling and grammar: use the whole sentence to fix misspelled, mis-heard or ungrammatical Telugu words and endings, and join words that Telugu grammar writes as one. "
+    "   Examples: 'ఇంక' -> 'ఇంకా', 'మనుం' -> 'మనం', 'ఉండాల అంటే' -> 'ఉండాలంటే' (two words become one: ONE correction from_index..to_index whose 'to' is the single joined word). "
+    "7. English words: write them in standard English spelling inside the Telugu sentence and keep the Telugu ending as a separate Telugu word: 'ఫ్యూచర్ లో' -> 'future లో', 'సేఫ్గా' -> 'safe గా'. "
+    "   Decide the capital letters from the sentence and the situation, like a careful editor: proper nouns, company, product and brand names and acronyms are capitalized (ChatGPT, Gemini, AI), and so is a word that "
+    "starts a sentence or is clearly a title or an emphasized term ('Future' when the sentence stresses it); ordinary English words in the middle of a sentence stay lowercase ('smart phones', 'integration'). "
+    "   Do this ONLY when the Telugu-script word is clearly the sound of an English word spoken in English; "
+    "never turn a genuine Telugu word into English, never translate, and never force an English word that is already in Latin script into Telugu. "
+    "8. Punctuation: put the missing sentence-ending mark on the last word of a sentence ('.', or '?' for a question): 'చేయాలి' -> 'చేయాలి?'. "
+    "9. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
     "probably mis-heard or noise; a confident word that fits its time is probably right. Change a word only when the evidence and the sentence support it. "
     'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
     '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'
@@ -118,7 +126,15 @@ SYSTEM_ALL = (
     "3. Mixed-language format: Natural Telugu grammar with standard English spelling for English words (e.g. 'మన స్మార్ట్ ఫోన్స్ లో AI ఇంటిగ్రేషన్ ఉంది' -> 'మన smart phones లో AI integration ఉంది'). "
     "4. Remove hallucinated stray numbers, list numbering, or noise artifacts that were not spoken (e.g. stray '2.' -> \"\"). "
     "5. Keep the speaker's original intended meaning. Never add words that were not spoken; never summarize or translate whole sentences; keep numbers and names accurate. "
-    "6. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
+    "6. Telugu spelling and grammar: use the whole sentence to fix misspelled, mis-heard or ungrammatical Telugu words and endings, and join words that Telugu grammar writes as one. "
+    "   Examples: 'ఇంక' -> 'ఇంకా', 'మనుం' -> 'మనం', 'ఉండాల అంటే' -> 'ఉండాలంటే' (two words become one: ONE correction from_index..to_index whose 'to' is the single joined word). "
+    "7. English words: write them in standard English spelling inside the Telugu sentence and keep the Telugu ending as a separate Telugu word: 'ఫ్యూచర్ లో' -> 'future లో', 'సేఫ్గా' -> 'safe గా'. "
+    "   Decide the capital letters from the sentence and the situation, like a careful editor: proper nouns, company, product and brand names and acronyms are capitalized (ChatGPT, Gemini, AI), and so is a word that "
+    "starts a sentence or is clearly a title or an emphasized term ('Future' when the sentence stresses it); ordinary English words in the middle of a sentence stay lowercase ('smart phones', 'integration'). "
+    "   Do this ONLY when the Telugu-script word is clearly the sound of an English word spoken in English; "
+    "never turn a genuine Telugu word into English, never translate, and never force an English word that is already in Latin script into Telugu. "
+    "8. Punctuation: put the missing sentence-ending mark on the last word of a sentence ('.', or '?' for a question): 'చేయాలి' -> 'చేయాలి?'. "
+    "9. You cannot hear the audio: p and the times s/e are what the audio tells you. A word with a low p, a word said in far too little or too much time for its length, or a word after a long gap is "
     "probably mis-heard or noise; a confident word that fits its time is probably right. Change a word only when the evidence and the sentence support it. "
     'Answer with JSON only: {"corrections":[{"segment":<id>,"from_index":<i>,"to_index":<j>,"from":"<the words i..j exactly as given, joined by single spaces>",'
     '"to":"<replacement words or empty string to delete noise>","reason":"<five words at most>"}]}. An empty list is a good answer.'

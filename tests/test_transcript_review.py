@@ -182,6 +182,34 @@ def test_the_comparison_puts_the_raw_whisper_text_next_to_the_final_one_with_the
     assert c["alignment"] == "estimated_for_edits" and not c["verified"]                    # corrected words still wait for their timestamps
 
 
+SPEC_RAW = "ఇంక ఫ్యూచర్ లో మనుం సేఫ్గా ఉండాల అంటే ఏమి చేయాలి"
+SPEC_FINAL = "ఇంకా Future లో మనం Safe గా ఉండాలంటే ఏమి చేయాలి?"
+
+
+def test_the_specified_sentence_is_corrected_word_for_word_and_the_original_stays(tmp_path):
+    """Telugu spelling (ఇంక -> ఇంకా, మనుం -> మనం), English words in English spelling with the Telugu ending kept apart (Future లో, Safe గా), two words joined by grammar (ఉండాలంటే), the question mark; the raw
+    transcript is untouched. (The wording of the LLM's answer is the prompt's job, checked against the real LLM; this checks that every such correction is accepted and applied exactly.)"""
+    ws = SPEC_RAW.split()
+    t = Transcript(language="te", duration=5.0, segments=[Segment(id=0, start=0, end=4.95, text=SPEC_RAW, words=[W(w, i * 0.5, i * 0.5 + 0.45, 0.9) for i, w in enumerate(ws)])])
+    (tmp_path / "transcript.json").write_text(t.model_dump_json(indent=1), encoding="utf-8")
+    raw = (tmp_path / "transcript.json").read_bytes()
+    fix = lambda i, j, to: {"segment": 0, "from_index": i, "to_index": j, "from": " ".join(ws[i:j + 1]), "to": to, "reason": "spec"}
+    ask = Ask(answer(fix(0, 0, "ఇంకా"), fix(1, 1, "Future"), fix(3, 3, "మనం"), fix(4, 4, "Safe గా"), fix(5, 6, "ఉండాలంటే"), fix(8, 8, "చేయాలి?")))
+    r = tr.refine(tmp_path, ask=ask, all_words=True, align=False)
+    assert [c["status"] for c in r["corrections"]] == ["applied"] * 6
+    c = tr.comparison(tmp_path)["segments"][0]
+    assert c["raw_text"] == SPEC_RAW and c["final_text"] == SPEC_FINAL and (tmp_path / "transcript.json").read_bytes() == raw
+    final = {w["w"]: w for w in c["final_words"]}
+    assert final["ఉండాలంటే"]["start"] == 2.5 and final["ఉండాలంటే"]["end"] == 3.45                           # the joined word spans both words it replaced
+    assert 2.0 <= final["Safe"]["start"] < final["Safe"]["end"] <= final["గా"]["end"] <= 2.45                 # the split word shares the time of the word it replaced
+
+
+def test_the_instructions_ask_for_telugu_grammar_english_spelling_only_for_spoken_english_and_punctuation():
+    for system in (tr.SYSTEM, tr.SYSTEM_ALL):
+        assert "'ఉండాల అంటే' -> 'ఉండాలంటే'" in system and "'ఫ్యూచర్ లో' -> 'future లో'" in system and "Decide the capital letters from the sentence and the situation" in system and "'చేయాలి' -> 'చేయాలి?'" in system
+        assert "ONLY when the Telugu-script word is clearly the sound of an English word" in system and "never turn a genuine Telugu word into English" in system
+
+
 def test_the_analysis_runs_whisper_only_when_there_is_no_transcript_and_the_llm_check_before_the_cuts(tmp_path, monkeypatch):
     ran = []
     monkeypatch.setattr(pipeline, "execute", lambda pdir, name, ctx: ran.append(name) or {"name": name, "status": "ran"})
