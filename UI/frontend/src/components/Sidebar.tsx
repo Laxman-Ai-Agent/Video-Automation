@@ -11,12 +11,13 @@ import {
   Zap,
   PlusCircle,
   FileAudio,
-  Edit3
+  Edit3,
+  ScrollText
 } from 'lucide-react';
 
 interface SidebarProps {
-  activeView: 'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm';
-  setActiveView: (view: 'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm') => void;
+  activeView: 'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm' | 'work-log';
+  setActiveView: (view: 'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm' | 'work-log') => void;
   collapsed?: boolean;
   onToggleCollapse?: () => void;
   pipelineTab?: string;
@@ -68,6 +69,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       label: 'Skills',
       icon: Sparkles,
       view: 'skills' as const
+    },
+    {
+      id: 'work-log',
+      label: 'Work Log',
+      icon: ScrollText,
+      view: 'work-log' as const
     }
   ];
 

@@ -42,3 +42,6 @@ VIDEO_ENGINE/remotion/public/projects/
 reports/RENDER_QC/
 config/visual_editor/sessions.json
 config/history/*.jsonl
+
+# the assistant's live work log (shown on the Work Log page)
+work_log.jsonl

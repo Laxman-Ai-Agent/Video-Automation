@@ -6,6 +6,7 @@ import { ProjectsPage } from './pages/ProjectsPage';
 import { AgentsCenterPage } from './pages/AgentsCenterPage';
 import { SkillsPage } from './pages/SkillsPage';
 import { LlmPage } from './pages/LlmPage';
+import { WorkLogPage } from './pages/WorkLogPage';
 import { AudioInputPage } from './pages/AudioInputPage';
 import { DashboardPage } from './pages/DashboardPage';
 import { VisualAiEditorPage } from './components/visual-editor/VisualAiEditorPage';
@@ -55,7 +56,7 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('a2v_theme');
     return (saved === 'light' || saved === 'dark') ? saved : 'dark';
   });
-  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm'>('pipeline');
+  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm' | 'work-log'>('pipeline');
   const [pipelineTab, setPipelineTab] = useState<'flow' | 'approvals' | 'communication' | 'new-project' | 'projects'>('flow');
   const [pipelineFullPage, setPipelineFullPage] = useState<boolean>(false);
   const [issues, setIssues] = useState<PipelineIssue[]>([]);
@@ -775,6 +776,9 @@ export const App: React.FC = () => {
           {activeView === 'skills' && (
             <SkillsPage skills={skills} />
           )}
+
+          {/* WORK LOG PAGE: what the assistant is doing, live */}
+          {activeView === 'work-log' && <WorkLogPage />}
 
           {/* LLM CONNECTION PAGE (opened from the LLM pill in the header) */}
           {activeView === 'llm' && (

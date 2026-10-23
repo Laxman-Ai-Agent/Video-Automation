@@ -349,14 +349,15 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
 
   return (
     <div
-      onClick={onSelect}
+      onClick={isWaitingForPrevious ? undefined : onSelect}
       role="button"
-      tabIndex={0}
-      title={`Click to open full screen details for ${config.label}`}
+      tabIndex={isWaitingForPrevious ? -1 : 0}
+      aria-disabled={isWaitingForPrevious}
+      title={isWaitingForPrevious ? `Inactive: waits for ${state?.waitingFor} to complete` : `Click to open full screen details for ${config.label}`}
       data-testid={`stage-card-${config.id}`}
       data-status={status}
       className={cardClassName}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') onSelect(); }}
+      onKeyDown={(e) => { if (!isWaitingForPrevious && (e.key === 'Enter' || e.key === ' ')) onSelect(); }}
       style={{
         width: '100%',
         minHeight: '118px',
@@ -379,7 +380,8 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
             ? 'none' 
             : 'var(--shadow-card)',
         padding: '10px 14px',
-        cursor: 'pointer',
+        cursor: isWaitingForPrevious ? 'not-allowed' : 'pointer',
+        opacity: isWaitingForPrevious ? 0.55 : 1,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -388,7 +390,7 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
         overflow: 'hidden'
       }}
       onMouseEnter={(e) => {
-        if (!isSelected && !isRunning && !isRetrying) {
+        if (!isSelected && !isRunning && !isRetrying && !isWaitingForPrevious) {
           e.currentTarget.style.borderColor = isFailed ? 'var(--status-failed)' : 'var(--accent-blue)';
           e.currentTarget.style.boxShadow = 'var(--shadow-hover)';
         }

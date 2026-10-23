@@ -26,6 +26,7 @@ from .routes import (
     uploads,
     visual,
     visual_editor,
+    work_log,
 )
 
 
@@ -71,6 +72,7 @@ for module in (
     orchestrator,
     evaluation,
     approvals,
+    work_log,
 ):
     app.include_router(module.router)
 

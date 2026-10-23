@@ -118,6 +118,9 @@ audio-to-video/
 - Never repeat completed work or a successful test without a reason. Re-run tests only when the code they cover changed, to investigate a regression, or when extra verification is needed; run the tests of the changed code and its integrations, not the whole suite by default.
 - Reuse existing outputs and validation results while they are valid (fingerprints, caches, finished steps). Never re-run Whisper or a finished stage for a project that already has valid outputs.
 - No duplicate implementations, no unnecessary LLM calls, no token waste, no repeated processing. One job, one implementation; callers use it.
+- On an error, keep going: fix it yourself and report only the result. Never stop just to inform, and never ask questions or permission (commit and push are pre-authorized by the user); stop only when truly blocked.
+- A problem that does not clear where it shows has its cause upstream (an earlier scene or stage in the chain): look there and fix it there.
+- Code too tangled to fix is deleted completely and rewritten cleanly, never patched on top. Keep the folder structure clean and the code small and simple.
 - Work incrementally: validate the current stage, then move to the next. Never create a copy of a project or a new test project: modify and test directly in the existing project; never delete user data or assets (audio, transcripts).
 
 ## Approvals & Pipeline Automation (no human gates)

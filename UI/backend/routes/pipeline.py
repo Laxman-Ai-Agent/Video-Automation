@@ -456,16 +456,13 @@ def run_motion_generation(pid: str):
     if (j := _same_job(pid, "motion")):
         return _started(j)
     _idle(pid)
-    from .. import motion_planning, motion_template_selection
+    from .. import motion_planning
     aspect = pipeline_view.aspect_of(pdir)
     plan = motion_planning.load(pdir, aspect)
     if plan is None:
         raise ApiError(409, "motion_plan_missing", "There is no motion plan yet", "run Motion Planning first")
     if (why := motion_planning.blockers(pdir, aspect)):
         raise ApiError(409, "motion_plan_not_current", f"Motion Generation waits for Motion Planning: {why}", "run Motion Planning again")
-    sel = motion_template_selection.load_selection(pdir, aspect)
-    if sel is None:
-        raise ApiError(409, "motion_template_selection_missing", "Motion Template Selection has not run yet", "run Motion Template Selection first")
     label = "motion-gen-9x16" if aspect == "9:16" else "motion-gen"
     return _started(jobs.start(pid, label, chain_for(pdir, label), Ctx()))
 

@@ -26,6 +26,18 @@ export async function fetchHealth(): Promise<{ ok: boolean }> {
   }
 }
 
+export interface WorkLogEntry { id: number; time: string; status: 'doing' | 'done' | 'problem' | 'fixed'; title: string; detail: string }
+
+/** The assistant's Work Log (null when the server cannot be reached). */
+export async function fetchWorkLog(): Promise<WorkLogEntry[] | null> {
+  try {
+    const res = await fetch(`${API_BASE}/work-log`);
+    return res.ok ? (await res.json()).entries : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchLlmHealth(): Promise<{ ok: boolean; provider?: string; latency_ms?: number; message?: string }> {
   const directUrl = 'http://127.0.0.1:8000/llm/health';
   const proxyUrl = `${API_BASE}/llm/health`;

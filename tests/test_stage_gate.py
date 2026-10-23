@@ -270,3 +270,20 @@ def test_motion_planning_warnings_are_solved_and_the_stage_run_again_before_the_
     monkeypatch.setattr(motion_autofix, "count", lambda p, d, name="plan": (_ for _ in ()).throw(motion_autofix.Exhausted("used up")))
     _orch(pdir)._resolve_stage_issues("motion_plan", run, rerun)                                    # the per-scene-plan limit of automatic attempts holds
     assert reruns == []
+
+
+def test_motion_generation_does_not_wait_for_the_removed_template_selection(pdir, monkeypatch):
+    """Motion Generation (custom code mode) never reads Motion Template Selection, yet its route answered 409 'Motion Template Selection has not run yet', so the stage never started by itself."""
+    from UI.backend import motion_planning, pipeline_view
+    from UI.backend.routes import pipeline as routes
+    started: list[str] = []
+    monkeypatch.setattr(routes.store, "project_dir", lambda _pid: pdir)
+    monkeypatch.setattr(pipeline_view, "aspect_of", lambda _p: "16:9")
+    monkeypatch.setattr(routes, "_same_job", lambda *a: None)
+    monkeypatch.setattr(routes, "_idle", lambda *a: None)
+    monkeypatch.setattr(motion_planning, "load", lambda p, a: {"stale": False})
+    monkeypatch.setattr(motion_planning, "blockers", lambda p, a: None)
+    monkeypatch.setattr(routes, "chain_for", lambda p, label: ())
+    monkeypatch.setattr(routes.jobs, "start", lambda pid, label, *a, **k: started.append(label) or label)
+    monkeypatch.setattr(routes, "_started", lambda job: job)
+    assert routes.run_motion_generation("proj_gate") == "motion-gen" and started == ["motion-gen"]
