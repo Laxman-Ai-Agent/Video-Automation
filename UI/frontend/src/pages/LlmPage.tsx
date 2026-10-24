@@ -13,6 +13,7 @@ import {
 
 interface LlmPageProps {
   onChanged: () => void;   // the header pill re-reads the connection
+  onBusyChange: (connecting: boolean) => void;   // the header pill blinks only while a connection is being tried
 }
 
 type Busy = 'auto' | 'recheck' | 'test' | 'save' | null;
@@ -68,7 +69,7 @@ const NoticeLine: React.FC<{ notice: Notice | null; area: Notice['area'] }> = ({
   );
 };
 
-export const LlmPage: React.FC<LlmPageProps> = ({ onChanged }) => {
+export const LlmPage: React.FC<LlmPageProps> = ({ onChanged, onBusyChange }) => {
   const [settings, setSettings] = useState<LlmSettings | null>(null);
   const [detected, setDetected] = useState<LlmDetected[] | null>(null);
   const [loadError, setLoadError] = useState('');
@@ -100,6 +101,11 @@ export const LlmPage: React.FC<LlmPageProps> = ({ onChanged }) => {
   }, []);
 
   useEffect(() => { void load(); }, [load]);
+
+  useEffect(() => {
+    onBusyChange(busy !== null);
+    return () => onBusyChange(false);
+  }, [busy, onBusyChange]);
 
   const run = async (kind: Exclude<Busy, null>, area: Notice['area'], job: () => Promise<void>) => {
     setBusy(kind);

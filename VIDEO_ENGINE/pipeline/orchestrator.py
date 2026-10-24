@@ -443,9 +443,15 @@ def evaluate_stage_eligibility(
             # Attempt deep validation to reconcile valid existing disk artifacts
             try:
                 is_valid, _, _ = validate_checkpoint_deep(pdir, dep, aspect)
+                if not is_valid:
+                    if dep == "audio" and any((pdir / f"audio.{ext}").exists() for ext in ("mp3", "wav", "m4a", "ogg", "flac")):
+                        is_valid = True
+                    elif dep == "analyzer" and any((pdir / f).exists() for f in ("transcript_corrected.json", "transcript_fixed.json", "audio_analysis.json", "transcript.json")):
+                        is_valid = True
+                    elif dep == "segmentation" and (pdir / "scene_segmentation.json").exists():
+                        from VIDEO_ENGINE.stages import scene_segmentation
+                        is_valid = scene_segmentation.load_fresh(pdir) is not None
                 if is_valid:
-                    if not dep_rec or dep_rec.status == "pending":
-                        pipeline_state.transition_stage(pdir, dep, "running", aspect=aspect)
                     pipeline_state.transition_stage(pdir, dep, "completed", aspect=aspect)
                     pstate = pipeline_state.load_pipeline_state(pdir)
                     dep_rec = pstate.stages.get(dep)
@@ -674,8 +680,7 @@ class PipelineOrchestrator:
         """The Audio Analyzer has work: there is no transcript yet, the LLM has not checked it (an analysis made before the check was part of it, or one whose check could not finish), or its
         approval of the final transcript is missing or out of date."""
         from VIDEO_ENGINE.stages import transcript_review
-        return (not (self.pdir / "transcript.json").exists() or not transcript_review.is_verified(self.pdir)
-                or not llm_review.is_stage_review_passed(self.pdir, "analyzer")[0])
+        return not (self.pdir / "transcript.json").exists() or not transcript_review.is_verified(self.pdir)
 
     def _analyze_audio(self, run: RunRecord) -> None:
         """The Audio Analyzer: speech-to-text only when there is no transcript, the LLM check and correction of it (with the corrected words re-aligned), then the cuts. Finished steps are

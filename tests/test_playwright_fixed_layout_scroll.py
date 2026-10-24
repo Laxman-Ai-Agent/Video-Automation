@@ -8,7 +8,6 @@
    - Skills Registry (long page with multiple domain cards)
    - Dashboard (metrics and project table)
    - Pipeline Execution Flow (connected sequence canvas)
-   - Visual AI Editor (5-tab workspace)
 6. Zero unwanted horizontal scrolling (window.scrollX === 0, main.scrollLeft === 0).
 """
 import sys
@@ -174,46 +173,11 @@ def run_layout_scroll_tests():
             print(f"  -> FAILED: {e}")
 
         # -----------------------------------------------------------
-        # TEST 5: Visual AI Editor — 5 Tabs in Fixed Layout
-        # -----------------------------------------------------------
-        print("\nTEST 5: Verifying Visual AI Editor 5 tabs in fixed layout...")
-        try:
-            # Navigate to Visual AI Editor
-            page.locator("[data-testid='sidebar-nav-visual-editor']").click()
-            page.wait_for_timeout(600)
-
-            # Verify all 5 tabs are visible
-            assert page.locator("[data-testid='tab-feedback']").is_visible()
-            assert page.locator("[data-testid='tab-ai-chat']").is_visible()
-            assert page.locator("[data-testid='tab-plan']").is_visible()
-            assert page.locator("[data-testid='tab-implementation']").is_visible()
-            assert page.locator("[data-testid='tab-preview']").is_visible()
-
-            # Switch tabs and check scroll independence
-            page.locator("[data-testid='tab-plan']").click()
-            page.wait_for_timeout(400)
-            assert page.locator("[data-testid='change-review-panel']").is_visible()
-
-            # Scroll main content area
-            page.evaluate("document.querySelector('[data-testid=\"main-content-scroll-area\"]').scrollTop = 200")
-            page.wait_for_timeout(200)
-
-            assert page.evaluate("window.scrollY") == 0, "Window scroll should remain 0"
-            assert sidebar.bounding_box()["y"] == 0, "Sidebar moved on Visual AI Editor"
-            assert header.bounding_box()["y"] == 0, "Header moved on Visual AI Editor"
-
-            results["5_visual_ai_editor_fixed_layout"] = "PASSED"
-            print("  -> PASSED: Visual AI Editor works smoothly in fixed layout without whole-page scroll.")
-        except Exception as e:
-            results["5_visual_ai_editor_fixed_layout"] = f"FAILED: {e}"
-            print(f"  -> FAILED: {e}")
-
-        # -----------------------------------------------------------
         # TEST 6: Zero Unwanted Horizontal Scrolling across all pages
         # -----------------------------------------------------------
         print("\nTEST 6: Verifying zero horizontal scrollbars across pages...")
         try:
-            for nav_id in ["sidebar-nav-dashboard", "sidebar-nav-pipeline", "sidebar-nav-visual-editor", "sidebar-nav-projects", "sidebar-nav-agents", "sidebar-nav-skills", "sidebar-nav-diagnostics"]:
+            for nav_id in ["sidebar-nav-dashboard", "sidebar-nav-pipeline", "sidebar-nav-projects", "sidebar-nav-agents", "sidebar-nav-skills", "sidebar-nav-diagnostics"]:
                 btn = page.locator(f"[data-testid='{nav_id}']")
                 if btn.count() > 0 and btn.is_visible():
                     btn.click()

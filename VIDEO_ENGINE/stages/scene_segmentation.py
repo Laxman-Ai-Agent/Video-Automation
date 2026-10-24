@@ -22,11 +22,11 @@ from pathlib import Path
 
 from . import config
 from .diagnose import UserProblem
-from .transcribe import TRANSCRIPT_FILES, Transcript
+from .transcribe import TRANSCRIPT_FILES, Transcript, transcript_from_analysis_json
 
 SCHEMA = "1.1"
 VERSION = 2                                  # bump when the rules or the instructions to Claude change (part of the step fingerprint and of the cache key of Claude's answers)
-TIMING_RULES = 3                             # bump when only the rules for the scene times change (2: a scene ends where the next one starts when their words overlap; 3: a tiny last scene joins the one before it, for Claude's grouping too): old results are stale, Claude's cached answers stay valid
+TIMING_RULES = 4                            # bump when only the rules for the scene times change (2: a scene ends where the next one starts when their words overlap; 3: a tiny last scene joins the one before it, for Claude's grouping too; 4: any scene shorter than the minimum joins a neighbour): old results are stale, Claude's cached answers stay valid
 # configurable guidance (environment A2V_SEG_*), soft limits: meaning comes first
 PAUSE_MIN = float(os.environ.get("A2V_SEG_PAUSE_MIN", "0.35"))         # a gap this long between two words is evidence of a boundary, never a boundary by itself
 PAUSE_SCENE = float(os.environ.get("A2V_SEG_PAUSE_SCENE", "0.5"))      # the fallback may start a new scene at a pause this long
@@ -66,17 +66,38 @@ class SourceError(UserProblem):
 
 
 def load_source(pdir: Path) -> Transcript:
-    """The final analysis JSON of the project as it is: transcript_fixed.json > transcript_corrected.json > transcript.json (the same order every stage reads). Nothing is generated: when it is
-    missing or invalid this raises SourceError (the audio is NOT processed again), and word times that cannot be true (negative, end before start, past the audio) are refused."""
-    f = next((pdir / n for n in TRANSCRIPT_FILES if (pdir / n).exists()), None)
+    """The final analysis JSON of the project containing the LLM-corrected transcript:
+    transcript_fixed.json > transcript_corrected.json > audio_analysis.json > transcript.json.
+    Nothing is generated: when missing or invalid this raises SourceError (the audio is NOT processed again),
+    and word times that cannot be true (negative, end before start, past the audio) are refused."""
+    f = None
+    for n in ("transcript_fixed.json", "transcript_corrected.json", "audio_analysis.json", "audio-analysis.json", "transcript.json"):
+        if (pdir / n).exists():
+            f = pdir / n
+            break
+
     if f is None:
-        raise SourceError("analysis_json_missing", "The final analysis JSON (transcript.json) is not in this project. The audio was not processed: add the JSON file to the project, or run the Audio Analyzer yourself.")
+        raise SourceError("analysis_json_missing", "The final analysis JSON (audio_analysis.json or transcript_corrected.json) is not in this project. The audio was not processed: add the JSON file to the project, or run the Audio Analyzer yourself.")
+
     try:
-        t = Transcript.model_validate_json(f.read_text(encoding="utf-8"))
+        if f.name in ("audio_analysis.json", "audio-analysis.json"):
+            t = transcript_from_analysis_json(f)
+            if t is None:
+                # If audio_analysis.json does not have utterances, fallback to transcript files
+                alt = next((pdir / n for n in ("transcript_fixed.json", "transcript_corrected.json", "transcript.json") if (pdir / n).exists()), None)
+                if alt:
+                    t = Transcript.model_validate_json(alt.read_text(encoding="utf-8"))
+                    f = alt
+                else:
+                    raise ValueError("audio_analysis.json contains no utterances or words")
+        else:
+            t = Transcript.model_validate_json(f.read_text(encoding="utf-8"))
     except (ValueError, OSError) as e:
         raise SourceError("analysis_json_invalid", f"{f.name} is not a valid analysis JSON ({str(e).splitlines()[0][:160]}). The audio was not processed again: fix or replace the file.") from e
-    if t.duration <= 0 or not any(s.words or s.text.strip() for s in t.segments):
+
+    if t is None or t.duration <= 0 or not any(s.words or s.text.strip() for s in t.segments):
         raise SourceError("analysis_json_invalid", f"{f.name} has no duration or no narration. The audio was not processed again: fix or replace the file.")
+
     for s in t.segments:
         for w in s.words:
             if w.start < 0 or w.end < w.start or w.end > t.duration + TOL:
@@ -85,9 +106,10 @@ def load_source(pdir: Path) -> Transcript:
 
 
 def read_input(pdir: Path) -> dict:
-    """The final analysis JSON as a flat word list with ids and the transcript segment each word came from, plus the pauses of audio_analysis.json when that file is there (optional: without
-    it the gaps between the words are used). Reading never starts any audio processing."""
+    """The final analysis JSON as a flat word list with ids and the transcript segment each word came from, plus the pauses of audio_analysis.json when that file is there.
+    Also extracts original raw Whisper transcript from transcript.json (if present) for side-by-side comparison. Reading never starts any audio processing."""
     t = load_source(pdir)
+    source_file = "transcript_corrected.json" if (pdir / "transcript_corrected.json").exists() else ("audio_analysis.json" if (pdir / "audio_analysis.json").exists() else "transcript.json")
     words, segs = [], []
     for s in t.segments:
         first = len(words)
@@ -97,14 +119,50 @@ def read_input(pdir: Path) -> dict:
         else:                                    # a segment without word times: kept as one unit with the sentence-level times
             words.append({"id": f"w{len(words) + 1:03d}", "text": s.text, "start": s.start, "end": s.end, "timing": "sentence", "seg": s.id})
         segs.append({"id": s.id, "start": s.start, "end": s.end, "first": first, "last": len(words) - 1})
+
     aa = {}
     try:
         aa = json.loads((pdir / "audio_analysis.json").read_text(encoding="utf-8"))
     except (OSError, ValueError):
         pass
-    pauses = [(p["start_seconds"], p["end_seconds"]) for p in aa.get("pauses", [])]
-    return {"language": t.language, "duration": t.duration, "words": words, "segments": segs, "pauses": pauses, "analysis_file": "audio_analysis.json" if aa else None,
-            "analysis_status": (aa.get("validation") or {}).get("status"), "audio_notes": {n["segment"]: n for n in (aa.get("validation") or {}).get("notes", []) if "segment" in n}}
+    pauses = []
+    for p in aa.get("pauses", []):
+        if isinstance(p, dict):
+            pauses.append((float(p.get("start_seconds", 0.0)), float(p.get("end_seconds", 0.0))))
+        elif isinstance(p, (list, tuple)) and len(p) >= 2:
+            pauses.append((float(p[0]), float(p[1])))
+
+    # Load raw Whisper transcript separately for UI comparison and downstream reference
+    whisper_words = []
+    whisper_segments = {}
+    raw_f = pdir / "transcript.json"
+    if raw_f.exists():
+        try:
+            t_raw = json.loads(raw_f.read_text(encoding="utf-8"))
+            for s in t_raw.get("segments", []):
+                whisper_segments[s.get("id")] = s.get("text", "")
+                for w in s.get("words", []):
+                    whisper_words.append({
+                        "w": w.get("w", w.get("text", "")),
+                        "start": float(w.get("start", 0.0)),
+                        "end": float(w.get("end", 0.0)),
+                    })
+        except Exception:
+            pass
+
+    return {
+        "language": t.language,
+        "duration": t.duration,
+        "words": words,
+        "segments": segs,
+        "pauses": pauses,
+        "whisper_words": whisper_words,
+        "whisper_segments": whisper_segments,
+        "analysis_file": "audio_analysis.json" if aa else None,
+        "source_transcript_file": source_file,
+        "analysis_status": (aa.get("validation") or {}).get("status"),
+        "audio_notes": {n["segment"]: n for n in (aa.get("validation") or {}).get("notes", []) if "segment" in n}
+    }
 
 
 def fingerprint_of(inp: dict) -> str:
@@ -243,13 +301,22 @@ def check_grouping(answer: dict, inp: dict, units: list[dict], cuts: dict[int, s
     return out, problems
 
 
-def tiny_last_joins_previous(ws: list[dict], bounds: list) -> bool:
-    """True when the last scene (`bounds`: one (first_word, last_word) per scene) is shorter than SOFT_MIN and the scene before it can take it without becoming longer than SOFT_MAX. The same rule
-    for the fallback and for Claude's grouping: a last scene of two or three seconds cannot carry its own picture, and Claude's answer is only guided (not checked) on scene length."""
-    if len(bounds) < 2:
-        return False
-    (first_prev, _), (first_last, last_last) = bounds[-2], bounds[-1]
-    return ws[last_last]["end"] - ws[first_last]["start"] < SOFT_MIN and ws[last_last]["end"] - ws[first_prev]["start"] <= SOFT_MAX
+def merge_short_scenes(ws: list[dict], groups: list[dict]) -> list[dict]:
+    """A scene shorter than SOFT_MIN (first, middle or last) joins the neighbour that gives the shorter merged scene, as long as the merged scene is not longer than SOFT_MAX; repeated until
+    none can. The same rule for the fallback and for Claude's grouping: a scene of two or three seconds cannot carry its own picture, and Claude's answer is only guided (not checked) on scene
+    length. The merged scene keeps both beats and the boundary after the later one. A short scene whose neighbours are both too long to take it stays and is reported."""
+    groups = [dict(g) for g in groups]
+    span = lambda a, b: ws[b["last"]]["end"] - ws[a["first"]]["start"]
+    while len(groups) > 1:
+        options = [(span(groups[j], groups[j + 1]), j) for k, g in enumerate(groups) if span(g, g) < SOFT_MIN for j in (k - 1, k)
+                   if 0 <= j < len(groups) - 1 and span(groups[j], groups[j + 1]) <= SOFT_MAX]
+        if not options:
+            break
+        _, j = min(options)
+        a, b = groups[j], groups[j + 1]
+        join = lambda x, y: x if not y or x == y else y if not x else f"{x} + {y}"
+        groups[j:j + 2] = [{**b, "first": a["first"], "beat": join(a.get("beat"), b.get("beat")), "objective": join(a.get("objective"), b.get("objective"))}]
+    return groups
 
 
 def fallback_grouping(inp: dict, units: list[dict], cuts: dict[int, str]) -> list[dict]:
@@ -264,9 +331,6 @@ def fallback_grouping(inp: dict, units: list[dict], cuts: dict[int, str]) -> lis
         if (u["sentence_end"] and dur >= SOFT_MIN and (u["pause_after"] >= PAUSE_SCENE or u["marker_next"] or nxt_dur > SOFT_MAX)) or i == len(units) - 1:
             groups.append([cur[0]["first"], cur[-1]["last"]])
             cur = []
-    if tiny_last_joins_previous(ws, groups):                           # a tiny last scene joins the one before it
-        last = groups.pop()
-        groups[-1][1] = last[1]
     out = []
     for a, b in groups:
         pieces = [(a, b)]
@@ -281,8 +345,8 @@ def fallback_grouping(inp: dict, units: list[dict], cuts: dict[int, str]) -> lis
             best = max(ok, key=lambda i: (rank.get(cuts[i], 0), gap_after(inp, i), -abs((ws[i]["end"] - ws[x]["start"]) - (ws[y]["end"] - ws[x]["start"]) / 2)))
             pieces[-1:] = [(x, best), (best + 1, y)]
         out += pieces
-    return [{"first": a, "last": b, "beat": None, "objective": None, "type": "pause" if gap_after(inp, b) >= PAUSE_SCENE else "sentence_boundary",
-             "reason": "a pause follows" if gap_after(inp, b) >= PAUSE_SCENE else "the sentence ends and the scene is long enough"} for a, b in out]
+    return merge_short_scenes(ws, [{"first": a, "last": b, "beat": None, "objective": None, "type": "pause" if gap_after(inp, b) >= PAUSE_SCENE else "sentence_boundary",
+                                    "reason": "a pause follows" if gap_after(inp, b) >= PAUSE_SCENE else "the sentence ends and the scene is long enough"} for a, b in out])
 
 
 def group(pdir: Path, inp: dict, units: list[dict], cuts: dict[int, str], ask=None) -> tuple[list[dict], dict]:
@@ -327,10 +391,7 @@ def group(pdir: Path, inp: dict, units: list[dict], cuts: dict[int, str], ask=No
                 scenes, problems = [], [f"the answer is not valid JSON ({e})"]
             call["check_s"], call["problems"] = round(time.perf_counter() - t2, 4), problems[:4]      # what made the answer unusable (a retry costs a whole second call)
             if not problems:
-                if tiny_last_joins_previous(inp["words"], [(s["first"], s["last"]) for s in scenes]):         # Claude was told the length guideline, nothing checks it
-                    last = scenes.pop()
-                    scenes[-1]["last"] = last["last"]
-                return scenes, llm
+                return merge_short_scenes(inp["words"], scenes), llm              # Claude was told the length guideline, nothing checks it
         llm["status"], llm["problems"] = "rejected", problems[:6]
     except Exception as e:     # CLI missing / not signed in / timeout
         llm["status"] = "unavailable" if "not found" in str(e) or "sign" in str(e).lower() else "failed"
@@ -341,12 +402,27 @@ def group(pdir: Path, inp: dict, units: list[dict], cuts: dict[int, str], ask=No
 # ---------- stages 6-7: timing and validation ----------
 def assemble(inp: dict, units: list[dict], cuts: dict[int, str], groups: list[dict], method: str) -> list[dict]:
     ws, scenes = inp["words"], []
+    whisper_words = inp.get("whisper_words", [])
+    whisper_segments = inp.get("whisper_segments", {})
     for k, g in enumerate(groups, 1):
         first, last = g["first"], g["last"]
         seg_words = ws[first:last + 1]
         kinds = {w["timing"] for w in seg_words}
         source = "sentence_timestamps" if "sentence" in kinds else "estimated_words" if "estimated" in kinds else "aligned_words"
         dur = seg_words[-1]["end"] - seg_words[0]["start"]
+        st = round(seg_words[0]["start"], 3)
+        et = round(seg_words[-1]["end"], 3)
+        corr_text = " ".join(w["text"] for w in seg_words)
+
+        # Match original Whisper transcript for this scene's window (preserved separately for UI comparison)
+        w_text = None
+        if whisper_words:
+            matched_w = [w["w"] for w in whisper_words if w.get("start", 0) >= st - 0.08 and w.get("end", 0) <= et + 0.12 and w.get("w")]
+            if matched_w:
+                w_text = " ".join(matched_w)
+        if not w_text and segs:
+            w_text = " ".join(whisper_segments[sid] for sid in segs if sid in whisper_segments).strip() or None
+
         details = []
         if source == "sentence_timestamps":
             details.append({"code": "sentence_level_timing", "message": "some narration has no word times: the sentence times of the transcript are used for it"})
@@ -368,9 +444,12 @@ def assemble(inp: dict, units: list[dict], cuts: dict[int, str], groups: list[di
         if method == "llm_semantic_grouping":
             ev.append("semantic_change")
         scenes.append({
-            "scene_id": f"scene_{k:03d}", "scene_index": k, "start_time": round(seg_words[0]["start"], 3), "end_time": round(seg_words[-1]["end"], 3),
+            "scene_id": f"scene_{k:03d}", "scene_index": k, "start_time": st, "end_time": et,
             "source_segment_ids": segs, "source_sentence_ids": [f"sentence_{u['n']:03d}" for u in units if u["last"] >= first and u["first"] <= last],
-            "source_word_ids": [w["id"] for w in seg_words], "word_range": [first, last], "transcript": " ".join(w["text"] for w in seg_words),
+            "source_word_ids": [w["id"] for w in seg_words], "word_range": [first, last],
+            "transcript": corr_text,
+            "llm_transcript": corr_text,
+            "whisper_transcript": w_text,
             "semantic_beat": g["beat"], "scene_objective": g["objective"],
             "boundary_after": {"type": g["type"], "reason": g["reason"] or None, "evidence": ev, "confidence": None, "inside_segment": inside}, "timing_source": source,
             "pause_after_seconds": gap_after(inp, last), "starts_inside_segment": first > 0 and ws[first - 1]["seg"] == ws[first]["seg"],
@@ -470,10 +549,109 @@ def run(pdir: Path, progress=None, ask=None) -> dict:
               f"{len(scenes)} scenes from {len(inp['segments'])} segments ({inside} cut(s) inside a segment)",
               "start = first word start, end = last word end (" + ", ".join(sorted({s['timing_source'] for s in scenes})) + ")",
               f"coverage {val['transcript_coverage']}, order {'ok' if val['chronological_order'] else 'wrong'}, {len(val['errors'])} errors, {len(val['warnings'])} warnings, {len(val['notes'])} source note(s)"]
-    out = {"schema_version": SCHEMA, "timing_rules": TIMING_RULES, "source_fingerprint": fingerprint_of(inp), "source_audio_analysis": inp["analysis_file"], "language": inp["language"], "audio_duration_seconds": inp["duration"],
-           "segmentation_method": method, "semantic_confidence": "supported_by_llm" if llm_on else "reduced", "needs_review": bool(val["errors"]) or not llm_on, "llm": llm,
-           "config": {"pause_min": PAUSE_MIN, "pause_scene": PAUSE_SCENE, "pause_clause": PAUSE_CLAUSE, "soft_min": SOFT_MIN, "soft_max": SOFT_MAX, "long_unit": LONG_UNIT, "min_split": MIN_SPLIT},
-           "source_segments": len(inp["segments"]), "timings_seconds": T, "scenes": scenes, "stages": [{"n": i + 1, "name": nm, "status": stat(i), "detail": detail[i]} for i, nm in enumerate(STAGES)], "validation": val}
+
+    clause_split_units = sum(bool(u["clause"]) for u in units)
+    clause_punct_cuts = sum(kind == "clause" for kind in cuts.values())
+    source_data = {
+        "source_transcript_file": inp.get("source_transcript_file"),
+        "source_audio_analysis": inp["analysis_file"],
+        "language": inp["language"],
+        "audio_duration_seconds": inp["duration"],
+        "transcript_segment_count": len(inp["segments"]),
+        "word_count": len(inp["words"]),
+        "measured_pause_count": len(inp["pauses"]),
+        "scene_count": len(scenes),
+        "measured_pauses": [
+            {
+                "start": round(p[0], 3),
+                "end": round(p[1], 3),
+                "duration": round(p[1] - p[0], 3),
+            }
+            for p in inp["pauses"]
+        ],
+    }
+    sentence_and_clause_detection = {
+        "unit_count": len(units),
+        "clause_split_count": clause_split_units,
+        "potential_cut_count": len(cuts),
+        "metrics": {
+            "unit_count": len(units),
+            "sentence_count": sum(bool(u.get("sentence_end")) for u in units),
+            "clause_split_count": clause_split_units,
+            "potential_cut_count": len(cuts),
+        },
+        "candidate_cut_points_by_type": {
+            "sentence_ends": sum(k == "sentence" for k in cuts.values()),
+            "clause_punctuation": clause_punct_cuts,
+            "pauses": sum(k == "pause" for k in cuts.values()),
+            "markers": sum(k == "marker" for k in cuts.values()),
+            "free": sum(k == "free" for k in cuts.values()),
+        },
+        "sentences": [
+            {
+                "sentence_id": f"sentence_{u['n']:03d}",
+                "unit_index": u["n"],
+                "start_time": round(u["start"], 3),
+                "end_time": round(u["end"], 3),
+                "word_range": [u["first"], u["last"]],
+                "text": u["text"],
+                "is_clause_split_unit": bool(u["clause"]),
+                "is_sentence_end": bool(u["sentence_end"]),
+                "pause_after": u["pause_after"],
+            }
+            for u in units
+        ],
+        "clause_splits": [
+            {
+                "split_word_index": u["last"],
+                "after_word": inp["words"][u["last"]]["text"],
+                "split_time": round(u["end"], 3),
+                "unit_index": u["n"],
+            }
+            for u in units if u["clause"]
+        ],
+        "allowed_cuts": [
+            {
+                "word_index": i,
+                "word": inp["words"][i]["text"],
+                "cut_type": "sentence_end" if kind == "sentence" else "clause_punctuation" if kind == "clause" else kind,
+                "description": (
+                    "Sentence boundary" if kind == "sentence" else
+                    "Clause punctuation mark (, ; :)" if kind == "clause" else
+                    "Acoustic pause" if kind == "pause" else
+                    "Discourse marker" if kind == "marker" else
+                    "Free split"
+                ),
+                "time": round(inp["words"][i]["end"], 3),
+            }
+            for i, kind in sorted(cuts.items())
+        ],
+    }
+
+    out = {
+        "schema_version": SCHEMA,
+        "timing_rules": TIMING_RULES,
+        "source_fingerprint": fingerprint_of(inp),
+        "source_audio_analysis": inp["analysis_file"],
+        "source_transcript": inp.get("source_transcript_file"),
+        "language": inp["language"],
+        "audio_duration_seconds": inp["duration"],
+        "source_data": source_data,
+        "sentence_and_clause_detection": sentence_and_clause_detection,
+        "source_segments": len(inp["segments"]),
+        "source_words": len(inp["words"]),
+        "source_pauses": len(inp["pauses"]),
+        "scene_count": len(scenes),
+        "segmentation_method": method,
+        "semantic_confidence": "supported_by_llm" if llm_on else "reduced",
+        "needs_review": bool(val["errors"]) or not llm_on,
+        "llm": llm,
+        "config": {"pause_min": PAUSE_MIN, "pause_scene": PAUSE_SCENE, "pause_clause": PAUSE_CLAUSE, "soft_min": SOFT_MIN, "soft_max": SOFT_MAX, "long_unit": LONG_UNIT, "min_split": MIN_SPLIT},
+        "timings_seconds": T,
+        "scenes": scenes,
+        "stages": [{"n": i + 1, "name": nm, "status": stat(i), "detail": detail[i]} for i, nm in enumerate(STAGES)],
+        "validation": val,
+    }
     if val["errors"]:
         raise ValueError("; ".join(val["errors"]))               # nothing is written: a broken segmentation must not look finished
     tmp = pdir / "scene_segmentation.json.part"

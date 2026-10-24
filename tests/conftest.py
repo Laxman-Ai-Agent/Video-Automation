@@ -19,13 +19,14 @@ def no_autoplan(monkeypatch):
 
 
 @pytest.fixture(autouse=True)
-def no_real_claude_cli(monkeypatch):
-    """Safety guard: prevents any test from calling the live Claude CLI process."""
+def no_real_llm(monkeypatch):
+    """Safety guard: prevents any test from reaching a live LLM, whichever provider config/llm_settings.json holds on this machine (the Claude CLI process or a paid/limited API)."""
     try:
         from backend import llm_client
-        def fake_claude_cli(user, system="", timeout=180):
-            raise llm_client.LlmError("Tests are prohibited from reaching the live Claude CLI process.")
-        monkeypatch.setattr(llm_client, "_call_claude_cli", fake_claude_cli)
+        def fake(*args, **kwargs):
+            raise llm_client.LlmError("Tests are prohibited from reaching a live LLM.")
+        for name in ("_call_claude_cli", "_call_gemini", "_call_openai_compatible", "_call_anthropic"):
+            monkeypatch.setattr(llm_client, name, fake)
     except Exception:
         pass
 

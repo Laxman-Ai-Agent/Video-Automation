@@ -57,8 +57,8 @@ export const TranscriptComparison: React.FC<Props> = ({ data }) => {
             <div style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginBottom: '4px' }}>LLM-CORRECTED (final){s.changed ? '' : ' · unchanged'}</div>
             {s.final_words
               ? s.final_words.map((w, i) => (
-                  <span key={i} title={w.edit ? `LLM edit, ${w.timing === 'aligned' ? 're-aligned against the audio' : 'estimated time'} (${w.start.toFixed(2)}–${w.end.toFixed(2)}s)` : undefined}
-                        style={w.edit ? { color: w.timing === 'aligned' ? '#4ADE80' : '#FBBF24', fontWeight: 700 } : undefined}>
+                  <span key={i} title={w.edit ? `LLM edit, ${w.timing === 'aligned' ? 're-aligned against the audio' : w.timing === 'estimated' ? 'estimated time' : 'time of the word it replaces'} (${w.start.toFixed(2)}–${w.end.toFixed(2)}s)` : undefined}
+                        style={w.edit ? { color: w.timing === 'estimated' ? '#FBBF24' : '#4ADE80', fontWeight: 700 } : undefined}>
                     {w.w}{' '}
                   </span>
                 ))

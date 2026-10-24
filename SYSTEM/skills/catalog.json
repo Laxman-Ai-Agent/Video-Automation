@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-22T10:53:34.776072+00:00",
+  "updated_at": "2026-10-24T03:08:29.424559+00:00",
   "skills": {
     "audio.bilingual_preservation": {
       "skill_id": "audio.bilingual_preservation",
@@ -84,12 +84,12 @@
       "risk_level": "low",
       "approval": {
         "reviewer": "category_skill_library_installer",
-        "timestamp": "2026-10-21T02:28:17.268476+00:00",
+        "timestamp": "2026-10-24T03:08:29.407886+00:00",
         "evidence": "Passed automated validation and load tests with score 67.0/100"
       },
-      "last_audited_at": "2026-10-21T02:28:17.268476+00:00",
-      "created_at": "2026-10-21T02:28:17.268476+00:00",
-      "updated_at": "2026-10-21T02:28:17.282141+00:00",
+      "last_audited_at": "2026-10-24T03:08:29.407886+00:00",
+      "created_at": "2026-10-24T03:08:29.407886+00:00",
+      "updated_at": "2026-10-24T03:08:29.424559+00:00",
       "metadata": {
         "category": "color_grading",
         "subcategory": null
@@ -238,12 +238,12 @@
       "risk_level": "low",
       "approval": {
         "reviewer": "category_skill_library_installer",
-        "timestamp": "2026-10-21T02:28:17.172151+00:00",
+        "timestamp": "2026-10-24T03:08:29.318026+00:00",
         "evidence": "Passed automated validation and load tests with score 67.0/100"
       },
-      "last_audited_at": "2026-10-21T02:28:17.172151+00:00",
-      "created_at": "2026-10-21T02:28:17.176725+00:00",
-      "updated_at": "2026-10-21T02:28:17.191769+00:00",
+      "last_audited_at": "2026-10-24T03:08:29.318026+00:00",
+      "created_at": "2026-10-24T03:08:29.318026+00:00",
+      "updated_at": "2026-10-24T03:08:29.327767+00:00",
       "metadata": {
         "category": "transitions",
         "subcategory": null

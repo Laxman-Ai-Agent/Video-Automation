@@ -28,7 +28,6 @@ def test_verify_sidebar_buttons_removed():
         expected_items = [
             "sidebar-nav-dashboard",
             "sidebar-nav-pipeline",
-            "sidebar-nav-visual-editor",
             "sidebar-nav-projects",
             "sidebar-nav-agents",
             "sidebar-nav-skills"

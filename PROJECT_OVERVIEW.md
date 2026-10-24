@@ -19,8 +19,7 @@ LAXMAN-AUTONOMOUS is an enterprise-grade autonomous video creation platform tail
 4. **Dual Visual Modes:**
    - **Use Images Mode:** Procedural combination of stock assets, user uploads, and dynamic motion graphics.
    - **Motion-Only Mode:** High-velocity kinetic typography, vector geometry, and procedural layouts requiring zero external images.
-5. **Integrated Visual AI Editor:** In-app visual feedback collection, interactive LLM coding agent chat, plan review, syntax-highlighted code diffing, and live sandboxed preview.
-6. **Robust Studio Ergonomics:** Studio Dark Theme, fixed left sidebar, fixed top navigation bar, and independently scrollable main content area with subtle dark scrollbars.
+5. **Robust Studio Ergonomics:** Studio Dark Theme, fixed left sidebar, fixed top navigation bar, and independently scrollable main content area with subtle dark scrollbars.
 
 ---
 
@@ -70,11 +69,11 @@ E:\audio-to-video/
 ├── UI/                     # Consolidated Application Core
 │   ├── backend/            # FastAPI application
 │   │   ├── main.py         # App entrypoint and router mounting
-│   │   ├── routes/         # Pipeline, agents runtime, visual editor, approvals, projects
+│   │   ├── routes/         # Pipeline, agents runtime, approvals, projects
 │   │   └── store.py        # Project persistence and file locking
 │   └── frontend/           # Vite + React 18 frontend
 │       ├── src/
-│       │   ├── components/ # Sidebar, Header, Live Pipeline, Visual AI Editor, Stage Tracking
+│       │   ├── components/ # Sidebar, Header, Live Pipeline, Stage Tracking
 │       │   ├── api/        # Typed API client and backend contracts
 │       │   ├── App.tsx     # Layout structure (Fixed Sidebar + Header + Scrollable Main)
 │       │   └── index.css   # Global styles and subtle scrollbars
@@ -178,24 +177,14 @@ The application UI is structured for stability, zero visual jitter, and distract
 
 ---
 
-## 7. Visual AI Editor Architecture
 
-The **Visual AI Editor** is an in-app workspace accessible from the main sidebar:
-- **Tab 1: Feedback:** Interactive sticky notes linked to specific UI routes, DOM selectors, and component names.
-- **Tab 2: AI Chat:** Interactive coding agent chat connected to the backend LLM (`/api/visual-editor/chat`) with agent persona, model badges, and execution logs.
-- **Tab 3: Implementation Plan:** Formatted plan review with affected files, risk level, task checklists, and human approval gate (`Approve Plan`).
-- **Tab 4: Code Diff:** Syntax-highlighted unified/split diff viewer detailing exact file additions and deletions.
-- **Tab 5: Live Preview:** In-app sandbox iframe previewing the running application (`http://localhost:5173`) with live reload and final UI sign-off gate (`Approve UI Changes`).
-
----
-
-## 8. Integrity Constraints
+## 7. Integrity Constraints
 
 - `transcript.json` is the raw Whisper output and is never edited; the LLM review writes `transcript_review.json` and `transcript_corrected.json` beside it, and Scene Segmentation reads the corrected transcript.
 - No stage is frozen: a stage may be changed when the work needs it, keeping the files later stages read (or updating every reader and test together).
 ---
 
-## 9. Development & Verification Guide
+## 8. Development & Verification Guide
 
 ### Starting the System
 1. **Backend Service (Port 8000):**
@@ -213,10 +202,6 @@ The **Visual AI Editor** is an in-app workspace accessible from the main sidebar
 - **Layout & Scrolling E2E Test:**
   ```powershell
   .venv\Scripts\python -m pytest tests/test_playwright_fixed_layout_scroll.py
-  ```
-- **Visual AI Editor E2E Test:**
-  ```powershell
-  .venv\Scripts\python -m pytest tests/test_playwright_visual_ai_editor.py
   ```
 - **Live Pipeline & No-Blinking Tests:**
   ```powershell

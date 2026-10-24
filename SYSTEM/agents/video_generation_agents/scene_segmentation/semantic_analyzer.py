@@ -215,7 +215,7 @@ class SemanticAnalyzer:
         self.gateway_module = llm_gateway_module
 
     def _extract_words_and_duration(self, transcript_data: dict[str, Any]) -> tuple[list[dict[str, Any]], float]:
-        """Extracts canonical words and duration safely from transcript.json."""
+        """Extracts canonical words and duration safely from the corrected transcript."""
         words: list[dict[str, Any]] = []
         duration = float(transcript_data.get("duration", 0.0))
 
@@ -225,9 +225,9 @@ class SemanticAnalyzer:
             seg_words = s.get("words", [])
             if seg_words:
                 for w in seg_words:
-                    word_text = w.get("word", w.get("text", w.get("w", "")))
-                    w_start = float(w.get("start", 0.0))
-                    w_end = float(w.get("end", w_start))
+                    word_text = str(w.get("word", w.get("text", w.get("w", ""))))
+                    w_start = float(w.get("start", w.get("start_seconds", 0.0)))
+                    w_end = float(w.get("end", w.get("end_seconds", w_start)))
                     words.append({
                         "id": f"w{len(words)+1:03d}",
                         "text": word_text,
@@ -237,12 +237,12 @@ class SemanticAnalyzer:
                     })
             else:
                 # Segment without word timestamps
-                seg_text = s.get("text", "")
+                seg_text = str(s.get("text", ""))
                 words.append({
                     "id": f"w{len(words)+1:03d}",
                     "text": seg_text,
-                    "start": float(s.get("start", 0.0)),
-                    "end": float(s.get("end", 0.0)),
+                    "start": float(s.get("start", s.get("start_seconds", 0.0))),
+                    "end": float(s.get("end", s.get("end_seconds", 0.0))),
                     "seg": seg_id,
                 })
 

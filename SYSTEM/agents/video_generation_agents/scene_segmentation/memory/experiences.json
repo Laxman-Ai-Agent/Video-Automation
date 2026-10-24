@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "scene_segmentation",
-  "updated_at": "2026-10-20T02:21:01.354354+00:00",
-  "total_experiences": 8,
+  "updated_at": "2026-10-24T03:45:49.056479+00:00",
+  "total_experiences": 16,
   "experiences": {
     "exp-scene_segmentation-056274e17b": {
       "experience_id": "exp-scene_segmentation-056274e17b",
@@ -128,6 +128,178 @@
       "timestamp": "2026-10-20T01:15:10.623662+00:00",
       "schema_version": 1
     },
+    "exp-scene_segmentation-a4d54b6351": {
+      "experience_id": "exp-scene_segmentation-a4d54b6351",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_883ac4c8",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_883ac4c8",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-23T23:51:18.708940+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T23:51:18.754637+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-a7f3506945": {
+      "experience_id": "exp-scene_segmentation-a7f3506945",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_c6d305b0",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_c6d305b0",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T03:31:22.311229+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Task execution was cancelled by user; retry forbidden.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:31:22.336280+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-b86977a599": {
+      "experience_id": "exp-scene_segmentation-b86977a599",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_7c681ba6",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_7c681ba6",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T03:31:32.025608+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:31:32.067014+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-bdb3cc96b6": {
+      "experience_id": "exp-scene_segmentation-bdb3cc96b6",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_5961b637",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_5961b637",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T02:17:24.347812+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T02:17:24.364425+00:00",
+      "schema_version": 1
+    },
     "exp-scene_segmentation-bf59808e59": {
       "experience_id": "exp-scene_segmentation-bf59808e59",
       "agent_id": "scene_segmentation",
@@ -157,6 +329,49 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T01:04:37.223148+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-c9c99308d9": {
+      "experience_id": "exp-scene_segmentation-c9c99308d9",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_9ae4c1bd",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_9ae4c1bd",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T03:29:44.863230+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:29:44.908159+00:00",
       "schema_version": 1
     },
     "exp-scene_segmentation-cf0e6b3dce": {
@@ -221,6 +436,49 @@
       "timestamp": "2026-10-18T13:41:48.311050+00:00",
       "schema_version": 1
     },
+    "exp-scene_segmentation-d9ed398bc7": {
+      "experience_id": "exp-scene_segmentation-d9ed398bc7",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_04945e5a",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_04945e5a",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-23T23:50:13.105079+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T23:50:13.138578+00:00",
+      "schema_version": 1
+    },
     "exp-scene_segmentation-e4109945c7": {
       "experience_id": "exp-scene_segmentation-e4109945c7",
       "agent_id": "scene_segmentation",
@@ -250,6 +508,92 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:21:01.346324+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-f166cce82d": {
+      "experience_id": "exp-scene_segmentation-f166cce82d",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_57471830",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_57471830",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T03:45:48.983760+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:45:49.023382+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-f2cf785391": {
+      "experience_id": "exp-scene_segmentation-f2cf785391",
+      "agent_id": "scene_segmentation",
+      "task_type": "recovery_segmentation",
+      "task_id": "run_c559f828",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "segmentation",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_c559f828",
+            "agent_id": "scene_segmentation",
+            "stage_id": "segmentation",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'segmentation': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T02:22:57.837023+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_segmentation",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for segmentation resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T02:22:57.888260+00:00",
       "schema_version": 1
     }
   }

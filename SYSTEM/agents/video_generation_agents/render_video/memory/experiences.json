@@ -1,9 +1,32 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-22T18:24:41.161017+00:00",
-  "total_experiences": 20,
+  "updated_at": "2026-10-24T03:18:46.163933+00:00",
+  "total_experiences": 24,
   "experiences": {
+    "exp-render_video-027d470a17": {
+      "experience_id": "exp-render_video-027d470a17",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-2307b9daa5",
+      "project_id": "motion-demo-6b97",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:59:54.083457+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-092004efd0": {
       "experience_id": "exp-render_video-092004efd0",
       "agent_id": "render_video",
@@ -211,6 +234,29 @@
       "timestamp": "2026-10-19T07:11:34.159205+00:00",
       "schema_version": 1
     },
+    "exp-render_video-4714b6ce1e": {
+      "experience_id": "exp-render_video-4714b6ce1e",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-e64a61e484",
+      "project_id": "motion-demo-1f2c",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:51:49.380176+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-5b4c6f0c6c": {
       "experience_id": "exp-render_video-5b4c6f0c6c",
       "agent_id": "render_video",
@@ -329,6 +375,29 @@
       "timestamp": "2026-10-20T05:11:12.695377+00:00",
       "schema_version": 1
     },
+    "exp-render_video-99246352ee": {
+      "experience_id": "exp-render_video-99246352ee",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-5d7b878609",
+      "project_id": "motion-demo-4300",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:49:25.296201+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-9c3d796cba": {
       "experience_id": "exp-render_video-9c3d796cba",
       "agent_id": "render_video",
@@ -350,6 +419,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T06:03:19.308647+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-ad96ff8565": {
+      "experience_id": "exp-render_video-ad96ff8565",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-9f940a906a",
+      "project_id": "motion-demo-6b7e",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:18:46.154783+00:00",
       "schema_version": 1
     },
     "exp-render_video-ade8d085ca": {

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "agent_id": "asset_collection",
+  "updated_at": "2026-10-24T02:06:38.912354+00:00",
+  "total_experiences": 1,
+  "experiences": {
+    "exp-asset_collection-80afcf3c7e": {
+      "experience_id": "exp-asset_collection-80afcf3c7e",
+      "agent_id": "asset_collection",
+      "task_type": "recovery_assets",
+      "task_id": "run_b217ad77",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "assets",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_b217ad77",
+            "agent_id": "asset_collection",
+            "stage_id": "assets",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'assets': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T02:06:38.869668+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_assets",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for assets resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T02:06:38.910358+00:00",
+      "schema_version": 1
+    }
+  }
+}

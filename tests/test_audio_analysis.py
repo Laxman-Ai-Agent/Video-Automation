@@ -136,3 +136,19 @@ def test_transcribe_never_ends_a_segment_before_its_last_word(tmp_path, monkeypa
     monkeypatch.setattr(transcribe, "chunk_points", lambda p, a, b: [(0.0, 3.0)])
     t = transcribe.transcribe(tmp_path)
     assert t.segments[0].end == 1.4 and t.segments[0].words[-1].end == 1.4
+
+
+# ---------- clipping: a peak at 0 dB is not clipping ----------
+def test_a_few_samples_at_full_scale_are_not_clipping(monkeypatch):
+    """Real case (07-5df8): max -0.0 dB with 37 of 1,246,343 samples in the top bin is a peak-normalized recording, not a clipped one."""
+    out = "n_samples: 0\nn_samples: 1246343\nmean_volume: -19.1 dB\nmax_volume: -0.0 dB\nhistogram_0db: 37\n"
+    monkeypatch.setattr(aa, "_run", lambda cmd: out)
+    q = aa.quality(shutil.which("ffmpeg") and __import__("pathlib").Path("x.wav"))
+    assert q["max_volume_db"] == -0.0 and q["peak_samples"] == 37 and q["peak_share"] < aa.CLIP_SHARE
+
+
+def test_a_really_clipped_file_is_over_the_clipping_share(tmp_path):
+    f = tmp_path / "clipped.wav"
+    subprocess.run(["ffmpeg", "-y", "-f", "lavfi", "-i", "sine=frequency=440:duration=2,volume=8,alimiter=limit=1:level=disabled", str(f)], capture_output=True, check=True)
+    q = aa.quality(f)
+    assert q["peak_share"] >= aa.CLIP_SHARE

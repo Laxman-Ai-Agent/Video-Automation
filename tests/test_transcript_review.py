@@ -25,7 +25,9 @@ def answer(*cs):
     return json.dumps({"corrections": list(cs)}, ensure_ascii=False)
 
 
-GOOD = {"segment": 0, "from_index": 1, "to_index": 1, "from": "ఫాస్ట్", "to": "ఫాస్ట్ఏపీఐ", "reason": "misheard"}
+GOOD = {"segment": 0, "from_index": 1, "to_index": 1, "from": "ఫాస్ట్", "to": "ఫాస్ట్ఏపీఐ", "reason": "misheard"}      # a respelling: one word for one word, it keeps the Whisper time
+SPLIT = {**GOOD, "to": "ఫాస్ట్ ఏపీఐ"}                                                                                      # one word for two: the new words share the old span (ESTIMATED until aligned)
+TRUTH = {"నమస్తే": (0, 1), "ఫాస్ట్": (1, 1.5), "ఏపీఐ": (1.5, 2), "API": (2, 3), "2024": (3, 4)}                            # what a trustworthy alignment finds for the words of SPLIT
 
 
 class Ask:
@@ -75,11 +77,12 @@ def test_corrected_words_get_estimated_times_inside_the_replaced_span_and_raw_is
 def test_refine_writes_review_and_corrected_file_and_keeps_raw(tmp_path):
     make(tmp_path)
     raw = (tmp_path / "transcript.json").read_bytes()
-    ask = Ask(answer(GOOD))
+    ask = Ask(answer(SPLIT))
     r = tr.refine(tmp_path, ask=ask)
     assert ask.calls == 1 and r["llm"]["status"] == "applied" and r["alignment"]["status"] == "estimated_for_edits" and r["unresolved"] == []
+    assert r["alignment"]["estimated_words"] == 2
     assert (tmp_path / "transcript.json").read_bytes() == raw
-    assert load_transcript(tmp_path).segments[0].words[1].w == "ఫాస్ట్ఏపీఐ"               # downstream reads the corrected layer
+    assert load_transcript(tmp_path).segments[0].words[1].w == "ఫాస్ట్"                      # downstream reads the corrected layer
     assert json.loads((tmp_path / "transcript_review.json").read_text(encoding="utf-8"))["corrected_file"] == "transcript_corrected.json"
 
 
@@ -127,7 +130,7 @@ def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_correcte
     assert (tmp_path / "transcript_corrected.json").exists() and tr.is_verified(tmp_path)
     _review(tmp_path, **{"llm.status": "unavailable"})
     assert not tr.is_verified(tmp_path)                                                     # the LLM did not check it
-    _review(tmp_path, **{"llm.status": "cached", "alignment.status": "estimated_for_edits"})
+    _review(tmp_path, **{"llm.status": "cached", "alignment.status": "estimated_for_edits", "alignment.estimated_words": 2})
     assert not tr.is_verified(tmp_path)                                                     # corrected words still wait for their timestamps
     _review(tmp_path, **{"alignment.status": "aligned_for_edits"})
     assert tr.is_verified(tmp_path)
@@ -164,12 +167,12 @@ def test_the_llm_gets_the_word_times_as_evidence_from_the_audio(tmp_path):
 
 def test_the_comparison_puts_the_raw_whisper_text_next_to_the_final_one_with_the_llm_edits_marked(tmp_path):
     make(tmp_path)
-    tr.refine(tmp_path, ask=Ask(answer(GOOD)))
+    tr.refine(tmp_path, ask=Ask(answer(SPLIT)))
     c = tr.comparison(tmp_path)
     assert c["raw_file"] == "transcript.json" and c["final_file"] == "transcript_corrected.json" and c["llm"]["status"] == "applied" and c["corrections_applied"] == 1
     first, second = c["segments"]
-    assert first["changed"] and first["raw_text"] == "a" and "ఫాస్ట్ఏపీఐ" in first["final_text"]
-    assert [w["edit"] for w in first["final_words"]] == [None, "llm", None, None] and first["final_words"][1]["timing"] == "estimated"        # no model in tests: the time is estimated, and it says so
+    assert first["changed"] and first["raw_text"] == "a" and "ఫాస్ట్ ఏపీఐ" in first["final_text"]
+    assert [w["edit"] for w in first["final_words"]] == [None, "llm", "llm", None, None] and first["final_words"][1]["timing"] == "estimated"        # no model in tests: the time is estimated, and it says so
     assert not second["changed"] and "final_words" not in second
     assert c["alignment"] == "estimated_for_edits" and not c["verified"]                    # corrected words still wait for their timestamps
 
@@ -246,10 +249,10 @@ def test_a_stale_corrected_file_is_replaced_by_the_final_json_of_the_new_transcr
 
 def test_refine_step_is_cached_and_a_changed_transcript_reruns_only_what_depends_on_it(tmp_path, monkeypatch):
     t = make(tmp_path)
-    asked = Ask(answer(GOOD))
+    asked = Ask(answer(SPLIT))
     monkeypatch.setattr(promptgen, "run_claude", asked)
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"
-    monkeypatch.setattr(tr, "whisper_aligner", lambda: exact())                                  # the aligner works now: the unfinished alignment is completed (resume)
+    monkeypatch.setattr(tr, "whisper_aligner", lambda: exact(truth=TRUTH))                                  # the aligner works now: the unfinished alignment is completed (resume)
     wav(tmp_path)
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "fresh" and asked.calls == 1      # finished: nothing re-run, no second call
@@ -327,9 +330,11 @@ def wav(pdir, secs=10):
     subprocess.run(["ffmpeg", "-y", "-f", "lavfi", "-i", f"sine=frequency=300:duration={secs}", "-ar", "16000", "-ac", "1", str(pdir / "audio_16k.wav")], capture_output=True, check=True)
 
 
-def exact(words_by_call=None, shift=0.0):
-    """A fake aligner that returns the times Whisper measured (plus an optional shift): what a trustworthy alignment of the same audio looks like."""
+def exact(truth=None, shift=0.0):
+    """A fake aligner that returns the times Whisper measured (`truth`: word -> (start, end), else one second per word) plus an optional shift: what a trustworthy alignment of the same audio looks like."""
     def align(audio, words):
+        if truth:
+            return [(round(truth[w][0] + shift, 3), round(truth[w][1] + shift, 3)) for w in words]
         return [(round(i * 1.0 + shift, 3), round(i * 1.0 + 1.0 + shift, 3)) for i in range(len(words))]
     return align
 
@@ -337,11 +342,11 @@ def exact(words_by_call=None, shift=0.0):
 def test_corrected_words_are_realigned_against_the_audio_and_cross_checked(tmp_path):
     make(tmp_path)
     wav(tmp_path)
-    r = tr.refine(tmp_path, ask=Ask(answer(GOOD)), aligner=exact())
+    r = tr.refine(tmp_path, ask=Ask(answer(SPLIT)), aligner=exact(truth=TRUTH))
     seg = load_transcript(tmp_path).segments[0]
-    assert r["alignment"]["status"] == "aligned_for_edits" and r["alignment"]["segments"][0]["median_shift"] == 0.0
+    assert r["alignment"]["status"] == "aligned_for_edits" and r["alignment"]["segments"][0]["median_shift"] == 0.0 and r["alignment"]["estimated_words"] == 0
     new = [w for w in seg.words if w.edit == "llm"]
-    assert [w.timing for w in new] == ["aligned"] and [w.timing for w in seg.words if w.edit is None] == [None, None, None]      # the unchanged words keep Whisper's own timestamps
+    assert [w.timing for w in new] == ["aligned", "aligned"] and [w.timing for w in seg.words if w.edit is None] == [None, None, None]      # the unchanged words keep Whisper's own timestamps
     assert "re-aligned against the original audio" in r["alignment"]["method"] and "model-inferred" in r["alignment"]["method"]
 
 
@@ -349,11 +354,11 @@ def test_an_alignment_that_disagrees_with_whisper_is_refused_and_the_words_stay_
     monkeypatch.setattr(tr, "PAD", 1.0)                                                  # room for the shifted times: the refusal must come from the disagreement, not the bounds
     make(tmp_path)
     wav(tmp_path)
-    r = tr.refine(tmp_path, ask=Ask(answer(GOOD)), aligner=exact(shift=0.2 + tr.MAX_SHIFT))
+    r = tr.refine(tmp_path, ask=Ask(answer(SPLIT)), aligner=exact(truth=TRUTH, shift=0.2 + tr.MAX_SHIFT))
     seg = load_transcript(tmp_path).segments[0]
     rec = r["alignment"]["segments"][0]
     assert r["alignment"]["status"] == "estimated_for_edits" and rec["status"] == "estimated" and "disagrees" in rec["reason"]
-    assert [w.timing for w in seg.words if w.edit == "llm"] == ["estimated"]
+    assert [w.timing for w in seg.words if w.edit == "llm"] == ["estimated", "estimated"]
     assert 1.0 <= seg.words[1].start < seg.words[1].end <= 2.0                       # still inside the span of the word it replaced
 
 
@@ -364,15 +369,15 @@ def test_alignment_errors_never_become_a_success(tmp_path):
     def crash(audio, words):
         raise MemoryError("not enough memory")
 
-    r = tr.refine(tmp_path, ask=Ask(answer(GOOD)), aligner=crash)
+    r = tr.refine(tmp_path, ask=Ask(answer(SPLIT)), aligner=crash)
     assert r["alignment"]["status"] == "estimated_for_edits" and "memory" in r["alignment"]["segments"][0]["reason"]
-    r2 = tr.refine(tmp_path, ask=Ask(answer(GOOD)))                                    # default aligner: no model on this machine
+    r2 = tr.refine(tmp_path, ask=Ask(answer(SPLIT)))                                   # default aligner: no model on this machine
     assert r2["alignment"]["status"] == "estimated_for_edits" and "could not start" in r2["alignment"]["segments"][0]["reason"]
 
 
 def test_without_audio_the_edited_words_are_estimated_and_the_reason_is_recorded(tmp_path):
     make(tmp_path)                                                                       # no audio at all
-    r = tr.refine(tmp_path, ask=Ask(answer(GOOD)))
+    r = tr.refine(tmp_path, ask=Ask(answer(SPLIT)))
     assert r["alignment"]["status"] == "estimated_for_edits" and "could not start" in r["alignment"]["segments"][0]["reason"]
 
 
@@ -381,14 +386,14 @@ def test_partial_alignment_is_reported_as_partial(tmp_path):
     t.segments[1].words[0].p = 0.1
     (tmp_path / "transcript.json").write_text(t.model_dump_json(indent=1), encoding="utf-8")
     wav(tmp_path)
-    second = {"segment": 1, "from_index": 0, "to_index": 0, "from": "సరే", "to": "సరేనా", "reason": "misheard"}
+    second = {"segment": 1, "from_index": 0, "to_index": 0, "from": "సరే", "to": "సరే నా", "reason": "misheard"}
 
     def align(audio, words):
-        if len(words) == 4:
-            return [(i * 1.0, i * 1.0 + 1.0) for i in range(4)]                         # segment 0: trustworthy
+        if len(words) == 5:
+            return exact(truth=TRUTH)(audio, words)                     # segment 0: trustworthy
         raise ValueError("no unchanged word agrees")                                      # segment 1: refused
 
-    r = tr.refine(tmp_path, ask=Ask(answer(GOOD, second)), aligner=align)
+    r = tr.refine(tmp_path, ask=Ask(answer(SPLIT, second)), aligner=align)
     assert r["alignment"]["status"] == "partial" and [s["status"] for s in r["alignment"]["segments"]] == ["aligned", "estimated"]
 
 
@@ -397,13 +402,13 @@ def test_analysis_never_calls_estimated_timestamps_completed(tmp_path):
     make(tmp_path)
     wav(tmp_path)
     (tmp_path / "audio.wav").write_bytes((tmp_path / "audio_16k.wav").read_bytes())
-    tr.refine(tmp_path, ask=Ask(answer(GOOD)))                                           # no model: estimated
+    tr.refine(tmp_path, ask=Ask(answer(SPLIT)))                                          # no model: estimated
     d = aa.build(tmp_path)
     s9 = d["stages"][8]
     assert s9["name"] == "Word-Level Alignment" and s9["status"] == "warning" and "ESTIMATED" in s9["detail"]
     assert any(w["code"] == "estimated_timestamps" for w in d["validation"]["warnings"]) and d["validation"]["status"] == "warning"
-    assert [w["timing"] for u in d["utterances"] for w in u["words"]].count("estimated") == 1
-    tr.refine(tmp_path, ask=Ask(answer(GOOD)), aligner=exact())
+    assert [w["timing"] for u in d["utterances"] for w in u["words"]].count("estimated") == 2
+    tr.refine(tmp_path, ask=Ask(answer(SPLIT)), aligner=exact(truth=TRUTH))
     d2 = aa.build(tmp_path)
     assert d2["stages"][8]["status"] == "completed" and not any(w["code"] == "estimated_timestamps" for w in d2["validation"]["warnings"])
 
@@ -412,13 +417,13 @@ def test_analysis_never_calls_estimated_timestamps_completed(tmp_path):
 def test_estimated_timestamps_keep_the_step_unfinished_until_the_alignment_succeeds(tmp_path, monkeypatch):
     make(tmp_path)
     wav(tmp_path)
-    asked = Ask(answer(GOOD))
+    asked = Ask(answer(SPLIT))
     monkeypatch.setattr(promptgen, "run_claude", asked)
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"      # no model: ESTIMATED
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"      # resume: not finished, tried again
-    monkeypatch.setattr(tr, "whisper_aligner", lambda: exact())
+    monkeypatch.setattr(tr, "whisper_aligner", lambda: exact(truth=TRUTH))
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"      # now aligned
-    assert tr.last_alignment(tmp_path) == "aligned_for_edits"
+    assert tr.last_review(tmp_path)["alignment"]["status"] == "aligned_for_edits" and not tr.alignment_pending(tr.last_review(tmp_path))
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "fresh"
     assert asked.calls == 1                                                              # the Claude answer was cached all along
 
@@ -476,3 +481,18 @@ def test_the_analysis_stops_when_the_llm_check_cannot_run_and_nothing_verified_e
     monkeypatch.setattr(promptgen, "run_claude", Ask(answer(GOOD)))                      # signed in again: the same step runs again and finishes
     assert pipeline.execute(tmp_path, "refine", pipeline.Ctx())["status"] == "ran"
     assert load_transcript(tmp_path).segments[0].words[1].w == "ఫాస్ట్ఏపీఐ"
+
+
+def test_a_respelled_word_keeps_the_whisper_time_and_raises_no_warning(tmp_path):
+    """One word for one word (క్రీటివిటి -> creativity): the same spoken word, so Whisper's time is measured. No ESTIMATED word, no aligner, no warning, the step is finished."""
+    from backend import audio_analysis as aa
+    make(tmp_path)
+    wav(tmp_path)
+    (tmp_path / "audio.wav").write_bytes((tmp_path / "audio_16k.wav").read_bytes())
+    r = tr.refine(tmp_path, ask=Ask(answer(GOOD)))                                    # the default aligner would fail here: it must not even be needed
+    w = load_transcript(tmp_path).segments[0].words[1]
+    assert (w.w, w.start, w.end, w.timing, w.edit) == ("ఫాస్ట్ఏపీఐ", 1, 2, None, "llm")
+    assert r["alignment"]["status"] == "unchanged" and r["alignment"]["estimated_words"] == 0 and not tr.alignment_pending(r)
+    d = aa.build(tmp_path)
+    assert not any(x["code"] == "estimated_timestamps" for x in d["validation"]["warnings"]) and d["stages"][8]["status"] == "completed"
+    assert "1 keep the Whisper timestamp" in d["stages"][8]["detail"]

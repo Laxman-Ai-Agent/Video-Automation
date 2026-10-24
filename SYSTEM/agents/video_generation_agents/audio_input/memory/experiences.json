@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "audio_input",
-  "updated_at": "2026-10-18T13:41:48.830282+00:00",
-  "total_experiences": 2,
+  "updated_at": "2026-10-24T03:29:49.399983+00:00",
+  "total_experiences": 3,
   "experiences": {
     "exp-audio_input-0f26e78282": {
       "experience_id": "exp-audio_input-0f26e78282",
@@ -22,6 +22,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T13:41:45.754326+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_input-7df67f9aab": {
+      "experience_id": "exp-audio_input-7df67f9aab",
+      "agent_id": "audio_input",
+      "task_type": "recovery_audio",
+      "task_id": "run_92ab3f42",
+      "project_id": "07-5df8",
+      "context": {
+        "stage_id": "audio",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "07-5df8",
+            "task_id": "run_92ab3f42",
+            "agent_id": "audio_input",
+            "stage_id": "audio",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Cannot complete stage 'audio': Phase 2 review gate failed (llm_review_blocked)",
+            "timestamp": "2026-10-24T03:29:49.355786+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_audio",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for audio resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:29:49.391880+00:00",
       "schema_version": 1
     },
     "exp-audio_input-a4c5f2a84f": {

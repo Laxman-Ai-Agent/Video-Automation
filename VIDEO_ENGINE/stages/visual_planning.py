@@ -242,11 +242,10 @@ def media_rules(opts: dict) -> str:
         lines.append(f"Never use an element of type {' or '.join(t for k in mk.KINDS.values() if k.family in none for t in [k.name])}: this project has none (its share is 0%).")
     if opts["image"] or opts["video"]:
         lines += [
-            "The primary element of a scene is either drawn (type text, graphic, diagram, chart, data_visualization, icon) or real (type image, video or reference). Decide with one question: can a camera film or "
-            "photograph this subject, and would the real picture explain the narration better than a drawing? Yes and it is a still subject: type image. Yes and the movement itself is the point "
-            "(flowing water, traffic, a launch): type video. No (an idea, a question, a definition, a number, a process, a comparison): a drawn primary element.",
-            "Aim at the shares over the whole video, scene by scene, but never force them: when the narration shows too few things a camera can film, keep fewer real scenes and say so in "
-            "'uncertainty'. Never use a real picture merely as decoration, and avoid real media in more than two scenes in a row unless the story needs it.",
+            "The primary element of a scene is either drawn (type text, graphic, diagram, chart, data_visualization, icon) or real (type image, video or reference).",
+            "When the narration mentions a tangible subject (people, workplace, city, hardware, documents, nature), use type image (still) or type video (motion in action).",
+            "When the narration expresses an abstract idea, strategy, or future concept, ground it in a concrete visual metaphor or real-world setting (e.g. modern tech office, developer coding, boardroom leadership, cityscape at sunrise) to fulfill the project's chosen image and video shares.",
+            "Aim at the target shares over the whole video, scene by scene, ensuring that real images and videos are distributed naturally across key narrative milestones alongside motion graphics.",
             "Every real element (type image, video or reference) carries the object `media`: query (2 to 6 plain English words naming what is visible; NEVER a brand or product name, a living person's name or a "
             "Telugu word; describe the generic thing instead, e.g. a chatbot -> 'person typing on laptop'), alt_queries (one broader and one synonym query), why (one sentence), must_be_real "
             "(true ONLY when the narration cites a specific real event or document that a generic picture would misrepresent) and fallback (one sentence: the flat motion graphic that is drawn "
@@ -551,13 +550,22 @@ def link_errors(motion_scenes: list[dict], hand: dict) -> list[str]:
 def _ask_text(ctx: dict, only: list[int] | None = None, note: str = "") -> str:
     """The question to the planner: the instructions and one row per scene (`only` = the ids of the scenes to plan, `note` = a request added after the rows)."""
     rows = []
+    pm = _read(ctx["pdir"], "prompts_map.json") if "pdir" in ctx else None
+    hints = {}
+    if pm and isinstance(pm, dict):
+        for p in pm.get("prompts", []):
+            if isinstance(p, dict) and p.get("scene") and p.get("text") and p.get("role") == "main":
+                hints[p["scene"]] = p["text"]
     for k, s in enumerate(ctx["plan"].scenes, 1):
         if only is not None and s.id not in only:
             continue
         nar = _narration(ctx, s, k)
-        rows.append({"id": s.id, "start": nar["start_seconds"], "end": nar["end_seconds"], "meaning": s.meaning, "concept": s.concept, "mood": s.mood, "pattern": s.pattern, "max_texts": rules.text_slots(s.pattern),
+        row_dict = {"id": s.id, "start": nar["start_seconds"], "end": nar["end_seconds"], "meaning": s.meaning, "concept": s.concept, "mood": s.mood, "pattern": s.pattern, "max_texts": rules.text_slots(s.pattern),
                      "keywords": [x.text for x in s.keywords], "params": s.params.model_dump(exclude_none=True, exclude_defaults=True), "narration_en": nar["text_en"],
-                     "words": " ".join(f"{w.w}@{w.start:g}-{w.end:g}" for w in ctx["words"] if nar["start_seconds"] - EPS <= (w.start + w.end) / 2 <= nar["end_seconds"] + EPS)})
+                     "words": " ".join(f"{w.w}@{w.start:g}-{w.end:g}" for w in ctx["words"] if nar["start_seconds"] - EPS <= (w.start + w.end) / 2 <= nar["end_seconds"] + EPS)}
+        if s.id in hints:
+            row_dict["cinematic_visual_hint"] = hints[s.id]
+        rows.append(row_dict)
     return (f"{spec(ctx['opts'])}\n\nstyle of the scene plan: {json.dumps(ctx['plan'].style.model_dump(), ensure_ascii=False)}\nscenes of the scene plan:\n"
             + json.dumps(rows, ensure_ascii=False, indent=1) + (f"\n\n{note}" if note else ""))
 

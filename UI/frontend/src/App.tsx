@@ -10,7 +10,6 @@ import { WorkLogPage } from './pages/WorkLogPage';
 import { AudioInputPage } from './pages/AudioInputPage';
 import { DEFAULT_MEDIA, type MediaMix } from './services/mediaMix';
 import { DashboardPage } from './pages/DashboardPage';
-import { VisualAiEditorPage } from './components/visual-editor/VisualAiEditorPage';
 import { 
   fetchHealth, 
   fetchLlmHealth,
@@ -57,7 +56,7 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('a2v_theme');
     return (saved === 'light' || saved === 'dark') ? saved : 'dark';
   });
-  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'visual-editor' | 'llm' | 'work-log'>('pipeline');
+  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'llm' | 'work-log'>('pipeline');
   const [pipelineTab, setPipelineTab] = useState<'flow' | 'approvals' | 'communication' | 'new-project' | 'projects'>('flow');
   const [pipelineFullPage, setPipelineFullPage] = useState<boolean>(false);
   const [issues, setIssues] = useState<PipelineIssue[]>([]);
@@ -71,6 +70,7 @@ export const App: React.FC = () => {
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
   const [backendHealthy, setBackendHealthy] = useState<boolean>(true);
   const [llmHealthy, setLlmHealthy] = useState<boolean>(false);
+  const [llmConnecting, setLlmConnecting] = useState<boolean>(false);
   const [sseStatus, setSseStatus] = useState<ConnectionStatus>('reconnecting');
   const [activeLlmCount, setActiveLlmCount] = useState<number>(0);
   const [projects, setProjects] = useState<any[]>([]);
@@ -623,6 +623,7 @@ export const App: React.FC = () => {
           onNewProject={handleOpenNewProject}
           backendHealthy={backendHealthy}
           llmHealthy={llmHealthy}
+          llmConnecting={llmConnecting}
           activeLlmCount={activeLlmCount}
           projectCount={projects.length}
           activeProjectId={activeProjectId}
@@ -784,12 +785,7 @@ export const App: React.FC = () => {
 
           {/* LLM CONNECTION PAGE (opened from the LLM pill in the header) */}
           {activeView === 'llm' && (
-            <LlmPage onChanged={async () => { const lh = await fetchLlmHealth(); setLlmHealthy(lh.ok); }} />
-          )}
-
-          {/* VISUAL AI EDITOR PAGE */}
-          {activeView === 'visual-editor' && (
-            <VisualAiEditorPage activeProjectId={activeProjectId} />
+            <LlmPage onChanged={async () => { const lh = await fetchLlmHealth(); setLlmHealthy(lh.ok); }} onBusyChange={setLlmConnecting} />
           )}
 
           {/* DIAGNOSTICS PAGE */}

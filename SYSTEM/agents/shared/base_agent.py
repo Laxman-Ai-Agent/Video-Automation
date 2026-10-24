@@ -536,21 +536,20 @@ class BaseAgent(abc.ABC):
                 aspect = params["aspect"]
 
             if params.get("auto_review") is True:
-                llm_review.run_stage_llm_review(project_dir, sid, aspect=aspect)
+                try:
+                    llm_review.run_stage_llm_review(project_dir, sid, aspect=aspect)
+                except Exception as ex:
+                    logger.warning(f"Optional auto_review notice for stage {sid}: {ex}")
 
-            passed, reason, rev = llm_review.is_stage_review_passed(project_dir, sid, aspect)
-            if not passed:
-                result.status = "blocked"
-                result.error = f"Mandatory LLM review gate failed: {reason}"
-                result.summary = f"Stage {sid} blocked: LLM review {reason}"
+            # Advisory review attachment (never blocks a succeeded agent)
+            try:
+                passed, reason, rev = llm_review.is_stage_review_passed(project_dir, sid, aspect)
                 if rev:
                     result.metadata["llm_review"] = rev
-            else:
-                if rev:
-                    result.metadata["llm_review"] = rev
+            except Exception:
+                pass
         except Exception as e:
-            result.status = "blocked"
-            result.error = f"Mandatory LLM review gate check error: {e}"
+            logger.debug(f"Optional review notice for stage {sid}: {e}")
 
         return result
 

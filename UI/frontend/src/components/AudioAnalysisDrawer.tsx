@@ -30,6 +30,7 @@ import {
 import { fetchAudioAnalysis, fetchTranscriptComparison, AudioAnalysisResult, TranscriptComparisonData } from '../services/api';
 import { AgentAboutTab } from './AgentAboutTab';
 import { TranscriptComparison } from './TranscriptComparison';
+import { AnalysisSubtasks } from './AnalysisSubtasks';
 
 interface AudioAnalysisDrawerProps {
   projectId: string;
@@ -505,6 +506,11 @@ export const AudioAnalysisDrawer: React.FC<AudioAnalysisDrawerProps> = ({
             />
           )}
 
+          {/* Live subtasks: real status, percent and LLM verification from the backend, on every tab of this page */}
+          {activeTab !== 'about' && (
+            <AnalysisSubtasks projectId={projectId} isRunning={isRunning} onFinished={loadAnalysisData} />
+          )}
+
           {/* 1. LOADING STATE */}
           {loading && activeTab !== 'about' && (
             <div 
@@ -530,7 +536,7 @@ export const AudioAnalysisDrawer: React.FC<AudioAnalysisDrawerProps> = ({
           )}
 
           {/* 2. MISSING ARTIFACT STATE */}
-          {!loading && isMissing && activeTab !== 'about' && (
+          {!loading && isMissing && !isRunning && activeTab !== 'about' && (
             <div 
               data-testid="audio-analysis-missing"
               style={{

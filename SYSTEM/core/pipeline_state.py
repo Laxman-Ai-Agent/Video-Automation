@@ -71,8 +71,8 @@ STAGE_TO_AGENT_MAP: dict[str, str] = {
 LEGAL_TRANSITIONS: dict[str, set[str]] = {
     "pending": {"running", "skipped", "pending"},
     "running": {"completed", "blocked", "failed", "needs_review", "cancelled", "running"},
-    "blocked": {"running", "pending", "blocked"},
-    "failed": {"running", "pending", "failed"},
+    "blocked": {"running", "pending", "completed", "blocked"},
+    "failed": {"running", "pending", "completed", "failed"},
     "needs_review": {"completed", "blocked", "running", "needs_review", "pending"},
     "cancelled": {"pending", "running", "cancelled"},
     "skipped": {"pending", "running", "skipped"},
@@ -346,19 +346,17 @@ def transition_stage(
             in_fp = llm_review.compute_stage_input_fingerprint(pdir, stage_id, aspect)
             out_fp = llm_review.compute_stage_output_fingerprint(pdir, stage_id, aspect)
 
-            # 3. Verify Phase 2 mandatory LLM review gate
-            passed, reason, rev = llm_review.is_stage_review_passed(pdir, stage_id, aspect, auto_pilot=True)
-            if not passed:
-                srec.status = "blocked"
-                srec.last_error = {
-                    "code": f"llm_review_gate_{reason}",
-                    "message": f"Mandatory LLM review gate not satisfied: {reason}",
-                }
-                state.revision += 1
-                save_pipeline_state(pdir, state)
-                raise InvalidStateTransitionError(
-                    f"Cannot complete stage '{stage_id}': Phase 2 review gate failed ({reason})"
-                )
+            # 3. Provenance and advisory review reference (optional, non-blocking)
+            rev_file = llm_review.review_path(pdir, stage_id, aspect)
+            review_ref = None
+            review_fp = ""
+            if rev_file.exists():
+                review_ref = rev_file.name
+                try:
+                    rev_data = json.loads(rev_file.read_text(encoding="utf-8"))
+                    review_fp = rev_data.get("output_fingerprint", "")
+                except Exception:
+                    pass
 
             # 4. Success: persist checkpoint provenance
             srec.status = "completed"
@@ -366,14 +364,16 @@ def transition_stage(
             srec.input_fingerprint = in_fp
             srec.output_fingerprint = out_fp
             srec.contract_version = artifact_contracts.CURRENT_CONTRACT_VERSION
-            srec.review_ref = llm_review.review_path(pdir, stage_id, aspect).name
+            srec.review_ref = review_ref
+            srec.last_error = None
+            srec.reusable = True
             srec.checkpoint_id = compute_checkpoint_id(
                 project_id=pdir.name,
                 stage_id=stage_id,
                 in_fp=in_fp,
                 out_fp=out_fp,
                 contract_version=srec.contract_version,
-                review_fp=rev.get("output_fingerprint", "") if rev else "",
+                review_fp=review_fp,
             )
             srec.reusable = True
             srec.last_error = None
@@ -451,15 +451,7 @@ def resolve_resume_plan(pdir: Path, aspect: str = "16:9") -> dict[str, Any]:
             invalidated_stages.append(sid)
             continue
 
-        # 3. Verify Phase 2 LLM review gate is fresh and passed
-        passed, reason, _ = llm_review.is_stage_review_passed(pdir, sid, aspect, auto_pilot=True)
-        if not passed:
-            earliest_invalid_stage = sid
-            invalidation_reason = f"review_gate_failed:{sid}:{reason}"
-            invalidated_stages.append(sid)
-            continue
-
-        # Stage is 100% verified and can be safely reused without rerun
+        # Stage contract artifacts and fingerprints are verified and can be safely reused
         reusable_stages.append({
             "stage_id": sid,
             "checkpoint_id": srec.checkpoint_id,

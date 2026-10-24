@@ -42,7 +42,7 @@ def save_status(status_data: dict[str, Any]) -> None:
 
 
 DEFAULT_MODELS: dict[str, str] = {
-    "gemini": "gemini-2.0-flash",
+    "gemini": "gemini-3.5-flash",       # gemini-2.0-flash and 1.5 were retired by Google (404 "no longer available"); check https://ai.google.dev/gemini-api/docs/models when this one is retired too
     "openai": "gpt-4o-mini",
     "anthropic": "claude-3-5-sonnet-20241022",
     "groq": "llama-3.3-70b-versatile",

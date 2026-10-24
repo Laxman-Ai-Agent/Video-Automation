@@ -73,8 +73,8 @@ def test_completed_transition_blocks_when_artifacts_missing(tmp_path: Path):
     assert st.stages["planning"].last_error["code"] == "contract_validation_failed"
 
 
-def test_completed_transition_blocks_when_llm_review_missing_or_stale(tmp_path: Path, monkeypatch):
-    """Verify that completing a stage fails closed if Phase 2 LLM review is absent or stale."""
+def test_completed_transition_succeeds_without_blocking_review_gate(tmp_path: Path, monkeypatch):
+    """Verify that completing a stage succeeds when deterministic artifacts are valid, without Phase 2 review gate blocking."""
     pdir = tmp_path / "no_rev_proj"
     pdir.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr("backend.store.project_dir", lambda p: tmp_path / p)
@@ -87,13 +87,13 @@ def test_completed_transition_blocks_when_llm_review_missing_or_stale(tmp_path: 
 
     transition_stage(pdir, "planning", "running")
 
-    # LLM review has not been run
-    with pytest.raises(InvalidStateTransitionError, match="Phase 2 review gate failed"):
-        transition_stage(pdir, "planning", "completed")
+    # Transitions cleanly to completed without requiring LLM review approval
+    rec = transition_stage(pdir, "planning", "completed")
+    assert rec.status == "completed"
+    assert rec.last_error is None
 
     st = load_pipeline_state(pdir)
-    assert st.stages["planning"].status == "blocked"
-    assert "llm_review_gate" in st.stages["planning"].last_error["code"]
+    assert st.stages["planning"].status == "completed"
 
 
 def test_completed_transition_succeeds_with_valid_artifacts_and_review(tmp_path: Path, monkeypatch):

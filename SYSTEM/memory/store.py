@@ -91,8 +91,8 @@ def motion_branch(pdir: Path) -> bool:
 
 
 def uses_images(pdir: Path) -> bool:
-    """Motion-Only is the sole supported video generation mode. Images are permanently disabled."""
-    return False
+    """True when the project has real media enabled (use_images is True in project.json)."""
+    return bool(read_info(pdir).get("use_images", False))
 
 
 def reusable_motion_templates(pdir: Path) -> bool:

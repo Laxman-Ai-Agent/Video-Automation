@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "visual_planning",
-  "updated_at": "2026-10-23T04:52:37.264567+00:00",
-  "total_experiences": 11,
+  "updated_at": "2026-10-24T03:22:10.084861+00:00",
+  "total_experiences": 13,
   "experiences": {
     "exp-visual_planning-0e412fb66d": {
       "experience_id": "exp-visual_planning-0e412fb66d",
@@ -226,6 +226,49 @@
       "timestamp": "2026-10-19T05:13:50.368845+00:00",
       "schema_version": 1
     },
+    "exp-visual_planning-7eea479b3a": {
+      "experience_id": "exp-visual_planning-7eea479b3a",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-1792812130",
+      "project_id": "base_agent_proj",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 7.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'failed' in 7.0ms.",
+        "error": "Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nscenes\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing",
+        "error_category": "validation_error",
+        "takeaway": "Task 'planning' failed with validation_error: Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nscenes\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing.",
+        "proposed_lesson": {
+          "title": "Lesson from visual_planning on planning",
+          "description": "Task 'planning' failed with validation_error: Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nscenes\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing.",
+          "affected_domain": "planning",
+          "observed_pattern": "Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from visual_planning on planning",
+        "description": "Task 'planning' failed with validation_error: Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing\nscenes\n  Field required [type=missing, input_value={}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.13/v/missing.",
+        "affected_domain": "planning",
+        "observed_pattern": "Visual planning generation failed: 2 validation errors for ScenePlan\nstyle\n  Field required [type=missing, input_value={",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:22:10.080277+00:00",
+      "schema_version": 1
+    },
     "exp-visual_planning-9ade7d8d8c": {
       "experience_id": "exp-visual_planning-9ade7d8d8c",
       "agent_id": "visual_planning",
@@ -310,6 +353,49 @@
       "confidence": 0.4,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T03:37:16.890106+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-d192d919e9": {
+      "experience_id": "exp-visual_planning-d192d919e9",
+      "agent_id": "visual_planning",
+      "task_type": "planning",
+      "task_id": "req-1792811301",
+      "project_id": "proj_test_01",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "blocked",
+      "error_category": "validation_error",
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'visual_planning' completed task 'planning' with outcome 'blocked' in 2.0ms.",
+        "error": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+        "proposed_lesson": {
+          "title": "Lesson from visual_planning on planning",
+          "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+          "affected_domain": "planning",
+          "observed_pattern": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from visual_planning on planning",
+        "description": "Task 'planning' failed with runtime_error: Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated.",
+        "affected_domain": "planning",
+        "observed_pattern": "Mandatory LLM review gate failed: Critical blocker: Safe zone layout violated",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:08:21.563003+00:00",
       "schema_version": 1
     },
     "exp-visual_planning-e2c3a8484b": {

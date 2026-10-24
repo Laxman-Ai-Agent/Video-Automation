@@ -251,7 +251,7 @@ def nasa_videos(q: str) -> list[StockAsset]:
         try:
             meta, links = it["data"][0], it.get("links") or []
             nid = meta["nasa_id"]
-            files = json.loads(_open(it["href"]))
+            files = json.loads(_open(urllib.parse.quote(it["href"], safe=":/")))
             mp4 = [u for u in files if isinstance(u, str) and u.lower().endswith(".mp4") and "preview" not in u.lower()]
             pick = next((u for u in mp4 if "~medium" in u), None) or next((u for u in mp4 if "~orig" not in u), None) or (mp4[0] if mp4 else None)
             if not pick:

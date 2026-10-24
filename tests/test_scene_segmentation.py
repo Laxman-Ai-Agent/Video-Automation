@@ -166,7 +166,8 @@ def test_a_last_scene_that_is_too_short_joins_the_one_before_it_whoever_made_the
     out = ss.run(tmp_path, ask=Ask(by_words((1, 5), (6, 9))))
     assert out["segmentation_method"] == "llm_semantic_grouping" and len(out["scenes"]) == 1 and out["scenes"][0]["word_range"] == [0, 8]
     assert out["scenes"][0]["boundary_after"]["type"] == "end" and not [w for w in out["validation"]["warnings"] if "short scene" in w]
-    assert ss.tiny_last_joins_previous(ss.read_input(tmp_path)["words"], [(0, 4), (5, 8)]) and not ss.tiny_last_joins_previous(ss.read_input(tmp_path)["words"], [(0, 8)])
+    ws = ss.read_input(tmp_path)["words"]
+    assert len(ss.merge_short_scenes(ws, [{"first": 0, "last": 4}, {"first": 5, "last": 8}])) == 1 and len(ss.merge_short_scenes(ws, [{"first": 0, "last": 8}])) == 1
     project(tmp_path, [sentence(["ఒకటి", "రెండు", "మూడు", "నాలుగు", "ఐదు", "ఆరు", "ఏడు."], 0.0), sentence(["ఎనిమిది", "తొమ్మిది", "పది."], 4.4)])       # without Claude: the same rule
     fb = ss.run(tmp_path, ask=Ask(RuntimeError("x")))
     assert fb["segmentation_method"] == "deterministic_fallback" and len(fb["scenes"]) == 1
@@ -184,7 +185,7 @@ def test_a_segmentation_made_under_older_scene_rules_is_not_fresh(tmp_path):
     assert ss.load_fresh(tmp_path) is not None
     f = tmp_path / "scene_segmentation.json"
     data = json.loads(f.read_text(encoding="utf-8"))
-    data["timing_rules"] = ss.TIMING_RULES - 1                                             # made before the tiny-last-scene rule
+    data["timing_rules"] = ss.TIMING_RULES - 1                                             # made before the short-scene rule
     f.write_text(json.dumps(data), encoding="utf-8")
     assert ss.load_fresh(tmp_path) is None
 
@@ -527,3 +528,30 @@ def test_a_missing_or_invalid_json_is_a_409_error_and_nothing_starts(client, mon
     assert r.json()["error"]["code"] == "analysis_json_invalid" and "impossible times" in r.json()["error"]["message"]
     assert ask.calls == 0 and not (pdir / "scene_segmentation.json").exists() and not jobs.is_running(pid)
     assert [s["status"] for s in client.get(f"/projects/{pid}/pipeline").json()["stages"] if s["id"] == "segmentation"] == ["queued"]
+
+
+# ---------- a short scene anywhere joins a neighbour ----------
+def _words(*seconds):
+    """Words of one second each: `seconds` words per scene."""
+    ws, t, groups = [], 0.0, []
+    for n in seconds:
+        groups.append({"first": len(ws), "last": len(ws) + n - 1, "beat": f"b{len(groups) + 1}", "objective": None, "type": "concept_change", "reason": f"r{len(groups) + 1}"})
+        ws += [{"start": t + i, "end": t + i + 1.0} for i in range(n)]
+        t += n
+    return ws, groups
+
+
+def test_a_short_middle_scene_joins_the_neighbour_that_gives_the_shorter_scene_and_keeps_both_beats():
+    """Real case (07-5df8): Claude left scene 8 of 9 alone at 2.6 s; only the last scene was ever merged, so the warning stayed and stopped the pipeline."""
+    ws, g = _words(7, 2, 5)                                                                 # 7 s, 2 s, 5 s: joining the 5 s one gives 7 s, the 7 s one gives 9 s
+    out = ss.merge_short_scenes(ws, g)
+    assert [(x["first"], x["last"]) for x in out] == [(0, 6), (7, 13)] and out[1]["beat"] == "b2 + b3" and out[1]["reason"] == "r3"
+    assert [(x["first"], x["last"]) for x in ss.merge_short_scenes(*_words(2, 6, 6))] == [(0, 7), (8, 13)]      # a short first scene joins the next one
+    ws2, g2 = _words(2, 2, 2, 2, 2, 2, 2)
+    out2 = ss.merge_short_scenes(ws2, g2)                                                                        # chains of short scenes keep merging until none is short, never beyond SOFT_MAX
+    assert [x['last'] - x['first'] + 1 for x in out2] == [4, 4, 6]
+
+
+def test_a_short_scene_stays_when_both_neighbours_are_too_long_to_take_it():
+    ws, g = _words(11, 2, 11)
+    assert len(ss.merge_short_scenes(ws, g)) == 3

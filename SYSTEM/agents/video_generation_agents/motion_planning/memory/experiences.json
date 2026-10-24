@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_planning",
-  "updated_at": "2026-10-19T16:39:38.552954+00:00",
-  "total_experiences": 79,
+  "updated_at": "2026-10-23T13:39:57.893032+00:00",
+  "total_experiences": 81,
   "experiences": {
     "exp-motion_planning-04791ddb41": {
       "experience_id": "exp-motion_planning-04791ddb41",
@@ -1752,6 +1752,49 @@
       "timestamp": "2026-10-19T14:59:22.893681+00:00",
       "schema_version": 1
     },
+    "exp-motion_planning-bd52feed9a": {
+      "experience_id": "exp-motion_planning-bd52feed9a",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_74cad67a",
+      "project_id": "project-01-e83f",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "project-01-e83f",
+            "task_id": "run_74cad67a",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "VALIDATION",
+            "code": "contract_validation_error",
+            "message": "PipelineOrchestrator._resolve_stage_issues() missing 1 required positional argument: 'rerun'",
+            "timestamp": "2026-10-23T08:21:06.580752+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Deterministic VALIDATION error cannot succeed by retrying without input changes.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "VALIDATION",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T08:21:16.582743+00:00",
+      "schema_version": 1
+    },
     "exp-motion_planning-bf0c4bf0d6": {
       "experience_id": "exp-motion_planning-bf0c4bf0d6",
       "agent_id": "motion_planning",
@@ -2043,6 +2086,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T13:41:47.765329+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_planning-e0e3ed91d3": {
+      "experience_id": "exp-motion_planning-e0e3ed91d3",
+      "agent_id": "motion_planning",
+      "task_type": "recovery_motion_plan",
+      "task_id": "run_4d85b36e",
+      "project_id": "media-mix-check-1a35",
+      "context": {
+        "stage_id": "motion_plan",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "media-mix-check-1a35",
+            "task_id": "run_4d85b36e",
+            "agent_id": "motion_planning",
+            "stage_id": "motion_plan",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Motion planning build failed: the motion plan has 2 error(s): scene_01: the on-screen text 'ChatGPT \u00b7 Gemini \u00b7 Grok' of tool_names is not in the motion plan; scene_04: the on-screen text 'Impact on jobs' of impact_label is not in the motion plan",
+            "timestamp": "2026-10-23T13:39:49.835573+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_plan",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_plan resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T13:39:57.893032+00:00",
       "schema_version": 1
     },
     "exp-motion_planning-e386acd136": {

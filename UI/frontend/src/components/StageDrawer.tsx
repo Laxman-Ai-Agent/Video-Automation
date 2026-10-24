@@ -251,8 +251,10 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
               scene_index: idx + 1,
               start_time: u.start_seconds || 0,
               end_time: u.end_seconds || 0,
-              transcript: u.text,
-              semantic_beat: u.text,
+              transcript: u.llm_transcript || u.text,
+              llm_transcript: u.llm_transcript || u.text,
+              whisper_transcript: u.whisper_transcript || null,
+              semantic_beat: u.llm_transcript || u.text,
               is_source_utterance: true
             }));
             setSceneData({
@@ -1399,7 +1401,7 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                                   minHeight: '44px',
                                   fontFamily: 'system-ui, -apple-system, sans-serif'
                                 }}>
-                                  {s.whisper_transcript || s.transcript || 'Whisper transcript not available'}
+                                  {s.whisper_transcript || (s.isFallback ? 'Whisper original transcript preserved separately' : 'Whisper original transcript preserved separately')}
                                 </div>
                                 <div style={{ fontSize: '11px', color: 'var(--text-muted)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', paddingTop: '6px', fontStyle: 'italic' }}>
                                   Raw speech-to-text transcript before LLM vocabulary & loanword processing
@@ -1413,7 +1415,7 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                                   backgroundColor: 'var(--bg-elevated)',
                                   padding: '14px 16px',
                                   borderRadius: '8px',
-                                  border: s.llm_transcript ? '1px solid rgba(168, 85, 247, 0.35)' : '1px dashed rgba(255, 255, 255, 0.15)',
+                                  border: (s.llm_transcript || s.transcript) ? '1px solid rgba(168, 85, 247, 0.35)' : '1px dashed rgba(255, 255, 255, 0.15)',
                                   display: 'flex',
                                   flexDirection: 'column',
                                   gap: '8px'
@@ -1421,11 +1423,11 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                               >
                                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                    <Sparkles size={14} color={s.llm_transcript ? '#C084FC' : 'var(--text-muted)'} />
+                                    <Sparkles size={14} color={(s.llm_transcript || s.transcript) ? '#C084FC' : 'var(--text-muted)'} />
                                     <span style={{
                                       fontSize: '11px',
                                       fontWeight: 800,
-                                      color: s.llm_transcript ? '#C084FC' : 'var(--text-muted)',
+                                      color: (s.llm_transcript || s.transcript) ? '#C084FC' : 'var(--text-muted)',
                                       textTransform: 'uppercase',
                                       letterSpacing: '0.04em'
                                     }}>
@@ -1433,7 +1435,7 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                                     </span>
                                   </div>
                                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                    {s.llm_transcript ? (
+                                    {(s.llm_transcript || s.transcript) ? (
                                       <span style={{
                                         fontSize: '10px',
                                         fontWeight: 700,
@@ -1471,10 +1473,10 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                                         alignItems: 'center',
                                         gap: '5px',
                                         padding: '3px 10px',
-                                        backgroundColor: s.llm_transcript ? 'rgba(168, 85, 247, 0.2)' : '#7C3AED',
-                                        border: s.llm_transcript ? '1px solid rgba(168, 85, 247, 0.4)' : '1px solid #A78BFA',
+                                        backgroundColor: (s.llm_transcript || s.transcript) ? 'rgba(168, 85, 247, 0.2)' : '#7C3AED',
+                                        border: (s.llm_transcript || s.transcript) ? '1px solid rgba(168, 85, 247, 0.4)' : '1px solid #A78BFA',
                                         borderRadius: '4px',
-                                        color: s.llm_transcript ? '#7C3AED' : '#FFFFFF',
+                                        color: (s.llm_transcript || s.transcript) ? '#7C3AED' : '#FFFFFF',
                                         fontSize: '11px',
                                         fontWeight: 600,
                                         cursor: llmReviewLoading ? 'not-allowed' : 'pointer',
@@ -1488,20 +1490,20 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
                                         <Play size={10} fill="currentColor" />
                                       )}
                                       <span>
-                                        {llmReviewLoading ? 'Running...' : (s.llm_transcript ? 'Re-run LLM Review' : 'Run LLM Review')}
+                                        {llmReviewLoading ? 'Running...' : ((s.llm_transcript || s.transcript) ? 'Re-run LLM Review' : 'Run LLM Review')}
                                       </span>
                                     </button>
                                   </div>
                                 </div>
                                 <div style={{
                                   fontSize: '14px',
-                                  color: s.llm_transcript ? 'var(--text-primary)' : 'var(--text-muted)',
+                                  color: (s.llm_transcript || s.transcript) ? 'var(--text-primary)' : 'var(--text-muted)',
                                   lineHeight: 1.6,
                                   minHeight: '44px',
                                   fontFamily: 'system-ui, -apple-system, sans-serif'
                                 }}>
-                                  {s.llm_transcript ? (
-                                    s.llm_transcript
+                                  {(s.llm_transcript || s.transcript) ? (
+                                    (s.llm_transcript || s.transcript)
                                   ) : (
                                     <span style={{ fontStyle: 'italic', fontSize: '13px' }}>
                                       LLM review not yet run for this project. Narration uses original Whisper transcript.

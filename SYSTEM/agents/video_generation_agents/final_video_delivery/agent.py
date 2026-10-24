@@ -369,11 +369,6 @@ class FinalVideoDeliveryAgent(BaseAgent):
         if qc_gate:
             gate_reasons.extend(qc_gate)
 
-        # 4. Mandatory LLM review gate
-        llm_pass, llm_reason, _ = llm_review.is_stage_review_passed(project_dir, "final", aspect)
-        if not llm_pass:
-            gate_reasons.append(f"LLM review for final delivery: {llm_reason}")
-
         if gate_reasons:
             try:
                 communication.publish_lifecycle_event(

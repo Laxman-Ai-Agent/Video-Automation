@@ -1,9 +1,59 @@
 {
   "schema_version": 1,
   "agent_id": "timeline_build",
-  "updated_at": "2026-10-22T18:19:20.038677+00:00",
-  "total_experiences": 33,
+  "updated_at": "2026-10-24T03:18:43.272675+00:00",
+  "total_experiences": 37,
   "experiences": {
+    "exp-timeline_build-026772deb2": {
+      "experience_id": "exp-timeline_build-026772deb2",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-3d7c5e27cd",
+      "project_id": "motion-demo-6b97",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 2104,
+        "fps": 30,
+        "duration_seconds": 70.131,
+        "speech_coverage_percent": 95.5,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 2104 frames at 30 fps (70.13s). Speech coverage: 95.5%. Continuity score: 60.0/100. Transitions recommended: 8.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:59:42.475862+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-1915804761": {
+      "experience_id": "exp-timeline_build-1915804761",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-a84489cde8",
+      "project_id": "motion-demo-4300",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 2104,
+        "fps": 30,
+        "duration_seconds": 70.131,
+        "speech_coverage_percent": 95.5,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 2104 frames at 30 fps (70.13s). Speech coverage: 95.5%. Continuity score: 60.0/100. Transitions recommended: 8.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:49:18.246402+00:00",
+      "schema_version": 1
+    },
     "exp-timeline_build-1e25d137d4": {
       "experience_id": "exp-timeline_build-1e25d137d4",
       "agent_id": "timeline_build",
@@ -77,6 +127,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-22T18:19:20.016031+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-244408a652": {
+      "experience_id": "exp-timeline_build-244408a652",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-c392c01dab",
+      "project_id": "motion-demo-1f2c",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 2104,
+        "fps": 30,
+        "duration_seconds": 70.131,
+        "speech_coverage_percent": 95.5,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 2104 frames at 30 fps (70.13s). Speech coverage: 95.5%. Continuity score: 60.0/100. Transitions recommended: 8.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-23T12:51:40.227642+00:00",
       "schema_version": 1
     },
     "exp-timeline_build-341b2fa9b0": {
@@ -195,6 +270,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:47:55.874530+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-471e5a0d9e": {
+      "experience_id": "exp-timeline_build-471e5a0d9e",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-80340166c0",
+      "project_id": "motion-demo-6b7e",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 2104,
+        "fps": 30,
+        "duration_seconds": 70.131,
+        "speech_coverage_percent": 95.5,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 2104 frames at 30 fps (70.13s). Speech coverage: 95.5%. Continuity score: 60.0/100. Transitions recommended: 8.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T03:18:43.264680+00:00",
       "schema_version": 1
     },
     "exp-timeline_build-4948212368": {

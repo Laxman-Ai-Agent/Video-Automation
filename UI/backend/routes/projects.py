@@ -192,6 +192,23 @@ def analysis(pid: str):
 
     data["_artifact_path"] = f"projects/{pid}/{target_file.name}"
     data["_filename"] = target_file.name
+
+    # Enrich utterances with separate raw Whisper text for comparison in UI
+    raw_f = pdir / "transcript.json"
+    raw_map = {}
+    if raw_f.exists():
+        try:
+            t_raw = json.loads(raw_f.read_text(encoding="utf-8"))
+            for s in t_raw.get("segments", []):
+                raw_map[s.get("id")] = s.get("text", "")
+        except Exception:
+            pass
+
+    for idx, u in enumerate(data.get("utterances", [])):
+        uid = u.get("id", idx)
+        u["llm_transcript"] = u.get("text", "")
+        if uid in raw_map:
+            u["whisper_transcript"] = raw_map[uid]
     fix_f = pdir / "analysis_autofix.json"
     if fix_f.exists():
         try:
@@ -203,11 +220,16 @@ def analysis(pid: str):
 
 def _final_transcript(pdir) -> dict:
     """The transcript every later step reads: the user's fix, else the LLM-corrected one, else the original."""
-    from ..transcribe import TRANSCRIPT_FILES
-    for name in TRANSCRIPT_FILES:
+    for name in ("transcript_fixed.json", "transcript_corrected.json", "transcript.json"):
         if (pdir / name).exists():
             return json.loads((pdir / name).read_text(encoding="utf-8"))
-    raise FileNotFoundError(name)
+    for name in ("audio_analysis.json", "audio-analysis.json"):
+        if (pdir / name).exists():
+            from ..transcribe import transcript_from_analysis_json
+            t = transcript_from_analysis_json(pdir / name)
+            if t is not None:
+                return json.loads(t.model_dump_json(exclude_none=True))
+    raise FileNotFoundError("transcript")
 
 
 @router.get("/{pid}/transcript")

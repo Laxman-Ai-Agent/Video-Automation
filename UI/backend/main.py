@@ -26,7 +26,6 @@ from .routes import (
     skills,
     uploads,
     visual,
-    visual_editor,
     work_log,
 )
 
@@ -64,7 +63,6 @@ for module in (
     review,
     assets,
     visual,
-    visual_editor,
     pipeline,
     resources,
     llm,

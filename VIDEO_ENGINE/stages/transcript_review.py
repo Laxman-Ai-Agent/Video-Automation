@@ -196,7 +196,9 @@ def validate_corrections(t: Transcript, answer: list) -> list[dict]:
 
 
 def apply_corrections(t: Transcript, corrections: list[dict]) -> tuple[Transcript, int]:
-    """The corrected transcript. A replaced span keeps the time span of the words it replaced; the new words share it by their length (timing 'estimated')."""
+    """The corrected transcript. A replaced span keeps the time span of the words it replaced. When the correction writes as many words as it replaced (a respelling: "క్రీటివిటి" -> "creativity"),
+    each new word keeps the Whisper timestamp of the word it replaces: the same spoken word, so that time IS measured (timing None, edit "llm"). Only when the word count changes do the new words
+    share the span by their length (timing 'estimated'), because then nothing says where one spoken word ends."""
     todo: dict[int, list[dict]] = {}
     for c in corrections:
         if c["status"] == "applied":
@@ -211,6 +213,11 @@ def apply_corrections(t: Transcript, corrections: list[dict]) -> tuple[Transcrip
             words += s.words[at:c["from_index"]]
             span = s.words[c["from_index"]:c["to_index"] + 1]
             new = c["to"].split()
+            if len(new) == len(span):
+                words += [Word(w=x, start=old.start, end=old.end, p=None, timing=None, edit="llm") for x, old in zip(new, span)]
+                edited += len(new)
+                at = c["to_index"] + 1
+                continue
             t0, t1 = span[0].start, span[-1].end
             size = sum(len(x) for x in new) or 1
             cur = t0
@@ -282,8 +289,9 @@ def _onset(hop, voiced, x: float, y: float):
 
 
 def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
-    """Re-time the words of every edited segment against the original audio. Returns {"status", "segments": [...]}. Accepted words get timing 'aligned'; the others stay 'estimated'."""
-    edited = [s for s in fixed.segments if any(w.edit for w in s.words)]
+    """Re-time the ESTIMATED words (corrections that changed the word count) against the original audio. Returns {"status", "segments": [...]}. Accepted words get timing 'aligned'; the others stay
+    'estimated'. Every other word, unchanged or respelled in place, keeps a Whisper timestamp and is an anchor for the cross-check; with nothing estimated the model is not even loaded."""
+    edited = [s for s in fixed.segments if any(w.timing == "estimated" for w in s.words)]
     out = {"status": "unchanged", "segments": []}
     if not edited:
         return out
@@ -307,14 +315,14 @@ def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
             spans = [(round(x + a, 3), round(y + a, 3)) for x, y in spans]
             if len(spans) != len(s.words) or any(not (a - 1e-6 <= x <= y <= b + 1e-6) for x, y in spans) or any(spans[k][0] < spans[k - 1][0] - 1e-6 for k in range(1, len(spans))):
                 raise ValueError("the aligned times are out of order or outside the audio")
-            anchors = [abs(x - w.start) for w, (x, _) in zip(s.words, spans) if w.edit is None]
+            anchors = [abs(x - w.start) for w, (x, _) in zip(s.words, spans) if w.timing != "estimated"]
             if not anchors:
                 rec["median_shift"] = 0.0
             else:
                 rec["median_shift"] = round(statistics.median(anchors), 3)
                 if rec["median_shift"] > MAX_SHIFT:
                     raise ValueError(f"the alignment disagrees with Whisper's own timestamps of the unchanged words (median {rec['median_shift']} s)")
-            fits = [(k, spans[k]) for k, w in enumerate(s.words) if w.edit]
+            fits = [(k, spans[k]) for k, w in enumerate(s.words) if w.timing == "estimated"]
             hop, voiced = _voiced(pcm)
             moved = []
             for n, (k, (x, y)) in enumerate(fits):                                       # check the model's times against the sound itself
@@ -347,22 +355,27 @@ def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
     return out
 
 
-def _alignment_block(align_r: dict, edited: int) -> dict:
-    """The "alignment" record of transcript_review.json for an alignment result."""
-    return {"status": align_r["status"], "edited_words": edited, "segments": align_r["segments"],
-            "method": {"unchanged": "whisper word timestamps (model-inferred), no word changed",
+def _alignment_block(align_r: dict, edited: int, estimated: int) -> dict:
+    """The "alignment" record of transcript_review.json for an alignment result; `estimated_words` is how many corrected words still have an ESTIMATED timing."""
+    return {"status": align_r["status"], "edited_words": edited, "estimated_words": estimated, "segments": align_r["segments"],
+            "method": {"unchanged": "whisper word timestamps (model-inferred); a corrected word that replaces one word keeps that word's timestamp",
                        "aligned_for_edits": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words",
                        "partial": "some corrected words re-aligned, the others keep ESTIMATED timestamps (see segments)",
                        "estimated_for_edits": "ESTIMATED timestamps for the corrected words (not aligned or alignment failed, see segments)"}[align_r["status"]]}
 
 
-def last_alignment(pdir: Path) -> str:
-    """The alignment status the last run recorded. While corrected words are ESTIMATED the `refine` step counts as unfinished (its outputs list a file that never exists), so every new run
-    tries the alignment again (resume) until it succeeds; the Claude answer comes from the cache, no second call."""
+def alignment_pending(review: dict) -> bool:
+    """True while corrected words of this review still have an ESTIMATED timing. The `refine` step then counts as unfinished (its outputs list a file that never exists), so every new run tries
+    the alignment again (resume); the Claude answer comes from the cache, no second call. A review written before `estimated_words` existed is judged by its alignment status."""
+    a = review.get("alignment") or {}
+    return a.get("estimated_words", 1) > 0 and a.get("status") in ("partial", "estimated_for_edits")
+
+
+def last_review(pdir: Path) -> dict:
     try:
-        return json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8"))["alignment"]["status"]
-    except (OSError, ValueError, KeyError):
-        return "none"
+        return json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
 
 
 def _model() -> str | None:
@@ -438,7 +451,7 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None) -> dict:
         # The LLM looked at every word: a low-confidence word it left as it is was reviewed and kept (confirmed), not unresolved. Only when the LLM did not check, the words stay unresolved.
         "unresolved": [] if checked else left,
         "confirmed": [{"segment": f["segment"], "index": f["index"], "text": f["text"], "p": f["p"], "reason": "checked by the LLM and kept"} for f in left] if checked else [],
-        "alignment": _alignment_block(align_r, edited),
+        "alignment": _alignment_block(align_r, edited, sum(w.timing == "estimated" for s in fixed.segments for w in s.words)),
     }
     tmp = pdir / "transcript_review.json.part"
     tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
@@ -458,7 +471,7 @@ def is_verified(pdir: Path) -> bool:
             review = json.loads(review_f.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return False
-        return (review.get("llm") or {}).get("status") in ("applied", "cached") and (review.get("alignment") or {}).get("status") not in ("partial", "estimated_for_edits")
+        return (review.get("llm") or {}).get("status") in ("applied", "cached") and not alignment_pending(review)
     return corrected.exists() and corrected.stat().st_mtime >= raw.stat().st_mtime        # no current review file: an older project that has only the corrected transcript
 
 

@@ -42,19 +42,60 @@ def find_audio(pdir: Path) -> Path:
     raise FileNotFoundError(f"no audio.* in {pdir}")
 
 
-TRANSCRIPT_FILES = ("transcript_fixed.json", "transcript_corrected.json", "transcript.json")     # user correction > reviewed (LLM) correction > raw ASR output
+TRANSCRIPT_FILES = ("transcript_fixed.json", "transcript_corrected.json", "audio_analysis.json", "transcript.json")     # user correction > reviewed (LLM) correction > Audio Analyzer output JSON > raw ASR output
+
+
+def transcript_from_analysis_json(path: Path) -> Transcript | None:
+    """Extracts the LLM-corrected Transcript from an Audio Analyzer output JSON (audio_analysis.json)."""
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        utterances = data.get("utterances", [])
+        if not utterances:
+            return None
+        segments = []
+        for idx, u in enumerate(utterances):
+            words = [
+                Word(
+                    w=str(w.get("text", w.get("w", ""))),
+                    start=float(w.get("start_seconds", w.get("start", 0.0))),
+                    end=float(w.get("end_seconds", w.get("end", 0.0))),
+                    p=w.get("confidence", w.get("p")),
+                    timing=w.get("timing"),
+                    edit=w.get("edit"),
+                )
+                for w in u.get("words", [])
+            ]
+            segments.append(
+                Segment(
+                    id=int(u.get("id", idx)),
+                    start=float(u.get("start_seconds", 0.0)),
+                    end=float(u.get("end_seconds", 0.0)),
+                    text=str(u.get("text", "")),
+                    words=words,
+                )
+            )
+        dur = float(data.get("source", {}).get("duration_seconds") or (segments[-1].end if segments else 0.0))
+        lang = str(data.get("transcription", {}).get("language", {}).get("code", "te"))
+        return Transcript(language=lang, duration=dur, segments=segments)
+    except Exception:
+        return None
 
 
 def transcript_inputs(pdir: Path) -> list[Path]:
     """Every file the effective transcript can come from (for stage fingerprints)."""
-    return [pdir / n for n in TRANSCRIPT_FILES]
+    return [pdir / n for n in TRANSCRIPT_FILES] + [pdir / "audio-analysis.json"]
 
 
 def load_transcript(pdir: Path) -> Transcript:
-    """transcript_fixed.json (user-corrected) wins over transcript_corrected.json (the reviewed correction) which wins over transcript.json (the raw ASR output, never edited)."""
-    for n in TRANSCRIPT_FILES:
+    """The effective transcript: user fix (transcript_fixed.json) > LLM-corrected (transcript_corrected.json) > raw ASR (transcript.json) > Audio Analyzer output JSON (audio_analysis.json)."""
+    for n in ("transcript_fixed.json", "transcript_corrected.json", "transcript.json"):
         if (pdir / n).exists():
             return Transcript.model_validate_json((pdir / n).read_text(encoding="utf-8"))
+    for n in ("audio_analysis.json", "audio-analysis.json"):
+        if (pdir / n).exists():
+            t = transcript_from_analysis_json(pdir / n)
+            if t is not None:
+                return t
     raise FileNotFoundError(f"no transcript in {pdir}")
 
 

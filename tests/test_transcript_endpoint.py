@@ -59,7 +59,7 @@ def test_the_final_transcript_is_the_llm_corrected_one_with_the_same_timestamps_
     w = d["transcript"]["segments"][0]["words"]
     assert r.status_code == 200 and [x["w"] for x in w] == ["మొదటి", "కాలని"] and d["llm"]["status"] == "applied" and d["corrections"][0]["status"] == "applied"
     assert (w[0]["start"], w[0]["end"]) == (0.0, 1.0) and (w[1]["start"], w[1]["end"]) == (1.0, 3.0)         # the timestamps are kept
-    assert w[0]["edit"] == "llm" and w[0]["timing"] == "estimated"                                          # never presented as measured
+    assert w[0]["edit"] == "llm" and w[0]["timing"] is None                                                 # a respelling: the time is the one Whisper measured for the word it replaces
     assert (config.PROJECTS_DIR / pid / "transcript.json").read_bytes() == before                           # the original is never edited
     assert client.get(f"/projects/{pid}/transcript").json() == d["transcript"]                               # the final JSON is the corrected one
     assert client.get(f"/projects/{pid}/transcript?view=original").json() == raw                             # the original stays available

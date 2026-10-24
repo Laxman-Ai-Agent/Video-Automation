@@ -17,6 +17,7 @@ from .transcribe import find_audio, load_transcript
 
 SCHEMA = "audio-analysis-2"      # additive over audio-analysis-1: review, quality, caching, 14 stages, word confidence/timing
 TOL = 0.5          # seconds a word end may pass the probed duration (decoder rounding)
+CLIP_SHARE = 0.0001    # share of the samples at full scale (ffmpeg volumedetect histogram_0db) from which the audio counts as clipped: 0.01%
 (S_VALID, S_META, S_PRE, S_LANG, S_ASR, S_VOCAB, S_CONF, S_LLM, S_ALIGN, S_INTEGRITY, S_PAUSE, S_QUALITY, S_FINAL, S_CACHE) = STAGES = (
     "Audio File Validation", "Audio Metadata Extraction", "Audio Preprocessing", "Language & Speech Detection", "Speech-to-Text (ASR)", "Telugu + English Technical Vocabulary",
     "Confidence-Based Correction", "Raw vs Corrected Transcript (LLM)", "Word-Level Alignment", "Word Timestamp Integrity", "Pause & Speech Rhythm Analysis",
@@ -84,7 +85,10 @@ def quality(audio: Path) -> dict:
     except UserProblem:
         return {"status": "unavailable", "max_volume_db": None, "mean_volume_db": None}
     g = lambda k: (lambda m: float(m.group(1)) if m else None)(re.search(k + r": (-?[\d.]+) dB", out))
-    return {"status": "measured", "max_volume_db": g("max_volume"), "mean_volume_db": g("mean_volume"), "noise_level": "not measured"}
+    count = lambda k: (lambda m: int(m[-1]) if m else None)(re.findall(k + r": (\d+)", out))      # the last match: ffmpeg also prints the line for a filter instance that saw no samples
+    total, top = count("n_samples"), count("histogram_0db")
+    return {"status": "measured", "max_volume_db": g("max_volume"), "mean_volume_db": g("mean_volume"), "noise_level": "not measured",
+            "peak_samples": top, "peak_share": round(top / total, 6) if total and top is not None else None}
 
 
 def _json(f: Path):
@@ -184,8 +188,11 @@ def build(pdir: Path, progress=None) -> dict:
     unresolved = len((review or {}).get("unresolved", []))
     total_words = max(1, n)
     mx, mean = q.get("max_volume_db"), q.get("mean_volume_db")
-    if mx is not None and mx >= -0.3:
-        add(warnings, S_QUALITY, "clipping_risk", f"the loudest sample is {mx} dB: the audio may be clipped")
+    share = q.get("peak_share")
+    if share is not None and share >= CLIP_SHARE:           # a peak-normalized recording touches 0 dB with a few samples; clipping is many samples flattened at full scale
+        add(warnings, S_QUALITY, "clipping_risk", f"{q['peak_samples']} samples ({share:.3%}) sit within 1 dB of full scale: the audio is clipped")
+    elif share is None and mx is not None and mx >= -0.3:   # the sample counts were not reported: only the peak is known
+        add(warnings, S_QUALITY, "clipping_risk", f"the loudest sample is {mx} dB and the sample counts were not measured: the audio may be clipped")
     if mx is not None and mx < -20:
         add(warnings, S_QUALITY, "very_quiet", f"the loudest sample is only {mx} dB")
     if q["status"] == "unavailable":
@@ -213,8 +220,11 @@ def build(pdir: Path, progress=None) -> dict:
     corr = (review or {}).get("corrections") or []
     applied = sum(c["status"] == "applied" for c in corr)
     ck = (review or {}).get("alignment") or {}
-    if ck.get("status") in ("estimated_for_edits", "partial"):
-        est = sum(1 for u in utterances for w in u["words"] if w["timing"] == "estimated")
+    words_all = [w for u in utterances for w in u["words"]]
+    est = sum(w["timing"] == "estimated" for w in words_all)
+    n_aligned = sum(w["timing"] == "aligned" for w in words_all)
+    n_edit = sum(bool(w["edit"]) for w in words_all)
+    if est:                                                  # a respelled word keeps its Whisper timestamp: only words whose time is really estimated are a finding
         why = "; ".join(sorted({r.get("reason") or "" for r in ck.get("segments", []) if r.get("status") != "aligned"} - {""}))[:200]
         add(warnings, S_ALIGN, "estimated_timestamps", f"{est} corrected word(s) have ESTIMATED timestamps, not measured ones ({why or 'alignment failed'})")
     snapped = [m for r in ck.get("segments", []) for m in r.get("snapped", [])]
@@ -248,9 +258,9 @@ def build(pdir: Path, progress=None) -> dict:
          ("no word confidences were saved for this transcript (made before they were recorded); nothing is flagged" if review else no_review)),
         (S_LLM, state(S_LLM, "warning" if unresolved else ("completed" if llm.get("status") in ("applied", "cached") else "skipped")) if review else "skipped", llm_text),
         (S_ALIGN, state(S_ALIGN),
-         {"aligned_for_edits": f"{ck.get('edited_words')} corrected word(s) re-aligned against the original audio (forced alignment, model-inferred), cross-checked against the unchanged words; the others keep Whisper's timestamps",
-          "partial": f"{ck.get('edited_words')} corrected word(s): some re-aligned, the rest ESTIMATED (not measured)",
-          "estimated_for_edits": f"{ck.get('edited_words')} corrected word(s) have ESTIMATED timestamps (alignment failed)"}.get(ck.get("status"), "Whisper word timestamps (model-inferred, not forced alignment); no word was changed")),
+         "Whisper word timestamps (model-inferred, not forced alignment); " + (
+             f"{n_edit} corrected word(s): {n_aligned} re-aligned against the original audio (forced alignment, model-inferred), {est} ESTIMATED (not measured), "
+             f"{n_edit - n_aligned - est} keep the Whisper timestamp of the word they replace" if n_edit else "no word was changed")),
         (S_INTEGRITY, state(S_INTEGRITY), f"{len(errors)} errors, {sum(w['stage'] == S_INTEGRITY for w in warnings)} warnings in {n} word timestamps"),
         (S_PAUSE, state(S_PAUSE, "completed" if pause_status == "measured" else "warning"),
          f"{len(pauses)} silences ≥ {config.SILENCE_MIN}s below {config.SILENCE_DB} dB" if pause_status == "measured" else "silence detector unavailable"),

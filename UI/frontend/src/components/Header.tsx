@@ -17,6 +17,7 @@ interface HeaderProps {
   onNewProject?: () => void;
   backendHealthy: boolean;
   llmHealthy?: boolean;
+  llmConnecting?: boolean;
   activeLlmCount: number;
   projectCount: number;
   activeProjectId?: string;
@@ -32,6 +33,7 @@ export const Header: React.FC<HeaderProps> = ({
   onNewProject,
   backendHealthy,
   llmHealthy = false,
+  llmConnecting = false,
   activeLlmCount,
   projectCount,
   activeProjectId,
@@ -137,26 +139,27 @@ export const Header: React.FC<HeaderProps> = ({
         >
           {(llmHealthy && backendHealthy) ? (
             <>
-              <span 
-                className="animate-blink-indicator"
-                style={{ 
-                  width: '7px', 
-                  height: '7px', 
-                  borderRadius: '50%', 
+              <span
+                className={llmConnecting ? 'animate-blink-indicator' : undefined}
+                style={{
+                  width: '7px',
+                  height: '7px',
+                  borderRadius: '50%',
                   backgroundColor: '#10B981',
                   display: 'inline-block',
                   flexShrink: 0
-                }} 
+                }}
               />
               <span>LLM</span>
             </>
           ) : (
             <>
-              <span 
-                style={{ 
-                  width: '7px', 
-                  height: '7px', 
-                  borderRadius: '50%', 
+              <span
+                className={llmConnecting ? 'animate-blink-indicator' : undefined}
+                style={{
+                  width: '7px',
+                  height: '7px',
+                  borderRadius: '50%',
                   backgroundColor: '#8C8C8C',
                   display: 'inline-block',
                   flexShrink: 0

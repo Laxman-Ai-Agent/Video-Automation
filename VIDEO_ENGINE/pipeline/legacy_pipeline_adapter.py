@@ -278,7 +278,7 @@ def _transcribe(pdir, ctx):
 
 
 @step("refine", requires=("transcript.json",), hint="run: python -m backend.cli transcribe <id>",
-      outputs=lambda p: [p / "transcript_review.json"] + ([p / "transcript_review.incomplete"] if transcript_review.last_alignment(p) in ("partial", "estimated_for_edits") else []),
+      outputs=lambda p: [p / "transcript_review.json"] + ([p / "transcript_review.incomplete"] if transcript_review.alignment_pending(transcript_review.last_review(p)) else []),
       fingerprint=lambda p, c: digest(p / "transcript.json", p / "vocabulary.txt", _audio(p), config.WHISPER_MODEL, transcript_review.VERSION, transcript_review.LOW_P, os.environ.get("PROMPTGEN_MODEL", "")))
 def _refine(pdir, ctx):
     """Audio Analyzer stages 6-9: technical vocabulary, uncertain words, the Claude check of every word (validated), the final corrected transcript. The raw transcript.json is never edited."""

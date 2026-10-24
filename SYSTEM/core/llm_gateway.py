@@ -53,10 +53,10 @@ GatewayStatus = Literal["passed", "blocked", "failed", "needs_review"]
 # Profile to model preference mapping per provider
 PROFILE_ROUTING: dict[str, dict[ModelProfile, str]] = {
     "gemini": {
-        "fast_structured": "gemini-2.0-flash",
-        "reasoning_review": "gemini-1.5-pro",
-        "code_generation": "gemini-2.0-flash",
-        "default": "gemini-2.0-flash",
+        "fast_structured": "gemini-3.1-flash-lite",
+        "reasoning_review": "gemini-3.5-flash",
+        "code_generation": "gemini-3.5-flash",
+        "default": "gemini-3.5-flash",
     },
     "anthropic": {
         "fast_structured": "claude-3-5-haiku-20241022",

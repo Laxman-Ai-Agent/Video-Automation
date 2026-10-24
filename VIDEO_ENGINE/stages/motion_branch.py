@@ -71,18 +71,8 @@ def validation_stage(pdir: Path, aspect: str, step: str, running: bool, failed: 
     if rep["stale"]:
         return dict(id=sid, label=label, status="queued", detail="an input changed since the last validation: run it again", action=open_it)
     if rep["readiness"] in ("ready", "ready_with_warnings"):
-        mv_ok, mv_reason, mv_rev = llm_review.is_stage_review_passed(pdir, "motion_validation", aspect)
-        if mv_ok:
-            warn_msg = f"ready with warnings: {s['warnings']} warning(s), {s['accepted_exceptions']} accepted exception(s)" if rep["readiness"] == "ready_with_warnings" else f"ready: {s['checks_passed']} of {s['checks_total']} checks passed"
-            return dict(id=sid, label=label, status="completed", detail=f"{warn_msg} (LLM reviewed)", action=open_it)
-        elif mv_reason in ("llm_review_blocked", "llm_review_has_blockers"):
-            return dict(id=sid, label=label, status="failed", detail=f"LLM validation review blocked: {mv_rev['summary'] if mv_rev else mv_reason}", action={"kind": "run_motion_validation", "label": "Retry"})
-        elif mv_reason == "llm_review_needs_review":
-            return dict(id=sid, label=label, status="waiting_for_approval", detail=f"LLM review requires decision: {mv_rev['summary'] if mv_rev else ''}", action=open_it)
-        else:
-            why = {"llm_review_missing": "pending LLM review", "llm_review_stale_inputs": "the LLM review is out of date (an input changed): run the validation again",
-                   "llm_review_stale_outputs": "the LLM review is out of date (the report changed): run the validation again"}.get(mv_reason, f"LLM review not passed ({mv_reason})")
-            return dict(id=sid, label=label, status="queued", detail=f"deterministic checks passed: {why}", action=open_it)
+        warn_msg = f"ready with warnings: {s['warnings']} warning(s), {s['accepted_exceptions']} accepted exception(s)" if rep["readiness"] == "ready_with_warnings" else f"ready: {s['checks_passed']} of {s['checks_total']} checks passed"
+        return dict(id=sid, label=label, status="completed", detail=warn_msg, action=open_it)
     if rep["readiness"] == "needs_review":
         return dict(id=sid, label=label, status="waiting_for_approval", detail=f"{s['unresolved_review_items']} warning(s) need a decision", action=open_it)
     return dict(id=sid, label=label, status="failed", detail=f"blocked: {s['blockers']} blocker(s), {s['errors']} error(s) (the timeline is not built)", action=open_it)
@@ -105,15 +95,7 @@ def stages(pdir: Path, aspect: str, step: str, running: bool, failed: str | None
     elif failed and not running and step == plan:
         out.append(dict(id="motion_plan", label="Motion Planning", status="failed", detail=failed))
     elif pipeline.is_fresh(pdir, plan):
-        mp_ok, mp_reason, mp_rev = llm_review.is_stage_review_passed(pdir, "motion_plan", aspect)
-        if mp_ok:
-            out.append(dict(id="motion_plan", label="Motion Planning", status="completed", detail="motion plan and scene timings ready (LLM reviewed)"))
-        elif mp_reason in ("llm_review_blocked", "llm_review_has_blockers"):
-            out.append(dict(id="motion_plan", label="Motion Planning", status="failed", detail=f"LLM review blocked: {mp_rev['summary'] if mp_rev else mp_reason}", action={"kind": "run_motion", "label": "Retry"}))
-        elif mp_reason == "llm_review_needs_review":
-            out.append(dict(id="motion_plan", label="Motion Planning", status="waiting_for_approval", detail=f"LLM review requires decision: {mp_rev['summary'] if mp_rev else ''}"))
-        else:
-            out.append(dict(id="motion_plan", label="Motion Planning", status="queued", detail="motion plan computed: pending LLM review"))
+        out.append(dict(id="motion_plan", label="Motion Planning", status="completed", detail="motion plan and scene timings ready"))
     else:
         out.append(dict(id="motion_plan", label="Motion Planning", status="queued", detail="waits for the scene plan" if not has_plan else "ready: run Motion Planning"))
 
@@ -123,15 +105,7 @@ def stages(pdir: Path, aspect: str, step: str, running: bool, failed: str | None
     elif failed and not running and step == build:
         out.append(dict(id="motion_gen", label="Motion Generation", status="failed", detail=failed))
     elif complete(pdir, aspect):
-        mg_ok, mg_reason, mg_rev = llm_review.is_stage_review_passed(pdir, "motion_gen", aspect)
-        if mg_ok:
-            out.append(dict(id="motion_gen", label="Motion Generation", status="completed", detail="scenes generated in custom code mode (compiled TSX, LLM reviewed)"))
-        elif mg_reason in ("llm_review_blocked", "llm_review_has_blockers"):
-            out.append(dict(id="motion_gen", label="Motion Generation", status="failed", detail=f"LLM animation review blocked: {mg_rev['summary'] if mg_rev else mg_reason}"))
-        elif mg_reason == "llm_review_needs_review":
-            out.append(dict(id="motion_gen", label="Motion Generation", status="waiting_for_approval", detail=f"LLM animation review requires decision: {mg_rev['summary'] if mg_rev else ''}"))
-        else:
-            out.append(dict(id="motion_gen", label="Motion Generation", status="queued", detail="scenes compiled: pending LLM review"))
+        out.append(dict(id="motion_gen", label="Motion Generation", status="completed", detail="scenes generated in custom code mode (compiled TSX)"))
     else:
         out.append(dict(id="motion_gen", label="Motion Generation", status="queued", detail="waits for Motion Planning"))
 

@@ -135,8 +135,9 @@ def advance(pid: str, part: str = "all"):
 def _enrich_scenes_with_transcripts(pdir, data: dict) -> dict:
     """Enrich each scene in scene_segmentation with both the original Whisper transcript and LLM-processed transcript.
     - Whisper transcript: raw faster-whisper ASR transcript from transcript.json
-    - LLM transcript: Claude LLM reviewed transcript with English technical loanwords in English script and genuine Telugu in Telugu script
-    If either version is not available in saved artifacts, it is None (never fabricated or duplicated)."""
+    - LLM transcript: LLM-reviewed transcript with English technical loanwords in English script and genuine Telugu in Telugu script
+    Ensures the LLM-corrected transcript is the authoritative primary narration (sc["transcript"]).
+    Preserves raw Whisper transcript separately (sc["whisper_transcript"]) for comparison."""
     import json
     if not isinstance(data.get("scenes"), list):
         return data
@@ -150,7 +151,11 @@ def _enrich_scenes_with_transcripts(pdir, data: dict) -> dict:
             for s in t_raw.get("segments", []):
                 whisper_segments[s.get("id")] = s.get("text", "")
                 for w in s.get("words", []):
-                    whisper_words.append(w)
+                    whisper_words.append({
+                        "w": w.get("w", w.get("text", "")),
+                        "start": float(w.get("start", 0.0)),
+                        "end": float(w.get("end", 0.0)),
+                    })
         except Exception:
             pass
 
@@ -165,41 +170,69 @@ def _enrich_scenes_with_transcripts(pdir, data: dict) -> dict:
                 for s in t_corr.get("segments", []):
                     llm_segments[s.get("id")] = s.get("text", "")
                     for w in s.get("words", []):
-                        llm_words.append(w)
+                        llm_words.append({
+                            "w": w.get("w", w.get("text", "")),
+                            "start": float(w.get("start", 0.0)),
+                            "end": float(w.get("end", 0.0)),
+                        })
                 has_llm = True
                 break
             except Exception:
                 pass
+
+    if not has_llm:
+        for aa_name in ["audio_analysis.json", "audio-analysis.json"]:
+            aa_f = pdir / aa_name
+            if aa_f.exists():
+                try:
+                    aa_data = json.loads(aa_f.read_text(encoding="utf-8"))
+                    utterances = aa_data.get("utterances", [])
+                    if utterances:
+                        for idx, u in enumerate(utterances):
+                            uid = u.get("id", idx)
+                            llm_segments[uid] = u.get("text", "")
+                            for w in u.get("words", []):
+                                llm_words.append({
+                                    "w": w.get("text", w.get("w", "")),
+                                    "start": float(w.get("start_seconds", w.get("start", 0.0))),
+                                    "end": float(w.get("end_seconds", w.get("end", 0.0))),
+                                })
+                        has_llm = True
+                        break
+                except Exception:
+                    pass
 
     for sc in data["scenes"]:
         st = sc.get("start_time", 0.0)
         et = sc.get("end_time_word", sc.get("end_time", 0.0))
         seg_ids = sc.get("source_segment_ids", [])
 
-        # 1. Whisper original transcript
-        w_text = None
-        if whisper_words:
-            matched_w = [w["w"] for w in whisper_words if w.get("start", 0) >= st - 0.08 and w.get("end", 0) <= et + 0.12 and "w" in w]
+        # 1. Whisper original transcript (ASR)
+        w_text = sc.get("whisper_transcript")
+        if not w_text and whisper_words:
+            matched_w = [w["w"] for w in whisper_words if w.get("start", 0) >= st - 0.08 and w.get("end", 0) <= et + 0.12 and w.get("w")]
             if matched_w:
                 w_text = " ".join(matched_w)
         if not w_text and seg_ids:
             w_text = " ".join(whisper_segments[sid] for sid in seg_ids if sid in whisper_segments).strip() or None
-        if not w_text and not has_llm:
-            w_text = sc.get("transcript")
         sc["whisper_transcript"] = w_text
 
-        # 2. LLM processed transcript (English loanwords in English script, genuine Telugu in Telugu script)
-        l_text = None
-        if has_llm:
+        # 2. LLM processed transcript (Corrected)
+        l_text = sc.get("llm_transcript")
+        if not l_text and has_llm:
             if llm_words:
-                matched_l = [w["w"] for w in llm_words if w.get("start", 0) >= st - 0.08 and w.get("end", 0) <= et + 0.12 and "w" in w]
+                matched_l = [w["w"] for w in llm_words if w.get("start", 0) >= st - 0.08 and w.get("end", 0) <= et + 0.12 and w.get("w")]
                 if matched_l:
                     l_text = " ".join(matched_l)
             if not l_text and seg_ids:
                 l_text = " ".join(llm_segments[sid] for sid in seg_ids if sid in llm_segments).strip() or None
-            if not l_text:
-                l_text = sc.get("transcript")
+        if not l_text:
+            l_text = sc.get("transcript")
+
+        # Set LLM transcript and ensure primary narration transcript is the corrected text
         sc["llm_transcript"] = l_text
+        if l_text:
+            sc["transcript"] = l_text
 
     return data
 

@@ -66,9 +66,9 @@ def test_logical_model_profile_routing():
     gw = LlmGateway()
 
     # Gemini profiles
-    assert gw.resolve_model_for_profile("gemini", "fast_structured") == "gemini-2.0-flash"
-    assert gw.resolve_model_for_profile("gemini", "reasoning_review") == "gemini-1.5-pro"
-    assert gw.resolve_model_for_profile("gemini", "code_generation") == "gemini-2.0-flash"
+    assert gw.resolve_model_for_profile("gemini", "fast_structured") == "gemini-3.1-flash-lite"
+    assert gw.resolve_model_for_profile("gemini", "reasoning_review") == "gemini-3.5-flash"
+    assert gw.resolve_model_for_profile("gemini", "code_generation") == "gemini-3.5-flash"
 
     # Anthropic profiles
     assert gw.resolve_model_for_profile("anthropic", "fast_structured") == "claude-3-5-haiku-20241022"

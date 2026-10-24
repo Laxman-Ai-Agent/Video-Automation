@@ -1343,7 +1343,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       {
         title: 'Interactive Visual Canvas Drag-and-Drop Sync',
         status: 'NOT IMPLEMENTED',
-        gapDescription: 'Code is generated programmatically; visual changes in Visual AI Editor must be recompiled.',
+        gapDescription: 'Code is generated programmatically; visual changes must be recompiled.',
         impact: 'Live two-way binding between GUI drag-and-drop and TSX source code is one-way.'
       }
     ],

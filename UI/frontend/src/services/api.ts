@@ -664,6 +664,27 @@ export async function fetchAudioAnalysis(projectId: string): Promise<AudioAnalys
   }
 }
 
+export interface AnalysisSubtask {
+  id: string;
+  name: string;
+  status: 'pending' | 'running' | 'completed' | 'failed';
+  percent: number | null;
+  llm: { status: 'none' | 'pending' | 'running' | 'completed' | 'failed'; detail: string };
+  message: string;
+}
+
+export interface AnalysisSubtasks {
+  running: boolean;
+  percent: number;
+  subtasks: AnalysisSubtask[];
+}
+
+export async function fetchAnalysisSubtasks(projectId: string): Promise<AnalysisSubtasks> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/analysis/subtasks`);
+  if (!res.ok) throw new Error(`HTTP ${res.status}: could not read the Audio Analysis subtasks`);
+  return res.json();
+}
+
 export interface SceneSegmentationResult {
   ok: boolean;
   data?: any;

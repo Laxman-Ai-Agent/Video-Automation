@@ -46,9 +46,9 @@ class SceneSegmentationAgent(BaseAgent):
         self.semantic_analyzer = SemanticAnalyzer()
 
     def validate(self, project_dir: Path, request: AgentRequest) -> list[str]:
-        tf = project_dir / "transcript.json"
-        if not tf.exists():
-            return ["Missing transcript.json for scene segmentation"]
+        target = next((project_dir / n for n in ("transcript_fixed.json", "transcript_corrected.json", "audio_analysis.json", "audio-analysis.json", "transcript.json") if (project_dir / n).exists()), None)
+        if target is None:
+            return ["Missing Audio Analyzer analysis output for scene segmentation"]
         return []
 
     def execute(self, project_dir: Path, request: AgentRequest) -> AgentResult:
@@ -87,18 +87,45 @@ class SceneSegmentationAgent(BaseAgent):
                 summary=f"Scene segmentation validation failed: {e}",
             )
 
-        # Execute semantic intelligence review layer
-        tf = project_dir / "transcript.json"
-        cf = project_dir / "cuts.json"
+        # Execute semantic intelligence review layer using the LLM-corrected transcript from previous Audio Analyzer stage
         transcript_data: dict[str, Any] = {}
+        for fname in ("transcript_fixed.json", "transcript_corrected.json", "audio_analysis.json", "audio-analysis.json", "transcript.json"):
+            cand = project_dir / fname
+            if cand.exists():
+                try:
+                    loaded = json.loads(cand.read_text(encoding="utf-8"))
+                    if "utterances" in loaded:  # audio_analysis.json schema
+                        transcript_data = {
+                            "language": loaded.get("transcription", {}).get("language", {}).get("code", "te"),
+                            "duration": float(loaded.get("source", {}).get("duration_seconds", 0.0)),
+                            "segments": [
+                                {
+                                    "id": int(u.get("id", idx)),
+                                    "start": float(u.get("start_seconds", 0.0)),
+                                    "end": float(u.get("end_seconds", 0.0)),
+                                    "text": str(u.get("text", "")),
+                                    "words": [
+                                        {
+                                            "word": str(w.get("text", w.get("w", ""))),
+                                            "start": float(w.get("start_seconds", w.get("start", 0.0))),
+                                            "end": float(w.get("end_seconds", w.get("end", 0.0))),
+                                            "timing": w.get("timing"),
+                                            "edit": w.get("edit"),
+                                        }
+                                        for w in u.get("words", [])
+                                    ],
+                                }
+                                for idx, u in enumerate(loaded.get("utterances", []))
+                            ],
+                        }
+                    else:
+                        transcript_data = loaded
+                    break
+                except Exception as e:
+                    logger.warning("Could not read %s for semantic analysis: %s", fname, e)
+
+        cf = project_dir / "cuts.json"
         cuts_data: Any = None
-
-        if tf.exists():
-            try:
-                transcript_data = json.loads(tf.read_text(encoding="utf-8"))
-            except Exception as e:
-                logger.warning("Could not read transcript.json for semantic analysis: %s", e)
-
         if cf.exists():
             try:
                 cuts_data = json.loads(cf.read_text(encoding="utf-8"))

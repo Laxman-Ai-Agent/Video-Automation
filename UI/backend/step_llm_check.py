@@ -18,7 +18,8 @@ STEP_REPORTS = {                                                                
     "motion_plan": "motion_planning{sfx}.json", "motion_gen": "motion_generation{sfx}.json",
     "motion_validation": "motion_timeline_validation{sfx}.json", "timeline": "timeline_build_report{sfx}.json", "qc": "final_qc_report.json",
 }
-EVIDENCE_CHARS = 12_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
+EVIDENCE_CHARS = 30_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
+CHECK_VERSION = "2.1"                                                              # cache version: bump to invalidate stale checks across all projects
 _running: set[tuple[str, str]] = set()
 _lock = threading.Lock()
 
@@ -51,8 +52,10 @@ def _checks_file(pdir: Path, stage_id: str, aspect: str) -> Path:
     return pdir / f"llm_step_checks_{stage_id}{_sfx(aspect)}.json"
 
 
-def _hash(step: dict) -> str:
-    return hashlib.sha256(json.dumps(step, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
+def _hash(step: dict, report: dict | None = None) -> str:
+    fp = (report or {}).get("source_fingerprint") or ""
+    payload = {"v": CHECK_VERSION, "step": step, "fp": fp}
+    return hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
 
 
 def load(pdir: Path, stage_id: str, aspect: str) -> dict:
@@ -62,7 +65,8 @@ def load(pdir: Path, stage_id: str, aspect: str) -> dict:
         data = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
     except ValueError:
         data = {}
-    current = {str(s["n"]): _hash(s) for s in steps(pdir, stage_id, aspect)[0]}
+    st_list, rep, _ = steps(pdir, stage_id, aspect)
+    current = {str(s["n"]): _hash(s, rep) for s in st_list}
     out = {}
     for n, c in (data.get("steps") or {}).items():
         out[n] = {**c, "current": current.get(n) == c.get("hash")}
@@ -80,22 +84,140 @@ def pending(pdir: Path, stage_id: str, aspect: str) -> int:
     return sum(1 for s in steps(pdir, stage_id, aspect)[0] if not _done(checks.get(str(s["n"]), {})))
 
 
+def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
+    """Builds focused, authoritative evidence for verifying a deterministic stage step.
+    Ensures critical source metrics, sentences/clause splits, and validation fields are preserved
+    without being pushed out by uncompressed scene dumps."""
+    if not isinstance(report, dict):
+        return {}
+
+    evidence = {
+        "schema_version": report.get("schema_version"),
+        "timing_rules": report.get("timing_rules"),
+        "source_fingerprint": report.get("source_fingerprint"),
+        "source_transcript": report.get("source_transcript"),
+        "source_audio_analysis": report.get("source_audio_analysis"),
+        "language": report.get("language"),
+        "audio_duration_seconds": report.get("audio_duration_seconds"),
+        "segmentation_method": report.get("segmentation_method"),
+        "semantic_confidence": report.get("semantic_confidence"),
+        "needs_review": report.get("needs_review"),
+    }
+
+    # Authoritative source data metrics
+    source_data = report.get("source_data")
+    if source_data:
+        evidence["source_data"] = source_data
+    else:
+        evidence["source_data"] = {
+            "source_transcript_file": report.get("source_transcript"),
+            "source_audio_analysis": report.get("source_audio_analysis"),
+            "transcript_segment_count": report.get("source_segments"),
+            "word_count": report.get("source_words"),
+            "measured_pause_count": report.get("source_pauses"),
+            "audio_duration_seconds": report.get("audio_duration_seconds"),
+            "scene_count": len(report.get("scenes", [])) if isinstance(report.get("scenes"), list) else None,
+        }
+
+    # Sentence & clause detection data
+    if "sentence_and_clause_detection" in report:
+        evidence["sentence_and_clause_detection"] = report["sentence_and_clause_detection"]
+
+    if "validation" in report:
+        evidence["validation"] = report["validation"]
+    if "llm" in report:
+        evidence["llm"] = report["llm"]
+    if "config" in report:
+        evidence["config"] = report["config"]
+
+    # Compact scene summary to guarantee every scene is visible within character limits
+    scenes = report.get("scenes")
+    if isinstance(scenes, list):
+        evidence["scene_count"] = len(scenes)
+        evidence["scenes_summary"] = [
+            {
+                "scene_id": s.get("scene_id") or f"scene_{s.get('scene_index', idx + 1):03d}",
+                "scene_index": s.get("scene_index", idx + 1),
+                "start_time": s.get("start_time"),
+                "end_time": s.get("end_time"),
+                "source_segment_ids": s.get("source_segment_ids"),
+                "source_sentence_ids": s.get("source_sentence_ids"),
+                "word_range": s.get("word_range"),
+                "transcript": (s.get("transcript") or "")[:80],
+                "timing_source": s.get("timing_source"),
+                "boundary_after": s.get("boundary_after"),
+                "boundary_before": s.get("boundary_before"),
+                "pause_after_seconds": s.get("pause_after_seconds"),
+            }
+            for idx, s in enumerate(scenes)
+        ]
+
+    # Include other stage-specific top-level keys
+    for k, v in report.items():
+        if k not in ("stages", "scenes", "source_data", "sentence_and_clause_detection", "validation", "llm", "config"):
+            if k not in evidence:
+                evidence[k] = v
+
+    return evidence
+
+
+def _step_guidance(stage_id: str, step: dict) -> str:
+    n = step.get("n")
+    if stage_id == "segmentation":
+        if n == 1:
+            return (
+                "Step Guidance (Analysis Data Reader):\n"
+                "Verify the source transcript segments count, word count, measured pause count, and audio duration against 'source_data'.\n"
+                "Note: 'transcript segments' are the input speech units from transcription; 'scenes' are the output units produced by segmentation. "
+                "Measured pauses are acoustic pauses from the source audio analysis, not inter-scene pauses."
+            )
+        if n == 2:
+            return (
+                "Step Guidance (Sentence & Clause Detection):\n"
+                "The recorded detail reports: '<units> units (<clause_splits> clause splits), <cuts> places where a scene may end'.\n"
+                "Verify the 3 primary metrics against 'sentence_and_clause_detection':\n"
+                "1. 'units' must match 'unit_count' (count of syntactic units in 'sentences').\n"
+                "2. 'clause splits' must match 'clause_split_count' (the count of sentences split into multiple units due to long duration; 0 if no sentence was split).\n"
+                "3. 'places where a scene may end' must match 'potential_cut_count' (the count of candidate cut points in 'allowed_cuts').\n"
+                "Note: A 'clause split' refers strictly to splitting a long sentence into multiple units (clause_split_count: 0 here). "
+                "Do NOT confuse 'clause splits' with candidate cut points at clause punctuation marks (clause_punctuation in candidate_cut_points_by_type), which allow scene boundaries at commas without splitting the underlying sentence unit."
+            )
+        if n == 3:
+            return "Step Guidance (Semantic Understanding):\nVerify semantic grouping LLM status and reuse/call status against the 'llm' object."
+        if n == 4:
+            return "Step Guidance (Topic & Idea Change Detection):\nVerify topic and idea boundary decisions in boundary_before/boundary_after across scenes."
+        if n == 5:
+            return "Step Guidance (Scene Boundary & Grouping):\nVerify the count of generated scenes and source segments in scenes_summary."
+        if n == 6:
+            return "Step Guidance (Duration & Timing Assignment):\nVerify start and end timestamps and timing_source across scenes_summary."
+        if n == 7:
+            return "Step Guidance (Scene Validation & Continuity):\nVerify validation status, transcript coverage, chronological order, and errors/warnings against 'validation'."
+    return "Verify whether the recorded status and detail are supported by and consistent with the provided evidence."
+
+
 def _ask(pdir: Path, stage_id: str, step: dict, report: dict, aspect: str) -> dict:
     from SYSTEM.core import llm_gateway
-    evidence = {k: v for k, v in report.items() if k != "stages"}
-    ev_text = json.dumps(evidence, ensure_ascii=False)[:EVIDENCE_CHARS]
+    evidence = build_step_evidence(stage_id, step, report)
+    ev_text = json.dumps(evidence, ensure_ascii=False)
+    if len(ev_text) > EVIDENCE_CHARS:
+        ev_text = ev_text[:EVIDENCE_CHARS]
+    guidance = _step_guidance(stage_id, step)
     req = llm_gateway.LlmGatewayRequest(
         project_id=pdir.name,
         stage_id=stage_id,
         agent_id="step_llm_check",
         purpose="review",
         model_profile="fast_structured",
-        system_prompt=("You verify one step of a video pipeline stage. The step is a deterministic check; it recorded a status and a detail. "
-                       "Using only the evidence given, say whether the recorded result holds. 'confirms' = the status and detail are consistent with the evidence; "
-                       "'questions' = the evidence is insufficient or something looks off; 'rejects' = the evidence contradicts the recorded result. "
-                       "Do not invent facts. Answer in JSON."),
+        system_prompt=("You verify one deterministic step of a video generation pipeline stage. "
+                       "The step recorded a status and a detail string. "
+                       "Using only the verified evidence provided, determine if the recorded result holds.\n"
+                       "- 'confirms': The status and detail are consistent with and supported by the evidence.\n"
+                       "- 'questions': The evidence is insufficient, ambiguous, or shows minor discrepancies.\n"
+                       "- 'rejects': The evidence directly contradicts the recorded result.\n"
+                       "Important: Do not confuse different metric types (e.g. source transcript segments are input speech chunks, while scenes are segmented output units; measured pauses are physical acoustic pauses from audio analysis, not scene gaps). Answer in JSON."),
         user_prompt=(f"Stage: {stage_id}\nStep {step.get('n')}: {step.get('name')}\nRecorded status: {step.get('status')}\n"
                      f"Recorded detail: {step.get('detail')}\nChecks: {step.get('checks_passed')}/{step.get('checks_total')}\n\n"
+                     f"{guidance}\n\n"
                      f"Evidence (the stage report without its step list, may be cut at {EVIDENCE_CHARS} characters):\n{ev_text}\n\n"
                      'Return ONLY this JSON object: {"verdict": "confirms" | "questions" | "rejects", "note": "one or two sentences: why"}'),
         structured_schema={"verdict": "confirms | questions | rejects", "note": "one or two sentences: why"},
@@ -124,7 +246,7 @@ def _run(pdir: Path, stage_id: str, aspect: str) -> None:
             step = next((s for s in recorded if s["n"] == step["n"]), None)
             if step is None or report is None:
                 continue
-            h = _hash(step)
+            h = _hash(step, report)
             try:
                 data = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
             except ValueError:

@@ -186,9 +186,22 @@ def validate_segmentation_artifacts(pdir: Path, aspect: str = "16:9") -> list[Ar
         scenes = data.get("scenes")
         if not isinstance(scenes, list) or len(scenes) == 0:
             raise ContractValidationError("scene_segmentation.json contains no scenes")
-        for sc in scenes:
+        for i, sc in enumerate(scenes):
             if not isinstance(sc, dict) or not any(k in sc for k in ("scene_id", "id", "scene_index")):
-                raise ContractValidationError(f"Malformed scene record in segmentation: {sc}")
+                raise ContractValidationError(f"Malformed scene record in segmentation at index {i}: {sc}")
+            sid = sc.get("scene_id") or sc.get("id") or f"scene_{i+1:03d}"
+            st = sc.get("start_seconds") if "start_seconds" in sc else sc.get("start_time", sc.get("start"))
+            et = sc.get("end_seconds") if "end_seconds" in sc else sc.get("end_time", sc.get("end"))
+            if st is not None and et is not None:
+                try:
+                    st_val = float(st)
+                    et_val = float(et)
+                except (ValueError, TypeError):
+                    raise ContractValidationError(f"Scene {sid} has non-numeric timestamps: start={st}, end={et}")
+                if st_val < 0:
+                    raise ContractValidationError(f"Scene {sid} has negative start timestamp: {st_val}")
+                if et_val < st_val:
+                    raise ContractValidationError(f"Scene {sid} has invalid timestamp range: start {st_val} > end {et_val}")
     except json.JSONDecodeError as e:
         raise ContractValidationError(f"Corrupted scene_segmentation.json: {e}")
 
