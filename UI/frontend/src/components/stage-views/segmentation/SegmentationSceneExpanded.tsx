@@ -43,66 +43,21 @@ export const SegmentationSceneExpanded: React.FC<SegmentationSceneExpandedProps>
 
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isFullPage ? '1fr 1fr' : '1fr',
+          gridTemplateColumns: isFullPage ? '1fr 1fr' : 'repeat(auto-fit, minmax(320px, 1fr))',
           gap: '14px'
         }}>
-          {/* Panel 1: Whisper Original Output (Raw ASR) */}
-          <div 
-            data-testid={`scene-${sceneNum}-whisper-transcript`}
-            style={{
-              backgroundColor: 'var(--bg-elevated)',
-              padding: '14px 16px',
-              borderRadius: '8px',
-              border: '1px solid rgba(0, 216, 245, 0.25)',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '8px'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Mic size={14} color="var(--accent-cyan)" />
-                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-                  Whisper Original Output (ASR)
-                </span>
-              </div>
-              <span style={{
-                fontSize: '10px',
-                fontWeight: 700,
-                backgroundColor: 'rgba(0, 216, 245, 0.12)',
-                color: 'var(--accent-cyan)',
-                padding: '2px 8px',
-                borderRadius: '12px',
-                fontFamily: 'var(--font-mono)'
-              }}>
-                faster-whisper
-              </span>
-            </div>
-            <div style={{
-              fontSize: '14px',
-              color: 'var(--text-primary)',
-              lineHeight: 1.6,
-              minHeight: '44px',
-              fontFamily: 'system-ui, -apple-system, sans-serif'
-            }}>
-              {s.whisper_transcript || (s.isFallback ? 'Whisper original transcript preserved separately' : 'Whisper original transcript preserved separately')}
-            </div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', paddingTop: '6px', fontStyle: 'italic' }}>
-              Raw speech-to-text transcript before LLM vocabulary & loanword processing
-            </div>
-          </div>
-
-          {/* Panel 2: LLM-Processed Output (Telugu + Standard English Words) */}
+          {/* Panel 1: LLM-Processed Output (Telugu + Standard English Words) - PRIMARY ACTIVE */}
           <div 
             data-testid={`scene-${sceneNum}-llm-transcript`}
             style={{
               backgroundColor: 'var(--bg-elevated)',
               padding: '14px 16px',
               borderRadius: '8px',
-              border: (s.llm_transcript || s.transcript) ? '1px solid rgba(168, 85, 247, 0.35)' : '1px dashed rgba(255, 255, 255, 0.15)',
+              border: (s.llm_transcript || s.transcript) ? '1px solid rgba(168, 85, 247, 0.45)' : '1px dashed rgba(255, 255, 255, 0.15)',
               display: 'flex',
               flexDirection: 'column',
-              gap: '8px'
+              gap: '8px',
+              boxShadow: (s.llm_transcript || s.transcript) ? '0 0 12px rgba(168, 85, 247, 0.08)' : 'none'
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
@@ -115,7 +70,7 @@ export const SegmentationSceneExpanded: React.FC<SegmentationSceneExpandedProps>
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em'
                 }}>
-                  LLM-Processed Output (Corrected)
+                  LLM-Processed Output (Active Narration)
                 </span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -129,7 +84,7 @@ export const SegmentationSceneExpanded: React.FC<SegmentationSceneExpandedProps>
                     borderRadius: '12px',
                     fontFamily: 'var(--font-mono)'
                   }}>
-                    Claude LLM Verified
+                    LLM Verified
                   </span>
                 ) : (
                   <span style={{
@@ -208,12 +163,59 @@ export const SegmentationSceneExpanded: React.FC<SegmentationSceneExpandedProps>
             }}>
               <span>
                 {s.llm_transcript
-                  ? '✓ Authoritative Final Narration for Visual Planning • Loanwords Standardized'
-                  : '⚠️ LLM verification pending — next step is blocked until run'}
+                  ? 'Authoritative Final Narration for Visual Planning & Motion Canvas'
+                  : 'LLM verification pending — next step is blocked until run'}
               </span>
               <span style={{ color: 'var(--text-muted)', fontSize: '10.5px', fontStyle: 'italic' }}>
-                {s.llm_transcript ? 'Telugu script preserved' : 'Click Run LLM Review to verify'}
+                {s.llm_transcript ? 'Telugu script preserved • Loanwords in English' : 'Click Run LLM Review to verify'}
               </span>
+            </div>
+          </div>
+
+          {/* Panel 2: Whisper Original Output (Raw ASR Reference) */}
+          <div 
+            data-testid={`scene-${sceneNum}-whisper-transcript`}
+            style={{
+              backgroundColor: 'var(--bg-elevated)',
+              padding: '14px 16px',
+              borderRadius: '8px',
+              border: '1px solid rgba(255, 255, 255, 0.08)',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '8px',
+              opacity: 0.85
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '6px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <Mic size={14} color="var(--accent-cyan)" />
+                <span style={{ fontSize: '11px', fontWeight: 800, color: 'var(--accent-cyan)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+                  Whisper Original Output (Raw ASR Reference)
+                </span>
+              </div>
+              <span style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                backgroundColor: 'rgba(0, 216, 245, 0.08)',
+                color: 'var(--accent-cyan)',
+                padding: '2px 8px',
+                borderRadius: '12px',
+                fontFamily: 'var(--font-mono)'
+              }}>
+                faster-whisper
+              </span>
+            </div>
+            <div style={{
+              fontSize: '14px',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.6,
+              minHeight: '44px',
+              fontFamily: 'system-ui, -apple-system, sans-serif'
+            }}>
+              {s.whisper_transcript || (s.isFallback ? 'Whisper original transcript preserved separately' : 'Whisper original transcript preserved separately')}
+            </div>
+            <div style={{ fontSize: '11px', color: 'var(--text-muted)', borderTop: '1px solid rgba(255, 255, 255, 0.05)', paddingTop: '6px', fontStyle: 'italic' }}>
+              Historical speech-to-text transcript before LLM technical loanword correction
             </div>
           </div>
         </div>
