@@ -11,7 +11,7 @@ def intensity(importance: float) -> str:
     return "energetic" if importance >= 0.7 else "restrained" if importance <= 0.5 else "moderate"
 
 
-def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dict] | None = None) -> tuple[list[dict], dict[int, str], dict[int, str], dict[int, str]]:
+def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dict] | None = None, is_custom_code: bool = False) -> tuple[list[dict], dict[int, str], dict[int, str], dict[int, str]]:
     """Stage 2: every Visual Plan element -> what draws it. Returns the elements and the ids to use as the target of each planned text / graphic / icon.
     `assets` = the real media Asset Collection kept for this scene, by element_id."""
     texts = [(i, norm(t["text"])) for i, t in enumerate(m["texts"])]
@@ -44,14 +44,17 @@ def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dic
         if mk.is_text(t):
             c = norm(e.get("content") or "")
             idx = next((i for i, n in texts if n == c and i not in used), None)
-            run.rule("text_kept", 2, sid, idx is None and c not in classic and bool(c), "error" if req else "warning", "required_text_missing",
-                     f"{sid}: the on-screen text '{e.get('content')}' of {eid} is not in the motion plan")
             if idx is not None:
                 used.add(idx)
                 text_ids[idx] = eid
                 el.update(status="resolved", registry_id=m["texts"][idx]["preset"], registry_kind="text_preset")
+            elif is_custom_code:
+                el.update(status="resolved", registry_id=eid, registry_kind="custom_code", note="drawn by custom React/TSX text")
             elif c in classic:
                 el.update(status="resolved", registry_id="classic_text", registry_kind="layer", note="drawn as a classic text layer")
+            else:
+                run.rule("text_kept", 2, sid, bool(c), "error" if req else "warning", "required_text_missing",
+                         f"{sid}: the on-screen text '{e.get('content')}' of {eid} is not in the motion plan")
         elif t == "background":
             el.update(status="resolved", registry_id=atmos[0]["preset"] if atmos else "scene_background", registry_kind="graphic_preset" if atmos else "layer",
                       note="the atmosphere layer" if atmos else "the scene's own gradient background")
@@ -76,6 +79,8 @@ def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dic
             elif eid in hint_gfx:
                 g = m["graphics"][hint_gfx[eid]]
                 el.update(status="resolved", registry_id=g["preset"], registry_kind="graphic_preset", note=f"drawn by {g['preset']} for the hint '{(g.get('why') or '')[5:]}'")
+            elif is_custom_code:
+                el.update(status="resolved", registry_id=eid, registry_kind="custom_code", note="drawn by custom React/TSX component")
             elif carrier:
                 el.update(status="fallback", fallback={"id": carrier, "kind": "graphic_preset", "reason": refused.get(eid) or "the library has no graphic that draws this element on its own"})
                 if req:

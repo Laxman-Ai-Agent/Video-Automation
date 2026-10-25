@@ -1,11 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import styles from './StageCard.module.css';
 import { 
-  CheckCircle2, 
   Clock, 
-  Loader2, 
-  AlertTriangle, 
-  XCircle, 
-  RotateCcw,
   Mic, 
   FileAudio, 
   Scissors, 
@@ -19,11 +15,12 @@ import {
   Tv, 
   CheckSquare, 
   FolderCheck,
-  AlertCircle,
-  Play,
-  Square
+  AlertTriangle
 } from 'lucide-react';
 import { StageConfig, StageState, StageStatus } from '../types/pipeline';
+import { StageActionButtons } from './stage-card/StageActionButtons';
+import { StageProgressRing } from './stage-card/StageProgressRing';
+import { StageCardSnippet } from './stage-card/StageCardSnippet';
 
 interface StageCardProps {
   config: StageConfig;
@@ -63,9 +60,6 @@ export function formatDuration(seconds: number): string {
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-const RING_R = 19;
-const RING_C = 2 * Math.PI * RING_R;
-
 export const StageCard: React.FC<StageCardProps> = React.memo(({
   config,
   state,
@@ -86,7 +80,7 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
   const isCompleted = status === 'completed';
   const isFailed = status === 'failed';
   const isBlocked = status === 'blocked';
-  const isWaitingForPrevious = !!state?.waitingFor;                            // inactive until the stage before it is completed with nothing unresolved
+  const isWaitingForPrevious = !!state?.waitingFor;
   const isCancelled = status === 'cancelled';
 
   // Live timer for elapsed duration while running / retrying
@@ -120,7 +114,6 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
   }, [isRunning, isRetrying, state?.startedAt, state?.completedAt, state?.durationMs]);
 
   const getTimingDisplay = (): string => {
-    // 1. While running, retrying, or recovering: show live elapsed timer
     if (isRunning || isRetrying) {
       if (!state?.startedAt) return 'Timing unavailable';
       const start = new Date(state.startedAt).getTime();
@@ -128,8 +121,7 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
       return formatDuration(elapsedSec);
     }
 
-    // 2. Completed: show total execution duration
-    if (isCompleted) {
+    if (isCompleted || isFailed) {
       if (state?.durationMs !== undefined && state?.durationMs !== null) {
         return formatDuration(state.durationMs / 1000);
       }
@@ -143,22 +135,6 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
       return 'Timing unavailable';
     }
 
-    // 3. Failed: show execution duration up to failure
-    if (isFailed) {
-      if (state?.durationMs !== undefined && state?.durationMs !== null) {
-        return formatDuration(state.durationMs / 1000);
-      }
-      if (state?.completedAt && state?.startedAt) {
-        const start = new Date(state.startedAt).getTime();
-        const end = new Date(state.completedAt).getTime();
-        if (!isNaN(start) && !isNaN(end) && end >= start) {
-          return formatDuration((end - start) / 1000);
-        }
-      }
-      return 'Timing unavailable';
-    }
-
-    // 4. Queued / Waiting / Blocked / Cancelled (persisted previous execution data if available)
     if (state?.durationMs !== undefined && state?.durationMs !== null) {
       return formatDuration(state.durationMs / 1000);
     }
@@ -189,163 +165,27 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
     return 'var(--status-waiting)';
   };
 
-  const getStatusBadge = () => {
-    if (state?.stuck && !isCompleted && !isFailed) {                      // started, then no progress beyond the expected time (backend issue list)
-      return (
-        <span data-testid={`stage-status-${config.id}`} style={{
-          display: 'flex', alignItems: 'center', gap: '3px', color: '#FDBA74', backgroundColor: 'rgba(249, 115, 22, 0.14)',
-          border: '1px solid rgba(249, 115, 22, 0.4)', padding: '2px 6px', borderRadius: '3px', fontSize: '11px', fontWeight: 700
-        }}>
-          <Clock size={11} />
-          STUCK
-        </span>
-      );
-    }
-    if (isCompleted) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '3px', 
-          color: 'var(--status-completed)', 
-          backgroundColor: 'var(--status-completed-bg)', 
-          border: '1px solid var(--status-completed-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <CheckCircle2 size={12} />
-          {(state?.issueWarnings || 0) > 0 ? 'WARNING' : 'COMPLETED'}
-        </span>
-      );
-    }
-    if (isRetrying) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '3px', 
-          color: 'var(--status-retrying)', 
-          backgroundColor: 'var(--status-retrying-bg)', 
-          border: '1px solid var(--status-retrying-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <RotateCcw size={12} className="animate-spin" />
-          {state?.attempt ? `RETRY (${state.attempt})` : 'RETRYING'}
-        </span>
-      );
-    }
-    if (isRunning) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '4px', 
-          color: 'var(--status-running)', 
-          backgroundColor: 'var(--status-running-bg)', 
-          border: '1px solid var(--status-running-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <span 
-            className="animate-pulse-dot" 
-            style={{ 
-              width: '6px', 
-              height: '6px', 
-              borderRadius: '50%', 
-              backgroundColor: 'var(--accent-cyan)' 
-            }} 
-          />
-          <Loader2 size={12} className="animate-spin" />
-          RUNNING
-        </span>
-      );
-    }
-    if (isFailed) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '3px', 
-          color: 'var(--status-failed)', 
-          backgroundColor: 'var(--status-failed-bg)', 
-          border: '1px solid var(--status-failed-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <XCircle size={12} />
-          ERROR
-        </span>
-      );
-    }
-    if (isBlocked) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '3px', 
-          color: 'var(--status-blocked)', 
-          backgroundColor: 'var(--status-blocked-bg)', 
-          border: '1px solid var(--status-blocked-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <AlertTriangle size={12} />
-          BLOCKED
-        </span>
-      );
-    }
-    if (isCancelled) {
-      return (
-        <span style={{ 
-          display: 'flex', 
-          alignItems: 'center', 
-          gap: '3px', 
-          color: 'var(--status-cancelled)', 
-          backgroundColor: 'var(--status-cancelled-bg)', 
-          border: '1px solid var(--status-cancelled-border)',
-          padding: '2px 6px',
-          borderRadius: '3px',
-          fontSize: '11px', 
-          fontWeight: 600 
-        }}>
-          <XCircle size={12} />
-          STOPPED
-        </span>
-      );
-    }
-    return (
-      <span style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        gap: '3px', 
-        color: 'var(--text-muted)', 
-        backgroundColor: 'var(--status-waiting-bg)', 
-        border: '1px solid var(--status-waiting-border)',
-        padding: '2px 6px',
-        borderRadius: '3px',
-        fontSize: '11px', 
-        fontWeight: 500 
-      }}>
-        <Clock size={11} />
-        {(status as string) === 'waiting_for_approval' ? 'NEEDS APPROVAL' : (state?.waitingFor ? 'WAITING' : 'READY')}
-      </span>
-    );
+  const cardClassName = [
+    styles.stageCard,
+    isRunning ? 'stage-card-running' : '',
+    isRetrying ? 'stage-card-retrying' : '',
+    isFailed ? 'stage-card-failed' : '',
+    (isBlocked || state?.stuck) ? 'stage-card-blocked' : ''
+  ].filter(Boolean).join(' ');
+
+  const getBorderColor = () => {
+    if (isSelected) return 'var(--accent-blue)';
+    if (isRunning) return 'var(--status-running)';
+    if (isRetrying) return 'var(--status-retrying)';
+    if (isFailed) return 'var(--status-failed)';
+    return 'var(--border-card)';
   };
 
-  const cardClassName = isRunning 
-    ? 'stage-card-running' 
-    : (isRetrying ? 'stage-card-retrying' : (isFailed ? 'stage-card-failed' : ((isBlocked || state?.stuck) ? 'stage-card-blocked' : '')));
+  const getBoxShadow = () => {
+    if (isSelected) return '0 0 0 2px rgba(24, 144, 255, 0.3), var(--shadow-card)';
+    if (isRunning || isRetrying) return 'none';
+    return 'var(--shadow-card)';
+  };
 
   return (
     <div
@@ -359,480 +199,110 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
       className={cardClassName}
       onKeyDown={(e) => { if (!isWaitingForPrevious && (e.key === 'Enter' || e.key === ' ')) onSelect(); }}
       style={{
-        width: '100%',
-        minHeight: '118px',
-        backgroundColor: 'var(--bg-card)',
-        borderRadius: 'var(--radius-sm)',
-        border: `1px solid ${
-          isSelected 
-            ? 'var(--accent-blue)' 
-            : isRunning 
-              ? 'var(--status-running)' 
-              : isRetrying
-                ? 'var(--status-retrying)'
-                : isFailed
-                  ? 'var(--status-failed)'
-                  : 'var(--border-card)'
-        }`,
-        boxShadow: isSelected 
-          ? '0 0 0 2px rgba(24, 144, 255, 0.3), var(--shadow-card)' 
-          : (isRunning || isRetrying) 
-            ? 'none' 
-            : 'var(--shadow-card)',
-        padding: '10px 14px',
+        border: `1px solid ${getBorderColor()}`,
+        boxShadow: getBoxShadow(),
         cursor: isWaitingForPrevious ? 'not-allowed' : 'pointer',
-        opacity: isWaitingForPrevious ? 0.55 : 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        transition: 'border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease',
-        position: 'relative',
-        overflow: 'hidden'
-      }}
-      onMouseEnter={(e) => {
-        if (!isSelected && !isRunning && !isRetrying && !isWaitingForPrevious) {
-          e.currentTarget.style.borderColor = isFailed ? 'var(--status-failed)' : 'var(--accent-blue)';
-          e.currentTarget.style.boxShadow = 'var(--shadow-hover)';
-        }
-      }}
-      onMouseLeave={(e) => {
-        if (!isSelected && !isRunning && !isRetrying) {
-          e.currentTarget.style.borderColor = isFailed ? 'var(--status-failed)' : 'var(--border-card)';
-          e.currentTarget.style.boxShadow = 'var(--shadow-card)';
-        }
+        opacity: isWaitingForPrevious ? 0.55 : 1
       }}
     >
       {/* Input Port Indicator (Left Edge) */}
-      <div style={{
-        position: 'absolute',
-        left: 0,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        width: '3px',
-        height: '16px',
-        borderTopRightRadius: '3px',
-        borderBottomRightRadius: '3px',
-        backgroundColor: isCompleted 
-          ? 'var(--status-completed)' 
-          : ((isRunning || isRetrying) ? 'var(--accent-cyan)' : (isFailed ? 'var(--status-failed)' : 'var(--border-subtle)')),
-        transition: 'background-color 0.2s ease'
-      }} />
+      <div 
+        className={`${styles.portIndicator} ${styles.portLeft}`}
+        style={{
+          backgroundColor: isCompleted 
+            ? 'var(--status-completed)' 
+            : ((isRunning || isRetrying) ? 'var(--accent-cyan)' : (isFailed ? 'var(--status-failed)' : 'var(--border-subtle)'))
+        }} 
+      />
 
       {/* Output Port Indicator (Right Edge) */}
-      <div style={{
-        position: 'absolute',
-        right: 0,
-        top: '50%',
-        transform: 'translateY(-50%)',
-        width: '3px',
-        height: '16px',
-        borderTopLeftRadius: '3px',
-        borderBottomLeftRadius: '3px',
-        backgroundColor: isCompleted 
-          ? 'var(--status-completed)' 
-          : ((isRunning || isRetrying) ? 'var(--accent-cyan)' : (isFailed ? 'var(--status-failed)' : 'var(--border-subtle)')),
-        transition: 'background-color 0.2s ease'
-      }} />
+      <div 
+        className={`${styles.portIndicator} ${styles.portRight}`}
+        style={{
+          backgroundColor: isCompleted 
+            ? 'var(--status-completed)' 
+            : ((isRunning || isRetrying) ? 'var(--accent-cyan)' : (isFailed ? 'var(--status-failed)' : 'var(--border-subtle)'))
+        }} 
+      />
 
       {/* Top Row: Stage Order & Status Icon & Status Badge + Action Buttons */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '7px' }}>
-          <span style={{
-            fontSize: '11px',
-            fontFamily: 'var(--font-mono)',
-            fontWeight: 700,
-            color: 'var(--text-muted)',
-            letterSpacing: '0.5px'
-          }}>
+      <div className={styles.topRow}>
+        <div className={styles.orderGroup}>
+          <span className={styles.orderNumber}>
             {String(config.order).padStart(2, '0')}
           </span>
-          <span style={{ color: getStatusColor(), display: 'flex', alignItems: 'center' }}>
+          <span className={styles.stageIcon} style={{ color: getStatusColor() }}>
             {STAGE_ICONS[config.id] || <Layers size={14} />}
           </span>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-          {/* Stop Button while Running */}
-          {(isRunning || isRetrying) && onStopStage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onStopStage(config.id);
-              }}
-              data-testid={`stage-stop-btn-${config.id}`}
-              title={`Stop ${config.label}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                backgroundColor: 'rgba(239, 68, 68, 0.15)',
-                border: '1px solid rgba(239, 68, 68, 0.4)',
-                borderRadius: '3px',
-                padding: '2px 6px',
-                color: '#EF4444',
-                fontSize: '10px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#EF4444';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
-                e.currentTarget.style.color = '#EF4444';
-              }}
-            >
-              <Square size={9} fill="currentColor" />
-              <span>STOP</span>
-            </button>
-          )}
-
-          {/* Retry Button on Failure */}
-          {isFailed && onRunStage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                onRunStage(config.id);
-              }}
-              data-testid={`stage-run-btn-${config.id}`}
-              title={`Retry ${config.label}`}
-              className="issue-blink"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                backgroundColor: 'rgba(255, 77, 79, 0.15)',
-                border: '1px solid rgba(255, 77, 79, 0.4)',
-                borderRadius: '3px',
-                padding: '2px 6px',
-                color: 'var(--status-failed)',
-                fontSize: '10px',
-                fontWeight: 700,
-                cursor: 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = 'var(--status-failed)';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'rgba(255, 77, 79, 0.15)';
-                e.currentTarget.style.color = 'var(--status-failed)';
-              }}
-            >
-              <RotateCcw size={9} />
-              <span>RETRY</span>
-            </button>
-          )}
-
-          {/* Run Button when Ready / Waiting / Cancelled */}
-          {!isRunning && !isRetrying && !isFailed && !isCompleted && onRunStage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!isBlocked && !isRunning && !isWaitingForPrevious) onRunStage(config.id);
-              }}
-              disabled={isBlocked || isRunning || isWaitingForPrevious}
-              data-testid={`stage-run-btn-${config.id}`}
-              title={state?.waitingFor ? `Waits for ${state.waitingFor} to complete` : isBlocked ? (state?.blockers?.[0] || 'Prerequisites required') : (isRunning ? 'Stage is running' : `Run ${config.label}`)}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '3px',
-                backgroundColor: isBlocked || isRunning || isWaitingForPrevious ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 216, 245, 0.15)',
-                border: `1px solid ${isBlocked || isRunning || isWaitingForPrevious ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 216, 245, 0.4)'}`,
-                borderRadius: '3px',
-                padding: '2px 6px',
-                color: isBlocked || isRunning || isWaitingForPrevious ? 'var(--text-muted)' : 'var(--accent-cyan)',
-                fontSize: '10px',
-                fontWeight: 700,
-                cursor: isBlocked || isRunning || isWaitingForPrevious ? 'not-allowed' : 'pointer',
-                opacity: isBlocked || isRunning || isWaitingForPrevious ? 0.6 : 1,
-                boxShadow: (!isBlocked && !isRunning && !isWaitingForPrevious) ? '0 0 6px rgba(0, 216, 245, 0.25)' : 'none',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!isBlocked && !isRunning) {
-                  e.currentTarget.style.backgroundColor = 'var(--accent-cyan)';
-                  e.currentTarget.style.color = '#000000';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isBlocked && !isRunning) {
-                  e.currentTarget.style.backgroundColor = 'rgba(0, 216, 245, 0.15)';
-                  e.currentTarget.style.color = 'var(--accent-cyan)';
-                }
-              }}
-            >
-              <Play size={9} fill="currentColor" />
-              <span>RUN</span>
-            </button>
-          )}
-
-          {/* Rerun Button when Completed */}
-          {isCompleted && onRunStage && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                if (!isPipelineRunning) onRunStage(config.id);
-              }}
-              disabled={isPipelineRunning}
-              data-testid={`stage-rerun-btn-${config.id}`}
-              title={`Rerun ${config.label}`}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '2px',
-                backgroundColor: 'transparent',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                borderRadius: '3px',
-                padding: '1px 5px',
-                color: 'var(--text-muted)',
-                fontSize: '9.5px',
-                fontWeight: 600,
-                cursor: isPipelineRunning ? 'not-allowed' : 'pointer',
-                transition: 'all 0.15s ease'
-              }}
-              onMouseEnter={(e) => {
-                if (!isPipelineRunning) {
-                  e.currentTarget.style.borderColor = 'var(--accent-cyan)';
-                  e.currentTarget.style.color = 'var(--accent-cyan)';
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (!isPipelineRunning) {
-                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                  e.currentTarget.style.color = 'var(--text-muted)';
-                }
-              }}
-            >
-              <RotateCcw size={8} />
-              <span>RERUN</span>
-            </button>
-          )}
-
-          {getStatusBadge()}
-        </div>
+        <StageActionButtons
+          config={config}
+          state={state}
+          isRunning={isRunning}
+          isRetrying={isRetrying}
+          isFailed={isFailed}
+          isCompleted={isCompleted}
+          isBlocked={isBlocked}
+          isWaitingForPrevious={isWaitingForPrevious}
+          isPipelineRunning={isPipelineRunning}
+          onRunStage={onRunStage}
+          onStopStage={onStopStage}
+          statusBadgeProps={{
+            config,
+            state,
+            status,
+            isCompleted,
+            isRetrying,
+            isRunning,
+            isFailed,
+            isBlocked,
+            isCancelled
+          }}
+        />
       </div>
 
       {/* Middle: Prominent Large Numeric Percentage (No Progress Bar) & Duration/Error preview */}
-      <div style={{ margin: '4px 0 2px 0' }}>
-        <div style={{ display: 'flex', alignItems: isRunning ? 'center' : 'baseline', justifyContent: 'space-between', gap: '8px' }}>
-          {isRunning ? (
-            <div data-testid={`stage-progress-ring-${config.id}`} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <div style={{ position: 'relative', width: '48px', height: '48px', flexShrink: 0 }}>
-                <div className={hasPct ? undefined : 'animate-spin'} style={{ width: '48px', height: '48px' }}>
-                  <svg width="48" height="48" viewBox="0 0 48 48" style={{ transform: 'rotate(-90deg)', display: 'block' }}>
-                    <circle cx="24" cy="24" r={RING_R} fill="none" stroke="var(--border-card)" strokeWidth="4" />
-                    <circle
-                      cx="24" cy="24" r={RING_R} fill="none" stroke="var(--status-running)" strokeWidth="4" strokeLinecap="round"
-                      strokeDasharray={RING_C}
-                      strokeDashoffset={RING_C * (1 - (hasPct ? Math.min(100, Math.max(0, state!.percentage as number)) : 25) / 100)}
-                      style={{ transition: 'stroke-dashoffset 0.6s ease' }}
-                    />
-                  </svg>
-                </div>
-                <span
-                  className="animate-blink-text"
-                  style={{
-                    position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '11px', fontWeight: 700, color: 'var(--status-running)', fontFamily: 'var(--font-mono)'
-                  }}
-                >
-                  {hasPct ? `${Math.round(state!.percentage as number)}%` : '…'}
-                </span>
-              </div>
-              <span aria-hidden="true" style={{ display: 'inline-flex', color: 'var(--accent-cyan)', fontSize: '16px', fontWeight: 700 }}>
-                <span className="animate-arrow-flow">›</span>
-                <span className="animate-arrow-flow" style={{ animationDelay: '0.18s' }}>›</span>
-                <span className="animate-arrow-flow" style={{ animationDelay: '0.36s' }}>›</span>
-              </span>
-            </div>
-          ) : (
-          <div style={{
-            fontSize: '26px',
-            fontWeight: 700,
-            fontFamily: 'var(--font-sans)',
-            letterSpacing: '-1px',
-            color: isCompleted 
-              ? 'var(--status-completed)' 
-              : isRunning 
-                ? 'var(--status-running)' 
-                : isRetrying
-                  ? 'var(--status-retrying)'
-                  : isFailed
-                    ? 'var(--status-failed)'
-                    : 'var(--text-primary)',
-            lineHeight: 1
-          }}>
-            {percentage}
-          </div>
-          )}
+      <div className={styles.middleSection}>
+        <div className={styles.percentageRow} style={{ alignItems: isRunning ? 'center' : 'baseline' }}>
+          <StageProgressRing
+            config={config}
+            state={state}
+            isRunning={isRunning}
+            isCompleted={isCompleted}
+            isRetrying={isRetrying}
+            isFailed={isFailed}
+            hasPct={hasPct}
+            percentage={percentage}
+          />
 
           <span
             data-testid={`stage-timing-${config.id}`}
             title={`Execution timing: ${getTimingDisplay()}`}
-            style={{
-              fontSize: '11px',
-              fontFamily: 'var(--font-mono)',
-              color: isRunning ? 'var(--status-running)' : 'var(--text-muted)',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              flexShrink: 0,
-              whiteSpace: 'nowrap'
-            }}
+            className={styles.timingLabel}
+            style={{ color: isRunning ? 'var(--status-running)' : 'var(--text-muted)' }}
           >
             <Clock size={11} style={{ flexShrink: 0, opacity: 0.8 }} />
             {getTimingDisplay()}
           </span>
         </div>
 
-        {/* Warning banner for long-running operation without recent progress update */}
-        {isStaleProgress && (
-          <div 
-            title="No recent progress update — checking current status."
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              marginTop: '4px',
-              padding: '2px 5px',
-              borderRadius: '3px',
-              backgroundColor: 'rgba(245, 158, 11, 0.12)',
-              border: '1px solid rgba(245, 158, 11, 0.3)',
-              color: '#FBBF24',
-              fontSize: '10px',
-              fontWeight: 600,
-              lineHeight: 1.2
-            }}
-          >
-            <AlertTriangle size={10} style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              No recent progress update — checking current status.
-            </span>
-          </div>
-        )}
-
-        {/* Error Preview Snippet */}
-        {isFailed && (
-          <div 
-            title={state?.errors?.[0] || 'Stage execution failed'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              marginTop: '4px',
-              padding: '2px 5px',
-              borderRadius: '3px',
-              backgroundColor: 'var(--status-failed-bg)',
-              border: '1px solid var(--status-failed-border)',
-              color: 'var(--status-failed)',
-              fontSize: '10px',
-              fontWeight: 600,
-              lineHeight: 1.2
-            }}
-          >
-            <AlertCircle size={10} style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {state?.errors?.[0] || (state?.failingSubStage ? `Failed at ${state.failingSubStage}` : 'Execution failed')}
-            </span>
-          </div>
-        )}
-
-        {/* Retrying Status Snippet */}
-        {isRetrying && (
-          <div 
-            title={state?.retryReason || 'Transient failure recovery in progress'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              marginTop: '4px',
-              padding: '2px 5px',
-              borderRadius: '3px',
-              backgroundColor: 'var(--status-retrying-bg)',
-              border: '1px solid var(--status-retrying-border)',
-              color: 'var(--status-retrying)',
-              fontSize: '10px',
-              fontWeight: 600,
-              lineHeight: 1.2
-            }}
-          >
-            <RotateCcw size={10} className="animate-spin" style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {state?.retryReason || (state?.attempt ? `Attempt ${state.attempt} recovery` : 'Recovering...')}
-            </span>
-          </div>
-        )}
-
-        {/* Waiting: its prerequisite stage has not completed, so it cannot run yet */}
-        {state?.waitingFor && !isRunning && (
-          <div data-testid={`stage-waiting-${config.id}`} title={`Starts after ${state.waitingFor} completes`}
-            style={{ display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', fontSize: '10px', fontWeight: 600, color: 'var(--text-muted)', lineHeight: 1.2 }}>
-            <Clock size={10} style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>Waiting for {state.waitingFor}</span>
-          </div>
-        )}
-
-        {/* Stuck: started but no progress beyond the stage's expected time (real timing from the agent log) */}
-        {state?.stuck && !isFailed && (
-          <div
-            data-testid={`stage-stuck-${config.id}`}
-            title="No progress beyond the expected time. Open Issues for details."
-            style={{
-              display: 'flex', alignItems: 'center', gap: '4px', marginTop: '4px', padding: '2px 5px', borderRadius: '3px',
-              backgroundColor: 'rgba(249, 115, 22, 0.14)', border: '1px solid rgba(249, 115, 22, 0.4)',
-              color: '#FDBA74', fontSize: '10px', fontWeight: 700, lineHeight: 1.2
-            }}
-          >
-            <Clock size={10} style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>STUCK: no progress, see Issues</span>
-          </div>
-        )}
-
-        {/* Blocked Reason Snippet */}
-        {isBlocked && (
-          <div 
-            title={state?.blockers?.[0] || 'Blocked awaiting prerequisites'}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '4px',
-              marginTop: '4px',
-              padding: '2px 5px',
-              borderRadius: '3px',
-              backgroundColor: 'var(--status-blocked-bg)',
-              border: '1px solid var(--status-blocked-border)',
-              color: 'var(--status-blocked)',
-              fontSize: '10px',
-              fontWeight: 600,
-              lineHeight: 1.2
-            }}
-          >
-            <AlertTriangle size={10} style={{ flexShrink: 0 }} />
-            <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-              {state?.blockers?.[0] || 'Awaiting prerequisites'}
-            </span>
-          </div>
-        )}
+        <StageCardSnippet
+          config={config}
+          state={state}
+          isRunning={isRunning}
+          isStaleProgress={isStaleProgress}
+          isFailed={isFailed}
+          isRetrying={isRetrying}
+          isBlocked={isBlocked}
+        />
       </div>
 
       {/* Bottom: Stage Label (Clean Single Title) */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: '8px' }}>
+      <div className={styles.bottomRow}>
         <div
           title={config.label}
-          style={{
-            fontSize: '12.5px',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            minWidth: 0
-          }}
+          className={styles.stageLabel}
         >
           {config.label}
         </div>
@@ -841,10 +311,8 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
             onClick={(e) => { e.stopPropagation(); window.dispatchEvent(new CustomEvent('open-issues', { detail: config.id })); }}
             data-testid={`stage-issues-${config.id}`}
             title="Open this stage's errors and warnings"
-            className={(state?.issueErrors || 0) > 0 ? 'issue-blink' : undefined}
+            className={`${styles.issueButton} ${(state?.issueErrors || 0) > 0 ? 'issue-blink' : ''}`}
             style={{
-              display: 'inline-flex', alignItems: 'center', gap: '4px', flexShrink: 0, height: '20px', padding: '0 7px', borderRadius: '9999px',
-              fontSize: '10.5px', fontWeight: 700, cursor: 'pointer',
               color: (state?.issueErrors || 0) > 0 ? '#FCA5A5' : '#FBBF24',
               backgroundColor: (state?.issueErrors || 0) > 0 ? 'rgba(239, 68, 68, 0.14)' : 'rgba(245, 158, 11, 0.14)',
               border: `1px solid ${(state?.issueErrors || 0) > 0 ? 'rgba(239, 68, 68, 0.45)' : 'rgba(245, 158, 11, 0.45)'}`
@@ -859,10 +327,8 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
         {status === 'completed' && (
           <div
             data-testid={`stage-llm-badge-${config.id}`}
-            style={{
-              fontSize: '10.5px', fontWeight: 600, whiteSpace: 'nowrap', flexShrink: 0,
-              color: state?.llmVerified ? '#34D399' : '#9CA3AF'
-            }}
+            className={styles.llmBadge}
+            style={{ color: state?.llmVerified ? '#34D399' : '#9CA3AF' }}
           >
             {state?.llmVerified ? '✓ LLM Verified' : 'Not verified with LLM'}
           </div>

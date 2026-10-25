@@ -213,10 +213,21 @@ def build(pdir: Path, progress=None) -> dict:
             add(warnings, S_PRE, "preprocessing_duration_changed", f"the 16 kHz copy is {derived}s, the original {dur}s")
     say(75)
     llm = (review or {}).get("llm") or {}
+    llm_name = "LLM"
+    try:
+        from SYSTEM.core import llm_client
+        llm_name = llm_client.get_public_settings().get("provider_name") or "LLM"
+    except Exception:
+        pass
+
     if unresolved:
-        add(warnings, S_LLM, "unresolved_words", f"{unresolved} uncertain word(s) were not corrected and need LLM review")
+        add(warnings, S_LLM, "unresolved_words", f"{unresolved} uncertain word(s) were not corrected and need {llm_name} review")
     if llm.get("status") in ("unavailable", "failed"):
-        add(warnings, S_LLM, "correction_unavailable", f"Claude could not check the uncertain words, the original ASR text is kept ({llm.get('error') or llm['status']})")
+        if unresolved > 0:
+            add(warnings, S_LLM, "correction_unavailable", f"{llm_name} could not check the uncertain words, the original ASR text is kept ({llm.get('error') or llm['status']})")
+        else:
+            end_notes.append({"segment": None, "code": "llm_skipped_high_confidence",
+                              "message": f"{llm_name} was unreachable ({llm.get('error') or llm['status']}), but all words had high confidence so raw ASR was kept."})
     corr = (review or {}).get("corrections") or []
     applied = sum(c["status"] == "applied" for c in corr)
     ck = (review or {}).get("alignment") or {}
@@ -240,10 +251,10 @@ def build(pdir: Path, progress=None) -> dict:
     reused = [k for k in ("transcribe", "refine", "cuts") if (timings.get(k) or {}).get("status") == "fresh"]
     cache_entries = len(_json(pdir / "asr_llm_cache.json") or {})
     no_review = "the review step has not run for this project"
-    llm_text = {"not_needed": ("no uncertain words: Claude was not asked" if conf.get("status") == "available" else "not run: this transcript has no word confidences, so no word can be called uncertain"),
-                "applied": f"Claude checked {llm.get('segments_sent')} segment(s): {applied} correction(s) applied, {len(corr) - applied} rejected",
+    llm_text = {"not_needed": (f"no uncertain words: {llm_name} was not asked" if conf.get("status") == "available" else "not run: this transcript has no word confidences, so no word can be called uncertain"),
+                "applied": f"{llm_name} checked {llm.get('segments_sent')} segment(s): {applied} correction(s) applied, {len(corr) - applied} rejected",
                 "cached": f"answer reused (no new call): {applied} applied, {len(corr) - applied} rejected",
-                "unavailable": f"Claude not available: {llm.get('error')}", "failed": f"Claude's answer could not be used: {llm.get('error')}"}.get(llm.get("status"), no_review)
+                "unavailable": f"{llm_name} not available: {llm.get('error')}", "failed": f"{llm_name}'s answer could not be used: {llm.get('error')}"}.get(llm.get("status"), no_review)
     rows = [
         (S_VALID, state(S_VALID), "file readable, has an audio stream"),
         (S_META, state(S_META), f"{dur}s, {src['sample_rate_hz']} Hz, {src['channels']} ch ({src['codec']})"),
@@ -266,7 +277,7 @@ def build(pdir: Path, progress=None) -> dict:
          f"{len(pauses)} silences ≥ {config.SILENCE_MIN}s below {config.SILENCE_DB} dB" if pause_status == "measured" else "silence detector unavailable"),
         (S_QUALITY, state(S_QUALITY), f"max {mx} dB, mean {mean} dB; {flagged} uncertain, {unresolved} unresolved word(s); noise level not measured"),
         (S_FINAL, "failed" if errors else "warning" if warnings else "completed", f"{len(errors)} errors, {len(warnings)} warnings"),
-        (S_CACHE, "completed", (f"reused unchanged: {', '.join(reused)}; " if reused else "") + f"Claude answers cached: {cache_entries}; a failed run resumes from the last finished step"),
+        (S_CACHE, "completed", (f"reused unchanged: {', '.join(reused)}; " if reused else "") + f"{llm_name} answers cached: {cache_entries}; a failed run resumes from the last finished step"),
     ]
     return {
         "schema_version": SCHEMA, "source": src,

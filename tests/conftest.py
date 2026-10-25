@@ -31,6 +31,29 @@ def no_real_llm(monkeypatch):
         pass
 
 
+@pytest.fixture(autouse=True)
+def isolate_projects_dir(tmp_path, monkeypatch):
+    """Safety guard: prevents any test from polluting the real workspace projects directory."""
+    test_projects = tmp_path / "projects"
+    test_projects.mkdir(parents=True, exist_ok=True)
+    try:
+        from backend import config as be_config, store as be_store
+        monkeypatch.setattr(be_config, "PROJECTS_DIR", test_projects)
+        monkeypatch.setattr(be_store, "PROJECTS_DIR", test_projects)
+    except Exception:
+        pass
+    try:
+        from SYSTEM.core import config as sys_config
+        monkeypatch.setattr(sys_config, "PROJECTS_DIR", test_projects)
+    except Exception:
+        pass
+    try:
+        from SYSTEM.memory import store as sys_store
+        monkeypatch.setattr(sys_store, "PROJECTS_DIR", test_projects)
+    except Exception:
+        pass
+
+
 @pytest.fixture(scope="session", autouse=True)
 def no_leftover_browser_profiles():
     """Tests that start Remotion's browser leave puppeteer_dev_chrome_profile-* folders in the temp folder (Windows cannot delete them while Chrome closes): remove the ones this run made."""

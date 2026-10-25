@@ -7,23 +7,17 @@ import {
   History,
   FileCode2,
   ShieldCheck,
-  Cpu,
   Video,
   CheckCircle2,
   AlertTriangle,
-  Clock,
-  Sparkles,
-  ExternalLink,
-  Zap,
-  Info,
-  Calendar,
-  Layers,
-  ChevronRight,
-  Search
+  Layers
 } from 'lucide-react';
 import { getAgentAboutData, AgentAboutData, generateAgentMarkdownExport } from '../data/agentAboutData';
 import { fetchAgentGrowth, fetchAgentUpgrades } from '../services/api';
 import { AgentAboutTab } from './AgentAboutTab';
+import { AgentGrowthDashboard } from './agent-intelligence/AgentGrowthDashboard';
+import { AgentUpgradesView } from './agent-intelligence/AgentUpgradesView';
+import { AgentMarkdownPreview } from './agent-intelligence/AgentMarkdownPreview';
 
 interface AgentIntelligenceDetailViewProps {
   agentId: string;
@@ -38,7 +32,7 @@ export const AgentIntelligenceDetailView: React.FC<AgentIntelligenceDetailViewPr
   const [copied, setCopied] = useState(false);
   const [growthData, setGrowthData] = useState<any | null>(null);
   const [upgradesData, setUpgradesData] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   // Retrieve static metadata & profile data
   const aboutData: AgentAboutData | null = useMemo(() => {
@@ -122,12 +116,6 @@ export const AgentIntelligenceDetailView: React.FC<AgentIntelligenceDetailViewPr
     aboutData.category === 'audio' ||
     aboutData.category === 'visual' ||
     aboutData.category === 'motion';
-
-  const currentScores = growthData?.current_scores || {};
-  const crs = currentScores.capability_readiness_score ?? 85.0;
-  const vc = currentScores.verification_coverage ?? 90.0;
-  const qs = currentScores.quality_metric || 'Empirically Verified';
-  const snapshots: any[] = growthData?.snapshots || [];
 
   return (
     <div
@@ -344,382 +332,12 @@ export const AgentIntelligenceDetailView: React.FC<AgentIntelligenceDetailViewPr
       {/* 3. TAB CONTENT */}
       {/* TAB 1: GROWTH & MATURITY TRACKING DASHBOARD */}
       {activeTab === 'growth' && (
-        <div data-testid="growth-dashboard-content" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-          {/* TOP 3 SCORE CARDS */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '18px' }}>
-            {/* CRS CARD */}
-            <div
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderRadius: 'var(--radius-xl)',
-                border: '1px solid var(--border-card)',
-                padding: '24px',
-                boxShadow: 'var(--shadow-card)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Capability Readiness Score
-                </span>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    backgroundColor: 'rgba(0, 216, 245, 0.12)',
-                    color: 'var(--accent-cyan)',
-                    borderRadius: 'var(--radius-sm)'
-                  }}
-                >
-                  CRS v1.0.0
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '12px' }}>
-                <span style={{ fontSize: '38px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {crs.toFixed(1)}%
-                </span>
-                {currentScores.delta_day_over_day !== undefined && currentScores.delta_day_over_day !== 0 && (
-                  <span
-                    style={{
-                      fontSize: '12px',
-                      fontWeight: 700,
-                      color: currentScores.delta_day_over_day > 0 ? '#10B981' : '#EF4444'
-                    }}
-                  >
-                    {currentScores.delta_day_over_day > 0 ? `+${currentScores.delta_day_over_day}%` : `${currentScores.delta_day_over_day}%`} (24h)
-                  </span>
-                )}
-              </div>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
-                Weighted readiness across all in-scope capabilities. Status multiplier: Verified=1.0, Partial=0.5.
-              </p>
-            </div>
-
-            {/* VC CARD */}
-            <div
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderRadius: 'var(--radius-xl)',
-                border: '1px solid var(--border-card)',
-                padding: '24px',
-                boxShadow: 'var(--shadow-card)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Verification Coverage
-                </span>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    backgroundColor: 'rgba(16, 185, 129, 0.12)',
-                    color: '#10B981',
-                    borderRadius: 'var(--radius-sm)'
-                  }}
-                >
-                  EMPIRICAL TESTS
-                </span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginTop: '12px' }}>
-                <span style={{ fontSize: '38px', fontWeight: 800, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {vc.toFixed(1)}%
-                </span>
-              </div>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '8px', lineHeight: 1.4 }}>
-                Percentage of capabilities backed by executed pytest or deterministic verification suites.
-              </p>
-            </div>
-
-            {/* QS CARD */}
-            <div
-              style={{
-                backgroundColor: 'var(--bg-card)',
-                borderRadius: 'var(--radius-xl)',
-                border: '1px solid var(--border-card)',
-                padding: '24px',
-                boxShadow: 'var(--shadow-card)'
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Quality Score & Telemetry
-                </span>
-                <span
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    padding: '2px 8px',
-                    backgroundColor: 'rgba(245, 158, 11, 0.12)',
-                    color: '#F59E0B',
-                    borderRadius: 'var(--radius-sm)'
-                  }}
-                >
-                  OBSERVABLE
-                </span>
-              </div>
-              <div style={{ marginTop: '14px' }}>
-                <span style={{ fontSize: '15px', fontWeight: 700, color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>
-                  {qs}
-                </span>
-              </div>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '12px', lineHeight: 1.4 }}>
-                Objective runtime observations: zero black frames, audio sync precision, latency, and test suite pass rate.
-              </p>
-            </div>
-          </div>
-
-          {/* HISTORICAL SNAPSHOTS TIMELINE */}
-          <div
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              borderRadius: 'var(--radius-xl)',
-              border: '1px solid var(--border-card)',
-              padding: '24px',
-              boxShadow: 'var(--shadow-card)'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '18px', flexWrap: 'wrap', gap: '8px' }}>
-              <div>
-                <h3 style={{ fontSize: '17px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Chronological Maturity Snapshots ({snapshots.length} Milestones)
-                </h3>
-                <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                  Persistent day-by-day capability progress saved in <code>config/history/agent_growth_snapshots.json</code>.
-                </p>
-              </div>
-
-              <div style={{ fontSize: '11.5px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)' }}>
-                Methodology: v1.0.0
-              </div>
-            </div>
-
-            <div style={{ overflowX: 'auto' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', fontSize: '13px' }}>
-                <thead>
-                  <tr style={{ borderBottom: '1px solid var(--border-subtle)', color: 'var(--text-muted)' }}>
-                    <th style={{ padding: '10px 14px', fontWeight: 600 }}>Date</th>
-                    <th style={{ padding: '10px 14px', fontWeight: 600 }}>CRS (%)</th>
-                    <th style={{ padding: '10px 14px', fontWeight: 600 }}>VC (%)</th>
-                    <th style={{ padding: '10px 14px', fontWeight: 600 }}>Quality Metric / Evidence</th>
-                    <th style={{ padding: '10px 14px', fontWeight: 600 }}>Milestone Type</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {snapshots.map((snap: any, idx: number) => (
-                    <tr
-                      key={snap.snapshot_id || idx}
-                      style={{
-                        borderBottom: '1px solid var(--border-subtle)',
-                        backgroundColor: snap.is_baseline ? 'rgba(0, 216, 245, 0.04)' : 'transparent'
-                      }}
-                    >
-                      <td style={{ padding: '12px 14px', fontFamily: 'var(--font-mono)', fontWeight: 600, color: 'var(--text-primary)' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                          <Calendar size={13} color="var(--accent-cyan)" />
-                          {snap.date}
-                        </div>
-                      </td>
-                      <td style={{ padding: '12px 14px', fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent-cyan)' }}>
-                        {snap.capability_readiness_score}%
-                      </td>
-                      <td style={{ padding: '12px 14px', fontFamily: 'var(--font-mono)', fontWeight: 700, color: '#10B981' }}>
-                        {snap.verification_coverage}%
-                      </td>
-                      <td style={{ padding: '12px 14px', color: 'var(--text-secondary)' }}>
-                        {snap.evidence_summary || snap.quality_metric}
-                      </td>
-                      <td style={{ padding: '12px 14px' }}>
-                        {snap.is_baseline ? (
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 700,
-                              padding: '2px 8px',
-                              borderRadius: 'var(--radius-sm)',
-                              backgroundColor: 'rgba(0, 216, 245, 0.12)',
-                              color: 'var(--accent-cyan)'
-                            }}
-                          >
-                            BASELINE
-                          </span>
-                        ) : (
-                          <span
-                            style={{
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              padding: '2px 8px',
-                              borderRadius: 'var(--radius-sm)',
-                              backgroundColor: 'var(--bg-elevated)',
-                              color: 'var(--text-muted)'
-                            }}
-                          >
-                            INCREMENTAL
-                          </span>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-
-            {/* FORMULA CALLOUT */}
-            <div
-              style={{
-                marginTop: '20px',
-                padding: '14px 18px',
-                backgroundColor: 'var(--bg-elevated)',
-                borderRadius: 'var(--radius-lg)',
-                border: '1px solid var(--border-subtle)',
-                display: 'flex',
-                alignItems: 'flex-start',
-                gap: '12px'
-              }}
-            >
-              <Info size={18} color="var(--accent-cyan)" style={{ marginTop: '2px', flexShrink: 0 }} />
-              <div style={{ fontSize: '12.5px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                <strong style={{ color: 'var(--text-primary)' }}>Maturity Scoring Formula (v1.0.0):</strong>
-                <br />
-                <code>CRS = (Σ(weight × status_multiplier) / total_weight) × 100</code> where Verified=1.0, Partial=0.5, Not Implemented=0.0. Out-of-scope non-responsibilities are excluded.
-                <br />
-                <code>VC = (verified_capabilities_count / total_in_scope_capabilities) × 100</code>. Quality score reflects empirical observable metrics.
-              </div>
-            </div>
-          </div>
-        </div>
+        <AgentGrowthDashboard growthData={growthData} />
       )}
 
       {/* TAB 2: VERIFIED UPGRADES */}
       {activeTab === 'upgrades' && (
-        <div data-testid="upgrades-content" style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
-          {upgradesData.length === 0 ? (
-            <div style={{ padding: '36px', textAlign: 'center', backgroundColor: 'var(--bg-card)', borderRadius: 'var(--radius-xl)' }}>
-              <p style={{ color: 'var(--text-muted)' }}>No historical upgrades recorded yet for this agent.</p>
-            </div>
-          ) : (
-            upgradesData.map((u: any, idx: number) => {
-              const statusColor =
-                u.verification_status === 'VERIFIED'
-                  ? '#10B981'
-                  : u.verification_status === 'PARTIALLY VERIFIED'
-                  ? '#F59E0B'
-                  : u.verification_status === 'VERIFICATION FAILED'
-                  ? '#EF4444'
-                  : 'var(--accent-cyan)';
-
-              return (
-                <div
-                  key={u.upgrade_id || idx}
-                  style={{
-                    backgroundColor: 'var(--bg-card)',
-                    borderRadius: 'var(--radius-xl)',
-                    border: '1px solid var(--border-card)',
-                    padding: '24px',
-                    boxShadow: 'var(--shadow-card)'
-                  }}
-                >
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                      <span
-                        style={{
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          padding: '3px 10px',
-                          borderRadius: 'var(--radius-full)',
-                          backgroundColor: `${statusColor}20`,
-                          color: statusColor,
-                          border: `1px solid ${statusColor}40`
-                        }}
-                      >
-                        {u.verification_status}
-                      </span>
-                      <h4 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)', margin: 0 }}>
-                        {u.upgrade_id}: {u.reason}
-                      </h4>
-                    </div>
-
-                    <div style={{ fontSize: '12px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)' }}>
-                      {u.timestamp}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginTop: '12px', fontSize: '12.5px', color: 'var(--text-secondary)' }}>
-                    <span>Version transition:</span>
-                    <span style={{ fontFamily: 'var(--font-mono)', padding: '2px 6px', backgroundColor: 'var(--bg-elevated)', borderRadius: 'var(--radius-sm)' }}>
-                      {u.before_version}
-                    </span>
-                    <ChevronRight size={14} />
-                    <span style={{ fontFamily: 'var(--font-mono)', padding: '2px 6px', backgroundColor: 'var(--bg-elevated)', borderRadius: 'var(--radius-sm)', color: 'var(--accent-cyan)', fontWeight: 700 }}>
-                      {u.after_version}
-                    </span>
-                  </div>
-
-                  <div style={{ marginTop: '14px', fontSize: '13px', color: 'var(--text-secondary)', lineHeight: 1.5 }}>
-                    <strong style={{ color: 'var(--text-primary)' }}>Previous Limitation Resolved:</strong> {u.previous_limitation}
-                  </div>
-
-                  {u.capabilities_added && u.capabilities_added.length > 0 && (
-                    <div style={{ marginTop: '12px' }}>
-                      <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                        Capabilities Added:
-                      </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
-                        {u.capabilities_added.map((c: string, ci: number) => (
-                          <span
-                            key={ci}
-                            style={{
-                              fontSize: '11.5px',
-                              padding: '2px 8px',
-                              backgroundColor: 'rgba(0, 216, 245, 0.08)',
-                              color: 'var(--accent-cyan)',
-                              borderRadius: 'var(--radius-sm)',
-                              border: '1px solid rgba(0, 216, 245, 0.2)'
-                            }}
-                          >
-                            + {c}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {u.files_changed && u.files_changed.length > 0 && (
-                    <div style={{ marginTop: '12px' }}>
-                      <span style={{ fontSize: '11.5px', fontWeight: 600, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                        Modified Files:
-                      </span>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '6px' }}>
-                        {u.files_changed.map((f: string, fi: number) => (
-                          <span
-                            key={fi}
-                            style={{
-                              fontSize: '11px',
-                              fontFamily: 'var(--font-mono)',
-                              padding: '2px 8px',
-                              backgroundColor: 'var(--bg-elevated)',
-                              color: 'var(--text-secondary)',
-                              borderRadius: 'var(--radius-sm)'
-                            }}
-                          >
-                            {f}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {u.evidence_refs && u.evidence_refs.length > 0 && (
-                    <div style={{ marginTop: '12px', borderTop: '1px solid var(--border-subtle)', paddingTop: '10px', fontSize: '12px', color: 'var(--text-muted)' }}>
-                      <strong>Verification Evidence:</strong> {u.evidence_refs.join(', ')}
-                    </div>
-                  )}
-                </div>
-              );
-            })
-          )}
-        </div>
+        <AgentUpgradesView upgradesData={upgradesData} />
       )}
 
       {/* TAB 3: TECHNICAL PROFILE (A-L) REUSING AgentAboutTab */}
@@ -731,66 +349,16 @@ export const AgentIntelligenceDetailView: React.FC<AgentIntelligenceDetailViewPr
 
       {/* TAB 4: LLM MARKDOWN EXPORT PREVIEW */}
       {activeTab === 'markdown' && (
-        <div
-          data-testid="markdown-preview-content"
-          style={{
-            backgroundColor: 'var(--bg-card)',
-            borderRadius: 'var(--radius-xl)',
-            border: '1px solid var(--border-card)',
-            padding: '24px',
-            boxShadow: 'var(--shadow-card)'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px', flexWrap: 'wrap', gap: '12px' }}>
-            <div>
-              <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                Comprehensive Markdown Technical Profile (19 Specification Points)
-              </h3>
-              <p style={{ fontSize: '12.5px', color: 'var(--text-muted)', marginTop: '2px' }}>
-                Formatted for direct sharing with Claude, GPT, or another LLM for architectural critique and upgrade planning.
-              </p>
-            </div>
-
-            <button
-              onClick={handleCopyAllDetails}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '8px 16px',
-                backgroundColor: copied ? '#10B981' : 'var(--accent-cyan)',
-                color: '#060D1A',
-                border: 'none',
-                borderRadius: 'var(--radius-md)',
-                cursor: 'pointer',
-                fontWeight: 700,
-                fontSize: '12.5px'
-              }}
-            >
-              {copied ? <Check size={15} /> : <Copy size={15} />}
-              {copied ? 'Copied!' : 'Copy Markdown'}
-            </button>
-          </div>
-
-          <pre
-            style={{
-              padding: '20px',
-              backgroundColor: 'var(--bg-elevated)',
-              borderRadius: 'var(--radius-lg)',
-              border: '1px solid var(--border-subtle)',
-              fontFamily: 'var(--font-mono)',
-              fontSize: '12px',
-              color: 'var(--text-primary)',
-              whiteSpace: 'pre-wrap',
-              wordBreak: 'break-word',
-              maxHeight: '600px',
-              overflowY: 'auto'
-            }}
-          >
-            {generateAgentMarkdownExport(aboutData, growthData, upgradesData)}
-          </pre>
-        </div>
+        <AgentMarkdownPreview
+          aboutData={aboutData}
+          growthData={growthData}
+          upgradesData={upgradesData}
+          copied={copied}
+          handleCopyAllDetails={handleCopyAllDetails}
+        />
       )}
     </div>
   );
 };
+
+export default AgentIntelligenceDetailView;

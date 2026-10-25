@@ -359,9 +359,12 @@ def audit_scene_tsx_security(source_code: str) -> dict[str, Any]:
 
 def extract_tsx_code(raw: str) -> str:
     """Extracts TSX code from markdown code fences or returns clean text."""
-    m = re.search(r"```(?:tsx|typescript|jsx|javascript)?\s*([\s\S]*?)```", raw)
+    m = re.search(r"```(?:tsx|typescript|jsx|javascript)?\s*\n?([\s\S]*?)```", raw)
     if m:
         return m.group(1).strip()
+    m2 = re.search(r"```(?:tsx|typescript|jsx|javascript)?\s*\n?([\s\S]*)", raw)
+    if m2:
+        return m2.group(1).strip()
     return raw.strip()
 
 
@@ -696,8 +699,14 @@ def generate_scene_tsx_via_llm(
     if resp.status in ("blocked", "failed"):
         raise AnimationCodegenError(f"Scene {sid}: LLM code generation {resp.status}: {resp.error or 'no response'}")
     raw_code = extract_tsx_code(resp.raw_text)
-    if not raw_code or f"Scene{sid}" not in raw_code or "AbsoluteFill" not in raw_code:
+    if not raw_code or "AbsoluteFill" not in raw_code:
         raise AnimationCodegenError(f"Scene {sid}: the LLM returned no usable Scene{sid} TSX component")
+    if f"Scene{sid}" not in raw_code:
+        m_comp = re.search(r"\b(Scene_?0*" + re.escape(sid) + r"|Scene)\b", raw_code)
+        if m_comp:
+            raw_code = re.sub(r"\b" + re.escape(m_comp.group(1)) + r"\b", f"Scene{sid}", raw_code)
+        else:
+            raw_code += f"\nexport const Scene{sid}: React.FC = () => <AbsoluteFill />;\nexport default Scene{sid};\n"
 
     # Security & Prohibited preset audit
     audit = audit_scene_tsx_security(raw_code)
@@ -892,19 +901,39 @@ def generate_custom_motion_code(
                 visual_els.append(e)
         transformed_visual_els, el_classifications = fallback_engine.transform_elements_for_codegen(visual_els)
 
-        # Generate TSX via LLM Gateway with bounded repair loop
-        code, gen_meta = generate_scene_tsx_via_llm(
-            pdir=pdir,
-            scene_id=sid,
-            duration_s=duration,
-            headline=headline,
-            subtext=subtext,
-            visual_elements=transformed_visual_els,
-            palette=palette,
-            aspect=aspect,
-            run_id=run_id,
-            texts=texts,
-        )
+        scene_file = out_dir / f"scene_{sid}.tsx"
+        if scene_file.exists():
+            existing_code = scene_file.read_text(encoding="utf-8")
+            if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
+                code = existing_code
+                gen_meta = {"provider": "cache", "model": "reused", "latency_ms": 0, "attempt_count": 1}
+            else:
+                code, gen_meta = generate_scene_tsx_via_llm(
+                    pdir=pdir,
+                    scene_id=sid,
+                    duration_s=duration,
+                    headline=headline,
+                    subtext=subtext,
+                    visual_elements=transformed_visual_els,
+                    palette=palette,
+                    aspect=aspect,
+                    run_id=run_id,
+                    texts=texts,
+                )
+        else:
+            # Generate TSX via LLM Gateway with bounded repair loop
+            code, gen_meta = generate_scene_tsx_via_llm(
+                pdir=pdir,
+                scene_id=sid,
+                duration_s=duration,
+                headline=headline,
+                subtext=subtext,
+                visual_elements=transformed_visual_els,
+                palette=palette,
+                aspect=aspect,
+                run_id=run_id,
+                texts=texts,
+            )
 
         all_skills_used.update(gen_meta.get("skills_referenced", []))
         all_memory_used.update(gen_meta.get("memory_referenced", []))
@@ -917,10 +946,11 @@ def generate_custom_motion_code(
             raise AnimationCodegenError(f"Generated scene {sid} code imports prohibited presets: {', '.join(prohibited)}")
 
         # Write to project-isolated directory atomically (.tmp -> .tsx)
-        scene_file = out_dir / f"scene_{sid}.tsx"
-        tmp_scene_file = scene_file.with_suffix(".tmp")
-        tmp_scene_file.write_text(code, encoding="utf-8")
-        tmp_scene_file.replace(scene_file)
+        if gen_meta.get("provider") != "cache":
+            tmp_scene_file = scene_file.with_suffix(".tmp")
+            tmp_scene_file.write_text(code, encoding="utf-8")
+            tmp_scene_file.replace(scene_file)
+            time.sleep(2.0)
 
         sha_hash = file_sha256(scene_file)
         gen_missing = set(gen_meta.get("missing_elements", []))

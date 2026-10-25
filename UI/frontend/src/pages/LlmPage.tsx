@@ -197,7 +197,36 @@ export const LlmPage: React.FC<LlmPageProps> = ({ onChanged, onBusyChange }) => 
           <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Cpu size={22} color={statusColor} />
             <div>
-              <div data-testid="llm-status-text" style={{ fontSize: '15px', fontWeight: 800, color: statusColor }}>{statusText}</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
+                <span data-testid="llm-status-text" style={{ fontSize: '15px', fontWeight: 800, color: statusColor }}>{statusText}</span>
+                {settings?.model_locked && (
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.5px',
+                    padding: '2px 8px',
+                    borderRadius: '9999px',
+                    backgroundColor: 'rgba(59, 130, 246, 0.15)',
+                    color: '#60A5FA',
+                    border: '1px solid rgba(59, 130, 246, 0.3)'
+                  }}>
+                    Model Lock Active
+                  </span>
+                )}
+                {settings?.auth_method_name && (
+                  <span style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '2px 8px',
+                    borderRadius: '9999px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                    color: 'var(--text-secondary)'
+                  }}>
+                    {settings.auth_method_name}
+                  </span>
+                )}
+              </div>
               <div style={{ fontSize: '13px', color: 'var(--text-secondary)' }}>
                 {settings ? `${settings.active_provider_name} · ${settings.active_model}${settings.latency_ms ? ` · ${Math.round(settings.latency_ms)} ms` : ''}` : 'Reading settings…'}
               </div>
@@ -288,6 +317,11 @@ export const LlmPage: React.FC<LlmPageProps> = ({ onChanged, onBusyChange }) => 
         </div>
         {info?.needs_key && (
           <p style={{ ...hint, margin: '10px 0 0' }}>The key is stored in <code>config/llm_settings.json</code> on this computer. Do not commit that file.</p>
+        )}
+        {provider === 'antigravity' && (
+          <p style={{ ...hint, margin: '10px 0 0' }}>
+            Uses your active Google Antigravity coding session on this computer (found &amp; active). Uses your locked Gemini model directly without needing any API key.
+          </p>
         )}
         {provider === 'claude_cli' && (
           <p style={{ ...hint, margin: '10px 0 0' }}>

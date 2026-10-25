@@ -258,7 +258,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
           format: 'JSON (14 analytical telemetry metrics, LUFS, dBFS, duration)',
           description: 'Deep audio health report and speech cadence statistics.',
           pathExample: 'projects/{project_id}/audio_analysis.json',
-          consumers: ['UI AudioAnalysisDrawer', 'final_qc']
+          consumers: ['UI AudioAnalyzerView', 'final_qc']
         }
       ],
       sideEffects: [
@@ -298,7 +298,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
         name: '14-stage audio telemetry',
         status: 'VERIFIED WORKING',
         description: 'Measures sample rate, LUFS loudness, speech rate WPM, and silence periods.',
-        evidence: 'Exposed via UI/backend/audio_analysis.py and AudioAnalysisDrawer.tsx'
+        evidence: 'Exposed via UI/backend/audio_analysis.py and AudioAnalyzerView.tsx'
       },
       {
         name: 'Bilingual Telugu/English vocabulary review',
@@ -377,7 +377,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       supportingFiles: [
         'UI/backend/audio_analysis.py',
         'VIDEO_ENGINE/stages/quality.py',
-        'UI/frontend/src/components/AudioAnalysisDrawer.tsx'
+        'UI/frontend/src/components/AudioAnalyzerView.tsx'
       ],
       classesAndFunctions: [
         'AudioAnalyzerAgent.execute()',

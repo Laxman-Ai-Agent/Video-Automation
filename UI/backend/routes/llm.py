@@ -110,9 +110,17 @@ def _mark_health_stale() -> None:
         _CURRENT_LLM_HEALTH["checked_at"] = 0.0
 
 
-def trigger_llm_health_probe() -> None:
+def trigger_llm_health_probe(force: bool = False) -> None:
     """Executes live probe in worker thread to prevent event-loop stalls."""
     global _CURRENT_LLM_HEALTH
+    if not force and hasattr(llm_client, "is_generation_active") and llm_client.is_generation_active():
+        with _LLM_HEALTH_LOCK:
+            _CURRENT_LLM_HEALTH["ok"] = True
+            _CURRENT_LLM_HEALTH["message"] = "LLM generation currently active"
+            _CURRENT_LLM_HEALTH["checked_at"] = time.time()
+            _CURRENT_LLM_HEALTH["in_progress"] = False
+        return
+
     with _LLM_HEALTH_LOCK:
         if _CURRENT_LLM_HEALTH.get("in_progress"):
             return
@@ -120,7 +128,7 @@ def trigger_llm_health_probe() -> None:
 
     try:
         t0 = time.time()
-        res = llm_client.test_connection()
+        res = llm_client.test_connection(force=force)
         _record_health(res, round((time.time() - t0) * 1000))
     except Exception as e:
         with _LLM_HEALTH_LOCK:
@@ -143,6 +151,7 @@ def test_connection(body: LlmTestRequest) -> dict[str, Any]:
         model=body.model,
         api_key=body.api_key,
         base_url=body.base_url,
+        force=True,
     )
     if body.provider is None and body.model is None and body.api_key is None and body.base_url is None:
         _record_health(res)     # a re-check of the active connection is what the header pill shows
@@ -153,10 +162,11 @@ def test_connection(body: LlmTestRequest) -> dict[str, Any]:
 def get_llm_health(force: bool = False) -> dict[str, Any]:
     """Live connectivity probe for the active configured LLM."""
     now = time.time()
-    # Trigger background probe if stale (> 15 seconds) or initial
-    if force or (now - _CURRENT_LLM_HEALTH["checked_at"] > 15.0):
+    # Trigger background probe if stale (> 60 seconds) or initial
+    if force or (now - _CURRENT_LLM_HEALTH["checked_at"] > 60.0):
         if not _CURRENT_LLM_HEALTH.get("in_progress"):
-            threading.Thread(target=trigger_llm_health_probe, daemon=True).start()
+            if force or not (hasattr(llm_client, "is_generation_active") and llm_client.is_generation_active()):
+                threading.Thread(target=trigger_llm_health_probe, args=(force,), daemon=True).start()
 
     with _LLM_HEALTH_LOCK:
         return dict(_CURRENT_LLM_HEALTH)

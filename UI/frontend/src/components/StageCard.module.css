@@ -1,0 +1,247 @@
+/* StageCard.module.css - Scoped styles for individual stage cards */
+
+.stageCard {
+  width: 100%;
+  min-height: 118px;
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: border-color 0.18s ease, background-color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+.portIndicator {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 16px;
+  transition: background-color 0.2s ease;
+}
+
+.portLeft {
+  left: 0;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.portRight {
+  right: 0;
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
+
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.orderGroup {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.orderNumber {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.stageIcon {
+  display: flex;
+  align-items: center;
+}
+
+.actionGroup {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badge {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.stopButton {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background-color: rgba(239, 68, 68, 0.15);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: #EF4444;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.stopButton:hover {
+  background-color: #EF4444;
+  color: #FFFFFF;
+}
+
+.retryButton {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background-color: rgba(255, 77, 79, 0.15);
+  border: 1px solid rgba(255, 77, 79, 0.4);
+  border-radius: 3px;
+  padding: 2px 6px;
+  color: var(--status-failed);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.retryButton:hover {
+  background-color: var(--status-failed);
+  color: #FFFFFF;
+}
+
+.runButton {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border-radius: 3px;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  transition: all 0.15s ease;
+}
+
+.runButtonActive {
+  background-color: rgba(0, 216, 245, 0.15);
+  border: 1px solid rgba(0, 216, 245, 0.4);
+  color: var(--accent-cyan);
+  cursor: pointer;
+  box-shadow: 0 0 6px rgba(0, 216, 245, 0.25);
+}
+
+.runButtonActive:hover {
+  background-color: var(--accent-cyan);
+  color: #000000;
+}
+
+.runButtonDisabled {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.rerunButton {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 3px;
+  padding: 1px 5px;
+  color: var(--text-muted);
+  font-size: 9.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.rerunButton:hover:not(:disabled) {
+  border-color: var(--accent-cyan);
+  color: var(--accent-cyan);
+}
+
+.middleSection {
+  margin: 4px 0 2px 0;
+}
+
+.percentageRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.percentageNumber {
+  font-size: 26px;
+  font-weight: 700;
+  font-family: var(--font-sans);
+  letter-spacing: -1px;
+  line-height: 1;
+}
+
+.timingLabel {
+  font-size: 11px;
+  font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.statusSnippet {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.stageLabel {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.issueButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+  height: 20px;
+  padding: 0 7px;
+  border-radius: 9999px;
+  font-size: 10.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.llmBadge {
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}

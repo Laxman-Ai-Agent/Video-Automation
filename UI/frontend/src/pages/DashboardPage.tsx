@@ -1,5 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
+import styles from './DashboardPage.module.css';
 import { TopMetricCards } from '../components/TopMetricCards';
+import { ProjectsDirectory } from '../components/ProjectsDirectory';
 import { 
   Play, 
   Plus, 
@@ -23,7 +25,6 @@ import {
   FolderOpen
 } from 'lucide-react';
 import { PipelineProjectState } from '../types/pipeline';
-import { deleteProject } from '../services/api';
 
 interface DashboardPageProps {
   projectState: PipelineProjectState;
@@ -52,35 +53,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
   onDeleteProject,
   onRefreshProjects
 }) => {
-  // Table & Project Management States
+  // Table Toggle State
   const [showAllProjectsTable, setShowAllProjectsTable] = useState<boolean>(false);
-  const [searchQuery, setSearchQuery] = useState<string>('');
-  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
-  const [isDeleting, setIsDeleting] = useState<boolean>(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
-  const [deleteSuccess, setDeleteSuccess] = useState<string | null>(null);
-
-  // Filter projects based on search query
-  const filteredProjects = useMemo(() => {
-    if (!searchQuery.trim()) return projects;
-    const q = searchQuery.toLowerCase().trim();
-    return projects.filter((p) => {
-      const pid = (p.id || p.project_id || p.name || '').toLowerCase();
-      const title = (p.title || p.name || '').toLowerCase();
-      const status = (p.status || '').toLowerCase();
-      return pid.includes(q) || title.includes(q) || status.includes(q);
-    });
-  }, [projects, searchQuery]);
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '24px',
-      maxWidth: '1600px',
-      margin: '0 auto',
-      fontFamily: 'var(--font-sans)'
-    }}>
+    <div className={styles.dashboardContainer}>
       {/* 1. TOP 4 METRIC CARDS */}
       <TopMetricCards
         totalRuns={projects.length || 1430}
@@ -90,48 +67,24 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
       />
 
       {/* 2. DUAL SPOTLIGHT CARDS: CURRENT ACTIVE PROJECT & ALL PROJECTS CARD */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(440px, 1fr))',
-        gap: '20px'
-      }}>
+      <div className={styles.dualSpotlightGrid}>
         {/* Card A: Current Active Project Spotlight */}
-        <div style={{
-          backgroundColor: 'var(--bg-card)',
-          borderRadius: 'var(--radius-sm)',
-          border: '1px solid var(--border-card)',
-          padding: '24px',
-          boxShadow: 'var(--shadow-card)',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: '16px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-            <div style={{
-              width: '48px',
-              height: '48px',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: 'var(--status-running-bg)',
-              border: '1px solid var(--status-running-border)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'var(--accent-blue)',
-              flexShrink: 0
-            }}>
+        <div className={styles.spotlightCard}>
+          <div className={styles.cardTopRow}>
+            <div 
+              className={styles.iconSquare}
+              style={{
+                backgroundColor: 'var(--status-running-bg)',
+                border: '1px solid var(--status-running-border)',
+                color: 'var(--accent-blue)'
+              }}
+            >
               <Video size={24} />
             </div>
 
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 700,
-                  color: 'var(--text-muted)',
-                  textTransform: 'uppercase',
-                  fontFamily: 'var(--font-mono)'
-                }}>
+            <div className={styles.cardHeaderInfo}>
+              <div className={styles.cardBadgeGroup}>
+                <span className={styles.cardSubTitle}>
                   Current Active Project
                 </span>
                 <span style={{
@@ -146,11 +99,11 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                 </span>
               </div>
 
-              <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+              <h2 className={styles.cardMainTitle}>
                 {projectState.title || activeProjectId}
               </h2>
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '16px', fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+              <div className={styles.cardMetaRow}>
                 <span>ID: <strong style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{activeProjectId}</strong></span>
                 <span>•</span>
                 <span>Aspect: <strong>{projectState.aspectRatio}</strong></span>
@@ -161,24 +114,10 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
           </div>
 
           {/* Action Buttons */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+          <div className={styles.actionRow}>
             <button
               onClick={onOpenLivePipeline}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '9px 18px',
-                backgroundColor: 'var(--accent-blue)',
-                color: '#FFFFFF',
-                border: 'none',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                boxShadow: '0 2px 6px rgba(24, 144, 255, 0.35)',
-                transition: 'background-color 0.15s ease'
-              }}
+              className={styles.primaryActionButton}
             >
               <span>Open Live Pipeline</span>
               <ArrowRight size={15} />
@@ -186,19 +125,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
             <button
               onClick={onNewProject}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px',
-                padding: '9px 16px',
-                backgroundColor: 'transparent',
-                color: 'var(--text-primary)',
-                border: '1px solid var(--border-card)',
-                borderRadius: 'var(--radius-sm)',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer'
-              }}
+              className={styles.secondaryActionButton}
             >
               <Plus size={15} />
               <span>New Audio Project</span>
@@ -210,47 +137,29 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
         <div
           data-testid="all-projects-card"
           onClick={() => setShowAllProjectsTable((prev) => !prev)}
+          className={`${styles.spotlightCard} ${styles.interactiveSpotlightCard}`}
           style={{
-            backgroundColor: 'var(--bg-card)',
-            borderRadius: 'var(--radius-sm)',
             border: showAllProjectsTable ? '1.5px solid var(--accent-blue)' : '1px solid var(--border-card)',
-            padding: '24px',
             boxShadow: showAllProjectsTable ? '0 0 16px rgba(24, 144, 255, 0.2)' : 'var(--shadow-card)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            gap: '16px',
-            cursor: 'pointer',
-            transition: 'all 0.2s ease',
             position: 'relative'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: 'var(--radius-sm)',
-                backgroundColor: 'rgba(24, 144, 255, 0.12)',
-                border: '1px solid rgba(24, 144, 255, 0.3)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--accent-blue)',
-                flexShrink: 0
-              }}>
+            <div className={styles.cardTopRow}>
+              <div 
+                className={styles.iconSquare}
+                style={{
+                  backgroundColor: 'rgba(24, 144, 255, 0.12)',
+                  border: '1px solid rgba(24, 144, 255, 0.3)',
+                  color: 'var(--accent-blue)'
+                }}
+              >
                 <FolderKanban size={24} />
               </div>
 
-              <div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{
-                    fontSize: '11px',
-                    fontWeight: 700,
-                    color: 'var(--text-muted)',
-                    textTransform: 'uppercase',
-                    fontFamily: 'var(--font-mono)'
-                  }}>
+              <div className={styles.cardHeaderInfo}>
+                <div className={styles.cardBadgeGroup}>
+                  <span className={styles.cardSubTitle}>
                     Workspaces &amp; Renders
                   </span>
                   <span style={{
@@ -265,7 +174,7 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                   </span>
                 </div>
 
-                <h2 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginTop: '2px' }}>
+                <h2 className={styles.cardMainTitle}>
                   All Projects
                 </h2>
 
@@ -276,19 +185,13 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </div>
 
             {/* Toggle Badge Indicator */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '6px 12px',
-              borderRadius: 'var(--radius-sm)',
-              backgroundColor: showAllProjectsTable ? 'var(--accent-blue)' : 'var(--bg-elevated)',
-              color: showAllProjectsTable ? '#FFFFFF' : 'var(--accent-blue)',
-              fontSize: '12px',
-              fontWeight: 600,
-              border: '1px solid var(--border-card)',
-              flexShrink: 0
-            }}>
+            <div 
+              className={styles.toggleBadge}
+              style={{
+                backgroundColor: showAllProjectsTable ? 'var(--accent-blue)' : 'var(--bg-elevated)',
+                color: showAllProjectsTable ? '#FFFFFF' : 'var(--accent-blue)'
+              }}
+            >
               <span>{showAllProjectsTable ? 'Hide Table' : 'View Table'}</span>
               {showAllProjectsTable ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             </div>
@@ -314,505 +217,16 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
 
       {/* 3. ALL PROJECTS TABLE ON THE SAME PAGE (EXPANDABLE VIA ALL PROJECTS CARD) */}
       {showAllProjectsTable && (
-        <div 
-          id="all-projects-table-section"
-          data-testid="all-projects-table-container"
-          style={{
-            backgroundColor: 'var(--bg-card)',
-            borderRadius: 'var(--radius-sm)',
-            border: '1.5px solid var(--accent-blue)',
-            boxShadow: 'var(--shadow-card)',
-            padding: '24px'
-          }}
-        >
-          {/* Header of Table: Title, Search, Refresh, Close */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-            marginBottom: '20px'
-          }}>
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <FolderOpen size={20} color="var(--accent-blue)" />
-                <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  All Projects Directory
-                </h3>
-                <span style={{
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  color: 'var(--accent-blue)',
-                  backgroundColor: 'rgba(24, 144, 255, 0.1)',
-                  padding: '2px 8px',
-                  borderRadius: '12px'
-                }}>
-                  {filteredProjects.length} of {projects.length} Total
-                </span>
-              </div>
-              <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginTop: '4px' }}>
-                All localized workspaces, timeline runs, and render outputs. Click View to open project details, or Delete to remove.
-              </p>
-            </div>
-
-            {/* Search and Action Bar */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: 'var(--bg-elevated)',
-                border: '1px solid var(--border-card)',
-                borderRadius: 'var(--radius-sm)',
-                padding: '6px 12px',
-                gap: '8px',
-                minWidth: '240px'
-              }}>
-                <Search size={14} color="var(--text-muted)" />
-                <input
-                  type="text"
-                  placeholder="Search by name, ID, or status..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  style={{
-                    backgroundColor: 'transparent',
-                    border: 'none',
-                    outline: 'none',
-                    color: 'var(--text-primary)',
-                    fontSize: '12px',
-                    width: '100%'
-                  }}
-                  data-testid="all-projects-search-input"
-                />
-              </div>
-
-              {onRefreshProjects && (
-                <button
-                  onClick={async () => {
-                    if (onRefreshProjects) await onRefreshProjects();
-                  }}
-                  title="Refresh Projects List"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '8px',
-                    backgroundColor: 'var(--bg-elevated)',
-                    border: '1px solid var(--border-card)',
-                    borderRadius: 'var(--radius-sm)',
-                    color: 'var(--text-secondary)',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <RefreshCw size={14} />
-                </button>
-              )}
-
-              <button
-                onClick={() => setShowAllProjectsTable(false)}
-                title="Hide Table"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px',
-                  padding: '7px 12px',
-                  backgroundColor: 'transparent',
-                  border: '1px solid var(--border-card)',
-                  borderRadius: 'var(--radius-sm)',
-                  color: 'var(--text-muted)',
-                  fontSize: '12px',
-                  cursor: 'pointer'
-                }}
-              >
-                <span>Hide Table</span>
-                <ChevronUp size={14} />
-              </button>
-            </div>
-          </div>
-
-          {/* Feedback alerts if any */}
-          {deleteSuccess && (
-            <div style={{
-              marginBottom: '16px',
-              padding: '10px 14px',
-              backgroundColor: 'var(--status-completed-bg)',
-              border: '1px solid var(--status-completed-border)',
-              borderRadius: '4px',
-              color: 'var(--status-completed)',
-              fontSize: '13px',
-              fontWeight: 600
-            }}>
-              {deleteSuccess}
-            </div>
-          )}
-
-          {deleteError && (
-            <div style={{
-              marginBottom: '16px',
-              padding: '10px 14px',
-              backgroundColor: 'rgba(255, 77, 79, 0.1)',
-              border: '1px solid var(--status-failed)',
-              borderRadius: '4px',
-              color: 'var(--status-failed)',
-              fontSize: '13px',
-              fontWeight: 600
-            }}>
-              {deleteError}
-            </div>
-          )}
-
-          {/* TABLE CONTAINER */}
-          <div style={{
-            overflowX: 'auto',
-            border: '1px solid var(--border-subtle)',
-            borderRadius: 'var(--radius-sm)'
-          }}>
-            <table style={{
-              width: '100%',
-              borderCollapse: 'collapse',
-              textAlign: 'left',
-              fontSize: '13px'
-            }}>
-              <thead>
-                <tr style={{
-                  backgroundColor: 'var(--bg-elevated)',
-                  borderBottom: '1px solid var(--border-card)',
-                  color: 'var(--text-muted)',
-                  fontSize: '11px',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.5px'
-                }}>
-                  <th style={{ padding: '12px 16px' }}>Project ID &amp; Name</th>
-                  <th style={{ padding: '12px 16px', width: '100px' }}>Aspect</th>
-                  <th style={{ padding: '12px 16px', width: '130px' }}>Status</th>
-                  <th style={{ padding: '12px 16px', width: '180px' }}>Created / Workspace</th>
-                  <th style={{ padding: '12px 16px', width: '180px', textAlign: 'right' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredProjects.length === 0 ? (
-                  <tr>
-                    <td colSpan={5} style={{ padding: '32px', textAlign: 'center', color: 'var(--text-muted)' }}>
-                      No projects found matching your search.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProjects.map((proj) => {
-                    const pid = proj.id || proj.project_id || proj.name;
-                    const isActive = pid === activeProjectId;
-                    const title = proj.name || proj.title || pid;
-                    const aspect = proj.aspect || '16:9';
-                    const status = proj.status || (isActive ? 'active' : 'ready');
-                    const createdAt = proj.created_at ? new Date(proj.created_at).toLocaleString() : 'Active Workspace';
-
-                    return (
-                      <tr
-                        key={pid}
-                        data-testid={`project-row-${pid}`}
-                        style={{
-                          borderBottom: '1px solid var(--border-subtle)',
-                          backgroundColor: isActive ? 'rgba(24, 144, 255, 0.05)' : 'transparent',
-                          transition: 'background-color 0.15s ease'
-                        }}
-                      >
-                        {/* Project ID & Name */}
-                        <td style={{ padding: '12px 16px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                            <div style={{
-                              width: '32px',
-                              height: '32px',
-                              borderRadius: '4px',
-                              backgroundColor: 'var(--bg-elevated)',
-                              border: '1px solid var(--border-subtle)',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              color: isActive ? 'var(--accent-blue)' : 'var(--text-muted)',
-                              flexShrink: 0
-                            }}>
-                              <FileAudio size={16} />
-                            </div>
-                            <div>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>
-                                  {title}
-                                </span>
-                                {isActive && (
-                                  <span style={{
-                                    fontSize: '10px',
-                                    fontWeight: 700,
-                                    color: 'var(--accent-blue)',
-                                    backgroundColor: 'rgba(24, 144, 255, 0.12)',
-                                    padding: '1px 5px',
-                                    borderRadius: '3px'
-                                  }}>
-                                    ACTIVE
-                                  </span>
-                                )}
-                              </div>
-                              <div style={{ fontSize: '11px', color: 'var(--text-muted)', fontFamily: 'var(--font-mono)', marginTop: '2px' }}>
-                                {pid}
-                              </div>
-                            </div>
-                          </div>
-                        </td>
-
-                        {/* Aspect */}
-                        <td style={{ padding: '12px 16px' }}>
-                          <span style={{
-                            fontSize: '11px',
-                            fontFamily: 'var(--font-mono)',
-                            color: 'var(--text-secondary)',
-                            backgroundColor: 'var(--bg-elevated)',
-                            padding: '2px 6px',
-                            borderRadius: '3px',
-                            border: '1px solid var(--border-subtle)'
-                          }}>
-                            {aspect}
-                          </span>
-                        </td>
-
-                        {/* Status */}
-                        <td style={{ padding: '12px 16px' }}>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            color: status === 'completed' 
-                              ? 'var(--status-completed)' 
-                              : status === 'running' 
-                              ? 'var(--status-running)' 
-                              : 'var(--accent-blue)',
-                            backgroundColor: status === 'completed'
-                              ? 'var(--status-completed-bg)'
-                              : status === 'running'
-                              ? 'var(--status-running-bg)'
-                              : 'var(--bg-elevated)',
-                            padding: '3px 8px',
-                            borderRadius: '3px',
-                            border: '1px solid var(--border-subtle)',
-                            textTransform: 'capitalize'
-                          }}>
-                            {status}
-                          </span>
-                        </td>
-
-                        {/* Created Date */}
-                        <td style={{ padding: '12px 16px', color: 'var(--text-secondary)', fontSize: '12px' }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                            <Clock size={12} color="var(--text-muted)" />
-                            <span>{createdAt}</span>
-                          </div>
-                        </td>
-
-                        {/* Actions: View and Delete */}
-                        <td style={{ padding: '12px 16px', textAlign: 'right' }}>
-                          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
-                            {/* View Button */}
-                            <button
-                              data-testid={`view-project-btn-${pid}`}
-                              onClick={() => {
-                                onSelectProject(pid);
-                                onOpenLivePipeline();
-                              }}
-                              title="View Project Details and Pipeline"
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                padding: '6px 12px',
-                                backgroundColor: 'rgba(24, 144, 255, 0.12)',
-                                border: '1px solid rgba(24, 144, 255, 0.35)',
-                                borderRadius: '4px',
-                                color: 'var(--accent-blue)',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                transition: 'all 0.15s ease'
-                              }}
-                            >
-                              <Eye size={13} />
-                              <span>View</span>
-                            </button>
-
-                            {/* Delete Button */}
-                            <button
-                              data-testid={`delete-project-btn-${pid}`}
-                              onClick={() => setProjectToDelete({ id: pid, name: title })}
-                              title="Delete Project Permanently"
-                              style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                padding: '6px 10px',
-                                backgroundColor: 'rgba(255, 77, 79, 0.08)',
-                                border: '1px solid rgba(255, 77, 79, 0.3)',
-                                borderRadius: '4px',
-                                color: 'var(--status-failed)',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                cursor: 'pointer',
-                                transition: 'all 0.15s ease'
-                              }}
-                            >
-                              <Trash2 size={13} />
-                              <span>Delete</span>
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    );
-                  })
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      )}
-
-      {/* 4. DELETE CONFIRMATION MODAL */}
-      {projectToDelete && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0, 0, 0, 0.75)',
-          backdropFilter: 'blur(4px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000
-        }}>
-          <div 
-            data-testid="delete-confirmation-dialog"
-            style={{
-              backgroundColor: 'var(--bg-card)',
-              border: '1.5px solid var(--border-card)',
-              borderRadius: 'var(--radius-md)',
-              padding: '24px',
-              maxWidth: '460px',
-              width: '90%',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)'
-            }}
-          >
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <div style={{
-                width: '40px',
-                height: '40px',
-                borderRadius: '50%',
-                backgroundColor: 'rgba(255, 77, 79, 0.15)',
-                border: '1px solid rgba(255, 77, 79, 0.4)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: 'var(--status-failed)',
-                flexShrink: 0
-              }}>
-                <AlertTriangle size={22} />
-              </div>
-
-              <div>
-                <h3 style={{ fontSize: '16px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                  Confirm Permanent Deletion
-                </h3>
-                <p style={{ fontSize: '12px', color: 'var(--text-muted)' }}>
-                  This action is irreversible
-                </p>
-              </div>
-            </div>
-
-            <div style={{
-              backgroundColor: 'var(--bg-elevated)',
-              padding: '12px 14px',
-              borderRadius: '4px',
-              border: '1px solid var(--border-subtle)',
-              fontSize: '13px',
-              lineHeight: 1.5,
-              color: 'var(--text-secondary)',
-              marginBottom: '20px'
-            }}>
-              Are you sure you want to permanently delete project <strong style={{ color: 'var(--text-primary)' }}>"{projectToDelete.name}"</strong>?
-              <div style={{ fontSize: '11px', fontFamily: 'var(--font-mono)', color: 'var(--text-muted)', marginTop: '4px' }}>
-                ID: {projectToDelete.id}
-              </div>
-              <div style={{ fontSize: '11px', color: 'var(--status-failed)', marginTop: '8px' }}>
-                All audio files, timeline edits, rendered videos, and workspace metadata will be permanently deleted.
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-              <button
-                type="button"
-                disabled={isDeleting}
-                onClick={() => {
-                  setProjectToDelete(null);
-                  setDeleteError(null);
-                }}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: 'transparent',
-                  border: '1px solid var(--border-card)',
-                  borderRadius: '4px',
-                  color: 'var(--text-secondary)',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: isDeleting ? 'not-allowed' : 'pointer'
-                }}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="button"
-                data-testid="confirm-delete-project-btn"
-                disabled={isDeleting}
-                onClick={async () => {
-                  setIsDeleting(true);
-                  setDeleteError(null);
-                  try {
-                    let success = false;
-                    if (onDeleteProject) {
-                      success = await onDeleteProject(projectToDelete.id);
-                    } else {
-                      success = await deleteProject(projectToDelete.id);
-                      if (onRefreshProjects) await onRefreshProjects();
-                    }
-
-                    if (success) {
-                      setDeleteSuccess(`Project "${projectToDelete.name}" was permanently deleted.`);
-                      setTimeout(() => setDeleteSuccess(null), 4000);
-                      setProjectToDelete(null);
-                    } else {
-                      setDeleteError(`Could not delete "${projectToDelete.name}". It may be currently running or locked.`);
-                    }
-                  } catch (err: any) {
-                    setDeleteError(err?.message || 'Failed to delete project.');
-                  } finally {
-                    setIsDeleting(false);
-                  }
-                }}
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  padding: '8px 18px',
-                  backgroundColor: 'var(--status-failed)',
-                  border: 'none',
-                  borderRadius: '4px',
-                  color: '#FFFFFF',
-                  fontSize: '13px',
-                  fontWeight: 600,
-                  cursor: isDeleting ? 'not-allowed' : 'pointer',
-                  opacity: isDeleting ? 0.7 : 1
-                }}
-              >
-                <Trash2 size={14} />
-                <span>{isDeleting ? 'Deleting...' : 'Permanently Delete'}</span>
-              </button>
-            </div>
-          </div>
-        </div>
+        <ProjectsDirectory
+          projects={projects}
+          activeProjectId={activeProjectId}
+          onSelectProject={onSelectProject}
+          onOpenLivePipeline={onOpenLivePipeline}
+          onRefreshProjects={onRefreshProjects}
+          onDeleteProject={onDeleteProject}
+          onClose={() => setShowAllProjectsTable(false)}
+          showCloseButton={true}
+        />
       )}
 
       {/* 5. RECENT PROJECTS & SWARM ACTIVITY GRID */}

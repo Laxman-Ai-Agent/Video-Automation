@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "audio_analyzer",
-  "updated_at": "2026-10-20T02:21:37.815240+00:00",
-  "total_experiences": 10,
+  "updated_at": "2026-10-25T07:18:37.640057+00:00",
+  "total_experiences": 14,
   "experiences": {
     "exp-audio_analyzer-29c2e65deb": {
       "experience_id": "exp-audio_analyzer-29c2e65deb",
@@ -140,6 +140,49 @@
       "timestamp": "2026-10-20T01:14:23.810240+00:00",
       "schema_version": 1
     },
+    "exp-audio_analyzer-4e04b6b904": {
+      "experience_id": "exp-audio_analyzer-4e04b6b904",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_d1d069d2",
+      "project_id": "11-de16",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "11-de16",
+            "task_id": "run_d1d069d2",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "The LLM check of the transcript could not run (Antigravity CLI error: error: invalid model selection (--model \"gemini-3.8-flash-high\" --effort \"\"): model gemini-3.8-flash-high is not recognized as a known model or custom model in settings). The final JSON is saved only after the LLM check: sign in to the Claude CLI and run the Audio Analyzer again.",
+            "timestamp": "2026-10-25T03:53:10.947511+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-25T03:53:37.325192+00:00",
+      "schema_version": 1
+    },
     "exp-audio_analyzer-66b7bf37a2": {
       "experience_id": "exp-audio_analyzer-66b7bf37a2",
       "agent_id": "audio_analyzer",
@@ -181,6 +224,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T01:12:24.557969+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-6c878d0b21": {
+      "experience_id": "exp-audio_analyzer-6c878d0b21",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_bf5883af",
+      "project_id": "my-test-01-b9a8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-test-01-b9a8",
+            "task_id": "run_bf5883af",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "TRANSIENT",
+            "code": "transient_service_error",
+            "message": "The LLM check of the transcript could not run (Groq API error (429): Rate limit reached for model `openai/gpt-oss-120b` in organization `org_01m3nf88ymevmt9hxbs52mdv6q` service tier `on_demand` on tokens per day (TPD): Limit 200000, Used 199849, Requested 6132. Please try again in 43m3.). The final JSON is saved only after the LLM check: sign in to the Claude CLI and run the Audio Analyzer again.",
+            "timestamp": "2026-10-24T11:37:27.021989+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "TRANSIENT",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-24T11:37:28.297519+00:00",
       "schema_version": 1
     },
     "exp-audio_analyzer-7ae7626804": {
@@ -278,6 +364,92 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:21:00.723834+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-cb09cbcc0e": {
+      "experience_id": "exp-audio_analyzer-cb09cbcc0e",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_ae6932af",
+      "project_id": "my-test-01-b9a8",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-test-01-b9a8",
+            "task_id": "run_ae6932af",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "The LLM check of the transcript could not run (Expecting ',' delimiter: line 178 column 6 (char 3840)). The final JSON is saved only after the LLM check: sign in to the Claude CLI and run the Audio Analyzer again.",
+            "timestamp": "2026-10-25T00:36:33.536945+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-25T00:36:45.642127+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-cdf9fbd61d": {
+      "experience_id": "exp-audio_analyzer-cdf9fbd61d",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_39274023",
+      "project_id": "11-de16",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "11-de16",
+            "task_id": "run_39274023",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "The LLM check of the transcript could not run (Antigravity CLI error: Antigravity CLI error). The final JSON is saved only after the LLM check: sign in to the Claude CLI and run the Audio Analyzer again.",
+            "timestamp": "2026-10-25T07:18:14.456855+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-25T07:18:37.634591+00:00",
       "schema_version": 1
     },
     "exp-audio_analyzer-da44313190": {

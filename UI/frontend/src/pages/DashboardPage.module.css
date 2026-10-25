@@ -1,0 +1,175 @@
+/* DashboardPage.module.css - Scoped styles for the Dashboard page */
+
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 1600px;
+  margin: 0 auto;
+  font-family: var(--font-sans);
+}
+
+.dualSpotlightGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(440px, 1fr));
+  gap: 20px;
+}
+
+.spotlightCard {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-card);
+  padding: 24px;
+  box-shadow: var(--shadow-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  transition: all 0.2s ease;
+}
+
+.interactiveSpotlightCard {
+  cursor: pointer;
+}
+
+.interactiveSpotlightCard:hover {
+  border-color: var(--accent-blue);
+  box-shadow: var(--shadow-hover);
+}
+
+.cardTopRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.iconSquare {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardHeaderInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.cardBadgeGroup {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cardSubTitle {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  font-family: var(--font-mono);
+}
+
+.cardMainTitle {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-top: 2px;
+}
+
+.cardMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.actionRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.primaryActionButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 18px;
+  background-color: var(--accent-blue);
+  color: #FFFFFF;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(24, 144, 255, 0.35);
+  transition: background-color 0.15s ease;
+}
+
+.primaryActionButton:hover {
+  background-color: #40a9ff;
+}
+
+.secondaryActionButton {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 9px 16px;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.secondaryActionButton:hover {
+  background-color: var(--bg-elevated);
+}
+
+.toggleBadge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border-card);
+  flex-shrink: 0;
+}
+
+.activityGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.8fr) minmax(320px, 1fr);
+  gap: 24px;
+}
+
+.panelCard {
+  background-color: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px;
+}
+
+.projectListItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.projectListItem:hover {
+  background-color: var(--bg-card-hover, rgba(255, 255, 255, 0.04));
+}

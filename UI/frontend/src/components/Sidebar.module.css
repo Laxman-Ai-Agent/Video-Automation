@@ -1,0 +1,126 @@
+/* Sidebar.module.css - Scoped styles for the left navigation sidebar */
+
+.sidebar {
+  background-color: var(--sidebar-bg);
+  color: var(--sidebar-text);
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  height: 100%;
+  max-height: 100vh;
+  transition: width 0.2s cubic-bezier(0.2, 0, 0, 1), background-color 0.2s ease, border-color 0.2s ease;
+  border-right: 1px solid var(--sidebar-border);
+  z-index: 100;
+  user-select: none;
+  overflow: hidden;
+}
+
+.brandHeader {
+  height: 64px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--sidebar-border);
+}
+
+.logoIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #1890FF 0%, #0050B3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.35);
+}
+
+.brandTitle {
+  font-size: 18px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.versionBadge {
+  font-size: 9px;
+  background-color: rgba(24, 144, 255, 0.25);
+  color: #40A9FF;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+}
+
+.menuNav {
+  flex: 1;
+  padding: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.navButton {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  background-color: transparent;
+  color: var(--sidebar-text);
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 400;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  position: relative;
+  text-align: left;
+}
+
+.navButton:hover:not(.navButtonActive) {
+  background-color: var(--sidebar-hover-bg);
+  color: var(--text-primary);
+}
+
+.navButtonActive {
+  background-color: #1890FF !important;
+  color: #FFFFFF !important;
+  font-weight: 600;
+}
+
+.navLabel {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebarFooter {
+  flex-shrink: 0;
+  border-top: 1px solid var(--sidebar-footer-border);
+  background-color: var(--sidebar-footer-bg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.collapseButton {
+  background: transparent;
+  border: none;
+  color: var(--sidebar-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  padding: 6px 0;
+  transition: color 0.15s ease;
+}
+
+.collapseButton:hover {
+  color: var(--text-primary);
+}

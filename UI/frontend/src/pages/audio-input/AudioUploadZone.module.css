@@ -1,0 +1,53 @@
+.dropzone {
+  flex: 1;
+  min-height: 120px;
+  border-radius: 5px;
+  padding: 16px 14px;
+  text-align: center;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dropzoneIdle {
+  border: 1.5px dashed var(--border-card);
+  background-color: var(--bg-card);
+  cursor: pointer;
+}
+
+.dropzoneIdle:hover {
+  border-color: var(--accent-blue);
+}
+
+.dropzoneActive {
+  border: 1.5px dashed var(--accent-blue);
+  background-color: var(--status-running-bg);
+  cursor: pointer;
+}
+
+.dropzoneDisabled {
+  cursor: not-allowed;
+}
+
+.removeBtn {
+  background: none;
+  border: 1px solid var(--border-card);
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background-color: var(--bg-card);
+  transition: all 0.15s ease;
+}
+
+.removeBtn:hover {
+  color: var(--status-failed);
+  border-color: var(--status-failed-border);
+}

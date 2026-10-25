@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, Suspense, lazy } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { Header } from './components/Header';
 import { PipelineCanvas } from './components/PipelineCanvas';
-import { ProjectsPage } from './pages/ProjectsPage';
-import { AgentsCenterPage } from './pages/AgentsCenterPage';
-import { SkillsPage } from './pages/SkillsPage';
-import { LlmPage } from './pages/LlmPage';
-import { WorkLogPage } from './pages/WorkLogPage';
 import { AudioInputPage } from './pages/AudioInputPage';
 import { DEFAULT_MEDIA, type MediaMix } from './services/mediaMix';
-import { DashboardPage } from './pages/DashboardPage';
+
+// Lazy-loaded secondary pages to minimize initial bundle size and speed up page load
+const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(m => ({ default: m.ProjectsPage })));
+const AgentsCenterPage = lazy(() => import('./pages/AgentsCenterPage').then(m => ({ default: m.AgentsCenterPage })));
+const SkillsPage = lazy(() => import('./pages/SkillsPage').then(m => ({ default: m.SkillsPage })));
+const LlmPage = lazy(() => import('./pages/LlmPage').then(m => ({ default: m.LlmPage })));
+const WorkLogPage = lazy(() => import('./pages/WorkLogPage').then(m => ({ default: m.WorkLogPage })));
+const DashboardPage = lazy(() => import('./pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
 import { 
   fetchHealth, 
   fetchLlmHealth,
@@ -705,12 +707,15 @@ export const App: React.FC = () => {
           data-testid="main-content-scroll-area"
           style={{
             flex: 1,
-            padding: (activeView === 'pipeline' || activeView === 'audio-input') && !pipelineFullPage ? '12px 24px 24px' : '24px',
-            overflowY: 'auto',
+            padding: pipelineFullPage 
+              ? 0 
+              : ((activeView === 'pipeline' || activeView === 'audio-input') ? '12px 24px 24px' : '24px'),
+            overflowY: pipelineFullPage ? 'hidden' : 'auto',
             overflowX: 'hidden',
             minHeight: 0
           }}
         >
+          <Suspense fallback={<div style={{ padding: '32px', textAlign: 'center', color: 'var(--text-muted)' }}>Loading view...</div>}>
           {/* DASHBOARD PAGE — HOUSES THE 4 TOP METRIC CARDS */}
           {activeView === 'dashboard' && (
             <DashboardPage
@@ -753,6 +758,8 @@ export const App: React.FC = () => {
               }}
               sseStatus={sseStatus}
               onFullPageChange={setPipelineFullPage}
+              onRefreshProjects={handleRefreshProjects}
+              onDeleteProject={handleDeleteProject}
             />
           )}
 
@@ -767,6 +774,7 @@ export const App: React.FC = () => {
                 setPipelineTab('flow');
               }}
               onCreateProject={handleCreateLegacyProject}
+              onRefreshProjects={handleRefreshProjects}
             />
           )}
 
@@ -819,6 +827,7 @@ export const App: React.FC = () => {
               </div>
             </div>
           )}
+          </Suspense>
         </main>
       </div>
     </div>

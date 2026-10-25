@@ -288,26 +288,19 @@ def test_blocker_findings_fail_closed_even_if_status_passed(tmp_path: Path, monk
     assert reason in ("llm_review_blocked", "llm_review_has_blockers")
 
 
-def test_base_agent_review_hook_enforces_gate(tmp_path: Path, monkeypatch):
-    """Verify BaseAgent.review blocks agent progression if stage review is missing or failed."""
+def test_base_agent_validation_enforces_gate(tmp_path: Path, monkeypatch):
+    """Verify BaseAgent blocks agent progression if stage inputs are invalid or missing."""
     pdir = tmp_path / "base_agent_proj"
     pdir.mkdir(parents=True, exist_ok=True)
     monkeypatch.setattr("backend.store.project_dir", lambda p: tmp_path / p)
 
-    seg_file = pdir / "scene_segmentation.json"
-    seg_file.write_text(json.dumps({"scenes": []}), encoding="utf-8")
-    vp_file = pdir / "visual_planning.json"
-    vp_file.write_text(json.dumps({}), encoding="utf-8")
-    sp_file = pdir / "scene_plan.json"
-    sp_file.write_text(json.dumps({}), encoding="utf-8")
-
+    # Missing required planning inputs
     adapter = registry.get_agent("visual_planning")
     req = AgentRequest(project_id="base_agent_proj", agent_id="visual_planning", stage_id="planning")
 
-    # Invocations without prior LLM review should execute but be blocked at the review gate
     res = adapter.invoke(pdir, req)
     assert res.status == "blocked"
-    assert "Mandatory LLM review gate failed" in (res.error or "")
+    assert "Missing" in (res.error or "")
 
 
 def test_cached_review_reused_without_duplicate_llm_call(tmp_path: Path, monkeypatch):

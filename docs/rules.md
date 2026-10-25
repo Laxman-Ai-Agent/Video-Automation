@@ -30,6 +30,14 @@ At a phase change say: "Switch to <model> with /model". The user switches; you c
 - Config values (thresholds, fps, sizes) live in `backend/config.py` and `VIDEO_ENGINE/remotion/src/config.ts`.
 - Log to `projects/{id}/log.txt`; never print secrets.
 
+## Frontend UI & Styling Rules (CSS Modules)
+- **Mandatory CSS Modules (`*.module.css`)**: Never dump layout, positioning, typography, borders, shadows, or pseudo-classes into inline `style={{ ... }}` objects. Every component must use a companion `[ComponentName].module.css` file.
+- **Dynamic Styles Only in `style`**: Inline styles are strictly reserved for runtime dynamic values (e.g. state-driven dimensions, `strokeDashoffset`, dynamic percentage numbers).
+- **No Direct DOM Style Mutation**: Never write `onMouseEnter={(e) => e.currentTarget.style.backgroundColor = ...}`. Use CSS `:hover`, `:active`, `:focus`, and active classes (`.navItemActive`) in the module CSS.
+- **Theme Variables**: Use design tokens from `index.css` (`var(--bg-card)`, `var(--text-primary)`, `var(--accent-blue)`, `var(--status-running)`, etc.). Avoid raw hardcoded hex codes.
+- **Testing Integrity (`data-testid`)**: Every interactive button, card, tab, and status indicator must maintain its `data-testid` attribute. Never remove or rename existing test IDs during refactoring.
+- **Verification Gate**: Any UI change must compile cleanly with `npm --prefix UI/frontend run build` and pass all Playwright automated regression tests.
+
 ## Remotion rules
 - Animate only with `interpolate()`, `spring()`, or GSAP paused timeline + `seek(frame/fps)`.
 - No CSS transitions, no setTimeout, no Framer Motion, no random without a seeded value.
@@ -46,6 +54,12 @@ At a phase change say: "Switch to <model> with /model". The user switches; you c
 - Transitions: never the same type twice in a row; match the mood (light-leak for warm, blur for soft).
 - Keep one palette and one type scale for the whole video (from `scene_plan.style`).
 - Particles and effects only at emphasis moments.
+
+## LLM & CLI Subprocess Execution
+- Always pass `stdin=subprocess.DEVNULL` when executing CLI tools (`agy.exe`, `claude`) to prevent Windows console input blocking.
+- Guard shared CLI instances with inter-process mutual exclusion locks (`_interprocess_agy_lock`) so short probes do not tear down active daemon sessions.
+- Never run un-cached health checks while pipeline LLM generations are actively streaming.
+- Use `Gemini 3.8 Flash (Low)` for fast text completion to avoid multi-minute thinking budget delays.
 
 ## Safety
 - Do not delete files without asking. Do not touch outside the project folder.

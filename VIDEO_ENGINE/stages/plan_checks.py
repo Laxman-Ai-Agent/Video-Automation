@@ -80,7 +80,8 @@ def check(pdir: Path) -> tuple[list[str], list[str]]:
     comp_raw = json.loads((pdir / "composition.json").read_text(encoding="utf-8"))
     W += palette_check(comp_raw, plan.style.palette)                                                              # colors outside the palette, weak contrast
     W += motion_check(comp_raw, json.loads((pdir / "scene_plan.json").read_text(encoding="utf-8")))              # camera limits, effect timing
-    motion_only = bool(json.loads((pdir / "composition.json").read_text(encoding="utf-8")).get("meta", {}).get("motionOnly"))
+    motion_only = bool(comp_raw.get("meta", {}).get("motionOnly"))
+    is_custom_code = bool(comp_raw.get("meta", {}).get("customCode")) or not bool(comp_raw.get("meta", {}).get("reusable_motion_templates", True))
     img_slots = {(l.model_extra or {}).get("slot") for c in comp.scenes for l in c.layers if l.type == "image"}
     # prompts
     n = sorted(p.n for p in pm.prompts)
@@ -91,7 +92,7 @@ def check(pdir: Path) -> tuple[list[str], list[str]]:
         per_scene[p.scene] = per_scene.get(p.scene, 0) + 1
         if p.scene not in by_scene:
             E.append(f"prompt {p.n}: scene {p.scene} does not exist")
-        if p.slot not in img_slots and not motion_only:      # a motion-only composition (Use Images OFF) has no picture layers on purpose
+        if p.slot not in img_slots and not motion_only and not is_custom_code:      # a motion-only or custom-code composition has no legacy picture layers
             E.append(f"prompt {p.n}: slot '{p.slot}' has no image layer in composition.json")
         if TELUGU.search(p.text):
             E.append(f"prompt {p.n}: contains Telugu script")

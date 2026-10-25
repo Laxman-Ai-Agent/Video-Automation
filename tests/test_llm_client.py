@@ -32,11 +32,15 @@ def test_llm_update_settings():
     assert llm_client.load_settings()["provider"] == "gemini"                                   # written to this test's own settings file
 
 
-def test_a_provider_without_a_key_falls_back_to_the_claude_cli(monkeypatch):
+def test_a_provider_without_a_key_does_not_silently_fallback(monkeypatch):
+    """Under Model Lock, a provider without a key stays locked to that provider and does NOT silently switch to Claude CLI."""
     monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude" if t == "claude" else None)
     for k in ("LLM_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
         monkeypatch.delenv(k, raising=False)
-    assert client.post("/llm/settings", json={"provider": "gemini", "model": "gemini-2.0-flash"}).json()["active_provider"] == "claude_cli"
+    res = client.post("/llm/settings", json={"provider": "gemini", "model": "gemini-3.5-flash"}).json()
+    assert res["active_provider"] == "gemini"
+    assert res["connection_status"] == "offline"
+    assert "API key is missing" in res["status_message"]
 
 
 def test_llm_test_connection_invalid_key_tests_the_provider_it_names(monkeypatch):

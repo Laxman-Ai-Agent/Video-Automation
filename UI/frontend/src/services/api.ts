@@ -72,9 +72,12 @@ export async function fetchLlmHealth(): Promise<{ ok: boolean; provider?: string
 // --- LLM connection page (UI/backend/routes/llm.py) ---
 export interface LlmProviderInfo { id: string; name: string; default_model: string; needs_key: boolean }
 export interface LlmSettings {
+  model_locked?: boolean;
   active_provider: string;
   active_provider_name: string;
   active_model: string;
+  auth_method?: string;
+  auth_method_name?: string;
   base_url: string;
   has_api_key: boolean;
   api_key_masked: string;
@@ -267,6 +270,66 @@ export async function fetchAssets(projectId: string): Promise<any | null> {
   }
 }
 
+/** Manual upload / override of an asset for a specific visual requirement */
+export async function uploadAsset(
+  projectId: string,
+  requirementId: string,
+  sceneId: number,
+  file: File
+): Promise<any> {
+  const formData = new FormData();
+  formData.append('file', file);
+  formData.append('requirement_id', requirementId);
+  formData.append('scene_id', String(sceneId));
+
+  const res = await fetch(`${API_BASE}/projects/${projectId}/assets/upload`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!res.ok) {
+    let msg = 'Failed to upload custom asset';
+    try {
+      const err = await res.json();
+      msg = err.detail || err.message || msg;
+    } catch {
+      // ignore
+    }
+    throw new Error(msg);
+  }
+  return await res.json();
+}
+
+/** Update asset properties: video trim frame range (clip_start, clip_dur, clip_end) or icon name */
+export async function updateAsset(
+  projectId: string,
+  payload: {
+    requirement_id: string;
+    scene_id?: number;
+    kind?: string;
+    clip_start?: number;
+    clip_dur?: number;
+    clip_end?: number;
+    icon_name?: string;
+  }
+): Promise<any> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/assets/update`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let msg = 'Failed to update asset settings';
+    try {
+      const err = await res.json();
+      msg = err.detail || err.message || msg;
+    } catch {
+      // ignore
+    }
+    throw new Error(msg);
+  }
+  return await res.json();
+}
+
 export async function createProject(title: string, aspectRatio: string = '16:9'): Promise<any> {
   const res = await fetch(`${API_BASE}/projects`, {
     method: 'POST',
@@ -394,19 +457,39 @@ export async function fetchProject(projectId: string): Promise<any | null> {
   }
 }
 
+export interface SubtaskStep {
+  n: number | null;
+  name: string;
+  status: string;
+  detail: string | null;
+  checks_passed?: number | null;
+  checks_total?: number | null;
+  progress_percent?: number | null;
+  completion_percent?: number;
+  disabled?: boolean;
+  // the LLM's check of this step: 'error' = the call failed (never shown as a pass); current = it checked exactly the result now recorded
+  llm_check?: { verdict: 'confirms' | 'questions' | 'rejects' | 'error'; note: string; model: string | null; latency_ms: number; at: number; current: boolean } | null;
+  llm_verification?: {
+    state: 'verified' | 'in_progress' | 'pending' | 'rejected' | 'questioned' | 'failed' | 'unverified';
+    model?: string | null;
+    latency_ms?: number;
+    note?: string;
+    verdict?: string;
+  };
+}
+
 // The steps a stage really recorded in its report, plus its stored LLM review and logged LLM calls (UI/backend/routes/pipeline.py)
 export interface StageSubtasks {
   stage_id: string;
   report: string | null;
   written: number | null;
-  steps: {
-    n: number | null; name: string; status: string; detail: string | null; checks_passed?: number | null; checks_total?: number | null;
-    // the LLM's check of this step: 'error' = the call failed (never shown as a pass); current = it checked exactly the result now recorded
-    llm_check?: { verdict: 'confirms' | 'questions' | 'rejects' | 'error'; note: string; model: string | null; latency_ms: number; at: number; current: boolean } | null;
-  }[];
+  steps: SubtaskStep[];
   llm_review: { status: string | null; score: number | null; model: string | null; summary: string | null; written: number } | null;
   llm_calls: Record<string, number>;
   llm_checks_running: boolean;
+  active_step?: number | null;
+  active_model?: string;
+  overall_progress?: number;
 }
 
 // A person's recorded decision to continue with a stage's current warnings (errors can never be accepted)

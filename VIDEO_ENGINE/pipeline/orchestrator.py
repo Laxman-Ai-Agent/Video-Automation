@@ -451,6 +451,17 @@ def evaluate_stage_eligibility(
                     elif dep == "segmentation" and (pdir / "scene_segmentation.json").exists():
                         from VIDEO_ENGINE.stages import scene_segmentation
                         is_valid = scene_segmentation.load_fresh(pdir) is not None
+                    elif dep == "motion_validation" and (pdir / f"motion_timeline_validation{'_9x16' if aspect == '9:16' else ''}.json").exists():
+                        from VIDEO_ENGINE.stages import motion_validation as mv_mod
+                        is_valid = mv_mod.is_valid(pdir, aspect)
+                    elif dep == "timeline" and (pdir / f"timeline_build_report{'_9x16' if aspect == '9:16' else ''}.json").exists():
+                        from VIDEO_ENGINE.stages import timeline_build as tb_mod
+                        tbs = tb_mod.load(pdir, aspect)
+                        is_valid = bool(tbs and tbs.get("current") and tbs.get("report", {}).get("status") == "completed")
+                    elif dep == "approval":
+                        from VIDEO_ENGINE.stages import timeline_approval as ta_mod
+                        snap = ta_mod.snapshot(pdir, aspect)
+                        is_valid = snap.get("status") == "approved"
                 if is_valid:
                     pipeline_state.transition_stage(pdir, dep, "completed", aspect=aspect)
                     pstate = pipeline_state.load_pipeline_state(pdir)

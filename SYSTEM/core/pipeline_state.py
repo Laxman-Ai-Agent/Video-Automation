@@ -69,7 +69,7 @@ STAGE_TO_AGENT_MAP: dict[str, str] = {
 
 # Legal lifecycle state transitions
 LEGAL_TRANSITIONS: dict[str, set[str]] = {
-    "pending": {"running", "skipped", "pending"},
+    "pending": {"running", "skipped", "pending", "completed"},
     "running": {"completed", "blocked", "failed", "needs_review", "cancelled", "running"},
     "blocked": {"running", "pending", "completed", "blocked"},
     "failed": {"running", "pending", "completed", "failed"},

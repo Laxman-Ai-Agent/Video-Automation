@@ -1011,11 +1011,159 @@ def get_stage_subtasks(pid: str, stage_id: str):
     aspect = pipeline_view.aspect_of(pdir)
     steps, _rep, f = step_llm_check.steps(pdir, stage_id, aspect)
     report, written = (f.name, f.stat().st_mtime) if f is not None and f.exists() else (None, None)
+
+    # Gating: Whisper speech-to-text (audio to Telugu) and audio_analysis.json must be ready before LLM checks
+    whisper_ready = True
+    if stage_id == "analyzer":
+        has_tr = (pdir / "transcript.json").exists()
+        has_an = (pdir / "audio_analysis.json").exists()
+        whisper_ready = has_tr and has_an
+
     if steps:
-        step_llm_check.start(pdir, stage_id, aspect)                               # no-op when every step already has a current check or a check runs
+        step_llm_check.start(pdir, stage_id, aspect)                               # checks steps 1-3 when audio exists; downstream steps wait for audio_analysis.json
     checks = step_llm_check.load(pdir, stage_id, aspect)
+
+    active_model = "openai/gpt-oss-120b"
+    try:
+        from SYSTEM.core import llm_gateway
+        gw = llm_gateway.get_gateway()
+        prov, configured_mdl, key, base_url = gw.client.resolve_provider_config()
+        active_model = gw.resolve_model_for_profile(prov, "fast_structured", configured_mdl)
+    except Exception:
+        pass
+
+    active_step = checks.get("active_step")
+    first_unverified_n = None
+    if checks.get("running") and active_step is None:
+        for stp in steps:
+            c_info = checks["steps"].get(str(stp["n"]))
+            if not (c_info and c_info.get("current") and c_info.get("verdict") != "error"):
+                first_unverified_n = stp["n"]
+                break
+
     for s in steps:
-        s["llm_check"] = checks["steps"].get(str(s["n"]))
+        chk = checks["steps"].get(str(s["n"]))
+        s["llm_check"] = chk
+
+        passed = s.get("checks_passed")
+        total = s.get("checks_total")
+        prog = s.get("progress_percent")
+        st = (s.get("status") or "").lower()
+
+        # LLM Verification state determination
+        v_state = "pending"
+        if chk and chk.get("current"):
+            v = chk.get("verdict")
+            if v == "confirms":
+                v_state = "verified"
+            elif v == "rejects":
+                v_state = "rejected"
+            elif v == "questions":
+                v_state = "questioned"
+            elif v == "error":
+                v_state = "error"
+            else:
+                v_state = "unverified"
+            s["llm_verification"] = {
+                "state": v_state,
+                "model": chk.get("model") or active_model,
+                "latency_ms": chk.get("latency_ms"),
+                "note": chk.get("note"),
+                "verdict": v,
+            }
+        elif checks.get("running"):
+            is_active = (active_step is not None and s.get("n") == active_step) or (active_step is None and s.get("n") == first_unverified_n)
+            v_state = "in_progress" if is_active else "pending"
+            s["llm_verification"] = {
+                "state": v_state,
+                "model": active_model,
+                "note": "LLM verification actively reviewing step output..." if is_active else "Queued for LLM verification",
+            }
+        else:
+            s["llm_verification"] = {
+                "state": "pending",
+                "model": active_model,
+                "note": "Waiting for LLM verification",
+            }
+
+        # When analyzer has not finished Whisper audio-to-Telugu conversion, downstream steps remain disabled & pending
+        if stage_id == "analyzer" and not whisper_ready:
+            step_n = s.get("n", 0)
+            if step_n in (4, 6, 7, 8, 9, 10, 11, 12, 13, 14):
+                s["disabled"] = True
+                s["status"] = "pending"
+                s["completion_percent"] = 0
+                s["llm_verification"] = {
+                    "state": "pending",
+                    "model": active_model,
+                    "note": "Waiting for Whisper audio-to-Telugu conversion to complete..."
+                }
+                continue
+            elif step_n == 5:
+                has_tr = (pdir / "transcript.json").exists()
+                if not has_tr:
+                    s["status"] = "running" if (pdir / "audio_16k.wav").exists() else "pending"
+                    s["completion_percent"] = int(prog) if (prog is not None and 0 < prog < 100) else 45
+                    s["llm_verification"] = {
+                        "state": "in_progress" if (pdir / "audio_16k.wav").exists() else "pending",
+                        "model": active_model,
+                        "note": "Whisper audio-to-Telugu conversion in progress..."
+                    }
+                    continue
+                else:
+                    s["llm_verification"] = {
+                        "state": "in_progress",
+                        "model": active_model,
+                        "note": "Audio analysis and Telugu vocabulary refinement in progress..."
+                    }
+                    s["completion_percent"] = 75
+                    continue
+
+        # Dynamic work-based percentage calculation: NEVER report 100% while running/verifying!
+        is_step_running = st == "running" or v_state == "in_progress"
+        is_step_pending = st in ("pending", "waiting", "") or s.get("disabled")
+        is_step_failed = st in ("failed", "error", "blocked") or v_state in ("rejected", "error")
+
+        if is_step_failed:
+            pct = 0
+        elif is_step_pending:
+            pct = 0
+        elif is_step_running:
+            # Running/processing: reflect dynamic work, capped below 100%
+            if prog is not None and 0 < prog < 100:
+                pct = int(prog)
+            elif total and total > 1 and passed is not None and 0 < passed < total:
+                pct = min(95, round((passed / total) * 100))
+            else:
+                pct = 50
+        elif st in ("completed", "passed"):
+            pct = 100
+        elif total and total > 0 and passed is not None:
+            pct = round((passed / total) * 100)
+        else:
+            pct = 0
+        s["completion_percent"] = pct
+
+    overall_progress = None
+    if steps:
+        total_steps = len(steps)
+        verified_count = sum(1 for s in steps if (s.get("llm_verification") or {}).get("state") == "verified")
+        has_errors = any(
+            (s.get("status") or "").lower() in ("failed", "error", "blocked") or
+            (s.get("llm_verification") or {}).get("state") == "rejected"
+            for s in steps
+        )
+        avg_det = sum(s.get("completion_percent", 0) for s in steps) / total_steps
+        verif_ratio = verified_count / total_steps
+
+        if has_errors:
+            overall_progress = min(round(avg_det * 0.75), 80)
+        elif avg_det >= 99.9:
+            overall_progress = 100
+        else:
+            # Proportional progress based on deterministic steps and LLM checks
+            overall_progress = round(avg_det * 0.8 + (verif_ratio * 100) * 0.2)
+
     review = None
     if (rf := llm_review.review_path(pdir, stage_id, pipeline_view.aspect_of(pdir))).exists():
         try:
@@ -1030,7 +1178,7 @@ def get_stage_subtasks(pid: str, stage_id: str):
             kind = c[len("LLM Gateway ["):].split("]")[0]
             calls[kind] = calls.get(kind, 0) + 1
     return {"stage_id": stage_id, "report": report, "written": written, "steps": steps, "llm_review": review, "llm_calls": calls,
-            "llm_checks_running": checks["running"]}
+            "llm_checks_running": checks["running"], "active_step": active_step, "active_model": active_model, "overall_progress": overall_progress}
 
 
 class AcceptWarningsBody(BaseModel):

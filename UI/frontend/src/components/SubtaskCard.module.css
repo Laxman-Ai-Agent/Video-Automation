@@ -1,0 +1,174 @@
+/* SubtaskCard.module.css - Scoped styles for square subtask cards */
+
+@keyframes subtaskActiveGlow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(14, 165, 233, 0.45), inset 0 0 8px rgba(14, 165, 233, 0.15);
+    border-color: rgba(56, 189, 248, 0.85);
+  }
+  50% {
+    box-shadow: 0 0 24px rgba(14, 165, 233, 0.9), inset 0 0 14px rgba(14, 165, 233, 0.3);
+    border-color: #38BDF8;
+  }
+}
+
+@keyframes subtaskIconBlink {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+    filter: drop-shadow(0 0 4px #0EA5E9);
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.65;
+    filter: drop-shadow(0 0 14px #38BDF8);
+  }
+}
+
+.card {
+  aspect-ratio: 1 / 1;
+  min-height: 136px;
+  padding: 10px 10px 8px 10px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+}
+
+.cardActive {
+  border-color: #38BDF8 !important;
+  animation: subtaskActiveGlow 2s infinite ease-in-out;
+}
+
+.iconBlink {
+  animation: subtaskIconBlink 1.4s infinite ease-in-out;
+}
+
+.topRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.stepNum {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  padding: 1px 6px;
+  border-radius: 4px;
+}
+
+.centerIconBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+}
+
+.iconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.18s ease;
+}
+
+.shortLabel {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 90%;
+  text-align: center;
+}
+
+.bottomRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 2px;
+}
+
+.bigPercentage {
+  font-family: var(--font-mono);
+  font-size: 26px;
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+/* Modal Overlay & Card Details Dialog */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.modalContent {
+  width: 100%;
+  max-width: 580px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 12px;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  animation: scaleUp 0.18s ease-out;
+}
+
+.modalHeader {
+  padding: 16px 20px;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-card);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modalBody {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 70vh;
+  overflow-y: auto;
+}

@@ -7,12 +7,13 @@ from . import pipeline
 
 
 def built_for_mode(pdir: Path, aspect: str) -> bool:
-    """Was the composition on disk built by the motion-only build (meta.motionOnly)? A composition of the removed image workflow is never ready, never approvable and never rendered."""
+    """Was the composition on disk built for the project's mode (motion-only vs with-images)?"""
+    from . import store
     try:
         meta = json.loads(pipeline._comp(pdir, aspect).read_text(encoding="utf-8")).get("meta", {})
     except (OSError, ValueError):
         return True                                   # no composition yet: the other rules say "build the timeline first"
-    return bool(meta.get("motionOnly"))
+    return bool(meta.get("motionOnly")) == (not store.uses_images(pdir))
 
 
 def state(pdir: Path, aspect: str) -> dict:

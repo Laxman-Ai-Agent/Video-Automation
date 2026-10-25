@@ -77,10 +77,10 @@ PROFILE_ROUTING: dict[str, dict[ModelProfile, str]] = {
         "default": "claude-code",
     },
     "groq": {
-        "fast_structured": "llama-3.3-70b-versatile",
-        "reasoning_review": "llama-3.3-70b-versatile",
-        "code_generation": "llama-3.3-70b-versatile",
-        "default": "llama-3.3-70b-versatile",
+        "fast_structured": "qwen/qwen3.8-27b",
+        "reasoning_review": "openai/gpt-oss-120b",
+        "code_generation": "openai/gpt-oss-120b",
+        "default": "openai/gpt-oss-120b",
     },
     "deepseek": {
         "fast_structured": "deepseek-chat",
@@ -169,9 +169,13 @@ class LlmGateway:
         self._client_module = val
 
     def resolve_model_for_profile(self, provider: str, profile: ModelProfile, configured_model: str = "") -> str:
-        """Resolves target model based on logical profile and active provider configuration."""
+        """Resolves target model based on logical profile and active provider configuration.
+        
+        When Model Lock is active and a model is explicitly configured, that exact model
+        is strictly enforced across all profiles. Silent substitution to other models is disabled.
+        """
         prov_key = (provider or "auto").lower()
-        if configured_model and profile == "default":
+        if configured_model:
             return configured_model
 
         routing_table = PROFILE_ROUTING.get(prov_key, {})
@@ -179,7 +183,7 @@ class LlmGateway:
         if target_model:
             return target_model
 
-        return configured_model or self.client.DEFAULT_MODELS.get(prov_key, "default")
+        return self.client.DEFAULT_MODELS.get(prov_key, "default")
 
     def execute(self, req: LlmGatewayRequest) -> LlmGatewayResponse:
         """Executes an LLM request with bounded retries, error normalization, and structured parsing."""
@@ -320,14 +324,33 @@ class LlmGateway:
 
                 except Exception as e:
                     last_error = sanitize_secrets(str(e))
-                    circuit_breaker.record_failure(prov, effective_mdl, error=last_error)
-                    # Fail fast on non-retryable authentication or configuration errors
-                    if any(k in last_error.lower() for k in ("missing", "invalid api key", "unauthorized", "401", "403", "forbidden")):
-                        logger.error(f"[{req.correlation_id}] Non-retryable LLM error: {last_error}")
+                    is_rate_limit = any(k in last_error.lower() for k in ("429", "rate limit", "too many requests", "tpm", "rpm"))
+                    is_quota = any(k in last_error.lower() for k in ("exceeded your current quota", "tokens per day", "tpd", "quota exceeded", "insufficient_quota", "credit balance"))
+                    if not is_rate_limit and not is_quota:
+                        circuit_breaker.record_failure(prov, effective_mdl, error=last_error)
+                    
+                    # Fail fast on non-retryable authentication, missing credentials, or quota exhaustion
+                    if any(k in last_error.lower() for k in ("missing", "invalid api key", "unauthorized", "401", "403", "forbidden")) or is_quota:
+                        logger.error(f"[{req.correlation_id}] Non-retryable LLM error (or quota exhaustion): {last_error}")
                         break
 
                     if attempt <= req.max_retries:
-                        backoff = calculate_backoff(attempt, base_seconds=0.5, max_seconds=4.0, jitter=True)
+                        # If error contains explicit retry-after seconds or milliseconds (e.g. "try again in 21.9s" or "try again in 82.5ms")
+                        m_wait_ms = re.search(r"try again in (\d+(?:\.\d+)?)ms", last_error)
+                        m_wait_s = re.search(r"try again in (\d+(?:\.\d+)?)s", last_error)
+                        is_network_error = any(k in last_error.lower() for k in ("getaddrinfo", "connection", "connect", "timeout", "timed out"))
+                        if m_wait_ms:
+                            wait_s = min(float(m_wait_ms.group(1)) / 1000.0 + 0.5, 30.0)
+                            backoff = wait_s
+                        elif m_wait_s:
+                            wait_s = min(float(m_wait_s.group(1)) + 1.0, 30.0)
+                            backoff = wait_s
+                        elif is_rate_limit:
+                            backoff = min(12.0 * attempt, 35.0)
+                        elif is_network_error:
+                            backoff = min(3.0 * attempt, 15.0)
+                        else:
+                            backoff = calculate_backoff(attempt, base_seconds=1.0, max_seconds=5.0, jitter=True)
                         logger.warning(f"[{req.correlation_id}] Transient LLM error (attempt {attempt}): {last_error}. Retrying in {backoff:.2f}s...")
                         time.sleep(backoff)
                     else:
@@ -448,7 +471,7 @@ class GatewayRequest:
     caller_agent_id: str = "agent"
     metadata: dict[str, Any] = field(default_factory=dict)
     timeout: int = 60
-    max_retries: int = 2
+    max_retries: int = 4
     user_prompt: str = ""
     project_id: str = ""
     agent_id: str = ""

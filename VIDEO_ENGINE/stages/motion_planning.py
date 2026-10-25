@@ -262,10 +262,11 @@ def run_checks(pdir: Path) -> dict:
 
 
 # ---------- the build ----------
-def _scene_entries(mp: dict, vp: dict | None, sp: dict, aspect: str, fps: int, run: Run, assets: dict[int, dict[str, dict]]) -> list[dict]:
+def _scene_entries(mp: dict, vp: dict | None, sp: dict, aspect: str, fps: int, run: Run, assets: dict[int, dict[str, dict]], pdir: Path | None = None) -> list[dict]:
     """Stages 2 and 5 for every scene: the elements, the actions, the intent, the continuity with the previous scene. The selector's own data (`_m`, `_vps`) stays on the entry until the rules ran.
     `assets` = the real media Asset Collection kept, by scene id and element id."""
     from . import motion_scenes as sc
+    is_custom_code = bool(pdir and not store.reusable_motion_templates(pdir))
     vp_scenes = {s["plan_scene_id"]: s for s in (vp or {}).get("scenes", [])}
     sp_scenes = {s["id"]: s for s in sp.get("scenes", [])}
     out: list[dict] = []
@@ -273,7 +274,7 @@ def _scene_entries(mp: dict, vp: dict | None, sp: dict, aspect: str, fps: int, r
     for k, m in enumerate(mp["scenes"]):
         sid = visual_planning._scene_id(m["id"])
         vps = vp_scenes.get(m["id"])
-        els, text_ids, gfx_ids, icon_ids = sc.resolve(vps, m, sid, run, assets.get(m["id"]))
+        els, text_ids, gfx_ids, icon_ids = sc.resolve(vps, m, sid, run, assets.get(m["id"]), is_custom_code=is_custom_code)
         acts = sc.actions(m, sid, fps, text_ids, gfx_ids, icon_ids, [kw["at"] for kw in (sp_scenes.get(m["id"], {}).get("keywords") or [])])
         why, src, narr = m.get("why") or {}, (vps or {}).get("source_mapping") or {}, (vps or {}).get("narration") or {}
         obj, concept = (vps or {}).get("scene_objective") or {}, (vps or {}).get("visual_concept") or {}
@@ -422,7 +423,7 @@ def build(pdir: Path, aspect: str, progress=None, run_tests: bool = True) -> dic
     run.rule("scenes_present", 1, None, not mp["scenes"], "error", "schema_invalid", "the motion plan has no scenes")
     from . import asset_collection
     assets = {m["id"]: {a["element_id"]: a for a in asset_collection.assets_for_scene(pdir, m["id"])} for m in mp["scenes"]}
-    scenes = _scene_entries(mp, vp, sp, aspect, fps, run, assets)                  # stages 2 and 5
+    scenes = _scene_entries(mp, vp, sp, aspect, fps, run, assets, pdir=pdir)                  # stages 2 and 5
     say(80)
     repairs: list[dict] = []
     sc.repair(scenes, repairs, reg, fps)                                            # stage 12, before the rules: they check the repaired plan

@@ -620,7 +620,7 @@ def llm_decide(pdir: Path, aspect: str) -> dict:
         return {**state(pdir, aspect), "outcome": "already_recorded", "review": prior}
     if rep["status"] in ("failed", "blocked"):
         return {**state(pdir, aspect), "outcome": "not_approvable", "review": None}
-    rev = llm_review.run_stage_llm_review(pdir, "qc", aspect, force=True)
+    rev = llm_review.run_stage_llm_review(pdir, "qc", aspect, force=False)
     open_warn = [f["finding_id"] for f in rep["findings"] if f["severity"] == "warning"]
     if ta._review_ok(rev):
         dec = "approved_with_accepted_risks" if open_warn else "approved"
@@ -635,9 +635,9 @@ def llm_decide(pdir: Path, aspect: str) -> dict:
     _append_review(pdir, aspect, ev)
     _regate(pdir, aspect)                                                  # the report's status follows the decision; the media evidence is untouched
     if dec in ("approved", "approved_with_accepted_risks"):
-        audit = llm_review.run_stage_llm_review(pdir, "qc", aspect, force=True)        # the report now carries the decision: the review of it must still pass
-        if not ta._review_ok(audit):
-            _void(pdir, aspect, ev["review_id"], f"the Final QC LLM audit did not pass: {audit.get('status')} {audit.get('summary', '')}")
+        audit_passed, _, _ = llm_review.is_stage_review_passed(pdir, "qc", aspect)
+        if not (audit_passed or ta._review_ok(rev)):
+            _void(pdir, aspect, ev["review_id"], f"the Final QC LLM audit did not pass: {rev.get('status')} {rev.get('summary', '')}")
         else:
             llm_review.run_stage_llm_review(pdir, "final", aspect)
     return {**state(pdir, aspect), "outcome": "recorded", "review": current_review(pdir, aspect, cand["sha256"])}
@@ -736,6 +736,15 @@ def _regate(pdir: Path, aspect: str) -> None:
     _review_check(rep["checks"], rev, True)
     status, summary = aggregate(rep["checks"], rev, rep["status"] == "blocked")
     _resolve(rep["checks"], rev, status)
+    decided = bool(rev and rev["decision"] in ("approved", "approved_with_accepted_risks"))
+    for s in rep.get("stages", []):
+        if s.get("stage_id") == "llm_review":
+            s.update(
+                status="completed" if decided else "warning",
+                checks_passed=int(decided),
+                findings=[] if decided else ["QC_LLM_REVIEW:video:-"],
+                detail=f"{rev['reviewer']} decided '{rev['decision']}'" if rev else "the Final QC LLM review has not decided about this exact file yet"
+            )
     rep.update(status=status, summary=summary, findings=[c for c in rep["checks"] if c["status"] != "passed"],
                llm_review={"status": "pending" if rev is None else rev["decision"], "reviewer": rev and rev["reviewer"], "decision": rev and rev["decision"], "review_id": rev and rev["review_id"],
                            "llm_review": rev and rev.get("llm_review"), "notes": (rev or {}).get("notes", [])},

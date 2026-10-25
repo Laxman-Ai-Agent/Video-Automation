@@ -2,17 +2,29 @@
 Google Gemini, OpenAI, Anthropic (API & CLI), Groq, DeepSeek, Ollama, and OpenAI-compatible endpoints.
 Configuration is stored in config/llm_settings.json and can be managed via API/UI or environment variables.
 """
+import contextlib
 import json
 import os
 import re
 import shutil
 import subprocess
 import tempfile
+import threading
 import time
 from pathlib import Path
 from typing import Any
 
 import httpx
+
+_AGY_LOCK = threading.RLock()
+_ACTIVE_GENERATION_COUNT = 0
+_GENERATION_LOCK = threading.Lock()
+
+
+def is_generation_active() -> bool:
+    """Returns True if any heavy LLM text generation is actively in progress."""
+    with _GENERATION_LOCK:
+        return _ACTIVE_GENERATION_COUNT > 0
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
 CONFIG_DIR = PROJECT_ROOT / "config"
@@ -42,6 +54,7 @@ def save_status(status_data: dict[str, Any]) -> None:
 
 
 DEFAULT_MODELS: dict[str, str] = {
+    "antigravity": "gemini-3.8-flash-low",
     "gemini": "gemini-3.5-flash",       # gemini-2.0-flash and 1.5 were retired by Google (404 "no longer available"); check https://ai.google.dev/gemini-api/docs/models when this one is retired too
     "openai": "gpt-4o-mini",
     "anthropic": "claude-3-5-sonnet-20241022",
@@ -52,6 +65,26 @@ DEFAULT_MODELS: dict[str, str] = {
     "custom": "default",
 }
 
+AUTH_METHODS: dict[str, str] = {
+    "antigravity": "ide_session",
+    "gemini": "api_key",
+    "openai": "api_key",
+    "anthropic": "api_key",
+    "groq": "api_key",
+    "deepseek": "api_key",
+    "claude_cli": "cli_subscription",
+    "ollama": "local_daemon",
+    "custom": "custom_endpoint",
+}
+
+AUTH_METHOD_NAMES: dict[str, str] = {
+    "ide_session": "Antigravity Active Session",
+    "api_key": "API Key",
+    "cli_subscription": "CLI Subscription",
+    "local_daemon": "Local Daemon",
+    "custom_endpoint": "Custom Endpoint",
+}
+
 DEFAULT_BASE_URLS: dict[str, str] = {
     "openai": "https://api.openai.com/v1",
     "groq": "https://api.groq.com/openai/v1",
@@ -60,6 +93,7 @@ DEFAULT_BASE_URLS: dict[str, str] = {
 }
 
 PROVIDER_NAMES: dict[str, str] = {
+    "antigravity": "Google Antigravity (Active Coding Model)",
     "gemini": "Google Gemini",
     "openai": "OpenAI (ChatGPT)",
     "anthropic": "Anthropic Claude (API)",
@@ -127,6 +161,9 @@ def save_settings(new_settings: dict[str, Any]) -> dict[str, Any]:
         if current.get(key) != val:
             changed = True
         current[key] = val
+    # If provider changed but model was not explicitly specified, update to new provider's default model
+    if "provider" in new_settings and "model" not in new_settings and new_settings["provider"] in DEFAULT_MODELS:
+        current["model"] = DEFAULT_MODELS[new_settings["provider"]]
     CONFIG_FILE.write_text(json.dumps(current, indent=2), encoding="utf-8")
     if changed and STATUS_FILE.exists():
         try:
@@ -137,35 +174,43 @@ def save_settings(new_settings: dict[str, Any]) -> dict[str, Any]:
 
 
 def resolve_provider_config(override_provider: str | None = None, override_model: str | None = None, override_key: str | None = None) -> tuple[str, str, str, str]:
-    """Resolves the effective (provider, model, api_key, base_url). `override_key` (a key typed in for a test) counts before the Claude CLI fallback."""
+    """Resolves the locked (provider, model, api_key, base_url).
+    
+    Eliminates all silent fallbacks: if a provider is configured, the system strictly
+    locks to that provider. If credentials are missing, it does NOT silently switch to
+    Claude CLI or any other provider.
+    """
     cfg = load_settings()
     prov = (override_provider or cfg.get("provider") or os.environ.get("LLM_PROVIDER") or "auto").strip().lower()
     
-    # Auto-detection: the first provider that has a key (in the environment, or the one saved for it), then the local Claude CLI
+    # Auto-detection only applies if provider is explicitly set to 'auto'.
     if prov == "auto":
-        with_key = [p for p in ENV_KEYS if _env_key(p) or (cfg.get("provider") == p and cfg.get("api_key"))]
-        if with_key:
-            prov = with_key[0]
-        elif shutil.which("claude"):
-            prov = "claude_cli"
+        if os.environ.get("ANTIGRAVITY_AGENT") or _find_agy_exe():
+            prov = "antigravity"
         else:
-            prov = "gemini"  # Default recommended provider
+            with_key = [p for p in ENV_KEYS if _env_key(p) or (cfg.get("provider") == p and cfg.get("api_key"))]
+            if with_key:
+                prov = with_key[0]
+            elif shutil.which("claude"):
+                prov = "claude_cli"
+            else:
+                prov = "gemini"  # Default recommended provider
 
     # Resolve API Key
     key = (override_key or "").strip() or cfg.get("api_key", "").strip() or os.environ.get("LLM_API_KEY", "").strip()
     if not key:
         key = _env_key(prov)
 
-    # Fallback to local claude CLI if key is missing for remote API provider
-    if prov in ("gemini", "openai", "anthropic", "groq", "deepseek") and not key:
-        if shutil.which("claude"):
-            prov = "claude_cli"
-            model = DEFAULT_MODELS["claude_cli"]
+    # Note: Silent fallback to local claude CLI when an API key is missing is strictly disabled
+    # per Active Model Lock requirements. The system must report the missing key directly.
 
     # Resolve Model
-    model = (override_model or cfg.get("model") or os.environ.get("LLM_MODEL") or "").strip()
-    if not model or prov == "claude_cli":
+    if override_model:
+        model = override_model.strip()
+    elif override_provider and override_provider.lower() != (cfg.get("provider") or "").lower():
         model = DEFAULT_MODELS.get(prov, "default")
+    else:
+        model = (cfg.get("model") or os.environ.get("LLM_MODEL") or "").strip() or DEFAULT_MODELS.get(prov, "default")
 
     # Resolve Base URL
     base_url = (cfg.get("base_url") or os.environ.get("LLM_BASE_URL") or "").strip()
@@ -175,10 +220,16 @@ def resolve_provider_config(override_provider: str | None = None, override_model
     return prov, model, key, base_url
 
 
-def get_public_settings() -> dict[str, Any]:
-    """Returns safe settings for frontend UI display."""
+def get_active_model_config() -> dict[str, Any]:
+    """Authoritative Active Model Configuration object.
+    
+    Single source of truth for the selected provider, exact model identifier,
+    authentication method, connection health, and model lock status.
+    """
     prov, model, key, base_url = resolve_provider_config()
     raw = load_settings()
+    auth_method = AUTH_METHODS.get(prov, "api_key")
+    auth_method_name = AUTH_METHOD_NAMES.get(auth_method, "API Key")
 
     cached = load_status()
     connection_status = "unknown"
@@ -192,31 +243,54 @@ def get_public_settings() -> dict[str, Any]:
         latency_ms = cached.get("latency_ms")
         last_verified_at = cached.get("timestamp")
     else:
-        # If credentials are completely missing for an API provider and no CLI fallback:
         if prov in ("gemini", "openai", "anthropic", "groq", "deepseek") and not key:
             connection_status = "offline"
-            status_message = f"API key is missing for {PROVIDER_NAMES.get(prov, prov)}."
+            status_message = f"API key is missing for {PROVIDER_NAMES.get(prov, prov)}. [Active Model Lock: Silent fallback disabled]"
+        elif prov == "antigravity" and not _find_agy_exe():
+            connection_status = "offline"
+            status_message = "Google Antigravity CLI binary ('agy') is not installed or not found."
         elif prov == "claude_cli" and not shutil.which("claude"):
             connection_status = "offline"
             status_message = "Claude Code CLI binary is not installed or not in PATH."
 
     return {
+        "model_locked": True,
         "active_provider": prov,
         "active_provider_name": PROVIDER_NAMES.get(prov, prov),
         "active_model": model,
+        "auth_method": auth_method,
+        "auth_method_name": auth_method_name,
         "base_url": base_url,
+        "has_credentials": bool(key) if auth_method == "api_key" else (bool(_find_agy_exe()) if auth_method == "ide_session" else (bool(shutil.which("claude")) if auth_method == "cli_subscription" else True)),
         "has_api_key": bool(key),
         "api_key_masked": _mask_key(key),
         "configured_provider": raw.get("provider", "auto"),
-        "available_providers": [
-            {"id": k, "name": v, "default_model": DEFAULT_MODELS.get(k, ""), "needs_key": k not in ("claude_cli", "ollama")}
-            for k, v in PROVIDER_NAMES.items()
-        ],
-        "claude_cli_installed": bool(shutil.which("claude")),
+        "configured_model": raw.get("model", ""),
         "connection_status": connection_status,
         "status_message": status_message,
         "latency_ms": latency_ms,
         "last_verified_at": last_verified_at,
+    }
+
+
+def get_public_settings() -> dict[str, Any]:
+    """Returns safe settings for frontend UI display, including Active Model Configuration."""
+    active_cfg = get_active_model_config()
+    return {
+        **active_cfg,
+        "available_providers": [
+            {
+                "id": k,
+                "name": v,
+                "default_model": DEFAULT_MODELS.get(k, ""),
+                "auth_method": AUTH_METHODS.get(k, "api_key"),
+                "auth_method_name": AUTH_METHOD_NAMES.get(AUTH_METHODS.get(k, "api_key"), "API Key"),
+                "needs_key": k not in ("antigravity", "claude_cli", "ollama"),
+            }
+            for k, v in PROVIDER_NAMES.items()
+        ],
+        "antigravity_installed": bool(_find_agy_exe()),
+        "claude_cli_installed": bool(shutil.which("claude")),
     }
 
 
@@ -278,10 +352,12 @@ def _call_openai_compatible(user: str, system: str, model: str, api_key: str, ba
     if api_key:
         headers["Authorization"] = f"Bearer {api_key}"
 
+    max_toks = 1500 if provider_name.lower() == "groq" else 4096
     payload = {
         "model": model,
         "messages": messages,
         "temperature": 0.2,
+        "max_tokens": max_toks,
     }
 
     with httpx.Client(timeout=timeout) as client:
@@ -297,7 +373,8 @@ def _call_openai_compatible(user: str, system: str, model: str, api_key: str, ba
             err_msg = err_json.get("error", {}).get("message", err_msg)
         except Exception:
             pass
-        raise LlmError(f"{provider_name} API error ({res.status_code}): {err_msg}")
+        if res.status_code != 200:
+            raise LlmError(f"{provider_name} API error ({res.status_code}): {err_msg}")
 
     try:
         data = res.json()
@@ -369,6 +446,130 @@ def _call_anthropic(user: str, system: str, model: str, api_key: str, timeout: i
         raise LlmError(f"Failed to parse Anthropic response: {e}") from e
 
 
+def _find_agy_exe() -> str | None:
+    exe = shutil.which("agy")
+    if exe:
+        return exe
+    candidate = Path.home() / ".gemini" / "bin" / "agy.exe"
+    if candidate.exists():
+        return str(candidate)
+    return None
+
+
+def normalize_antigravity_model(model: str | None) -> str:
+    """Map model slug or identifier to exact model name recognized by Google Antigravity CLI ('agy')."""
+    if not model:
+        return "Gemini 3.8 Flash (High)"
+    raw = str(model).strip()
+    m = raw.lower().replace("_", "-").replace(" ", "-")
+    if "flash" in m and "high" in m:
+        return "Gemini 3.8 Flash (High)"
+    if "flash" in m and "medium" in m:
+        return "Gemini 3.8 Flash (Medium)"
+    if "flash" in m:
+        return "Gemini 3.8 Flash (Low)"
+    if "sonnet" in m:
+        return "Claude Sonnet 4.6 (Thinking)"
+    if "opus" in m:
+        return "Claude Opus 4.6 (Thinking)"
+    if "gpt" in m or "oss" in m:
+        return "GPT-OSS 120B (Medium)"
+    valid_exact = {
+        "Gemini 3.8 Flash (High)",
+        "Gemini 3.8 Flash (Medium)",
+        "Gemini 3.8 Flash (Low)",
+        "Claude Sonnet 4.6 (Thinking)",
+        "Claude Opus 4.6 (Thinking)",
+        "GPT-OSS 120B (Medium)",
+    }
+    if raw in valid_exact:
+        return raw
+    return "Gemini 3.8 Flash (Low)"
+
+
+@contextlib.contextmanager
+def _interprocess_agy_lock(timeout: float = 120.0):
+    """File lock across OS processes on Windows so multiple scripts/servers do not collide on agy daemon."""
+    lockfile_path = Path(tempfile.gettempdir()) / "agy_cli_interprocess.lock"
+    start = time.time()
+    try:
+        import msvcrt
+        f = open(lockfile_path, "a+b")
+        acquired = False
+        while time.time() - start < timeout:
+            try:
+                f.seek(0)
+                msvcrt.locking(f.fileno(), msvcrt.LK_NBLCK, 1)
+                acquired = True
+                break
+            except (OSError, IOError):
+                time.sleep(0.1)
+        if not acquired:
+            try:
+                f.seek(0)
+                msvcrt.locking(f.fileno(), msvcrt.LK_LOCK, 1)
+                acquired = True
+            except Exception:
+                pass
+        try:
+            yield
+        finally:
+            if acquired:
+                try:
+                    f.seek(0)
+                    msvcrt.locking(f.fileno(), msvcrt.LK_UNLCK, 1)
+                except Exception:
+                    pass
+            try:
+                f.close()
+            except Exception:
+                pass
+    except ImportError:
+        yield
+
+
+def _call_antigravity_cli(user: str, system: str, timeout: int, model: str = "gemini-3.8-flash-high") -> str:
+    exe = _find_agy_exe()
+    if not exe:
+        raise LlmError("The Google Antigravity CLI ('agy') was not found on this machine.")
+    
+    # Direct directive preventing autonomous agent loops or file inspections
+    direct_directive = (
+        "CRITICAL SYSTEM DIRECTIVE: You are executing as a direct text completion engine. "
+        "DO NOT call any tools or skills. DO NOT read files, do not execute terminal commands, and do not inspect workspace directories. "
+        "Output ONLY the direct completion/response to the user prompt immediately."
+    )
+    content = f"{system.strip()}\n\n{user.strip()}" if system.strip() else user.strip()
+    full_prompt = f"{direct_directive}\n\n{content}"
+    agy_model = normalize_antigravity_model(model)
+    cmd = [
+        exe, "-p", full_prompt,
+        "--model", agy_model,
+        "--output-format", "text",
+        "--disable-slash-commands",
+        "--dangerously-skip-permissions",
+    ]
+    with _AGY_LOCK:
+        with _interprocess_agy_lock(timeout=float(timeout)):
+            try:
+                r = subprocess.run(
+                    cmd,
+                    capture_output=True,
+                    stdin=subprocess.DEVNULL,
+                    text=True,
+                    encoding="utf-8",
+                    errors="replace",
+                    timeout=timeout,
+                    cwd=tempfile.gettempdir()
+                )
+            except subprocess.TimeoutExpired as e:
+                raise LlmError(f"Antigravity CLI did not answer within {timeout} s") from e
+            if r.returncode != 0:
+                err = (r.stderr or r.stdout or "Antigravity CLI error").strip()
+                raise LlmError(f"Antigravity CLI error: {err[:300]}")
+            return r.stdout.strip()
+
+
 def _call_claude_cli(user: str, system: str, timeout: int) -> str:
     exe = shutil.which("claude")
     if not exe:
@@ -426,32 +627,41 @@ def _call_claude_cli(user: str, system: str, timeout: int) -> str:
 
 def generate_text(user: str, system: str = "", timeout: int = 180, provider: str | None = None, model: str | None = None) -> str:
     """Central text generation dispatch for any configured LLM. Returns the text response."""
-    prov, mdl, key, base_url = resolve_provider_config(override_provider=provider, override_model=model)
+    global _ACTIVE_GENERATION_COUNT
+    with _GENERATION_LOCK:
+        _ACTIVE_GENERATION_COUNT += 1
+    try:
+        prov, mdl, key, base_url = resolve_provider_config(override_provider=provider, override_model=model)
 
-    if prov == "gemini":
-        return _call_gemini(user, system, mdl, key, timeout)
-    elif prov == "openai":
-        url = base_url or DEFAULT_BASE_URLS["openai"]
-        return _call_openai_compatible(user, system, mdl, key, url, timeout, "OpenAI")
-    elif prov == "groq":
-        url = base_url or DEFAULT_BASE_URLS["groq"]
-        return _call_openai_compatible(user, system, mdl, key, url, timeout, "Groq")
-    elif prov == "deepseek":
-        url = base_url or DEFAULT_BASE_URLS["deepseek"]
-        return _call_openai_compatible(user, system, mdl, key, url, timeout, "DeepSeek")
-    elif prov == "ollama":
-        url = base_url or DEFAULT_BASE_URLS["ollama"]
-        return _call_openai_compatible(user, system, mdl, "", url, timeout, "Ollama")
-    elif prov == "custom":
-        if not base_url:
-            raise LlmError("Base URL is required for custom OpenAI-compatible provider.")
-        return _call_openai_compatible(user, system, mdl, key, base_url, timeout, "Custom Provider")
-    elif prov == "anthropic":
-        return _call_anthropic(user, system, mdl, key, timeout)
-    elif prov == "claude_cli":
-        return _call_claude_cli(user, system, timeout)
-    else:
-        raise LlmError(f"Unknown or unsupported LLM provider: '{prov}'. Choose gemini, openai, anthropic, or claude_cli.")
+        if prov == "gemini":
+            return _call_gemini(user, system, mdl, key, timeout)
+        elif prov == "openai":
+            url = base_url or DEFAULT_BASE_URLS["openai"]
+            return _call_openai_compatible(user, system, mdl, key, url, timeout, "OpenAI")
+        elif prov == "groq":
+            url = base_url or DEFAULT_BASE_URLS["groq"]
+            return _call_openai_compatible(user, system, mdl, key, url, timeout, "Groq")
+        elif prov == "deepseek":
+            url = base_url or DEFAULT_BASE_URLS["deepseek"]
+            return _call_openai_compatible(user, system, mdl, key, url, timeout, "DeepSeek")
+        elif prov == "ollama":
+            url = base_url or DEFAULT_BASE_URLS["ollama"]
+            return _call_openai_compatible(user, system, mdl, "", url, timeout, "Ollama")
+        elif prov == "custom":
+            if not base_url:
+                raise LlmError("Base URL is required for custom OpenAI-compatible provider.")
+            return _call_openai_compatible(user, system, mdl, key, base_url, timeout, "Custom Provider")
+        elif prov == "anthropic":
+            return _call_anthropic(user, system, mdl, key, timeout)
+        elif prov == "antigravity":
+            return _call_antigravity_cli(user, system, timeout, mdl)
+        elif prov == "claude_cli":
+            return _call_claude_cli(user, system, timeout)
+        else:
+            raise LlmError(f"Unknown or unsupported LLM provider: '{prov}'. Choose gemini, antigravity, openai, anthropic, or claude_cli.")
+    finally:
+        with _GENERATION_LOCK:
+            _ACTIVE_GENERATION_COUNT = max(0, _ACTIVE_GENERATION_COUNT - 1)
 
 
 def _cache_status(ok: bool, provider: str, model: str, latency_ms: int, message: str) -> None:
@@ -465,11 +675,38 @@ def _cache_status(ok: bool, provider: str, model: str, latency_ms: int, message:
     })
 
 
-def test_connection(provider: str | None = None, model: str | None = None, api_key: str | None = None, base_url: str | None = None) -> dict[str, Any]:
+def test_connection(provider: str | None = None, model: str | None = None, api_key: str | None = None, base_url: str | None = None, force: bool = False) -> dict[str, Any]:
     """Test connection with the specified or active LLM."""
     prov, mdl, key, url = resolve_provider_config(override_provider=provider, override_model=model, override_key=api_key)
     if base_url is not None:
         url = base_url.strip()
+
+    # Fast-path for background health probes: return verified active status if tested within 60s
+    if not force and provider is None and model is None and api_key is None and base_url is None:
+        cached = load_status()
+        if cached and cached.get("provider") == prov and cached.get("model") == mdl and cached.get("status") == "active":
+            if time.time() - float(cached.get("timestamp", 0)) < 60.0:
+                return {
+                    "ok": True,
+                    "provider": prov,
+                    "provider_name": PROVIDER_NAMES.get(prov, prov),
+                    "model": mdl,
+                    "latency_ms": cached.get("latency_ms", 0),
+                    "message": cached.get("message", "Connected"),
+                    "cached": True,
+                }
+
+    if prov in ("gemini", "openai", "anthropic", "groq", "deepseek") and not key:
+        err_msg = f"API key is missing for {PROVIDER_NAMES.get(prov, prov)}. [Active Model Lock: Silent fallback disabled]"
+        _cache_status(False, prov, mdl, 0, err_msg)
+        return {
+            "ok": False,
+            "provider": prov,
+            "provider_name": PROVIDER_NAMES.get(prov, prov),
+            "model": mdl,
+            "latency_ms": 0,
+            "message": err_msg,
+        }
 
     t0 = time.perf_counter()
     prompt = "Respond with exactly: LLM connection successful!"
@@ -488,6 +725,8 @@ def test_connection(provider: str | None = None, model: str | None = None, api_k
             resp = _call_openai_compatible(prompt, "", mdl, key, url, timeout=30, provider_name="Custom Provider")
         elif prov == "anthropic":
             resp = _call_anthropic(prompt, "", mdl, key, timeout=30)
+        elif prov == "antigravity":
+            resp = _call_antigravity_cli(prompt, "", timeout=30, model=mdl)
         elif prov == "claude_cli":
             resp = _call_claude_cli(prompt, "", timeout=30)
         else:
@@ -531,6 +770,8 @@ def detect_options() -> list[dict[str, str]]:
     """What this computer can connect to right now, in the order `auto` tries it. Says where each came from; never returns a key."""
     cfg = load_settings()
     found = []
+    if _find_agy_exe():
+        found.append({"id": "antigravity", "name": PROVIDER_NAMES["antigravity"], "model": DEFAULT_MODELS["antigravity"], "source": "Google Antigravity active session on this computer"})
     for prov in ENV_KEYS:
         if _env_key(prov):
             source = "API key in the environment"

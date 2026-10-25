@@ -53,3 +53,98 @@ def test_only_listed_collected_files_are_served_and_never_a_path_outside(client)
     assert client.get(f"/projects/{pid}/assets/file/unlisted.jpg").status_code == 404                   # in the folder but not in the manifest
     assert client.get(f"/projects/{pid}/assets/file/..%2F..%2Fsecret.txt").status_code == 404
     assert client.get(f"/projects/{pid}/assets/file/secret.txt").status_code == 404
+
+
+def test_upload_custom_asset_replaces_fallback_and_serves_file(client, monkeypatch):
+    """Verify manual asset upload replaces a fallback requirement, stores file, and serves it."""
+    pid = create(client).json()["id"]
+    pdir = _m7.config.PROJECTS_DIR / pid
+    plan_with_requests(pdir, monkeypatch)
+    aspect = client.get(f"/projects/{pid}").json().get("aspect") or "9:16"
+    ac.plan_requirements(pdir, aspect)
+
+    # Start with a fallback for req_1_1
+    ac._save(ac.manifest_path(pdir), {
+        "schema": ac.SCHEMA_MAN,
+        "input_fingerprint": ac.input_fingerprint(pdir, aspect),
+        "assets": [],
+        "fallbacks": [{"requirement_id": "req_1_1", "scene_id": 1, "reason": "no stock found"}],
+    })
+
+    # Upload custom file for req_1_1
+    fake_png = b"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15c4\x00\x00\x00\rIDATx\x9cc\xf8\xff\xff?\x00\x05\xfe\x02\xfe\xdc\xccY\xe7\x00\x00\x00\x00IEND\xaeB`\x82"
+    res = client.post(
+        f"/projects/{pid}/assets/upload",
+        data={"requirement_id": "req_1_1", "scene_id": "1"},
+        files={"file": ("custom_apple.png", fake_png, "image/png")}
+    )
+    assert res.status_code == 200
+    data = res.json()
+    assert data["ok"] is True
+    assert data["asset"]["requirement_id"] == "req_1_1"
+
+    # Verify assets endpoint now reports collected instead of fallback
+    got = client.get(f"/projects/{pid}/assets").json()
+    item = next(i for i in got["items"] if i["requirement_id"] == "req_1_1")
+    assert item["status"] == "collected"
+    assert "custom asset" in data["message"].lower()
+
+    # Verify file can be fetched via file endpoint
+    file_res = client.get(item["asset"]["url"])
+    assert file_res.status_code == 200
+    assert file_res.content == fake_png
+
+
+def test_update_video_trim_and_icon(client, monkeypatch):
+    """Verify updating video trim settings and icon settings via /assets/update."""
+    pid = create(client).json()["id"]
+    pdir = _m7.config.PROJECTS_DIR / pid
+    plan_with_requests(pdir, monkeypatch)
+    aspect = client.get(f"/projects/{pid}").json().get("aspect") or "9:16"
+    ac.plan_requirements(pdir, aspect)
+
+    # Manifest with a video asset
+    ac._save(ac.manifest_path(pdir), {
+        "schema": ac.SCHEMA_MAN,
+        "input_fingerprint": ac.input_fingerprint(pdir, aspect),
+        "assets": [{
+            "requirement_id": "req_2_1",
+            "scene_id": 2,
+            "kind": "video",
+            "asset_id": "vid123",
+            "file": "assets/collected/vid123.mp4",
+            "duration_s": 10.0,
+            "clip_start": 0.0,
+            "clip_dur": 2.0,
+            "clip_end": 2.0,
+        }],
+        "fallbacks": [],
+    })
+
+    # Update video trim
+    res = client.post(
+        f"/projects/{pid}/assets/update",
+        json={
+            "requirement_id": "req_2_1",
+            "scene_id": 2,
+            "kind": "video",
+            "clip_start": 3.0,
+            "clip_dur": 2.0,
+            "clip_end": 5.0,
+        }
+    )
+    assert res.status_code == 200
+    assert res.json()["ok"] is True
+
+    # Check manifest updated
+    man = ac.load_manifest(pdir)
+    vid_asset = next(a for a in man["assets"] if a["requirement_id"] == "req_2_1")
+    assert vid_asset["clip_start"] == 3.0
+    assert vid_asset["clip_dur"] == 2.0
+    assert vid_asset["clip_end"] == 5.0
+
+    # Check categories reported
+    got = client.get(f"/projects/{pid}/assets").json()
+    assert "categories" in got
+    assert got["categories"]["videos"] >= 1
+

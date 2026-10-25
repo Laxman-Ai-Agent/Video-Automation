@@ -125,10 +125,12 @@ def _subtask_issues(pdir: Path, stages: list[dict]) -> list[dict]:
             continue
         written = f.stat().st_mtime if f is not None and f.exists() else None
         checks = step_llm_check.load(pdir, s["id"], aspect)["steps"]
+        from VIDEO_ENGINE.pipeline import stage_gate
+        unresolved_steps = {u.get("n") for u in stage_gate.unresolved(pdir, s["id"], aspect)}
         for st in steps:
             state = (st.get("status") or "").lower()
             sev = "error" if state in ("failed", "blocked", "error") else ("warning" if state == "warning" else None)
-            if sev:
+            if sev == "error" or (sev == "warning" and st.get("n") in unresolved_steps):
                 out.append({"id": f"{s['id']}:step:{st['n']}", "severity": sev, "stage_id": s["id"], "stage_label": s["label"],
                             "source": f"step report ({f.name})", "component": st.get("name"), "subtask": st.get("name"),
                             "message": st.get("detail") or f"step {state}", "at": written})

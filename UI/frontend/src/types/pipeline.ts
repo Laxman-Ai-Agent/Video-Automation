@@ -99,3 +99,6 @@ export interface AgentInfo {
   currentTask?: string;
   capabilities: string[];
 }
+
+export type { SubtaskStep, StageSubtasks } from '../services/api';
+

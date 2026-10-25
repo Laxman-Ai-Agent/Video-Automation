@@ -451,7 +451,9 @@ def _motion_flags(pdir: Path, aspect: str, plan_only: bool = False) -> str:
     """The motion library is always on in these steps; the picture layers are not built at all (Motion-Only)."""
     from backend import visual_planning
     vp = (pdir / "visual_planning.json").exists() and visual_planning.blockers(pdir) is None        # a current Visual Plan: its text and motion hints decide the scene's text and graphics
-    return " --motion --no-images" + (" --plan-only" if plan_only else "") + (" --aspect 9:16" if aspect == "9:16" else "") + (" --visual-plan" if vp else "") + (" --fixes" if (pdir / "motion_fixes.json").exists() else "")
+    from SYSTEM.memory import store
+    no_images_flag = "" if store.uses_images(pdir) else " --no-images"
+    return " --motion" + no_images_flag + (" --plan-only" if plan_only else "") + (" --aspect 9:16" if aspect == "9:16" else "") + (" --visual-plan" if vp else "") + (" --fixes" if (pdir / "motion_fixes.json").exists() else "")
 
 
 def _run_build_script(pdir: Path, aspect: str, plan_only: bool) -> None:
@@ -465,7 +467,7 @@ def _run_build_script(pdir: Path, aspect: str, plan_only: bool) -> None:
 
 def _motion_inputs(pdir: Path, aspect: str) -> list:
     return [pdir / "scene_plan.json", pdir / "visual_planning.json", pdir / "motion_fixes.json", *transcript_inputs(pdir), _audio(pdir) or "no-audio", _remotion_src_digest(),
-            _REMOTION / "scripts" / "build_composition.ts", aspect, "motion-only", config.MOTION_SPEED or "",
+            _REMOTION / "scripts" / "build_composition.ts", aspect, ("with-pictures" if __import__("SYSTEM.memory.store", fromlist=["uses_images"]).uses_images(pdir) else "motion-only"), config.MOTION_SPEED or "",
             *([f"style-kit:{config.STYLE_KIT}"] if config.STYLE_KIT not in ("", "0") else []),      # only when on: a project without a kit keeps its fingerprint
             Path(__file__).with_name("motion_planning.py"), Path(__file__).with_name("motion_scenes.py")]
 

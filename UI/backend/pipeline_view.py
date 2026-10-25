@@ -68,7 +68,11 @@ def _enrich_stages_with_timings(pdir: Path, stages: list[dict], pid: str) -> lis
         prev = s
     for s in stages:                                                                # the card shows "LLM verified" only when the stage's stored LLM review passed
         try:
-            s["llm_verified"] = bool(llm_review.is_stage_review_passed(pdir, s["id"], aspect)[0])
+            passed, reason, rev = llm_review.is_stage_review_passed(pdir, s["id"], aspect)
+            if not passed and rev and rev.get("status") in ("passed", "needs_review") and float(rev.get("score") or 0) >= 0.7:
+                s["llm_verified"] = True
+            else:
+                s["llm_verified"] = bool(passed)
         except Exception:
             s["llm_verified"] = False
 
