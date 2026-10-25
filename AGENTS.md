@@ -13,3 +13,4 @@ This repository follows strict modular architecture and testing standards. Refer
    - Guard shared CLI instances with inter-process mutual exclusion locks (`_interprocess_agy_lock`) so short probes do not tear down active daemon sessions.
    - Never run un-cached health checks while pipeline LLM generations are actively streaming.
    - Use `Gemini 3.8 Flash (Low)` for fast text completion to avoid multi-minute thinking budget delays.
+7. **Superpowers Skills (`.agents/skills`)**: Follow systematic debugging, atomic planning, and verification before completion for all complex tasks.

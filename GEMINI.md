@@ -88,3 +88,22 @@ Before committing changes or concluding any task:
 1. **Frontend Compilation**: Run `npm --prefix UI/frontend run build` (`tsc && vite build`).
    - Must complete with **0 TypeScript errors** and **0 build warnings/errors**.
 2. **Automated Testing**: Run Playwright end-to-end tests to ensure navigation, layout spacing, drawer toggles, and status updates function without visual regression.
+
+---
+
+## 5. Superpowers Engineering Discipline (`.agents/skills`)
+
+This project integrates the `obra/superpowers` agentic framework. When designing, implementing, or debugging features, adhere to the core skills located in `.agents/skills/`:
+1. **Systematic Debugging (`systematic-debugging`)**:
+   - Always find the root cause before attempting fixes.
+   - Formulate a testable hypothesis and create a reproducible test or probe.
+   - Never apply random speculative changes or multi-component trial-and-error edits.
+2. **Atomic Planning & Execution (`writing-plans`, `executing-plans`)**:
+   - For any non-trivial change (> 50 lines or across multiple files), write a structured, step-by-step plan.
+   - Execute step-by-step with clear verification gates at each milestone.
+3. **Test-Driven Development (`test-driven-development`)**:
+   - Write failing automated tests (Playwright or pytest) before implementing new stage logic or UI components.
+   - Verify that tests fail for the right reason, then implement minimal clean code to make them pass.
+4. **Verification Before Completion (`verification-before-completion`)**:
+   - Never claim a task is completed based on assumption. Verify evidence (build logs, test outputs, screenshots) before concluding.
+
