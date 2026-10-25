@@ -18,7 +18,7 @@ MAX_BYTES = 30 * 1024 * 1024
 MAX_VIDEO_BYTES = 150 * 1024 * 1024
 PER_PROVIDER = 6
 UA = "audio-to-video/1.0 (local tool)"
-DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com", "staticflickr.com", "archive.org")
+DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com", "staticflickr.com", "archive.org", "images.unsplash.com")
 FREE_LICENSES = {"by": "CC BY", "by-sa": "CC BY-SA", "cc0": "CC0", "pdm": "Public Domain Mark"}      # Openverse licence codes that allow commercial use AND changes (a crop or a dim is a change: no -nd, no -nc)
 OPENVERSE_TIMEOUT = 45                       # an anonymous Openverse query answers in 15 to 20 s
 MAX_ARCHIVE_SECONDS = 900                    # a recording of hours says nothing about its title: only short items of the Internet Archive
@@ -197,7 +197,29 @@ def openverse(q: str) -> list[StockAsset]:
     return out
 
 
-PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "openverse": (openverse, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY")}
+def unsplash(q: str) -> list[StockAsset]:
+    """Official Unsplash Search Photos API (requires UNSPLASH_ACCESS_KEY)."""
+    d = _json("https://api.unsplash.com/search/photos?" + urllib.parse.urlencode({"query": q, "per_page": PER_PROVIDER, "orientation": "landscape"}), {"Authorization": f"Client-ID {os.environ['UNSPLASH_ACCESS_KEY']}"})
+    out = []
+    for p in d.get("results", []):
+        try:
+            urls = p.get("urls") or {}
+            user = p.get("user") or {}
+            out.append(StockAsset(id=f"unsplash:{p['id']}", provider="unsplash", provider_asset_id=str(p["id"]),
+                                  source_page_url=p.get("links", {}).get("html", ""),
+                                  download_url=urls.get("regular") or urls.get("full"),
+                                  thumbnail_url=urls.get("small"), title=p.get("description") or p.get("alt_description") or "",
+                                  width=p.get("width"), height=p.get("height"),
+                                  license_name="Unsplash License", license_url="https://unsplash.com/license",
+                                  author=user.get("name") or user.get("username", ""),
+                                  attribution_text=f"Photo by {user.get('name', '')} on Unsplash",
+                                  commercial_use_known=True, search_query=q, retrieved_at=_now()))
+        except (KeyError, TypeError):
+            continue
+    return out
+
+
+PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "openverse": (openverse, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY"), "unsplash": (unsplash, "UNSPLASH_ACCESS_KEY")}
 
 
 # ---------- video adapters (same rules: official APIs, one malformed item is skipped) ----------

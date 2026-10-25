@@ -35,16 +35,18 @@ ARCHIVE_META = {"short-cc": {"files": [{"name": "film.mp4", "format": "h.264", "
 PEXELS = {"photos": [{"id": 7, "url": "https://pexels.com/photo/7", "photographer": "Bo", "width": 4000, "height": 2250, "alt": "river",
                       "src": {"large2x": "https://images.pexels.com/7.jpg", "medium": "https://images.pexels.com/7m.jpg"}}, {"id": 8}]}
 PIXABAY = {"hits": [{"id": 9, "pageURL": "https://pixabay.com/p/9", "user": "Cy", "largeImageURL": "https://pixabay.com/9.jpg", "imageWidth": 3000, "imageHeight": 2000, "tags": "sea"}]}
+UNSPLASH = {"results": [{"id": "u1", "links": {"html": "https://unsplash.com/photos/u1"}, "urls": {"regular": "https://images.unsplash.com/u1.jpg", "small": "https://images.unsplash.com/u1-s.jpg"}, "width": 1920, "height": 1080, "description": "lake", "user": {"name": "Dana", "username": "dana"}}]}
 
 
 @pytest.fixture
 def net(monkeypatch):
     monkeypatch.setenv("PEXELS_API_KEY", "k1")
     monkeypatch.setenv("PIXABAY_API_KEY", "k2")
+    monkeypatch.setenv("UNSPLASH_ACCESS_KEY", "k3")
 
     def fake(url, headers=None, **kw):
         host = url.split("/")[2]
-        data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.openverse.org": OPENVERSE, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY}[host]
+        data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.openverse.org": OPENVERSE, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY, "api.unsplash.com": UNSPLASH}[host]
         return json.dumps(data).encode()
     monkeypatch.setattr(stock, "_open", fake)
 
@@ -53,7 +55,8 @@ def test_every_adapter_normalises_to_one_schema_and_keeps_rights(net):
     found, state = stock.search("river sunrise", "16:9")
     by = {a.provider: a for a in reversed(found)}      # the best-ranked result of each provider
     by["wikimedia"] = next(a for a in found if a.id == "wikimedia:1")
-    assert set(by) == {"nasa", "wikimedia", "openverse", "pexels", "pixabay"} and all(s["ok"] for s in state.values())
+    assert set(by) == {"nasa", "wikimedia", "openverse", "pexels", "pixabay", "unsplash"} and all(s["ok"] for s in state.values())
+    assert by["unsplash"].attribution_text == "Photo by Dana on Unsplash" and by["unsplash"].commercial_use_known is True
     assert by["pexels"].attribution_text == "Photo by Bo on Pexels" and by["pexels"].commercial_use_known is True and by["pexels"].source_page_url
     assert by["nasa"].commercial_use_known is None and "credit" in by["nasa"].license_name.lower()             # unclear rights are never claimed as free
     assert by["wikimedia"].author == "Ann" and by["wikimedia"].license_name == "CC BY-SA 4.0" and by["wikimedia"].commercial_use_known is True
@@ -91,7 +94,7 @@ def test_one_failing_provider_never_fails_the_search(net, monkeypatch):
     monkeypatch.setattr(stock, "_open", flaky)
     found, state = stock.search("river")
     assert state["pexels"]["error"].startswith("rate limit") and not state["nasa"]["ok"] and state["pixabay"]["ok"]
-    assert {a.provider for a in found} == {"wikimedia", "openverse", "pixabay"}
+    assert {a.provider for a in found} == {"wikimedia", "openverse", "pixabay", "unsplash"}
 
 
 def test_empty_results(monkeypatch):
@@ -169,6 +172,7 @@ COMMONS_V = {"query": {"pages": {"1": {"pageid": 1, "title": "File:Tide.webm", "
 def vnet(monkeypatch):
     monkeypatch.setenv("PEXELS_API_KEY", "k1")
     monkeypatch.setenv("PIXABAY_API_KEY", "k2")
+    monkeypatch.setenv("UNSPLASH_ACCESS_KEY", "k3")
 
     def fake(url, headers=None, limit=0):
         if url.endswith("collection.json"):

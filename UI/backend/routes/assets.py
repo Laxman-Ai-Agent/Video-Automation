@@ -113,7 +113,7 @@ def get_asset_file(pid: str, name: str):
     name = Path(name).name
     listed = {Path(a["file"]).name for a in ac.load_manifest(pdir).get("assets", [])}
     path = ac.collected_dir(pdir) / name
-    if name not in listed or not path.is_file():
+    if (name not in listed and not name.startswith(("chart_", "map_"))) or not path.is_file():
         raise ApiError(404, "file_not_found", f"{name} is not among the collected assets of this project")
     return FileResponse(path)
 
@@ -272,3 +272,53 @@ def update_asset(pid: str, body: AssetUpdateRequest):
                 pass
 
     return {"ok": True, "message": "Asset settings updated successfully"}
+
+
+class ChartGenerateRequest(BaseModel):
+    chart_type: str = "bar"
+    labels: list[str]
+    data: list[float]
+    title: str = ""
+    label: str = "Metric"
+    dark_mode: bool = True
+
+
+class MapGenerateRequest(BaseModel):
+    place_name: str
+    width: int = 1280
+    height: int = 720
+
+
+@router.post("/assets/generate-chart")
+def generate_chart_endpoint(pid: str, body: ChartGenerateRequest):
+    """Generate high-res chart visual for the project via QuickChart."""
+    from VIDEO_ENGINE.stages.chart_generator import build_chart_config, render_and_save_chart
+    pdir = store.project_dir(pid)
+    dest_dir = ac.collected_dir(pdir)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"chart_{body.chart_type}_{abs(hash(body.title + str(body.labels))) % 10000}.png"
+    out_file = dest_dir / filename
+    cfg = build_chart_config(body.chart_type, body.labels, body.data, body.title, body.label, body.dark_mode)
+    render_and_save_chart(cfg, out_file)
+    return {"ok": True, "filename": filename, "url": f"/projects/{pid}/assets/file/{filename}", "type": "chart"}
+
+
+@router.post("/assets/generate-map")
+def generate_map_endpoint(pid: str, body: MapGenerateRequest):
+    """Generate location map SVG visual for the project via OpenStreetMap Nominatim."""
+    from VIDEO_ENGINE.stages.map_generator import render_location_map
+    pdir = store.project_dir(pid)
+    dest_dir = ac.collected_dir(pdir)
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    filename = f"map_{body.place_name.lower().replace(' ', '_')}.svg"
+    out_file = dest_dir / filename
+    render_location_map(body.place_name, out_file, body.width, body.height)
+    return {"ok": True, "filename": filename, "url": f"/projects/{pid}/assets/file/{filename}", "type": "map"}
+
+
+@router.get("/assets/sfx-catalog")
+def get_sfx_catalog():
+    """List available motion sound effect presets."""
+    from VIDEO_ENGINE.stages.sfx_manager import list_builtin_sfx
+    return {"ok": True, "sfx": list_builtin_sfx()}
+
