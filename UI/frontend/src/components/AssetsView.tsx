@@ -2,6 +2,8 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Info } from 'lucide-react';
 import { fetchAssets } from '../services/api';
 import { ItemCard } from './assets-view/ItemCard';
+import { AssetGeneratorsBar } from './assets-view/AssetGeneratorsBar';
+
 
 const card: React.CSSProperties = {
   backgroundColor: 'var(--bg-elevated)',
@@ -146,6 +148,12 @@ export const AssetsView: React.FC<AssetsViewProps> = ({ projectId, refreshKey })
           </span>
         </div>
       </div>
+
+      {/* Asset Generation & Toolkits Bar */}
+      <AssetGeneratorsBar
+        projectId={projectId || ''}
+        onAssetCreated={() => setLocalRefresh((n) => n + 1)}
+      />
 
       {/* Category Tabs: All, Images, Icons, Videos */}
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>

@@ -1079,6 +1079,60 @@ export async function fetchAgentIntelligence(agentId: string): Promise<any | nul
   }
 }
 
+export async function generateChartAsset(
+  projectId: string,
+  params: {
+    chart_type?: string;
+    labels: string[];
+    data: number[];
+    title?: string;
+    label?: string;
+    dark_mode?: boolean;
+  }
+): Promise<{ ok: boolean; filename?: string; url?: string; error?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/assets/generate-chart`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return await res.json();
+  } catch (err: any) {
+    return { ok: false, error: err?.message || 'Failed to generate chart' };
+  }
+}
+
+export async function generateMapAsset(
+  projectId: string,
+  params: {
+    place_name: string;
+    width?: number;
+    height?: number;
+  }
+): Promise<{ ok: boolean; filename?: string; url?: string; error?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/assets/generate-map`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(params),
+    });
+    return await res.json();
+  } catch (err: any) {
+    return { ok: false, error: err?.message || 'Failed to generate map' };
+  }
+}
+
+export async function fetchSfxCatalog(): Promise<{ ok: boolean; sfx: any[] }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/_/assets/sfx-catalog`);
+    if (!res.ok) return { ok: false, sfx: [] };
+    return await res.json();
+  } catch {
+    return { ok: false, sfx: [] };
+  }
+}
+
+
 
 
 

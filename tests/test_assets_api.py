@@ -148,3 +148,24 @@ def test_update_video_trim_and_icon(client, monkeypatch):
     assert "categories" in got
     assert got["categories"]["videos"] >= 1
 
+
+def test_chart_map_and_sfx_endpoints(client):
+    pid = create(client).json()["id"]
+
+    # 1. SFX Catalog
+    sfx_res = client.get(f"/projects/{pid}/sfx/catalog")
+    assert sfx_res.status_code == 200
+    sfx_data = sfx_res.json()
+    assert sfx_data["ok"] is True
+    assert len(sfx_data["sfx"]) >= 5
+
+    # 2. Generate Map
+    map_res = client.post(
+        f"/projects/{pid}/assets/generate-map",
+        json={"place_name": "Hyderabad, India", "width": 800, "height": 600}
+    )
+    assert map_res.status_code == 200
+    assert map_res.json()["ok"] is True
+    assert map_res.json()["type"] == "map"
+
+

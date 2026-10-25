@@ -316,9 +316,11 @@ def generate_map_endpoint(pid: str, body: MapGenerateRequest):
     return {"ok": True, "filename": filename, "url": f"/projects/{pid}/assets/file/{filename}", "type": "map"}
 
 
-@router.get("/assets/sfx-catalog")
-def get_sfx_catalog():
+@router.get("/assets-tools/sfx-catalog")
+@router.get("/sfx/catalog")
+def get_sfx_catalog(pid: str = ""):
     """List available motion sound effect presets."""
     from VIDEO_ENGINE.stages.sfx_manager import list_builtin_sfx
     return {"ok": True, "sfx": list_builtin_sfx()}
+
 
