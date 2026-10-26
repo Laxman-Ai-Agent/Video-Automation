@@ -95,6 +95,24 @@ def _save(path: Path, data: Any) -> None:
     tmp.replace(path)
 
 
+AUTHENTICITY = ("real", "user_provided")      # downloaded from a licensed provider / handed in by the user (a picture they made or generated themselves)
+
+
+def has_provenance(a: dict) -> bool:
+    """A source and a licence: a download has its source URL, a user's own upload has the user as its source and a licence they declare."""
+    return bool((a.get("source_url") or a.get("selected_by") == "manual_upload") and (a.get("license") or {}).get("name"))
+
+
+def picture_prompt(req: dict, aspect: str = "16:9") -> str | None:
+    """What a person can give an image generator for a requirement that is a picture (the planner's own AI prompt when it wrote one, else written from what the scene needs); None for a clip or a page."""
+    if req.get("kind") != "photo":
+        return None
+    if (given := (req.get("ai_prompt") or "").strip()):
+        return given
+    what = (req.get("description") or req.get("why") or "").strip().rstrip(".")
+    return (f"{req['query']}. " + (f"{what}. " if what else "") + f"Photorealistic photograph, natural lighting, sharp focus, {aspect} wide frame composition, no text, no logos, no watermark.")
+
+
 def _sha(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
@@ -145,7 +163,7 @@ def plan_requirements(pdir: Path, aspect: str, force: bool = False) -> dict:
         for n, r in enumerate(s.get("media_requirements", []), 1):
             reqs.append({"requirement_id": f"req_{s['plan_scene_id']}_{n}", "scene_id": s["plan_scene_id"], "element_id": r["element_id"], "kind": KIND_OF[r["media_type"]],
                          "query": _clean(r["query"]), "alt_queries": [q for q in (_clean(a) for a in r["alt_queries"]) if q][:2], "section": r.get("section") if r.get("section") in web_capture.SECTIONS else "infobox", "must_be_real": r["must_be_real"],
-                         "why": r["why"][:200], "fallback": r["fallback"], "ai_prompt": r["ai_prompt"]})
+                         "why": r["why"][:200], "description": (r.get("semantic_content") or "")[:300], "fallback": r["fallback"], "ai_prompt": r["ai_prompt"]})
     data = {"schema": SCHEMA_REQ, "version": VERSION, "fingerprint": fp, "aspect": aspect, "requirements": reqs, "source": "visual_planning.json", "generated_at": _now()}
     _save(requirements_path(pdir), data)
     return data
@@ -576,20 +594,20 @@ def _file_problems(pdir: Path, a: dict) -> list[str]:
 
 
 def check_assets(pdir: Path, manifest: dict | None = None) -> list[dict]:
-    """Findings {code, severity, asset_id, message} for the manifest: missing/changed files, missing licence or source, class D, authenticity not "real". severity "review" = a person must look (class C)."""
+    """Findings {code, severity, asset_id, message} for the manifest: missing/changed files, missing licence or source, class D, authenticity neither "real" nor "user_provided". severity "review" = a person must look (class C)."""
     man = manifest if manifest is not None else _load(manifest_path(pdir), {})
     out = []
     for a in man.get("assets", []):
         aid = a.get("asset_id")
         for p in _file_problems(pdir, a):
             out.append({"code": "asset_file", "severity": "error", "asset_id": aid, "message": p})
-        if not a.get("source_url") or not (a.get("license") or {}).get("name"):
+        if not has_provenance(a):
             out.append({"code": "asset_provenance", "severity": "error", "asset_id": aid, "message": f"{aid}: source or licence is missing"})
         if a.get("rights_class") == "D":
             out.append({"code": "asset_rights", "severity": "error", "asset_id": aid, "message": f"{aid}: no licence information, it must not be used"})
         elif a.get("rights_class") != "A":
             out.append({"code": "asset_rights_review", "severity": "review", "asset_id": aid, "message": f"{aid}: rights not established ({(a.get('license') or {}).get('name')}), a person must confirm the use"})
-        if a.get("authenticity") != "real":
+        if a.get("authenticity") not in AUTHENTICITY:
             out.append({"code": "asset_authenticity", "severity": "error", "asset_id": aid, "message": f"{aid}: authenticity is {a.get('authenticity')!r}"})
     return out
 

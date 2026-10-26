@@ -45,7 +45,8 @@ def get_assets(pid: str):
     for r in req.get("requirements", []) if req.get("fingerprint") == fp else []:
         a, f = got.get(r["requirement_id"]), missed.get(r["requirement_id"])
         k = "photo" if r.get("media_type") == "image" or r.get("kind") in ("photo", "image") else r.get("kind") or r.get("media_type") or "photo"
-        items.append({**r, "kind": k, "status": "collected" if a else "fallback" if f else "pending", "asset": {**a, "url": _url(pid, a)} if a else None, "reason": f["reason"] if f else None})
+        items.append({**r, "kind": k, "status": "collected" if a else "fallback" if f else "pending", "asset": {**a, "url": _url(pid, a)} if a else None, "reason": f["reason"] if f else None,
+                      "ai_prompt": ac.picture_prompt(r, aspect)})            # a picture always has a prompt: when nothing is found the person can make it elsewhere and upload it here
 
     # Discover and include icon elements from visual_planning.json if present
     vp_path = pdir / "visual_planning.json"
@@ -199,8 +200,8 @@ async def upload_custom_asset(
         "author": "User",
         "rights_class": "A",
         "license": {"name": "User Upload (Personal)"},
-        "source_url": "",
-        "authenticity": "real",
+        "source_url": f"user-upload://{file.filename or dest_name}",         # the user is the source; the licence is theirs to declare
+        "authenticity": "user_provided",
         "selected_by": "manual_upload",
     }
     man["assets"].append(new_entry)

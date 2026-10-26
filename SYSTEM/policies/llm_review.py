@@ -813,7 +813,7 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
             "- Asset Collection adds OPTIONAL real photographs and video clips to Motion-Only scenes. A project where no scene needs real media (zero requirements, zero assets) is a valid, passing outcome.\n"
             "- Every requirement must be met by a collected asset whose title and search query clearly match what that scene's narration is about, or be recorded in fallbacks with a reason. "
             "An asset that is irrelevant, misleading or likely to misrepresent the narration is a blocker.\n"
-            "- Every asset needs a source_url, a licence, rights_class 'A' or 'C' (C = rights not established: collected on purpose and judged by the Final QC LLM review, so it is NOT a blocker here) and authenticity 'real'.\n"
+            "- Every asset needs a source_url, a licence, rights_class 'A' or 'C' (C = rights not established: collected on purpose and judged by the Final QC LLM review, so it is NOT a blocker here) and authenticity 'real' (a picture the user uploaded by hand has selected_by 'manual_upload' and authenticity 'user_provided': it is valid, the user is its source and declares its licence).\n"
             "- deterministic_findings with severity 'error' are blockers; severity 'review' is informational.\n"
             "- If all of this holds, approve with status='passed' and score >= 0.85."
         )

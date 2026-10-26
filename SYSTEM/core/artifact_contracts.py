@@ -651,7 +651,7 @@ def validate_final_artifacts(pdir: Path, aspect: str = "16:9") -> list[ArtifactM
 
 def validate_assets_artifacts(pdir: Path, aspect: str = "16:9") -> list[ArtifactManifestRecord]:
     """Validates asset_requirements.json and assets_manifest.json: both exist and are objects of their schema, and every collected asset has its file (unchanged since collection), a source,
-    a licence, a rights class other than D and authenticity "real". An empty manifest is valid: most videos need no real media."""
+    a licence, a rights class other than D and authenticity "real" or "user_provided". An empty manifest is valid: most videos need no real media."""
     out: list[ArtifactManifestRecord] = []
     data: dict[str, Any] = {}
     for name, schema, key in (("asset_requirements.json", "asset-requirements", "requirements"), ("assets_manifest.json", "assets-manifest", "assets")):
@@ -679,12 +679,13 @@ def validate_assets_artifacts(pdir: Path, aspect: str = "16:9") -> list[Artifact
                 h.update(chunk)
         if a.get("file_sha256") and h.hexdigest() != a["file_sha256"]:
             raise ContractValidationError(f"Asset {aid}: the file changed after collection")
-        if not a.get("source_url") or not (a.get("license") or {}).get("name"):
+        from VIDEO_ENGINE.stages import asset_collection as ac            # the ONE definition of provenance and authenticity
+        if not ac.has_provenance(a):
             raise ContractValidationError(f"Asset {aid}: source or licence is missing")
         if a.get("rights_class") not in ("A", "C"):
             raise ContractValidationError(f"Asset {aid}: rights class {a.get('rights_class')!r} is not usable")
-        if a.get("authenticity") != "real":
-            raise ContractValidationError(f"Asset {aid}: authenticity is {a.get('authenticity')!r}, not 'real'")
+        if a.get("authenticity") not in ac.AUTHENTICITY:
+            raise ContractValidationError(f"Asset {aid}: authenticity is {a.get('authenticity')!r}, not one of {ac.AUTHENTICITY}")
     return out
 
 

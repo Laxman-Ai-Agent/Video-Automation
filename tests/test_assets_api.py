@@ -169,3 +169,32 @@ def test_chart_map_and_sfx_endpoints(client):
     assert map_res.json()["type"] == "map"
 
 
+
+
+def test_a_picture_that_was_not_found_gets_a_prompt_to_make_it_elsewhere_and_a_hand_upload_is_valid_provenance(client, monkeypatch):
+    pid = create(client).json()["id"]
+    pdir = _m7.config.PROJECTS_DIR / pid
+    plan_with_requests(pdir, monkeypatch)
+    aspect = client.get(f"/projects/{pid}").json().get("aspect") or "9:16"
+    ac.plan_requirements(pdir, aspect)
+    reqs = ac.load_requirements(pdir)
+    reqs["requirements"][0]["ai_prompt"] = None                                                     # the planner wrote none (a project made without that choice)
+    ac._save(ac.requirements_path(pdir), reqs)
+    items = {i["requirement_id"]: i for i in client.get(f"/projects/{pid}/assets").json()["items"]}
+    assert "office workers" in items["req_1_1"]["ai_prompt"] and "no text" in items["req_1_1"]["ai_prompt"] and items["req_2_1"]["ai_prompt"] is None      # a clip has none
+    up = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_1_1", "scene_id": "1"}, files={"file": ("mine.png", _png(), "image/png")})
+    assert up.status_code == 200 and up.json()["asset"]["authenticity"] == "user_provided" and up.json()["asset"]["source_url"] == "user-upload://mine.png"
+    man = ac.load_manifest(pdir)
+    assert ac.check_assets(pdir, man) == []                                                         # a hand upload is not "source or licence is missing"
+    old = {**man["assets"][0], "source_url": "", "authenticity": "real"}                              # one stored before uploads carried them
+    assert ac.check_assets(pdir, {"assets": [old]}) == [] and ac.has_provenance(old)
+    assert [f["code"] for f in ac.check_assets(pdir, {"assets": [{**old, "selected_by": None}]})] == ["asset_provenance"]      # a download without a source is still an error
+    assert [f["code"] for f in ac.check_assets(pdir, {"assets": [{**old, "authenticity": "ai"}]})] == ["asset_authenticity"]
+
+
+def _png():
+    import io
+    from PIL import Image
+    b = io.BytesIO()
+    Image.new("RGB", (64, 36), (10, 20, 30)).save(b, "PNG")
+    return b.getvalue()
