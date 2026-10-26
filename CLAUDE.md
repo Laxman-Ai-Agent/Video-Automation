@@ -1,6 +1,6 @@
 # Audio-to-Video Studio — Autonomous Motion-Only Pipeline Guide
 
-Read this file first every session. Details live in `docs/`. Read ONLY the docs you need.
+Read this file first every session. Details live in `docs/`. Read ONLY the docs you need. **Latest handoff (what is done, open, next): `docs/SESSION_STATUS.md`: read it second.**
 
 ## System Purpose & Core Identity
 Dark World Video Generation Agent is an autonomous, LLM-driven Motion-Only video generation system.

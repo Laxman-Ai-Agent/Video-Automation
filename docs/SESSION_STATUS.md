@@ -1,0 +1,50 @@
+# Session status and handoff (2026-10-26)
+
+Read this after `CLAUDE.md`. It says what is done, what is open, and what to do next, so nothing is repeated. Older status: `docs/VISUAL_PLANNING_STATUS.md` (2026-10-23).
+
+## Where things run (do this first)
+- Repository: `E:\movies\Audio-to-video-main` (branch `main`, remote `origin` = GitHub `Laxman-Ai-Agent/Video-Automation`). **Start the API (:8000) and the frontend (:5173) only from here** (`.claude/launch.json` entries `backend`, `frontend`).
+- `E:\audio-to-video` is an OLD copy of the project (older commits, no LLM page, different layout). A server started from it shows stale UI and old routes. Never run from it; check with `Get-NetTCPConnection -LocalPort 5173,8000` and the process command line.
+- Remotion libraries: `npm ci` was run in `VIDEO_ENGINE/remotion` (397 packages; `node_modules` is not in git, repeat `npm ci` there on a new machine or folder).
+- Active LLM: provider `claude_cli` (Claude Code), model chosen on the LLM page (`config/llm_settings.json`, git-ignored, local). The LLM page now has a model pick-list for Claude Code; auto-connect tries Claude Code, then Antigravity, then API keys, then Ollama.
+- **Never restart the backend while a job runs** (`projects/<pid>/job.json`, `GET /llm/active`): the job dies. Transcribe now resumes from its checkpoint (`transcript.partial.json`); the other steps start again.
+- The harness has a "Fact-Forcing Gate" hook: the first edit/write of a file, and destructive-looking shell commands, need a short statement first (importers, affected API/data, rollback, the user's instruction verbatim), then the same call is retried.
+
+## Test project: `projects/my-first-project-01-df7f` (audio `08.wav`, 59.5 s, 16:9, media mix 60/30/10)
+Stage states at the end (11:43): audio, analyzer, segmentation, planning, assets, motion_plan, **motion_gen = completed** (it had failed on TS2307 for `public/composition.json` and `resource-library/bundle/render_bundle.json`; after the restore in `c800bff` the re-run finished and `generated_motion/scene_1..7.tsx` exist). motion_validation, timeline, approval, render, qc, final = pending (next: stage 8, click RUN on it, see Open item 1: manual execution mode).
+- Analyzer: 14/14 steps LLM-verified, validation `ok`. Segmentation: 7 scenes, validation `ok`, 7/7 steps verified. Visual Planning: 7 scenes, validation `ok`, LLM review passed 0.88 with `info` findings only.
+- Timings of the analyzer on this CPU: transcribe 807 s, refine 204 s, cuts about 1 s (41 s once under CPU contention), segment 37 s.
+
+## Done this session (commits on `main`, newest first)
+| Commit | What |
+|---|---|
+| (docs commit) | this file, CLAUDE.md pointer, runtime state files |
+| `c800bff` | restore `composition.json`, `resource-library/bundle/render_bundle.json`, `catalog/registry.json`, font/icon licences (deleted by `31b2f3e`) |
+| `7720701` | Visual Planning: deterministic rules `brand_query` (a media query holding a brand or a word made from one, e.g. "youtuber") and `real_media_alone`; planner and reviewer instructions no longer contradict (a real photo/clip as mood or metaphor is fine when drawn text/graphic carries the meaning) |
+| `6f9ca13` | restore 63 files deleted by `31b2f3e` (Remotion `scripts/*.ts`, `public/geo`, Hind Guntur fonts, tabler icons); `no_placeholders` no longer rejects the word "placeholder" in a prose description |
+| `31a5fe4` | segmentation: segments emptied by the LLM review are no word / no translation line (`translate_io.py`); cut breakdown includes `clause_ends`; long-scene tolerance `LONG_TOL` 0.5 s; `scene_segmentation.VERSION` 3; subtask card labels follow the stage; `CHECK_VERSION` 2.5 |
+| `07bffcd` | `cuts` fingerprint reads inputs only (no self-edit); interim analyzer report claims only what it measured; no "Steps recorded in null" |
+| `95cd454` | an emptied segment is a note (`segment_emptied`), not a warning; LLM step evidence for steps 1 and 10 fixed; `CHECK_VERSION` 2.4 |
+| `5920ea5` | Whisper `transcribe` checkpoints every chunk and resumes (`transcript.partial.json`) |
+| `8095f1f` | interim analyzer report has a `source_fingerprint` so a stale LLM verdict is asked again |
+| `1badce7` | interim analyzer report measures audio with ffprobe (`audio_analysis.probe`), not the `wave` module |
+| `91455ef` | Claude Code model pick-list; Claude Code first in auto-connect; test fixture hides `agy.exe` |
+
+Rule the user set: **the LLM review decides what stays** (no Whisper-confidence veto of a word the LLM removed).
+
+## Open / known issues
+1. **Manual execution mode (a design decision to confirm with the user).** The working tree held uncommitted work from a parallel session (10:04-11:32, no other session was running afterwards) that removed the frontend auto-advance (`PipelineCanvas.tsx`: "Each stage must be triggered explicitly by the user via the RUN button") and changed the `auto_pilot` default to `False` (`VIDEO_ENGINE/pipeline/orchestrator.py`, `UI/backend/routes/orchestrator.py`). `CLAUDE.md` still says stages advance autonomously with no human gate: either update `CLAUDE.md` to the manual mode or revert those three files; ask the user which one they want. Other parts of that work: Antigravity model pick-list and default `gemini-3.8-flash-high` (`llm_client.py`), Skills page redesign with usage tracking, delete and `.agents/skills` discovery (`skill_registry.py`, `routes/skills.py`, `SkillsPage.tsx`, `pages/skills/*`), Visual Planning view and scene modal (`VisualPlanningView.tsx`, `VisualSceneModal.tsx`), and richer evidence for the 8 Visual Planning LLM step checks (`step_llm_check.py`, `CHECK_VERSION` now `"2.6"`). It was reviewed (not authored) at handoff: `npx tsc --noEmit` clean, related Python tests pass except the old failures in item 3; one test assertion was widened for wildcard skills (`tests/test_skills_and_shared_memory.py`, `compatible_agents` `"*"`).
+2. **Commit `31b2f3e` ("modularize oversized frontend components...") deleted 111 files, most of it by accident.** Restored: scripts (15), geo maps, fonts, icons, composition.json, bundle, registry, licences. **Not restored (48):** dev/test fixtures in `VIDEO_ENGINE/remotion/public` (`audio_test.wav` 3.3 MB, `img_01-03.png`, `layers_test.json`, `transitions_test.json`, `motion_preview.wav`, `resource-gallery-silence.wav`, `gallery.json`), ~40 gallery preview images in `resource-library/previews`, and the old frontend components `AnalysisSubtasks.tsx`, `AudioAnalysisDrawer.tsx` (replaced on purpose). Restore one with `git restore --source=31b2f3e^ -- <path>` only if a script or test needs it.
+3. **Old failing tests (they fail without this session's changes too):** `tests/test_scene_segmentation.py` (5: `test_a_failed_segmentation_leaves_the_analysis_files_untouched_and_writes_nothing`, `test_segmentation_runs_only_on_the_run_request_and_opening_it_starts_nothing`, `test_no_stage_starts_after_the_audio_analysis_finishes`, `test_it_runs_from_the_existing_json_alone_without_touching_the_audio_or_the_json`, `test_a_missing_or_invalid_json_is_a_409_error_and_nothing_starts`), `tests/test_step_llm_check_segmentation.py` (2: expected evidence keys `sentences`, `transcript_segment_count` that the code does not produce), `tests/test_orchestrator_and_monitoring.py::test_the_audio_analyzer_runs_when_there_is_no_transcript_or_the_llm_has_not_checked_it` (expects an LLM-approval check `_analysis_needed` does not make), `tests/test_transcript_review.py::test_the_instructions_ask_for_telugu_grammar_english_spelling_only_for_spoken_english_and_punctuation` (prompt text). Fix the test or the code, whichever is wrong; do not ignore them.
+4. **Analyzer real report has no `source_fingerprint`** (only the interim one has). When an LLM-step-check evidence builder changes and the step text does not, bump `CHECK_VERSION` in `UI/backend/step_llm_check.py` (now `"2.6"`).
+5. **Whisper speed (settings unchanged on purpose):** large-v3 int8, chunks 9/4 s, beam 5, default cpu_threads. Benchmark on 29.2 s of audio: base 395 s; `cpu_threads=8` was slower (524 s) on this hybrid CPU. Chunk 25 s and beam 1 were not measured (benchmark stopped at the user's request). Each 9 s chunk costs a full 30 s encoder window (4.5x work), the main lever if speed is wanted; it needs an accuracy check against `transcript_corrected.json`.
+6. Not run: `npm --prefix UI/frontend run build` (only `npx tsc --noEmit`, clean) and the Remotion `npm run tsc` check.
+7. Runtime state files tracked in git change on every run (`SYSTEM/config/llm_usage.json`, `config/shared_memory.json`, `SYSTEM/agents/.../motion_animation/memory/experiences.json`); they are committed as a "chore: runtime state" commit, nothing in them is code.
+
+## Next steps (in this order)
+1. Confirm the manual-vs-autonomous decision (Open item 1) with the user and make `CLAUDE.md` and the code agree.
+2. Continue the pipeline from stage 8 (stages no longer start by themselves in manual mode: click RUN, or `POST /projects/my-first-project-01-df7f/...`): motion_validation (12 deterministic checks) -> timeline -> approval (LLM decides) -> render (Remotion, CPU, slow) -> qc (LLM decides) -> final. For every warning, find the root cause (real data, checker bug, or wrong evidence) and fix it in code with a regression test; never accept a warning.
+3. After a real MP4 exists: run the focused tests of what was changed, then the failing-test list in "Open" item 3.
+4. Optional: continue the Whisper benchmark (chunk size, beam) with an accuracy check; restore more of the 48 deleted files if something needs them.
+
+Verification commands: `$env:PYTHONPATH="."; .venv\Scripts\python.exe -m pytest tests/<file> -q`; `cd UI/frontend && npx tsc --noEmit`.
