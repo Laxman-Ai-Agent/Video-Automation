@@ -7,12 +7,15 @@ when its recorded result changes. Nothing is invented: a failed or unavailable L
 """
 from __future__ import annotations
 
+import functools
 import hashlib
 import json
 import re
 import threading
 import time
 from pathlib import Path
+
+from VIDEO_ENGINE.stages import audio_analysis
 
 STEP_REPORTS = {                                                                    # stage -> the report whose "stages" list the stage itself writes ({sfx} = the 9:16 suffix)
     "analyzer": "audio_analysis.json", "segmentation": "scene_segmentation.json", "planning": "visual_planning.json",
@@ -35,6 +38,12 @@ def _sfx(aspect: str) -> str:
 def report_file(pdir: Path, stage_id: str, aspect: str) -> Path | None:
     name = STEP_REPORTS.get(stage_id)
     return pdir / name.format(sfx=_sfx(aspect)) if name else None
+
+
+@functools.lru_cache(maxsize=32)
+def _probe_audio(path: str, mtime_ns: int) -> dict:
+    """ffprobe facts of an audio file, measured once per file version (this is polled while the analyzer runs)."""
+    return audio_analysis.probe(Path(path))
 
 
 def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
@@ -63,25 +72,10 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
     val_info = {"status": "passed", "errors": [], "warnings": []}
     if has_audio:
         try:
-            import wave
-            with wave.open(str(audio)) as w:
-                dur = round(w.getnframes() / max(1, w.getframerate()), 2)
-                ch = w.getnchannels()
-                sr = w.getframerate()
-        except Exception:
-            dur = None
-            ch = None
-            sr = None
-        source_info = {
-            "file": audio.name,
-            "size_bytes": audio.stat().st_size,
-            "duration_seconds": dur,
-            "sample_rate_hz": sr,
-            "channels": ch,
-            "container": audio.suffix.lstrip("."),
-            "codec": "pcm_s16le" if audio.suffix.lower() == ".wav" else "audio",
-            "metadata_source": "wave",
-        }
+            source_info = _probe_audio(str(audio), audio.stat().st_mtime_ns)     # the same ffprobe measurement the finished report uses
+        except audio_analysis.UserProblem as e:
+            val_info = {"status": "failed", "errors": [str(e)], "warnings": []}
+    audio_ok = bool(source_info)
     if has_16k:
         proc_info = {
             "preprocessing": "16 kHz mono model-ready copy generated",
@@ -98,17 +92,17 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
             {
                 "n": 1,
                 "name": "Audio File Validation",
-                "status": "completed" if has_audio else "pending",
-                "detail": f"{audio.name if audio else 'audio'} readable, stream validated" if has_audio else "waits for audio file",
-                "checks_passed": 1 if has_audio else 0,
+                "status": "completed" if audio_ok else ("failed" if has_audio else "pending"),
+                "detail": f"{audio.name} readable, stream validated" if audio_ok else (val_info["errors"][0] if has_audio else "waits for audio file"),
+                "checks_passed": 1 if audio_ok else 0,
                 "checks_total": 1,
             },
             {
                 "n": 2,
                 "name": "Audio Metadata Extraction",
-                "status": "completed" if has_audio else "pending",
-                "detail": "sample rate, channels and container probed via ffprobe" if has_audio else "waits for audio probe",
-                "checks_passed": 1 if has_audio else 0,
+                "status": "completed" if audio_ok else ("failed" if has_audio else "pending"),
+                "detail": f"sample rate, channels and container probed via {source_info['metadata_source']}" if audio_ok else ("no metadata: the audio could not be probed" if has_audio else "waits for audio probe"),
+                "checks_passed": 1 if audio_ok else 0,
                 "checks_total": 1,
             },
             {
