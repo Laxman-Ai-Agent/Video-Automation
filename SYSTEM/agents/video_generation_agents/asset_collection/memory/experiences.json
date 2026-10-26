@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "asset_collection",
-  "updated_at": "2026-10-24T02:06:38.912354+00:00",
-  "total_experiences": 1,
+  "updated_at": "2026-10-26T13:00:53.559923+00:00",
+  "total_experiences": 2,
   "experiences": {
     "exp-asset_collection-80afcf3c7e": {
       "experience_id": "exp-asset_collection-80afcf3c7e",
@@ -45,6 +45,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-24T02:06:38.910358+00:00",
+      "schema_version": 1
+    },
+    "exp-asset_collection-f29db29215": {
+      "experience_id": "exp-asset_collection-f29db29215",
+      "agent_id": "asset_collection",
+      "task_type": "recovery_assets",
+      "task_id": "run_1e0051f9",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "assets",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_1e0051f9",
+            "agent_id": "asset_collection",
+            "stage_id": "assets",
+            "category": "SECURITY",
+            "code": "security_policy_denied",
+            "message": "[WinError 5] Access is denied: '[CONFINED_PATH]' -> '[CONFINED_PATH]'",
+            "timestamp": "2026-10-26T13:00:39.343523+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_assets",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Errors of category SECURITY cannot be retried.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "SECURITY",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for assets resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T13:00:53.540497+00:00",
       "schema_version": 1
     }
   }

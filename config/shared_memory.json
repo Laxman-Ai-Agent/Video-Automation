@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-26T04:38:22.800226+00:00",
+  "updated_at": "2026-10-26T13:03:36.111175+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -7105,6 +7105,32 @@
       "review_by": null,
       "metadata": {}
     },
+    "mem-94f0b972973f": {
+      "memory_id": "mem-94f0b972973f",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-26T13:03:36.111175+00:00",
+      "updated_at": "2026-10-26T13:03:36.111175+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-9534103bdfb0": {
       "memory_id": "mem-9534103bdfb0",
       "title": "Experience exp_6d6ea3bb80c1: Template selection task",
@@ -11477,6 +11503,32 @@
       "review_by": null,
       "metadata": {}
     },
+    "mem-e0e61d64dcd6": {
+      "memory_id": "mem-e0e61d64dcd6",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-26T12:44:09.644846+00:00",
+      "updated_at": "2026-10-26T12:44:09.644846+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-e13e0d8d94c7": {
       "memory_id": "mem-e13e0d8d94c7",
       "title": "Motion Animation Execution - proj_agent_v2",
@@ -12587,6 +12639,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "proj_agent_v2"
+      }
+    },
+    "mem-f1c0a835aa0c": {
+      "memory_id": "mem-f1c0a835aa0c",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-26T12:35:47.902701+00:00",
+      "updated_at": "2026-10-26T12:35:47.902701+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-f23de2e802ed": {
