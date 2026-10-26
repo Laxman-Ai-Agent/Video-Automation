@@ -1,9 +1,52 @@
 {
   "schema_version": 1,
   "agent_id": "asset_collection",
-  "updated_at": "2026-10-26T13:00:53.559923+00:00",
-  "total_experiences": 2,
+  "updated_at": "2026-10-26T13:48:39.173956+00:00",
+  "total_experiences": 3,
   "experiences": {
+    "exp-asset_collection-1d65211e98": {
+      "experience_id": "exp-asset_collection-1d65211e98",
+      "agent_id": "asset_collection",
+      "task_type": "recovery_assets",
+      "task_id": "run_5595274e",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "assets",
+        "attempt": 2,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_5595274e",
+            "agent_id": "asset_collection",
+            "stage_id": "assets",
+            "category": "SECURITY",
+            "code": "security_policy_denied",
+            "message": "[WinError 5] Access is denied: '[CONFINED_PATH]' -> '[CONFINED_PATH]'",
+            "timestamp": "2026-10-26T13:48:30.640602+00:00",
+            "recovery_permitted": false,
+            "attempt": 2,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_assets",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Errors of category SECURITY cannot be retried.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "SECURITY",
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for assets resulted in failed on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T13:48:39.147950+00:00",
+      "schema_version": 1
+    },
     "exp-asset_collection-80afcf3c7e": {
       "experience_id": "exp-asset_collection-80afcf3c7e",
       "agent_id": "asset_collection",
