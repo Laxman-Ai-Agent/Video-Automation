@@ -65,6 +65,21 @@ DEFAULT_MODELS: dict[str, str] = {
     "custom": "default",
 }
 
+# Models a provider offers as a pick-list on the LLM page (providers not listed take a typed model name).
+# claude_cli: the ids `claude --model` accepts; an alias (sonnet/opus/haiku) always follows that family's latest model.
+PROVIDER_MODELS: dict[str, list[dict[str, str]]] = {
+    "claude_cli": [
+        {"id": "claude-code", "name": "Claude Code default (the model the CLI itself is set to)"},
+        {"id": "sonnet", "name": "Sonnet (latest)"},
+        {"id": "opus", "name": "Opus (latest)"},
+        {"id": "haiku", "name": "Haiku (latest)"},
+        {"id": "claude-sonnet-5-5", "name": "Sonnet 5.5"},
+        {"id": "claude-opus-5-5", "name": "Opus 5.5"},
+        {"id": "claude-haiku-5-5", "name": "Haiku 5.5"},
+        {"id": "claude-fable-5-1", "name": "Fable 5.1"},
+    ],
+}
+
 AUTH_METHODS: dict[str, str] = {
     "antigravity": "ide_session",
     "gemini": "api_key",
@@ -185,16 +200,14 @@ def resolve_provider_config(override_provider: str | None = None, override_model
     
     # Auto-detection only applies if provider is explicitly set to 'auto'.
     if prov == "auto":
-        if os.environ.get("ANTIGRAVITY_AGENT") or _find_agy_exe():
+        # same order as detect_options: Claude Code, Antigravity, an API key, then the recommended default
+        if shutil.which("claude"):
+            prov = "claude_cli"
+        elif os.environ.get("ANTIGRAVITY_AGENT") or _find_agy_exe():
             prov = "antigravity"
         else:
             with_key = [p for p in ENV_KEYS if _env_key(p) or (cfg.get("provider") == p and cfg.get("api_key"))]
-            if with_key:
-                prov = with_key[0]
-            elif shutil.which("claude"):
-                prov = "claude_cli"
-            else:
-                prov = "gemini"  # Default recommended provider
+            prov = with_key[0] if with_key else "gemini"  # Default recommended provider
 
     # Resolve API Key
     key = (override_key or "").strip() or cfg.get("api_key", "").strip() or os.environ.get("LLM_API_KEY", "").strip()
@@ -286,6 +299,7 @@ def get_public_settings() -> dict[str, Any]:
                 "auth_method": AUTH_METHODS.get(k, "api_key"),
                 "auth_method_name": AUTH_METHOD_NAMES.get(AUTH_METHODS.get(k, "api_key"), "API Key"),
                 "needs_key": k not in ("antigravity", "claude_cli", "ollama"),
+                "models": PROVIDER_MODELS.get(k, []),
             }
             for k, v in PROVIDER_NAMES.items()
         ],
@@ -570,10 +584,12 @@ def _call_antigravity_cli(user: str, system: str, timeout: int, model: str = "ge
             return r.stdout.strip()
 
 
-def _call_claude_cli(user: str, system: str, timeout: int) -> str:
+def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = None) -> str:
     exe = shutil.which("claude")
     if not exe:
         raise LlmError("The Claude CLI was not found on this machine. Select Gemini or OpenAI in LLM Settings, or install Claude Code.")
+    cli_default = DEFAULT_MODELS["claude_cli"]   # the label for "no --model": the CLI uses its own default
+    model = model if model and model != cli_default else os.environ.get("PROMPTGEN_MODEL")
     cmd = [
         exe, "-p", "--output-format", "json", "--max-turns", "1",
         "--tools", "", "--setting-sources", "", "--disable-slash-commands",
@@ -581,8 +597,8 @@ def _call_claude_cli(user: str, system: str, timeout: int) -> str:
     ]
     if system.strip():
         cmd.extend(["--system-prompt", system])
-    if os.environ.get("PROMPTGEN_MODEL"):
-        cmd.extend(["--model", os.environ["PROMPTGEN_MODEL"]])
+    if model:
+        cmd.extend(["--model", model])
 
     try:
         r = subprocess.run(
@@ -618,7 +634,7 @@ def _call_claude_cli(user: str, system: str, timeout: int) -> str:
         if inp > 0 or out > 0:
             try:
                 from . import llm_usage
-                llm_usage.record_backend_usage("claude_cli", "claude-code", inp, out, is_subscription=True, prompt_snippet=user[:64])
+                llm_usage.record_backend_usage("claude_cli", model or cli_default, inp, out, is_subscription=True, prompt_snippet=user[:64])
             except Exception:
                 pass
 
@@ -656,7 +672,7 @@ def generate_text(user: str, system: str = "", timeout: int = 180, provider: str
         elif prov == "antigravity":
             return _call_antigravity_cli(user, system, timeout, mdl)
         elif prov == "claude_cli":
-            return _call_claude_cli(user, system, timeout)
+            return _call_claude_cli(user, system, timeout, model=mdl)
         else:
             raise LlmError(f"Unknown or unsupported LLM provider: '{prov}'. Choose gemini, antigravity, openai, anthropic, or claude_cli.")
     finally:
@@ -728,7 +744,7 @@ def test_connection(provider: str | None = None, model: str | None = None, api_k
         elif prov == "antigravity":
             resp = _call_antigravity_cli(prompt, "", timeout=30, model=mdl)
         elif prov == "claude_cli":
-            resp = _call_claude_cli(prompt, "", timeout=30)
+            resp = _call_claude_cli(prompt, "", timeout=30, model=mdl)
         else:
             return {"ok": False, "provider": prov, "model": mdl, "message": f"Unsupported provider: {prov}", "latency_ms": 0}
 
@@ -770,6 +786,8 @@ def detect_options() -> list[dict[str, str]]:
     """What this computer can connect to right now, in the order `auto` tries it. Says where each came from; never returns a key."""
     cfg = load_settings()
     found = []
+    if shutil.which("claude"):
+        found.append({"id": "claude_cli", "name": PROVIDER_NAMES["claude_cli"], "model": DEFAULT_MODELS["claude_cli"], "source": "Claude Code installed on this computer"})
     if _find_agy_exe():
         found.append({"id": "antigravity", "name": PROVIDER_NAMES["antigravity"], "model": DEFAULT_MODELS["antigravity"], "source": "Google Antigravity active session on this computer"})
     for prov in ENV_KEYS:
@@ -780,8 +798,6 @@ def detect_options() -> list[dict[str, str]]:
         else:
             continue
         found.append({"id": prov, "name": PROVIDER_NAMES[prov], "model": DEFAULT_MODELS[prov], "source": source})
-    if shutil.which("claude"):
-        found.append({"id": "claude_cli", "name": PROVIDER_NAMES["claude_cli"], "model": DEFAULT_MODELS["claude_cli"], "source": "Claude Code installed on this computer"})
     if _ollama_reachable():
         found.append({"id": "ollama", "name": PROVIDER_NAMES["ollama"], "model": DEFAULT_MODELS["ollama"], "source": "Ollama running on this computer"})
     return found

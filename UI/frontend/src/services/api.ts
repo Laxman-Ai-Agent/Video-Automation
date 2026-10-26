@@ -70,7 +70,7 @@ export async function fetchLlmHealth(): Promise<{ ok: boolean; provider?: string
 }
 
 // --- LLM connection page (UI/backend/routes/llm.py) ---
-export interface LlmProviderInfo { id: string; name: string; default_model: string; needs_key: boolean }
+export interface LlmProviderInfo { id: string; name: string; default_model: string; needs_key: boolean; models?: { id: string; name: string }[] }
 export interface LlmSettings {
   model_locked?: boolean;
   active_provider: string;

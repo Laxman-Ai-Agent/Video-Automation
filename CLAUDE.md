@@ -133,6 +133,7 @@ audio-to-video/
 - OS: Windows 11, CPU-only (Intel i5-1235U, 16 GB RAM, no NVIDIA GPU).
 - Python 3.12 (`.venv\Scripts\python.exe`), Node.js for Remotion and frontend.
 - Never run destructive Git commands (`git reset --hard`, `git clean -fd`, `git checkout .`).
+- Start the API (8000) and frontend (5173) only from this repository's root. If the machine holds another copy of the project, a server started there shows stale UI and old routes. When a UI change does not appear, first check which folder the servers run from: `Get-NetTCPConnection -LocalPort 5173,8000` + the process command line. Keep one copy per machine.
 - Develop stage-by-stage following the approved roadmap.
 
 ## Permanent Engineering Rules (mandatory for every agent, stage, module, API, UI component)

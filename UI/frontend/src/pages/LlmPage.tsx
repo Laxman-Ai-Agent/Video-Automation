@@ -292,7 +292,14 @@ export const LlmPage: React.FC<LlmPageProps> = ({ onChanged, onBusyChange }) => 
           </div>
           <div>
             <label htmlFor="llm-model" style={label}>Model</label>
-            <input id="llm-model" value={model} onChange={(e) => setModel(e.target.value)} placeholder={info?.default_model} style={field} />
+            {info?.models?.length ? (
+              <select id="llm-model" data-testid="llm-model" value={model} onChange={(e) => setModel(e.target.value)} style={field}>
+                {!info.models.some((m) => m.id === model) && <option value={model}>{model}</option>}
+                {info.models.map((m) => <option key={m.id} value={m.id}>{m.name}</option>)}
+              </select>
+            ) : (
+              <input id="llm-model" data-testid="llm-model" value={model} onChange={(e) => setModel(e.target.value)} placeholder={info?.default_model} style={field} />
+            )}
           </div>
           {info?.needs_key && (
             <div>

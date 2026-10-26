@@ -5,6 +5,7 @@ from backend.main import app
 from backend import llm_client
 
 client = TestClient(app)
+_REAL_CLAUDE_CLI = llm_client._call_claude_cli      # conftest swaps the module attribute for a fake in every test
 
 
 @pytest.fixture(autouse=True)
@@ -73,16 +74,17 @@ ALL_KEYS = ("LLM_API_KEY", "GEMINI_API_KEY", "GOOGLE_API_KEY", "OPENAI_API_KEY",
 
 @pytest.fixture
 def bare_machine(monkeypatch):
-    """No API key in the environment, no Claude CLI, no Ollama."""
+    """No API key in the environment, no Claude CLI, no Antigravity, no Ollama."""
     for k in ALL_KEYS:
         monkeypatch.delenv(k, raising=False)
     monkeypatch.setattr(llm_client.shutil, "which", lambda t: None)
+    monkeypatch.setattr(llm_client, "_find_agy_exe", lambda: None)      # it is also found under ~/.gemini/bin, not only on PATH
     monkeypatch.setattr(llm_client, "_ollama_reachable", lambda: False)
 
 
 def _with_claude_cli(monkeypatch, reply="ok"):
     monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude" if t == "claude" else None)
-    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout: reply)
+    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout, model=None: reply)
 
 
 def test_detect_lists_what_this_machine_offers_without_revealing_a_key(bare_machine, monkeypatch):
@@ -90,8 +92,18 @@ def test_detect_lists_what_this_machine_offers_without_revealing_a_key(bare_mach
     monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude" if t == "claude" else None)
     res = client.get("/llm/detect")
     assert res.status_code == 200
-    assert [o["id"] for o in res.json()["options"]] == ["groq", "claude_cli"]
+    assert [o["id"] for o in res.json()["options"]] == ["claude_cli", "groq"]
     assert "gsk_secret_value_123" not in res.text
+
+
+def test_claude_code_is_tried_before_antigravity_and_an_api_key(bare_machine, monkeypatch):
+    monkeypatch.setenv("GROQ_API_KEY", "k")
+    monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude" if t == "claude" else None)
+    monkeypatch.setattr(llm_client, "_find_agy_exe", lambda: "/fake/agy")
+    assert [o["id"] for o in client.get("/llm/detect").json()["options"]] == ["claude_cli", "antigravity", "groq"]
+    assert llm_client.resolve_provider_config()[0] == "claude_cli"                    # provider `auto` follows the same order
+    monkeypatch.setattr(llm_client.shutil, "which", lambda t: None)
+    assert llm_client.resolve_provider_config()[0] == "antigravity"
 
 
 def test_detect_on_a_bare_machine_finds_nothing(bare_machine):
@@ -105,14 +117,14 @@ def test_auto_connect_keeps_the_first_provider_that_answers(bare_machine, monkey
 
     def fake_test(provider=None, model=None, api_key=None, base_url=None):
         calls.append((provider, model, base_url))
-        ok = provider == "claude_cli"
-        return {"ok": ok, "provider": provider, "model": model, "latency_ms": 5, "message": "up" if ok else "bad key"}
+        ok = provider == "groq"
+        return {"ok": ok, "provider": provider, "model": model, "latency_ms": 5, "message": "up" if ok else "not signed in"}
     monkeypatch.setattr(llm_client, "test_connection", fake_test)
     data = client.post("/llm/auto-connect").json()
-    assert data["connected"] is True and data["provider"] == "claude_cli"
-    assert [(r["id"], r["ok"]) for r in data["results"]] == [("groq", False), ("claude_cli", True)]
-    assert llm_client.load_settings()["provider"] == "claude_cli"
-    assert calls[0] == ("groq", "llama-3.3-70b-versatile", "")          # that provider's own default model and URL, never a leftover of the previous one
+    assert data["connected"] is True and data["provider"] == "groq"
+    assert [(r["id"], r["ok"]) for r in data["results"]] == [("claude_cli", False), ("groq", True)]
+    assert llm_client.load_settings()["provider"] == "groq"
+    assert calls[1] == ("groq", "llama-3.3-70b-versatile", "")          # that provider's own default model and URL, never a leftover of the previous one
 
 
 def test_auto_connect_records_a_verified_status_and_updates_the_header(bare_machine, monkeypatch):
@@ -134,7 +146,7 @@ def test_auto_connect_without_any_option_changes_nothing(bare_machine):
 def test_auto_connect_when_every_option_fails_changes_nothing(bare_machine, monkeypatch):
     llm_client.save_settings({"provider": "gemini", "model": "gemini-2.0-flash"})
     _with_claude_cli(monkeypatch)
-    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout: (_ for _ in ()).throw(llm_client.LlmError("not signed in")))
+    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout, model=None: (_ for _ in ()).throw(llm_client.LlmError("not signed in")))
     data = client.post("/llm/auto-connect").json()
     assert data["connected"] is False and [r["ok"] for r in data["results"]] == [False] and "not signed in" in data["results"][0]["message"]
     assert llm_client.load_settings()["provider"] == "gemini"
@@ -143,6 +155,46 @@ def test_auto_connect_when_every_option_fails_changes_nothing(bare_machine, monk
 def test_an_unknown_provider_is_rejected_and_auto_is_accepted(bare_machine):
     assert client.post("/llm/settings", json={"provider": "not-a-provider"}).status_code == 422
     assert client.post("/llm/settings", json={"provider": "auto"}).status_code == 200
+
+
+def _claude_command(monkeypatch, model):
+    """The command line the real Claude CLI wrapper would run for `model` (the process itself is faked)."""
+    monkeypatch.delenv("PROMPTGEN_MODEL", raising=False)
+    monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude")
+    seen = []
+
+    def run(cmd, **kwargs):
+        seen.append(cmd)
+        return type("R", (), {"stdout": '{"result": "ok", "usage": {}}', "stderr": ""})()
+    monkeypatch.setattr(llm_client.subprocess, "run", run)
+    assert _REAL_CLAUDE_CLI("hi", "", 30, model=model) == "ok"
+    return seen[0]
+
+
+def test_claude_cli_runs_with_the_chosen_model(monkeypatch):
+    cmd = _claude_command(monkeypatch, "claude-opus-5-5")
+    assert cmd[cmd.index("--model") + 1] == "claude-opus-5-5"
+
+
+def test_claude_cli_default_label_leaves_the_model_to_the_cli(monkeypatch):
+    assert "--model" not in _claude_command(monkeypatch, llm_client.DEFAULT_MODELS["claude_cli"])
+
+
+def test_the_model_saved_for_claude_cli_reaches_every_call(bare_machine, monkeypatch):
+    seen = []
+    monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude")
+    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout, model=None: seen.append(model) or "ok")
+    client.post("/llm/settings", json={"provider": "claude_cli", "model": "sonnet"})
+    llm_client.generate_text("hi")
+    assert client.post("/llm/test", json={}).json()["ok"] is True
+    assert seen == ["sonnet", "sonnet"]
+
+
+def test_claude_cli_offers_a_model_pick_list():
+    providers = {p["id"]: p for p in client.get("/llm/settings").json()["available_providers"]}
+    ids = [m["id"] for m in providers["claude_cli"]["models"]]
+    assert {"claude-code", "sonnet", "opus", "haiku"} <= set(ids)
+    assert providers["gemini"]["models"] == []                           # providers without a list keep the typed model name
 
 
 def test_checking_the_active_connection_updates_the_header_status(bare_machine, monkeypatch):
