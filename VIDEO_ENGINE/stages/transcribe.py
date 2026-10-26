@@ -1,6 +1,7 @@
 """python -m backend.transcribe projects/demo"""
 import hashlib
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -99,6 +100,27 @@ def load_transcript(pdir: Path) -> Transcript:
     raise FileNotFoundError(f"no transcript in {pdir}")
 
 
+PARTIAL = "transcript.partial.json"      # the chunks Whisper finished in a run that was interrupted (deleted when the transcript is complete)
+
+
+def _load_partial(pf: Path, key: str, chunks: list[list[float]]) -> tuple[int, list[Segment]]:
+    """(chunks done, their segments) from an interrupted run of the same audio, model and chunking; nothing otherwise."""
+    try:
+        d = json.loads(pf.read_text(encoding="utf-8"))
+        if d["key"] == key and d["chunks"] == chunks and 0 < d["done"] <= len(chunks):
+            return d["done"], [Segment.model_validate(s) for s in d["segments"]]
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
+    return 0, []
+
+
+def _save_partial(pf: Path, key: str, chunks: list[list[float]], done: int, out: list[Segment]) -> None:
+    """Atomic (temp file + rename): a kill during the write never leaves a half-written checkpoint."""
+    tmp = pf.with_suffix(".json.part")
+    tmp.write_text(json.dumps({"key": key, "chunks": chunks, "done": done, "segments": [s.model_dump() for s in out]}, ensure_ascii=False), encoding="utf-8")
+    os.replace(tmp, pf)
+
+
 def transcribe(pdir: Path, progress=None) -> Transcript:
     """progress(percent) is optional; job.json is owned by backend/pipeline.py."""
     audio = find_audio(pdir)
@@ -121,8 +143,13 @@ def transcribe(pdir: Path, progress=None) -> Transcript:
     model = WhisperModel(config.WHISPER_MODEL, device=config.WHISPER_DEVICE, compute_type=config.WHISPER_COMPUTE,
                          local_files_only=config.WHISPER_LOCAL_ONLY)
     pcm = decode_audio(str(wav), sampling_rate=16000)
-    out: list[Segment] = []
-    for a, b in chunk_points(wav, config.WHISPER_CHUNK_MAX, config.WHISPER_CHUNK_MIN):
+    chunks = [list(c) for c in chunk_points(wav, config.WHISPER_CHUNK_MAX, config.WHISPER_CHUNK_MIN)]
+    pf = pdir / PARTIAL
+    done, out = _load_partial(pf, h, chunks)
+    if done and progress:
+        progress(100 * chunks[done - 1][1] / total)      # a resumed run shows where it continues, not 0%
+    for i in range(done, len(chunks)):
+        a, b = chunks[i]
         segs, _ = model.transcribe(pcm[int(a * 16000):int(b * 16000)], language="te", word_timestamps=True,
                                    vad_filter=False, condition_on_previous_text=False)
         for s in segs:
@@ -130,13 +157,16 @@ def transcribe(pdir: Path, progress=None) -> Transcript:
             # Whisper times the words by cross-attention and the segment by its own timestamp tokens: the last word can end a little after the segment (seen: 19.58 vs 19.42, while the next segment
             # starts at 19.58). A segment never ends before its own last word.
             out.append(Segment(id=len(out), start=a + s.start, end=max(a + s.end, words[-1].end) if words else a + s.end, text=s.text.strip(), words=words))
+        _save_partial(pf, h, chunks, i + 1, out)           # a restart or crash continues after this chunk
         if progress:
             progress(100 * b / total)
     if not any(s.words for s in out):   # nothing is written: an empty transcript would look like a finished step
+        pf.unlink(missing_ok=True)
         raise UserProblem("No speech was found in the audio. Check that it is Telugu speech and not music or noise.")
     t = Transcript(language="te", duration=round(total, 3), segments=out)
     tf.write_text(t.model_dump_json(indent=1), encoding="utf-8")
     hf.write_text(h)
+    pf.unlink(missing_ok=True)
     return t
 
 
