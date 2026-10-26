@@ -26,7 +26,8 @@ REGIONS = tuple(REGION_BOX)
 EDGE_REGIONS = ("full_frame",)                 # text over the whole frame has no safe area; left/right/top/bottom are placement intents (the layout stage keeps them inside the safe area)
 SAFE_AREA_POLICY = ("Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin "
                     "(in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background, or a real picture that is the backdrop of the scene, may fill the whole frame.")
-PLACEHOLDER = re.compile(r"placeholder|\btbd\b|\btodo\b|lorem ipsum|\bxxx+\b", re.I)
+PLACEHOLDER = re.compile(r"placeholder|\btbd\b|\btodo\b|lorem ipsum|\bxxx+\b", re.I)    # an unfilled value: a region, an id or an on-screen text that is a template word
+UNFINISHED = re.compile(r"\btbd\b|\btodo\b|lorem ipsum|\bxxx+\b", re.I)                  # a description is prose: it may legitimately say "a photo placeholder inside the phone mockup", it may not be unfinished
 TELUGU = re.compile(r"[ఀ-౿]")
 FIGURE = re.compile(r"\b(figures?|persons?|people|humans?|astronauts?|crew|explorers?|silhouettes?)\b", re.I)
 SINGLE = re.compile(r"\b(lone|single|solitary|alone|sole)\b", re.I)
@@ -382,7 +383,7 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
         rule("hierarchy", sid, bool(prim) and any(e["placement"]["priority"] < min(prim) for e in els if e["role"] != "primary"), 4, "warning", "hierarchy", f"{sid}: a supporting element has a higher priority than the primary one")
         odd = sorted({e["placement"]["region"] for e in els if e["placement"]["region"] not in REGIONS})
         rule("regions", sid, bool(odd), 3, "error", "region_unknown", f"{sid}: placement regions {odd} are not supported regions")
-        rule("no_placeholders", sid, any(PLACEHOLDER.search(f"{e['placement']['region']} {e['element_id']} {e.get('content') or ''} {e['visual_description']}") for e in els), 3, "error", "placeholder",
+        rule("no_placeholders", sid, any(PLACEHOLDER.search(f"{e['placement']['region']} {e['element_id']} {e.get('content') or ''}") or UNFINISHED.search(e["visual_description"]) for e in els), 3, "error", "placeholder",
              f"{sid}: an element still holds a placeholder value (placement, id, text or description)")
         rule("text_safe_area", sid, any(e["placement"]["region"] in EDGE_REGIONS for e in texts), 6, "warning", "text_outside_safe_area", f"{sid}: text is placed over the whole frame instead of a safe area")
         clash = clashes(els, s["element_relationships"], ctx["aspect"])

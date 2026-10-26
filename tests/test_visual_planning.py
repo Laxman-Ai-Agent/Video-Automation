@@ -327,6 +327,18 @@ def test_more_on_screen_texts_than_the_scenes_pattern_draws_is_an_error_that_nam
     assert '"max_texts": 1' in ask.asked[0][1] and '"max_texts": 2' in ask.asked[0][1] and "never give more" in ask.asked[0][1]
 
 
+def test_a_description_may_say_placeholder_but_an_unfinished_description_or_placeholder_text_is_rejected(tmp_path):
+    """Real case: 'a post card showing a clothes photo placeholder' describes a phone mockup; it is no unfilled value. TBD in a description, or 'placeholder' as the on-screen text, is."""
+    d, sp = project(tmp_path)
+    first = lambda r: r["scenes"][0]["elements"][0]
+    _, ok = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: first(r).update(visual_description="A phone mockup with a photo placeholder and a caption bubble filling in")))
+    assert ok == []
+    _, unfinished = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: first(r).update(visual_description="TBD")))
+    assert unfinished
+    _, text = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: next(e for e in r["scenes"][0]["elements"] if e["type"] == "text").update(content="placeholder")))
+    assert text
+
+
 def test_an_unsupported_or_placeholder_region_is_replaced_by_a_supported_one_and_the_change_is_recorded(tmp_path):
     d, sp = project(tmp_path)
     plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: next(e for e in r["scenes"][0]["elements"] if e["type"] == "text")["placement"].update(region="somewhere nice")))
