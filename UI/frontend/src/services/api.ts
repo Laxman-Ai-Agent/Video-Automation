@@ -216,6 +216,27 @@ export async function fetchSkills(): Promise<any[]> {
   }
 }
 
+export async function fetchSkillDetails(skillId: string): Promise<any | null> {
+  try {
+    const res = await fetch(`${API_BASE}/skills/${encodeURIComponent(skillId)}`);
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+export async function deleteSkill(skillId: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/skills/${encodeURIComponent(skillId)}`, {
+    method: 'DELETE'
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail?.message || err.detail || 'Failed to delete skill');
+  }
+  return await res.json();
+}
+
 export async function fetchLlmActive(): Promise<any> {
   try {
     const res = await fetch(`${API_BASE}/llm/active`);
@@ -340,7 +361,7 @@ export async function createProject(title: string, aspectRatio: string = '16:9')
   return await res.json();
 }
 
-export async function startProjectRun(projectId: string, autoPilot: boolean = true): Promise<any> {
+export async function startProjectRun(projectId: string, autoPilot: boolean = false): Promise<any> {
   try {
     const res = await fetch(`${API_BASE}/projects/${projectId}/orchestrator/run`, {
       method: 'POST',

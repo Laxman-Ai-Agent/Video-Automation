@@ -72,7 +72,7 @@ def test_skill_lookup_and_filtering():
     assert len(motion_skills) >= 2
 
     agent_skills = skill_registry.registry.search_skills(agent_id="motion_animation")
-    assert all("motion_animation" in s.compatible_agents for s in agent_skills)
+    assert all("motion_animation" in s.compatible_agents or "*" in s.compatible_agents for s in agent_skills)      # a wildcard skill (the agent workflow skills of .agents/skills) is for every agent
 
     query_skills = skill_registry.registry.search_skills(query="typography")
     assert any("kinetic_typography" in s.skill_id for s in query_skills)

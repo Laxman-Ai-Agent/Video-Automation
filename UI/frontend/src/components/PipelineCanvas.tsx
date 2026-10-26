@@ -156,57 +156,8 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
     }
   };
 
-  // Auto-advance to next downstream stage when previous stage completes
-  const autoTriggeredStagesRef = React.useRef<Set<string>>(new Set());
-  const isAutoAdvancingRef = React.useRef<boolean>(false);
-
-  useEffect(() => {
-    if (isAnyStageRunning || isAutoAdvancingRef.current) return;
-    if (failedStage) return;
-
-    const pid = activeProjectId;
-    if (!pid || pid === 'sample-01' || projectState.projectId !== activeProjectId) return;
-
-    for (let i = 0; i < CANONICAL_12_STAGES.length; i++) {
-      const stage = CANONICAL_12_STAGES[i];
-      const stageState = projectState.stages[stage.id];
-      const isCompleted = stageState?.status === 'completed';
-
-      if (!isCompleted) {
-        const prevStage = i > 0 ? CANONICAL_12_STAGES[i - 1] : null;
-        const prevCompleted = prevStage ? projectState.stages[prevStage.id]?.status === 'completed' : !isAudioMissing;
-
-        if (prevCompleted && !stageState?.waitingFor && (stageState?.status === 'waiting' || stageState?.status === 'queued' || stageState?.status === 'idle')) {
-          if (stage.id === 'motion_validation') {
-            break;
-          }
-
-          const autoKey = `${pid}:${stage.id}`;
-          if (!autoTriggeredStagesRef.current.has(autoKey)) {
-            autoTriggeredStagesRef.current.add(autoKey);
-            isAutoAdvancingRef.current = true;
-            setActionMessage(`Auto-starting Stage ${String(stage.order).padStart(2, '0')}: ${stage.label}...`);
-            runStage(pid, stage.id)
-              .then(() => {
-                setAutoFailure(null);
-                setActionMessage(`Stage ${stage.label} started automatically.`);
-                if (onReloadState) onReloadState();
-                setTimeout(() => setActionMessage(null), 3500);
-              })
-              .catch((err: any) => {
-                console.warn(`Auto-advance for stage ${stage.id} failed:`, err);
-                setActionMessage(null);
-                setAutoFailure({ stageId: stage.id, label: stage.label, message: String(err?.message || err) });
-              })
-              .finally(() => {
-                isAutoAdvancingRef.current = false;
-              });
-          }
-        }
-        break;
-      }
-    }
-  }, [projectState.stages, isAnyStageRunning, failedStage, isAudioMissing, projectState.projectId, activeProjectId, onReloadState]);
+  // Manual Execution Mode: Automatic cascading and auto-advance have been removed.
+  // Each stage must be triggered explicitly by the user via the RUN button.
 
   // Load pending approvals
   const loadApprovals = async () => {

@@ -189,6 +189,7 @@ def list_skills(
 def get_skill(skill_id: str, version: str | None = None) -> dict[str, Any]:
     """Retrieves metadata and verified instructions for a specific skill."""
     try:
+        skill_registry.record_skill_usage(skill_id)
         record, content = skill_registry.registry.get_skill(
             skill_id,
             version=version,
@@ -203,6 +204,17 @@ def get_skill(skill_id: str, version: str | None = None) -> dict[str, Any]:
         raise HTTPException(status_code=403, detail=str(e))
     except skill_registry.SkillVerificationError as e:
         raise HTTPException(status_code=422, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.delete("/{skill_id}")
+def delete_skill(skill_id: str) -> dict[str, Any]:
+    """Permanently deletes an agent skill from .agents/skills/ or removes it from catalog."""
+    try:
+        return skill_registry.registry.delete_skill(skill_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail=f"Skill '{skill_id}' not found")
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -19,7 +19,7 @@ class RunRequestBody(BaseModel):
     max_retries: int = Field(default=3, ge=0, le=10)
     idempotency_key: str | None = None
     synchronous: bool = False
-    auto_pilot: bool = True
+    auto_pilot: bool = False
 
 
 class CancelRequestBody(BaseModel):

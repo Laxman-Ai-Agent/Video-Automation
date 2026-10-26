@@ -25,7 +25,7 @@ STEP_REPORTS = {                                                                
     "final": "delivery_summary{sfx}.json",
 }
 EVIDENCE_CHARS = 30_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
-CHECK_VERSION = "2.5"                                                          # cache version: bump to invalidate stale checks across all projects
+CHECK_VERSION = "2.6"                                                          # cache version: bump to invalidate stale checks across all projects
 _running: set[tuple[str, str]] = set()
 _active_step: dict[tuple[str, str], int] = {}
 _lock = threading.Lock()
@@ -838,23 +838,83 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
             "scene_count": len(scenes),
         }
         if n == 1:
-            ev["narrative_roles"] = [s.get("narrative_role") for s in scenes]
+            ev["narrative_roles"] = [s.get("scene_objective", {}).get("narrative_role") for s in scenes]
+            ev["scene_objectives"] = [
+                {
+                    "scene_id": s.get("scene_id"),
+                    "narrative_role": s.get("scene_objective", {}).get("narrative_role"),
+                    "core_meaning": (s.get("scene_objective", {}).get("core_meaning") or "")[:80],
+                    "audience_takeaway": (s.get("scene_objective", {}).get("audience_takeaway") or "")[:80],
+                }
+                for s in scenes
+            ]
         elif n == 2:
             ev["visual_concepts_count"] = sum(1 for s in scenes if s.get("visual_concept"))
-            ev["animation_cues_count"] = sum(len(s.get("word_cues", [])) for s in scenes)
+            ev["animation_cues_count"] = sum(len(s.get("word_animation_events", [])) for s in scenes)
+            ev["visual_concepts_summary"] = [
+                {
+                    "scene_id": s.get("scene_id"),
+                    "representation": s.get("visual_concept", {}).get("representation"),
+                    "primary_focus": s.get("visual_concept", {}).get("primary_focus"),
+                    "word_cues_count": len(s.get("word_animation_events", [])),
+                }
+                for s in scenes
+            ]
         elif n == 3:
-            ev["total_elements"] = sum(len(s.get("elements", [])) for s in scenes)
+            total_elems = sum(len(s.get("elements", [])) for s in scenes)
+            depth_layers = [e.get("depth_layer") for s in scenes for e in s.get("elements", []) if e.get("depth_layer")]
+            ev["total_elements"] = total_elems
+            ev["elements_by_scene"] = {s.get("scene_id"): len(s.get("elements", [])) for s in scenes}
+            ev["depth_layering_defined"] = len(depth_layers) > 0
+            ev["totals_by_type"] = report.get("totals", {})
         elif n == 4:
-            ev["total_relationships"] = sum(len(s.get("relationships", [])) for s in scenes)
+            total_rels = sum(len(s.get("element_relationships", [])) for s in scenes)
+            ev["total_relationships"] = total_rels
+            ev["relationships_by_scene"] = {
+                s.get("scene_id"): [
+                    f"{r.get('source')} --({r.get('relation')})--> {r.get('target')}"
+                    for r in s.get("element_relationships", [])
+                ]
+                for s in scenes if s.get("element_relationships")
+            }
         elif n == 5:
+            real_count = sum(len(s.get("media_requirements", [])) for s in scenes)
             ev["media_mix"] = mix
+            ev["real_media_requirements_count"] = real_count
+            ev["target_shares"] = mix.get("target")
+            ev["actual_shares"] = mix.get("actual")
         elif n == 6:
             ev["timing_text_valid"] = True
-            ev["scene_timings"] = [{"scene_index": s.get("scene_index", i+1), "duration": s.get("duration")} for i, s in enumerate(scenes[:4])]
+            ev["scene_timings"] = [
+                {
+                    "scene_id": s.get("scene_id"),
+                    "start_seconds": s.get("narration", {}).get("start_seconds"),
+                    "end_seconds": s.get("narration", {}).get("end_seconds"),
+                    "duration_seconds": round((s.get("narration", {}).get("end_seconds") or 0) - (s.get("narration", {}).get("start_seconds") or 0), 2),
+                    "timestamp_source": s.get("narration", {}).get("timestamp_source"),
+                    "has_narration_text": bool(s.get("narration", {}).get("text")),
+                }
+                for s in scenes
+            ]
+            ev["source_mapping"] = report.get("source_mapping", {})
         elif n == 7:
-            ev["style_continuity"] = report.get("style") or report.get("continuity")
+            ev["visual_style"] = report.get("visual_style")
+            ev["scene_continuity"] = [
+                {
+                    "scene_id": s.get("scene_id"),
+                    "previous_scene_id": s.get("continuity", {}).get("previous_scene_id"),
+                    "next_scene_id": s.get("continuity", {}).get("next_scene_id"),
+                    "motifs": s.get("continuity", {}).get("motifs", []),
+                    "transition_intent": s.get("continuity", {}).get("transition_intent"),
+                }
+                for s in scenes
+            ]
         elif n == 8:
             ev["validation"] = val
+            ev["planned_scenes"] = (report.get("source_mapping") or {}).get("planned_scenes", len(scenes))
+            ev["canonical_scenes"] = (report.get("source_mapping") or {}).get("canonical_scenes")
+            ev["checks_passed"] = (val.get("checks") or {}).get("passed")
+            ev["checks_total"] = (val.get("checks") or {}).get("total")
         return ev
 
     evidence = {
@@ -1016,10 +1076,27 @@ def _step_guidance(stage_id: str, step: dict) -> str:
             "Confirm the step if the evidence supports this."
         )
     if stage_id == "planning":
+        specific = ""
+        if n == 1:
+            specific = "Verify that all scenes have narrative roles, core meanings, and audience takeaways in scene_objectives. Confirm the step if supported."
+        elif n == 2:
+            specific = "Verify visual concepts count and word-level animation cues in visual_concepts_count and animation_cues_count against the recorded detail. Confirm the step if supported."
+        elif n == 3:
+            specific = "Verify total elements count and depth layering across scenes against the recorded detail. Confirm the step if supported."
+        elif n == 4:
+            specific = "Verify total relationships count in total_relationships and relationships_by_scene against the recorded detail. Confirm the step if supported."
+        elif n == 5:
+            specific = "Verify real media requirements count and media mix shares against the recorded detail. Note: A minor difference (within 15 percentage points) between target and actual media shares is normal and valid. Confirm the step if supported."
+        elif n == 6:
+            specific = "Verify scene start/end timings and narration groundings in scene_timings against the recorded detail. Confirm the step if supported."
+        elif n == 7:
+            specific = "Verify project visual_style and scene_continuity (previous/next links) against the recorded detail. Confirm the step if supported."
+        elif n == 8:
+            specific = "Verify validation status is 'ok', errors count is 0, and deterministic checks passed against the recorded detail. Confirm the step if supported."
         return (
             f"Step Guidance (Visual Planning Step {n} - {step.get('name')}):\n"
             f"Recorded detail: '{step.get('detail')}'. Status: '{step.get('status')}'.\n"
-            "Verify that the recorded status and detail are supported by and consistent with the visual planning evidence. "
+            f"{specific}\n"
             "Confirm the step if the evidence supports this."
         )
     if stage_id == "segmentation":

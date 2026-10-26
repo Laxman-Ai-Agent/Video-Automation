@@ -54,7 +54,7 @@ def save_status(status_data: dict[str, Any]) -> None:
 
 
 DEFAULT_MODELS: dict[str, str] = {
-    "antigravity": "gemini-3.8-flash-low",
+    "antigravity": "gemini-3.8-flash-high",
     "gemini": "gemini-3.5-flash",       # gemini-2.0-flash and 1.5 were retired by Google (404 "no longer available"); check https://ai.google.dev/gemini-api/docs/models when this one is retired too
     "openai": "gpt-4o-mini",
     "anthropic": "claude-3-5-sonnet-20241022",
@@ -68,6 +68,14 @@ DEFAULT_MODELS: dict[str, str] = {
 # Models a provider offers as a pick-list on the LLM page (providers not listed take a typed model name).
 # claude_cli: the ids `claude --model` accepts; an alias (sonnet/opus/haiku) always follows that family's latest model.
 PROVIDER_MODELS: dict[str, list[dict[str, str]]] = {
+    "antigravity": [
+        {"id": "gemini-3.8-flash-high", "name": "Gemini 3.8 Flash (High)"},
+        {"id": "gemini-3.8-flash-medium", "name": "Gemini 3.8 Flash (Medium)"},
+        {"id": "gemini-3.8-flash-low", "name": "Gemini 3.8 Flash (Low)"},
+        {"id": "claude-sonnet-4-6", "name": "Claude Sonnet 4.6 (Thinking)"},
+        {"id": "claude-opus-4-6", "name": "Claude Opus 4.6 (Thinking)"},
+        {"id": "gpt-oss-120b", "name": "GPT-OSS 120B (Medium)"},
+    ],
     "claude_cli": [
         {"id": "claude-code", "name": "Claude Code default (the model the CLI itself is set to)"},
         {"id": "sonnet", "name": "Sonnet (latest)"},
@@ -480,8 +488,10 @@ def normalize_antigravity_model(model: str | None) -> str:
         return "Gemini 3.8 Flash (High)"
     if "flash" in m and "medium" in m:
         return "Gemini 3.8 Flash (Medium)"
-    if "flash" in m:
+    if "flash" in m and "low" in m:
         return "Gemini 3.8 Flash (Low)"
+    if "flash" in m:
+        return "Gemini 3.8 Flash (High)"
     if "sonnet" in m:
         return "Claude Sonnet 4.6 (Thinking)"
     if "opus" in m:
@@ -498,7 +508,7 @@ def normalize_antigravity_model(model: str | None) -> str:
     }
     if raw in valid_exact:
         return raw
-    return "Gemini 3.8 Flash (Low)"
+    return "Gemini 3.8 Flash (High)"
 
 
 @contextlib.contextmanager

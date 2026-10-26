@@ -15,6 +15,7 @@ import hashlib
 import json
 import os
 import re
+import shutil
 import threading
 from dataclasses import asdict, dataclass, field
 from datetime import datetime, timezone
@@ -40,6 +41,37 @@ SkillRiskLevel = Literal["low", "medium", "high", "critical"]
 SKILLS_DIR = (config.PROJECT_ROOT / "SYSTEM" / "skills") if (config.PROJECT_ROOT / "SYSTEM" / "skills" / "catalog.json").exists() else (config.PROJECT_ROOT / "skills")
 CATALOG_FILE = SKILLS_DIR / "catalog.json"
 STAGING_DIR = SKILLS_DIR / "staging"
+AGENTS_SKILLS_DIR = config.PROJECT_ROOT / ".agents" / "skills"
+USAGE_FILE = config.PROJECT_ROOT / "SYSTEM" / "config" / "skills_usage.json"
+
+
+def load_skills_usage() -> dict[str, Any]:
+    """Loads recorded execution/viewing timestamps for skills."""
+    if USAGE_FILE.exists():
+        try:
+            return json.loads(USAGE_FILE.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def save_skills_usage(usage: dict[str, Any]) -> None:
+    """Persists skill usage records to disk."""
+    USAGE_FILE.parent.mkdir(parents=True, exist_ok=True)
+    tmp = USAGE_FILE.with_suffix(".json.tmp")
+    tmp.write_text(json.dumps(usage, indent=2), encoding="utf-8")
+    os.replace(tmp, USAGE_FILE)
+
+
+def record_skill_usage(skill_id: str) -> None:
+    """Updates the last_used_at timestamp and invocation count for a skill."""
+    usage = load_skills_usage()
+    now = datetime.now(timezone.utc).isoformat()
+    entry = usage.get(skill_id, {})
+    entry["last_used_at"] = now
+    entry["use_count"] = entry.get("use_count", 0) + 1
+    usage[skill_id] = entry
+    save_skills_usage(usage)
 
 LEGAL_TRANSITIONS: dict[SkillStatus, set[SkillStatus]] = {
     "discovered": {"quarantined", "draft", "rejected"},
@@ -94,6 +126,7 @@ class SkillRecord:
     last_audited_at: str = ""
     created_at: str = ""
     updated_at: str = ""
+    last_used_at: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
 
     def to_dict(self) -> dict[str, Any]:
@@ -107,7 +140,7 @@ class SkillRecord:
 
 
 def verify_skill_path_confinement(rel_path: str, allow_staging: bool = True) -> Path:
-    """Ensures a given relative path resolves strictly inside skills/ or skills/staging.
+    """Ensures a given relative path resolves strictly inside skills/, .agents/skills/, or skills/staging.
     Rejects path traversal attacks (e.g. '../', '..\\').
     """
     if not rel_path or ".." in rel_path:
@@ -118,13 +151,31 @@ def verify_skill_path_confinement(rel_path: str, allow_staging: bool = True) -> 
 
     normalized = Path(rel_path.replace("\\", "/"))
 
-    target = (SKILLS_DIR / normalized).resolve()
-    base_skills = SKILLS_DIR.resolve()
+    candidates = [
+        (config.PROJECT_ROOT / normalized).resolve(),
+        (SKILLS_DIR / normalized).resolve(),
+    ]
 
-    try:
-        target.relative_to(base_skills)
-    except ValueError:
-        raise SkillSecurityError(f"Skill path escapes canonical skills root: {target}")
+    allowed_bases = [
+        SKILLS_DIR.resolve(),
+    ]
+    if AGENTS_SKILLS_DIR.exists():
+        allowed_bases.append(AGENTS_SKILLS_DIR.resolve())
+
+    target: Path | None = None
+    for cand in candidates:
+        for base in allowed_bases:
+            try:
+                cand.relative_to(base)
+                target = cand
+                break
+            except ValueError:
+                continue
+        if target:
+            break
+
+    if target is None:
+        raise SkillSecurityError(f"Skill path escapes canonical skills root: {rel_path!r}")
 
     if not allow_staging and STAGING_DIR.resolve() in target.parents:
         raise SkillSecurityError(f"Access to quarantined staging area disallowed: {target}")
@@ -319,6 +370,86 @@ class SkillRegistry:
             self._save()
             return record
 
+    def _discover_agent_skills(self) -> dict[str, SkillRecord]:
+        """Discovers and parses agent workflow skills from .agents/skills/."""
+        if not AGENTS_SKILLS_DIR.exists() or not AGENTS_SKILLS_DIR.is_dir():
+            return {}
+
+        results: dict[str, SkillRecord] = {}
+        now = datetime.now(timezone.utc).isoformat()
+        usage = load_skills_usage()
+
+        for d in AGENTS_SKILLS_DIR.iterdir():
+            if not d.is_dir() or d.name.startswith("."):
+                continue
+            skill_md = d / "SKILL.md"
+            if not skill_md.is_file():
+                continue
+
+            try:
+                content = skill_md.read_text(encoding="utf-8")
+                name = d.name.replace("-", " ").title()
+                summary = f"Agent workflow skill: {d.name}"
+                domain = "agent_workflows"
+                tags = ["agent", "workflow"]
+
+                if content.startswith("---"):
+                    parts = content.split("---", 2)
+                    if len(parts) >= 3:
+                        for line in parts[1].splitlines():
+                            if ":" in line and not line.strip().startswith("-"):
+                                k, v = line.split(":", 1)
+                                k = k.strip().lower()
+                                v = v.strip().strip("'\"")
+                                if k == "name":
+                                    name = v.replace("-", " ").title() if "-" in v else v
+                                elif k in ("description", "summary"):
+                                    summary = v
+                                elif k == "domain":
+                                    domain = v
+                                elif k == "tags":
+                                    tags.extend([t.strip() for t in v.split(",") if t.strip()])
+
+                sha = compute_file_sha256(skill_md)
+                rel_entrypoint = f".agents/skills/{d.name}/SKILL.md"
+
+                rec = SkillRecord(
+                    skill_id=d.name,
+                    name=name,
+                    summary=summary,
+                    domain=domain,
+                    tags=list(set(tags)),
+                    version="1.0.0",
+                    entrypoint=rel_entrypoint,
+                    status="approved",
+                    source="local",
+                    content_sha256=sha,
+                    license="Apache-2.0",
+                    license_evidence="Local agent skill installed via GitHub / CLI",
+                    capabilities=[d.name],
+                    compatible_agents=["*"],
+                    risk_level="low",
+                    approval={
+                        "reviewer": "agent_skills_scanner",
+                        "timestamp": now,
+                        "evidence": f"Scanned from {rel_entrypoint}",
+                    },
+                    last_audited_at=now,
+                    created_at=now,
+                    updated_at=now,
+                    last_used_at=usage.get(d.name, {}).get("last_used_at"),
+                    metadata={
+                        "scope": "agent_workflow",
+                        "is_agent_skill": True,
+                        "folder": d.name,
+                    },
+                )
+                results[d.name] = rec
+            except Exception as e:
+                logger.warning(f"Failed to scan agent skill '{d.name}': {e}")
+
+        return results
+
     def get_skill(self, skill_id: str, version: str | None = None, load_content: bool = True) -> tuple[SkillRecord, str]:
         """Retrieves a skill and optionally loads its validated instruction content.
         Enforces approved-only status for production loading and verifies content hash.
@@ -331,6 +462,9 @@ class SkillRegistry:
                     skill = self._skills.get("media.ffmpeg_operations")
                 elif skill_id == "media.ffmpeg_operations":
                     skill = self._skills.get("media_probe")
+            if not skill:
+                agent_skills = self._discover_agent_skills()
+                skill = agent_skills.get(skill_id)
             if not skill:
                 raise KeyError(f"Skill not found in catalog: {skill_id}")
 
@@ -484,6 +618,9 @@ class SkillRegistry:
                 elif skill_name == "media.ffmpeg_operations":
                     skill = self._skills.get("media_probe")
             if not skill:
+                agent_skills = self._discover_agent_skills()
+                skill = agent_skills.get(skill_name)
+            if not skill:
                 raise KeyError(
                     f"Skill '{skill_name}' not found for agent '{agent_id}' in local directory or central library."
                 )
@@ -542,14 +679,23 @@ class SkillRegistry:
             results: list[SkillRecord] = []
             q = query.lower().strip()
 
-            for skill in self._skills.values():
+            agent_skills = self._discover_agent_skills()
+            all_skills = dict(self._skills)
+            usage = load_skills_usage()
+            for sid, arec in agent_skills.items():
+                if sid not in all_skills:
+                    all_skills[sid] = arec
+
+            for skill in all_skills.values():
+                if not skill.last_used_at and skill.skill_id in usage:
+                    skill.last_used_at = usage[skill.skill_id].get("last_used_at")
                 if status and skill.status != status:
                     continue
                 if domain and skill.domain.lower() != domain.lower():
                     continue
                 if tag and tag.lower() not in [t.lower() for t in skill.tags]:
                     continue
-                if agent_id and agent_id not in skill.compatible_agents:
+                if agent_id and agent_id not in skill.compatible_agents and "*" not in skill.compatible_agents:
                     continue
 
                 if q:
@@ -603,9 +749,48 @@ class SkillRegistry:
         """Returns all registered skills, optionally filtered by status."""
         self.initialize()
         with self._lock:
+            agent_skills = self._discover_agent_skills()
+            all_skills = dict(self._skills)
+            usage = load_skills_usage()
+            for sid, arec in agent_skills.items():
+                if sid not in all_skills:
+                    all_skills[sid] = arec
+
+            for skill in all_skills.values():
+                if not skill.last_used_at and skill.skill_id in usage:
+                    skill.last_used_at = usage[skill.skill_id].get("last_used_at")
+
             if status is None:
-                return list(self._skills.values())
-            return [s for s in self._skills.values() if s.status == status]
+                return list(all_skills.values())
+            return [s for s in all_skills.values() if s.status == status]
+
+    def delete_skill(self, skill_id: str) -> dict[str, Any]:
+        """Deletes an agent workflow skill from .agents/skills/ or removes it from catalog.json."""
+        self.initialize()
+        with self._lock:
+            # 1. Check if it's in .agents/skills/
+            agent_skill_dir = AGENTS_SKILLS_DIR / skill_id
+            if agent_skill_dir.exists() and agent_skill_dir.is_dir():
+                shutil.rmtree(agent_skill_dir)
+                return {
+                    "success": True,
+                    "skill_id": skill_id,
+                    "type": "agent_workflow",
+                    "message": f"Agent skill '{skill_id}' successfully removed from .agents/skills",
+                }
+
+            # 2. Check if in central catalog
+            if skill_id in self._skills:
+                self._skills.pop(skill_id)
+                self._save()
+                return {
+                    "success": True,
+                    "skill_id": skill_id,
+                    "type": "catalog",
+                    "message": f"Skill '{skill_id}' successfully removed from catalog",
+                }
+
+            raise KeyError(f"Skill '{skill_id}' not found to delete")
 
     @staticmethod
     def audit_skill_content(content: str, filename: str = "") -> dict[str, Any]:

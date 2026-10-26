@@ -524,7 +524,7 @@ def evaluate_stage_eligibility(
 class PipelineOrchestrator:
     """Authoritative Run Coordinator for the 12-stage Motion-Only pipeline."""
 
-    def __init__(self, project_id: str, aspect: str = "16:9", auto_pilot_mode: bool = True) -> None:
+    def __init__(self, project_id: str, aspect: str = "16:9", auto_pilot_mode: bool = False) -> None:
         self.project_id = project_id
         self.aspect = aspect
         self.auto_pilot_mode = auto_pilot_mode

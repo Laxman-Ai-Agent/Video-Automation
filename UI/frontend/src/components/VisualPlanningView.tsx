@@ -1,16 +1,21 @@
-import React, { useMemo, useState } from 'react';
-import { AlertTriangle, CheckCircle2, ChevronDown, ChevronRight, Film, Image as ImageIcon, Sparkles } from 'lucide-react';
-import { FAMILIES, FAMILY_LABEL, MediaFamily } from '../services/mediaMix';
+import React, { useState } from 'react';
+import styles from './VisualPlanningView.module.css';
+import { AlertTriangle, CheckCircle2, Film, Image as ImageIcon, Sparkles, Eye, Volume2 } from 'lucide-react';
+import { MediaFamily } from '../services/mediaMix';
+import { VisualSceneModal } from './VisualSceneModal';
 
-// What Visual Planning (visual_planning.json, schema 2.0) shows: the chosen media mix against what the plan reached, the count of every kind of element, and one row per scene.
-const COLOR: Record<MediaFamily, string> = { motion: 'var(--accent-blue)', image: 'var(--accent-cyan)', video: '#a78bfa' };
+const COLOR: Record<MediaFamily, string> = {
+  motion: 'var(--accent-blue, #3b82f6)',
+  image: 'var(--accent-cyan, #06b6d4)',
+  video: '#a78bfa'
+};
+
 const COUNT_COLUMNS: { key: string; label: string }[] = [
-  { key: 'text', label: 'Text' },
+  { key: 'text', label: 'Kinetic Text' },
   { key: 'icon', label: 'Icons' },
-  { key: 'graphic', label: 'Graphics' },
-  { key: 'image', label: 'Images' },
-  { key: 'video', label: 'Videos' },
-  { key: 'page', label: 'Pages' }
+  { key: 'graphic', label: 'Cards & Graphics' },
+  { key: 'image', label: 'Image Cards' },
+  { key: 'video', label: 'Video Frames' }
 ];
 
 interface VisualPlanningViewProps {
@@ -18,190 +23,209 @@ interface VisualPlanningViewProps {
   loading: boolean;
 }
 
-const card: React.CSSProperties = { backgroundColor: 'var(--bg-elevated)', border: '1px solid var(--border-card)', borderRadius: '8px', padding: '14px 18px' };
-const muted: React.CSSProperties = { fontSize: '11px', color: 'var(--text-muted)' };
-
-export const HeroBadge: React.FC<{ family: MediaFamily }> = ({ family }) => (
-  <span
-    data-testid={`hero-${family}`}
-    style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '2px 8px', borderRadius: '10px', fontSize: '11px', fontWeight: 700, color: COLOR[family], border: `1px solid ${COLOR[family]}`, whiteSpace: 'nowrap' }}
-  >
-    {family === 'image' ? <ImageIcon size={11} /> : family === 'video' ? <Film size={11} /> : <Sparkles size={11} />}
-    {FAMILY_LABEL[family]}
-  </span>
-);
-
-const MixBar: React.FC<{ mix: any }> = ({ mix }) => (
-  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
-    {FAMILIES.map((f) => {
-      const target = mix.target?.[f] ?? 0;
-      const actual = mix.actual?.[f] ?? 0;
-      const off = (mix.off_target || []).includes(f);
-      return (
-        <div key={f} data-testid={`mix-${f}`}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>
-            <span>{FAMILY_LABEL[f]}</span>
-            <span style={{ color: off ? 'var(--status-warning, #f59e0b)' : 'var(--text-primary)' }}>
-              {actual}% <span style={{ ...muted, fontWeight: 400 }}>of {target}% chosen</span>
-            </span>
-          </div>
-          <div style={{ position: 'relative', height: '8px', borderRadius: '4px', backgroundColor: 'var(--bg-card)', marginTop: '4px' }}>
-            <div style={{ width: `${actual}%`, height: '100%', borderRadius: '4px', backgroundColor: COLOR[f] }} />
-            <div title={`chosen ${target}%`} style={{ position: 'absolute', left: `${target}%`, top: '-3px', width: '2px', height: '14px', backgroundColor: 'var(--text-primary)' }} />
-          </div>
-        </div>
-      );
-    })}
-  </div>
-);
-
-const SceneDetails: React.FC<{ scene: any }> = ({ scene }) => {
-  const notes = (scene.validation_notes || []).filter((n: any) => n.severity !== 'info');
+export const HeroBadge: React.FC<{ family: MediaFamily }> = ({ family }) => {
+  const isImage = family === 'image';
+  const isVideo = family === 'video';
+  const label = isImage ? 'Motion + Image Card' : isVideo ? 'Motion + Video Frame' : 'Motion Graphics';
+  const color = isImage ? 'var(--accent-cyan, #06b6d4)' : isVideo ? '#c084fc' : 'var(--accent-blue, #3b82f6)';
   return (
-    <div style={{ display: 'grid', gap: '10px', padding: '10px 4px' }}>
-      <div style={{ fontSize: '12px', color: 'var(--text-primary)' }}>
-        <strong>{scene.scene_objective?.core_meaning}</strong>
-        <div style={muted}>{scene.narration?.text_en || scene.narration?.text}</div>
-      </div>
-      <div style={{ display: 'grid', gap: '4px' }}>
-        {(scene.elements || []).map((e: any) => (
-          <div key={e.element_id} style={{ display: 'grid', gridTemplateColumns: '90px 150px 1fr', gap: '8px', fontSize: '11.5px', alignItems: 'baseline' }}>
-            <span style={{ fontWeight: 700, color: e.type === 'image' || e.type === 'reference' ? COLOR.image : e.type === 'video' ? COLOR.video : 'var(--text-secondary)' }}>{e.type}</span>
-            <span style={{ ...muted, fontFamily: 'var(--font-mono)' }}>{e.element_id} · {e.role} · {e.placement?.region}</span>
-            <span style={{ color: 'var(--text-primary)' }}>{e.content ? `"${e.content}"` : e.visual_description}</span>
-          </div>
-        ))}
-      </div>
-      {(scene.media_requirements || []).map((r: any) => (
-        <div key={r.requirement_id} data-testid="media-requirement" style={{ border: '1px dashed var(--border-card)', borderRadius: '6px', padding: '8px 10px', fontSize: '11.5px', display: 'grid', gap: '2px' }}>
-          <div><strong>{r.media_type === 'video' ? 'Clip' : r.media_type === 'reference' ? 'Reference page' : 'Photo'} {r.media_type === 'reference' ? `(${r.section})` : 'search'}:</strong> {r.query} <span style={muted}>(also: {(r.alt_queries || []).join(', ') || '—'})</span></div>
-          <div style={muted}>If nothing suitable is found: {r.fallback}</div>
-          {r.ai_prompt && <div style={muted}>AI prompt: {r.ai_prompt}</div>}
-        </div>
-      ))}
-      {notes.length > 0 && (
-        <div style={{ fontSize: '11px', color: 'var(--status-warning, #f59e0b)' }}>
-          {notes.map((n: any, i: number) => (
-            <div key={i} style={{ display: 'flex', gap: '6px', alignItems: 'flex-start' }}><AlertTriangle size={12} style={{ marginTop: 2, flexShrink: 0 }} />{n.message}</div>
-          ))}
-        </div>
-      )}
-    </div>
+    <span
+      data-testid={`hero-${family}`}
+      className={styles.heroBadge}
+      style={{
+        color: color,
+        backgroundColor: isImage ? 'rgba(6, 182, 212, 0.12)' : isVideo ? 'rgba(192, 132, 252, 0.12)' : 'rgba(59, 130, 246, 0.12)',
+        border: `1px solid ${isImage ? 'rgba(6, 182, 212, 0.35)' : isVideo ? 'rgba(192, 132, 252, 0.35)' : 'rgba(59, 130, 246, 0.35)'}`
+      }}
+    >
+      {isImage ? <ImageIcon size={11} /> : isVideo ? <Film size={11} /> : <Sparkles size={11} />}
+      {label}
+    </span>
   );
 };
 
 export const VisualPlanningView: React.FC<VisualPlanningViewProps> = ({ data, loading }) => {
-  const [open, setOpen] = useState<Record<string, boolean>>({});
+  const [selectedScene, setSelectedScene] = useState<any | null>(null);
+
   const scenes: any[] = data?.scenes || [];
   const totals = data?.totals || {};
   const errors: string[] = data?.validation?.errors || [];
   const warnings: string[] = data?.validation?.warnings || [];
-  const mix = data?.media_mix;
-  const first = useMemo(() => scenes[0]?.scene_id, [scenes]);
 
-  if (loading) return <div style={{ ...card, ...muted }} data-testid="visual-planning-loading">Loading the visual plan…</div>;
+  if (loading) {
+    return (
+      <div className={styles.loadingCard} data-testid="visual-planning-loading">
+        Loading the visual plan…
+      </div>
+    );
+  }
+
   if (!data) {
     return (
-      <div style={{ ...card, ...muted, textAlign: 'center', padding: '40px 16px' }} data-testid="visual-planning-empty">
+      <div className={styles.emptyCard} data-testid="visual-planning-empty">
         Visual Planning has not produced a plan for this project yet. Run the stage to plan what each scene shows.
       </div>
     );
   }
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }} data-testid="visual-planning-tab-content">
-      <div style={{ ...card, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px' }}>
+    <div className={styles.container} data-testid="visual-planning-tab-content">
+      {/* Header Info */}
+      <div className={styles.headerCard}>
         <div>
-          <div style={{ fontSize: '13.5px', fontWeight: 700, color: 'var(--text-primary)' }}>Visual Planning</div>
-          <div style={muted}>
-            {scenes.length} scenes · {data.visual_style?.category || 'style not named'} · {data.project?.aspect_ratio}
-            {data.stale ? ' · out of date (the scene plan or the media mix changed)' : ''}
+          <div className={styles.title}>Visual Planning</div>
+          <div className={styles.subtitle}>
+            {scenes.length} scenes · {data.visual_style?.category || 'Cinematic Motion Graphics'} · {data.project?.aspect_ratio}
+            {data.stale ? ' · out of date (the scene plan changed)' : ''}
           </div>
         </div>
         <span
           data-testid="visual-planning-validation"
-          style={{ display: 'inline-flex', alignItems: 'center', gap: '5px', fontSize: '12px', fontWeight: 700, color: errors.length ? 'var(--status-failed, #f87171)' : warnings.length ? 'var(--status-warning, #f59e0b)' : 'var(--status-completed, #34d399)' }}
+          className={`${styles.validationBadge} ${
+            errors.length ? styles.badgeError : warnings.length ? styles.badgeWarn : styles.badgeOk
+          }`}
         >
           {errors.length ? <AlertTriangle size={14} /> : <CheckCircle2 size={14} />}
           {errors.length ? `${errors.length} blocking error(s)` : warnings.length ? `${warnings.length} warning(s)` : 'all checks passed'}
         </span>
       </div>
 
-      {mix && (
-        <div style={card}>
-          <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.4px', marginBottom: '8px' }}>
-            Media mix — chosen at upload vs reached by the plan (share of the video's time)
+      {/* 100% Motion Graphics Banner */}
+      <div className={styles.motionBannerCard} data-testid="motion-format-banner">
+        <div className={styles.motionBannerHeader}>
+          <div className={styles.motionBadge}>
+            <Sparkles size={14} />
+            <span>100% Kinetic Motion Canvas</span>
           </div>
-          <MixBar mix={mix} />
-          <div style={{ ...muted, marginTop: '8px' }} data-testid="mix-note">
-            {mix.off_target?.length ? mix.note : 'Within the tolerance of the chosen shares.'}{mix.ai_images ? ' · AI-picture prompts are written for every image.' : ''}
-          </div>
+          <span className={styles.motionBannerSub} data-testid="mix-note">
+            All scenes are rendered as animated motion graphics. Images and video clips are embedded inside interactive motion cards, card decks, and device frames synchronized with dialogue.
+          </span>
         </div>
-      )}
+      </div>
 
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }} data-testid="visual-planning-totals">
+      {/* Totals Summary */}
+      <div className={styles.totalsGrid} data-testid="visual-planning-totals">
         {COUNT_COLUMNS.map((c) => (
-          <div key={c.key} style={{ ...card, padding: '10px 16px', minWidth: '96px' }}>
-            <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--text-primary)' }}>{totals[c.key] ?? 0}</div>
-            <div style={muted}>{c.label}</div>
+          <div key={c.key} className={styles.totalCard}>
+            <div className={styles.totalValue}>{totals[c.key] ?? 0}</div>
+            <div className={styles.totalLabel}>{c.label}</div>
           </div>
         ))}
       </div>
 
-      <div style={{ ...card, padding: 0, overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }} data-testid="visual-planning-table">
+      {/* Scenes Table */}
+      <div className={styles.tableCard}>
+        <table className={styles.table} data-testid="visual-planning-table">
           <thead>
-            <tr style={{ textAlign: 'left', color: 'var(--text-muted)', borderBottom: '1px solid var(--border-card)' }}>
-              <th style={{ padding: '8px 12px' }}>Scene</th>
-              <th style={{ padding: '8px 6px' }}>Primary</th>
-              {COUNT_COLUMNS.map((c) => <th key={c.key} style={{ padding: '8px 6px', textAlign: 'center' }}>{c.label}</th>)}
-              <th style={{ padding: '8px 12px' }}>Idea</th>
+            <tr>
+              <th className={styles.th}>Scene</th>
+              <th className={styles.th}>Format</th>
+              {COUNT_COLUMNS.map((c) => (
+                <th key={c.key} className={styles.thCenter}>
+                  {c.label}
+                </th>
+              ))}
+              <th className={styles.th}>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <Volume2 size={13} color="var(--accent-cyan)" />
+                  Original Narration
+                </span>
+              </th>
+              <th className={`${styles.th} ${styles.actionsCol}`}>Action</th>
             </tr>
           </thead>
           <tbody>
-            {scenes.map((s) => {
-              const isOpen = open[s.scene_id] ?? s.scene_id === first;
-              return (
-                <React.Fragment key={s.scene_id}>
-                  <tr
-                    data-testid={`scene-row-${s.scene_id}`}
-                    onClick={() => setOpen((o) => ({ ...o, [s.scene_id]: !isOpen }))}
-                    style={{ cursor: 'pointer', borderBottom: '1px solid var(--border-card)' }}
+            {scenes.map((s) => (
+              <tr
+                key={s.scene_id}
+                data-testid={`scene-row-${s.scene_id}`}
+                className={styles.tr}
+                onClick={() => setSelectedScene(s)}
+              >
+                {/* Scene & Time */}
+                <td className={styles.td}>
+                  <div className={styles.sceneIdCol}>
+                    <span className={styles.sceneIdText}>{s.scene_id}</span>
+                    <span className={styles.timeMuted}>
+                      {s.narration?.start_seconds?.toFixed?.(1)}–{s.narration?.end_seconds?.toFixed?.(1)} s
+                    </span>
+                  </div>
+                </td>
+
+                {/* Format: Motion / Motion + Card */}
+                <td className={styles.td}>
+                  <HeroBadge family={s.hero} />
+                </td>
+
+                {/* Element Counts */}
+                {COUNT_COLUMNS.map((c) => (
+                  <td
+                    key={c.key}
+                    data-testid={`count-${s.scene_id}-${c.key}`}
+                    className={`${styles.tdCenter} ${styles.countCell}`}
+                    style={{
+                      color: s.counts?.[c.key] ? 'var(--text-primary)' : 'var(--text-muted)'
+                    }}
                   >
-                    <td style={{ padding: '8px 12px', whiteSpace: 'nowrap', fontWeight: 600, color: 'var(--text-primary)' }}>
-                      {isOpen ? <ChevronDown size={12} /> : <ChevronRight size={12} />} {s.scene_id}
-                      <div style={muted}>{s.narration?.start_seconds?.toFixed?.(1)}–{s.narration?.end_seconds?.toFixed?.(1)} s</div>
-                    </td>
-                    <td style={{ padding: '8px 6px' }}><HeroBadge family={s.hero} /></td>
-                    {COUNT_COLUMNS.map((c) => (
-                      <td key={c.key} data-testid={`count-${s.scene_id}-${c.key}`} style={{ padding: '8px 6px', textAlign: 'center', color: s.counts?.[c.key] ? 'var(--text-primary)' : 'var(--text-muted)' }}>
-                        {s.counts?.[c.key] ?? 0}
-                      </td>
-                    ))}
-                    <td style={{ padding: '8px 12px', color: 'var(--text-secondary)', minWidth: '220px' }}>{s.visual_concept?.description}</td>
-                  </tr>
-                  {isOpen && (
-                    <tr>
-                      <td colSpan={COUNT_COLUMNS.length + 3} style={{ padding: '4px 16px 12px', backgroundColor: 'var(--bg-card)' }}>
-                        <SceneDetails scene={s} />
-                      </td>
-                    </tr>
+                    {s.counts?.[c.key] ?? 0}
+                  </td>
+                ))}
+
+                {/* Original Narration (Telugu & English) */}
+                <td className={`${styles.td} ${styles.narrationCol}`}>
+                  <div className={styles.narrationTelugu}>
+                    {s.narration?.text || s.scene_objective?.core_meaning || 'Narration not available'}
+                  </div>
+                  {s.narration?.text_en && (
+                    <div className={styles.narrationEnglish}>
+                      {s.narration.text_en}
+                    </div>
                   )}
-                </React.Fragment>
-              );
-            })}
+                </td>
+
+                {/* Action: View Modal Button */}
+                <td className={`${styles.td} ${styles.actionsCol}`} onClick={(e) => e.stopPropagation()}>
+                  <button
+                    type="button"
+                    className={styles.viewBtn}
+                    onClick={() => setSelectedScene(s)}
+                    data-testid={`scene-view-btn-${s.scene_id}`}
+                    title="View Full Scene Details"
+                  >
+                    <Eye size={13} />
+                    View Details
+                  </button>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>
 
+      {/* Validation Issues / Notes */}
       {(errors.length > 0 || warnings.length > 0) && (
-        <div style={card} data-testid="visual-planning-issues">
+        <div className={styles.issuesCard} data-testid="visual-planning-issues">
           {[...errors.map((m) => ({ m, error: true })), ...warnings.map((m) => ({ m, error: false }))].map((x, i) => (
-            <div key={i} style={{ display: 'flex', gap: '6px', fontSize: '11.5px', color: x.error ? 'var(--status-failed, #f87171)' : 'var(--status-warning, #f59e0b)', padding: '2px 0' }}>
-              <AlertTriangle size={12} style={{ marginTop: 2, flexShrink: 0 }} />{x.m}
+            <div
+              key={i}
+              className={styles.issueItem}
+              style={{
+                color: x.error ? 'var(--status-failed, #f87171)' : 'var(--status-warning, #f59e0b)'
+              }}
+            >
+              <AlertTriangle size={12} style={{ marginTop: 2, flexShrink: 0 }} />
+              <span>{x.m}</span>
             </div>
           ))}
         </div>
+      )}
+
+      {/* Full Detail Modal Popup */}
+      {selectedScene && (
+        <VisualSceneModal
+          scene={selectedScene}
+          onClose={() => setSelectedScene(null)}
+        />
       )}
     </div>
   );
