@@ -435,6 +435,15 @@ def _issues(val: dict, stage_name: str) -> dict:
     return {k: [x for x in val.get(k) or [] if x.get("stage") == stage_name] for k in ("errors", "warnings")}
 
 
+def _step_checks(report: dict, n: int, legacy: dict) -> dict:
+    """The checks one step made: its own rules as the stage recorded them (`by_stage`), so the step's "x of y" and its evidence are the same numbers. A report made before that was recorded falls back to the fixed rule list."""
+    checks = (report.get("validation") or {}).get("checks", {})
+    if (own := (checks.get("by_stage") or {}).get(str(n))) is not None:
+        return own
+    by_rule = checks.get("by_rule", {})
+    return {r: by_rule.get(r) for r in legacy.get(n, ("", ()))[1] if r in by_rule}
+
+
 def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
     """Builds focused, authoritative evidence for verifying a deterministic stage step.
     Ensures critical source metrics, sentences/clause splits, and validation fields are preserved
@@ -444,15 +453,14 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
 
     if stage_id == "motion_plan":
         n = step.get("n", 1)
-        rules = MOTION_PLAN_STAGE_RULES.get(n, ("", ()))[1]
-        by_rule = (report.get("validation") or {}).get("checks", {}).get("by_rule", {})
         return {
             "stage_n": n,
             "stage_name": step.get("name"),
             "recorded_detail": step.get("detail"),
             "validation_status": (report.get("validation") or {}).get("status"),
             "validation_errors": (report.get("validation") or {}).get("errors", []),
-            "stage_checks": {r: by_rule.get(r) for r in rules if r in by_rule},
+            "stage_checks": _step_checks(report, n, MOTION_PLAN_STAGE_RULES),
+            "composition": (report.get("output") or {}).get("composition"),
             "overall_summary": {
                 "passed": (report.get("validation") or {}).get("checks", {}).get("passed"),
                 "total": (report.get("validation") or {}).get("checks", {}).get("total"),
@@ -461,15 +469,13 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
 
     if stage_id == "motion_gen":
         n = step.get("n", 1)
-        rules = MOTION_GEN_STAGE_RULES.get(n, ("", ()))[1]
-        by_rule = (report.get("validation") or {}).get("checks", {}).get("by_rule", {})
         return {
             "stage_n": n,
             "stage_name": step.get("name"),
             "recorded_detail": step.get("detail"),
             "validation_status": (report.get("validation") or {}).get("status"),
             "validation_errors": (report.get("validation") or {}).get("errors", []),
-            "stage_checks": {r: by_rule.get(r) for r in rules if r in by_rule},
+            "stage_checks": _step_checks(report, n, MOTION_GEN_STAGE_RULES),
             "overall_summary": {
                 "passed": (report.get("validation") or {}).get("checks", {}).get("passed"),
                 "total": (report.get("validation") or {}).get("checks", {}).get("total"),
@@ -1018,7 +1024,7 @@ MOTION_PLAN_STAGE_RULES: dict[int, tuple[str, tuple[str, ...]]] = {
     10: ("Code & Plan Validator", ("ids_unique", "no_code", "mode_requirement")),
     11: ("Motion Test Runner", ("motion_checks", "motion_checks_ran")),
     12: ("Error Repair Handler", ()),
-    13: ("Remotion Output Adapter", ("adapter_fields", "composition_current", "contract")),
+    13: ("Remotion Output Adapter", ("adapter_fields", "contract")),
 }
 
 MOTION_GEN_STAGE_RULES: dict[int, tuple[str, tuple[str, ...]]] = {

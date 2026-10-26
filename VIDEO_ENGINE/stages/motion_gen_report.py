@@ -105,7 +105,8 @@ def build(pdir: Path, aspect: str, comp: dict, determinism: dict | None = None, 
            "scenes": scenes_out, "reuse": g.reuse, "output": out, "stages": stages,
            "validation": {"status": "error" if errors else "warning" if run.of("warning") else "ok", "errors": errors, "warnings": [i["message"] for i in run.of("warning")],
                           "checks": {"passed": sum(c[0] for c in run.counts.values()), "total": sum(c[1] for c in run.counts.values()),
-                                     "by_rule": {k: {"passed": v[0], "total": v[1]} for k, v in run.counts.items()}},
+                                     "by_rule": {k: {"passed": v[0], "total": v[1]} for k, v in run.counts.items()},
+                                     "by_stage": {str(n): {k: {"passed": v[0], "total": v[1]} for k, v in rs.items()} for n, rs in sorted(run.stage_rules.items())}},
                           "note": "no probability is claimed: the result is the list of checks that passed; a still-frame preview is a separate, manual check"},
            "repairs": repairs, "repair_passes": passes, "tests": tests, "needs_review": bool(errors) or bool(run.of("warning")), "source_fingerprint": "", "timings_seconds": {"build": round(time.perf_counter() - t0, 3)}}
     return rep, g.comp

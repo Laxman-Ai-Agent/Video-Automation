@@ -88,9 +88,7 @@ def resolve(vps: dict | None, m: dict, sid: str, run: Run, assets: dict[str, dic
             else:
                 el.update(status="unresolved", note="the scene has no graphic to carry it")
                 run.note(2, "error" if req else "warning", "no_safe_fallback", sid, f"{sid}: {eid} has no registry id and the scene has no graphic to carry it")
-        c2 = run.counts.setdefault("element_drawn", [0, 0])
-        c2[1] += 1
-        c2[0] += el["status"] in ("resolved", "approximate")
+        run.count("element_drawn", 2, el["status"] in ("resolved", "approximate"))
         out.append(el)
     if carried:
         acc = sid in run.accepted

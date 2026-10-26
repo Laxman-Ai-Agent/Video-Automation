@@ -473,17 +473,19 @@ def _run_build_script(pdir: Path, aspect: str, plan_only: bool) -> None:
         raise RuntimeError("build_composition failed: " + (r.stderr or r.stdout)[-400:])
 
 
+_STAGES_DIR = Path(__file__).resolve().parent.parent / "stages"
+
+
 def _motion_inputs(pdir: Path, aspect: str) -> list:
     return [pdir / "scene_plan.json", pdir / "visual_planning.json", pdir / "motion_fixes.json", *transcript_inputs(pdir), _audio(pdir) or "no-audio", _remotion_src_digest(),
             _REMOTION / "scripts" / "build_composition.ts", aspect, ("with-pictures" if __import__("SYSTEM.memory.store", fromlist=["uses_images"]).uses_images(pdir) else "motion-only"), config.MOTION_SPEED or "",
             *([f"style-kit:{config.STYLE_KIT}"] if config.STYLE_KIT not in ("", "0") else []),      # only when on: a project without a kit keeps its fingerprint
-            Path(__file__).with_name("motion_planning.py"), Path(__file__).with_name("motion_scenes.py")]
+            _STAGES_DIR / "motion_planning.py", _STAGES_DIR / "motion_scenes.py"]                  # the files that make the plan: a change in them must rebuild it
 
 
 def _generation_inputs() -> list:
     """What Motion Generation is made of besides the plan: the modules that check it and the renderer's validator."""
-    stages = Path(__file__).resolve().parent.parent / "stages"
-    return [stages / n for n in ("motion_generation.py", "motion_gen_rules.py", "motion_gen_report.py", "motion_animation.py")] + [_REMOTION / "scripts" / "motion_validate.ts"]
+    return [_STAGES_DIR / n for n in ("motion_generation.py", "motion_gen_rules.py", "motion_gen_report.py", "motion_animation.py")] + [_REMOTION / "scripts" / "motion_validate.ts"]
 
 
 def _planned(plan: dict) -> list:

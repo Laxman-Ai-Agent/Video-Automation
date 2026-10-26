@@ -37,7 +37,7 @@ from SYSTEM.core import media_kinds as mk
 from . import config, store, visual_planning
 
 SCHEMA = "1.0"
-VERSION = 2                                    # bump when the rules or the structure change (part of the fingerprint); 2: drawn elements (diagram), approximate status, drawn-text rules
+VERSION = 3                                    # bump when the rules or the structure change (part of the fingerprint); 2: drawn elements (diagram), approximate status, drawn-text rules; 3: one set of counts per step and rule (checks.by_stage), the stale composition is a note
 FPS = 30
 EPS = 0.04                                     # seconds: one frame of tolerance
 FIXES = "motion_fixes.json"                    # written by solve(): what "Solve warnings" changed (read by build_composition.ts --fixes and by build())
@@ -144,19 +144,20 @@ class Run:
         self.items: list[dict] = []
         self.counts: dict[str, list[int]] = {}
         self.by_stage: dict[int, list[int]] = {}
+        self.stage_rules: dict[int, dict[str, list[int]]] = {}                 # step -> rule -> [passed, total]: what each step's own checks were
         self.accepted: set[str] = set()                                       # scenes whose recorded fallback the user accepted with "Solve warnings"
 
+    def count(self, name: str, stage: int, ok: bool) -> None:
+        """One check of rule `name` at step `stage`: counted for the rule and for the step. The ONE place the counts are kept, so a step's "x of y checks passed" and its rules' counts always agree."""
+        for c in (self.counts.setdefault(name, [0, 0]), self.by_stage.setdefault(stage, [0, 0]), self.stage_rules.setdefault(stage, {}).setdefault(name, [0, 0])):
+            c[1] += 1
+            c[0] += ok
+
     def rule(self, name: str, stage: int, scene: str | None, bad: bool, severity: str, code: str, message: str) -> None:
-        c = self.counts.setdefault(name, [0, 0])
-        c[1] += 1
-        s = self.by_stage.setdefault(stage, [0, 0])
-        s[1] += 1
         bad = bad and not rule_switches.is_off(self.stage_id, name)
-        s[0] += not bad
+        self.count(name, stage, not bad)
         if bad:
             self.items.append({"stage": stage, "severity": severity, "code": code, "scene": scene, "message": message})
-        else:
-            c[0] += 1
 
     def note(self, stage: int, severity: str, code: str, scene: str | None, message: str) -> None:
         self.items.append({"stage": stage, "severity": severity, "code": code, "scene": scene, "message": message})
@@ -444,7 +445,8 @@ def build(pdir: Path, aspect: str, progress=None, run_tests: bool = True) -> dic
     if comp:
         same = pipeline._planned(mp) == pipeline._built(comp)
         out["composition"] = "matches the plan" if same else "differs from the plan: Motion Generation has to build it again"
-        run.rule("composition_current", 13, None, not same, "info", "composition_stale", "the composition on disk was built from an earlier plan: Motion Generation has to run again")
+        if not same:                                                    # a fact told, not a check of this stage: Motion Generation builds the composition after this plan
+            run.note(13, "info", "composition_stale", None, "the composition on disk was built from an earlier plan: Motion Generation has to run again")
     tests = {"motion_checks": run_checks(pdir) if run_tests else {"ok": None, "error": "not run"}}                  # stage 11
     ok = tests["motion_checks"]["ok"]
     run.rule("motion_checks", 11, None, ok is False, "error", "motion_checks_failed", f"the motion library's own checks failed: {tests['motion_checks'].get('failed')}")
@@ -491,11 +493,14 @@ def build(pdir: Path, aspect: str, progress=None, run_tests: bool = True) -> dic
             status = "failed" if er else "warning" if its else "completed"
             done = run.by_stage.get(n, [0, 0])
             detail = (er or its)[0]["message"] if its else (f"{done[0]} of {done[1]} {names[n]} checks passed" if done[1] else f"{names[n]} checked")
+            if n == 2 and not its and (fb := sum(1 for s in scenes for e in s["elements"] if e["status"] == "fallback")):
+                detail += f"; {fb} element(s) are recorded fallbacks carried by a graphic of their scene (not drawn one by one)"
         plan["stages"].append({"n": n, "name": STAGES[n - 1][0], "status": status, "detail": detail[:240]})
     errors = [i["message"] for i in run.of("error")]
     plan["validation"] = {"status": "error" if errors else "warning" if run.of("warning") else "ok", "errors": errors, "warnings": [i["message"] for i in run.of("warning")],
                           "checks": {"passed": sum(c[0] for c in run.counts.values()), "total": sum(c[1] for c in run.counts.values()),
-                                     "by_rule": {k: {"passed": v[0], "total": v[1]} for k, v in run.counts.items()}},
+                                     "by_rule": {k: {"passed": v[0], "total": v[1]} for k, v in run.counts.items()},
+                                     "by_stage": {str(n): {k: {"passed": v[0], "total": v[1]} for k, v in rs.items()} for n, rs in sorted(run.stage_rules.items())}},
                           "note": "no probability is claimed: the result is the list of checks that passed; the choice is the deterministic selector of the motion library"}
     plan["needs_review"] = bool(errors) or bool(run.of("warning"))
     plan["timings_seconds"] = {"build": round(time.perf_counter() - t0, 3)}

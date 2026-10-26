@@ -370,7 +370,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                     "warnings": mpl_val.get("warnings", []),
                     "errors": mpl_val.get("errors", []),
                     "accepted_fallbacks": by_rule.get("element_drawn", {}).get("total", 0) - by_rule.get("element_drawn", {}).get("passed", 0),
-                    "pending_downstream_checks": ["composition_current (updated downstream during Motion Generation)"] if by_rule.get("composition_current", {}).get("passed") != by_rule.get("composition_current", {}).get("total") else [],
+                    "pending_downstream_checks": ["composition (updated downstream during Motion Generation)"] if str((mpl.get("output") or {}).get("composition", "")).startswith("differs") else [],
                     "deterministic_verdict": "clean_pass" if not mpl_val.get("warnings") and not mpl_val.get("errors") else "needs_attention",
                 }
                 payload["scenes_detail"] = [
