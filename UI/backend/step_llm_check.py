@@ -25,7 +25,7 @@ STEP_REPORTS = {                                                                
     "final": "delivery_summary{sfx}.json",
 }
 EVIDENCE_CHARS = 30_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
-CHECK_VERSION = "2.4"                                                            # cache version: bump to invalidate stale checks across all projects
+CHECK_VERSION = "2.5"                                                          # cache version: bump to invalidate stale checks across all projects
 _running: set[tuple[str, str]] = set()
 _active_step: dict[tuple[str, str], int] = {}
 _lock = threading.Lock()

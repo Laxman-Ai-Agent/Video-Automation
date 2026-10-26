@@ -25,7 +25,7 @@ from .diagnose import UserProblem
 from .transcribe import TRANSCRIPT_FILES, Transcript, transcript_from_analysis_json
 
 SCHEMA = "1.1"
-VERSION = 2                                  # bump when the rules or the instructions to Claude change (part of the step fingerprint and of the cache key of Claude's answers)
+VERSION = 3                               # bump when the rules or the instructions to Claude change (part of the step fingerprint and of the cache key of Claude's answers)
 TIMING_RULES = 4                            # bump when only the rules for the scene times change (2: a scene ends where the next one starts when their words overlap; 3: a tiny last scene joins the one before it, for Claude's grouping too; 4: any scene shorter than the minimum joins a neighbour): old results are stale, Claude's cached answers stay valid
 # configurable guidance (environment A2V_SEG_*), soft limits: meaning comes first
 PAUSE_MIN = float(os.environ.get("A2V_SEG_PAUSE_MIN", "0.35"))         # a gap this long between two words is evidence of a boundary, never a boundary by itself
@@ -33,7 +33,8 @@ PAUSE_SCENE = float(os.environ.get("A2V_SEG_PAUSE_SCENE", "0.5"))      # the fal
 PAUSE_CLAUSE = float(os.environ.get("A2V_SEG_PAUSE_CLAUSE", "0.15"))   # a gap this long inside a sentence is a place where a scene MAY end
 SOFT_MIN = float(os.environ.get("A2V_SEG_SOFT_MIN", "3.0"))            # seconds: shorter scenes are merged (fallback) or noted
 SOFT_MAX = float(os.environ.get("A2V_SEG_SOFT_MAX", "12.0"))           # seconds: longer scenes are split at a clause (fallback) or noted
-LONG_UNIT = float(os.environ.get("A2V_SEG_LONG_UNIT", "6.0"))          # a sentence/clause longer than this may be cut between any two words (with MIN_SPLIT on both sides)
+LONG_TOL = float(os.environ.get("A2V_SEG_LONG_TOL", "0.5"))            # seconds: the guideline is soft, a scene a fraction of a second over SOFT_MAX (12.03s) is not a finding
+LONG_UNIT = float(os.environ.get("A2V_SEG_LONG_UNIT", "6.0"))         # a sentence/clause longer than this may be cut between any two words (with MIN_SPLIT on both sides)
 MIN_SPLIT = float(os.environ.get("A2V_SEG_MIN_SPLIT", "1.5"))
 TOL = 0.5
 END_MARKS = (".", "?", "!", "।")
@@ -112,6 +113,8 @@ def read_input(pdir: Path) -> dict:
     source_file = "transcript_corrected.json" if (pdir / "transcript_corrected.json").exists() else ("audio_analysis.json" if (pdir / "audio_analysis.json").exists() else "transcript.json")
     words, segs = [], []
     for s in t.segments:
+        if not s.words and not s.text.strip():   # a segment the transcript review emptied: nothing was said there, it is no word and no scene content
+            continue
         first = len(words)
         if s.words:
             for w in s.words:
@@ -431,7 +434,7 @@ def assemble(inp: dict, units: list[dict], cuts: dict[int, str], groups: list[di
             details.append({"code": "estimated_timing", "message": f"{len(est)} corrected word(s) have estimated times ({', '.join(est[:3])}{'...' if len(est) > 3 else ''})"})
         if dur < SOFT_MIN and len(groups) > 1:
             details.append({"code": "short_scene", "message": f"short scene ({dur:.1f}s, guideline {SOFT_MIN:g}-{SOFT_MAX:g}s)"})
-        if dur > SOFT_MAX:
+        if dur > SOFT_MAX + LONG_TOL:
             details.append({"code": "long_scene", "message": f"long scene ({dur:.1f}s, guideline {SOFT_MIN:g}-{SOFT_MAX:g}s): it may hold more than one idea"})
         segs = sorted({w["seg"] for w in seg_words})
         inside = last < len(ws) - 1 and ws[last]["seg"] == ws[last + 1]["seg"]       # the cut falls inside a transcript segment: intentional (the allowed-cut rule), recorded here
@@ -582,6 +585,7 @@ def run(pdir: Path, progress=None, ask=None) -> dict:
         },
         "candidate_cut_points_by_type": {
             "sentence_ends": sum(k == "sentence" for k in cuts.values()),
+            "clause_ends": sum(k == "clause_end" for k in cuts.values()),
             "clause_punctuation": clause_punct_cuts,
             "pauses": sum(k == "pause" for k in cuts.values()),
             "markers": sum(k == "marker" for k in cuts.values()),

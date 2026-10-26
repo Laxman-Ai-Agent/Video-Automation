@@ -145,6 +145,7 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
             stageRunning={isRunning}
             llmChecksRunning={Boolean(realSub?.llm_checks_running)}
             activeModel={realSub?.active_model || 'openai/gpt-oss-20b'}
+            stageId={config.id}
           />
         ))}
       </div>

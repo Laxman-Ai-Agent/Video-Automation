@@ -20,14 +20,10 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-/**
- * Returns a sleek Lucide icon and concise friendly label for each subtask.
- * Ensures cards don't suffer from clumsy text truncation and have strong visual identity.
- */
-export function getSubtaskVisualMeta(stepNum: number, name: string): { icon: React.ReactNode; shortLabel: string } {
-  const lower = (name || '').toLowerCase();
+type VisualMeta = { icon: React.ReactNode; shortLabel: string };
 
-  // Known Audio Analysis steps (1 - 14)
+/** The Audio Analyzer's own 14 steps. Step numbers mean nothing in other stages, so this is used for the analyzer only. */
+function analyzerMeta(stepNum: number, lower: string): VisualMeta | null {
   if (stepNum === 1 || lower.includes('file valid') || lower.includes('audio file')) {
     return { icon: <FileAudio size={22} />, shortLabel: 'Audio File' };
   }
@@ -70,6 +66,30 @@ export function getSubtaskVisualMeta(stepNum: number, name: string): { icon: Rea
   if (stepNum === 14 || lower.includes('caching') || lower.includes('resume')) {
     return { icon: <Database size={22} />, shortLabel: 'Cache & Resume' };
   }
+  return null;
+}
+
+/** Scene Segmentation's 7 steps (scene_segmentation.py STAGES). */
+const SEGMENTATION_META: Record<number, VisualMeta> = {
+  1: { icon: <FileSearch size={22} />, shortLabel: 'Data Reader' },
+  2: { icon: <AlignLeft size={22} />, shortLabel: 'Sentences' },
+  3: { icon: <BookOpen size={22} />, shortLabel: 'Semantics' },
+  4: { icon: <GitCompare size={22} />, shortLabel: 'Topic Changes' },
+  5: { icon: <Film size={22} />, shortLabel: 'Grouping' },
+  6: { icon: <Clock size={22} />, shortLabel: 'Timing' },
+  7: { icon: <ShieldCheck size={22} />, shortLabel: 'Validation' },
+};
+
+/**
+ * Returns a sleek Lucide icon and concise friendly label for each subtask.
+ * Ensures cards don't suffer from clumsy text truncation and have strong visual identity.
+ * The stage decides what a step number means: step 2 of Scene Segmentation is not the Audio Analyzer's "Metadata".
+ */
+export function getSubtaskVisualMeta(stepNum: number, name: string, stageId?: string): VisualMeta {
+  const lower = (name || '').toLowerCase();
+
+  const own = stageId === 'analyzer' ? analyzerMeta(stepNum, lower) : stageId === 'segmentation' ? SEGMENTATION_META[stepNum] : null;
+  if (own) return own;
 
   // General fallbacks for other pipeline stages
   if (lower.includes('scene') || lower.includes('segment')) {

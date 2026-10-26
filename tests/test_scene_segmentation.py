@@ -122,6 +122,40 @@ def test_a_segment_without_word_times_uses_sentence_times_and_says_so(tmp_path):
     assert out["validation"]["status"] == "warning" and out["stages"][6]["status"] == "warning"
 
 
+def test_a_segment_the_review_emptied_is_no_word_and_no_warning(tmp_path, short_scenes):
+    """The LLM review decides what stays: a segment whose words it removed has no text and no words. It must not become an empty 'word' with sentence times (a false word count and warning)."""
+    a, b = sentence(["ఒకటి", "రెండు."], 0.0), sentence(["మూడు", "నాలుగు."], 4.0)
+    t = Transcript(language="te", duration=8.0, segments=[Segment(id=0, start=0, end=a[-1].end, text="ఒకటి రెండు.", words=a),
+                                                           Segment(id=1, start=1.5, end=2.5, text="", words=[]),
+                                                           Segment(id=2, start=4.0, end=b[-1].end, text="మూడు నాలుగు.", words=b)])
+    (tmp_path / "transcript.json").write_text(t.model_dump_json(), encoding="utf-8")
+    inp = ss.read_input(tmp_path)
+    assert len(inp["words"]) == 4 and [s["id"] for s in inp["segments"]] == [0, 2]
+    out = ss.run(tmp_path, ask=Ask(scenes_of([1, 2])))
+    assert out["validation"]["warnings"] == [] and out["source_data"]["word_count"] == 4
+    assert [s["timing_source"] for s in out["scenes"]] == ["aligned_words"] and words_of(out) == "ఒకటి రెండు. మూడు నాలుగు."
+
+
+def test_the_cut_point_breakdown_adds_up_to_the_potential_cuts(tmp_path):
+    long = sentence(["ఇది,", "మొదటి", "భాగం", "గురించి", "మాట్లాడుతుంది,", "ఆ", "తర్వాత", "రెండో", "భాగం", "వస్తుంది."], 0.0, step=1.2)
+    short = sentence(["అది", "చివరి", "భాగం."], long[-1].end + 0.3)
+    project(tmp_path, [long, short])
+    d = ss.run(tmp_path, ask=Ask(scenes_of([1], [2], [3])))["sentence_and_clause_detection"]
+    by_type = d["candidate_cut_points_by_type"]
+    assert sum(by_type.values()) == d["potential_cut_count"] and by_type["clause_ends"] >= 1
+
+
+def test_a_scene_a_fraction_of_a_second_over_the_guideline_is_not_flagged_but_a_clearly_long_one_is(tmp_path):
+    def long_scene(step):
+        words = ["ఒకటి"] * 9 + ["రెండు."]
+        project(tmp_path, [sentence(words, 0.0, step=step)])
+        return ss.run(tmp_path, ask=Ask(by_words((1, 10))))["scenes"][0]
+    near = long_scene(1.208)                                              # 12.03 s: the guideline is 3-12 s
+    assert 12.0 < near["end_time"] - near["start_time"] < ss.SOFT_MAX + ss.LONG_TOL and near["warnings"] == []
+    far = long_scene(1.5)                                                 # 14.95 s
+    assert any("long scene" in str(w) for w in far["warnings"])
+
+
 def test_estimated_word_times_of_corrected_words_are_reported_not_hidden(tmp_path):
     ws = sentence(["ఒకటి", "రెండు", "మూడు."], 0.0)
     ws[1] = W("రెండు", ws[1].start, ws[1].end, timing="estimated")

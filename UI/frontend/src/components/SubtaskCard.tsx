@@ -34,6 +34,7 @@ export interface SubtaskCardProps {
   stageRunning?: boolean;
   llmChecksRunning?: boolean;
   activeModel?: string;
+  stageId?: string;
 }
 
 export const SubtaskCard: React.FC<SubtaskCardProps> = ({
@@ -42,6 +43,7 @@ export const SubtaskCard: React.FC<SubtaskCardProps> = ({
   stageRunning = false,
   llmChecksRunning = false,
   activeModel = 'gemini-3.8-flash-high',
+  stageId,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -221,7 +223,7 @@ export const SubtaskCard: React.FC<SubtaskCardProps> = ({
     },
   }[cardState];
 
-  const visual = getSubtaskVisualMeta(n, name);
+  const visual = getSubtaskVisualMeta(n, name, stageId);
   const isCardActive = cardState === 'in_progress';
   const isCardVerified = cardState === 'verified';
   const hasIssue = cardState === 'warning' || cardState === 'failed';

@@ -25,9 +25,14 @@ class ENTranscript(BaseModel):
     segments: list[ENSegment]
 
 
+def spoken(t) -> list:
+    """The segments that have something to translate: a segment the transcript review emptied (all its words removed) is not part of the narration."""
+    return [s for s in t.segments if s.text.strip()]
+
+
 def prepare(pdir: Path) -> str:
     t = load_transcript(pdir)
-    lines = [f"{s.id} [{s.start:.2f}-{s.end:.2f}] {s.text}" for s in t.segments]
+    lines = [f"{s.id} [{s.start:.2f}-{s.end:.2f}] {s.text}" for s in spoken(t)]
     txt = "Translate each Telugu line to clean English (keep meaning, fix obvious ASR slips). Keep ids.\n" + "\n".join(lines) + "\n"
     (pdir / "translate_input.txt").write_text(txt, encoding="utf-8")
     return txt
@@ -36,11 +41,11 @@ def prepare(pdir: Path) -> str:
 def merge(pdir: Path) -> ENTranscript:
     t = load_transcript(pdir)
     tr = {x["id"]: x["en"] for x in json.loads((pdir / "translation.json").read_text(encoding="utf-8"))["segments"]}
-    missing = [s.id for s in t.segments if s.id not in tr]
+    missing = [s.id for s in spoken(t) if s.id not in tr]
     if missing:
         raise ValueError(f"translation.json missing segment ids {missing}")
     en = ENTranscript(duration=t.duration, segments=[
-        ENSegment(id=s.id, start=s.start, end=s.end, te=s.text, en=tr[s.id]) for s in t.segments])
+        ENSegment(id=s.id, start=s.start, end=s.end, te=s.text, en=tr[s.id]) for s in spoken(t)])
     (pdir / "transcript_en.json").write_text(en.model_dump_json(indent=1), encoding="utf-8")
     return en
 
