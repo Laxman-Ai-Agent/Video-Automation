@@ -631,6 +631,8 @@ def run(pdir: Path, ask=None, progress=None) -> dict:
 FIX_HINTS = {
     "cluttered": "a scene may have at most 6 elements: drop or merge the least useful supporting/decoration elements (never one that is required) and remove every relationship, motion hint and beat reference to an element you drop",
     "text_ungrounded": "on-screen text must be words of this scene's own narration (narration_en and its words): use words that are in it, or drop the text element if no short phrase of the narration fits",
+    "brand_query": "rewrite media.query and every alt_query so they name only what a camera shows, with no brand, product or person name and no word made from one (e.g. 'youtuber recording video camera tripod' -> 'person recording video with camera on tripod')",
+    "real_media_alone": "keep the real picture or clip, and add one drawn element (a short text from the narration, or a graphic, diagram or chart) that says what the narration means",
 }
 
 

@@ -27,6 +27,8 @@ EDGE_REGIONS = ("full_frame",)                 # text over the whole frame has n
 SAFE_AREA_POLICY = ("Text and key graphics stay inside the central 90% of the frame (5% margin on every side). Captions and short text sit in the upper or lower caption band inside that margin "
                     "(in 9:16 above the bottom 16% that phone apps cover) and never over the primary visual; only a background, or a real picture that is the backdrop of the scene, may fill the whole frame.")
 PLACEHOLDER = re.compile(r"placeholder|\btbd\b|\btodo\b|lorem ipsum|\bxxx+\b", re.I)    # an unfilled value: a region, an id or an on-screen text that is a template word
+BRAND_STEMS = ("youtub", "instagram", "facebook", "whatsapp", "tiktok", "twitter", "chatgpt", "openai", "linkedin", "snapchat", "netflix", "photoshop", "google", "microsoft", "iphone", "samsung")   # a media query names what is visible, never a brand or a word made from one ('youtuber'); only stems that are no ordinary word ('apple', 'zoom', 'canva(s)' are): the LLM review catches the rest
+DRAWN_CARRIERS = ("text", "label", "graphic", "diagram", "chart", "data_visualization")    # what says the narration's meaning on top of a real picture or clip
 UNFINISHED = re.compile(r"\btbd\b|\btodo\b|lorem ipsum|\bxxx+\b", re.I)                  # a description is prose: it may legitimately say "a photo placeholder inside the phone mockup", it may not be unfinished
 TELUGU = re.compile(r"[ఀ-౿]")
 FIGURE = re.compile(r"\b(figures?|persons?|people|humans?|astronauts?|crew|explorers?|silhouettes?)\b", re.I)
@@ -435,6 +437,10 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
         for e in real:
             q = e["media"]["query"]
             rule("media_query_english", sid, bool(TELUGU.search(q)) or len(q.split()) > 8, 5, "error", "media_query", f"{sid}: the search query '{q}' of {e['element_id']} must be 2 to 6 plain English words")
+            brand = next((w for text in [q, *(e["media"].get("alt_queries") or [])] for w in re.findall(r"[a-z0-9]+", text.lower()) if w.startswith(BRAND_STEMS)), None)
+            rule("media_query_brand", sid, brand is not None, 5, "warning", "brand_query", f"{sid}: a search query of {e['element_id']} holds '{brand}', a brand or a word made from one: name only what is visible")
+        rule("real_media_with_meaning", sid, any(e["role"] == "primary" for e in real) and not any(e["type"] in DRAWN_CARRIERS for e in els), 5, "warning", "real_media_alone",
+             f"{sid}: a real picture or clip is the primary element and nothing drawn (text, graphic, diagram, chart) says what the narration means")
         known = set(words(f"{n['text']} {n.get('text_en') or ''}")) | allow
         for e in texts:
             c = (e.get("content") or "").strip()

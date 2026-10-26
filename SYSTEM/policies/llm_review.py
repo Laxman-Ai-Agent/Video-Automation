@@ -802,7 +802,9 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         user_prompt += (
             "- Evaluate the visual plan: does every scene show its narration's meaning, and is there visual diversity across scenes (motion graphics, real photos, real clips)?\n"
             "- media_mix compares the shares the user chose at upload (target) with what the plan reached (actual). A mix that is off because the narration has too few things a camera can show is acceptable "
-            "when the plan says so; a real photo or clip chosen only as decoration, or a scene whose narration is a concrete filmable subject that is drawn although the user asked for more real media, is a finding.\n"
+            "when the plan says so. The planner is told to ground an abstract narration in a concrete visual metaphor or real-world setting to reach the user's shares, so a real photo or clip used as a mood or metaphor is "
+            "NOT a finding when the same scene has drawn text or a graphic that says the narration's meaning (see counts: every scene keeps its drawn layer on top of the picture). It is a finding only when the real media is "
+            "the only carrier of the meaning, or shows something that contradicts or misleads the narration; a scene whose narration is a concrete filmable subject that is drawn although the user asked for more real media is also a finding.\n"
             "- Every real element (scenes_overview[].real_media) needs a plain-English query that names what is visible (never a brand or a person) and a motion fallback.\n"
             "- Verify all planned scenes are covered with zero blocking errors."
         )

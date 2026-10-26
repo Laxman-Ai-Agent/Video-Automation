@@ -168,6 +168,28 @@ def test_a_search_query_in_telugu_or_too_long_is_an_error(tmp_path):
     assert any("2 to 6 plain English words" in m for m in problems)
 
 
+def test_a_media_query_with_a_brand_or_a_word_made_from_one_is_a_warning_the_fixer_can_solve(tmp_path):
+    """Real case: 'youtuber recording video camera tripod' (a word made from YouTube) passed the checks and only the LLM review noticed it."""
+    d, sp = project(tmp_path)
+    brand = lambda r: r["scenes"][0]["elements"][0]["media"].update(query="youtuber recording video camera tripod")
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=brand))
+    assert problems == [] and "brand_query" in codes(plan) and "brand_query" in vp.FIX_HINTS
+    alt = lambda r: r["scenes"][0]["elements"][0]["media"].update(alt_queries=["open plan office", "Instagram reel studio"])
+    assert "brand_query" in codes(vp.assemble(d, sp, raw_for(sp, REAL, mutate=alt))[0])
+    plain = lambda r: r["scenes"][0]["elements"][0]["media"].update(query="painter at a canvas, apple on the desk")      # canvas and apple are ordinary words
+    assert "brand_query" not in codes(vp.assemble(d, sp, raw_for(sp, REAL, mutate=plain))[0])
+
+
+def test_a_real_picture_with_nothing_drawn_saying_the_meaning_is_a_warning(tmp_path):
+    """A real photo or clip may be a mood or a metaphor (the planner is told to), when text or a graphic says what the narration means."""
+    d, sp = project(tmp_path)
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL))
+    assert problems == [] and "real_media_alone" not in codes(plan)
+    alone = lambda r: r["scenes"][0].update(elements=[e for e in r["scenes"][0]["elements"] if e["type"] not in ("text", "label", "graphic", "diagram", "chart", "data_visualization")])
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=alone))
+    assert problems == [] and "real_media_alone" in codes(plan) and "real_media_alone" in vp.FIX_HINTS
+
+
 def test_a_family_with_a_zero_share_becomes_a_flat_graphic_and_says_so(tmp_path):
     d, sp = project(tmp_path, media={"motion": 70, "image": 30, "video": 0})
     plan, problems = vp.assemble(d, sp, raw_for(sp, {1: "image", 7: "video"}))
