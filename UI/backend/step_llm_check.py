@@ -53,6 +53,12 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
     has_tr = (pdir / "transcript.json").exists()
     has_rev = (pdir / "transcript_review.json").exists()
     has_cuts = (pdir / "cuts.json").exists()
+    try:
+        llm_status = (json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8")).get("llm") or {}).get("status")
+    except (OSError, ValueError):
+        llm_status = None
+    llm_done = llm_status in ("applied", "cached")
+    later = "measured when audio_analysis.json is written"             # what this interim report cannot know: it claims nothing about it
 
     job_file = pdir / "job.json"
     job = {}
@@ -154,27 +160,27 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
             {
                 "n": 8,
                 "name": "Raw vs Corrected Transcript (LLM)",
-                "status": "completed" if has_rev else ("running" if (has_tr and step == "refine") else "pending"),
-                "detail": "LLM transcript verification finished" if has_rev else ("LLM transcript verification in progress" if (has_tr and step == "refine") else "waits for Whisper transcription"),
-                "checks_passed": 1 if has_rev else 0,
+                "status": "completed" if llm_done else ("running" if (has_tr and step == "refine") else "pending"),
+                "detail": f"LLM transcript check: {llm_status}" if has_rev else ("LLM transcript verification in progress" if (has_tr and step == "refine") else "waits for Whisper transcription"),
+                "checks_passed": 1 if llm_done else 0,
                 "checks_total": 1,
                 "disabled": not has_tr,
             },
             {
                 "n": 9,
                 "name": "Word-Level Alignment",
-                "status": "completed" if has_rev else "pending",
-                "detail": "forced alignment timestamps synchronized" if has_rev else "waits for Whisper transcription",
-                "checks_passed": 1 if has_rev else 0,
+                "status": "pending",
+                "detail": later,
+                "checks_passed": 0,
                 "checks_total": 1,
                 "disabled": not has_tr,
             },
             {
                 "n": 10,
                 "name": "Word Timestamp Integrity",
-                "status": "completed" if has_rev else "pending",
-                "detail": "timestamp monotonic checks passed" if has_rev else "waits for Whisper transcription",
-                "checks_passed": 1 if has_rev else 0,
+                "status": "pending",
+                "detail": later,
+                "checks_passed": 0,
                 "checks_total": 1,
                 "disabled": not has_tr,
             },
@@ -190,18 +196,18 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
             {
                 "n": 12,
                 "name": "Audio Quality & Uncertainty Detection",
-                "status": "completed" if has_cuts else "pending",
-                "detail": "mean volume, peak volume and SNR verified" if has_cuts else "waits for Whisper transcription",
-                "checks_passed": 1 if has_cuts else 0,
+                "status": "pending",
+                "detail": later,
+                "checks_passed": 0,
                 "checks_total": 1,
                 "disabled": not has_tr,
             },
             {
                 "n": 13,
                 "name": "Final Audio Analysis Validation",
-                "status": "completed" if has_cuts else "pending",
-                "detail": "0 errors, 0 warnings" if has_cuts else "waits for Whisper transcription",
-                "checks_passed": 1 if has_cuts else 0,
+                "status": "pending",
+                "detail": later,
+                "checks_passed": 0,
                 "checks_total": 1,
                 "disabled": not has_tr,
             },

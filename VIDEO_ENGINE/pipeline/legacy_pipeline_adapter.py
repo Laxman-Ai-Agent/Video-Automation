@@ -290,9 +290,17 @@ def _refine(pdir, ctx):
     return f"{len(r['confidence']['flagged'])} uncertain words, {n} corrected, Claude: {r['llm']['status']}"
 
 
+CUTS_OUTPUTS = ("cuts.json", "audio_analysis.json")
+
+
+def _cuts_inputs(pdir: Path) -> list[Path]:
+    """The transcript files cuts reads, not the ones it writes: a fingerprint is of inputs only (audio_analysis.json is a transcript source and a cuts output)."""
+    return [f for f in transcript_inputs(pdir) if f.name not in CUTS_OUTPUTS]
+
+
 @step("cuts", requires=("transcript.json", "audio.*"), hint="run: python -m backend.cli transcribe <id>", tools=("ffmpeg",),
-      outputs=lambda p: [p / "cuts.json", p / "audio_analysis.json"],
-      fingerprint=lambda p, c: digest(*transcript_inputs(p), p / "transcript_review.json", _audio(p), config.SILENCE_MIN, config.SILENCE_DB))
+      outputs=lambda p: [p / n for n in CUTS_OUTPUTS],
+      fingerprint=lambda p, c: digest(*_cuts_inputs(p), p / "transcript_review.json", _audio(p), config.SILENCE_MIN, config.SILENCE_DB))
 def _cuts(pdir, ctx):
     from backend.audio_analysis import write as write_analysis
     from backend.cuts import make_cuts

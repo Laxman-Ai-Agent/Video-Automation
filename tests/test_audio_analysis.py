@@ -42,6 +42,22 @@ def test_timing_checks_catch_bad_times_and_untimed_segments():
     assert aa.check_timing([{"id": 0, "text": "x", "start_seconds": 0, "end_seconds": 1, "words": [w(0, 0, 1)]}], 1.0) == ([], [])
 
 
+def test_cuts_fingerprint_is_of_inputs_only(tmp_path):
+    """cuts writes audio_analysis.json: it must not be one of the inputs its fingerprint reads, or the step edits its own inputs and runs again."""
+    from backend import pipeline as pl
+    for n in ("transcript.json", "transcript_review.json"):
+        (tmp_path / n).write_text("{}", encoding="utf-8")
+    (tmp_path / "audio.wav").write_bytes(b"x")
+    fp = lambda: pl.STEPS["cuts"].fingerprint(tmp_path, None)
+    before = fp()
+    (tmp_path / "audio_analysis.json").write_text('{"written": "by cuts"}', encoding="utf-8")
+    (tmp_path / "cuts.json").write_text("{}", encoding="utf-8")
+    assert fp() == before                                                 # its own outputs do not change it
+    (tmp_path / "transcript_corrected.json").write_text("{}", encoding="utf-8")
+    assert fp() != before                                                 # a real input does
+    assert [p.name for p in pl.STEPS["cuts"].outputs(tmp_path)] == ["cuts.json", "audio_analysis.json"]
+
+
 def test_a_segment_the_review_emptied_is_not_a_timing_or_alignment_finding():
     """The LLM review decides what stays: a segment whose words it removed has no text and no words, and that is no warning."""
     w = {"index": 0, "text": "x", "start_seconds": 0, "end_seconds": 1}

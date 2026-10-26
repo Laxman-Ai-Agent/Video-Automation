@@ -53,6 +53,23 @@ def test_step_evidence_holds_what_the_step_detail_says():
     assert ev1["file_validation"] == {"errors": [], "warnings": []} and "validation_status" not in ev1
 
 
+def test_interim_report_claims_nothing_it_did_not_measure(tmp_path):
+    """Before audio_analysis.json exists nothing has validated timestamps, alignment or quality: those steps wait instead of saying 'passed'."""
+    _audio(tmp_path / "audio.wav")
+    for n in ("audio_16k.wav", "transcript.json", "cuts.json"):
+        (tmp_path / n).write_bytes(b"x")
+    (tmp_path / "transcript_review.json").write_text('{"llm": {"status": "applied"}}', encoding="utf-8")
+    rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
+    for n in (9, 10, 12, 13):
+        assert _step(rep, n)["status"] == "pending" and _step(rep, n)["detail"].startswith("measured when audio_analysis.json") and _step(rep, n)["checks_passed"] == 0
+    claims = " ".join(s["detail"] for s in rep["stages"]).lower()
+    assert not any(x in claims for x in ("0 errors", "forced alignment", "monotonic", "snr"))
+    assert _step(rep, 8)["status"] == "completed" and "applied" in _step(rep, 8)["detail"]
+    (tmp_path / "transcript_review.json").write_text('{"llm": {"status": "failed"}}', encoding="utf-8")      # the LLM check did not happen: it is not 'finished'
+    rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
+    assert _step(rep, 8)["status"] == "pending" and "failed" in _step(rep, 8)["detail"]
+
+
 def test_interim_report_without_audio_waits(tmp_path):
     rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
     assert _step(rep, 1)["status"] == _step(rep, 2)["status"] == "pending"

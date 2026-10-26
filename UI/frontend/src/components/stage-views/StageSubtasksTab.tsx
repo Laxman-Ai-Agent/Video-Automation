@@ -72,7 +72,9 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
 
       <span style={{ fontSize: '12.5px', color: 'var(--text-muted)', fontWeight: 600 }}>
         {subSteps.length
-          ? `Steps recorded in ${realSub?.report}${realSub?.written ? ` (written ${new Date(realSub.written * 1000).toLocaleString()})` : ''}`
+          ? (realSub?.report
+              ? `Steps recorded in ${realSub.report}${realSub.written ? ` (written ${new Date(realSub.written * 1000).toLocaleString()})` : ''}`
+              : 'Live progress: the step report is written when the stage finishes')
           : isRunning
             ? 'Stage is currently executing: subtasks will update live as steps complete...'
             : 'This stage does not record step-by-step results; only its overall status and LLM review are available.'}
