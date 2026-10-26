@@ -32,6 +32,16 @@ def test_interim_report_fails_steps_1_and_2_for_an_unreadable_file(tmp_path):
     assert _step(rep, 1)["detail"] == rep["validation"]["errors"][0]
 
 
+def test_a_check_made_on_other_measured_facts_is_not_current(tmp_path):
+    """A step whose text stays the same but whose evidence changed (wave -> ffprobe) must be checked again."""
+    _audio(tmp_path / "audio.wav")
+    rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
+    step = _step(rep, 2)
+    assert step_llm_check._hash(step, rep) == step_llm_check._hash(step, step_llm_check.synthesize_analyzer_stages(tmp_path))     # same facts: same check
+    old = {**rep, "source_fingerprint": "evidence-as-the-wave-module-reported-it"}
+    assert step_llm_check._hash(step, rep) != step_llm_check._hash(step, old)
+
+
 def test_interim_report_without_audio_waits(tmp_path):
     rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
     assert _step(rep, 1)["status"] == _step(rep, 2)["status"] == "pending"

@@ -82,9 +82,11 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
             "copy_file": "audio_16k.wav",
         }
 
+    facts = json.dumps([source_info, proc_info, val_info], sort_keys=True, ensure_ascii=False)
     return {
         "schema_version": "audio-analysis-2",
         "status": "completed" if has_cuts else "running",
+        "source_fingerprint": hashlib.sha256(facts.encode("utf-8")).hexdigest()[:16],      # the LLM check of a step is asked again when the measured facts it saw change, not only its text
         "source": source_info,
         "processing": proc_info,
         "validation": val_info,
