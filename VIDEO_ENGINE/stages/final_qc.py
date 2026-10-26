@@ -20,6 +20,7 @@ import time
 import uuid
 from pathlib import Path
 
+from SYSTEM.policies import rule_switches
 from . import asset_collection, media_probe as mprobe, motion_planning as mp, motion_validation as mv, render, render_video as rv, resource_library as rl, store
 from . import timeline_approval as ta
 from . import timeline_build as tb
@@ -101,6 +102,8 @@ class Q:
 
     def add(self, rule: str, status: str, severity: str, message: str, scene: str | None = None, target: str | None = None, evidence: dict | None = None, action: str = "", resolution: str = "unresolved") -> dict:
         fid = re.sub(r"[^A-Za-z0-9._:-]+", "-", f"{rule}:{scene or 'video'}:{target or '-'}")
+        if status not in ("passed", "not_applicable") and rule_switches.is_off("qc", rule):        # a rule the user switched off is never evaluated: said, never counted as a pass
+            status, severity, message = "not_applicable", "info", f"switched off by the user: {rule}"
         c = {"finding_id": fid, "rule_id": rule, "stage_id": self.stage, "status": status, "severity": severity, "message": message, "scene_id": scene, "target": target, "evidence": evidence or {},
              "recommended_action": action, "resolution": "none" if status in ("passed", "not_applicable") else resolution}
         self.checks.append(c)

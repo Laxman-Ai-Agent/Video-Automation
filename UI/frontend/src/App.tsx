@@ -14,6 +14,7 @@ const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(m => ({ defa
 const AgentsCenterPage = lazy(() => import('./pages/AgentsCenterPage').then(m => ({ default: m.AgentsCenterPage })));
 const SkillsPage = lazy(() => import('./pages/SkillsPage').then(m => ({ default: m.SkillsPage })));
 const LlmPage = lazy(() => import('./pages/LlmPage').then(m => ({ default: m.LlmPage })));
+const RulesPage = lazy(() => import('./pages/RulesPage').then(m => ({ default: m.RulesPage })));
 const WorkLogPage = lazy(() => import('./pages/WorkLogPage').then(m => ({ default: m.WorkLogPage })));
 const DashboardPage = lazy(() => import('./pages/DashboardPage').then(m => ({ default: m.DashboardPage })));
 
@@ -22,7 +23,7 @@ export const App: React.FC = () => {
     const saved = localStorage.getItem('a2v_theme');
     return (saved === 'light' || saved === 'dark') ? saved : 'dark';
   });
-  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'llm' | 'work-log'>('pipeline');
+  const [activeView, setActiveView] = useState<'dashboard' | 'pipeline' | 'projects' | 'agents' | 'skills' | 'diagnostics' | 'audio-input' | 'llm' | 'work-log' | 'rules'>('pipeline');
   const [pipelineTab, setPipelineTab] = useState<PipelineTabType>('flow');
   const [pipelineFullPage, setPipelineFullPage] = useState<boolean>(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState<boolean>(false);
@@ -247,6 +248,10 @@ export const App: React.FC = () => {
 
             {activeView === 'skills' && (
               <SkillsPage skills={skills} />
+            )}
+
+            {activeView === 'rules' && (
+              <RulesPage />
             )}
 
             {activeView === 'work-log' && (

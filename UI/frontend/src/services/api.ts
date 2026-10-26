@@ -1166,3 +1166,27 @@ export async function fetchSfxCatalog(): Promise<{ ok: boolean; sfx: any[] }> {
 
 
 
+
+// The rules of the stages and the user's switch for each one (SYSTEM/policies/rule_catalog.py, rule_switches.py): OFF = the rule is never evaluated, so it cannot block or warn
+export interface RuleRow { stage: string; stage_label: string; rule: string; severity: string; says: string; calls: number; on: boolean; off_note?: string | null; off_at?: number | null }
+export interface RuleStage { stage: string; label: string; total: number; off: number; rules: RuleRow[] }
+export interface RulesView { total: number; off: number; stages: RuleStage[] }
+
+export async function fetchRules(): Promise<RulesView | null> {
+  try {
+    const res = await fetch(`${API_BASE}/rules`);
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Switch one rule (stage + rule), every rule of a stage (stage only) or every rule (neither) ON or OFF. Returns the new view. */
+export async function switchRules(body: { on: boolean; stage?: string; rule?: string; note?: string }): Promise<RulesView | null> {
+  try {
+    const res = await fetch(`${API_BASE}/rules/switch`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}

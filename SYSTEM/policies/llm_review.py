@@ -21,6 +21,8 @@ import time
 from pathlib import Path
 from typing import Any, Literal, TypedDict
 
+from SYSTEM.policies import rule_switches
+
 from SYSTEM.core import llm_client, llm_gateway
 from SYSTEM.memory import store
 from SYSTEM.policies.llm_reviewer import LlmFinding, LlmReviewStatus, ask_reviewer   # the generic reviewer is the Agent System's; this module is the video stage gate on top of it
@@ -902,6 +904,8 @@ def run_stage_llm_review(
 
     t0 = time.perf_counter()
     payload = build_stage_payload(pdir, stage, aspect)
+    if (off := rule_switches.off_in(stage)):                                    # a check the user switched off was not made: the reviewer is told, so it is never read as a pass
+        payload["rules_switched_off_by_the_user"] = off
     sys_prompt, user_prompt = generate_stage_review_prompt(stage, payload)
 
     from SYSTEM.core.pipeline_state import STAGE_TO_AGENT_MAP as stage_to_agent

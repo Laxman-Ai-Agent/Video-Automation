@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import re
 
+from SYSTEM.policies import rule_switches
 from SYSTEM.core import media_kinds as mk
 
 from . import config
@@ -310,7 +311,7 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
     def rule(name: str, scene: str | None, bad: bool, stage: int, severity: str, code: str, message: str) -> None:
         c = counts_.setdefault(name, [0, 0])
         c[1] += 1
-        if bad:
+        if bad and not rule_switches.is_off("planning", name):          # a rule the user switched off is never evaluated
             iss.add(stage, severity, code, scene, message)
         else:
             c[0] += 1

@@ -31,6 +31,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, ValidationError
 
+from SYSTEM.policies import rule_switches
 from SYSTEM.core import media_kinds as mk
 
 from . import config, store, visual_planning
@@ -138,7 +139,8 @@ class PlanM(Strict):
 class Run:
     """The findings of one build: each rule counts what it checked, a failed rule records a finding (an error blocks the plan, a warning does not)."""
 
-    def __init__(self) -> None:
+    def __init__(self, stage_id: str = "motion_plan") -> None:
+        self.stage_id = stage_id                                              # whose rules these are (Motion Generation records its rules in a Run too): the key of the user's rule switches
         self.items: list[dict] = []
         self.counts: dict[str, list[int]] = {}
         self.by_stage: dict[int, list[int]] = {}
@@ -149,6 +151,7 @@ class Run:
         c[1] += 1
         s = self.by_stage.setdefault(stage, [0, 0])
         s[1] += 1
+        bad = bad and not rule_switches.is_off(self.stage_id, name)
         s[0] += not bad
         if bad:
             self.items.append({"stage": stage, "severity": severity, "code": code, "scene": scene, "message": message})

@@ -28,7 +28,7 @@ def build(pdir: Path, aspect: str, comp: dict, determinism: dict | None = None, 
     mplan = mp._read(pdir / mname)
     if mplan is None:
         raise GenerationError(f"{mname} is missing: run Motion Planning first")
-    reg, run, images = mp.registry(), mp.Run(), store.uses_images(pdir)
+    reg, run, images = mp.registry(), mp.Run("motion_gen"), store.uses_images(pdir)
     g = R.G(pdir, aspect, comp, plan, mplan, reg, images, run)
     repairs: list[dict] = []
     say(55)

@@ -26,6 +26,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from SYSTEM.policies import rule_switches
 from PIL import Image
 
 from VIDEO_ENGINE.ffmpeg import media_probe
@@ -609,7 +610,7 @@ def check_assets(pdir: Path, manifest: dict | None = None) -> list[dict]:
             out.append({"code": "asset_rights_review", "severity": "review", "asset_id": aid, "message": f"{aid}: rights not established ({(a.get('license') or {}).get('name')}), a person must confirm the use"})
         if a.get("authenticity") not in AUTHENTICITY:
             out.append({"code": "asset_authenticity", "severity": "error", "asset_id": aid, "message": f"{aid}: authenticity is {a.get('authenticity')!r}"})
-    return out
+    return [f for f in out if not rule_switches.is_off("assets", f["code"])]          # a rule the user switched off is never evaluated
 
 
 def assets_for_scene(pdir: Path, scene_id: Any) -> list[dict]:

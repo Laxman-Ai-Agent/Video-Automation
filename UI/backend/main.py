@@ -22,6 +22,7 @@ from .routes import (
     resources,
     results,
     review,
+    rules,
     run,
     skills,
     uploads,
@@ -73,6 +74,7 @@ for module in (
     evaluation,
     approvals,
     work_log,
+    rules,
 ):
     app.include_router(module.router)
 

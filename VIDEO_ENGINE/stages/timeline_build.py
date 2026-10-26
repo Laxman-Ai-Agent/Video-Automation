@@ -21,6 +21,7 @@ import threading
 import time
 from pathlib import Path
 
+from SYSTEM.policies import rule_switches
 from . import config, motion_planning as mp, motion_validation as mv, resource_library as rl, store
 
 SCHEMA = "1.0"
@@ -109,10 +110,10 @@ class Rec:
               owner: str = "timeline_build", action: str = "") -> bool:
         c = self.counts[stage]
         c["total"] += 1
-        if ok:
+        if ok or rule_switches.is_off("timeline", rule):                      # a rule the user switched off is never evaluated
             c["passed"] += 1
-        else:
-            self._add(stage, rule, severity, message, scene, item, evidence, owner, action or f"fix it in {owner.replace('_', ' ')}, then build the timeline again")
+            return True
+        self._add(stage, rule, severity, message, scene, item, evidence, owner, action or f"fix it in {owner.replace('_', ' ')}, then build the timeline again")
         return ok
 
     def note(self, stage: str, rule: str, severity: str, message: str, scene: str | None = None, item: str | None = None, evidence: dict | None = None, owner: str = "motion_generation") -> None:

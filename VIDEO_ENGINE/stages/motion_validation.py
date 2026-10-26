@@ -17,6 +17,7 @@ import re
 import time
 from pathlib import Path
 
+from SYSTEM.policies import rule_switches
 from . import config, motion_generation as mg, motion_planning as mp
 
 SCHEMA = "1.0"
@@ -179,10 +180,10 @@ class V:
               owner: str = "motion_generation", action: str = "") -> bool:
         c = self.counts[stage]
         c["total"] += 1
-        if ok:
+        if ok or rule_switches.is_off("motion_validation", rule):             # a rule the user switched off is never evaluated
             c["passed"] += 1
-        else:
-            self._add(stage, rule, severity, message, scene, target, evidence, owner, action or f"fix it in {owner.replace('_', ' ')}, then validate again")
+            return True
+        self._add(stage, rule, severity, message, scene, target, evidence, owner, action or f"fix it in {owner.replace('_', ' ')}, then validate again")
         return ok
 
     def skip(self, stage: str, rule: str, message: str, scene: str | None = None, target: str | None = None, evidence: dict | None = None, owner: str = "motion_generation", severity: str = "info") -> None:

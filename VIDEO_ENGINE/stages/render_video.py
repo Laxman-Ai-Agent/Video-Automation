@@ -17,6 +17,7 @@ import time
 import uuid
 from pathlib import Path
 
+from SYSTEM.policies import rule_switches
 from . import config, media_probe as mprobe, motion_planning as mp, motion_validation as mv, pipeline, render, resource_library as rl, store
 from . import timeline_approval as ta
 
@@ -167,6 +168,7 @@ def verify_output(path: Path, exp: dict, audio_seconds: float | None) -> tuple[d
     checks: list[dict] = []
 
     def add(cid, ok, message, want=None, got=None, severity="error"):
+        ok = ok or rule_switches.is_off("render", cid)                    # a rule the user switched off is never evaluated
         checks.append({"id": cid, "status": "passed" if ok else ("warning" if severity == "warning" else "failed"), "message": message, "expected": want, "observed": got})
 
     try:
