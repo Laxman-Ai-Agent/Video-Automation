@@ -31,6 +31,7 @@ from PIL import Image
 
 from VIDEO_ENGINE.ffmpeg import media_probe
 
+from . import live_steps
 from . import config, llm_gateway, stock, visual_planning, web_capture
 
 STAGE_ID = "assets"
@@ -431,40 +432,9 @@ def fetch(pdir: Path, req: dict, cand: dict, scene: dict, aspect: str, known: li
     return entry
 
 
-# ---------- the live step report (the Subtasks page reads it while the stage runs) ----------
+# ---------- the live step report (the Subtasks page reads it while the stage runs; the writer is live_steps.LiveSteps) ----------
 REPORT = "asset_collection_report.json"
 STEPS = ("Requirements from the Visual Plan", "Search licensed sources", "Choose the best candidates (LLM)", "Download and prepare the media", "Manifest and rights check")
-
-
-class _Report:
-    """Which step of the stage runs and how many of its items are done, written to REPORT at every change (never an estimate: a step shows only the counts it really reached)."""
-
-    def __init__(self, pdir: Path) -> None:
-        self.path = pdir / REPORT
-        self.rows = [{"n": i, "name": nm, "status": "pending", "detail": "waiting", "checks_passed": 0, "checks_total": 0, "progress_percent": 0} for i, nm in enumerate(STEPS, 1)]
-        self.status, self.started = "running", time.time()
-        self.write()
-
-    def write(self) -> None:
-        _save(self.path, {"schema_version": "1.0", "status": self.status, "started_at": self.started, "stages": self.rows, "updated_at": _now()})
-
-    def step(self, n: int, status: str, detail: str, done: int = 0, total: int = 0, evidence: dict | None = None) -> None:
-        """`evidence`: the facts the recorded detail stands on (what the LLM check of the step is shown: a step that claims something without facts cannot be confirmed)."""
-        pct = 100 if status == "completed" else min(99, max(1, round(100 * done / total))) if total and done else 0
-        self.rows[n - 1].update(status=status, detail=detail, checks_passed=done, checks_total=total, progress_percent=pct)
-        if evidence is not None:
-            self.rows[n - 1]["evidence"] = evidence
-        self.write()
-
-    def fail(self, why: str) -> None:
-        row = next((r for r in self.rows if r["status"] == "running"), self.rows[-1])
-        self.step(row["n"], "failed", why[:300], row["checks_passed"], row["checks_total"])
-        self.status = "failed"
-        self.write()
-
-    def finish(self) -> None:
-        self.status = "completed"
-        self.write()
 
 
 def _req_fact(r: dict) -> dict:
@@ -482,21 +452,10 @@ def _end_facts(pdir: Path, man: dict) -> dict:
             "check_findings": [{k: f[k] for k in ("severity", "code", "message")} for f in check_assets(pdir, man)]}
 
 
-def live_progress(pdir: Path) -> dict | None:
-    """How far the running stage is, from its own step report (None when the report is not of a run in progress): the detail of the step that runs, the percent of all steps, the run's start."""
-    rep = _load(pdir / REPORT, {})
-    if rep.get("status") != "running":
-        return None
-    rows = rep.get("stages") or []
-    now = next((r for r in rows if r["status"] == "running"), None)
-    return {"detail": f"{now['name']}: {now['detail']}" if now else "starting", "started_at": rep.get("started_at"),
-            "percent": round(sum(100 if r["status"] == "completed" else r.get("progress_percent", 0) for r in rows) / max(1, len(rows)), 1)}
-
-
 # ---------- the stage ----------
 def run(pdir: Path, aspect: str = "16:9", force: bool = False) -> dict:
     """The whole stage. Reuses a manifest that is current (same scenes, every file present and unchanged). Raises AssetError with the exact cause on failure."""
-    rep = _Report(pdir)
+    rep = live_steps.LiveSteps(pdir / REPORT, STEPS)
     try:
         manifest = _collect(pdir, aspect, force, rep)
     except Exception as e:                                         # the step that was running is the one that failed
@@ -506,7 +465,7 @@ def run(pdir: Path, aspect: str = "16:9", force: bool = False) -> dict:
     return manifest
 
 
-def _collect(pdir: Path, aspect: str, force: bool, rep: _Report) -> dict:
+def _collect(pdir: Path, aspect: str, force: bool, rep: live_steps.LiveSteps) -> dict:
     fp = input_fingerprint(pdir, aspect)
     prev = _load(manifest_path(pdir), {})
     current = prev.get("schema") == SCHEMA_MAN and prev.get("input_fingerprint") == fp and not force

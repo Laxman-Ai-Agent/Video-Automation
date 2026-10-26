@@ -18,7 +18,7 @@ import time
 from pathlib import Path
 
 from SYSTEM.policies import rule_switches
-from . import config, motion_generation as mg, motion_planning as mp
+from . import config, live_steps, motion_generation as mg, motion_planning as mp
 
 SCHEMA = "1.0"
 VERSION = 1                                    # the validator (structure of the report, how the stages run)
@@ -63,7 +63,8 @@ class ValidationError(Exception):
 
 def names(aspect: str) -> dict[str, str]:
     sfx = "_9x16" if aspect == "9:16" else ""
-    return {"report": f"motion_timeline_validation{sfx}.json", "exceptions": f"motion_validation_exceptions{sfx}.json", "preview": f"motion_validation_preview{sfx}"}
+    return {"report": f"motion_timeline_validation{sfx}.json", "exceptions": f"motion_validation_exceptions{sfx}.json", "preview": f"motion_validation_preview{sfx}",
+            "live": f"motion_validation_progress{sfx}.json"}
 
 
 def sha(data: str | bytes) -> str:
@@ -281,6 +282,18 @@ def run(pdir: Path, aspect: str, progress=None, force: bool = False) -> dict:
     """Validate and write the report. `force` redoes every stage; otherwise a stage whose inputs, rule set and validator are unchanged keeps its previous result (recorded as a cache hit)."""
     from . import motion_validation_rules as R
     say = progress or (lambda p, eta=None: None)
+    live = live_steps.LiveSteps(pdir / names(aspect)["live"], [s[2] for s in STAGES], live=True)          # the Subtasks page shows the run step by step
+    live.step(1, "running", "making the preview stills of the composition first (slow on this CPU)")
+    try:
+        res = _run(pdir, aspect, say, force, live, R)
+    except Exception as e:
+        live.fail(str(e))
+        raise
+    live.finish()
+    return res
+
+
+def _run(pdir: Path, aspect: str, say, force: bool, live: live_steps.LiveSteps, R) -> dict:
     _ensure_preview(pdir, aspect)
     t0 = time.perf_counter()
     digests = input_digests(pdir, aspect)
@@ -295,12 +308,14 @@ def run(pdir: Path, aspect: str, progress=None, force: bool = False) -> dict:
         halted = None
         for i, (sid, _lab, _name, _desc) in enumerate(STAGES[:-1]):
             say(5 + 85 * i / (N - 1))
+            live.step(i + 1, "running", _desc)
             t1 = time.perf_counter()
             key = stage_key(sid, digests)
             if halted and sid not in ("input_provenance", "preview_validation"):
                 rec = _stage_record(sid, v, key, 0, {"hit": False, "reason": "not run"})
                 rec.update(status="skipped_due_to_dependency", progress_percent=0, detail=halted)
                 records.append(rec)
+                live.step(i + 1, "skipped_due_to_dependency", halted)
                 continue
             cached = old.get(sid)
             if cached and sid in STAGE_INPUTS and cached.get("input_fingerprint") == key and cached["status"] in ("completed", "warning", "blocked"):
@@ -314,6 +329,7 @@ def run(pdir: Path, aspect: str, progress=None, force: bool = False) -> dict:
                 if sid == "element_completeness":
                     x.element_summary, x.element_rows = cached.get("elements") or {}, cached.get("element_rows") or []
                 records.append({**cached, "cache": {"hit": True, "reason": "inputs, rule set and validator unchanged since the previous run"}, "duration_ms": 0})
+                live.step(i + 1, cached["status"], "unchanged since the previous run: its result is reused", cached["checks_passed"], cached["checks_total"])
                 continue
             getattr(R, "stage_" + sid)(x, v)
             rec = _stage_record(sid, v, key, round((time.perf_counter() - t1) * 1000), {"hit": False, "reason": "forced" if force else "first run" if not cached else "an input of this stage changed"})
@@ -324,6 +340,8 @@ def run(pdir: Path, aspect: str, progress=None, force: bool = False) -> dict:
             if sid == "fingerprint_freshness" and any(f["severity"] in ("blocker", "error") for f in v.of(sid)):
                 halted = "an input is out of date: run the owner stage again, then validate (see the Fingerprint Check findings)"
             records.append(rec)
+            live.step(i + 1, rec["status"], f"{rec['checks_passed']} of {rec['checks_total']} checks passed" + (f", {len(rec['finding_ids'])} finding(s)" if rec["finding_ids"] else ""), rec["checks_passed"], rec["checks_total"])
+        live.step(N, "running", "deciding the readiness of the timeline from all findings")
         say(92)
         findings = sorted(v.findings.values(), key=lambda f: (SEVERITIES.index(f["severity"]), f["scene_id"] or "", f["finding_id"]))
         records.append(_stage_record("readiness_gate", v, "", 0, {"hit": False, "reason": "always recomputed"}))
@@ -332,6 +350,7 @@ def run(pdir: Path, aspect: str, progress=None, force: bool = False) -> dict:
         res = commit(pdir, aspect, rep, fp0)
         from . import llm_review
         llm_review.run_stage_llm_review(pdir, "motion_validation", aspect)
+        live.step(N, "completed", f"readiness: {res.get('readiness')}", 1, 1)
         return res
     except Exception as e:
         write_failed(pdir, aspect, fp0, e)

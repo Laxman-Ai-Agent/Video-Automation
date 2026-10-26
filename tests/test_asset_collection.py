@@ -12,7 +12,7 @@ import pytest
 from PIL import Image
 
 from VIDEO_ENGINE.ffmpeg import media_probe
-from VIDEO_ENGINE.stages import asset_collection as ac, llm_gateway, stock
+from VIDEO_ENGINE.stages import asset_collection as ac, live_steps, llm_gateway, stock
 
 HAS_FFMPEG = shutil.which("ffmpeg") is not None
 
@@ -178,15 +178,15 @@ def _report(pdir):
 
 def test_the_stage_writes_its_steps_live_and_finishes_them_all(pdir, monkeypatch):
     seen = []
-    real = ac._Report.write
-    monkeypatch.setattr(ac._Report, "write", lambda self: (real(self), seen.append((self.status, [r["status"] for r in self.rows], ac.live_progress(self.path.parent))))[0])
+    real = live_steps.LiveSteps.write
+    monkeypatch.setattr(live_steps.LiveSteps, "write", lambda self: (real(self), seen.append((self.status, [r["status"] for r in self.rows], live_steps.progress(self.path))))[0])
     use(monkeypatch, LLM([REQ], choice=1), results={"*": [cand(1), cand(2)]}, files={"pexels:2": jpeg(seed=3)})
     ac.run(pdir)
     assert any(st == "running" and "running" in rows and lp and 0 <= lp["percent"] < 100 for st, rows, lp in seen)       # a step was seen running, with a real percent, before the end
     percents = [lp["percent"] for st, rows, lp in seen if lp]
     assert percents == sorted(percents)                                                                                  # the percent never goes back
     rep = _report(pdir)
-    assert rep["status"] == "completed" and [r["status"] for r in rep["stages"]] == ["completed"] * len(ac.STEPS) and ac.live_progress(pdir) is None
+    assert rep["status"] == "completed" and [r["status"] for r in rep["stages"]] == ["completed"] * len(ac.STEPS) and live_steps.progress(pdir / ac.REPORT) is None
     assert rep["stages"][3]["detail"].startswith("1 real asset(s) ready")
 
 
@@ -211,7 +211,7 @@ def test_a_failing_stage_marks_the_step_that_ran_as_failed(pdir, monkeypatch):
         ac.run(pdir)
     rep = _report(pdir)
     assert rep["status"] == "failed" and [r["status"] for r in rep["stages"]] == ["completed"] * 4 + ["failed"] and "no acceptable real media" in rep["stages"][4]["detail"]
-    assert ac.live_progress(pdir) is None
+    assert live_steps.progress(pdir / ac.REPORT) is None
 
 
 def test_search_is_cached_and_a_total_outage_is_not(pdir, monkeypatch):

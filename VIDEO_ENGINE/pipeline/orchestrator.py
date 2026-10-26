@@ -883,7 +883,8 @@ class PipelineOrchestrator:
 
                 run.current_stage = stage_id
                 save_run_record(self.pdir, run)
-
+                from .legacy_pipeline_adapter import set_job
+                set_job(self.pdir, stage_id)                                    # job.json still held the percent of the step before: a new stage starts at 0
                 # Check stage eligibility
                 elig = evaluate_stage_eligibility(self.pdir, stage_id, self.aspect, auto_pilot_mode=self.auto_pilot_mode)
 

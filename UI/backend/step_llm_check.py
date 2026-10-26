@@ -31,6 +31,25 @@ _active_step: dict[tuple[str, str], int] = {}
 _lock = threading.Lock()
 
 
+LIVE_REPORTS = {"motion_validation": "motion_validation_progress{sfx}.json"}      # a stage whose own report is written only at the end: its steps are shown from this file while it runs
+
+
+def _live_report(pdir: Path, stage_id: str, aspect: str) -> Path | None:
+    """The live step report of a stage that is running right now (None otherwise: a report left on "running" by a stopped run does not count)."""
+    name = LIVE_REPORTS.get(stage_id)
+    if not name:
+        return None
+    f = pdir / name.format(sfx=_sfx(aspect))
+    try:
+        if json.loads(f.read_text(encoding="utf-8")).get("status") != "running":
+            return None
+        from VIDEO_ENGINE.pipeline import orchestrator
+        run = orchestrator.current_run(pdir.name)
+    except (OSError, ValueError):
+        return None
+    return f if run and run.current_stage == stage_id else None
+
+
 def _sfx(aspect: str) -> str:
     return "_9x16" if aspect == "9:16" else ""
 
@@ -226,7 +245,7 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
 
 def steps(pdir: Path, stage_id: str, aspect: str) -> tuple[list[dict], dict | None, Path | None]:
     """The recorded steps of the stage, the whole report and its file (empty when the stage keeps no step report)."""
-    f = report_file(pdir, stage_id, aspect)
+    f = _live_report(pdir, stage_id, aspect) or report_file(pdir, stage_id, aspect)
     rep = None
     if (f is None or not f.exists()) and stage_id == "analyzer":
         audio = next(iter(pdir.glob("audio.*")), None)
@@ -376,6 +395,7 @@ def steps(pdir: Path, stage_id: str, aspect: str) -> tuple[list[dict], dict | No
             "checks_passed": passed,
             "checks_total": total,
             "progress_percent": s.get("progress_percent"),
+            **({"live": True} if s.get("live") else {}),                              # only when set: the key must not change the hash (and so the stored LLM check) of any other step
         })
     return out, rep, f
 
@@ -418,7 +438,7 @@ def _done(check: dict) -> bool:
 
 def _recorded(step: dict) -> bool:
     """A step has a result to check only once it is over: a step that is still running (a live report) or has not begun is never sent to the LLM."""
-    return (step.get("status") or "").lower() not in ("running", "pending", "waiting")
+    return (step.get("status") or "").lower() not in ("running", "pending", "waiting") and not step.get("live")
 
 
 def pending(pdir: Path, stage_id: str, aspect: str) -> int:

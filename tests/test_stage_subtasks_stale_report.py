@@ -54,7 +54,8 @@ def test_a_step_still_running_is_not_sent_to_the_llm(monkeypatch, tmp_path):
 
 def test_asset_collection_shows_its_own_progress_only_while_its_run_is_alive(monkeypatch, tmp_path):
     from VIDEO_ENGINE.stages import asset_collection as ac
-    rep = ac._Report(tmp_path)
+    from VIDEO_ENGINE.stages import live_steps
+    rep = live_steps.LiveSteps(tmp_path / ac.REPORT, ac.STEPS)
     rep.step(1, "completed", "4 requirement(s)", 4, 4)
     rep.step(2, "running", "searching 'river' (1 of 4 done)", 1, 4)
     monkeypatch.setattr(ac, "input_fingerprint", lambda *a: "x")

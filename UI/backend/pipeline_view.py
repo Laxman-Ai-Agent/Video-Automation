@@ -31,6 +31,9 @@ def _stage(id_: str, label: str, status: str, detail: str = "", percent: float |
     return {"id": id_, "label": label, "status": status, "detail": detail, "percent": None if percent is None else round(percent, 1), "action": action, **extra}
 
 
+from VIDEO_ENGINE.stages import live_steps
+
+
 def _runs_now(pid: str, stage_id: str) -> bool:
     from VIDEO_ENGINE.pipeline import orchestrator
     run = orchestrator.current_run(pid)
@@ -44,7 +47,7 @@ def _assets_stage(pdir: Path, aspect: str, plan_ok: bool) -> dict:
     man = ac.load_manifest(pdir)
     if not plan_ok:
         return _stage("assets", label, "queued", "waits for Visual Planning")
-    if (live := ac.live_progress(pdir)) is not None and _runs_now(pdir.name, "assets"):       # the stage is running now: its own steps say how far it is (a report left "running" by a stopped run does not count)
+    if (live := live_steps.progress(pdir / ac.REPORT)) is not None and _runs_now(pdir.name, "assets"):       # the stage is running now: its own steps say how far it is (a report left "running" by a stopped run does not count)
         return _stage("assets", label, "running", live["detail"], live["percent"], started_at=live["started_at"])
     if man.get("schema") != ac.SCHEMA_MAN or man.get("input_fingerprint") != ac.input_fingerprint(pdir, aspect):
         return _stage("assets", label, "queued", "runs before Motion Planning: real photos and clips, only for scenes that need them", action=run)
@@ -229,7 +232,12 @@ def build(pid: str) -> dict:
                              action={"kind": "run_motion", "label": "Retry"} if s["status"] == "failed" else None))
 
     v = motion_branch.validation_stage(pdir, aspect, step, running, failed_step)      # Stage 7, between Motion Generation and the Timeline Build
-    stages.append(_stage(v["id"], v["label"], v["status"], v["detail"], disk.get("percent") if v["status"] == "running" else None, action=v.get("action")))
+    from VIDEO_ENGINE.stages import motion_validation
+    vlive = live_steps.progress(pdir / motion_validation.names(aspect)["live"]) if _runs_now(pid, "motion_validation") else None
+    if vlive:                                                                         # the stage runs now: its own steps say how far it is
+        stages.append(_stage(v["id"], v["label"], "running", vlive["detail"], vlive["percent"], started_at=vlive["started_at"]))
+    else:
+        stages.append(_stage(v["id"], v["label"], v["status"], v["detail"], disk.get("percent") if v["status"] == "running" else None, action=v.get("action")))
 
     tl = timeline_gate.state(pdir, aspect)
     built = review.timeline_state(pdir)[aspect]["ready"] and timeline_gate.built_for_mode(pdir, aspect)      # the composition is built and its pre-render check passed
