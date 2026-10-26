@@ -63,7 +63,7 @@ ASPECTS = ("9:16", "16:9")
 
 
 def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None) -> Path:
-    media = media_kinds.normalise(media)                  # ValueError before anything is made: the shares are set here, at upload, and never change afterwards
+    media = media_kinds.normalise(media)                  # ValueError before anything is made: the media settings are set here, at upload, and never change afterwards
     pid = slug(name)
     while (config.PROJECTS_DIR / pid).exists():
         pid = slug(name)
@@ -81,7 +81,7 @@ def create(name: str, aspect: str | None = None, reusable_motion_templates: bool
 
 
 def media(pdir: Path) -> dict:
-    """The media mix of the project: {"motion", "image", "video"} shares (sum 100) and "ai_images". Set at upload; a project made before it existed gets the defaults."""
+    """The media settings of the project: {"ai_images"}. Set at upload; a project made before it existed gets the defaults."""
     return media_kinds.options(read_info(pdir))
 
 

@@ -11,8 +11,7 @@ from . import config
 EPS = 0.06
 OVERLAP_MIN = 0.02                             # share of the frame two elements may share before they count as overlapping
 PATH_REGION = "path_across_frame"
-MIX_TOLERANCE = 15                             # percentage points a family may be off its target before the plan says so
-MAX_REAL_PER_SCENE = 2                         # real pictures / clips in one scene
+MAX_REAL_PER_SCENE = 6                         # real pictures / clips in one scene: the scene's own limit of 6 elements (clutter) is the only bound, there is no share of the video to reach
 RELATIONS = ("connects_to", "flows_from", "compares_with", "labels", "explains", "contains", "follows", "part_of")
 # The placement regions and where they are on the frame (x0, y0, x1, y1 as shares of a 16:9 frame). ONE definition: the instructions to the planner, the repair and the checks all read it.
 # The margin is the project's safe margin (config.SAFE_AREA, remotion theme.json); the two caption bands are the only edge regions for text; around/over_primary_visual follow their primary.
@@ -178,13 +177,6 @@ def _repair_media(sc: dict, ctx: dict, sid: str, iss: Issues) -> None:
         if not mk.is_real(e["type"]):
             e["media"] = None
             continue
-        family = mk.family_of(e["type"])
-        if family not in ctx["allowed"]:                         # this project has no real pictures / clips: the same idea as a flat graphic, said in its constraints
-            iss.add(5, "warning", "media_family_off", sid, f"{e['element_id']} is a {e['type']} but this project has no {family} (its share is 0%): drawn as a flat graphic instead")
-            e["constraints"] = [*e["constraints"], f"was a {e['type']} in the planner's answer: draw it as a simple flat graphic, no photo"]
-            e["registry_requirements"] = e["registry_requirements"] or {"icon": None, "category": "graphic", "search_descriptors": [e["element_id"].replace("_", " ")], "resolved": None}
-            e["type"], e["media"] = "graphic", None
-            continue
         m = e["media"]
         m["alt_queries"] = [q for q in dict.fromkeys(m["alt_queries"]) if q != m["query"]][:2]
         if e["type"] == "image" and opts["ai_images"]:
@@ -295,7 +287,7 @@ def hero(elements: list[dict]) -> str:
 
 
 def media_mix(plan: dict, opts: dict) -> dict:
-    """The target (what the user chose at upload) against what the plan really carries, by the time each scene holds on the timeline."""
+    """What the plan really carries, by the time each scene holds on the timeline (information only: media is unlimited, there is no share to reach)."""
     secs = dict.fromkeys(mk.FAMILIES, 0.0)
     by_family: dict[str, list[str]] = {f: [] for f in mk.FAMILIES}
     for s in plan["scenes"]:
@@ -306,10 +298,8 @@ def media_mix(plan: dict, opts: dict) -> dict:
     actual = {f: round(100 * secs[f] / total) if total else 0 for f in mk.FAMILIES}
     if total:
         actual["motion"] += 100 - sum(actual.values())            # rounding goes to motion so the three add up to 100
-    target = {f: opts[f] for f in mk.FAMILIES}
-    off = [f for f in mk.FAMILIES if abs(actual[f] - target[f]) > MIX_TOLERANCE]
-    return {"target": target, "actual": actual, "tolerance": MIX_TOLERANCE, "off_target": off, "scenes": by_family, "ai_images": opts["ai_images"],
-            "note": ("the narration offered fewer (or more) scenes that a camera can show than the shares ask for; the plan keeps what the narration supports" if off else "within the tolerance of the chosen shares")}
+    return {"actual": actual, "scenes": by_family, "ai_images": opts["ai_images"],
+            "note": "every scene is motion graphics; the shares above are the time in which the primary element is drawn, a real picture or a real clip (no share is asked for)"}
 
 
 # ---------- deterministic checks ----------

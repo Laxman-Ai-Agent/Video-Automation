@@ -31,6 +31,12 @@ def _stage(id_: str, label: str, status: str, detail: str = "", percent: float |
     return {"id": id_, "label": label, "status": status, "detail": detail, "percent": None if percent is None else round(percent, 1), "action": action, **extra}
 
 
+def _runs_now(pid: str, stage_id: str) -> bool:
+    from VIDEO_ENGINE.pipeline import orchestrator
+    run = orchestrator.current_run(pid)
+    return bool(run and run.current_stage == stage_id)
+
+
 def _assets_stage(pdir: Path, aspect: str, plan_ok: bool) -> dict:
     """Stage 5, Asset Collection (optional real photos/clips): derived from its manifest, the scenes it was made for and its stored LLM review."""
     from VIDEO_ENGINE.stages import asset_collection as ac
@@ -38,6 +44,8 @@ def _assets_stage(pdir: Path, aspect: str, plan_ok: bool) -> dict:
     man = ac.load_manifest(pdir)
     if not plan_ok:
         return _stage("assets", label, "queued", "waits for Visual Planning")
+    if (live := ac.live_progress(pdir)) is not None and _runs_now(pdir.name, "assets"):       # the stage is running now: its own steps say how far it is (a report left "running" by a stopped run does not count)
+        return _stage("assets", label, "running", live["detail"], live["percent"], started_at=live["started_at"])
     if man.get("schema") != ac.SCHEMA_MAN or man.get("input_fingerprint") != ac.input_fingerprint(pdir, aspect):
         return _stage("assets", label, "queued", "runs before Motion Planning: real photos and clips, only for scenes that need them", action=run)
     if errs := [f["message"] for f in ac.check_assets(pdir, man) if f["severity"] == "error"]:
@@ -109,11 +117,10 @@ def _enrich_stages_with_timings(pdir: Path, stages: list[dict], pid: str) -> lis
         completed_at = srec.get("completed_at")
         duration_ms = None
 
-        if s.get("status") == "running":
+        if s.get("status") == "running":                                            # the start of THIS run: never an earlier run's record, never "now" (a made-up start hides the report the run writes)
+            started_at = s.get("started_at") or (srec.get("started_at") if srec.get("status") == "running" else None)
             if started_at is None and active_run and active_run.current_stage == sid:
                 started_at = active_run.started_at
-            if started_at is None and active_job:
-                started_at = getattr(active_job, "started_at", None) or time.time()
             completed_at = None
 
         if started_at is not None and completed_at is not None:
@@ -151,6 +158,12 @@ def _enrich_stages_with_timings(pdir: Path, stages: list[dict], pid: str) -> lis
         s["duration_ms"] = duration_ms
 
     return stages
+
+
+def run_started_at(pid: str, stage_id: str) -> float | None:
+    """When the stage's current run began; None when the stage is not running or its start is unknown."""
+    s = next((s for s in build(pid)["stages"] if s["id"] == stage_id), None)
+    return s["started_at"] if s and s["status"] == "running" else None
 
 
 def build(pid: str) -> dict:
@@ -197,7 +210,8 @@ def build(pid: str) -> dict:
     plan_ok = has("scene_plan.json") and has("prompts_map.json")
     if gen.get("state") == "running" and gen.get("kind") == "plan":
         stages.append(_stage("planning", "Visual Planning", "running", f"stage {gen.get('current') or 1} of {gen.get('total') or '?'}",
-                             100 * gen["done"] / gen["total"] if gen.get("total") else None))
+                             100 * gen["done"] / gen["total"] if gen.get("total") else None,
+                             started_at=time.mktime(time.strptime(gen["started"], "%Y-%m-%dT%H:%M:%S")) if gen.get("started") else None))
     elif gen.get("state") == "failed" and gen.get("kind") == "plan":
         stages.append(_stage("planning", "Visual Planning", "failed", gen.get("error") or "planning failed", action={"kind": "retry_plan", "label": "Retry"}))
     elif plan_ok:

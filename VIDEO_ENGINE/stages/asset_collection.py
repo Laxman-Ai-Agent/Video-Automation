@@ -412,24 +412,110 @@ def fetch(pdir: Path, req: dict, cand: dict, scene: dict, aspect: str, known: li
     return entry
 
 
+# ---------- the live step report (the Subtasks page reads it while the stage runs) ----------
+REPORT = "asset_collection_report.json"
+STEPS = ("Requirements from the Visual Plan", "Search licensed sources", "Choose the best candidates (LLM)", "Download and prepare the media", "Manifest and rights check")
+
+
+class _Report:
+    """Which step of the stage runs and how many of its items are done, written to REPORT at every change (never an estimate: a step shows only the counts it really reached)."""
+
+    def __init__(self, pdir: Path) -> None:
+        self.path = pdir / REPORT
+        self.rows = [{"n": i, "name": nm, "status": "pending", "detail": "waiting", "checks_passed": 0, "checks_total": 0, "progress_percent": 0} for i, nm in enumerate(STEPS, 1)]
+        self.status, self.started = "running", time.time()
+        self.write()
+
+    def write(self) -> None:
+        _save(self.path, {"schema_version": "1.0", "status": self.status, "started_at": self.started, "stages": self.rows, "updated_at": _now()})
+
+    def step(self, n: int, status: str, detail: str, done: int = 0, total: int = 0, evidence: dict | None = None) -> None:
+        """`evidence`: the facts the recorded detail stands on (what the LLM check of the step is shown: a step that claims something without facts cannot be confirmed)."""
+        pct = 100 if status == "completed" else min(99, max(1, round(100 * done / total))) if total and done else 0
+        self.rows[n - 1].update(status=status, detail=detail, checks_passed=done, checks_total=total, progress_percent=pct)
+        if evidence is not None:
+            self.rows[n - 1]["evidence"] = evidence
+        self.write()
+
+    def fail(self, why: str) -> None:
+        row = next((r for r in self.rows if r["status"] == "running"), self.rows[-1])
+        self.step(row["n"], "failed", why[:300], row["checks_passed"], row["checks_total"])
+        self.status = "failed"
+        self.write()
+
+    def finish(self) -> None:
+        self.status = "completed"
+        self.write()
+
+
+def _req_fact(r: dict) -> dict:
+    return {"requirement_id": r["requirement_id"], "scene_id": r["scene_id"], "kind": r["kind"], "query": r["query"], "must_be_real": r["must_be_real"]}
+
+
+def _asset_fact(a: dict) -> dict:
+    return {k: a.get(k) for k in ("requirement_id", "asset_id", "file", "file_sha256", "rights_class", "needs_human_review", "selected_by", "authenticity")}
+
+
+def _end_facts(pdir: Path, man: dict) -> dict:
+    """What the last step stands on: the manifest as written and what the stage's own checks say about it."""
+    return {"requirement_count": man["requirement_count"], "assets": len(man["assets"]), "fallbacks": len(man["fallbacks"]), "input_fingerprint": man["input_fingerprint"],
+            "needs_rights_review": [a["asset_id"] for a in man["assets"] if a.get("needs_human_review")],
+            "check_findings": [{k: f[k] for k in ("severity", "code", "message")} for f in check_assets(pdir, man)]}
+
+
+def live_progress(pdir: Path) -> dict | None:
+    """How far the running stage is, from its own step report (None when the report is not of a run in progress): the detail of the step that runs, the percent of all steps, the run's start."""
+    rep = _load(pdir / REPORT, {})
+    if rep.get("status") != "running":
+        return None
+    rows = rep.get("stages") or []
+    now = next((r for r in rows if r["status"] == "running"), None)
+    return {"detail": f"{now['name']}: {now['detail']}" if now else "starting", "started_at": rep.get("started_at"),
+            "percent": round(sum(100 if r["status"] == "completed" else r.get("progress_percent", 0) for r in rows) / max(1, len(rows)), 1)}
+
+
 # ---------- the stage ----------
 def run(pdir: Path, aspect: str = "16:9", force: bool = False) -> dict:
     """The whole stage. Reuses a manifest that is current (same scenes, every file present and unchanged). Raises AssetError with the exact cause on failure."""
+    rep = _Report(pdir)
+    try:
+        manifest = _collect(pdir, aspect, force, rep)
+    except Exception as e:                                         # the step that was running is the one that failed
+        rep.fail(str(e))
+        raise
+    rep.finish()
+    return manifest
+
+
+def _collect(pdir: Path, aspect: str, force: bool, rep: _Report) -> dict:
     fp = input_fingerprint(pdir, aspect)
     prev = _load(manifest_path(pdir), {})
     current = prev.get("schema") == SCHEMA_MAN and prev.get("input_fingerprint") == fp and not force
     if current and not check_assets(pdir, prev):
+        reused, total = "nothing changed since the last run (same input fingerprint, every file present and unchanged): the collected media is reused", prev["requirement_count"]
+        reqs = load_requirements(pdir).get("requirements", [])
+        facts = {1: {"requirements": [_req_fact(r) for r in reqs]}, 2: {"searched": "no search: reused", "providers": prev.get("providers", {})},
+                 3: {"picks": [{"requirement_id": a["requirement_id"], "selected_by": a.get("selected_by")} for a in prev["assets"]], "no_pick": [f["requirement_id"] for f in prev["fallbacks"]]},
+                 4: {"assets": [_asset_fact(a) for a in prev["assets"]], "fallbacks": prev["fallbacks"]}, 5: _end_facts(pdir, prev)}
+        proof = {"input_fingerprint": fp, "equals_the_last_manifest": True, "files_checked": len(prev["assets"]), "file_problems": []}      # what the reuse claim of every step rests on
+        for n in range(1, len(STEPS) + 1):
+            rep.step(n, "completed", reused, total, total, {**facts[n], "reuse_proof": proof})
         return prev
+    rep.step(1, "running", "reading what the Visual Plan asks for")
     reqs = plan_requirements(pdir, aspect, force=force)["requirements"]
+    rep.step(1, "completed", f"{len(reqs)} requirement(s) from visual_planning.json" if reqs else "no scene needs real media", len(reqs), len(reqs), {"requirements": [_req_fact(r) for r in reqs]})
     scenes = {s["id"]: s for s in scenes_of(pdir)}
     kept = {a["requirement_id"]: a for a in prev.get("assets", []) if current and not _file_problems(pdir, a)}          # files that are still good are not fetched again
     rows, providers = [], {}
-    for r in reqs:
-        if r["requirement_id"] in kept:
-            continue
+    todo = [r for r in reqs if r["requirement_id"] not in kept]
+    for i, r in enumerate(todo):
+        rep.step(2, "running", f"searching '{r['query']}' ({i} of {len(todo)} done)", i, len(todo))
         cands, st = search(r, aspect)
         providers.update(st)
         rows.append({"requirement": r, "scene": scenes[r["scene_id"]], "candidates": cands, "later": list(r.get("alt_queries", [])), "seen": {c["id"] for c in cands}})
+    rep.step(2, "completed", f"{len(todo)} requirement(s) searched, {sum(len(x['candidates']) for x in rows)} candidate(s) found" + (f"; {len(kept)} kept from the last run" if kept else ""), len(todo), len(todo),
+             {"candidates_found": {x["requirement"]["requirement_id"]: len(x["candidates"]) for x in rows}, "kept_from_last_run": list(kept), "providers": providers})
+    rep.step(3, "running", f"the language model is choosing among the candidates of {len(rows)} requirement(s)")
     picks = choose(pdir, rows)
     for _ in range(2):                                              # the model said none of the candidates fits: try the next alternative query (new candidates only), then ask again
         retry = [x for x in rows if picks[x["requirement"]["requirement_id"]] == (None, "llm") and x["later"]]
@@ -441,8 +527,12 @@ def run(pdir: Path, aspect: str = "16:9", force: bool = False) -> dict:
             x["candidates"] = [c for c in more if c["id"] not in x["seen"]]
             x["seen"] |= {c["id"] for c in x["candidates"]}
         picks.update(choose(pdir, [x for x in retry if x["candidates"]]))
+    picked = sum(1 for p in picks.values() if p[0] is not None)
+    rep.step(3, "completed", f"{picked} of {len(rows)} requirement(s) have a candidate the model picked", len(rows), len(rows),
+             {"picks": [{"requirement_id": k, "candidate_index": v[0], "selected_by": v[1]} for k, v in picks.items()]})
     assets, fallbacks = list(kept.values()), []
-    for row in rows:
+    for i, row in enumerate(rows):
+        rep.step(4, "running", f"downloading and preparing media for {row['requirement']['requirement_id']} ({i} of {len(rows)} done)", i, len(rows))
         r, cands = row["requirement"], row["candidates"]
         idx, by = picks[r["requirement_id"]]
         order = [] if idx is None and by == "llm" else ([idx] if idx is not None else []) + [i for i in range(len(cands)) if i != idx]    # the LLM said none fits: none is used
@@ -463,11 +553,15 @@ def run(pdir: Path, aspect: str = "16:9", force: bool = False) -> dict:
         else:
             fallbacks.append({"requirement_id": r["requirement_id"], "scene_id": r["scene_id"], "kind": r["kind"], "must_be_real": r["must_be_real"], "reason": reason,
                               "action": "the scene keeps its generated motion graphics"})
+    rep.step(4, "completed", f"{len(assets)} real asset(s) ready" + (f"; {len(fallbacks)} requirement(s) fall back to generated motion graphics" if fallbacks else ""), len(rows), len(rows),
+             {"assets": [_asset_fact(a) for a in assets], "fallbacks": fallbacks})
+    rep.step(5, "running", "writing the manifest and checking rights")
     manifest = {"schema": SCHEMA_MAN, "version": VERSION, "input_fingerprint": fp, "aspect": aspect, "requirement_count": len(reqs), "assets": assets, "fallbacks": fallbacks,
                 "providers": providers, "generated_at": _now()}
     _save(manifest_path(pdir), manifest)
     if (missing := [f for f in fallbacks if f["must_be_real"]]):
         raise AssetError("no acceptable real media for " + "; ".join(f"{m['requirement_id']} ({m['reason']})" for m in missing))
+    rep.step(5, "completed", f"manifest written; {sum(1 for a in assets if a.get('needs_human_review'))} asset(s) listed for the rights review in Final QC", 1, 1, _end_facts(pdir, manifest))
     return manifest
 
 

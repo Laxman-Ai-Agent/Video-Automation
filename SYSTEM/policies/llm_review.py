@@ -343,7 +343,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                 payload["scenes_planned"] = len(vp.get("scenes", []))
                 payload["errors"] = vp.get("validation", {}).get("errors", [])
                 payload["warnings"] = vp.get("validation", {}).get("warnings", [])
-                payload["media_mix"] = vp.get("media_mix")                       # the shares chosen at upload against what the plan reached
+                payload["media_mix"] = vp.get("media_mix")                       # what the plan really carries (information only: there is no share to reach)
                 payload["totals"] = vp.get("totals")
                 payload["scenes_overview"] = [{"scene": s.get("scene_id"), "meaning": (s.get("scene_objective") or {}).get("core_meaning"), "primary": s.get("hero"), "counts": s.get("counts"),
                                                "real_media": [{"type": r.get("media_type"), "query": r.get("query"), "fallback": r.get("fallback")} for r in s.get("media_requirements", [])]}
@@ -801,10 +801,10 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
     elif stage == "planning":
         user_prompt += (
             "- Evaluate the visual plan: does every scene show its narration's meaning, and is there visual diversity across scenes (motion graphics, real photos, real clips)?\n"
-            "- media_mix compares the shares the user chose at upload (target) with what the plan reached (actual). A mix that is off because the narration has too few things a camera can show is acceptable "
-            "when the plan says so. The planner is told to ground an abstract narration in a concrete visual metaphor or real-world setting to reach the user's shares, so a real photo or clip used as a mood or metaphor is "
-            "NOT a finding when the same scene has drawn text or a graphic that says the narration's meaning (see counts: every scene keeps its drawn layer on top of the picture). It is a finding only when the real media is "
-            "the only carrier of the meaning, or shows something that contradicts or misleads the narration; a scene whose narration is a concrete filmable subject that is drawn although the user asked for more real media is also a finding.\n"
+            "- Every video is 100% motion graphics and real photos or clips are used INSIDE the animated scenes in any amount: media_mix only reports how much of the video each kind of primary element carries; "
+            "there is NO share to reach, so a high or low share of real media is never a finding by itself. A real photo or clip used as a mood or metaphor is NOT a finding when the same scene has drawn text or "
+            "a graphic that says the narration's meaning (see counts: every scene keeps its drawn layer on top of the picture). It is a finding only when the real media is the only carrier of the meaning, "
+            "or shows something that contradicts or misleads the narration.\n"
             "- Every real element (scenes_overview[].real_media) needs a plain-English query that names what is visible (never a brand or a person) and a motion fallback.\n"
             "- Verify all planned scenes are covered with zero blocking errors."
         )

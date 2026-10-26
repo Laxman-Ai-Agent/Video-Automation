@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { DEFAULT_MEDIA, MediaMix, total } from '../services/mediaMix';
+import { DEFAULT_MEDIA, MediaMix } from '../services/mediaMix';
 import { 
   Film, 
   AlertCircle, 
@@ -78,11 +78,6 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
 
     if (!audioFile) {
       setError('Audio File is required. Please select or drop an audio file (.mp3, .wav, .m4a, etc.).');
-      return;
-    }
-
-    if (total(media) !== 100) {
-      setError(`The media mix must add up to 100% (it adds up to ${total(media)}%).`);
       return;
     }
 

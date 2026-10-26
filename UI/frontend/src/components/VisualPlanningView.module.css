@@ -90,32 +90,6 @@
   color: var(--text-secondary);
   line-height: 1.45;
 }
-  position: relative;
-  height: 8px;
-  border-radius: 4px;
-  background-color: var(--bg-card);
-  overflow: visible;
-}
-
-.mixFill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.3s ease;
-}
-
-.mixMarker {
-  position: absolute;
-  top: -3px;
-  width: 2px;
-  height: 14px;
-  background-color: var(--text-primary);
-}
-
-.mixNote {
-  font-size: 11.5px;
-  color: var(--text-muted);
-  margin-top: 10px;
-}
 
 /* Totals Row */
 .totalsGrid {

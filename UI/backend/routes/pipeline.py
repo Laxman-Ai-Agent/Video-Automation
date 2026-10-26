@@ -1004,13 +1004,17 @@ def get_resume_plan(pid: str, aspect: str | None = None):
 def get_stage_subtasks(pid: str, stage_id: str):
     """The steps the stage recorded in its last report (status, detail, checks) with the LLM check of each, when that report was written, the stage's
     stored LLM review and how many LLM calls the agent log shows for it. Steps without a check of their current result start being checked in the
-    background (one LLM call per step). A stage without a step report returns no steps: the UI says so instead of inventing them."""
+    background (one LLM call per step). A stage without a step report returns no steps: the UI says so instead of inventing them. While the stage runs, a
+    report written before this run started belongs to the previous run and is never returned: only what the new run has written shows."""
     import json as _json
     from .. import pipeline_issues, step_llm_check
     pdir = store.project_dir(pid)
     aspect = pipeline_view.aspect_of(pdir)
     steps, _rep, f = step_llm_check.steps(pdir, stage_id, aspect)
     report, written = (f.name, f.stat().st_mtime) if f is not None and f.exists() else (None, None)
+    started = pipeline_view.run_started_at(pid, stage_id)
+    if started is not None and written is not None and written < started:
+        steps, report, written = [], None, None
 
     # Gating: Whisper speech-to-text (audio to Telugu) and audio_analysis.json must be ready before LLM checks
     whisper_ready = True
@@ -1132,7 +1136,7 @@ def get_stage_subtasks(pid: str, stage_id: str):
             # Running/processing: reflect dynamic work, capped below 100%
             if prog is not None and 0 < prog < 100:
                 pct = int(prog)
-            elif total and total > 1 and passed is not None and 0 < passed < total:
+            elif total and total > 1 and passed is not None and 0 <= passed < total:
                 pct = min(95, round((passed / total) * 100))
             else:
                 pct = 50
@@ -1204,5 +1208,24 @@ def run_stage_subtask_checks(pid: str, stage_id: str):
     aspect = pipeline_view.aspect_of(pdir)
     started = step_llm_check.start(pdir, stage_id, aspect)
     return {"started": started, "pending": step_llm_check.pending(pdir, stage_id, aspect), "running": step_llm_check.load(pdir, stage_id, aspect)["running"]}
+
+
+@router.post("/stages/{stage_id}/subtasks/{n}/retry", status_code=202)
+def retry_stage_subtask(pid: str, stage_id: str, n: int):
+    """Run only step `n` again. A Visual Planning step that has warnings is solved by one planner call about the scenes that raised them (every other scene stays as it is); any other
+    step gets its LLM check asked again. The rest of the stage is never run."""
+    from .. import step_llm_check, visual_planning
+    pdir = store.project_dir(pid)
+    aspect = pipeline_view.aspect_of(pdir)
+    step = next((s for s in step_llm_check.steps(pdir, stage_id, aspect)[0] if s.get("n") == n), None)
+    if step is None:
+        raise ApiError(404, "no_such_step", f"Stage '{stage_id}' has no step {n} in its report")
+    if stage_id == "planning" and (step.get("status") or "").lower() in ("warning", "failed", "error"):
+        try:
+            visual_planning.start_fix(pdir, n)
+        except review.ReviewError as e:
+            raise ApiError(409, "retry_not_allowed", str(e)) from e
+        return {"kind": "solve_warnings", "started": True}
+    return {"kind": "llm_check", "started": step_llm_check.recheck(pdir, stage_id, aspect, n)}
 
 

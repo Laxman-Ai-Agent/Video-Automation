@@ -259,9 +259,6 @@ export async function createProjectWithAudio(
   formData.append('audio', audioFile);
   formData.append('aspect', aspect);
   formData.append('reusable_motion_templates', reusableTemplates ? 'true' : 'false');
-  formData.append('media_motion', String(media.motion));            // the shares of the video are set here and never change afterwards
-  formData.append('media_image', String(media.image));
-  formData.append('media_video', String(media.video));
   formData.append('ai_images', media.ai_images ? 'true' : 'false');
 
   const res = await fetch(`${API_BASE}/projects`, {
@@ -534,6 +531,18 @@ export async function runStageStepChecks(projectId: string, stageId: string): Pr
     return await res.json();
   } catch {
     return null;
+  }
+}
+
+// Run only one step of a stage again (Visual Planning: its warnings are solved; any other step: its LLM check is asked again)
+export async function retryStageSubtask(projectId: string, stageId: string, n: number): Promise<{ ok: boolean; kind?: string; message?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/stages/${stageId}/subtasks/${n}/retry`, { method: 'POST' });
+    const body = await res.json().catch(() => null);
+    if (!res.ok) return { ok: false, message: body?.message || body?.detail?.message || `HTTP ${res.status}` };
+    return body?.started === false ? { ok: false, message: 'A check of this stage is already running: try again when it finishes' } : { ok: true, kind: body?.kind };
+  } catch (e: any) {
+    return { ok: false, message: String(e?.message || e) };
   }
 }
 

@@ -24,52 +24,38 @@ def test_every_kind_has_a_known_family_and_group():
     assert mk.family_of("reference") == "image" and mk.group_of("reference") == "page" and mk.family_of("diagram") == "motion" and mk.group_of("chart") == "graphic" and mk.is_text("label") and mk.is_real("video") and not mk.is_real("icon")
 
 
-def test_defaults_are_60_30_10_without_ai_pictures():
-    assert mk.normalise(None) == {"motion": 60, "image": 30, "video": 10, "ai_images": False}
-    assert mk.options({}) == mk.normalise(None) and mk.options({"media": {"motion": 50, "image": 50, "video": 0, "ai_images": True}})["image"] == 50
+def test_the_only_media_choice_is_ai_pictures_and_the_old_shares_are_ignored():
+    assert mk.normalise(None) == {"ai_images": False} == mk.DEFAULT_MEDIA
+    assert mk.options({}) == mk.normalise(None)
+    assert mk.options({"media": {"motion": 50, "image": 50, "video": 0, "ai_images": True}}) == {"ai_images": True}          # a project made with shares keeps working: the shares mean nothing now
+    with pytest.raises(ValueError, match="true or false"):
+        mk.normalise({"ai_images": "yes"})
+    assert not hasattr(mk, "allowed")                                                                                          # every family is always available inside the motion graphics
 
 
-@pytest.mark.parametrize("raw, why", [({"motion": 50, "image": 30, "video": 10}, "add up to 100"), ({"motion": 101, "image": 0, "video": 0}, "0 to 100"),
-                                      ({"motion": 60, "image": 30.5, "video": 9.5}, "whole number"), ({"motion": "60", "image": 30, "video": 10}, "whole number"),
-                                      ({"motion": 60, "image": 30, "video": 10, "ai_images": "yes"}, "true or false")])
-def test_a_mix_that_cannot_be_used_is_refused_with_the_reason(raw, why):
-    with pytest.raises(ValueError, match=why):
-        mk.normalise(raw)
-
-
-def test_a_family_with_a_zero_share_is_not_allowed_but_motion_always_is():
-    assert mk.allowed(mk.normalise({"motion": 100, "image": 0, "video": 0})) == ("motion",)
-    assert mk.allowed(mk.normalise({"motion": 70, "image": 30, "video": 0})) == ("motion", "image")
-    assert mk.allowed(mk.normalise({"motion": 0, "image": 60, "video": 40})) == mk.FAMILIES
-
-
-# ---------- the shares are set at upload and stored with the project ----------
-def test_a_project_stores_its_media_mix_at_creation(tmp_path, monkeypatch):
+# ---------- the setting is made at upload and stored with the project ----------
+def test_a_project_stores_its_media_settings_at_creation(tmp_path, monkeypatch):
     from SYSTEM.core import config
     monkeypatch.setattr(config, "PROJECTS_DIR", tmp_path)
-    pdir = store.create("Mix", "16:9", media={"motion": 40, "image": 40, "video": 20, "ai_images": True})
-    assert store.media(pdir) == {"motion": 40, "image": 40, "video": 20, "ai_images": True} and json.loads((pdir / "project.json").read_text(encoding="utf-8"))["media"]["image"] == 40
+    pdir = store.create("Mix", "16:9", media={"ai_images": True})
+    assert store.media(pdir) == {"ai_images": True} and json.loads((pdir / "project.json").read_text(encoding="utf-8"))["media"] == {"ai_images": True}
     assert store.media(store.create("Default")) == mk.DEFAULT_MEDIA
     with pytest.raises(ValueError):
-        store.create("Bad", media={"motion": 10, "image": 10, "video": 10})
-    assert not any(p.name.startswith("bad") for p in tmp_path.iterdir())              # nothing is made for a mix that cannot be used
+        store.create("Bad", media={"ai_images": "maybe"})
+    assert not any(p.name.startswith("bad") for p in tmp_path.iterdir())              # nothing is made for a setting that cannot be used
 
 
-def test_the_api_takes_the_mix_at_upload_and_refuses_one_that_does_not_add_up(client):
-    ok = client.post("/projects", data={"name": "A", "media_motion": 50, "media_image": 30, "media_video": 20, "ai_images": "true"}, files={"audio": ("a.wav", _m7.wav_bytes(), "audio/wav")})
-    assert ok.status_code == 201 and ok.json()["media"] == {"motion": 50, "image": 30, "video": 20, "ai_images": True}
-    assert client.get(f"/projects/{ok.json()['id']}").json()["media"]["video"] == 20
+def test_the_api_takes_the_setting_at_upload_and_no_share_is_asked(client):
+    ok = client.post("/projects", data={"name": "A", "ai_images": "true", "media_image": 30}, files={"audio": ("a.wav", _m7.wav_bytes(), "audio/wav")})     # a share sent by an old client is ignored
+    assert ok.status_code == 201 and ok.json()["media"] == {"ai_images": True}
     default = create(client)
-    assert default.status_code == 201 and default.json()["media"] == {"motion": 60, "image": 30, "video": 10, "ai_images": False}
-    bad = client.post("/projects", data={"name": "B", "media_motion": 50, "media_image": 30, "media_video": 30}, files={"audio": ("a.wav", _m7.wav_bytes(), "audio/wav")})
-    assert bad.status_code == 422 and "add up to 100" in bad.text
-    assert len(client.get("/projects").json()) == 2                                    # the refused upload made no project
+    assert default.status_code == 201 and default.json()["media"] == {"ai_images": False}
 
 
-def test_there_is_no_route_that_changes_the_mix_afterwards(client):
+def test_there_is_no_route_that_changes_the_setting_afterwards(client):
     pid = create(client).json()["id"]
-    client.patch(f"/projects/{pid}", json={"media": {"motion": 0, "image": 100, "video": 0}})
-    assert client.get(f"/projects/{pid}").json()["media"]["image"] == 30
+    client.patch(f"/projects/{pid}", json={"media": {"ai_images": True}})
+    assert client.get(f"/projects/{pid}").json()["media"] == {"ai_images": False}
 
 
 # ---------- the contract: every consumer handles every kind ----------
@@ -79,10 +65,8 @@ def test_every_consumer_handles_every_kind():
     # the per-scene counts have a place for every kind
     got = rules.counts([{"element_id": t, "type": t} for t in mk.TYPES])
     assert sum(got.values()) == len(mk.TYPES) and set(got) == set(mk.GROUPS)
-    # the planner is told about every kind a project allows
-    text = vp.spec(mk.normalise({"motion": 20, "image": 40, "video": 40}))
-    assert all(f"- {t} (" in text for t in mk.TYPES)
-    assert "- image (" not in vp.spec(mk.normalise({"motion": 100, "image": 0, "video": 0})) and "- video (" not in vp.spec(mk.normalise({"motion": 70, "image": 30, "video": 0}))
+    # the planner is told about every kind, whatever the project's settings
+    assert all(f"- {t} (" in vp.spec(mk.normalise(raw)) for t in mk.TYPES for raw in (None, {"ai_images": True}))
     # Asset Collection knows what to collect for every real kind
     assert set(asset_collection.KIND_OF) == set(mk.REAL_TYPES)
     # Motion Planning resolves every kind to something (drawn, collected or a recorded fallback), never an exception

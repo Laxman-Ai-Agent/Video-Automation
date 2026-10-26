@@ -3,15 +3,15 @@
 Three families, fixed for good: motion (drawn by code: text, icons, graphics ...), image (a real or AI-made picture) and video (a real clip).
 A new kind of element is one more row in KINDS (plus its handler, which tests/test_media_kinds.py insists on); no other file needs a new tuple of type names.
 
-Per project the user sets, at upload and never afterwards, how much of the video each family carries (a share of the time, the three sum to 100) and whether AI-made pictures
-are wanted: project.json key `media` = {"motion": 60, "image": 30, "video": 10, "ai_images": false}."""
+Every video is 100% motion graphics: real pictures and clips (and AI-made pictures when wanted) are drawn INSIDE the animated scenes, in any number the narration calls for; there is no share
+to reach. Per project the user sets, at upload and never afterwards, only whether AI-made pictures are wanted: project.json key `media` = {"ai_images": false}."""
 from __future__ import annotations
 
 from dataclasses import dataclass
 
 FAMILIES = ("motion", "image", "video")
 GROUPS = ("text", "icon", "graphic", "background", "image", "video", "page")      # what the UI counts for every scene
-DEFAULT_MEDIA = {"motion": 60, "image": 30, "video": 10, "ai_images": False}
+DEFAULT_MEDIA = {"ai_images": False}
 
 
 @dataclass(frozen=True)
@@ -58,20 +58,12 @@ def is_real(type_: str) -> bool:
 
 
 def normalise(raw: dict | None) -> dict:
-    """The media settings of a project from what the user sent (None = the defaults). Raises ValueError with the reason when they cannot be used."""
+    """The media settings of a project from what the user sent (None = the defaults). Raises ValueError with the reason when they cannot be used.
+    The shares of motion / image / video that an earlier version stored are ignored: media is unlimited."""
     raw = {**DEFAULT_MEDIA, **(raw or {})}
-    out: dict = {}
-    for f in FAMILIES:
-        v = raw[f]
-        if isinstance(v, bool) or not isinstance(v, (int, float)) or v != int(v) or not 0 <= v <= 100:
-            raise ValueError(f"the share of {f} must be a whole number from 0 to 100")
-        out[f] = int(v)
-    if sum(out[f] for f in FAMILIES) != 100:
-        raise ValueError(f"motion, image and video must add up to 100 (they add up to {sum(out[f] for f in FAMILIES)})")
     if not isinstance(raw["ai_images"], bool):
         raise ValueError("ai_images must be true or false")
-    out["ai_images"] = raw["ai_images"]
-    return out
+    return {"ai_images": raw["ai_images"]}
 
 
 def options(info: dict) -> dict:
@@ -80,8 +72,3 @@ def options(info: dict) -> dict:
         return normalise(info.get("media"))
     except ValueError:
         return dict(DEFAULT_MEDIA)
-
-
-def allowed(opts: dict) -> tuple[str, ...]:
-    """The families a plan may use: motion always (the text and graphics on top of every scene), image and video only when their share is above 0."""
-    return tuple(f for f in FAMILIES if f == "motion" or opts[f] > 0)

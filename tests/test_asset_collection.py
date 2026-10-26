@@ -172,6 +172,48 @@ def test_a_current_manifest_is_reused_without_search_download_or_llm(pdir, monke
     assert len(downloads) == n_down + 1 and f.exists() and len(searches) == n_search
 
 
+def _report(pdir):
+    return json.loads((pdir / ac.REPORT).read_text(encoding="utf-8"))
+
+
+def test_the_stage_writes_its_steps_live_and_finishes_them_all(pdir, monkeypatch):
+    seen = []
+    real = ac._Report.write
+    monkeypatch.setattr(ac._Report, "write", lambda self: (real(self), seen.append((self.status, [r["status"] for r in self.rows], ac.live_progress(self.path.parent))))[0])
+    use(monkeypatch, LLM([REQ], choice=1), results={"*": [cand(1), cand(2)]}, files={"pexels:2": jpeg(seed=3)})
+    ac.run(pdir)
+    assert any(st == "running" and "running" in rows and lp and 0 <= lp["percent"] < 100 for st, rows, lp in seen)       # a step was seen running, with a real percent, before the end
+    percents = [lp["percent"] for st, rows, lp in seen if lp]
+    assert percents == sorted(percents)                                                                                  # the percent never goes back
+    rep = _report(pdir)
+    assert rep["status"] == "completed" and [r["status"] for r in rep["stages"]] == ["completed"] * len(ac.STEPS) and ac.live_progress(pdir) is None
+    assert rep["stages"][3]["detail"].startswith("1 real asset(s) ready")
+
+
+def test_every_step_carries_the_facts_it_stands_on_also_when_the_last_result_is_reused(pdir, monkeypatch):
+    from backend import step_llm_check
+    use(monkeypatch, LLM([REQ], choice=1), results={"*": [cand(1), cand(2)]}, files={"pexels:2": jpeg(seed=3)})
+    ac.run(pdir)
+    rows = _report(pdir)["stages"]
+    assert all(r.get("evidence") for r in rows)                                                       # a step without facts cannot be confirmed by the LLM check
+    assert rows[0]["evidence"]["requirements"][0]["query"] == "Nile river flood" and rows[3]["evidence"]["assets"][0]["file_sha256"]
+    assert rows[4]["evidence"]["check_findings"] == [] and rows[4]["evidence"]["assets"] == 1
+    ac.run(pdir)                                                                                      # nothing changed: reused, still with counts and facts
+    again = _report(pdir)["stages"]
+    assert all(r["status"] == "completed" and r["checks_total"] == 1 and r["evidence"]["reuse_proof"]["input_fingerprint"] and r["evidence"]["reuse_proof"]["file_problems"] == [] for r in again) and "reused" in again[0]["detail"]
+    ev = step_llm_check.build_step_evidence("assets", {"n": 4, "name": again[3]["name"]}, _report(pdir))
+    assert ev["step_evidence"]["assets"][0]["rights_class"] == "A" and ev["recorded_detail"] == again[3]["detail"] and ev["subtask_checks_total"] == 1
+
+
+def test_a_failing_stage_marks_the_step_that_ran_as_failed(pdir, monkeypatch):
+    use(monkeypatch, LLM([{**REQ, "must_be_real": True}]), results={"*": []})
+    with pytest.raises(ac.AssetError):
+        ac.run(pdir)
+    rep = _report(pdir)
+    assert rep["status"] == "failed" and [r["status"] for r in rep["stages"]] == ["completed"] * 4 + ["failed"] and "no acceptable real media" in rep["stages"][4]["detail"]
+    assert ac.live_progress(pdir) is None
+
+
 def test_search_is_cached_and_a_total_outage_is_not(pdir, monkeypatch):
     req = {"requirement_id": "r", "scene_id": 1, "kind": "photo", "query": "river", "alt_queries": []}
     searches, _ = use(monkeypatch, LLM(), results={"*": [cand(1)]})

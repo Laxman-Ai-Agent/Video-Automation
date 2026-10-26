@@ -259,3 +259,37 @@
 .footerCloseBtn:hover {
   opacity: 0.9;
 }
+
+.footer {
+  gap: 10px;
+}
+
+.retryMessage {
+  margin-right: auto;
+  font-size: 12px;
+  color: #FBBF24;
+}
+
+.footerRetryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 16px;
+  border-radius: 6px;
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #F59E0B;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid rgba(245, 158, 11, 0.6);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.footerRetryBtn:hover:not(:disabled) {
+  background-color: rgba(245, 158, 11, 0.28);
+}
+
+.footerRetryBtn:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}

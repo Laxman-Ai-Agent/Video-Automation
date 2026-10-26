@@ -24,7 +24,7 @@ import {
   Activity,
   Sparkles,
 } from 'lucide-react';
-import { SubtaskStep } from '../services/api';
+import { SubtaskStep, retryStageSubtask } from '../services/api';
 import { SubtaskDetailModal } from './SubtaskDetailModal';
 import { getSubtaskVisualMeta } from './subtask-card/subtaskVisualMeta';
 
@@ -35,6 +35,8 @@ export interface SubtaskCardProps {
   llmChecksRunning?: boolean;
   activeModel?: string;
   stageId?: string;
+  projectId?: string;
+  onRetried?: () => void;                // called after a retry started: the page loads the steps again
 }
 
 export const SubtaskCard: React.FC<SubtaskCardProps> = ({
@@ -44,6 +46,8 @@ export const SubtaskCard: React.FC<SubtaskCardProps> = ({
   llmChecksRunning = false,
   activeModel = 'gemini-3.8-flash-high',
   stageId,
+  projectId,
+  onRetried,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -227,6 +231,14 @@ export const SubtaskCard: React.FC<SubtaskCardProps> = ({
   const isCardActive = cardState === 'in_progress';
   const isCardVerified = cardState === 'verified';
   const hasIssue = cardState === 'warning' || cardState === 'failed';
+  // Only what can be run alone: a Visual Planning step with warnings (its scenes are planned again) or a step the LLM questioned / rejected (its check is asked again)
+  const canRetry = hasIssue && !stageRunning && Boolean(projectId && stageId)
+    && ((stageId === 'planning' && (isRawWarning || isRawError)) || isQuestioned || isRejected);
+  const retry = async () => {
+    const res = await retryStageSubtask(projectId!, stageId!, n);
+    if (res.ok) onRetried?.();
+    return res;
+  };
 
   return (
     <>
@@ -386,6 +398,7 @@ export const SubtaskCard: React.FC<SubtaskCardProps> = ({
           modelName={modelName}
           latencyMs={latencyMs}
           noteText={noteText}
+          onRetry={canRetry ? retry : undefined}
         />
       )}
     </>

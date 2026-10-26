@@ -71,7 +71,7 @@ class VisualPlanningAgent(BaseAgent):
         mix = plan.get("media_mix", {})
         outputs = [ArtifactRef(path=str(p), description=d) for p, d in ((vf, "Visual Planning JSON"), (project_dir / "scene_plan.json", "Scene Plan JSON")) if p.exists()]
         return self._result(project_dir, "succeeded", f"Visual planning assembled for {len(scenes)} scenes", output_refs=outputs,
-                            metadata={"scenes_count": len(scenes), "media_mix_target": mix.get("target"), "media_mix_actual": mix.get("actual"), "totals": plan.get("totals"),
+                            metadata={"scenes_count": len(scenes), "media_mix_actual": mix.get("actual"), "totals": plan.get("totals"),
                                       "skills_used": SKILLS_USED, "memory_used": MEMORIES_USED, "project_media": store.media(project_dir)})
 
 

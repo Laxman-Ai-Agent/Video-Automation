@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './SubtaskDetailModal.module.css';
 import {
   X,
   Sparkles,
   Info,
   Cpu,
+  RotateCw,
 } from 'lucide-react';
 import { SubtaskStep } from '../services/api';
 
@@ -35,6 +36,8 @@ export interface SubtaskDetailModalProps {
   modelName: string;
   latencyMs?: number;
   noteText: string;
+  // Runs only this subtask again; given only when that is possible. ok = it started (the modal closes: the card shows the new run)
+  onRetry?: () => Promise<{ ok: boolean; message?: string }>;
 }
 
 /**
@@ -164,8 +167,21 @@ export const SubtaskDetailModal: React.FC<SubtaskDetailModalProps> = ({
   modelName,
   latencyMs,
   noteText,
+  onRetry,
 }) => {
+  const [retrying, setRetrying] = useState(false);
+  const [retryMessage, setRetryMessage] = useState('');
   if (!isOpen) return null;
+
+  const retry = async () => {
+    if (!onRetry) return;
+    setRetrying(true);
+    setRetryMessage('');
+    const res = await onRetry();
+    setRetrying(false);
+    if (res.ok) onClose();
+    else setRetryMessage(res.message || 'Retry could not start');
+  };
 
   const rawStatus = (subtask.status || '').toLowerCase();
   const narration = getHumanNarration(name, rawStatus, cardState, noteText, modelName, subtask.detail, n);
@@ -297,6 +313,18 @@ export const SubtaskDetailModal: React.FC<SubtaskDetailModalProps> = ({
 
         {/* Modal Footer */}
         <div className={styles.footer}>
+          {retryMessage && <span className={styles.retryMessage} data-testid={`subtask-retry-message-${n}`}>{retryMessage}</span>}
+          {onRetry && (
+            <button
+              onClick={retry}
+              disabled={retrying}
+              className={styles.footerRetryBtn}
+              data-testid={`subtask-retry-btn-${n}`}
+            >
+              <RotateCw size={13} className={retrying ? 'animate-spin' : undefined} />
+              {retrying ? 'Retrying…' : 'Retry this subtask'}
+            </button>
+          )}
           <button
             onClick={onClose}
             className={styles.footerCloseBtn}

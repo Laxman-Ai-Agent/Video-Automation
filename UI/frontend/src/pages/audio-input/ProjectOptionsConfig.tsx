@@ -1,7 +1,7 @@
 import React from 'react';
 import { Tv, Check, Sliders } from 'lucide-react';
 import { MediaMix } from '../../services/mediaMix';
-import { MediaMixPicker } from '../../components/MediaMixPicker';
+import { AiPicturesOption } from '../../components/AiPicturesOption';
 
 export interface ProjectOptionsConfigProps {
   aspect: '16:9' | '9:16';
@@ -197,7 +197,7 @@ export const ProjectOptionsConfig: React.FC<ProjectOptionsConfigProps> = ({
           </span>
         </div>
 
-        <MediaMixPicker value={media} onChange={setMedia} disabled={submitting} />
+        <AiPicturesOption value={media} onChange={setMedia} disabled={submitting} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px' }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>

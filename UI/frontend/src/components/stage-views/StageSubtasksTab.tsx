@@ -127,11 +127,6 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
           </div>
         );
       })()}
-      {isRunning && subSteps.length > 0 && (
-        <span style={{ fontSize: '12px', color: '#FBBF24' }}>
-          The stage is running now: these are the results of its last finished run and refresh when the new report is written.
-        </span>
-      )}
       <div style={{
         display: 'grid',
         gridTemplateColumns: isFullPage ? 'repeat(auto-fill, minmax(135px, 1fr))' : 'repeat(auto-fill, minmax(120px, 1fr))',
@@ -146,6 +141,8 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
             llmChecksRunning={Boolean(realSub?.llm_checks_running)}
             activeModel={realSub?.active_model || 'openai/gpt-oss-20b'}
             stageId={config.id}
+            projectId={projectId}
+            onRetried={() => projectId && fetchStageSubtasks(projectId, config.id).then(setRealSub)}
           />
         ))}
       </div>

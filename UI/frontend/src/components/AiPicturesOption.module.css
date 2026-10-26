@@ -1,0 +1,33 @@
+.option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.option[data-disabled='true'] {
+  cursor: default;
+}
+
+.checkbox {
+  margin-top: 2px;
+  accent-color: var(--accent-blue);
+}
+
+.title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.hint {
+  font-size: 10.5px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.note {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

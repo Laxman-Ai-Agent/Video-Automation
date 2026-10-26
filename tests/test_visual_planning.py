@@ -15,7 +15,7 @@ from VIDEO_ENGINE.stages import visual_planning as vp
 
 FIXTURE = Path(__file__).parent / "fixtures" / "plan_sample"
 REPS = ("object_in_context", "process_diagram", "comparison", "timeline", "chart", "map", "typography", "abstract_graphic")
-REAL = {1: "image", 3: "image", 6: "image", 7: "video"}                 # ~28% images + ~9% video of the fixture's 70 s: inside the tolerance of the default 60/30/10
+REAL = {1: "image", 3: "image", 6: "image", 7: "video"}                 # ~28% images + ~9% video of the fixture's 70 s
 
 
 def project(tmp_path, media=None, aspect=None):
@@ -71,7 +71,7 @@ def test_a_valid_planner_answer_becomes_the_visual_plan_with_every_field_of_the_
     plan, problems = vp.assemble(d, sp, raw_for(sp, REAL))
     assert problems == [] and plan["source"] == "llm" and plan["llm"]["status"] == "applied" and plan["validation"]["errors"] == [] and plan["validation"]["warnings"] == []
     assert plan["schema_version"] == "2.0" and {"project", "visual_style", "scenes", "stages", "validation", "llm", "needs_review", "media_mix", "totals"} <= set(plan)
-    assert plan["project"] == {"visual_mode": "mixed", "aspect_ratio": "16:9", "width": 1920, "height": 1080, "fps": 30, "media": mk.DEFAULT_MEDIA}
+    assert plan["project"] == {"visual_mode": "motion_graphics", "aspect_ratio": "16:9", "width": 1920, "height": 1080, "fps": 30, "media": mk.DEFAULT_MEDIA}
     s = scene(plan)
     assert {"scene_id", "source_segment_ids", "narration", "scene_objective", "visual_concept", "hero", "counts", "elements", "element_relationships", "media_requirements", "motion_hints",
             "continuity", "validation_notes"} <= set(s) and "asset_requirements" not in s
@@ -131,15 +131,14 @@ def test_every_scene_counts_its_elements_by_kind_and_the_plan_totals_them(tmp_pa
     assert plan["totals"] == {g: sum(s["counts"][g] for s in plan["scenes"]) for g in mk.GROUPS} and plan["totals"]["image"] == 3 and plan["totals"]["video"] == 1
 
 
-def test_the_plan_carries_the_chosen_shares_next_to_what_it_reached(tmp_path):
+def test_the_plan_reports_what_it_carries_and_asks_for_no_share(tmp_path):
     d, sp = project(tmp_path)
     plan, _ = vp.assemble(d, sp, raw_for(sp, REAL))
     mix = plan["media_mix"]
-    assert mix["target"] == {"motion": 60, "image": 30, "video": 10} and sum(mix["actual"].values()) == 100 and mix["off_target"] == []
+    assert set(mix) == {"actual", "scenes", "ai_images", "note"} and sum(mix["actual"].values()) == 100               # no target, no tolerance: media is unlimited
     assert mix["scenes"]["image"] == ["scene_01", "scene_03", "scene_06"] and mix["scenes"]["video"] == ["scene_07"] and mix["actual"]["image"] == 28 and mix["actual"]["video"] == 9
-    off, _ = vp.assemble(d, sp, raw_for(sp))                                                              # nothing real at all: images and video are far from their shares, and the plan says so
-    assert off["media_mix"]["off_target"] == ["motion", "image"] and off["media_mix"]["actual"] == {"motion": 100, "image": 0, "video": 0}      # video 0 against 10 is inside the tolerance
-    assert "fewer" in off["media_mix"]["note"]
+    none, _ = vp.assemble(d, sp, raw_for(sp))                                                              # nothing real at all is as valid as a lot of it
+    assert none["media_mix"]["actual"] == {"motion": 100, "image": 0, "video": 0} and none["validation"]["warnings"] == []
 
 
 def test_a_real_element_becomes_a_requirement_with_its_queries_and_its_fallback(tmp_path):
@@ -190,25 +189,19 @@ def test_a_real_picture_with_nothing_drawn_saying_the_meaning_is_a_warning(tmp_p
     assert problems == [] and "real_media_alone" in codes(plan) and "real_media_alone" in vp.FIX_HINTS
 
 
-def test_a_family_with_a_zero_share_becomes_a_flat_graphic_and_says_so(tmp_path):
-    d, sp = project(tmp_path, media={"motion": 70, "image": 30, "video": 0})
-    plan, problems = vp.assemble(d, sp, raw_for(sp, {1: "image", 7: "video"}))
-    video = next(e for e in scene(plan, 6)["elements"] if e["element_id"] == "video_main")
-    assert problems == [] and video["type"] == "graphic" and video["media"] is None and any("flat motion graphic" in c or "flat graphic" in c for c in video["constraints"])
-    assert "media_family_off" in codes(plan) and scene(plan, 6)["media_requirements"] == [] and scene(plan, 6)["hero"] == "motion"
-    assert scene(plan)["hero"] == "image" and len(scene(plan)["media_requirements"]) == 1                   # the family that is on is kept
-
-
-def test_with_images_and_video_off_the_plan_is_motion_only_and_needs_no_search(tmp_path):
-    d, sp = project(tmp_path, media={"motion": 100, "image": 0, "video": 0})
-    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL))
-    assert problems == [] and plan["project"]["visual_mode"] == "motion_only" and plan["totals"]["image"] == plan["totals"]["video"] == 0
-    assert all(s["media_requirements"] == [] and s["hero"] == "motion" for s in plan["scenes"]) and plan["media_mix"]["off_target"] == []
-    assert "image" not in vp.spec(mk.normalise({"motion": 100, "image": 0, "video": 0})).split("The types an element can have:")[1].split("4. element_relationships")[0]
+def test_images_and_video_are_always_allowed_inside_the_motion_graphics(tmp_path):
+    for raw in (None, {"ai_images": True}):
+        (tmp_path / str(bool(raw))).mkdir()
+        d, sp = project(tmp_path / str(bool(raw)), media=raw)
+        plan, problems = vp.assemble(d, sp, raw_for(sp, REAL))
+        assert problems == [] and plan["totals"]["image"] == 3 and plan["totals"]["video"] == 1 and not any(c == "media_family_off" for c in codes(plan))
+        assert scene(plan, 6)["hero"] == "video" and len(scene(plan)["media_requirements"]) == 1
+        text = vp.spec(mk.normalise(raw))
+        assert "100% Motion Graphics production" in text and "- image (" in text and "- video (" in text and "- reference (" in text
 
 
 def test_the_ai_prompt_is_kept_when_ai_pictures_are_wanted_derived_when_missing_and_dropped_otherwise(tmp_path):
-    d, sp = project(tmp_path, media={"motion": 60, "image": 30, "video": 10, "ai_images": True})
+    d, sp = project(tmp_path, media={"ai_images": True})
     plan, _ = vp.assemble(d, sp, raw_for(sp, REAL, ai_prompt=True))
     assert scene(plan)["media_requirements"][0]["ai_prompt"].startswith("office workers at their desks") and scene(plan, 6)["media_requirements"][0]["ai_prompt"] is None   # a video has none
     plan, _ = vp.assemble(d, sp, raw_for(sp, REAL))
@@ -228,17 +221,21 @@ def test_a_real_picture_that_fills_the_frame_is_a_backdrop_and_a_text_over_it_is
     assert "layout_overlap" in codes(plan)
 
 
-def test_more_than_two_real_elements_in_a_scene_is_a_warning(tmp_path):
+def test_more_real_elements_than_a_scene_can_hold_is_a_warning(tmp_path):
     d, sp = project(tmp_path)
 
-    def three(r):
-        for i in range(2):
-            e = json.loads(json.dumps(r["scenes"][0]["elements"][0]))
-            e.update(element_id=f"extra_{i}", role="supporting")
-            e["placement"]["region"] = ("left", "right")[i]
-            r["scenes"][0]["elements"].append(e)
-    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=three))
-    assert problems == [] and any("3 real pictures or clips" in w for w in plan["validation"]["warnings"])
+    def many(n):
+        def add(r):
+            for i in range(n - 1):
+                e = json.loads(json.dumps(r["scenes"][0]["elements"][0]))
+                e.update(element_id=f"extra_{i}", role="supporting")
+                e["placement"]["region"] = ("left", "right", "upper_safe_area", "lower_safe_area", "center")[i % 5]
+                r["scenes"][0]["elements"].append(e)
+        return add
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=many(3)))
+    assert problems == [] and not any("real pictures or clips" in w for w in plan["validation"]["warnings"])           # a bento of three pictures is fine: media is unlimited
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=many(vp.rules.MAX_REAL_PER_SCENE + 1)))
+    assert problems == [] and any(f"{vp.rules.MAX_REAL_PER_SCENE + 1} real pictures or clips" in w for w in plan["validation"]["warnings"])
 
 
 def reference(section=None, query="Mount Everest", region="right"):
@@ -260,13 +257,11 @@ def test_a_reference_asks_for_a_wikipedia_infobox_or_table_by_the_articles_title
     assert all(r.get("section") is None for s in plan["scenes"] for r in s["media_requirements"] if r["media_type"] != "reference")      # only a reference has a section
 
 
-def test_a_reference_is_part_of_the_image_family_and_needs_an_image_share(tmp_path):
-    d, sp = project(tmp_path, media={"motion": 70, "image": 0, "video": 30})
+def test_a_reference_is_always_available_and_is_part_of_the_image_family(tmp_path):
+    d, sp = project(tmp_path)
     plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: r["scenes"][1]["elements"].append(reference())))
     ref = next(e for e in scene(plan, 1)["elements"] if e["element_id"] == "ref_main")
-    assert problems == [] and ref["type"] == "graphic" and "media_family_off" in codes(plan) and scene(plan, 1)["media_requirements"] == []
-    text = vp.spec(mk.normalise({"motion": 70, "image": 0, "video": 30}))
-    assert "Never use an element of type image or reference" in text and "- reference (" not in text
+    assert problems == [] and ref["type"] == "reference" and mk.family_of("reference") == "image" and len(scene(plan, 1)["media_requirements"]) == 1
     on = vp.spec(mk.normalise(None))
     assert "- reference (image)" in on and "article's exact title" in on and "media.section" in on
 
@@ -346,7 +341,7 @@ def test_more_on_screen_texts_than_the_scenes_pattern_draws_is_an_error_that_nam
     assert problems == [] and scene(plan, 4)["counts"]["text"] == 2
     ask = Planner(raw_for(sp, REAL))
     vp.run(d, ask=ask)
-    assert '"max_texts": 1' in ask.asked[0][1] and '"max_texts": 2' in ask.asked[0][1] and "never give more" in ask.asked[0][1]
+    assert '"max_texts": 1' in ask.asked[0][1] and '"max_texts": 2' in ask.asked[0][1] and "draw only that many text elements" in ask.asked[0][1]
 
 
 def test_a_description_may_say_placeholder_but_an_unfinished_description_or_placeholder_text_is_rejected(tmp_path):
@@ -425,12 +420,12 @@ def test_there_is_no_derived_plan_for_a_project_that_never_ran_visual_planning(t
     assert sorted(p.name for p in d.iterdir()) == before                                                  # reading writes nothing
 
 
-def test_a_stored_plan_is_stale_when_the_scene_plan_or_the_media_shares_change(tmp_path):
+def test_a_stored_plan_is_stale_when_the_scene_plan_or_the_media_settings_change(tmp_path):
     d, sp = project(tmp_path)
     vp.save(d, vp.assemble(d, sp, raw_for(sp, REAL))[0])
     assert vp.load(d)["stale"] is False and vp.load(d)["stored"] is True and vp.blockers(d) is None
     info = json.loads((d / "project.json").read_text(encoding="utf-8"))
-    (d / "project.json").write_text(json.dumps({**info, "media": mk.normalise({"motion": 100, "image": 0, "video": 0})}), encoding="utf-8")
+    (d / "project.json").write_text(json.dumps({**info, "media": mk.normalise({"ai_images": True})}), encoding="utf-8")
     assert vp.load(d)["stale"] is True and "out of date" in vp.blockers(d)
     (d / "project.json").write_text(json.dumps(info), encoding="utf-8")
     sp["scenes"][0]["meaning"] = "something else"
@@ -477,50 +472,27 @@ def test_run_asks_once_writes_the_plan_and_never_changes_the_scene_plan(tmp_path
     plan = vp.run(d, ask=ask)
     assert plan["source"] == "llm" and (d / "visual_planning.json").exists() and len(ask.asked) == 1 and ask.asked[0][0] == vp.VISUAL_SYSTEM
     assert {n: (d / n).read_bytes() for n in before} == before
-    assert "60%" in ask.asked[0][1] and "real photographs 30%" in ask.asked[0][1] and "type image, video or reference" in ask.asked[0][1] and "IMAGE MODE" not in ask.asked[0][1]
+    assert "100% Motion Graphics production" in ask.asked[0][1] and "type image, video or reference" in ask.asked[0][1] and "AI pictures are wanted" not in ask.asked[0][1] and "IMAGE MODE" not in ask.asked[0][1]
 
 
-def test_the_instructions_follow_the_shares_of_the_project(tmp_path):
-    d, sp = project(tmp_path, media={"motion": 100, "image": 0, "video": 0})
+def test_the_instructions_follow_the_ai_pictures_setting_and_ask_for_no_share(tmp_path):
+    d, sp = project(tmp_path, media={"ai_images": True})
     ask = Planner(raw_for(sp))
     vp.run(d, ask=ask)
     text = ask.asked[0][1]
-    assert "Never use an element of type image or video" in text and "Every visual is drawn" in text
-    d2 = tmp_path / "ai"
-    d2.mkdir()
-    d2, sp2 = project(d2, media={"motion": 50, "image": 50, "video": 0, "ai_images": True})
-    ask = Planner(raw_for(sp2))
-    vp.run(d2, ask=ask)
-    assert "Never use an element of type video" in ask.asked[0][1] and "ai_prompt" in ask.asked[0][1] and "AI pictures are wanted" in ask.asked[0][1]
+    assert "ai_prompt" in text and "AI pictures are wanted" in text and "Never use an element of type" not in text
 
 
-def test_a_media_mix_far_from_the_shares_gets_one_more_ask_and_the_closer_plan_is_kept(tmp_path):
-    d, sp = project(tmp_path)
-    ask = Planner(raw_for(sp), raw_for(sp, REAL))
-    plan = vp.run(d, ask=ask)
-    assert len(ask.asked) == 2 and "MEDIA MIX" in ask.asked[1][1] and "image 30%" in ask.asked[1][1] and plan["media_mix"]["off_target"] == []
-    assert json.loads((d / "visual_planning.json").read_text(encoding="utf-8"))["media_mix"]["actual"]["image"] == 28
-
-
-def test_when_the_second_answer_is_no_closer_the_first_plan_is_kept_and_the_plan_says_it_is_off(tmp_path):
+def test_a_plan_with_no_real_media_or_a_lot_of_it_needs_one_ask_only(tmp_path):
     d, sp = project(tmp_path)
     ask = Planner(raw_for(sp))
     plan = vp.run(d, ask=ask)
-    assert len(ask.asked) == 2 and plan["media_mix"]["off_target"] == ["motion", "image"] and plan["media_mix"]["actual"]["motion"] == 100          # not forced: the narration is the judge
-    assert (d / "visual_planning.json").exists() and vp.blockers(d) is None                                                                  # an off-target mix does not block the pipeline
-
-
-def test_a_plan_inside_the_shares_needs_one_ask_only(tmp_path):
-    d, sp = project(tmp_path)
-    ask = Planner(raw_for(sp, REAL))
-    vp.run(d, ask=ask)
-    assert len(ask.asked) == 1
-    d2 = tmp_path / "m"
-    d2.mkdir()
-    d2, sp2 = project(d2, media={"motion": 100, "image": 0, "video": 0})
-    ask = Planner(raw_for(sp2))
+    assert len(ask.asked) == 1 and plan["media_mix"]["actual"]["motion"] == 100 and vp.blockers(d) is None                 # there is no share to reach: no second ask
+    (tmp_path / "m").mkdir()
+    d2, sp2 = project(tmp_path / "m")
+    ask = Planner(raw_for(sp2, REAL))
     vp.run(d2, ask=ask)
-    assert len(ask.asked) == 1                                                                              # nothing to reach: motion only
+    assert len(ask.asked) == 1
 
 
 def test_an_invalid_answer_is_retried_once_with_the_problems_then_the_stage_fails_and_nothing_is_derived(tmp_path):
@@ -617,6 +589,19 @@ def test_solving_retries_once_with_the_problems_then_fails_without_changing_the_
     with pytest.raises(promptgen.GenError, match="could not be used"):
         vp.fix_warnings(d, ask=ask)
     assert len(asked) == 2 and "the answer has no scene 1" in asked[1] and "warning_fix" not in vp.load(d)
+
+
+def test_a_step_retry_solves_only_the_warnings_that_step_raised(tmp_path):
+    d, sp, old = cluttered_plan(tmp_path)
+    note = next(n for n in old["scenes"][0]["validation_notes"] if n["code"] == "cluttered")
+    own, other = note["stage"], note["stage"] % 7 + 1                              # the step that raised it / another step (never the last one)
+    assert vp.warned(old, own).keys() == {1} and vp.warned(old, len(vp.STAGES)).keys() == {1}      # the last step is the verdict on the whole plan
+    assert vp.warned(old, other) == {}
+    assert vp.fix_warnings(d, ask=lambda *a, **k: pytest.fail("the planner must not be asked"), stage=other) == old
+    with pytest.raises(review.ReviewError, match=f"step {other} has no warning"):
+        vp.start_fix(d, other)
+    del note["stage"]                                                                # a plan made before notes carried their step: its warning counts for any step
+    assert vp.warned(old, other).keys() == {1}
 
 
 def test_a_plan_without_warnings_has_nothing_to_solve_and_no_job_starts(tmp_path):

@@ -18,7 +18,7 @@ from pathlib import Path
 from VIDEO_ENGINE.stages import audio_analysis
 
 STEP_REPORTS = {                                                                    # stage -> the report whose "stages" list the stage itself writes ({sfx} = the 9:16 suffix)
-    "analyzer": "audio_analysis.json", "segmentation": "scene_segmentation.json", "planning": "visual_planning.json",
+    "analyzer": "audio_analysis.json", "segmentation": "scene_segmentation.json", "planning": "visual_planning.json", "assets": "asset_collection_report.json",
     "motion_plan": "motion_planning{sfx}.json", "motion_gen": "motion_generation{sfx}.json",
     "motion_validation": "motion_timeline_validation{sfx}.json", "timeline": "timeline_build_report{sfx}.json",
     "approval": "timeline_approval_report{sfx}.json", "render": "render_report{sfx}.json", "qc": "final_qc_report.json",
@@ -416,10 +416,15 @@ def _done(check: dict) -> bool:
     return bool(check.get("current")) and check.get("verdict") != "error"
 
 
+def _recorded(step: dict) -> bool:
+    """A step has a result to check only once it is over: a step that is still running (a live report) or has not begun is never sent to the LLM."""
+    return (step.get("status") or "").lower() not in ("running", "pending", "waiting")
+
+
 def pending(pdir: Path, stage_id: str, aspect: str) -> int:
     """How many recorded steps have no LLM check of their current result."""
     checks = load(pdir, stage_id, aspect)["steps"]
-    st_list = steps(pdir, stage_id, aspect)[0]
+    st_list = [s for s in steps(pdir, stage_id, aspect)[0] if _recorded(s)]
     if stage_id == "analyzer" and not (pdir / "audio_analysis.json").exists():
         st_list = [s for s in st_list if s.get("n") in (1, 2, 3)]
     return sum(1 for s in st_list if not _done(checks.get(str(s["n"]), {})))
@@ -630,6 +635,20 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
             "qc_summary": report.get("summary"),
             "llm_decision": report.get("llm_review"),
             "delivery_open": report.get("delivery_gate", {}).get("open"),
+        }
+
+    if stage_id == "assets":
+        n = step.get("n")
+        stg = next((s for s in report.get("stages", []) if s.get("n") == n), {})
+        return {
+            "stage_n": n,
+            "stage_name": stg.get("name") or step.get("name"),
+            "status": stg.get("status") or step.get("status"),
+            "recorded_detail": stg.get("detail") or step.get("detail"),
+            "subtask_checks_passed": stg.get("checks_passed"),
+            "subtask_checks_total": stg.get("checks_total"),
+            "step_evidence": stg.get("evidence"),
+            "run_status": report.get("status"),
         }
 
     if stage_id == "analyzer":
@@ -881,7 +900,6 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
             real_count = sum(len(s.get("media_requirements", [])) for s in scenes)
             ev["media_mix"] = mix
             ev["real_media_requirements_count"] = real_count
-            ev["target_shares"] = mix.get("target")
             ev["actual_shares"] = mix.get("actual")
         elif n == 6:
             ev["timing_text_valid"] = True
@@ -1075,6 +1093,14 @@ def _step_guidance(stage_id: str, step: dict) -> str:
             "Verify that the recorded status and detail are supported by and consistent with the provided audio analysis metrics. "
             "Confirm the step if the evidence supports this."
         )
+    if stage_id == "assets":
+        return (
+            f"Step Guidance (Asset Collection Step {n} - {step.get('name')}):\n"
+            f"Recorded detail: '{step.get('detail')}'. Status: '{step.get('status')}'.\n"
+            "Verify the recorded detail and the counts (subtask_checks_passed / subtask_checks_total) against step_evidence, the facts the stage wrote for this step. "
+            "A step of a run that reused the last result is confirmed when step_evidence shows the same input fingerprint and its files without findings. "
+            "A requirement that fell back to generated motion graphics is a valid, recorded outcome (an error only when it is marked must_be_real). Confirm the step if the evidence supports this."
+        )
     if stage_id == "planning":
         specific = ""
         if n == 1:
@@ -1086,7 +1112,7 @@ def _step_guidance(stage_id: str, step: dict) -> str:
         elif n == 4:
             specific = "Verify total relationships count in total_relationships and relationships_by_scene against the recorded detail. Confirm the step if supported."
         elif n == 5:
-            specific = "Verify real media requirements count and media mix shares against the recorded detail. Note: A minor difference (within 15 percentage points) between target and actual media shares is normal and valid. Confirm the step if supported."
+            specific = "Verify the real media requirements count and the media shares in actual_shares against the recorded detail. There is no target share: media is unlimited inside the 100% motion graphics video, so no share is a finding by itself. Confirm the step if supported."
         elif n == 6:
             specific = "Verify scene start/end timings and narration groundings in scene_timings against the recorded detail. Confirm the step if supported."
         elif n == 7:
@@ -1287,7 +1313,7 @@ def _run(pdir: Path, stage_id: str, aspect: str) -> None:
         for step in steps(pdir, stage_id, aspect)[0]:                               # re-read every time: the report may change while the checks run
             recorded, report, _ = steps(pdir, stage_id, aspect)
             step = next((s for s in recorded if s["n"] == step["n"]), None)
-            if step is None or report is None:
+            if step is None or report is None or not _recorded(step):
                 continue
             # When audio_analysis.json is not yet created, only check steps 1, 2, 3 (which only require audio.wav and audio_16k.wav)
             if stage_id == "analyzer" and not (pdir / "audio_analysis.json").exists() and step.get("n") not in (1, 2, 3):
@@ -1330,3 +1356,18 @@ def start(pdir: Path, stage_id: str, aspect: str) -> bool:
         _running.add(key)
     threading.Thread(target=_run, args=(pdir, stage_id, aspect), daemon=True, name=f"step-llm-check-{stage_id}").start()
     return True
+
+
+def recheck(pdir: Path, stage_id: str, aspect: str, n: int) -> bool:
+    """Ask the LLM about step `n` again, and only that step: its stored check is dropped, so the background run finds it unchecked. False when a check of this stage already runs."""
+    with _lock:
+        if (pdir.name, stage_id) in _running:
+            return False
+    f = _checks_file(pdir, stage_id, aspect)
+    try:
+        data = json.loads(f.read_text(encoding="utf-8")) if f.exists() else {}
+    except ValueError:
+        data = {}
+    if (data.get("steps") or {}).pop(str(n), None) is not None:
+        f.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
+    return start(pdir, stage_id, aspect)

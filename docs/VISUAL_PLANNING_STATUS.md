@@ -5,8 +5,8 @@ This file records the state of the Visual Planning redesign and what is still op
 ## What was built
 | Area | What | Where |
 |---|---|---|
-| Media registry | The ONE definition of what a scene element can be: families motion / image / video, kinds text, label, icon, graphic, diagram, chart, data_visualization, background, image, video, reference. Per-project shares (default 60/30/10) and the AI-pictures flag, chosen at upload and locked. | `SYSTEM/core/media_kinds.py`, `SYSTEM/memory/store.py` (`create(media=...)`, `media()`) |
-| Visual Planning (rewritten) | One planner call + one repair retry, nothing derived when it fails. Per scene: `hero`, `counts`, elements, `media_requirements`; plan: `media_mix` (chosen vs reached), `totals`. `max_texts` per scene pattern is told to the planner and checked. | `VIDEO_ENGINE/stages/visual_planning.py`, `visual_planning_rules.py`, `autoplan.py`, `SYSTEM/agents/video_generation_agents/visual_planning/agent.py` |
+| Media registry | The ONE definition of what a scene element can be: families motion / image / video, kinds text, label, icon, graphic, diagram, chart, data_visualization, background, image, video, reference. Every video is 100% motion graphics with real pictures/clips drawn inside it in any amount (no shares); the only per-project choice is the AI-pictures flag, chosen at upload and locked. | `SYSTEM/core/media_kinds.py`, `SYSTEM/memory/store.py` (`create(media=...)`, `media()`) |
+| Visual Planning (rewritten) | One planner call + one repair retry, nothing derived when it fails. Per scene: `hero`, `counts`, elements, `media_requirements`; plan: `media_mix` (what it carries, information only), `totals`. `max_texts` per scene pattern is told to the planner and checked. | `VIDEO_ENGINE/stages/visual_planning.py`, `visual_planning_rules.py`, `autoplan.py`, `SYSTEM/agents/video_generation_agents/visual_planning/agent.py` |
 | Asset Collection | Requirements are written from the Visual Plan (no planner of its own). `reference` -> Wikipedia infobox/table screenshot. Keyless providers: Openverse (photos), Internet Archive (videos), plus Wikimedia/NASA; Pexels/Pixabay only with keys. Search cache key includes the available providers. | `VIDEO_ENGINE/stages/asset_collection.py`, `stock.py`, `web_capture.py` |
 | Downstream | Motion Planning resolves real elements (collected file or the plan's motion fallback); Motion Generation draws collected files and the fallback otherwise; validation treats a plan without Scene Segmentation as stated. | `motion_scenes.py`, `motion_planning.py`, `motion_animation.py`, `motion_validation_rules.py` |
 | API | Upload takes `media_motion`, `media_image`, `media_video`, `ai_images`; `GET /projects/{pid}/assets`, `GET /projects/{pid}/assets/file/{name}`. | `UI/backend/routes/projects.py`, `routes/assets.py`, `api_models.py` |
@@ -14,7 +14,7 @@ This file records the state of the Visual Planning redesign and what is still op
 | Tests | New: `test_media_kinds.py` (fails when a kind has no handler), `test_visual_planning.py` (rewritten), `test_assets_api.py`; adapted: asset, stock, motion, autoplan, validation, render fixtures. | `tests/` |
 
 ## Verified with real runs
-- Stages 1-5 on the user's audio: plan errors 0, mix 59/25/16 against 60/30/10; Motion Planning completed on that plan.
+- Stages 1-5 on the user's audio: plan errors 0, mix 59/25/16 (then a 60/30/10 target; the shares were removed afterwards); Motion Planning completed on that plan.
 - Wikipedia infobox capture (344x999 PNG), photos from Wikimedia and Openverse (CC0 / CC BY), a clip request that honestly fell back.
 - Related tests: about 190 pass. Full suite on the first run: 1172 pass; failures left are old ones (below).
 
