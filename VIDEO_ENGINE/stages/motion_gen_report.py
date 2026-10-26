@@ -2,6 +2,7 @@
 Nothing is written by `build`; `finish` writes the composition, reads it back and only then saves the report (a stage is complete only after its output is on disk)."""
 from __future__ import annotations
 
+import hashlib
 import json
 import time
 from pathlib import Path
@@ -142,6 +143,36 @@ def load(pdir: Path, aspect: str) -> dict | None:
     except OSError:
         rep["stale"] = True
     return rep
+
+
+def scenes_view(pdir: Path, aspect: str) -> dict | None:
+    """Motion Generation scene by scene for its page: for every scene the code that was written (read from the project's generated_motion folder, never from a path in a file), the elements it
+    draws, what was checked (type check, security audit, preview verifier), how the code was made (the model, the attempts, the repairs) and the descriptors of the composition. None when no code was generated yet."""
+    sfx = "_9x16" if aspect == "9:16" else ""
+    man = mp._read(pdir / f"motion_animation{sfx}.json")
+    if not man or not man.get("scenes"):
+        return None
+    gen = {s.get("plan_scene_id"): s for s in (mp._read(pdir / names(aspect)[1]) or {}).get("scenes", [])}
+    sp = {s.get("id"): s for s in (mp._read(pdir / "scene_plan.json") or {}).get("scenes", [])}
+    out = []
+    for sc in man["scenes"]:
+        sid = sc.get("scene_id")
+        f = pdir / "generated_motion" / f"scene_{sid}.tsx"
+        code = f.read_text(encoding="utf-8") if f.is_file() else ""
+        g, p = gen.get(sid) or {}, sp.get(sid) or {}
+        out.append({
+            "scene_id": sid, "start": p.get("start"), "end": p.get("end"), "meaning": p.get("meaning"), "timing": g.get("timing"), "duration_frames": sc.get("duration_frames"),
+            "code": code, "lines": code.count("\n") + 1 if code else 0, "bytes": len(code.encode("utf-8")), "file": f"generated_motion/scene_{sid}.tsx",
+            "code_changed": bool(code) and hashlib.sha256(code.encode("utf-8")).hexdigest() != sc.get("source_sha256"),             # the file was edited after the manifest recorded it
+            "source_sha256": sc.get("source_sha256"), "input_fingerprint": sc.get("input_fingerprint"),
+            "required_elements": sc.get("required_elements", []), "implemented_elements": sc.get("implemented_elements", []), "missing_required_elements": sc.get("missing_required_elements", []),
+            "element_classifications": sc.get("element_classifications", []), "compile_status": sc.get("compile_status"), "security_audit": sc.get("security_audit"),
+            "preview_result": sc.get("preview_result"), "generation": sc.get("generation"), "repair_attempts": sc.get("repair_attempts"), "warnings": sc.get("warnings", []),
+            "descriptors": [{k: d.get(k) for k in ("element_id", "element_type", "component_id", "preset_id", "start", "end")} for d in g.get("descriptors", [])],
+            "validation_notes": g.get("validation_notes", []),
+        })
+    return {"mode": man.get("mode"), "status": man.get("status"), "run_id": man.get("run_id"), "typecheck": man.get("typecheck"), "diagnostics": man.get("diagnostics"),
+            "warnings": man.get("warnings", []), "scenes": out}
 
 
 def blockers(pdir: Path, aspect: str) -> str | None:

@@ -9,6 +9,7 @@ import { AudioAnalyzerView } from '../AudioAnalyzerView';
 import { StageOverviewTab } from './StageOverviewTab';
 import { SegmentationSceneTable } from './SegmentationSceneTable';
 import { MotionPlanSceneTable } from './MotionPlanSceneTable';
+import { MotionGenSceneTable } from './motion-gen/MotionGenSceneTable';
 import { StageSubtasksTab } from './StageSubtasksTab';
 import { StageAgentTab, StageArtifactsTab, StageLogsTab } from './StageMetaTabs';
 
@@ -180,6 +181,10 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
       )}
 
       {/* Specialized: Frame-Accurate Visual Timeline */}
+      {activeTab === 'scenes' && config.id === 'motion_gen' && projectId && (
+        <MotionGenSceneTable projectId={projectId} refreshKey={state?.status} onRunStage={onRunStage} />
+      )}
+
       {activeTab === 'scenes' && config.id === 'timeline' && projectId && (
         <TimelineBuildVisualView
           projectId={projectId}

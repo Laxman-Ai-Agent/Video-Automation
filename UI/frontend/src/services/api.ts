@@ -1167,6 +1167,28 @@ export async function fetchSfxCatalog(): Promise<{ ok: boolean; sfx: any[] }> {
 
 
 
+// Motion Generation scene by scene (GET /projects/{id}/motion-generation/scenes): the code written for each scene, its elements, its checks and how it was made
+export interface MotionGenScene {
+  scene_id: number; start: number | null; end: number | null; meaning: string | null; timing: { start: number; end: number; start_frame: number; end_frame: number } | null; duration_frames: number | null;
+  code: string; lines: number; bytes: number; file: string; code_changed: boolean; source_sha256: string | null; input_fingerprint: string | null;
+  required_elements: string[]; implemented_elements: string[]; missing_required_elements: string[];
+  element_classifications: { element_id: string; requested_effect: string; is_supported: boolean; is_3d: boolean; fallback_strategy: string; capability_limitation: string | null }[];
+  compile_status: string | null; security_audit: { passed: boolean; findings: any[] } | null;
+  preview_result: { passed: boolean; score: number; safe_zone_passed: boolean; typography_passed: boolean; contrast_passed: boolean; findings: any[] } | null;
+  generation: { provider?: string; model?: string; attempt_count?: number; latency_ms?: number } | null; repair_attempts: number | null; warnings: string[];
+  descriptors: { element_id: string; element_type: string; component_id: string; preset_id: string; start: number; end: number }[]; validation_notes: any[];
+}
+export interface MotionGenScenes { mode: string | null; status: string | null; run_id: string | null; typecheck: { status: string } | null; diagnostics: Record<string, any> | null; warnings: string[]; scenes: MotionGenScene[] }
+
+export async function fetchMotionGenerationScenes(projectId: string): Promise<MotionGenScenes | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/motion-generation/scenes`);
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
 // The rules of the stages and the user's switch for each one (SYSTEM/policies/rule_catalog.py, rule_switches.py): OFF = the rule is never evaluated, so it cannot block or warn
 export interface RuleRow { stage: string; stage_label: string; rule: string; severity: string; says: string; calls: number; on: boolean; off_note?: string | null; off_at?: number | null }
 export interface RuleStage { stage: string; label: string; total: number; off: number; rules: RuleRow[] }

@@ -10,7 +10,8 @@ import {
   Cpu,
   Info,
   FileText,
-  Terminal
+  Terminal,
+  Code
 } from 'lucide-react';
 import { StageConfig, StageState } from '../types/pipeline';
 import { StageDrawerHeader } from './stage-views/StageDrawerHeader';
@@ -112,6 +113,11 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
       id: 'scenes',
       label: motionScenesList.length > 0 ? `Motion Scenes (${motionScenesList.length})` : 'Motion Scenes & Plan',
       icon: <Sparkles size={18} strokeWidth={activeTab === 'scenes' ? 2.3 : 1.8} />
+    }] : []),
+    ...(config.id === 'motion_gen' ? [{
+      id: 'scenes',
+      label: 'Generated Scenes',
+      icon: <Code size={18} strokeWidth={activeTab === 'scenes' ? 2.3 : 1.8} />
     }] : []),
     ...(config.id === 'timeline' ? [{
       id: 'scenes',

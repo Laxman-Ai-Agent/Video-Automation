@@ -457,6 +457,17 @@ def get_motion_generation(pid: str):
     return data
 
 
+@router.get("/motion-generation/scenes")
+def get_motion_generation_scenes(pid: str):
+    """Motion Generation scene by scene: the code written for each scene, its elements, its checks and how it was made. Read-only."""
+    from .. import motion_gen_report
+    pdir = store.project_dir(pid)
+    data = motion_gen_report.scenes_view(pdir, pipeline_view.aspect_of(pdir))
+    if data is None:
+        raise ApiError(409, "motion_code_missing", "No scene code has been generated yet", "run Motion Generation from its page")
+    return data
+
+
 @router.post("/motion-generation/fix-warnings", response_model=JobStarted, status_code=202)
 def fix_motion_generation_warnings(pid: str, auto: bool = False):
     """Solve what can be solved mechanically in the warnings of Motion Generation: an emphasis that lies inside a spoken word starts with that word (`motion_planning.auto_align_emphasis`).

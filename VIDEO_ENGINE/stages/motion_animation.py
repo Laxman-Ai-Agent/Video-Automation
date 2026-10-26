@@ -797,6 +797,23 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
+CODEGEN_VERSION = "1"                  # bump when the instructions or the checks of the code generation change: every scene is then written again
+
+
+def scene_input_fingerprint(**inputs: Any) -> str:
+    """What one scene's code is written from (its texts, its elements with the real pictures drawn for them, its length, the palette and the canvas). Code is reused only while this is unchanged."""
+    return hashlib.sha256(json.dumps({"v": CODEGEN_VERSION, **inputs}, sort_keys=True, default=str, ensure_ascii=False).encode("utf-8")).hexdigest()
+
+
+def previous_fingerprints(pdir: Path, sfx: str) -> dict:
+    """scene id -> the input fingerprint the stored code of that scene was written from (a manifest made before this was recorded gives none: its code is written again)."""
+    try:
+        prev = json.loads((pdir / f"motion_animation{sfx}.json").read_text(encoding="utf-8"))
+        return {x.get("scene_id"): x.get("input_fingerprint") for x in prev.get("scenes", [])}
+    except (OSError, ValueError, AttributeError):
+        return {}
+
+
 def generate_custom_motion_code(
     pdir: Path,
     aspect: str = "16:9",
@@ -849,6 +866,7 @@ def generate_custom_motion_code(
     preview_verifier = VisualPreviewVerifier()
     reporter = StructuredGenerationReporter()
 
+    prev_fps = previous_fingerprints(pdir, sfx)
     scenes_manifest = []
     template_warnings = []
     all_clean = True
@@ -902,7 +920,8 @@ def generate_custom_motion_code(
         transformed_visual_els, el_classifications = fallback_engine.transform_elements_for_codegen(visual_els)
 
         scene_file = out_dir / f"scene_{sid}.tsx"
-        if scene_file.exists():
+        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect)
+        if scene_file.exists() and prev_fps.get(sid) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
                 code = existing_code
@@ -967,6 +986,7 @@ def generate_custom_motion_code(
             "scene_id": sid,
             "source_path": str(scene_file.resolve()),
             "source_sha256": sha_hash,
+            "input_fingerprint": scene_fp,
             "duration_frames": max(1, round(duration * 30)),
             "fps": 30,
             "dimensions": {"width": 1080 if aspect == "9:16" else 1920, "height": 1920 if aspect == "9:16" else 1080},
