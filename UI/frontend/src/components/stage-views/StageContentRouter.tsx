@@ -55,10 +55,6 @@ export interface StageContentRouterProps {
   motionScenesList: any[];
   filteredMotionScenes: any[];
   motionPlanLoading: boolean;
-  expandedMotionScenes: Record<string, boolean>;
-  toggleMotionScene: (id: string) => void;
-  showRawMotionJson: Record<string, boolean>;
-  toggleRawMotionJson: (id: string, e?: React.MouseEvent) => void;
   copiedMotionSceneId: string | null;
   copiedAllMotion: boolean;
   handleCopyMotionSceneJson: (scene: any, e?: React.MouseEvent) => void;
@@ -109,10 +105,6 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
   motionScenesList,
   filteredMotionScenes,
   motionPlanLoading,
-  expandedMotionScenes,
-  toggleMotionScene,
-  showRawMotionJson,
-  toggleRawMotionJson,
   copiedMotionSceneId,
   copiedAllMotion,
   handleCopyMotionSceneJson,
@@ -179,16 +171,11 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
           sceneSearch={sceneSearch}
           setSceneSearch={setSceneSearch}
           motionPlanLoading={motionPlanLoading}
-          expandedMotionScenes={expandedMotionScenes}
-          toggleMotionScene={toggleMotionScene}
-          showRawMotionJson={showRawMotionJson}
-          toggleRawMotionJson={toggleRawMotionJson}
           copiedMotionSceneId={copiedMotionSceneId}
           copiedAllMotion={copiedAllMotion}
           handleCopyMotionSceneJson={handleCopyMotionSceneJson}
           handleCopyAllMotionPlanJson={handleCopyAllMotionPlanJson}
           onRunStage={onRunStage}
-          isFullPage={isFullPage}
         />
       )}
 

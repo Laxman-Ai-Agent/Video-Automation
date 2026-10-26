@@ -82,6 +82,10 @@ def test_upload_custom_asset_replaces_fallback_and_serves_file(client, monkeypat
     data = res.json()
     assert data["ok"] is True
     assert data["asset"]["requirement_id"] == "req_1_1"
+    assert data["asset"]["element_id"] == "image_main" and data["asset"]["scene_id"] == 1                 # what Motion Generation draws it as: without it Motion Generation fails with KeyError 'element_id'
+    assert [x["element_id"] for x in ac.assets_for_scene(pdir, 1)] == ["image_main"]
+    bad = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_9_9", "scene_id": "1"}, files={"file": ("x.png", fake_png, "image/png")})
+    assert bad.status_code == 404 and "req_9_9" in bad.text                                                 # an upload against a request that does not exist is refused
 
     # Verify assets endpoint now reports collected instead of fallback
     got = client.get(f"/projects/{pid}/assets").json()

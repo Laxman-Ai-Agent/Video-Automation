@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sparkles, Search, RefreshCw, Play } from 'lucide-react';
 import {
   sceneTableStyle,
@@ -6,6 +6,7 @@ import {
 } from './sceneTableStyles';
 import { MotionPlanSummaryBar } from './motion-plan/MotionPlanSummaryBar';
 import { MotionPlanSceneRow } from './motion-plan/MotionPlanSceneRow';
+import { MotionSceneModal } from './motion-plan/MotionSceneModal';
 
 export interface MotionPlanSceneTableProps {
   motionPlanData: any;
@@ -14,16 +15,11 @@ export interface MotionPlanSceneTableProps {
   sceneSearch: string;
   setSceneSearch: (val: string) => void;
   motionPlanLoading: boolean;
-  expandedMotionScenes: Record<string, boolean>;
-  toggleMotionScene: (id: string) => void;
-  showRawMotionJson: Record<string, boolean>;
-  toggleRawMotionJson: (id: string, e?: React.MouseEvent) => void;
   copiedMotionSceneId: string | null;
   copiedAllMotion: boolean;
   handleCopyMotionSceneJson: (scene: any, e?: React.MouseEvent) => void;
   handleCopyAllMotionPlanJson: (e?: React.MouseEvent) => void;
   onRunStage?: (stageId: string) => void;
-  isFullPage?: boolean;
 }
 
 export const MotionPlanSceneTable: React.FC<MotionPlanSceneTableProps> = ({
@@ -33,17 +29,19 @@ export const MotionPlanSceneTable: React.FC<MotionPlanSceneTableProps> = ({
   sceneSearch,
   setSceneSearch,
   motionPlanLoading,
-  expandedMotionScenes,
-  toggleMotionScene,
-  showRawMotionJson,
-  toggleRawMotionJson,
   copiedMotionSceneId,
   copiedAllMotion,
   handleCopyMotionSceneJson,
   handleCopyAllMotionPlanJson,
   onRunStage,
-  isFullPage = false
 }) => {
+  const [open, setOpen] = useState<{ key: string; json: boolean } | null>(null);       // the scene whose popup is open
+  const keyOf = (s: any, i: number) => s.scene_id || s.plan_scene_id || String(i + 1);
+  const openIdx = open ? filteredMotionScenes.findIndex((s: any, i: number) => keyOf(s, i) === open.key) : -1;
+  const step = (delta: number) => {
+    const next = filteredMotionScenes[openIdx + delta];
+    if (next) setOpen({ key: keyOf(next, openIdx + delta), json: open?.json ?? false });
+  };
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }} data-testid="motion-planning-tab-content">
       {/* Summary Metadata Bar */}
@@ -165,24 +163,34 @@ export const MotionPlanSceneTable: React.FC<MotionPlanSceneTableProps> = ({
           </thead>
           <tbody>
             {filteredMotionScenes.map((s: any, idx: number) => {
-              const sceneKey = s.scene_id || s.plan_scene_id || String(idx + 1);
+              const sceneKey = keyOf(s, idx);
               return (
                 <MotionPlanSceneRow
                   key={sceneKey}
                   scene={s}
                   idx={idx}
-                  isExpanded={!!expandedMotionScenes[sceneKey]}
-                  isRawJsonOpen={!!showRawMotionJson[sceneKey]}
                   isCopied={copiedMotionSceneId === sceneKey}
-                  isFullPage={isFullPage}
-                  toggleMotionScene={toggleMotionScene}
-                  toggleRawMotionJson={toggleRawMotionJson}
+                  onOpen={(key, json) => setOpen({ key, json })}
                   handleCopyMotionSceneJson={handleCopyMotionSceneJson}
                 />
               );
             })}
           </tbody>
         </table>
+      )}
+
+      {/* The scene in full, in a popup */}
+      {open && openIdx >= 0 && (
+        <MotionSceneModal
+          scene={filteredMotionScenes[openIdx]}
+          idx={openIdx}
+          total={filteredMotionScenes.length}
+          startWithJson={open.json}
+          isCopied={copiedMotionSceneId === open.key}
+          handleCopyMotionSceneJson={handleCopyMotionSceneJson}
+          onClose={() => setOpen(null)}
+          onStep={step}
+        />
       )}
     </div>
   );

@@ -41,8 +41,6 @@ export function useStageDrawerData({
   const [visualPlanLoading, setVisualPlanLoading] = useState<boolean>(false);
   const [motionPlanData, setMotionPlanData] = useState<any | null>(null);
   const [motionPlanLoading, setMotionPlanLoading] = useState<boolean>(false);
-  const [expandedMotionScenes, setExpandedMotionScenes] = useState<Record<string, boolean>>({});
-  const [showRawMotionJson, setShowRawMotionJson] = useState<Record<string, boolean>>({});
   const [copiedMotionSceneId, setCopiedMotionSceneId] = useState<string | null>(null);
   const [copiedAllMotion, setCopiedAllMotion] = useState<boolean>(false);
 
@@ -154,8 +152,6 @@ export function useStageDrawerData({
       fetchMotionPlanning(projectId).then((res) => {
         if (res.ok && res.data) {
           setMotionPlanData(res.data);
-          const firstScene = res.data.scenes?.[0]?.scene_id || 'scene_01';
-          setExpandedMotionScenes({ [firstScene]: true });
         } else {
           setMotionPlanData(null);
         }
@@ -202,20 +198,6 @@ export function useStageDrawerData({
     );
   }, [motionScenesList, sceneSearch]);
 
-  const toggleMotionScene = (id: string) => {
-    setExpandedMotionScenes((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
-
-  const toggleRawMotionJson = (id: string, e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
-    setShowRawMotionJson((prev) => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
 
   const handleCopyMotionSceneJson = (scene: any, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -405,10 +387,6 @@ export function useStageDrawerData({
     motionPlanLoading,
     motionScenesList,
     filteredMotionScenes,
-    expandedMotionScenes,
-    toggleMotionScene,
-    showRawMotionJson,
-    toggleRawMotionJson,
     copiedMotionSceneId,
     copiedAllMotion,
     handleCopyMotionSceneJson,

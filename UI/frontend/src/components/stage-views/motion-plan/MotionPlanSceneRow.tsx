@@ -1,32 +1,23 @@
 import React from 'react';
-import { ChevronDown, ChevronRight, Check, Copy, Code } from 'lucide-react';
+import { ChevronRight, Check, Copy, Code } from 'lucide-react';
 import {
   sceneTdStyle,
   sceneRowStyle
 } from '../sceneTableStyles';
-import { MotionPlanSceneExpanded } from './MotionPlanSceneExpanded';
 
 export interface MotionPlanSceneRowProps {
   scene: any;
   idx: number;
-  isExpanded: boolean;
-  isRawJsonOpen: boolean;
   isCopied: boolean;
-  isFullPage?: boolean;
-  toggleMotionScene: (id: string) => void;
-  toggleRawMotionJson: (id: string, e?: React.MouseEvent) => void;
+  onOpen: (id: string, withJson: boolean) => void;                    // opens the scene's popup (withJson: with its raw JSON shown)
   handleCopyMotionSceneJson: (scene: any, e?: React.MouseEvent) => void;
 }
 
 export const MotionPlanSceneRow: React.FC<MotionPlanSceneRowProps> = ({
   scene,
   idx,
-  isExpanded,
-  isRawJsonOpen,
   isCopied,
-  isFullPage = false,
-  toggleMotionScene,
-  toggleRawMotionJson,
+  onOpen,
   handleCopyMotionSceneJson
 }) => {
   const sceneKey = scene.scene_id || scene.plan_scene_id || String(idx + 1);
@@ -48,12 +39,12 @@ export const MotionPlanSceneRow: React.FC<MotionPlanSceneRowProps> = ({
     <React.Fragment key={sceneKey}>
       {/* Scene Table Row (Clickable) */}
       <tr
-        onClick={() => toggleMotionScene(sceneKey)}
+        onClick={() => onOpen(sceneKey, false)}
         data-testid={`motion-scene-card-${sceneNum}`}
-        style={sceneRowStyle(isExpanded)}
+        style={sceneRowStyle(false)}
       >
-        <td style={{ ...sceneTdStyle, paddingRight: 0, color: isExpanded ? 'var(--accent-cyan)' : 'var(--text-muted)', borderLeft: `3px solid ${scene.segmentation_data?.llm_transcript ? '#10B981' : '#6B7280'}` }}>
-          {isExpanded ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
+        <td style={{ ...sceneTdStyle, paddingRight: 0, color: 'var(--text-muted)', borderLeft: `3px solid ${scene.segmentation_data?.llm_transcript ? '#10B981' : '#6B7280'}` }}>
+          <ChevronRight size={16} />
         </td>
         <td style={sceneTdStyle}>
           <div style={{
@@ -210,18 +201,18 @@ export const MotionPlanSceneRow: React.FC<MotionPlanSceneRowProps> = ({
 
             {/* Toggle Raw JSON View Button */}
             <button
-              onClick={(e) => toggleRawMotionJson(sceneKey, e)}
+              onClick={(e) => { e.stopPropagation(); onOpen(sceneKey, true); }}
               data-testid={`motion-scene-${sceneNum}-toggle-raw-json-btn`}
-              title="Toggle raw JSON view for this motion scene"
+              title="Open this motion scene with its raw JSON"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '4px',
                 padding: '4px 8px',
-                backgroundColor: isRawJsonOpen ? 'rgba(0, 216, 245, 0.2)' : 'transparent',
-                border: isRawJsonOpen ? '1px solid var(--accent-cyan)' : '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'transparent',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
                 borderRadius: '4px',
-                color: isRawJsonOpen ? 'var(--accent-cyan)' : 'var(--text-muted)',
+                color: 'var(--text-muted)',
                 fontSize: '11px',
                 cursor: 'pointer'
               }}
@@ -232,23 +223,6 @@ export const MotionPlanSceneRow: React.FC<MotionPlanSceneRowProps> = ({
           </div>
         </td>
       </tr>
-
-      {/* Expanded Content: BEFORE & AFTER PANEL + LAYOUTS */}
-      {isExpanded && (
-        <tr>
-          <td colSpan={7} style={{ padding: 0, borderBottom: '1px solid var(--border-subtle)' }}>
-            <MotionPlanSceneExpanded
-              scene={scene}
-              sceneNum={sceneNum}
-              sceneKey={sceneKey}
-              isFullPage={isFullPage}
-              isRawJsonOpen={isRawJsonOpen}
-              isCopied={isCopied}
-              handleCopyMotionSceneJson={handleCopyMotionSceneJson}
-            />
-          </td>
-        </tr>
-      )}
     </React.Fragment>
   );
 };

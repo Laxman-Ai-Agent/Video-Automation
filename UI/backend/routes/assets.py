@@ -131,6 +131,11 @@ async def upload_custom_asset(
     if not pdir.exists():
         raise ApiError(404, "project_not_found", f"Project {pid} does not exist")
 
+    req = next((r for r in ac.load_requirements(pdir).get("requirements", []) if r["requirement_id"] == requirement_id), None)
+    if req is None:                                                    # the element and the scene of the upload come from the request itself, never from the page
+        raise ApiError(404, "no_such_requirement", f"There is no requirement '{requirement_id}' in the current Visual Plan", "open Asset Collection and upload against one of its requests")
+    scene_id = req["scene_id"]
+
     out_dir = ac.collected_dir(pdir)
     out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -185,6 +190,7 @@ async def upload_custom_asset(
     new_entry = {
         "requirement_id": requirement_id,
         "scene_id": scene_id,
+        "element_id": req["element_id"],                                 # what Motion Generation draws this picture as
         "kind": kind,
         "asset_id": sha[:16],
         "file": f"assets/collected/{dest_name}",
