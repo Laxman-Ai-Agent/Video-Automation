@@ -53,13 +53,20 @@ def probe(audio: Path) -> dict:
             "channels": a.get("channels"), "metadata_source": "ffprobe"}
 
 
+def alignment_status(utterances: list[dict]) -> str:
+    """word_timestamps / partial / unavailable, over the segments that have text (a segment whose words were all removed has nothing to time)."""
+    spoken = [u for u in utterances if u["text"].strip()]
+    timed = sum(1 for u in spoken if u["words"])
+    return "unavailable" if not timed else "word_timestamps" if timed == len(spoken) else "partial"
+
+
 def check_timing(utterances: list[dict], duration: float) -> tuple[list[dict], list[dict]]:
     """(errors, warnings) of the timestamps: word and segment bounds, order, segment boundaries, empty or untimed segments."""
     err, warn = [], []
     add = lambda lst, code, msg: lst.append({"stage": S_INTEGRITY, "code": code, "message": msg})
     prev_end = 0.0
     for u in utterances:
-        if not u["words"]:
+        if not u["words"] and u["text"].strip():             # a segment the transcript review emptied has nothing to time: it is a note, not a finding
             add(warn, "segment_without_words", f"segment {u['id']} has text but no word timings")
         if not 0 <= u["start_seconds"] <= u["end_seconds"] <= duration + TOL:
             add(err, "segment_out_of_range", f"segment {u['id']} ({u['start_seconds']}s - {u['end_seconds']}s) is outside the audio ({duration}s)")
@@ -158,7 +165,7 @@ def build(pdir: Path, progress=None) -> dict:
                           "timing": w.timing or "measured", "edit": w.edit})
             n += 1
         utterances.append({"utterance_id": f"utt_{s.id + 1:03d}", "id": s.id, "text": s.text, "start_seconds": round(s.start, 3), "end_seconds": end_fixes.get(s.id, round(s.end, 3)),
-                           "boundary_source": "whisper_segment", "alignment_status": "word_timestamps" if words else "unavailable", "words": words})
+                           "boundary_source": "whisper_segment", "alignment_status": "word_timestamps" if words else "unavailable" if s.text.strip() else "no_text", "words": words})
     add = lambda lst, stage, code, msg: lst.append({"stage": stage, "code": code, "message": msg})
     errors, warnings = check_timing(utterances, dur)                       # stage 10
     for nt in end_notes:
@@ -169,8 +176,11 @@ def build(pdir: Path, progress=None) -> dict:
         add(warnings, S_META, "duration_mismatch", f"transcript duration {t.duration}s differs from the probed {dur}s")
     if src["sample_rate_hz"] is None or src["channels"] is None:
         add(warnings, S_META, "metadata_incomplete", "sample rate or channel count could not be read")
-    timed = sum(1 for u in utterances if u["words"])
-    align = "unavailable" if not timed else "word_timestamps" if timed == len(utterances) else "partial"
+    for u in utterances:
+        if not u["text"].strip():
+            end_notes.append({"segment": u["id"], "code": "segment_emptied",
+                              "message": f"segment {u['id']} ({u['start_seconds']}s - {u['end_seconds']}s) has no words: all of them were removed (transcript review or user correction)"})
+    align = alignment_status(utterances)
     if align != "word_timestamps":
         add(warnings, S_ALIGN, "alignment_incomplete", "some or all segments have no word times")
     if edited:

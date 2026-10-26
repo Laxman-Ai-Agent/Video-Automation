@@ -25,7 +25,7 @@ STEP_REPORTS = {                                                                
     "final": "delivery_summary{sfx}.json",
 }
 EVIDENCE_CHARS = 30_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
-CHECK_VERSION = "2.3"                                                              # cache version: bump to invalidate stale checks across all projects
+CHECK_VERSION = "2.4"                                                            # cache version: bump to invalidate stale checks across all projects
 _running: set[tuple[str, str]] = set()
 _active_step: dict[tuple[str, str], int] = {}
 _lock = threading.Lock()
@@ -74,7 +74,7 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
         try:
             source_info = _probe_audio(str(audio), audio.stat().st_mtime_ns)     # the same ffprobe measurement the finished report uses
         except audio_analysis.UserProblem as e:
-            val_info = {"status": "failed", "errors": [str(e)], "warnings": []}
+            val_info = {"status": "failed", "errors": [{"stage": "Audio File Validation", "code": "unreadable_audio", "message": str(e)}], "warnings": []}
     audio_ok = bool(source_info)
     if has_16k:
         proc_info = {
@@ -95,7 +95,7 @@ def synthesize_analyzer_stages(pdir: Path, aspect: str = "16:9") -> dict:
                 "n": 1,
                 "name": "Audio File Validation",
                 "status": "completed" if audio_ok else ("failed" if has_audio else "pending"),
-                "detail": f"{audio.name} readable, stream validated" if audio_ok else (val_info["errors"][0] if has_audio else "waits for audio file"),
+                "detail": f"{audio.name} readable, stream validated" if audio_ok else (val_info["errors"][0]["message"] if has_audio else "waits for audio file"),
                 "checks_passed": 1 if audio_ok else 0,
                 "checks_total": 1,
             },
@@ -419,6 +419,11 @@ def pending(pdir: Path, stage_id: str, aspect: str) -> int:
     return sum(1 for s in st_list if not _done(checks.get(str(s["n"]), {})))
 
 
+def _issues(val: dict, stage_name: str) -> dict:
+    """The errors and warnings an analysis validation holds for one stage (each one is a dict: stage, code, message)."""
+    return {k: [x for x in val.get(k) or [] if x.get("stage") == stage_name] for k in ("errors", "warnings")}
+
+
 def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
     """Builds focused, authoritative evidence for verifying a deterministic stage step.
     Ensures critical source metrics, sentences/clause splits, and validation fields are preserved
@@ -646,7 +651,7 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
                 "duration_seconds": source.get("duration_seconds"),
                 "container": source.get("container"),
                 "codec": source.get("codec"),
-                "validation_status": val.get("status"),
+                "file_validation": _issues(val, step.get("name")),             # this stage's own findings, not the status of the whole analysis
             })
         elif n == 2:
             ev.update({
@@ -713,10 +718,10 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
                 "correction_spans": len(rev.get("corrections", [])),
             })
         elif n == 10:
+            issues = _issues(val, step.get("name"))
             ev.update({
-                "validation_status": val.get("status"),
-                "word_timestamp_errors": [e for e in val.get("errors", []) if "timestamp" in e or "word" in e],
-                "word_timestamp_warnings": [w for w in val.get("warnings", []) if "timestamp" in w or "word" in w],
+                "word_timestamp_errors": issues["errors"],
+                "word_timestamp_warnings": issues["warnings"],
                 "total_words": sum(len(u.get("words", [])) for u in utterances),
             })
         elif n == 11:

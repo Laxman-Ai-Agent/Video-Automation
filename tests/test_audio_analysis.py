@@ -34,12 +34,25 @@ def test_probe_measures_a_real_file(tmp_path):
 
 def test_timing_checks_catch_bad_times_and_untimed_segments():
     w = lambda i, a, b: {"index": i, "text": "x", "start_seconds": a, "end_seconds": b}
-    u = [{"id": 0, "start_seconds": 0, "end_seconds": 1, "words": [w(0, 0, 0.5), w(1, 0.4, 0.3)]},
-         {"id": 1, "start_seconds": 1, "end_seconds": 9, "words": []}]
+    u = [{"id": 0, "text": "x x", "start_seconds": 0, "end_seconds": 1, "words": [w(0, 0, 0.5), w(1, 0.4, 0.3)]},
+         {"id": 1, "text": "x", "start_seconds": 1, "end_seconds": 9, "words": []}]
     err, warn = aa.check_timing(u, 2.0)
     codes = {e["code"] for e in err} | {x["code"] for x in warn}
     assert {"word_out_of_range", "segment_out_of_range", "segment_without_words"} <= codes
-    assert aa.check_timing([{"id": 0, "start_seconds": 0, "end_seconds": 1, "words": [w(0, 0, 1)]}], 1.0) == ([], [])
+    assert aa.check_timing([{"id": 0, "text": "x", "start_seconds": 0, "end_seconds": 1, "words": [w(0, 0, 1)]}], 1.0) == ([], [])
+
+
+def test_a_segment_the_review_emptied_is_not_a_timing_or_alignment_finding():
+    """The LLM review decides what stays: a segment whose words it removed has no text and no words, and that is no warning."""
+    w = {"index": 0, "text": "x", "start_seconds": 0, "end_seconds": 1}
+    kept = {"id": 0, "text": "x", "start_seconds": 0, "end_seconds": 1, "words": [w]}
+    emptied = {"id": 1, "text": "", "start_seconds": 1, "end_seconds": 2, "words": []}
+    assert aa.check_timing([kept, emptied], 2.0) == ([], [])
+    assert aa.alignment_status([kept, emptied]) == "word_timestamps"
+    untimed = {"id": 2, "text": "x", "start_seconds": 2, "end_seconds": 3, "words": []}      # text without word times is still a finding
+    assert aa.alignment_status([kept, emptied, untimed]) == "partial"
+    assert [x["code"] for x in aa.check_timing([kept, untimed], 3.0)[1]] == ["segment_without_words"]
+    assert aa.alignment_status([emptied]) == "unavailable"
 
 
 def test_endpoint_builds_once_from_the_files_and_keeps_the_transcript_untouched(client):

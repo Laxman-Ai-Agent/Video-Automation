@@ -29,7 +29,7 @@ def test_interim_report_fails_steps_1_and_2_for_an_unreadable_file(tmp_path):
     rep = step_llm_check.synthesize_analyzer_stages(tmp_path)
     assert rep["source"] == {} and rep["validation"]["status"] == "failed" and rep["validation"]["errors"]
     assert _step(rep, 1)["status"] == _step(rep, 2)["status"] == "failed"
-    assert _step(rep, 1)["detail"] == rep["validation"]["errors"][0]
+    assert _step(rep, 1)["detail"] == rep["validation"]["errors"][0]["message"]
 
 
 def test_a_check_made_on_other_measured_facts_is_not_current(tmp_path):
@@ -40,6 +40,17 @@ def test_a_check_made_on_other_measured_facts_is_not_current(tmp_path):
     assert step_llm_check._hash(step, rep) == step_llm_check._hash(step, step_llm_check.synthesize_analyzer_stages(tmp_path))     # same facts: same check
     old = {**rep, "source_fingerprint": "evidence-as-the-wave-module-reported-it"}
     assert step_llm_check._hash(step, rep) != step_llm_check._hash(step, old)
+
+
+def test_step_evidence_holds_what_the_step_detail_says():
+    """The LLM check sees this stage's own findings: step 10 its timestamp warnings (dicts), step 1 not the status of the whole analysis."""
+    warn = {"stage": "Word Timestamp Integrity", "code": "segment_without_words", "message": "segment 1 has text but no word timings"}
+    other = {"stage": "Word-Level Alignment", "code": "alignment_incomplete", "message": "some or all segments have no word times"}
+    report = {"source": {"file": "audio.wav"}, "validation": {"status": "warning", "errors": [], "warnings": [warn, other]}, "utterances": [{"words": [1, 2]}]}
+    ev10 = step_llm_check.build_step_evidence("analyzer", {"n": 10, "name": "Word Timestamp Integrity", "detail": "0 errors, 1 warnings", "status": "warning"}, report)
+    assert ev10["word_timestamp_warnings"] == [warn] and ev10["word_timestamp_errors"] == [] and ev10["total_words"] == 2
+    ev1 = step_llm_check.build_step_evidence("analyzer", {"n": 1, "name": "Audio File Validation", "detail": "file readable", "status": "completed"}, report)
+    assert ev1["file_validation"] == {"errors": [], "warnings": []} and "validation_status" not in ev1
 
 
 def test_interim_report_without_audio_waits(tmp_path):
