@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-24T04:17:18.207221+00:00",
-  "total_experiences": 57,
+  "updated_at": "2026-10-26T04:38:22.800226+00:00",
+  "total_experiences": 60,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -270,6 +270,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T22:44:00.300531+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-37f2b41679": {
+      "experience_id": "exp-motion_animation-37f2b41679",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-1935f98aa6",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 7,
+        "elements_generated": 15,
+        "fallbacks_applied": 1,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 1 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T04:36:30.125349+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-3c9ba81034": {
@@ -797,6 +822,49 @@
       "timestamp": "2026-10-22T17:37:39.047313+00:00",
       "schema_version": 1
     },
+    "exp-motion_animation-93cc2535f7": {
+      "experience_id": "exp-motion_animation-93cc2535f7",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_225cd44e",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_225cd44e",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Remotion's packages are missing. Run \"npm install\" in the remotion folder. (details in projects/my-first-project-01-df7f/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-26T04:21:47.332825+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T04:21:55.144325+00:00",
+      "schema_version": 1
+    },
     "exp-motion_animation-956bc489b0": {
       "experience_id": "exp-motion_animation-956bc489b0",
       "agent_id": "motion_animation",
@@ -1045,6 +1113,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:34:14.544984+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-cc07a7a3db": {
+      "experience_id": "exp-motion_animation-cc07a7a3db",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-91b147758d",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 7,
+        "elements_generated": 15,
+        "fallbacks_applied": 1,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 1 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T04:38:22.799109+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-cfe9520fdc": {
