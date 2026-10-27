@@ -129,6 +129,41 @@ run writes all 8 again once, and from then on they are kept. Scene 8's TS18047 n
 the pipeline cannot generate code until then. Either wait, or set the LLM page to Antigravity `gemini-3.8-flash-high` (it failed before at the
 old 120 s timeout; code generation now gets 600 s, so it is worth one try) and run again.
 
+## Phase 1 proven on a real render (2026-10-27, 22:10): run_9272a250 completed all 13 stages
+Second login was needed: the pipeline's `claude_cli` provider calls the `claude` CLI as a subprocess with its OWN
+login, separate from this app's. The user's first account (`laxmand7221@gmail.com`) hit its session limit;
+`claude auth login` with `CLAUDE_CONFIG_DIR` set signed a second account (`healthdecode7221@gmail.com`) in for the
+pipeline only (verified: `POST /llm/test` -> ok, 7.4 s). New permanent memory: `project_pipeline_llm_and_backend_ops`
+(the CLI's own login, and the backend needs a restart after a code change - no `--reload`).
+
+**4 more bugs found and fixed while following the run** (all pushed, all with tests):
+- `cd88e0a` **a scene left by another project in the shared Remotion staging folder was bundled into this project's
+  composition and type-checked with it** - unfixable by the compile repair (the file does not exist in this
+  project), so the stage failed for ever on it. `motion_animation.stage_scenes()` is now the one implementation
+  (used by both codegen staging and render staging): it removes every `scene_*.tsx` that is not one of this
+  project's own before writing the current ones.
+- `049cf0c` the deterministic timeline-approval fallback (used only when the LLM reviewer is unavailable) returned
+  `status: "approved"`, confidence 0.95 and a summary claiming pacing/continuity were "verified" - against
+  "an unavailable LLM never approves" and against claiming what was not checked. It now returns `cannot_determine`,
+  no scores, and says what it did NOT assess. Advisory only (the real decision is `timeline_approval.auto_approve`'s
+  LLM review), so no approval path changed.
+- `f9dba9c` the last rule-11 debt: `TimelineTrackCanvas` and `TimelineTrackHeaderColumn` now use CSS modules
+  (370 -> 246 and 71 -> 41 lines; 35 inline styles -> 5, all of them runtime positions from `frameToPx`).
+- `d86a684` a stale test expectation from the PROFILE_TIMEOUT change (fast suite: 1079 passed, 4 skipped).
+
+**Result (`run_9272a250`, project `my-first-project-01-df7f`, 16:9):** all 13 stages completed, 0 retries on any
+stage. motion_gen: all 8 scenes compiled with 0 repairs (rule 12's strict-null guidance worked: scene 8's
+`getPointAtLength` null case, the earlier TS18047, did not recur), stage LLM review passed 0.90. motion_validation:
+`ready_with_warnings` (3 `shot_changes` warnings - exactly the Phase 1 check doing its job: scene_04 shot_3->shot_4
+and scene_06 twice show too little visual change between shots). Timeline approval passed 0.87. Final QC
+`passed_with_warnings` (11 findings disclosed), its LLM decision passed 0.86. `out.mp4`: h264/aac, 1920x1080, 30fps,
+59.477 s (matches the audio exactly), 40 MB.
+**Proven on the actual output, not just the code:** frames pulled from `out.mp4` at the middle of each of scene 4's
+four shots (19.1-29.1 s) show four genuinely different compositions (two empty cards -> left card filled -> +
+signature/handshake + image/rating -> + a middle checklist panel) - shots are real, not one layout repeated.
+**Next:** nothing blocking. The 3 shot_changes warnings and 11 QC findings are disclosed, not fixed - optional
+follow-up if the user wants fewer warnings. Phase 2+ of the roadmap is next when the user wants to continue.
+
 ## Next steps (in this order)
 0. The analyzer of the test project has 2 errors after the re-run (step 10 "Word Timestamp Integrity": 1 error in 130 word timestamps; step 13 follows from it). They block Scene Segmentation: fix at the root (a re-aligned corrected word), then the full autonomous run of the test project, then one fast-suite run. All pending tasks: `docs/ROADMAP.md` section 3.
 1. Phase 1 of the roadmap: shots of 1.5-3.5 s inside every scene, snapped to word times (beats exist; `snap_beats`), the code generator gets per-shot frames + word timestamps, validation of maximum shot length and visual change.
