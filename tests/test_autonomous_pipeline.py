@@ -111,3 +111,10 @@ def test_the_view_says_llm_verified_only_for_a_passed_review_and_null_where_ther
     stages = {s["id"]: s for s in client.get(f"/projects/{pid}/pipeline").json()["stages"]}
     assert stages["segmentation"]["llm_verified"] is False and stages["motion_gen"]["llm_verified"] is False
     assert stages["assets"]["llm_verified"] is None and stages["render"]["llm_verified"] is None
+
+
+def test_a_retry_waits_out_the_llm_circuit_breakers_cooldown():
+    """Three slow answers opened the breaker for 20 s; the stage retried after about a second, three times inside the cooldown, and stopped."""
+    msg = "the planner could not be asked: LLM Gateway call failed: Circuit for 'claude_cli:claude-sonnet-5-5' is OPEN (3 consecutive failures). Cooldown: 18.5s remaining."
+    assert orchestrator._circuit_wait(msg) == 19.5
+    assert orchestrator._circuit_wait("The Claude CLI did not answer within 60 s") == 0.0 and orchestrator._circuit_wait(None) == 0.0

@@ -520,6 +520,13 @@ def evaluate_stage_eligibility(
     }
 
 
+def _circuit_wait(message: str) -> float:
+    """A call the LLM circuit breaker refused can only succeed after its cooldown: wait it out (plus a second). A one-second backoff burned every retry attempt inside the cooldown and stopped a
+    stage for a few slow answers (seen on Visual Planning)."""
+    m = re.search(r"is OPEN.*?Cooldown: ([\d.]+)s remaining", message or "", re.S)
+    return float(m.group(1)) + 1.0 if m else 0.0
+
+
 class PipelineOrchestrator:
     """Authoritative Run Coordinator for the 12-stage Motion-Only pipeline."""
 
@@ -1183,7 +1190,7 @@ class PipelineOrchestrator:
                                 logger.debug(f"Diagnostician advisory notice: {diag_err}")
 
                         if retry_ok:
-                            delay = calculate_backoff(attempt, base_seconds=0.5, max_seconds=4.0, jitter=True)
+                            delay = max(calculate_backoff(attempt, base_seconds=0.5, max_seconds=4.0, jitter=True), _circuit_wait(clean_err))
                             logger.warning(
                                 f"Transient failure in stage '{stage_id}' (attempt {attempt}/{max_retries}, code={code}): {clean_err}. Backoff: {delay}s. Action: {diag_report.recommended_action if diag_report else 'RETRY_WITH_BACKOFF'}."
                             )
