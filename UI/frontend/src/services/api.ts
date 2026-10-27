@@ -760,6 +760,16 @@ export async function fetchTranscriptComparison(projectId: string): Promise<Tran
   }
 }
 
+/** The final transcript the video is made from (segments with their text and times); null when the audio has not been analyzed yet. */
+export async function fetchFinalTranscript(projectId: string): Promise<{ segments: { id: number; start: number; end: number; text: string }[] } | null> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/transcript`);
+    return res.ok ? await res.json() : null;
+  } catch {
+    return null;
+  }
+}
+
 export async function runLlmReview(projectId: string): Promise<any> {
   const res = await fetch(`${API_BASE}/projects/${projectId}/llm-review/run`, {
     method: 'POST'

@@ -14,11 +14,12 @@ export interface TimelineSceneTileProps {
   selected: boolean;
   current: boolean;
   onSelect: () => void;
+  onOpen: () => void;
   formatSeconds: (s: number) => string;
 }
 
 // One scene on the Visuals track: the real frames of the scene (entry, middle, before the exit) side by side behind the name and the length.
-export const TimelineSceneTile: React.FC<TimelineSceneTileProps> = ({ scene, stills, thumbs, fps, leftPx, widthPx, selected, current, onSelect, formatSeconds }) => {
+export const TimelineSceneTile: React.FC<TimelineSceneTileProps> = ({ scene, stills, thumbs, fps, leftPx, widthPx, selected, current, onSelect, onOpen, formatSeconds }) => {
   const frames = sceneFilmstrip(stills, scene.scene_id);
   // With the sheet of the rendered video the strip is made of the video's own frames, as many as fit the width; without it, the preview stills of the scene.
   const cells = thumbs?.available ? Math.max(1, Math.round(widthPx / CELL_PX)) : 0;
@@ -28,6 +29,7 @@ export const TimelineSceneTile: React.FC<TimelineSceneTileProps> = ({ scene, sti
       className={cls}
       style={{ left: `${leftPx}px`, width: `${Math.max(12, widthPx)}px` }}
       onClick={(e) => { e.stopPropagation(); onSelect(); }}
+      onDoubleClick={(e) => { e.stopPropagation(); onOpen(); }}
       title={`Scene ${scene.scene_id}: F${scene.start_frame} - F${scene.end_frame} (${formatSeconds(scene.duration_frames / fps)})`}
       data-testid={`timeline-scene-tile-${scene.scene_id}`}
     >

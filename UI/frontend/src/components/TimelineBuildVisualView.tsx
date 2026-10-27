@@ -4,6 +4,7 @@ import { TimelinePreviewCanvas } from './timeline-build/TimelinePreviewCanvas';
 import { TimelineTrackCanvas } from './timeline-build/TimelineTrackCanvas';
 import { TimelineSceneInspector } from './timeline-build/TimelineSceneInspector';
 import { TimelineHeaderBar } from './timeline-build/TimelineHeaderBar';
+import { TimelineSceneModal } from './timeline-build/TimelineSceneModal';
 import { useTimelineData, formatTimecode, formatSeconds } from './timeline-build/useTimelineData';
 import { useTimelinePlayback } from './timeline-build/useTimelinePlayback';
 
@@ -22,6 +23,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
   isPipelineRunning = false
 }) => {
   const [selectedSceneId, setSelectedSceneId] = useState<string | null>(null);
+  const [popupSceneId, setPopupSceneId] = useState<string | null>(null);   // the scene popup (double click on a tile)
   const [inspectorTab, setInspectorTab] = useState<'details' | 'layers' | 'validation' | 'raw_json'>('details');
 
   // Track Visibility Toggles
@@ -44,6 +46,8 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
     segmentationScenes,
     stills,
     thumbs,
+    transcriptSegments,
+    transitions,
     fps,
     totalFrames,
     totalDurationSeconds,
@@ -75,6 +79,8 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
   React.useEffect(() => {
     setFrameForData(currentFrame);
   }, [currentFrame]);
+
+  const popupIdx = scenesList.findIndex(s => s.scene_id === popupSceneId);
 
   if (loading) {
     return (
@@ -211,11 +217,29 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
         setSelectedSceneId={setSelectedSceneId}
         setCurrentFrame={setCurrentFrame}
         waveformPeaks={waveformPeaks}
-        segmentationScenes={segmentationScenes}
         stills={stills}
         thumbs={thumbs}
         motionPlan={motionPlan}
+        transcriptSegments={transcriptSegments}
+        transitions={transitions}
+        onOpenScene={setPopupSceneId}
       />
+
+      {popupIdx >= 0 && (
+        <TimelineSceneModal
+          scene={scenesList[popupIdx]}
+          idx={popupIdx}
+          total={scenesList.length}
+          fps={fps}
+          stills={stills.samples}
+          thumbs={thumbs}
+          segments={transcriptSegments}
+          transitions={transitions}
+          formatSeconds={formatSeconds}
+          onClose={() => setPopupSceneId(null)}
+          onStep={(d) => setPopupSceneId(scenesList[popupIdx + d]?.scene_id ?? null)}
+        />
+      )}
 
       {/* SELECTED SCENE DEEP DETAILS INSPECTOR */}
       {selectedScene && (

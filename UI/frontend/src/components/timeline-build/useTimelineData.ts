@@ -6,9 +6,11 @@ import {
   fetchTimelineStills,
   fetchTimelineThumbnails,
   fetchMotionData, 
-  fetchSceneSegmentation 
+  fetchSceneSegmentation,
+  fetchFinalTranscript
 } from '../../services/api';
 import type { StillsResponse, Thumbs } from './timelineStills';
+import type { TranscriptSegment, Transition } from './timelineCaptions';
 
 export interface TimelineSceneItem {
   item_id: string;
@@ -53,6 +55,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
   const [segmentationScenes, setSegmentationScenes] = useState<any[]>([]);
   const [stills, setStills] = useState<StillsResponse>({ current: false, exists: false, samples: [] });
   const [thumbs, setThumbs] = useState<Thumbs | null>(null);
+  const [transcriptSegments, setTranscriptSegments] = useState<TranscriptSegment[]>([]);
 
   const fps = 30;
 
@@ -62,14 +65,17 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     setError(null);
 
     try {
-      const [buildRes, tlRes, wfRes, motionRes, segRes, stillsRes] = await Promise.all([
+      const [buildRes, tlRes, wfRes, motionRes, segRes, stillsRes, transcript] = await Promise.all([
         fetchTimelineBuildData(projectId),
         fetchTimelineJson(projectId),
         fetchTimelineWaveform(projectId),
         fetchMotionData(projectId),
         fetchSceneSegmentation(projectId),
-        fetchTimelineStills(projectId)
+        fetchTimelineStills(projectId),
+        fetchFinalTranscript(projectId)
       ]);
+
+      setTranscriptSegments(Array.isArray(transcript?.segments) ? transcript.segments : []);
 
       if (buildRes.ok) setTimelineBuildReport(buildRes.data);
       if (tlRes.ok) setTimelineData(tlRes.data);
@@ -185,6 +191,8 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     }) || activeMotionScene.graphics[0];
   }, [activeMotionScene, activeScene, currentFrame, fps]);
 
+  const transitions: Transition[] = useMemo(() => (Array.isArray(timelineData?.transitions) ? timelineData.transitions : []), [timelineData]);
+
   const timelineConflicts = useMemo(() => {
     const conflicts: { type: 'gap' | 'overlap'; startFrame: number; endFrame: number; message: string }[] = [];
     for (let i = 0; i < scenesList.length - 1; i++) {
@@ -219,6 +227,8 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     segmentationScenes,
     stills,
     thumbs,
+    transcriptSegments,
+    transitions,
     fps,
     totalFrames,
     totalDurationSeconds,

@@ -1,8 +1,10 @@
 import React from 'react';
 import { TimelineTrackHeaderColumn } from './TimelineTrackHeaderColumn';
 import { TimelineSceneTile } from './TimelineSceneTile';
+import { TimelineCaptionsTrack } from './TimelineCaptionsTrack';
+import { TimelineTransitionMarks } from './TimelineTransitionMarks';
+import { captionBlocks, type TranscriptSegment, type Transition } from './timelineCaptions';
 import type { StillsResponse, Thumbs } from './timelineStills';
-
 
 export interface TimelineTrackCanvasProps {
   fps: number;
@@ -27,10 +29,12 @@ export interface TimelineTrackCanvasProps {
   setSelectedSceneId: (id: string) => void;
   setCurrentFrame: React.Dispatch<React.SetStateAction<number>>;
   waveformPeaks: number[];
-  segmentationScenes: any[];
   stills: StillsResponse;
   thumbs: Thumbs | null;
   motionPlan: any;
+  transcriptSegments: TranscriptSegment[];
+  transitions: Transition[];
+  onOpenScene: (sceneId: string) => void;
 }
 
 export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
@@ -56,10 +60,12 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
   setSelectedSceneId,
   setCurrentFrame,
   waveformPeaks,
-  segmentationScenes,
   stills,
   thumbs,
-  motionPlan
+  motionPlan,
+  transcriptSegments,
+  transitions,
+  onOpenScene
 }) => {
   return (
     <div style={{
@@ -204,9 +210,11 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
                     selected={selectedScene?.scene_id === scene.scene_id}
                     current={activeScene?.scene_id === scene.scene_id}
                     onSelect={() => { setSelectedSceneId(scene.scene_id); setCurrentFrame(scene.start_frame); }}
+                    onOpen={() => onOpenScene(scene.scene_id)}
                     formatSeconds={formatSeconds}
                   />
                 ))}
+                <TimelineTransitionMarks transitions={transitions} frameToPx={frameToPx} fps={fps} />
               </div>
             )}
 
@@ -264,37 +272,7 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
                 position: 'relative',
                 backgroundColor: 'rgba(15, 23, 42, 0.2)'
               }}>
-                {segmentationScenes.map((seg, idx) => {
-                  const startSec = seg.start_seconds || seg.start || 0;
-                  const endSec = seg.end_seconds || seg.end || (startSec + 4);
-                  const left = frameToPx(Math.round(startSec * fps));
-                  const width = frameToPx(Math.round((endSec - startSec) * fps));
-
-                  return (
-                    <div
-                      key={idx}
-                      style={{
-                        position: 'absolute',
-                        left: `${left}px`,
-                        width: `${Math.max(16, width)}px`,
-                        top: '6px',
-                        bottom: '6px',
-                        backgroundColor: 'rgba(16, 185, 129, 0.15)',
-                        border: '1px solid rgba(16, 185, 129, 0.4)',
-                        borderRadius: '4px',
-                        padding: '4px 8px',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        alignItems: 'center'
-                      }}
-                      title={`Speech: "${seg.narration || seg.transcript || seg.meaning || ''}" (${formatSeconds(endSec - startSec)})`}
-                    >
-                      <span style={{ fontSize: '11px', color: 'var(--status-completed)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {seg.narration || seg.transcript || seg.meaning || `Speech ${idx + 1}`}
-                      </span>
-                    </div>
-                  );
-                })}
+                <TimelineCaptionsTrack blocks={captionBlocks(transcriptSegments, fps)} frameToPx={frameToPx} fps={fps} formatSeconds={formatSeconds} />
               </div>
             )}
 
