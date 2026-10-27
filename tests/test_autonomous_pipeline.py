@@ -153,3 +153,14 @@ def test_the_gateway_keeps_the_callers_timeout():
         seen.clear()
         llm_gateway.execute_llm_gateway_call(llm_gateway.GatewayRequest(prompt="p"))
         assert seen["req"].timeout == 60                                                  # the default stays
+
+
+def test_a_later_successful_visual_planning_replaces_an_old_failure_on_the_page(tmp_path):
+    """The autonomous run planned successfully at 12:00 but the page kept the 'failed' record of the 11:11 attempt (network blip): only the background job wrote the record."""
+    from VIDEO_ENGINE.stages import promptgen, visual_planning
+    visual_planning.record_outcome(tmp_path, "Visual Planning: can't reach the API server")
+    g = promptgen.state(tmp_path)
+    assert g["state"] == "failed" and "reach the API" in g["error"]
+    visual_planning.record_outcome(tmp_path)
+    g = promptgen.state(tmp_path)
+    assert g["state"] == "done" and g["error"] is None and g["kind"] == "plan"

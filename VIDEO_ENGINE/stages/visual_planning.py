@@ -699,16 +699,25 @@ def fix_warnings(pdir: Path, ask=None, progress=None, stage: int | None = None) 
 
 
 # ---------- the background jobs (same job record as the scene planner: never a second job at the same time) ----------
+def record_outcome(pdir: Path, error: str | None = None) -> None:
+    """The generation record the pages read: `done`, or `failed` with the cause. Written by the background job AND by the autonomous run (the Visual Planning agent), so an old failure never stays
+    on the page after a later run planned successfully."""
+    if error is None:
+        promptgen._record(pdir, kind="plan", state="done", done=3, total=3, current=None, error=None, finished=review.now())
+    else:
+        promptgen._record(pdir, kind="plan", state="failed", error=error, current=None, finished=review.now())
+
+
 def _job(pdir: Path, label: str, work) -> None:
     try:
         promptgen._record(pdir, current=1, done=0)
         work(lambda n: promptgen._record(pdir, current=n, done=n - 1))
         llm_review.run_stage_llm_review(pdir, "planning")
-        promptgen._record(pdir, state="done", done=3, current=None, error=None, finished=review.now())
+        record_outcome(pdir)
     except GenError as e:
-        promptgen._record(pdir, state="failed", error=f"{label}: {e}", current=None, finished=review.now())
+        record_outcome(pdir, f"{label}: {e}")
     except Exception as e:                                                  # never leave the record on "running"
-        promptgen._record(pdir, state="failed", error=f"unexpected error: {e}", current=None, finished=review.now())
+        record_outcome(pdir, f"unexpected error: {e}")
 
 
 def _work_fix(pdir: Path, stage: int | None = None) -> None:

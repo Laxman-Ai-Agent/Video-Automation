@@ -63,11 +63,13 @@ class VisualPlanningAgent(BaseAgent):
             try:
                 plan = visual_planning.run(project_dir, ask=self._gateway_ask(project_dir, request))
             except Exception as e:                                      # GenError names the cause; nothing is derived in its place
+                visual_planning.record_outcome(project_dir, f"Visual Planning: {e}")
                 return self._result(project_dir, "failed", f"Visual planning generation failed: {e}")
         try:
             validate_planning_artifacts(project_dir)
         except Exception as e:
             return self._result(project_dir, "failed", f"Visual planning contract validation failed: {e}")
+        visual_planning.record_outcome(project_dir)                    # the page shows this run, not an older failure
         scenes = plan.get("scenes", [])
         mix = plan.get("media_mix", {})
         outputs = [ArtifactRef(path=str(p), description=d) for p, d in ((vf, "Visual Planning JSON"), (project_dir / "scene_plan.json", "Scene Plan JSON")) if p.exists()]
