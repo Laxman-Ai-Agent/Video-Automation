@@ -46,6 +46,7 @@ def _private_skill_catalog(monkeypatch, tmp_path):
     monkeypatch.setattr(skill_registry, "SKILLS_DIR", tmp_path / "skills")
     monkeypatch.setattr(skill_registry, "STAGING_DIR", tmp_path / "staging")
     monkeypatch.setattr(skill_registry, "CATALOG_FILE", tmp_path / "catalog.json")
+    monkeypatch.setattr(skill_registry, "AGENTS_SKILLS_DIR", tmp_path / "agents_skills")     # the repository's .agents/skills would add its 29 agent skills
     return skill_registry
 
 

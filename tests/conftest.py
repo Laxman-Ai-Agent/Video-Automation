@@ -54,6 +54,38 @@ def isolate_projects_dir(tmp_path, monkeypatch):
         pass
 
 
+# Measured 2026-10-27, each module run on its own on the i5-1235U: 45 s or more (20 of them did not finish in 90 s).
+SLOW_MODULES = {
+    "test_audio_visual_agents_integration.py", "test_asset_collection.py", "test_dome_render.py", "test_e2e_production_readiness.py",
+    "test_final_qc.py", "test_improve_p1.py", "test_main_orchestrator_intelligence.py", "test_motion_animation_intelligence.py",
+    "test_motion_approved_libraries.py", "test_motion_codegen.py", "test_motion_codegen_and_concurrency.py", "test_motion_generation.py",
+    "test_motion_library.py", "test_motion_only_mode.py", "test_motion_planning.py", "test_motion_validation.py",
+    "test_motion_validation_intelligence.py", "test_phase2_capability_system.py", "test_phase3_capability_learning.py",
+    "test_phase9_e2e_integration.py", "test_render_smoke.py", "test_render_video.py", "test_scene_segmentation.py",
+    "test_stage5_desktop_delivery_auto_qc.py", "test_stage_lifecycle_and_gate_removal.py", "test_timeline_approval.py",
+    "test_timeline_approval_intelligence.py", "test_timeline_build.py", "test_timeline_render_qc_delivery.py",
+}
+# Browser tests against the running app (API :8000, frontend :5173).
+LIVE_UI_MODULES = {
+    "test_playwright_about_tab_all_stages.py", "test_playwright_agent_intelligence_system.py", "test_playwright_audio_analysis_card.py",
+    "test_playwright_e2e_features.py", "test_playwright_e2e_visible_video_generation.py", "test_playwright_fixed_layout_scroll.py",
+    "test_playwright_live_pipeline_status.py", "test_playwright_no_blinking.py", "test_playwright_pipeline_11_stages.py",
+    "test_playwright_ui_smoke.py", "test_verify_all_pipeline_cards_fullpage.py", "test_verify_audio_analysis_fullpage.py",
+    "test_verify_backend_stability.py", "test_verify_realtime_status_indicators.py", "test_verify_scene_segmentation_tab.py",
+    "test_verify_sidebar_buttons_removed.py",
+}
+
+
+def pytest_collection_modifyitems(items):
+    """Marks the slow and the live-UI modules, so the fast suite is `-m "not slow and not live_ui"` (nothing is skipped by default)."""
+    for item in items:
+        name = item.path.name
+        if name in SLOW_MODULES:
+            item.add_marker(pytest.mark.slow)
+        if name in LIVE_UI_MODULES:
+            item.add_marker(pytest.mark.live_ui)
+
+
 @pytest.fixture(autouse=True)
 def isolate_repo_state(tmp_path, monkeypatch):
     """Tests never write the repository's own state files: the approvals queue and audit log and the central skill catalog live in tmp_path
