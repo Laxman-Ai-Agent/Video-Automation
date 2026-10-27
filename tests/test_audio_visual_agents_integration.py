@@ -282,7 +282,7 @@ def test_scene_segmentation_wrapper_reuses_artifacts_without_asr(sample_project,
     )
     res_invalid = adapter.execute(sample_project, req)
     assert res_invalid.status == "failed"
-    assert "non-positive duration" in res_invalid.summary
+    assert "invalid timestamp range" in res_invalid.summary
 
 
 # ------------------ TEST 6: Visual Planning Structured Generation via Gateway ------------------
@@ -471,29 +471,6 @@ def test_visual_planning_gateway_repair_and_retry(sample_project):
     # the planner LLM failed: nothing is derived in its place (the plan would claim what no planner judged); the stage fails with the cause
     assert res.status == "failed" and "planner could not be asked" in res.summary and "Invalid JSON after retries" in res.summary
     assert not (sample_project / "visual_planning.json").exists()
-
-
-# ------------------ TEST 9: Mandatory Review Gate Fails Closed on Blockers ------------------
-def test_visual_planning_mandatory_review_gate(sample_project):
-    """Visual Planning marks status=blocked if Phase 2 review returns blockers."""
-    registry = get_agent_registry()
-    adapter = registry.get_agent("visual_planning")
-    req = AgentRequest(project_id="proj_test_01", agent_id="visual_planning", stage_id="planning")
-
-    # Create dummy visual planning files
-    (sample_project / "visual_planning.json").write_text(
-        json.dumps({"schema_version": "1.0", "version": 3, "scenes": []}),
-        encoding="utf-8",
-    )
-
-    with patch("backend.artifact_contracts.validate_planning_artifacts"), \
-         patch("VIDEO_ENGINE.stages.visual_planning.load", return_value={"scenes": [], "stale": False}), \
-         patch("backend.llm_review.is_stage_review_passed", return_value=(False, "Critical blocker: Safe zone layout violated", {"status": "blocked", "findings": [{"severity": "blocker"}]})):
-
-        res = adapter.invoke(sample_project, req)
-        assert res.status == "blocked"
-        assert "blocked" in res.summary.lower()
-        assert "Mandatory LLM review gate failed" in (res.error or "")
 
 
 # ------------------ TEST 10: Truthful Agent Lifecycle & Communication ------------------

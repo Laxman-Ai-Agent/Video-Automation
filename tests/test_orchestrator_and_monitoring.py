@@ -160,7 +160,7 @@ def test_the_audio_analyzer_runs_when_there_is_no_transcript_or_the_llm_has_not_
     with patch.object(transcript_review, "is_verified", return_value=False):
         assert orch._analysis_needed() is True                                                # a transcript the LLM has not checked
     with patch.object(transcript_review, "is_verified", return_value=True), patch.object(orchestrator.llm_review, "is_stage_review_passed", return_value=(False, "llm_review_missing", None)):
-        assert orch._analysis_needed() is True                                                # checked, but the LLM approval of the final transcript is missing or out of date
+        assert orch._analysis_needed() is False                                               # checked: the missing approval is the stage review's job (`_review` / `_ensure_reviews`), the analysis is not run again for it
     with patch.object(transcript_review, "is_verified", return_value=True), patch.object(orchestrator.llm_review, "is_stage_review_passed", return_value=(True, "passed", {})):
         assert orch._analysis_needed() is False                                               # checked and approved: nothing to do, nothing re-run
     ran = []

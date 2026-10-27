@@ -190,7 +190,7 @@ def test_timeline_is_built_approved_and_rendered_without_pictures(motion, monkey
     assert (pdir / "out.mp4").exists() and (pdir / "render_report.json").exists()
     t = stages(c, pid)
     assert [t[k]["status"] for k in ("motion_plan", "motion_gen", "motion_validation", "timeline", "approval", "render")] == ["completed"] * 6, t
-    assert t["qc"]["status"] == "waiting_for_approval"                                    # a rendered video is judged by a person at Final QC
+    assert t["qc"]["status"] == "completed"                                              # a rendered video is judged by the Final QC LLM review, nobody else
 
 
 def test_both_aspect_ratios_are_built_without_pictures(client, monkeypatch):

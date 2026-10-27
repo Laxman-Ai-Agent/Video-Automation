@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "timeline_approval",
-  "updated_at": "2026-10-20T05:55:15.282152+00:00",
-  "total_experiences": 18,
+  "updated_at": "2026-10-27T02:13:28.849687+00:00",
+  "total_experiences": 20,
   "experiences": {
     "exp-timeline_approval-10e87d0dbb": {
       "experience_id": "exp-timeline_approval-10e87d0dbb",
@@ -215,6 +215,49 @@
       "timestamp": "2026-10-19T07:49:45.546342+00:00",
       "schema_version": 1
     },
+    "exp-timeline_approval-570a75bfc8": {
+      "experience_id": "exp-timeline_approval-570a75bfc8",
+      "agent_id": "timeline_approval",
+      "task_type": "recovery_approval",
+      "task_id": "run_064c567d",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "approval",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_064c567d",
+            "agent_id": "timeline_approval",
+            "stage_id": "approval",
+            "category": "VALIDATION",
+            "code": "contract_validation_error",
+            "message": "the LLM approval review did not pass (needs_review, score 0.72): The current timeline's measurable properties are sound, but the recorded approval does not cover it. The latest approval was issued for fingerprint d0f85d237c7920e1, while the current timeline fingerprint is 55cdac9b1e1a8835. The timeline changed after that approval, so its 'approved' decision and notes are stale. Duration, scene con; warning: Fingerprint mismatch: the latest approval (d0f85d237c7920e1) does not match the current timeline (55cdac9b1e1a8835). Under the policy 'approve only a timeline that is valid in every respect', the old approval must not authorize render or export of the current timeline. Re-run the approval against the current fingerprint and record a fresh decision. The payload does not show what changed between fingerprints, so the prior 202/202 validation claim cannot be assumed to apply to this build.; warning: The payload does not state the filler policy (e.g. hold_previous_scene) for the 6 gap intervals. Continuous visual playback through the gaps and transition windows cannot be confirmed from the artifacts provided.; warning: The motion plan specifies 3 graphics and 1-2 texts per scene, but each timeline scene reports layers_count=1 (7 layers total, 8 items, 2 tracks). The mapping from planned graphics and text to timeline layers is not shown. It is probably grouped into a single composition layer per scene, but this should be confirmed. Scene 004 plans 2 texts (quote_type) and is the most likely to lose one.",
+            "timestamp": "2026-10-27T02:13:28.764635+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_approval",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Deterministic VALIDATION error cannot succeed by retrying without input changes.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "VALIDATION",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for approval resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T02:13:28.838912+00:00",
+      "schema_version": 1
+    },
     "exp-timeline_approval-5773df43ce": {
       "experience_id": "exp-timeline_approval-5773df43ce",
       "agent_id": "timeline_approval",
@@ -328,6 +371,49 @@
       "confidence": 0.4,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T04:56:53.546786+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-7df303592b": {
+      "experience_id": "exp-timeline_approval-7df303592b",
+      "agent_id": "timeline_approval",
+      "task_type": "recovery_approval",
+      "task_id": "run_22258728",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "approval",
+        "attempt": 2,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_22258728",
+            "agent_id": "timeline_approval",
+            "stage_id": "approval",
+            "category": "VALIDATION",
+            "code": "contract_validation_error",
+            "message": "the LLM approval review did not pass (needs_review, score 0.72): The current timeline's measurable properties are sound, but the recorded approval does not cover it. The latest approval was issued for fingerprint d0f85d237c7920e1, while the current timeline fingerprint is 55cdac9b1e1a8835. The timeline changed after that approval, so its 'approved' decision and notes are stale. Duration, scene con; warning: Fingerprint mismatch: the latest approval (d0f85d237c7920e1) does not match the current timeline (55cdac9b1e1a8835). Under the policy 'approve only a timeline that is valid in every respect', the old approval must not authorize render or export of the current timeline. Re-run the approval against the current fingerprint and record a fresh decision. The payload does not show what changed between fingerprints, so the prior 202/202 validation claim cannot be assumed to apply to this build.; warning: The payload does not state the filler policy (e.g. hold_previous_scene) for the 6 gap intervals. Continuous visual playback through the gaps and transition windows cannot be confirmed from the artifacts provided.; warning: The motion plan specifies 3 graphics and 1-2 texts per scene, but each timeline scene reports layers_count=1 (7 layers total, 8 items, 2 tracks). The mapping from planned graphics and text to timeline layers is not shown. It is probably grouped into a single composition layer per scene, but this should be confirmed. Scene 004 plans 2 texts (quote_type) and is the most likely to lose one.",
+            "timestamp": "2026-10-27T02:06:01.368457+00:00",
+            "recovery_permitted": false,
+            "attempt": 2,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_approval",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Deterministic VALIDATION error cannot succeed by retrying without input changes.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "VALIDATION",
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for approval resulted in failed on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T02:06:01.703600+00:00",
       "schema_version": 1
     },
     "exp-timeline_approval-7f787c44e2": {

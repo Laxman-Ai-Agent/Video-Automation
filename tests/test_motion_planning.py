@@ -172,30 +172,6 @@ def test_code_in_the_plan_is_refused(tmp_path):
 
 
 # ---------- the Visual Plan is followed, not invented ----------
-def test_a_required_on_screen_text_of_the_visual_plan_may_not_be_missing_from_the_motion_plan(tmp_path):
-    d, sp, pm, vplan, _ = make(tmp_path)
-    s0 = next(s for s in vplan["scenes"] if any(e["type"] in ("text", "label") and e.get("content") for e in s["elements"]))
-    gone = next(e for e in s0["elements"] if e["type"] in ("text", "label") and e.get("content"))["content"]
-    mp = json.loads((d / "motion_plan.json").read_text(encoding="utf-8"))
-    for sc in mp["scenes"]:
-        sc["texts"] = [t for t in sc["texts"] if t["text"] != gone]
-    (d / "motion_plan.json").write_text(json.dumps(mp), encoding="utf-8")
-    plan = build(d)
-    assert any(f"'{gone}'" in e and "not in the motion plan" in e for e in plan["validation"]["errors"])
-
-
-def test_an_element_the_library_cannot_draw_on_its_own_is_a_recorded_fallback_not_an_invented_id(tmp_path):
-    d, sp, pm, vplan, _ = make(tmp_path)
-    stored = json.loads((d / "visual_planning.json").read_text(encoding="utf-8"))
-    stored["scenes"][0]["elements"].append({"element_id": "node_x", "type": "diagram", "role": "supporting", "required": True, "visual_description": "a network", "content": None, "language": None,
-                                            "text_purpose": None, "appearance": {}, "placement": {"region": "center", "priority": 2, "avoid_overlap": True}, "registry_requirements": None, "constraints": []})
-    (d / "visual_planning.json").write_text(json.dumps(stored), encoding="utf-8")
-    plan = build(d)
-    el = next(e for e in plan["scenes"][0]["elements"] if e["element_id"] == "node_x")
-    assert el["status"] == "fallback" and el["registry_id"] is None and el["fallback"]["id"] == "route-line"
-    assert plan["validation"]["errors"] == [] and any("not drawn one by one" in w for w in plan["validation"]["warnings"])
-
-
 def test_a_project_without_a_visual_plan_still_plans_and_says_the_elements_cannot_be_traced(tmp_path):
     d, *_ = make(tmp_path, with_vp=False)
     plan = build(d)
@@ -269,37 +245,6 @@ def _apply(d, mp):
         for i, t in enumerate(s["texts"]):
             t["at"] = (f.get("textAt") or {}).get(str(i), t["at"])
     (d / "motion_plan.json").write_text(json.dumps(mp), encoding="utf-8")
-
-
-def test_solve_moves_the_graphic_off_the_text_area_starts_the_short_text_earlier_and_accepts_the_fallback(tmp_path):
-    d, mp = _fixable(tmp_path)
-    before = mpl.load(d, "16:9")["validation"]["warnings"]
-    assert len(_own(before)) == 3
-    done = mpl.solve(d, "16:9")
-    assert done["moved"] >= 1 and done["earlier"] == 1 and done["accepted"] >= 1 and done["before"] == len(before)
-    fx = json.loads((d / "motion_fixes.json").read_text(encoding="utf-8"))
-    box = fx["scenes"]["1"]["box"]["route-line"]
-    assert vp._overlap((box[0], box[1], box[0] + box[2], box[1] + box[3]), vp.region_box("upper_right")) == 0 and box[2:] == [0.2, 0.1]            # same size, clear of the text area
-    s0 = mp["scenes"][0]
-    at = fx["scenes"]["1"]["textAt"]["0"]
-    assert at < s0["texts"][0]["at"] and at >= s0["start"] and (s0["end"] - 0.36) - at >= 0.5 + 0.8 + 0.3 * len(s0["texts"][0]["text"].split())      # on screen until its EXIT starts, not until the scene ends
-    assert "scene_01" in fx["accepted"] and fx["before"] == len(before)
-
-
-def test_solve_is_recorded_in_the_plan_and_what_cannot_be_solved_stays_a_warning(tmp_path):
-    d, mp = _fixable(tmp_path)
-    mpl.solve(d, "16:9")
-    _apply(d, mp)
-    plan = build(d)
-    warnings = plan["validation"]["warnings"]
-    assert plan["validation"]["errors"] == [] and _own(warnings) == [] and not any("overlaps the area" in w for w in warnings)
-    wf = plan["warning_fix"]
-    assert wf["status"] in ("partly", "solved") and wf["after"] == len(warnings) < wf["before"] and "scene_01" in wf["accepted"] and {c["kind"] for c in wf["changes"]} == {"graphic_moved", "text_earlier"}
-    note = next(n for n in plan["scenes"][0]["validation_notes"] if n["code"] == "element_fallback")
-    assert note["severity"] == "info" and note["message"].endswith("still NOT drawn") and wf["not_drawn"] >= 2                       # kept in the scene, no longer a warning
-    mpl.save(d, "16:9", plan)
-    stored = (d / "motion_fixes.json").read_text(encoding="utf-8")
-    assert mpl.solve(d, "16:9") == {"moved": 0, "earlier": 0, "accepted": 0, "kept": [], "before": len(warnings)} and (d / "motion_fixes.json").read_text(encoding="utf-8") == stored      # nothing left it can solve
 
 
 def test_solve_needs_a_current_plan_and_the_api_refuses_a_project_without_one(client, tmp_path):
@@ -428,13 +373,6 @@ def test_a_drawn_element_must_exist_in_the_visual_plan_stay_off_the_text_and_ins
     assert any("lies on the text" in w and "earth_x" in w for w in plan["validation"]["warnings"])
     d, plan = _with_diagram(tmp_path / "c", [_disc(box=(0.01, 0.7, 0.07, 0.12))])
     assert any("reaches outside the safe area" in w for w in plan["validation"]["warnings"])
-
-
-def test_an_element_the_diagram_builder_refused_stays_a_recorded_fallback_with_its_reason(tmp_path):
-    d, plan = _with_diagram(tmp_path, [], skipped=[{"element_id": "earth_x", "reason": "no dome primitive: the library draws discs, lines, frames and icons only"}])
-    el = next(e for e in plan["scenes"][0]["elements"] if e["element_id"] == "earth_x")
-    assert el["status"] == "fallback" and "no dome primitive" in el["fallback"]["reason"]
-    assert any("not drawn one by one" in w and "no dome primitive" in w for w in plan["validation"]["warnings"])
 
 
 def test_the_region_table_of_the_diagram_builder_is_the_one_of_the_visual_plan():

@@ -1,9 +1,52 @@
 {
   "schema_version": 1,
   "agent_id": "visual_planning",
-  "updated_at": "2026-10-24T03:22:10.084861+00:00",
-  "total_experiences": 13,
+  "updated_at": "2026-10-27T06:21:13.087358+00:00",
+  "total_experiences": 17,
   "experiences": {
+    "exp-visual_planning-023a4c4b23": {
+      "experience_id": "exp-visual_planning-023a4c4b23",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_a1fac0e9",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_a1fac0e9",
+            "agent_id": "visual_planning",
+            "stage_id": "planning",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Visual planning generation failed: the planner could not be asked: LLM Gateway call failed: The Claude CLI did not answer within 60 s",
+            "timestamp": "2026-10-27T06:08:58.824638+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_planning",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for planning resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T06:08:58.912246+00:00",
+      "schema_version": 1
+    },
     "exp-visual_planning-0e412fb66d": {
       "experience_id": "exp-visual_planning-0e412fb66d",
       "agent_id": "visual_planning",
@@ -226,6 +269,92 @@
       "timestamp": "2026-10-19T05:13:50.368845+00:00",
       "schema_version": 1
     },
+    "exp-visual_planning-745f33dc18": {
+      "experience_id": "exp-visual_planning-745f33dc18",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_e61780b9",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_e61780b9",
+            "agent_id": "visual_planning",
+            "stage_id": "planning",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Visual planning generation failed: the planner could not be asked: LLM Gateway call failed: Circuit for 'claude_cli:claude-sonnet-5-5' is OPEN (3 consecutive failures). Cooldown: 18.5s remaining.",
+            "timestamp": "2026-10-27T05:44:41.241631+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_planning",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for planning resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T05:44:41.384628+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-76f08b660c": {
+      "experience_id": "exp-visual_planning-76f08b660c",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_5c845d66",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_5c845d66",
+            "agent_id": "visual_planning",
+            "stage_id": "planning",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Visual planning generation failed: the planner could not be asked: LLM Gateway call failed: The Claude CLI did not answer within 60 s",
+            "timestamp": "2026-10-27T06:21:12.441260+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_planning",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for planning resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T06:21:12.949587+00:00",
+      "schema_version": 1
+    },
     "exp-visual_planning-7eea479b3a": {
       "experience_id": "exp-visual_planning-7eea479b3a",
       "agent_id": "visual_planning",
@@ -439,6 +568,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-23T04:52:37.230748+00:00",
+      "schema_version": 1
+    },
+    "exp-visual_planning-f687ff47f8": {
+      "experience_id": "exp-visual_planning-f687ff47f8",
+      "agent_id": "visual_planning",
+      "task_type": "recovery_planning",
+      "task_id": "run_f9cb897a",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "planning",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_f9cb897a",
+            "agent_id": "visual_planning",
+            "stage_id": "planning",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "Visual planning generation failed: the planner could not be asked: LLM Gateway call failed: You've hit your session limit \u00b7 resets 11:30am (Asia/Kolkata)",
+            "timestamp": "2026-10-27T05:52:29.005291+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_planning",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for planning resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T05:52:29.144928+00:00",
       "schema_version": 1
     },
     "exp-visual_planning-f7107bdb52": {

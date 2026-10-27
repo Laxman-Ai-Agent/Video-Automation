@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-26T15:10:31.134843+00:00",
+  "updated_at": "2026-10-27T06:51:18.122087+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -2032,6 +2032,32 @@
         "project_id": "system"
       }
     },
+    "mem-265241ec0260": {
+      "memory_id": "mem-265241ec0260",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 8, \"elements_generated\": 30, \"fallbacks_applied\": 3, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "816acc52be6d6dec0e81e5ba84a5a30aa8c5361a9ce614d0678ecc3d30570a40",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T06:51:18.122087+00:00",
+      "updated_at": "2026-10-27T06:51:18.122087+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-2775dbb47901": {
       "memory_id": "mem-2775dbb47901",
       "title": "Experience exp_c25d127d9324: Delegated action to architecture_validator",
@@ -2976,6 +3002,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-3c6c32a1b632": {
+      "memory_id": "mem-3c6c32a1b632",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T01:58:32.801197+00:00",
+      "updated_at": "2026-10-27T01:58:32.801197+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-3d23e837b865": {
@@ -8383,6 +8435,32 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-a92fd654ade8": {
+      "memory_id": "mem-a92fd654ade8",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T01:40:57.984448+00:00",
+      "updated_at": "2026-10-27T01:40:57.984448+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-a9df25bfaf27": {
       "memory_id": "mem-a9df25bfaf27",
       "title": "Experience exp_7851b3f4dd80: Delegated action to capability_finder",
@@ -9787,6 +9865,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "01-2f64"
+      }
+    },
+    "mem-be5eb9ae5a54": {
+      "memory_id": "mem-be5eb9ae5a54",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T02:12:40.324679+00:00",
+      "updated_at": "2026-10-27T02:12:40.324679+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-be70aa987636": {
@@ -12433,6 +12537,32 @@
         "project_id": "system"
       }
     },
+    "mem-ef0b876d06f1": {
+      "memory_id": "mem-ef0b876d06f1",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T02:15:25.239987+00:00",
+      "updated_at": "2026-10-27T02:15:25.239987+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-efb44c8ae2c0": {
       "memory_id": "mem-efb44c8ae2c0",
       "title": "Experience exp_74319734f3ee: Delegated action to capability_finder",
@@ -12899,6 +13029,32 @@
         "project_id": "01-2f64"
       }
     },
+    "mem-f8460844f6c7": {
+      "memory_id": "mem-f8460844f6c7",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-26T18:34:54.197957+00:00",
+      "updated_at": "2026-10-26T18:34:54.197957+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
+      }
+    },
     "mem-f861aceb1b5c": {
       "memory_id": "mem-f861aceb1b5c",
       "title": "Experience exp_ee02023916b5: Delegated action to verification_and_test",
@@ -12961,6 +13117,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-fad7ac04176a": {
+      "memory_id": "mem-fad7ac04176a",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 7, \"elements_generated\": 26, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "3e9b99b282a4cf1f259ea47f81a10bb608f46c1036a11431b6be068d354eb5ad",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-27T01:52:46.930873+00:00",
+      "updated_at": "2026-10-27T01:52:46.930873+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-fb1c15053e9e": {

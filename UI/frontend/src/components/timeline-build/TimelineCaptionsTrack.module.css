@@ -1,0 +1,27 @@
+.block {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  background-color: rgba(16, 185, 129, 0.15);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  border-radius: 4px;
+  padding: 2px 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.text {
+  font-size: 11px;
+  line-height: 1.25;
+  color: var(--status-completed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.empty {
+  font-size: 11px;
+  color: var(--text-muted);
+  padding: 16px;
+}

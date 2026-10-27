@@ -508,12 +508,8 @@ class BaseAgent(abc.ABC):
         return proposal.to_dict()
 
     def review(self, project_dir: Path, request: AgentRequest, result: AgentResult) -> AgentResult:
-        """Mandatory stage review hook.
-        For active pipeline stages with an associated stage_id:
-        1. If auto_review=True in request parameters, triggers stage review via the gateway.
-        2. Evaluates is_stage_review_passed(project_dir, stage, aspect).
-        3. If review failed, is missing, stale, or has blockers, transitions result.status to 'blocked'.
-        """
+        """Stage review hook: attaches the stage's stored LLM review to the result (metadata `llm_review`) when there is one and, with `auto_review=True`, asks for it first. It never blocks:
+        a stage whose LLM review did not pass keeps the NEXT stage from starting through the stage gate (VIDEO_ENGINE/pipeline/stage_gate.py), the one place that decides it."""
         sid = request.stage_id or self.stage_id
         if not sid or sid in ("pipeline", "main_orchestrator", "motion_template"):
             return result

@@ -1,5 +1,5 @@
 """M7 API tests (FastAPI TestClient). Whisper, CLIP and Remotion are replaced by fast fakes; everything else
-(routes, store, jobs, pipeline executor, matcher bookkeeping, fill_slots) is real.
+(routes, store, jobs, pipeline executor, fill_slots) is real.
 Run: python -m pytest tests/test_m7.py -q"""
 import io
 import importlib
@@ -60,13 +60,6 @@ def client(tmp_path, monkeypatch, llm_review_pass):
 
     monkeypatch.setattr("backend.transcribe.transcribe", fake_transcribe)
     monkeypatch.setattr("backend.cuts.make_cuts", lambda pdir: [{"t": 0.5, "reason": "silence", "silence": 0.3}])
-
-    def fake_clip(images, texts):          # image i matches prompt i (images are sorted by name)
-        s = np.zeros((len(images), len(texts)))
-        for i in range(min(len(images), len(texts))):
-            s[i, i] = 0.5
-        return s
-    monkeypatch.setattr("backend.matcher._clip_scores", fake_clip)
 
     def fake_render(pdir, preview, on_progress=None, aspect="16:9", out=None):
         """Stands in for Remotion. A final render hands Stage 13 a real encoded video of the composition's size and length (it verifies the file for real); a preview is 10 kB of bytes."""

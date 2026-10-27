@@ -43,7 +43,7 @@ def test_illegal_state_transition_rejected(tmp_path: Path):
     save_pipeline_state(pdir, state)
 
     # Cannot transition directly from 'pending' to 'completed' without running
-    with pytest.raises(InvalidStateTransitionError, match="cannot move from 'pending' to 'completed'"):
+    with pytest.raises(InvalidStateTransitionError, match="cannot move from 'pending' to 'completed'|Cannot complete stage 'planning'"):         # the contract check of the stage output refuses it first (nothing was produced)
         transition_stage(pdir, "planning", "completed")
 
     # Can transition from 'pending' to 'running'

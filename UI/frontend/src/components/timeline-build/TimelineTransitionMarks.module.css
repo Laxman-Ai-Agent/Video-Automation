@@ -1,0 +1,13 @@
+.mark {
+  position: absolute;
+  bottom: 0;
+  height: 5px;
+  background-color: rgba(168, 85, 247, 0.85);
+  border-radius: 2px 2px 0 0;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.unsupported {
+  background-color: rgba(239, 68, 68, 0.9);
+}

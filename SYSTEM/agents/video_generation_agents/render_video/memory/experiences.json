@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-24T08:57:30.619389+00:00",
-  "total_experiences": 25,
+  "updated_at": "2026-10-27T08:34:46.865478+00:00",
+  "total_experiences": 31,
   "experiences": {
     "exp-render_video-027d470a17": {
       "experience_id": "exp-render_video-027d470a17",
@@ -96,6 +96,29 @@
       "timestamp": "2026-10-19T07:49:41.993672+00:00",
       "schema_version": 1
     },
+    "exp-render_video-2cfbc0c45d": {
+      "experience_id": "exp-render_video-2cfbc0c45d",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-6e3b10ee1a",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 46747742,
+        "sha256_short": "402e94866706",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T07:12:12.758257+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-2dba6037b4": {
       "experience_id": "exp-render_video-2dba6037b4",
       "agent_id": "render_video",
@@ -117,6 +140,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:11:57.460916+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-2e1899ea1c": {
+      "experience_id": "exp-render_video-2e1899ea1c",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-0c9e5c6a4e",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 37314461,
+        "sha256_short": "cd875b66feda",
+        "recovery_attempts": 0,
+        "audit_passed": false
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T04:16:23.189914+00:00",
       "schema_version": 1
     },
     "exp-render_video-32b4de9a9f": {
@@ -188,6 +234,29 @@
       "timestamp": "2026-10-19T07:32:11.311716+00:00",
       "schema_version": 1
     },
+    "exp-render_video-3bb30ea338": {
+      "experience_id": "exp-render_video-3bb30ea338",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-2a05adf644",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 37314461,
+        "sha256_short": "cd875b66feda",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T02:37:20.167467+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-3d7b64d03c": {
       "experience_id": "exp-render_video-3d7b64d03c",
       "agent_id": "render_video",
@@ -255,6 +324,55 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-23T12:51:49.380176+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-4e1a73497f": {
+      "experience_id": "exp-render_video-4e1a73497f",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-7422642f68",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 46741396,
+        "sha256_short": "14ef5d79fc7a",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T08:34:46.857310+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-5111bffb94": {
+      "experience_id": "exp-render_video-5111bffb94",
+      "agent_id": "render_video",
+      "task_type": "recovery_render",
+      "task_id": "run_700e3f60",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "render",
+        "attempt": 2,
+        "details": {
+          "recovered_after_retries": 1
+        }
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "attempt": 2
+      },
+      "reflection": "Recovery execution for render resulted in succeeded on attempt 2.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T19:14:52.369486+00:00",
       "schema_version": 1
     },
     "exp-render_video-5b4c6f0c6c": {
@@ -580,6 +698,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-22T18:24:41.161017+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-fbc08a2014": {
+      "experience_id": "exp-render_video-fbc08a2014",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-d628dc184c",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 37314461,
+        "sha256_short": "cd875b66feda",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-26T19:14:52.134877+00:00",
       "schema_version": 1
     }
   }
