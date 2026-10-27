@@ -36,3 +36,23 @@ def test_a_scene_generated_before_the_stage_failed_is_reused_and_not_written_aga
     assert ma.previous_fingerprints(tmp_path, "_9x16") == {}                                              # the other aspect has its own record
     (tmp_path / "motion_animation.json").write_text(json.dumps({"scenes": [{"scene_id": 2, "input_fingerprint": "from_manifest"}]}), encoding="utf-8")
     assert ma.previous_fingerprints(tmp_path, "")["2"] == "from_manifest"                                 # a finished stage is the stronger record
+
+
+def test_staging_removes_a_scene_another_project_left_in_the_shared_folder(tmp_path):
+    """VIDEO_ENGINE/remotion/src/generated is shared by every project and its index.ts registers EVERY scene_*.tsx it finds, so a leftover is
+    bundled into this project's composition and type-checked with it - and the compile repair can never fix it, because the file does not exist
+    in this project (a scene_9.tsx of a project that no longer exists did exactly that)."""
+    src, target = tmp_path / "generated_motion", tmp_path / "staged"
+    src.mkdir()
+    target.mkdir()
+    for n in (1, 2):
+        (src / f"scene_{n}.tsx").write_text(f"export const Scene{n} = () => null;", encoding="utf-8")
+    (target / "scene_9.tsx").write_text("left by another project", encoding="utf-8")
+    (target / "index.ts").write_text("the fixed registry", encoding="utf-8")
+
+    ma.stage_scenes(sorted(src.glob("scene_*.tsx")), target)
+
+    assert sorted(p.name for p in target.glob("scene_*.tsx")) == ["scene_1.tsx", "scene_2.tsx"]
+    assert (target / "scene_1.tsx").read_text(encoding="utf-8") == "export const Scene1 = () => null;"
+    assert (target / "index.ts").exists()                                                                 # only the scenes are staged, the registry stays
+    assert not list(target.glob("*.tmp"))                                                                 # written atomically, nothing left over

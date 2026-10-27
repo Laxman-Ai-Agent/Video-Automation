@@ -63,11 +63,8 @@ def stage_motion(pdir: Path) -> None:
     gen_dir = pdir / "generated_motion"
     if not gen_dir.is_dir():
         return
-    remotion_dir = config.REMOTION_DIR
-    target_gen = remotion_dir / "src" / "generated"
-    target_gen.mkdir(parents=True, exist_ok=True)
-    for f in gen_dir.glob("*.tsx"):
-        shutil.copyfile(f, target_gen / f.name)
+    from .motion_animation import stage_scenes               # the one implementation: it also removes a scene another project left in the shared folder
+    stage_scenes(sorted(gen_dir.glob("scene_*.tsx")), config.REMOTION_DIR / "src" / "generated")
     asset_collection.stage_assets(pdir)                       # the real photos/clips the scenes draw (staticFile("projects/<id>/assets/..."))
 
 

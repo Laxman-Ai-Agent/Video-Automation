@@ -170,6 +170,25 @@ def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[st
     return None
 
 
+def stage_scenes(sources: list[Path], target: Path) -> None:
+    """Copy exactly these scene files into the shared Remotion staging folder and delete every scene_*.tsx there that is not one of them.
+
+    The folder (VIDEO_ENGINE/remotion/src/generated) is shared by every project and its fixed index.ts registers EVERY scene_*.tsx it finds,
+    so a scene left behind by another project is bundled into this project's composition and type-checked together with it. Worse, the compile
+    repair can never fix such a scene: it does not exist in this project, so the repair loop skips it and the stage fails for ever (a scene_9.tsx
+    of a project that no longer exists sat there for hours). The files are stage outputs, regenerated from the project, and git-ignored.
+    """
+    target.mkdir(parents=True, exist_ok=True)
+    keep = {src.name for src in sources}
+    for old in target.glob("scene_*.tsx"):
+        if old.name not in keep:
+            old.unlink()
+    for src in sources:
+        tmp = target / f"{src.name}.tmp"
+        tmp.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+        tmp.replace(target / src.name)
+
+
 class AnimationCodegenError(Exception):
     """Raised when custom animation code generation or validation fails."""
 
@@ -1092,16 +1111,8 @@ def generate_custom_motion_code(
     # compiled here, which never contained the staged scenes: the "0 TypeScript errors" check verified the wrong tree.
 
     with _remotion_staging_lock:
-        remotion_gen_dir.mkdir(parents=True, exist_ok=True)
-        # Copy the scenes to VIDEO_ENGINE/remotion/src/generated/ (its fixed index.ts finds them)
-        for sc in scenes:
-            sid = sc.get("id")
-            sfile = out_dir / f"scene_{sid}.tsx"
-            if sfile.exists():
-                r_file = remotion_gen_dir / f"scene_{sid}.tsx"
-                r_tmp = r_file.with_suffix(".tmp")
-                r_tmp.write_text(sfile.read_text(encoding="utf-8"), encoding="utf-8")
-                r_tmp.replace(r_file)
+        # Copy the scenes to VIDEO_ENGINE/remotion/src/generated/ (its fixed index.ts finds them); a scene of another project is removed there
+        stage_scenes([f for f in (out_dir / f"scene_{sc.get('id')}.tsx" for sc in scenes) if f.exists()], remotion_gen_dir)
 
         if not (remotion_dir / "package.json").exists():
             # Test environment without remotion directory
