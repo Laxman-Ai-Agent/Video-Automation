@@ -55,5 +55,15 @@ def test_the_deterministic_template_does_not_fade_the_scene():
     assert ma.scene_self_fades(code, 150) == []
 
 
-def test_the_rule_is_part_of_the_generation_version():
-    assert ma.CODEGEN_VERSION == "2"
+def test_the_generation_version_decides_whether_a_scene_is_written_again():
+    """The rule lives in the code generator's instructions, so the version is what makes an existing project write its scenes again: it is part of every scene's input fingerprint.
+    (The number itself is not pinned here: a later rule change bumps it, and that is exactly what must keep working.)"""
+    args = dict(duration=5.0, headline="Head", subtext="", texts=["Head"], elements=[], palette=["#000"], aspect="16:9")
+    before = ma.scene_input_fingerprint(**args)
+    assert int(ma.CODEGEN_VERSION) >= 2                                  # 2 is the version that brought the rule: never below it again
+    v = ma.CODEGEN_VERSION
+    try:
+        ma.CODEGEN_VERSION = str(int(v) + 1)
+        assert ma.scene_input_fingerprint(**args) != before
+    finally:
+        ma.CODEGEN_VERSION = v

@@ -387,6 +387,15 @@ def scene_self_fades(code: str, dur_frames: int) -> list[str]:
     return out
 
 
+def missing_shot_sequences(code: str, shots: list[dict[str, Any]]) -> list[str]:
+    """The shots of the scene the code starts no <Sequence> for (with the shot's own frame range): without them the whole scene is one unchanging layout."""
+    if len(shots) < 2:
+        return []
+    have = {int(m) for m in re.findall(r"from=\{\s*(\d+)\s*\}", code)}
+    return [f"shot {x['shot_id']} ({x['start_frame']}-{x['end_frame']}) has no <Sequence from={{{x['start_frame']}}} durationInFrames={{{int(x['end_frame']) - int(x['start_frame'])}}}> of its own"
+            for x in shots if int(x["start_frame"]) not in have]
+
+
 def missing_element_ids(code: str, element_ids: list[str]) -> list[str]:
     """Planned element ids the TSX does not draw (no node carries data-element-id for it)."""
     return [i for i in element_ids if not re.search(rf"""data-element-id=\{{?\s*["']{re.escape(i)}["']""", code)]
@@ -619,6 +628,7 @@ def generate_scene_tsx_via_llm(
     aspect: str = "16:9",
     run_id: str | None = None,
     texts: list[str] | None = None,
+    shots: list[dict[str, Any]] | None = None,
 ) -> tuple[str, dict[str, Any]]:
     """Generates scene TSX source code via canonical LLM Gateway with bounded diagnostic repair.
     Employs skills and shared memory context, strict security auditing, and fallbacks.
@@ -658,6 +668,12 @@ def generate_scene_tsx_via_llm(
         "8. The timeline blends this scene with its neighbours (a transition overlaps the end of one scene and the start of the next): never fade or scale the WHOLE scene in "
         "from nothing or out to nothing (no opacity on the root AbsoluteFill, nothing fading to 0 at the last frames). The background and the main layout are visible from frame 0; "
         "elements may animate in, and everything stays visible to the last frame.\n"
+        "10. SHOTS: the scene is given as a list of shots (frame ranges relative to this scene's frame 0, cut on the spoken words). Wrap EVERY shot in its own "
+        "<Sequence from={start_frame} durationInFrames={end_frame - start_frame}> imported from \"remotion\", in order, and give each shot a DIFFERENT composition: another "
+        "arrangement, another focal element, another scale or position of the hero, a new card entering while the one before it leaves. A shot is not one more element appearing on an "
+        "unchanged layout. The background, the palette and the headline style stay the same across the shots of one scene (it is one scene, not several); inside a Sequence the frame "
+        "counts from that shot's start, so animate each shot from frame 0 of its own Sequence and keep its content visible to its last frame (rule 8 holds for the scene as a whole).\n"
+        "11. Each shot lists the words spoken in it with their frames: a word that is drawn on screen appears at its own start_frame, never on a fixed schedule.\n"
         "9. Output valid, complete React TSX source code only."
     )
     texts = [t for t in (texts or [headline, subtext]) if t]
@@ -670,7 +686,9 @@ def generate_scene_tsx_via_llm(
         f"Subtext: {subtext}\n"
         f"On-screen texts (draw every one, verbatim): {json.dumps(texts, ensure_ascii=False)}\n"
         f"Palette: {', '.join(palette)}\n"
-        f"Visual elements: {json.dumps(safe_visual_elements)}\n\n"
+        f"Visual elements: {json.dumps(safe_visual_elements)}\n"
+        + (f"Shots (one <Sequence> each; frames are relative to this scene's frame 0): {json.dumps(shots, ensure_ascii=False)}\n\n" if shots else "\n")
+        + 
         f"Approved Skills:\n" + "\n".join(skill_summaries) + "\n\n"
         f"Verified Memory Guidelines:\n" + "\n".join(memory_summaries) + "\n\n"
         "Draw EVERY visual element listed above with its own JSX node and put the attribute "
@@ -788,6 +806,7 @@ def generate_scene_tsx_via_llm(
         out = [f"the planned element '{i}' has no node with data-element-id=\"{i}\"" for i in missing_element_ids(code, ids) if i in required_ids]
         out += [f"the planned on-screen text '{t}' is not drawn verbatim" for t in texts if t and t not in code]
         out += scene_self_fades(code, dur_frames)
+        out += missing_shot_sequences(code, shots or [])
         from SYSTEM.agents.video_generation_agents.motion_animation.animation_intelligence import VisualPreviewVerifier
         out += VisualPreviewVerifier().verify(code, aspect=aspect).findings
         return out
@@ -814,7 +833,7 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
-CODEGEN_VERSION = "2"                # bump when the instructions or the checks of the code generation change: every scene is then written again
+CODEGEN_VERSION = "3"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames)
 
 
 def scene_input_fingerprint(**inputs: Any) -> str:
@@ -937,7 +956,8 @@ def generate_custom_motion_code(
         transformed_visual_els, el_classifications = fallback_engine.transform_elements_for_codegen(visual_els)
 
         scene_file = out_dir / f"scene_{sid}.tsx"
-        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect)
+        shots = vp_sc.get("shots") or []
+        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots)
         if scene_file.exists() and prev_fps.get(sid) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
@@ -955,6 +975,7 @@ def generate_custom_motion_code(
                     aspect=aspect,
                     run_id=run_id,
                     texts=texts,
+                    shots=shots,
                 )
         else:
             # Generate TSX via LLM Gateway with bounded repair loop
@@ -969,6 +990,7 @@ def generate_custom_motion_code(
                 aspect=aspect,
                 run_id=run_id,
                 texts=texts,
+                shots=shots,
             )
 
         all_skills_used.update(gen_meta.get("skills_referenced", []))

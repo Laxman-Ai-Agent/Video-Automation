@@ -15,9 +15,10 @@ from pathlib import Path
 from . import config, motion_generation as mg, motion_planning as mp
 from .motion_validation import ValidationError, fingerprint, names, sha
 
-RULE_VERSION = "1"                              # the sampling rule: bump it and every old preview is out of date
+RULE_VERSION = "2"                              # the sampling rule: bump it and every old preview is out of date (2: one still per shot of the scene, plus a thumbnail per still)
 SCALE = 0.25                                    # a quarter of the frame: cheap, enough to see layers and blankness
 BLANK_STD = 2.0                                 # a frame whose grey values hardly vary is blank
+THUMB = 16                                      # the still is also kept as a 16x16 grey thumbnail: enough to measure how much the picture changed from one shot to the next
 FRACTIONS = (("entry", 0.12), ("mid", 0.5), ("pre_exit", 0.9))        # of every scene, by frame
 ATTEMPTS = 5                                    # tries per still
 
@@ -31,12 +32,16 @@ def load(pdir: Path, aspect: str) -> dict | None:
     return m if isinstance(m, dict) and m.get("sampling_rule_version") else None
 
 
-def sample_plan(comp: dict) -> list[dict]:
-    """Which frames: entry / mid / pre-exit of every scene, plus the middle of the outgoing transition. Chosen by frame arithmetic only, so the same composition gives the same frames."""
+def sample_plan(comp: dict, shots: dict[str, list[dict]] | None = None) -> list[dict]:
+    """Which frames: the middle of every SHOT of the scene (the shots of the Visual Plan, so every sampled frame is one visual moment), plus the middle of the outgoing transition. A scene
+    with fewer than two shots is sampled at entry / mid / pre-exit as before. Chosen by frame arithmetic only, so the same composition gives the same frames."""
     fps, out = int(comp["meta"].get("fps") or mp.FPS), []
     for s in comp["scenes"]:
         sid, a, b = f"scene_{s['id']:02d}", s["start"], s["end"]
-        for kind, f in FRACTIONS:
+        sh = (shots or {}).get(sid) or []
+        for i, x in enumerate(sh if len(sh) > 1 else [], 1):
+            out.append({"scene_id": sid, "kind": f"shot_{i}", "frame": mp.fr(a + (x["start_frame"] + x["end_frame"]) / 2 / fps, fps)})
+        for kind, f in (FRACTIONS if len(sh) < 2 else ()):
             out.append({"scene_id": sid, "kind": kind, "frame": mp.fr(a + f * (b - a), fps)})
         t = s.get("transition_out")
         if t:
@@ -83,9 +88,17 @@ def _measure(path: Path) -> dict:
             im.verify()
         with Image.open(path) as im:
             std = float(ImageStat.Stat(im.convert("L")).stddev[0])
-            return {"decode_ok": True, "width": im.width, "height": im.height, "std": round(std, 1), "blank": std < BLANK_STD}
+            thumb = list(im.convert("L").resize((THUMB, THUMB), Image.BILINEAR).getdata())
+            return {"decode_ok": True, "width": im.width, "height": im.height, "std": round(std, 1), "blank": std < BLANK_STD, "thumb": thumb}
     except Exception as e:                                                       # Pillow raises many kinds for a broken file
         return {"decode_ok": False, "width": None, "height": None, "std": None, "blank": True, "error": str(e)[:120]}
+
+
+def picture_change(a: list[int] | None, b: list[int] | None) -> float | None:
+    """How much the picture changed between two stills: the mean absolute difference of their grey thumbnails (0 = the same picture, 255 = black against white). None when a thumbnail is missing."""
+    if not a or not b or len(a) != len(b):
+        return None
+    return round(sum(abs(x - y) for x, y in zip(a, b)) / len(a), 2)
 
 
 def _pipeline_modules():
@@ -134,7 +147,12 @@ def generate(pdir: Path, aspect: str, progress=None) -> dict:
     comp_file = pdir / mg.names(aspect)[0]
     comp = json.loads(comp_file.read_text(encoding="utf-8"))
     fps = int(comp["meta"].get("fps") or mp.FPS)
-    plan = sample_plan(comp)
+    from . import visual_planning
+    try:
+        vplan = visual_planning.load(pdir) or {}
+    except (OSError, ValueError):
+        vplan = {}
+    plan = sample_plan(comp, {s["scene_id"]: s.get("shots") or [] for s in vplan.get("scenes", [])})
     out = folder(pdir, aspect)
     out.mkdir(exist_ok=True)
     tmp_bundle = Path(tempfile.mkdtemp(prefix="a2v_bundle_"))

@@ -448,4 +448,59 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
             rule("variety", sid, b["representation"] == c["representation"] and b["primary_focus"] == c["primary_focus"] and c["representation"] != "typography", 7, "warning", "repeated_concept", f"{sid} repeats the concept of the scene before it")
         rule("palette", sid, any(isinstance(v, str) and v.startswith("#") and v.lower() not in pal for e in els for v in e["appearance"].values()), 7, "warning", "palette", f"{sid}: an element uses a colour that is not in the project palette")
         rule("motion_not_presets", sid, any(MOTION_WORDS.search(h["intent"]) for h in s["motion_hints"]), 5, "warning", "motion_preset", f"{sid}: a motion hint names presets or timing")
+        check_shots(s, rule)
     return counts_
+
+
+# ---------- shots: the visual moments the scene is cut into (Phase 1) ----------
+SHOT_MIN, SHOT_MAX, SHOT_TARGET = 1.5, 3.5, 2.5      # seconds: a professional explainer changes its picture every 1.5-3.5 s
+
+
+def shots(nar: dict, mapping: dict, beats: list[dict], ws: list, sid: str, iss: Issues) -> list[dict]:
+    """Cut the scene into shots of SHOT_MIN..SHOT_MAX seconds that cover the whole interval the scene holds on the timeline, each cut on the end of a spoken word.
+    Derived, never asked from the planner: the ends of the beats it wrote are the preferred cut points, the rest is word arithmetic. Frames are relative to the scene's own frame 0
+    (timeline_start), which is what the generated scene component counts from. A scene whose words allow no cut stays one shot and says so."""
+    from . import motion_planning as mp
+    a, b = float(mapping["timeline_start"]), float(mapping["timeline_end"])
+    if not (b > a):
+        return []
+    spoken = _spoken(nar, ws)
+    cuts = sorted({round(w.end, 3) for w in spoken if a + SHOT_MIN - EPS < w.end < b - EPS})
+    pref = {round(x["end_seconds"], 3) for x in beats}
+    bounds, start = [], a
+    while b - start > SHOT_MAX + EPS:
+        window = [c for c in cuts if start + SHOT_MIN - EPS <= c <= start + SHOT_MAX + EPS]
+        if not window:
+            break                                                        # no word ends inside the window: this shot cannot be cut on a word
+        pick = min((c for c in window if c in pref), default=None)
+        bounds.append((start, pick if pick is not None else min(window, key=lambda c: abs(c - (start + SHOT_TARGET)))))
+        start = bounds[-1][1]
+    bounds.append((start, b))
+    if len(bounds) > 1 and bounds[-1][1] - bounds[-1][0] < SHOT_MIN:      # a tail shorter than the minimum belongs to the shot before it
+        bounds[-2:] = [(bounds[-2][0], bounds[-1][1])]
+    out = []
+    for i, (s, e) in enumerate(bounds, 1):
+        beat = next((x for x in beats if x["start_seconds"] < e - EPS and x["end_seconds"] > s + EPS), None)
+        out.append({"shot_id": f"{sid}_shot_{i}", "start_seconds": round(s, 3), "end_seconds": round(e, 3), "duration_seconds": round(e - s, 3),
+                    "start_frame": mp.fr(s - a), "end_frame": mp.fr(e - a),
+                    "words": [{"w": w.w, "start_frame": mp.fr(w.start - a), "end_frame": mp.fr(w.end - a)} for w in spoken if s - EPS <= (w.start + w.end) / 2 <= e + EPS],
+                    "beat_id": beat["beat_id"] if beat else None, "description": beat["description"] if beat else None,
+                    "element_ids": beat["element_ids"] if beat else []})
+    long = [x for x in out if x["duration_seconds"] > SHOT_MAX + EPS]
+    if long:
+        iss.add(8, "info", "shot_uncuttable", sid, f"{len(long)} shot(s) are longer than {SHOT_MAX:g} s ({', '.join(f'{x["shot_id"]} {x["duration_seconds"]:g} s' for x in long)}): "
+                                                   "the spoken words give no cut point inside the allowed window")
+    return out
+
+
+def check_shots(sc: dict, rule) -> None:
+    """The derived shots cover the scene's timeline interval without a gap or an overlap, and none is shorter than the minimum. A failure here is a bug in `shots`, never the planner's."""
+    sid, sh, m = sc["scene_id"], sc.get("shots", []), sc["source_mapping"]
+    rule("shots_present", sid, not sh, 8, "error", "shots_missing", f"{sid} has no shots")
+    if not sh:
+        return
+    gaps = [f"{x['shot_id']}->{y['shot_id']}" for x, y in zip(sh, sh[1:]) if abs(y["start_seconds"] - x["end_seconds"]) > 0.0015]
+    rule("shots_contiguous", sid, bool(gaps) or abs(sh[0]["start_seconds"] - m["timeline_start"]) > 0.0015 or abs(sh[-1]["end_seconds"] - m["timeline_end"]) > 0.0015, 8, "error", "shots_not_contiguous",
+         f"{sid}: the shots do not cover {m['timeline_start']:g}-{m['timeline_end']:g} s without a gap ({', '.join(gaps) or 'the first or the last shot does not reach the edge'})")
+    short = [x["shot_id"] for x in sh if len(sh) > 1 and x["duration_seconds"] < SHOT_MIN - EPS]
+    rule("shots_min_length", sid, bool(short), 8, "error", "shot_too_short", f"{sid}: {', '.join(short)} are shorter than {SHOT_MIN:g} s")

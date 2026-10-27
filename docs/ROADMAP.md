@@ -23,7 +23,7 @@ Evidence: the real render of the test project `my-first-project-01-df7f` (one fr
 | Phase | What | Status |
 |---|---|---|
 | 0 | Reliability fixes | **DONE 2026-10-27** |
-| 1 | Shots + narration sync | pending (next) |
+| 1 | Shots + narration sync | **code DONE 2026-10-27** (not yet proven on a real run) |
 | 2 | Motion kit + art direction | pending (needs the user's decision) |
 | 3 | Real footage + images, chosen by looking at them | pending (needs API keys) |
 | 4 | Sound design | pending |
@@ -34,7 +34,16 @@ Evidence: the real render of the test project `my-first-project-01-df7f` (one fr
 ### Phase 0 - reliability (DONE)
 Empty frames at cuts fixed in the code generator (rule 8, `motion_animation.scene_self_fades`, `CODEGEN_VERSION` 2); Final QC sees empty cuts (`final_qc.measure().detail`, `RULES_VERSION` 2); tests isolated from repository state (conftest `isolate_repo_state`, one approvals-audit writer `ApprovalEngine.record_event`); one `/video` route; `slow` / `live_ui` test markers (fast suite `pytest tests -m "not slow and not live_ui"`, ~8 min, target 5 min not reached). Plus: analyzer correction prompt restored (cut by accident in `31b2f3e`), `is_verified` needs the current rules version, a failed LLM check keeps `refine` unfinished, test leftovers removed from the skill catalog.
 
-### Phase 1 - shots and narration sync (largest visual impact)
+### Phase 1 - shots and narration sync (largest visual impact) - CODE DONE 2026-10-27
+What was built (not yet proven on a real render: the test project must run the pipeline again):
+- `visual_planning_rules.shots()` cuts every scene into shots of 1.5-3.5 s (`SHOT_MIN`/`SHOT_MAX`/`SHOT_TARGET`) that cover the whole interval the scene holds on the timeline. Every cut falls on the END of a spoken word; the ends of the beats the planner wrote are the preferred cut points; a tail shorter than the minimum joins the shot before it. Derived deterministically: the planner is NOT asked for shots and no extra LLM call is made. Each shot carries `start_frame`/`end_frame` relative to the scene's own frame 0 and the words spoken in it with their frames. A scene whose words allow no cut stays one shot and records the info note `shot_uncuttable` (never a warning nobody can clear).
+- Every scene of `visual_planning.json` now has `shots`; `visual_planning.VERSION` is 3 (the plan of an existing project is made again on the next run). New checks (`rules.check_shots`): `shots_present`, `shots_contiguous`, `shots_min_length` (all errors: a failure is a bug in the splitter).
+- The code generator receives the shots (`motion_animation.generate_scene_tsx_via_llm(shots=...)`), with system rules 10 and 11: one `<Sequence from=... durationInFrames=...>` per shot, a DIFFERENT composition per shot (not one more element on an unchanged layout), and a word drawn on screen appears at its own `start_frame`. `missing_shot_sequences()` flags a scene whose code has no Sequence for a shot, inside the existing bounded quality-repair pass; the shots are part of `scene_input_fingerprint`, and `CODEGEN_VERSION` is 3 (every scene is written again).
+- The preview samples the middle of EVERY shot (`motion_validation_preview.sample_plan(comp, shots)`, `RULE_VERSION` 2; a scene with fewer than two shots keeps entry/mid/pre-exit, so the number of stills stays about the same) and keeps a 16x16 grey thumbnail per still. `picture_change()` is the mean absolute difference of two thumbnails; `motion_validation_rules` checks `preview.shots_sampled` and `preview.shot_changes` (warning below `SHOT_CHANGE_MIN` = 6.0: the scene shows one layout instead of separate shots). `RULE_SET` is 1.2.
+- Tests: `tests/test_scene_shots.py` (11 tests: lengths, word-boundary cuts, frames and word times, beat-preferred cuts, short tail, no words, the three checks, the Sequence check, the fingerprint, the sampling, the difference measure).
+- Open for Phase 1: nothing is proven on a real render yet. The next pipeline run of the test project writes all scenes again and the shot checks then say whether the LLM really changes the composition per shot.
+
+### Phase 1 - the original plan
 - **Why:** the picture must change every 2-3 s and words must appear when they are spoken.
 - **How:** Visual Planning splits every scene into shots of 1.5-3.5 s whose times are snapped to word timestamps (beats already exist in all scenes; `visual_planning.rules.snap_beats` snaps them). The code generator (`motion_animation.generate_scene_tsx_via_llm`) receives each shot's frame range and the word timestamps of the key terms, and builds the scene as one `<Sequence>` per shot with a real layout change per shot. New validation rules: maximum shot length; minimum visual change per 3 s, measured on the preview stills (frame difference).
 - **Expected:** a visual change every ~2.5 s; on-screen words land on the spoken word.

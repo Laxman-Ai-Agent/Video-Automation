@@ -38,7 +38,7 @@ from .visual_planning_rules import overlap as _overlap
 
 log = logging.getLogger(__name__)
 SCHEMA = "2.0"
-VERSION = 2                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: the planner is told how many texts a scene draws (max_texts) and the plan is checked for it
+VERSION = 3                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: max_texts; 3: every scene carries its derived shots (1.5-3.5 s, cut on spoken words)
 FILE = "visual_planning.json"                # NOT visual_plan.json: that file is the user-editable shots/layers plan of visual_plan.py (untouched); this one is its semantic layer, joined by scene_NN
 STAGES = ("Semantic Understanding", "Scene Objective & Visual Concept", "Element Breakdown", "Relationships & Visual Hierarchy", "Media Mix", "Audio Timing & Text",
           "Style & Continuity", "Validation & Confidence")
@@ -373,7 +373,7 @@ def _stages(plan: dict, iss: Issues) -> list[dict]:
     n, mix = len(plan["scenes"]), plan["media_mix"]
     real = sum(len(s["media_requirements"]) for s in plan["scenes"])
     det = {1: f"meaning, narrative role and takeaway of {n} scenes",
-           2: f"a visual concept for each of {n} scenes; {sum(len(s.get('word_animation_events', [])) for s in plan['scenes'])} word-level animation cues",
+           2: f"a visual concept for each of {n} scenes; {sum(len(s.get('shots', [])) for s in plan['scenes'])} shots of 1.5-3.5 s cut on spoken words; {sum(len(s.get('word_animation_events', [])) for s in plan['scenes'])} word-level animation cues",
            3: f"{sum(len(s['elements']) for s in plan['scenes'])} elements with depth layering",
            4: f"{sum(len(s['element_relationships']) for s in plan['scenes'])} relationships",
            5: f"{real} real picture(s) or clip(s) inside the motion scenes; the primary element is drawn in {mix['actual']['motion']}% of the video, a real picture in {mix['actual']['image']}%, a real clip in {mix['actual']['video']}%",
@@ -432,6 +432,7 @@ def assemble(pdir: Path, sp: dict, raw: dict | None, plan_dir: Path | None = Non
                     "element_relationships": body["element_relationships"], "media_requirements": _requirements(body["elements"]), "motion_hints": body["motion_hints"],
                     "continuity": {"previous_scene_id": _scene_id(ctx["plan"].scenes[k - 2].id) if k > 1 else None, "next_scene_id": _scene_id(ctx["plan"].scenes[k].id) if k < total else None,
                                    "motifs": body["continuity"].get("motifs", []), "transition_intent": body["continuity"].get("transition_intent"), "note": body["continuity"].get("note")},
+                    "shots": rules.shots(nar, mapping, body.get("beats") or [], ctx["words"], sid, iss),
                     **({"beats": body["beats"]} if body.get("beats") else {}),
                     **({"word_animation_events": body["word_animation_events"]} if body.get("word_animation_events") else {}),
                     "validation_notes": [{"code": "uncertainty", "severity": "info", "message": m} for m in body.get("uncertainty", [])]})

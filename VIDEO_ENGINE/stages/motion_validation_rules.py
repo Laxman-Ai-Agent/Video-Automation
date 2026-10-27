@@ -686,6 +686,16 @@ def stage_buildability(x: X, v: V) -> None:
 
 
 # ---------- 11 Preview Validation & Visual Evidence ----------
+SHOT_CHANGE_MIN = 6.0           # mean grey difference of two 16x16 thumbnails: below it two shots show the same picture (one layout instead of separate shots)
+
+
+def by_scene(samples: list[dict]) -> dict[str, list[dict]]:
+    out: dict[str, list[dict]] = {}
+    for s in samples:
+        out.setdefault(s["scene_id"], []).append(s)
+    return out
+
+
 def stage_preview_validation(x: X, v: V) -> None:
     """The preview is optional on the first run: nothing here claims a person looked at anything. Four separate facts: evidence generated / technical checks passed / stills reviewed by a person / motion played and reviewed."""
     from . import motion_validation_preview as pv
@@ -711,6 +721,18 @@ def stage_preview_validation(x: X, v: V) -> None:
         v.check(S, "preview.not_blank", not smp.get("blank"), "warning", f"{smp['scene_id']}: the preview frame {smp['file']} is blank (std {smp.get('std')})", smp["scene_id"], f"blank:{smp['file']}", {"std": smp.get("std")},
                 "motion_generation", "look at the scene")
         good_all.append(good and not smp.get("blank"))
+    shots = {s["scene_id"]: s.get("shots") or [] for s in (x.vp or {}).get("scenes", [])}
+    for sid, group in by_scene(samples).items():                      # the shots of the scene: every one has its own frame, and the picture really changes from one to the next
+        seq = [s for s in group if str(s.get("kind", "")).startswith("shot_")]
+        want = len(shots.get(sid, []))
+        v.check(S, "preview.shots_sampled", want < 2 or len(seq) == want, "warning", f"{sid}: {len(seq)} of its {want} shots have a preview frame", sid, "shots_sampled",
+                {"shots": want, "sampled": len(seq)}, "motion_generation", "generate the preview again")
+        for p, q in zip(seq, seq[1:]):
+            d = pv.picture_change(p.get("thumb"), q.get("thumb"))
+            v.check(S, "preview.shot_changes", d is None or d >= SHOT_CHANGE_MIN, "warning",
+                    f"{sid}: the picture hardly changes from {p['kind']} to {q['kind']} (difference {d}, at least {SHOT_CHANGE_MIN} expected): the scene shows one layout instead of separate shots",
+                    sid, f"change:{p['kind']}-{q['kind']}", {"difference": d, "minimum": SHOT_CHANGE_MIN}, "motion_generation",
+                    "generate the scene code again so every shot has its own composition")
     sampled = {smp["scene_id"] for smp in samples}
     for s in x.scenes():
         v.check(S, "preview.scene_sampled", sid_of(s["id"]) in sampled, "warning", f"{sid_of(s['id'])}: no preview frame was made for it", sid_of(s["id"]), "sampled", {}, "motion_generation", "generate the preview again")
