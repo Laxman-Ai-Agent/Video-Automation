@@ -118,3 +118,22 @@ def test_a_retry_waits_out_the_llm_circuit_breakers_cooldown():
     msg = "the planner could not be asked: LLM Gateway call failed: Circuit for 'claude_cli:claude-sonnet-5-5' is OPEN (3 consecutive failures). Cooldown: 18.5s remaining."
     assert orchestrator._circuit_wait(msg) == 19.5
     assert orchestrator._circuit_wait("The Claude CLI did not answer within 60 s") == 0.0 and orchestrator._circuit_wait(None) == 0.0
+
+
+def test_the_visual_planning_agent_gives_the_gateway_the_planners_timeout(tmp_path, monkeypatch):
+    """The agent's ask() dropped the planner's 900 s and the gateway used its default of 60 s: a planner answer takes minutes, so Visual Planning failed after three 'did not answer within 60 s'."""
+    from SYSTEM.agents.video_generation_agents.visual_planning.agent import VisualPlanningAgent
+    from SYSTEM.core import llm_gateway
+    seen = {}
+
+    def fake(req):
+        seen["timeout"] = req.timeout
+        return SimpleNamespace(status="passed", raw_output="{}", error_message=None)
+    monkeypatch.setattr(llm_gateway, "execute_llm_gateway_call", fake)
+    monkeypatch.setattr(VisualPlanningAgent, "agent_id", "visual_planning")                           # a property of the agent: no instance setup is needed for this
+    agent = VisualPlanningAgent.__new__(VisualPlanningAgent)
+    ask = agent._gateway_ask(tmp_path, SimpleNamespace(correlation_id="c"))
+    ask("p", system="s", timeout=900)
+    assert seen["timeout"] == 900
+    ask("p")
+    assert seen["timeout"] == 900

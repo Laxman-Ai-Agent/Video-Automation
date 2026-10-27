@@ -42,7 +42,8 @@ class VisualPlanningAgent(BaseAgent):
             enhanced = (system or visual_planning.VISUAL_SYSTEM) + ("\n\nACTIVE VISUAL PLANNING SKILLS:\n" + "\n---\n".join(docs) if docs else "")
             res = llm_gateway.execute_llm_gateway_call(llm_gateway.GatewayRequest(
                 prompt=prompt, system_prompt=enhanced, stage_id="planning", purpose="generation", model_profile="fast_structured", correlation_id=request.correlation_id,
-                caller_agent_id=self.agent_id, metadata={"project_id": project_dir.name, "skills_used": SKILLS_USED, "memory_used": MEMORIES_USED}))
+                caller_agent_id=self.agent_id, timeout=timeout or 900,                        # the planner asks for 900 s: the gateway's default of 60 s cut a planner answer (minutes long) off three times
+                metadata={"project_id": project_dir.name, "skills_used": SKILLS_USED, "memory_used": MEMORIES_USED}))
             if res.status not in ("passed", "needs_review") or not res.raw_output:
                 raise visual_planning.GenError(f"LLM Gateway call failed: {res.error_message or res.status}")
             return res.raw_output
