@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-27T12:15:41.643152+00:00",
-  "total_experiences": 83,
+  "updated_at": "2026-10-27T15:33:45.938803+00:00",
+  "total_experiences": 85,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -102,6 +102,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-26T12:44:09.570608+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-148728a40d": {
+      "experience_id": "exp-motion_animation-148728a40d",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_2bdf0262",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_2bdf0262",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Scene 3: LLM code generation blocked: The Claude CLI did not answer within 60 s (details in projects/my-first-project-01-df7f/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-27T15:14:47.489122+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T15:14:47.802386+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-1bef85639b": {
@@ -1681,6 +1724,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:06:11.276506+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-d194955628": {
+      "experience_id": "exp-motion_animation-d194955628",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_20e1ddc4",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_20e1ddc4",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Scene 1: LLM code generation blocked: You've hit your session limit \u00b7 resets 12:10am (Asia/Kolkata) (details in projects/my-first-project-01-df7f/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-27T15:33:45.473799+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T15:33:45.919721+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-d9c972d0cd": {
