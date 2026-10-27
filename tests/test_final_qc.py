@@ -90,7 +90,7 @@ def test_the_same_file_is_not_decoded_again_and_a_new_rules_version_recomputes_e
     media = [s for s in second["stages"] if s["stage_id"] in fq.MEDIA_STAGES]
     assert all(s["cache"]["hit"] for s in media) and not any(s["cache"]["hit"] for s in first["stages"] if s["stage_id"] in fq.MEDIA_STAGES)
     assert [c["finding_id"] for c in second["findings"]] == [c["finding_id"] for c in first["findings"]] and len({c["finding_id"] + c["stage_id"] for c in second["checks"]}) == len(second["checks"])         # no duplicate findings
-    monkeypatch.setattr(fq, "RULES_VERSION", "2")
+    monkeypatch.setattr(fq, "RULES_VERSION", fq.RULES_VERSION + ".next")
     third = fq.run(pd, A)
     assert not any(s["cache"]["hit"] for s in third["stages"] if s["stage_id"] in fq.MEDIA_STAGES)
 

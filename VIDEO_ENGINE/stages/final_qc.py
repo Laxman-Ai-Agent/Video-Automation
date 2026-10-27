@@ -27,10 +27,10 @@ from . import timeline_build as tb
 
 SCHEMA = "1.0"
 VERSION = 1
-RULES_VERSION = "1"                                   # the meaning of the rules: part of every cache key
+RULES_VERSION = "2"                                  # the meaning of the rules: part of every cache key
 PROFILES = {                                          # named profiles with recorded parameters (roadmap 10); only `standard` is implemented, and it says so
     "standard": {"decode": "full", "black_min_s": 0.5, "black_pix_th": 0.10, "freeze_min_s": 3.0, "freeze_noise": 0.001, "clip_db": -0.1, "silent_db": -50.0, "silence_min_s": 2.0, "sample_fractions": (0.12, 0.5, 0.9),
-                 "frame_width": 480, "blank_std": 2.0, "static_diff": 0.5, "static_scene_min_s": 3.0, "av_offset_warn_s": 0.04, "av_offset_error_s": 0.25, "audio_tail_warn_s": 0.5},
+                 "frame_width": 480, "blank_std": 2.0, "empty_detail_pct": 0.5, "static_diff": 0.5, "static_scene_min_s": 3.0, "av_offset_warn_s": 0.04, "av_offset_error_s": 0.25, "audio_tail_warn_s": 0.5},
 }
 STAGES = (
     ("run_initialization", "Run Initialization"), ("artifact_resolution", "Artifact & Manifest"), ("provenance_gate", "Provenance & Approval"), ("file_integrity", "File Integrity"),
@@ -180,9 +180,12 @@ def measure(path: Path) -> dict:
         with Image.open(path) as im:
             g = np.asarray(im.convert("L"), dtype="float32")
             small = np.asarray(im.convert("L").resize((64, 36)), dtype="float32")
-            return {"decode_ok": True, "width": im.width, "height": im.height, "mean": round(float(g.mean()), 1), "std": round(float(g.std()), 1), "_small": small}
+            # detail: % of pixels on an edge. A gradient or vignette background has a high std but almost no edges (0-0.3 %); any drawn content has 1.5 % or more.
+            edge = np.maximum(np.abs(np.diff(g, axis=1))[:-1, :], np.abs(np.diff(g, axis=0))[:, :-1])
+            return {"decode_ok": True, "width": im.width, "height": im.height, "mean": round(float(g.mean()), 1), "std": round(float(g.std()), 1),
+                    "detail": round(float((edge > 12).mean() * 100), 2), "_small": small}
     except Exception as e:
-        return {"decode_ok": False, "width": None, "height": None, "mean": None, "std": None, "error": str(e)[:100], "_small": None}
+        return {"decode_ok": False, "width": None, "height": None, "mean": None, "std": None, "detail": None, "error": str(e)[:100], "_small": None}
 
 
 # ---------- run ----------
@@ -504,15 +507,19 @@ def _frames(q, pdir, aspect, video, exp, clips, transitions, fps, prof, data) ->
 
 def _boundaries(q, clips, transitions, data, prof) -> dict:
     by = {s["frame"]: s for s in data.get("frame_quality", {}).get("samples", [])}
+    # A frame with no content: flat, or a background without any drawn edge (a gradient or vignette passes the std test but shows nothing).
+    empty = lambda s: s and s["decode_ok"] and ((s["std"] is not None and s["std"] < prof["blank_std"]) or (s.get("detail") is not None and s["detail"] < prof["empty_detail_pct"]))
     for t in transitions:
         win = [by.get(t["start_frame"]), by.get((t["start_frame"] + t["end_frame"]) // 2), by.get(t["end_frame"] - 1)]
         have = [w for w in win if w and w["decode_ok"]]
-        flatmid = win[1] and win[1]["decode_ok"] and win[1]["std"] is not None and win[1]["std"] < prof["blank_std"]
+        cut = [by.get(t["start_frame"] - 2)] + win + [by.get(t["start_frame"] + 1)]            # the frame before the cut, the transition window, the frame after the cut
+        blank = sorted({s["frame"] for s in cut if empty(s)})
         if len(have) < 3:
             q.add("QC_TRANSITION_SAMPLED", "not_run", "review", f"{t['from_scene']} -> {t['to_scene']}: {3 - len(have)} of the 3 transition frames could not be sampled", scene=t["from_scene"], target=t["transition_id"], evidence={"window": [t["start_frame"], t["end_frame"]]})
-        elif flatmid:
-            q.add("QC_TRANSITION_NOT_BLANK", "warning", "warning", f"{t['from_scene']} -> {t['to_scene']} ({t['type']}): the middle of the transition is flat: blank content during the transition?", scene=t["from_scene"], target=t["transition_id"],
-                  evidence={"frame": win[1]["frame"]}, action="watch this transition")
+        elif blank:
+            q.add("QC_TRANSITION_NOT_BLANK", "warning", "warning", f"{t['from_scene']} -> {t['to_scene']} ({t['type']}): {len(blank)} frame(s) at the cut show no content (frames {blank}): the scenes fade out/in to an empty background",
+                  scene=t["from_scene"], target=t["transition_id"], evidence={"frames": blank, "detail": {s["frame"]: s.get("detail") for s in cut if s}},
+                  action="route to Motion Generation: the scenes must stay visible through the timeline transition (no whole-scene fade)")
         else:
             q.ok("QC_TRANSITION_NOT_BLANK", f"{t['from_scene']} -> {t['to_scene']} ({t['type']}, {t['applied_frames']} f): the window has content at start, middle and end", scene=t["from_scene"], target=t["transition_id"])
     first = by.get(0)

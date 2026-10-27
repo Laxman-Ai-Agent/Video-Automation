@@ -368,6 +368,25 @@ def extract_tsx_code(raw: str) -> str:
     return raw.strip()
 
 
+_FADE_TO_ZERO = re.compile(r"interpolate\(\s*frame\s*,\s*\[[^\],]+,\s*([^\]]+?)\s*\]\s*,\s*\[\s*1\s*,\s*0\s*\]")
+_ROOT_STYLE = re.compile(r"return\s*\(\s*<AbsoluteFill\b[^>]*?style=\{\{(.*?)\}\}", re.S)
+
+
+def scene_self_fades(code: str, dur_frames: int) -> list[str]:
+    """The cut between scenes belongs to the timeline (SceneRoot's TransitionSeries overlaps the two scenes). A scene that fades its whole picture
+    in from nothing or out to nothing therefore leaves empty frames at every cut."""
+    out = []
+    root = _ROOT_STYLE.search(code)
+    if root and re.search(r"\bopacity\s*:", root.group(1)):
+        out.append("the root AbsoluteFill has an opacity, so the whole scene fades and the cut shows empty frames: keep the root fully visible and animate the elements instead")
+    for m in _FADE_TO_ZERO.finditer(code):
+        end = m.group(1).strip()
+        if re.search(r"durationInFrames|durFrames|duration", end) or (end.isdigit() and int(end) >= dur_frames - 2):
+            out.append("content fades to nothing at the last frames of the scene: the timeline transition already shows the exit, so keep everything visible to the last frame")
+            break
+    return out
+
+
 def missing_element_ids(code: str, element_ids: list[str]) -> list[str]:
     """Planned element ids the TSX does not draw (no node carries data-element-id for it)."""
     return [i for i in element_ids if not re.search(rf"""data-element-id=\{{?\s*["']{re.escape(i)}["']""", code)]
@@ -532,11 +551,6 @@ export const Scene{sid}: React.FC<{{ layer?: any }}> = () => {{
   const subtextOpacity = interpolate(frame, [15, 28], [0, 1], {{ extrapolateLeft: "clamp", extrapolateRight: "clamp" }});
   const subtextY = interpolate(frame, [15, 28], [15, 0], {{ extrapolateLeft: "clamp", extrapolateRight: "clamp" }});
 
-  // Scene exit fade
-  const exitFrames = Math.round(0.4 * fps);
-  const exitStart = Math.max(0, durFrames - exitFrames);
-  const exitOpacity = interpolate(frame, [exitStart, durFrames], [1, 0], {{ extrapolateLeft: "clamp", extrapolateRight: "clamp" }});
-
   return (
     <AbsoluteFill
       style={{{{
@@ -549,7 +563,6 @@ export const Scene{sid}: React.FC<{{ layer?: any }}> = () => {{
         alignItems: "center",
         padding: "8%",
         textAlign: "center",
-        opacity: exitOpacity,
         overflow: "hidden",
         width: "100%",
         height: "100%",
@@ -642,7 +655,10 @@ def generate_scene_tsx_via_llm(
         "src={staticFile(real_media.file)}, objectFit cover, animated from the current frame only (a slow scale from 1 to 1.08 with interpolate). Put the element's data-element-id on that node, keep the headline readable "
         "(a dark gradient behind the text), and show real_media.credit as a small caption (fontSize 20 or more) near the bottom edge: the credit is mandatory. Never alter what the media shows and never present it as generated. "
         "A real_media of kind \"page\" is a screenshot of a reference page element (an infobox or table): draw it as a framed card with objectFit contain (never full-bleed, never cropped), so its text stays readable.\n"
-        "8. Output valid, complete React TSX source code only."
+        "8. The timeline blends this scene with its neighbours (a transition overlaps the end of one scene and the start of the next): never fade or scale the WHOLE scene in "
+        "from nothing or out to nothing (no opacity on the root AbsoluteFill, nothing fading to 0 at the last frames). The background and the main layout are visible from frame 0; "
+        "elements may animate in, and everything stays visible to the last frame.\n"
+        "9. Output valid, complete React TSX source code only."
     )
     texts = [t for t in (texts or [headline, subtext]) if t]
 
@@ -771,6 +787,7 @@ def generate_scene_tsx_via_llm(
         """What the downstream validation would flag in this code: required elements not drawn, planned text missing, the preview verifier's layout findings."""
         out = [f"the planned element '{i}' has no node with data-element-id=\"{i}\"" for i in missing_element_ids(code, ids) if i in required_ids]
         out += [f"the planned on-screen text '{t}' is not drawn verbatim" for t in texts if t and t not in code]
+        out += scene_self_fades(code, dur_frames)
         from SYSTEM.agents.video_generation_agents.motion_animation.animation_intelligence import VisualPreviewVerifier
         out += VisualPreviewVerifier().verify(code, aspect=aspect).findings
         return out
@@ -797,7 +814,7 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
-CODEGEN_VERSION = "1"                  # bump when the instructions or the checks of the code generation change: every scene is then written again
+CODEGEN_VERSION = "2"                # bump when the instructions or the checks of the code generation change: every scene is then written again
 
 
 def scene_input_fingerprint(**inputs: Any) -> str:
