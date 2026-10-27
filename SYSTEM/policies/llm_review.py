@@ -30,6 +30,7 @@ from SYSTEM.policies.llm_reviewer import LlmFinding, LlmReviewStatus, ask_review
 
 SCHEMA = "1.0"
 VERSION = 1
+EVIDENCE_REVISION = {"approval": 2}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
 
 
 class LlmReviewResult(TypedDict):
@@ -177,7 +178,7 @@ def compute_stage_input_fingerprint(pdir: Path, stage: str, aspect: str = "16:9"
     hashes = [f"{f.name}:{_file_hash(f)}" for f in files]
     mode = "template" if store.reusable_motion_templates(pdir) else "custom_code"
     asp_tag = aspect if stage in ASPECT_DEPENDENT_STAGES else "common"
-    return _sha("|".join(hashes) + f"|{asp_tag}|{mode}|v{VERSION}")
+    return _sha("|".join(hashes) + f"|{asp_tag}|{mode}|v{VERSION}" + (f"|e{EVIDENCE_REVISION[stage]}" if stage in EVIDENCE_REVISION else ""))
 
 
 def compute_stage_output_fingerprint(pdir: Path, stage: str, aspect: str = "16:9") -> str:
