@@ -42,6 +42,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
     waveformPeaks,
     motionPlan,
     segmentationScenes,
+    stills,
     fps,
     totalFrames,
     totalDurationSeconds,
@@ -49,8 +50,6 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
     scenesList,
     activeScene,
     selectedScene,
-    activeKineticText,
-    activeGraphic,
     timelineConflicts
   } = useTimelineData(projectId, frameForData, selectedSceneId);
 
@@ -163,8 +162,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
       <TimelinePreviewCanvas
         aspect={aspect}
         activeScene={activeScene}
-        activeKineticText={activeKineticText}
-        activeGraphic={activeGraphic}
+        stills={stills}
         currentFrame={currentFrame}
         totalFrames={totalFrames}
         fps={fps}
@@ -212,6 +210,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
         setCurrentFrame={setCurrentFrame}
         waveformPeaks={waveformPeaks}
         segmentationScenes={segmentationScenes}
+        stills={stills}
         motionPlan={motionPlan}
       />
 

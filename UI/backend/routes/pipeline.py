@@ -708,6 +708,21 @@ def get_timeline_waveform(pid: str):
     return w
 
 
+@router.get("/timeline-build/stills")
+def get_timeline_stills(pid: str):
+    """The preview stills of the current composition for the Timeline page (the frames Motion Validation drew), each with the URL that serves it. `current` is false when the stills were made from
+    another composition or renderer: the page then says so instead of showing frames that do not belong to this timeline. Read-only."""
+    from .. import motion_gen_report, motion_validation_preview as pv
+    pdir = store.project_dir(pid)
+    aspect = pipeline_view.aspect_of(pdir)
+    man = pv.load(pdir, aspect)
+    gen = motion_gen_report.load(pdir, aspect)
+    current = bool(man) and bool(gen) and pv.is_current(man, (gen.get("output") or {}).get("composition_sha"))
+    base = f"/projects/{pid}/motion-timeline-validation/preview/"
+    samples = [{"scene_id": x["scene_id"], "kind": x["kind"], "frame": x["frame"], "time_s": x.get("time_s"), "url": base + x["file"]} for x in (man or {}).get("samples", [])] if current else []
+    return {"current": current, "exists": man is not None, "samples": samples}
+
+
 @router.get("/timeline-build/audio")
 def get_timeline_audio(pid: str):
     """The narration file the published timeline uses (for listening on the Timeline page)."""

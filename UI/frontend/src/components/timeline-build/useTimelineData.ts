@@ -3,9 +3,11 @@ import {
   fetchTimelineBuildData, 
   fetchTimelineJson, 
   fetchTimelineWaveform, 
+  fetchTimelineStills,
   fetchMotionData, 
   fetchSceneSegmentation 
 } from '../../services/api';
+import type { StillsResponse } from './timelineStills';
 
 export interface TimelineSceneItem {
   item_id: string;
@@ -48,6 +50,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
   const [waveformPeaks, setWaveformPeaks] = useState<number[]>([]);
   const [motionPlan, setMotionPlan] = useState<any | null>(null);
   const [segmentationScenes, setSegmentationScenes] = useState<any[]>([]);
+  const [stills, setStills] = useState<StillsResponse>({ current: false, exists: false, samples: [] });
 
   const fps = 30;
 
@@ -57,12 +60,13 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     setError(null);
 
     try {
-      const [buildRes, tlRes, wfRes, motionRes, segRes] = await Promise.all([
+      const [buildRes, tlRes, wfRes, motionRes, segRes, stillsRes] = await Promise.all([
         fetchTimelineBuildData(projectId),
         fetchTimelineJson(projectId),
         fetchTimelineWaveform(projectId),
         fetchMotionData(projectId),
-        fetchSceneSegmentation(projectId)
+        fetchSceneSegmentation(projectId),
+        fetchTimelineStills(projectId)
       ]);
 
       if (buildRes.ok) setTimelineBuildReport(buildRes.data);
@@ -70,6 +74,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
       if (wfRes.ok && Array.isArray(wfRes.data?.peaks)) setWaveformPeaks(wfRes.data.peaks);
       if (motionRes.ok && motionRes.data?.plan) setMotionPlan(motionRes.data.plan);
       if (segRes.ok && Array.isArray(segRes.data?.scenes)) setSegmentationScenes(segRes.data.scenes);
+      if (stillsRes.ok) setStills(stillsRes.data as StillsResponse);
 
       if (!buildRes.ok && !tlRes.ok) {
         setError(buildRes.error || tlRes.error || 'Failed to load timeline build data.');
@@ -203,6 +208,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     waveformPeaks,
     motionPlan,
     segmentationScenes,
+    stills,
     fps,
     totalFrames,
     totalDurationSeconds,

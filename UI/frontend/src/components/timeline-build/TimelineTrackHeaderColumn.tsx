@@ -33,7 +33,7 @@ export const TimelineTrackHeaderColumn: React.FC<TimelineTrackHeaderColumnProps>
 
       {/* Track Labels */}
       {showVisualsTrack && (
-        <div style={{ height: '64px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+        <div style={{ height: '84px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
           <Video size={16} color="var(--accent-cyan)" />
           <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Visual Scenes</span>
         </div>

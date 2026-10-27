@@ -1,5 +1,7 @@
 import React from 'react';
 import { TimelineTrackHeaderColumn } from './TimelineTrackHeaderColumn';
+import { TimelineSceneTile } from './TimelineSceneTile';
+import type { StillsResponse } from './timelineStills';
 
 
 export interface TimelineTrackCanvasProps {
@@ -26,6 +28,7 @@ export interface TimelineTrackCanvasProps {
   setCurrentFrame: React.Dispatch<React.SetStateAction<number>>;
   waveformPeaks: number[];
   segmentationScenes: any[];
+  stills: StillsResponse;
   motionPlan: any;
 }
 
@@ -53,6 +56,7 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
   setCurrentFrame,
   waveformPeaks,
   segmentationScenes,
+  stills,
   motionPlan
 }) => {
   return (
@@ -181,63 +185,25 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
             {/* TRACK 1: SCENE VISUALS & MEDIA */}
             {showVisualsTrack && (
               <div style={{
-                height: '64px',
+                height: '84px',
                 borderBottom: '1px solid var(--border-subtle)',
                 position: 'relative',
                 backgroundColor: 'rgba(15, 23, 42, 0.3)'
               }}>
-                {scenesList.map((scene, idx) => {
-                  const left = frameToPx(scene.start_frame);
-                  const width = frameToPx(scene.duration_frames);
-                  const isSelected = selectedScene?.scene_id === scene.scene_id;
-                  const isCurrent = activeScene?.scene_id === scene.scene_id;
-
-                  return (
-                    <div
-                      key={scene.item_id || idx}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedSceneId(scene.scene_id);
-                        setCurrentFrame(scene.start_frame);
-                      }}
-                      style={{
-                        position: 'absolute',
-                        left: `${left}px`,
-                        width: `${Math.max(12, width)}px`,
-                        top: '4px',
-                        bottom: '4px',
-                        backgroundColor: isSelected 
-                          ? 'rgba(34, 211, 238, 0.25)' 
-                          : (isCurrent ? 'rgba(59, 130, 246, 0.2)' : 'rgba(30, 41, 59, 0.7)'),
-                        border: isSelected 
-                          ? '2px solid var(--accent-cyan)' 
-                          : (isCurrent ? '1.5px solid #60A5FA' : '1px solid rgba(255, 255, 255, 0.15)'),
-                        borderRadius: '6px',
-                        padding: '6px 10px',
-                        cursor: 'pointer',
-                        overflow: 'hidden',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        justifyContent: 'space-between',
-                        boxShadow: isSelected ? '0 0 12px rgba(34, 211, 238, 0.3)' : 'none',
-                        transition: 'all 0.15s ease'
-                      }}
-                      title={`Scene ${scene.scene_id}: F${scene.start_frame} - F${scene.end_frame} (${formatSeconds(scene.duration_frames / fps)})`}
-                    >
-                      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <span style={{ fontSize: '12px', fontWeight: 700, color: '#FFFFFF', whiteSpace: 'nowrap' }}>
-                          {scene.scene_id}
-                        </span>
-                        <span style={{ fontSize: '10px', fontFamily: 'var(--font-mono)', color: 'var(--accent-cyan)' }}>
-                          {scene.duration_frames}f
-                        </span>
-                      </div>
-                      <div style={{ fontSize: '10px', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                        {scene.pattern || 'custom_motion'} • {formatSeconds(scene.duration_frames / fps)}
-                      </div>
-                    </div>
-                  );
-                })}
+                {scenesList.map((scene, idx) => (
+                  <TimelineSceneTile
+                    key={scene.item_id || idx}
+                    scene={scene}
+                    stills={stills.samples}
+                    fps={fps}
+                    leftPx={frameToPx(scene.start_frame)}
+                    widthPx={frameToPx(scene.duration_frames)}
+                    selected={selectedScene?.scene_id === scene.scene_id}
+                    current={activeScene?.scene_id === scene.scene_id}
+                    onSelect={() => { setSelectedSceneId(scene.scene_id); setCurrentFrame(scene.start_frame); }}
+                    formatSeconds={formatSeconds}
+                  />
+                ))}
               </div>
             )}
 
