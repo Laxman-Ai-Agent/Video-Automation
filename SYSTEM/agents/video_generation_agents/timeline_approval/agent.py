@@ -187,12 +187,10 @@ class TimelineApprovalAgent(BaseAgent):
         reviewer: str,
         fingerprint: str | None,
     ) -> None:
-        """Appends a tamper-evident audit record to config/approvals_audit.jsonl."""
+        """Appends the decision to the approvals audit log through the approval engine (its one writer)."""
+        from SYSTEM.approvals.approval_engine import approval_engine
         try:
-            audit_path = Path("config/approvals_audit.jsonl")
-            record = {
-                "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ"),
-                "event_type": "approval_granted" if decision == "approved" else "approval_blocked",
+            approval_engine.record_event("approval_granted" if decision == "approved" else "approval_blocked", {
                 "request_id": f"auto_{int(time.time())}_{project_id}",
                 "action_type": "timeline_render",
                 "requester_agent_id": self.agent_id,
@@ -200,9 +198,7 @@ class TimelineApprovalAgent(BaseAgent):
                 "fingerprint": fingerprint,
                 "project_id": project_id,
                 "reviewer": reviewer,
-            }
-            with audit_path.open("a", encoding="utf-8") as f:
-                f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            })
         except Exception as e:
             logger.warning(f"Failed to append to approvals_audit.jsonl: {e}")
 

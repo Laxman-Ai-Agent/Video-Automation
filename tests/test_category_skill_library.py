@@ -59,6 +59,23 @@ EXPECTED_25_CATEGORIES = [
 ]
 
 
+@pytest.fixture(autouse=True)
+def isolated_library(tmp_path, monkeypatch):
+    """Installs, archives and the installed index go to tmp_path: a test never adds a skill to the repository's library."""
+    from SYSTEM.skills import installer as inst
+    root = tmp_path / "skills"
+    root.mkdir()
+    if inst.INSTALLED_INDEX_FILE.exists():
+        shutil.copy(inst.INSTALLED_INDEX_FILE, root / "installed_skills.json")
+    for name, path in (("SKILLS_DIR", root), ("LIBRARY_ROOT", root / "library"), ("HISTORY_ROOT", root / "archive" / "library_history"), ("INSTALLED_INDEX_FILE", root / "installed_skills.json")):
+        monkeypatch.setattr(inst, name, path)
+    monkeypatch.setattr(inst, "_installer_singleton", None)
+    from SYSTEM.skills import agent_integration
+    monkeypatch.setattr(agent_integration, "_access_controller_singleton", None)          # it keeps the installer it was made with
+    from SYSTEM.registries import skill_registry as sr
+    monkeypatch.setattr(sr, "SKILLS_DIR", root)                        # the registry resolves an installed skill's entrypoint under the same root
+
+
 @pytest.fixture
 def client() -> TestClient:
     return TestClient(app)
@@ -295,22 +312,7 @@ def test_multi_tiered_discovery_flow(manager: SkillLibraryManager):
 # Test 7: Controlled Installation, Validation, and Registration
 # ---------------------------------------------------------------------------
 
-@pytest.fixture
-def restore_skill_state():
-    """Leave the real catalog and archive exactly as they were: the install test must not leave a deprecated skill behind."""
-    skills_dir = config.PROJECT_ROOT / "SYSTEM" / "skills"
-    catalog_file = skills_dir / "catalog.json"
-    archive_dir = skills_dir / "archive" / "library_history" / "typography"
-    catalog_before = catalog_file.read_bytes()
-    archives_before = set(archive_dir.glob("*")) if archive_dir.exists() else set()
-    yield
-    get_skill_registry()._skills.pop("test-kinetic-stagger", None)
-    catalog_file.write_bytes(catalog_before)
-    for leftover in (set(archive_dir.glob("*")) - archives_before) if archive_dir.exists() else set():
-        shutil.rmtree(leftover)
-
-
-def test_controlled_installation_validation_and_registration(manager: SkillLibraryManager, restore_skill_state):
+def test_controlled_installation_validation_and_registration(manager: SkillLibraryManager):
     installer = get_skill_library_installer()
     skill_registry = get_skill_registry()
     cap_registry = get_capability_registry()
@@ -341,7 +343,8 @@ def test_controlled_installation_validation_and_registration(manager: SkillLibra
     assert record.category_id == "typography"
 
     # Verify disk files
-    install_dir = config.PROJECT_ROOT / "SYSTEM" / record.installation_path
+    from SYSTEM.skills import installer as inst
+    install_dir = inst.SKILLS_DIR.parent / record.installation_path
     assert install_dir.exists()
     assert (install_dir / "StaggerText.tsx").exists()
     assert (install_dir / "manifest.json").exists()
@@ -389,7 +392,8 @@ def test_installation_rollback_on_load_test_failure():
     assert any("syntax error" in err.lower() for err in res.validation_errors)
 
     # Verify destination was rolled back and deleted
-    dest = config.PROJECT_ROOT / "SYSTEM" / "skills" / "library" / "video_editing" / "broken-syntax-skill"
+    from SYSTEM.skills import installer as inst
+    dest = inst.LIBRARY_ROOT / "video_editing" / "broken-syntax-skill"
     assert not dest.exists()
 
 

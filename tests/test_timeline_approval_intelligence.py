@@ -283,7 +283,8 @@ def test_timeline_approval_agent_llm_approval(mock_approval_project: Path):
         "last_decision": {"decided_by": "llm:claude_cli/claude-code"},
     }
 
-    audit_log = Path("config/approvals_audit.jsonl")
+    from SYSTEM.approvals.approval_engine import approval_engine
+    audit_log = approval_engine._audit_file                            # the one audit writer (tests: a file in tmp_path)
     initial_audit_len = len(audit_log.read_text(encoding="utf-8").splitlines()) if audit_log.exists() else 0
 
     with patch("VIDEO_ENGINE.stages.timeline_approval.state", return_value=state_before),          patch("VIDEO_ENGINE.stages.timeline_approval.fingerprint", return_value="fp_valid_123"),          patch("VIDEO_ENGINE.stages.timeline_approval.auto_approve", return_value=state_after),          patch("SYSTEM.core.artifact_contracts.validate_approval_artifacts", return_value=None):

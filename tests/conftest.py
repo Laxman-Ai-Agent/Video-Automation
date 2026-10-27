@@ -54,6 +54,24 @@ def isolate_projects_dir(tmp_path, monkeypatch):
         pass
 
 
+@pytest.fixture(autouse=True)
+def isolate_repo_state(tmp_path, monkeypatch):
+    """Tests never write the repository's own state files: the approvals queue and audit log and the central skill catalog live in tmp_path
+    (the catalog starts as a copy of the real one), and the skill registry's memory is restored after the test."""
+    import shutil
+    from SYSTEM.approvals import approval_engine as ae
+    from SYSTEM.registries import skill_registry as sr
+    state = tmp_path / "repo_state"
+    state.mkdir(exist_ok=True)
+    monkeypatch.setattr(ae.approval_engine, "_audit_file", state / "approvals_audit.jsonl")
+    monkeypatch.setattr(ae.approval_engine, "_queue_file", state / "approvals_queue.json")
+    if sr.CATALOG_FILE.exists():
+        shutil.copy(sr.CATALOG_FILE, state / "catalog.json")
+    monkeypatch.setattr(sr, "CATALOG_FILE", state / "catalog.json")
+    monkeypatch.setattr(sr.registry, "_skills", dict(sr.registry._skills))
+    monkeypatch.setattr(sr.registry, "_initialized", sr.registry._initialized)
+
+
 @pytest.fixture(scope="session", autouse=True)
 def no_leftover_browser_profiles():
     """Tests that start Remotion's browser leave puppeteer_dev_chrome_profile-* folders in the temp folder (Windows cannot delete them while Chrome closes): remove the ones this run made."""

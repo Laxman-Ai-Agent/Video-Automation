@@ -169,6 +169,11 @@ class ApprovalEngine:
                 status_code=500,
             ) from e
 
+    def record_event(self, event_type: str, details: dict[str, Any]) -> None:
+        """Appends one event to the audit log: the one writer of approvals_audit.jsonl for every caller."""
+        with self._lock:
+            self._append_audit_event_unlocked(event_type, details)
+
     def submit_request(
         self,
         requester_agent_id: str,
