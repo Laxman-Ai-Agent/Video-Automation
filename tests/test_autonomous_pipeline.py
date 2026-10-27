@@ -152,7 +152,7 @@ def test_the_gateway_keeps_the_callers_timeout():
         assert seen["req"].timeout == 900
         seen.clear()
         llm_gateway.execute_llm_gateway_call(llm_gateway.GatewayRequest(prompt="p"))
-        assert seen["req"].timeout == 60                                                  # the default stays
+        assert seen["req"].timeout == 0                                                   # 0 = the timeout of the model profile (PROFILE_TIMEOUT), not a fixed 60 s
 
 
 def test_a_later_successful_visual_planning_replaces_an_old_failure_on_the_page(tmp_path):
