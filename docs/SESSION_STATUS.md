@@ -2,6 +2,19 @@
 
 **Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
 
+## IN PROGRESS at 23:45 - check this first
+A background session ("Fix the 16 stale live-UI Playwright tests") is mid-flight, working on the item 6 backlog task
+(`docs/ROADMAP.md` section 3). As of 23:45 it has **not yet committed or pushed** - the working tree has its
+uncommitted edits to `UI/frontend/src/App.tsx`, `UI/frontend/src/components/Sidebar.tsx`,
+`tests/test_playwright_about_tab_all_stages.py`, `tests/test_playwright_live_pipeline_status.py`,
+`tests/test_playwright_pipeline_11_stages.py`. `git log -1` on `main` was still `95a81f1` at that point.
+Its brief told it to commit and push to `main` itself when done and mark ROADMAP item 6 done.
+**On resume:** `git log --oneline -5` and `git status --short` first - if `main` has moved past `95a81f1` and the
+tree is clean, the session finished and pushed; read its commit(s) for what changed. If the tree still has
+uncommitted changes matching the files above, the session was interrupted (e.g. the desktop app was closed) -
+read what it changed (`git diff`), decide whether to keep going from there or restart the task, and only then
+commit (don't assume its state is finished or correct without checking).
+
 ## Working with the user (these lived only in the old laptop's local memory: they are the rules now)
 - The user writes Telugu in English letters: answer the same way (Telugu script only when asked), keep file names, commands and technical terms in English. "Don't generate code" = explain only.
 - Explain the cause of a warning/error with evidence first. Fix at the root, with a regression test; never accept a warning. Never claim what was not verified; say what was not run.
