@@ -9,18 +9,18 @@ from .uploads import safe_name
 router = APIRouter(prefix="/projects/{pid}", tags=["results"])
 
 
-@router.get("/result")
-def result(pid: str, preview: bool = False, aspect: str = "16:9"):
+@router.get("/video")
+def video(pid: str, aspect: str | None = None, preview: bool = False):
+    """The rendered video (Range requests are answered, so seeking works). `aspect` defaults to the project's own; `preview=true` serves the low-resolution preview render."""
+    from .. import pipeline_view, render
     pdir = store.project_dir(pid)
-    from ..artifact_contracts import verify_path_confinement
-    verify_path_confinement(pdir, pdir)
-
-    sfx = "_9x16" if aspect == "9:16" else ""
-    f = pdir / (f"out_preview{sfx}.mp4" if preview else f"out{sfx}.mp4")
-    verify_path_confinement(pdir, f)
+    aspect = aspect or pipeline_view.aspect_of(pdir)
+    if aspect not in review.ASPECTS:
+        raise ApiError(422, "invalid_request", "aspect must be 16:9 or 9:16")
+    f = render.output_path(pdir, preview, aspect)
     if not f.exists():
-        raise ApiError(404, "result_missing", "the video has not been rendered yet", "POST /projects/{id}/render")
-    return FileResponse(f, media_type="video/mp4")          # Starlette answers Range requests (seeking works)
+        raise ApiError(404, "result_missing", "the video has not been rendered yet", "run the Render Video stage")
+    return FileResponse(f, media_type="video/mp4")
 
 
 @router.get("/delivery")
@@ -90,14 +90,3 @@ def download_delivery(pid: str, aspect: str = "16:9"):
         media_type="video/mp4",
         filename=safe_filename,
     )
-
-
-@router.get("/video")
-def video(pid: str, aspect: str = "9:16", preview: bool = True):
-    pdir = store.project_dir(pid)
-    if aspect not in review.ASPECTS:
-        raise ApiError(422, "invalid_request", "aspect must be 16:9 or 9:16")
-    f = pdir / f"{'out_preview' if preview else 'out'}{'_9x16' if aspect == '9:16' else ''}.mp4"
-    if not f.exists():
-        raise ApiError(404, "result_missing", "the video has not been rendered yet", "run Preview or Render")
-    return FileResponse(f, media_type="video/mp4")

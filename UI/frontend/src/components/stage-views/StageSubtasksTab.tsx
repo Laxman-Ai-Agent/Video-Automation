@@ -1,7 +1,7 @@
 import React from 'react';
 import { Play } from 'lucide-react';
 import { StageConfig } from '../../types/pipeline';
-import { StageSubtasks, runStageStepChecks, fetchStageSubtasks } from '../../services/api';
+import { API_BASE, StageSubtasks, runStageStepChecks, fetchStageSubtasks } from '../../services/api';
 import { SubtaskCard } from '../SubtaskCard';
 
 export interface StageSubtasksTabProps {
@@ -51,7 +51,7 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
               </span>
             </div>
             <a
-              href={`http://127.0.0.1:8000/projects/${projectId}/video?preview=false`}
+              href={`${API_BASE}/projects/${projectId}/video`}
               target="_blank"
               rel="noreferrer"
               style={{ fontSize: '11px', color: 'var(--accent-cyan)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
@@ -63,7 +63,7 @@ export const StageSubtasksTab: React.FC<StageSubtasksTabProps> = ({
             <video
               controls
               preload="metadata"
-              src={`http://127.0.0.1:8000/projects/${projectId}/video?preview=false`}
+              src={`${API_BASE}/projects/${projectId}/video`}
               style={{ width: '100%', maxHeight: '360px', objectFit: 'contain' }}
             />
           </div>

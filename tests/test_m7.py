@@ -119,7 +119,7 @@ def test_full_flow(client):
     assert s["error"] is None and s["waiting_for"] == "plan" and s["command"] == f"/plan {pid}"
     assert client.get(f"/projects/{pid}").json()["state"] == "done"                # the orchestrator's run (Audio Input -> Audio Analysis) finished
     assert client.get(f"/projects/{pid}/status").json()["waiting_for"] == "plan"
-    assert client.get(f"/projects/{pid}/result").status_code == 404           # nothing rendered
+    assert client.get(f"/projects/{pid}/video").status_code == 404            # nothing rendered
 
 
 def test_status_has_all_documented_fields(client):
@@ -209,11 +209,11 @@ def test_openapi_lists_every_endpoint(client):
     paths = client.get("/openapi.json").json()["paths"]
     for p in ("/projects", "/projects/{pid}", "/projects/{pid}/transcribe", "/projects/{pid}/status",
               "/projects/{pid}/pipeline", "/projects/{pid}/motion", "/projects/{pid}/render", "/projects/{pid}/final-qc",
-              "/projects/{pid}/result", "/projects/{pid}/cancel"):
+              "/projects/{pid}/video", "/projects/{pid}/cancel"):
         assert p in paths, p
-    for gone in ("/projects/{pid}/prompts", "/projects/{pid}/review", "/projects/{pid}/crops/{n}", "/projects/{pid}/qc", "/projects/{pid}/visual", "/projects/{pid}/run"):      # the old prompt / crop / scene-table / video-QC workflow
+    for gone in ("/projects/{pid}/prompts", "/projects/{pid}/review", "/projects/{pid}/crops/{n}", "/projects/{pid}/qc", "/projects/{pid}/visual", "/projects/{pid}/run",       # the old prompt / crop / scene-table / video-QC workflow
+                 "/projects/{pid}/result"):                                                                       # merged into /video
         assert gone not in paths, gone
-    assert "/projects/{pid}/video" in paths                                                                       # the rendered video is still served
 
 
 def test_rename_changes_only_the_display_name(client):
