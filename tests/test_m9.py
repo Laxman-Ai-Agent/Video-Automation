@@ -599,7 +599,6 @@ def fill_env(env, grade=None):
 
 # ---------- Tasks 2, 6, 8: camera, effects, word accents ----------
 from backend import motion_checks                        # noqa: E402
-from backend.focus import frame_focus                     # noqa: E402
 
 CAMERA = THEME["camera"]
 
@@ -680,16 +679,6 @@ def test_accent_pulses_are_small_brief_and_never_stack():
     assert all(v == 1 for v in one[:fps]) and all(v == 1 for v in one[fps + a["upFrames"] + a["downFrames"] + 1:])   # exactly 1 outside the window
     assert sum(1 for v in one if v > 1) <= a["upFrames"] + a["downFrames"]
     assert a["pulseScale"] <= 1.06                                                  # "small pulses"
-
-
-def test_frame_focus_converts_a_photo_point_to_a_screen_point():
-    assert frame_focus([0.4, 0.6], (1920, 1080)) == [0.4, 0.6]                      # 16:9 photo filling the frame: unchanged
-    square = frame_focus([0.5, 0.4], (1000, 1000), "full")                          # 1:1 photo is cropped top and bottom by object-fit: cover
-    assert square == [0.5, 0.322] and square[1] != 0.4                              # the old code aimed at 0.4: 84 px off
-    assert frame_focus([0.5, 0.5], (2000, 1500), "left-half") == [0.25, 0.5]        # centre of a photo in the left half is the centre of that half
-    assert frame_focus([0.5, 0.5], (2000, 1500), [960, 0, 960, 1080]) == [0.75, 0.5]    # same box given in pixels: the right half
-    assert frame_focus([0.95, 0.5], (1000, 1000), "full")[0] == 0.85                # never aims at the very edge of the visible photo
-    assert frame_focus([0.5, 0.5], (1000, 1000), "no-such-box") == frame_focus([0.5, 0.5], (1000, 1000), "full")
 
 
 def test_named_image_boxes_are_complete_and_inside_the_frame():

@@ -9,7 +9,6 @@ from PIL import Image
 
 from backend import config, pipeline, render
 from backend.cli import parser
-from backend.focus import FRAME, PORTRAIT_FRAME, frame_focus
 from backend.theme import THEME
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -117,15 +116,6 @@ def test_portrait_boxes_cover_every_16x9_name_and_stay_inside_the_frame():
     grid = [tall[f"grid-{i}"] for i in range(4)]                 # four rows, none over another
     for a, b in zip(grid, grid[1:]):
         assert a[1] + a[3] <= b[1] + 1e-9
-
-
-# ---------- where a cropped photo's focus lands ----------
-def test_frame_focus_with_crop_puts_the_focus_at_the_same_relative_place_in_the_box():
-    assert FRAME == (1920, 1080) and PORTRAIT_FRAME == (1080, 1920)
-    assert frame_focus([0.7, 0.4], (1920, 1080), "full", PORTRAIT_FRAME, crop=True) == [0.7, 0.4]
-    assert frame_focus([0.5, 0.5], (1920, 1080), "right-half", PORTRAIT_FRAME, crop=True) == [0.5, 0.75]   # portrait right-half = bottom half
-    assert frame_focus([0.95, 0.5], (1920, 1080), "full", PORTRAIT_FRAME, crop=True)[0] == 0.85            # never aims at the very edge
-    assert frame_focus([0.4, 0.6], (1920, 1080)) == [0.4, 0.6]                                              # default call: unchanged 16:9 math
 
 
 # ---------- fill ----------

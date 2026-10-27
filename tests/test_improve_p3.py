@@ -6,7 +6,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from backend import config, plan_preview, shots
+from backend import config, shots
 from backend.assets import work_dir
 from backend.models import MatchReport
 
@@ -159,12 +159,3 @@ def test_apply_shots_leaves_scene_alone_when_a_picture_is_missing_in_the_composi
     comp = json.loads((pdir / "composition.json").read_text(encoding="utf-8"))          # image files are still null in this composition
     before = json.dumps(comp, sort_keys=True)
     assert shots.apply_shots(pdir, comp) == 0 and json.dumps(comp, sort_keys=True) == before
-
-
-def test_plan_preview_uses_the_shot_plan_only_with_the_flag(tmp_path, monkeypatch):
-    pdir = _sample(tmp_path)
-    monkeypatch.delenv("A2V_SHOTS", raising=False)
-    assert len(plan_preview.build(pdir)["scenes"][3]["shots"]) == 1
-    monkeypatch.setenv("A2V_SHOTS", "1")
-    out = plan_preview.build(pdir)
-    assert len(out["scenes"][3]["shots"]) == 3 and out["summary"]["shots"] == 11

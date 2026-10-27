@@ -1,12 +1,11 @@
-"""Phase 0.5 of improvement/MASTER_PLAN.md: flags, contracts, locks, fingerprints, safe-area table, golden plan preview."""
+"""Phase 0.5 of improvement/MASTER_PLAN.md: flags, contracts, locks, fingerprints, safe-area table."""
 import json
-import shutil
 from pathlib import Path
 
 import pytest
 from pydantic import ValidationError
 
-from backend import config, contracts, plan_preview
+from backend import config, contracts
 from backend.fingerprint import versioned
 from backend.theme import THEME
 
@@ -79,33 +78,3 @@ def test_thresholds_are_consistent():
     assert config.MIN_SHOT_SEC * 2 <= config.LONG_SCENE_SEC
     lo, hi = config.HIGHLIGHT_DURATION_SEC
     assert 0 < lo < hi
-
-
-def _golden_project(tmp_path: Path) -> Path:
-    for f in ("transcript.json", "scene_plan.json", "prompts_map.json", "composition.json"):
-        shutil.copy(FIX / "plan_sample" / f, tmp_path / f)
-    shutil.copy(FIX / "golden" / "match_report.json", tmp_path / "match_report.json")
-    return tmp_path
-
-
-def test_plan_preview_matches_golden(tmp_path):
-    got = plan_preview.dump(plan_preview.build(_golden_project(tmp_path)))
-    assert got == (FIX / "golden" / "expected_plan_preview.json").read_text(encoding="utf-8")
-
-
-def test_plan_preview_without_matches_is_never_all_clear(tmp_path):
-    pdir = _golden_project(tmp_path)
-    (pdir / "match_report.json").unlink()
-    out = plan_preview.build(pdir)
-    assert out["summary"]["matches"] == {"high": 0, "medium": 0, "low": 0, "none": 14}
-    assert sum(1 for i in out["issues"] if i["rule"] == "missing_image") == 14      # missing media must show up, never "all clear"
-
-
-def test_plan_preview_locks_manual_choice_and_reasons(tmp_path):
-    pdir = _golden_project(tmp_path)
-    out = plan_preview.build(pdir)
-    ms = [m for s in out["scenes"] for m in s["matches"]]
-    manual = next(m for m in ms if m["reason"]["rule"] == "user_choice")
-    assert manual["locked"] is True and manual["band"] == "none"
-    assert all(m["reason"]["rule"] for m in ms)
-    assert all(s["shots"][0]["kind"] == "whole_scene" and s["shots"][0]["reason"]["rule"] for s in out["scenes"])

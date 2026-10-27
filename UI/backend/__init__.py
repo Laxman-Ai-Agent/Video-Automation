@@ -37,7 +37,6 @@ _DELEGATIONS: dict[str, str] = {
     "autoplan": "VIDEO_ENGINE.stages.autoplan",
     "cuts": "VIDEO_ENGINE.stages.cuts",
     "final_qc": "VIDEO_ENGINE.stages.final_qc",
-    "matcher": "VIDEO_ENGINE.stages.matcher",
     "motion_autofix": "VIDEO_ENGINE.stages.motion_autofix",
     "motion_branch": "VIDEO_ENGINE.stages.motion_branch",
     "motion_gen_report": "VIDEO_ENGINE.stages.motion_gen_report",
@@ -61,8 +60,6 @@ _DELEGATIONS: dict[str, str] = {
     "timeline_media": "VIDEO_ENGINE.stages.timeline_media",
     "transcribe": "VIDEO_ENGINE.stages.transcribe",
     "transcript_review": "VIDEO_ENGINE.stages.transcript_review",
-    "video_qc": "VIDEO_ENGINE.stages.video_qc",
-    "visual_plan": "VIDEO_ENGINE.stages.visual_plan",
     "visual_planning": "VIDEO_ENGINE.stages.visual_planning",
 }
 
