@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-27T08:34:46.865478+00:00",
-  "total_experiences": 31,
+  "updated_at": "2026-10-27T12:15:54.973035+00:00",
+  "total_experiences": 37,
   "experiences": {
     "exp-render_video-027d470a17": {
       "experience_id": "exp-render_video-027d470a17",
@@ -71,6 +71,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:36:11.360164+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-18d8fceab5": {
+      "experience_id": "exp-render_video-18d8fceab5",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-dc9753bc2c",
+      "project_id": "motion-demo-17c4",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:48:43.004754+00:00",
       "schema_version": 1
     },
     "exp-render_video-1ae60f0c8b": {
@@ -421,6 +444,29 @@
       "timestamp": "2026-10-20T05:30:03.544352+00:00",
       "schema_version": 1
     },
+    "exp-render_video-761c435180": {
+      "experience_id": "exp-render_video-761c435180",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-031b307e70",
+      "project_id": "motion-demo-2eff",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:47:40.441680+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-78f34a39b8": {
       "experience_id": "exp-render_video-78f34a39b8",
       "agent_id": "render_video",
@@ -516,6 +562,29 @@
       "timestamp": "2026-10-23T12:49:25.296201+00:00",
       "schema_version": 1
     },
+    "exp-render_video-9a5c726ca8": {
+      "experience_id": "exp-render_video-9a5c726ca8",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-71357b57d1",
+      "project_id": "motion-demo-027e",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T12:15:54.962584+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-9c3d796cba": {
       "experience_id": "exp-render_video-9c3d796cba",
       "agent_id": "render_video",
@@ -537,6 +606,52 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T06:03:19.308647+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-9fb0d1a9e7": {
+      "experience_id": "exp-render_video-9fb0d1a9e7",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-4a5c531c8a",
+      "project_id": "motion-demo-dc2c",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 32114691,
+        "sha256_short": "57f07b2035da",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:49:59.713935+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-ad33c97f2b": {
+      "experience_id": "exp-render_video-ad33c97f2b",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-c57e98762c",
+      "project_id": "motion-demo-13ff",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:16:52.103411+00:00",
       "schema_version": 1
     },
     "exp-render_video-ad96ff8565": {
@@ -629,6 +744,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:11:32.763217+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-e005547b1a": {
+      "experience_id": "exp-render_video-e005547b1a",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-3c602d4cad",
+      "project_id": "motion-demo-e182",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 34788885,
+        "sha256_short": "299efc28a3f9",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:25:58.230316+00:00",
       "schema_version": 1
     },
     "exp-render_video-e7f0d77315": {

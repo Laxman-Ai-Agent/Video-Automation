@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "mock_agent",
-  "updated_at": "2026-10-24T03:07:54.308275+00:00",
-  "total_experiences": 10,
+  "updated_at": "2026-10-27T11:45:01.880420+00:00",
+  "total_experiences": 13,
   "experiences": {
     "exp-mock_agent-288630ea8b": {
       "experience_id": "exp-mock_agent-288630ea8b",
@@ -149,6 +149,35 @@
       "timestamp": "2026-10-17T11:25:35.221525+00:00",
       "schema_version": 1
     },
+    "exp-mock_agent-91ccda868a": {
+      "experience_id": "exp-mock_agent-91ccda868a",
+      "agent_id": "mock_agent",
+      "task_type": "mock_stage",
+      "task_id": "req-1793099674",
+      "project_id": "test-proj-lifecycle",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 2.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_agent' completed task 'mock_stage' with outcome 'succeeded' in 2.0ms.",
+        "takeaway": "Parameters and inputs for 'mock_stage' produced verified output.",
+        "performance": {
+          "duration_ms": 2.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T11:14:34.007784+00:00",
+      "schema_version": 1
+    },
     "exp-mock_agent-9d45dccaef": {
       "experience_id": "exp-mock_agent-9d45dccaef",
       "agent_id": "mock_agent",
@@ -207,6 +236,35 @@
       "timestamp": "2026-10-23T12:09:52.051648+00:00",
       "schema_version": 1
     },
+    "exp-mock_agent-c3b4d08316": {
+      "experience_id": "exp-mock_agent-c3b4d08316",
+      "agent_id": "mock_agent",
+      "task_type": "mock_stage",
+      "task_id": "req-1793101501",
+      "project_id": "test-proj-lifecycle",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 3.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_agent' completed task 'mock_stage' with outcome 'succeeded' in 3.0ms.",
+        "takeaway": "Parameters and inputs for 'mock_stage' produced verified output.",
+        "performance": {
+          "duration_ms": 3.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T11:45:01.869842+00:00",
+      "schema_version": 1
+    },
     "exp-mock_agent-cab16f4b45": {
       "experience_id": "exp-mock_agent-cab16f4b45",
       "agent_id": "mock_agent",
@@ -263,6 +321,35 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T13:37:57.188680+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_agent-d2bee21d91": {
+      "experience_id": "exp-mock_agent-d2bee21d91",
+      "agent_id": "mock_agent",
+      "task_type": "mock_stage",
+      "task_id": "req-1793095507",
+      "project_id": "test-proj-lifecycle",
+      "context": {
+        "parameters": []
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_agent' completed task 'mock_stage' with outcome 'succeeded' in 1.0ms.",
+        "takeaway": "Parameters and inputs for 'mock_stage' produced verified output.",
+        "performance": {
+          "duration_ms": 1.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T10:05:07.514801+00:00",
       "schema_version": 1
     },
     "exp-mock_agent-f6ee90b1ac": {
