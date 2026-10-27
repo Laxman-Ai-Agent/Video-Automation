@@ -328,9 +328,9 @@ export const StageCard: React.FC<StageCardProps> = React.memo(({
           <div
             data-testid={`stage-llm-badge-${config.id}`}
             className={styles.llmBadge}
-            style={{ color: state?.llmVerified ? '#34D399' : '#9CA3AF' }}
+            style={{ color: state?.llmVerified === undefined ? '#9CA3AF' : (state.llmVerified ? '#34D399' : '#F87171') }}
           >
-            {state?.llmVerified ? '✓ LLM Verified' : 'Not verified with LLM'}
+            {state?.llmVerified === undefined ? 'Checked by rules' : (state.llmVerified ? '✓ LLM Verified' : 'LLM review not passed')}
           </div>
         )}
       </div>

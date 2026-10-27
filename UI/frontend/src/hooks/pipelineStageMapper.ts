@@ -91,7 +91,7 @@ export function processPipelineData(
       startedAt: normalizeTimestamp(raw?.started_at),
       completedAt: normalizeTimestamp(raw?.completed_at),
       durationMs: durationMs,
-      llmVerified: !!raw?.llm_verified,
+      llmVerified: raw?.llm_verified == null ? undefined : !!raw.llm_verified,       // null = a stage without an LLM review (decided by its own checks)
       blockers: st === 'blocked' && raw?.detail ? [raw.detail] : undefined,
       waitingFor: raw?.waiting_for || undefined,
       attempt: raw?.attempt || 1,

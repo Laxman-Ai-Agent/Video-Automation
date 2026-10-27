@@ -413,7 +413,6 @@ def evaluate_stage_eligibility(
     pdir: Path,
     stage_id: str,
     aspect: str = "16:9",
-    auto_pilot_mode: bool = False,
 ) -> dict[str, Any]:
     """Evaluates whether a stage is eligible to execute according to DAG and gate policies."""
     if stage_id not in ACTIVE_STAGES:
@@ -524,10 +523,9 @@ def evaluate_stage_eligibility(
 class PipelineOrchestrator:
     """Authoritative Run Coordinator for the 12-stage Motion-Only pipeline."""
 
-    def __init__(self, project_id: str, aspect: str = "16:9", auto_pilot_mode: bool = False) -> None:
+    def __init__(self, project_id: str, aspect: str = "16:9") -> None:
         self.project_id = project_id
         self.aspect = aspect
-        self.auto_pilot_mode = auto_pilot_mode
         self.pdir = store.project_dir(project_id)
         self.project_lock = _get_project_lock(project_id)
 
@@ -546,12 +544,9 @@ class PipelineOrchestrator:
         idempotency_key: str | None = None,
         max_retries: int = 3,
         synchronous: bool = False,
-        auto_pilot_mode: bool | None = None,
     ) -> RunRecord:
         """Starts or safely resumes an orchestrator run with idempotency and concurrency guards."""
         with self.project_lock:
-            if auto_pilot_mode is not None:
-                self.auto_pilot_mode = auto_pilot_mode
             # Reconcile orphaned runs and crashed executions on startup or prior to dispatch
             pipeline_state.reconcile_orphaned_jobs(self.pdir)
             try:
@@ -585,7 +580,6 @@ class PipelineOrchestrator:
                 started_at=time.time(),
                 updated_at=time.time(),
                 correlation_id=correlation_id,
-                metadata={"auto_pilot": self.auto_pilot_mode},
             )
 
             # Store active run
@@ -607,7 +601,7 @@ class PipelineOrchestrator:
                 detail=f"Run '{run_id}' started for aspect '{self.aspect}' (from_stage={from_stage}, to_stage={to_stage}, resume={resume})",
                 run_id=run_id,
                 correlation_id=correlation_id,
-                metadata={"idempotency_key": computed_key, "resume": resume, "from_stage": from_stage, "to_stage": to_stage, "auto_pilot": self.auto_pilot_mode},
+                metadata={"idempotency_key": computed_key, "resume": resume, "from_stage": from_stage, "to_stage": to_stage},
             )
 
         if synchronous:
@@ -713,6 +707,23 @@ class PipelineOrchestrator:
         from VIDEO_ENGINE.stages import scene_segmentation
         return scene_segmentation.load_fresh(self.pdir) is None
 
+    def _review(self, stage_id: str) -> None:
+        """The stage LLM review of the stage that just ran, only for the stages that need one. An unavailable LLM stores a blocked review: the gate then keeps the next stage from starting."""
+        if not llm_review.review_required(stage_id):
+            return
+        try:
+            llm_review.run_stage_llm_review(self.pdir, stage_id, aspect=self.aspect)
+        except Exception as e:
+            logger.warning(f"Stage {stage_id} LLM review could not run: {e}")
+
+    def _ensure_reviews(self, stage_id: str) -> None:
+        """A stage finished in an earlier run (reused now) is reviewed again when its review is missing or belongs to other inputs, so the gate never reads an old verdict. Approval and Final QC
+        decide themselves and are not reviewed here."""
+        done = pipeline_state.load_pipeline_state(self.pdir).stages
+        for sid in ACTIVE_STAGES[:ACTIVE_STAGES.index(stage_id)]:
+            if sid in llm_review.SWITCHABLE and llm_review.review_required(sid) and getattr(done.get(sid), "status", None) == "completed" and not llm_review.review_is_current(self.pdir, sid, self.aspect):
+                self._review(sid)
+
     def _resolve_stage_issues(self, stage_id: str, run: RunRecord, rerun) -> None:
         """The next stage starts only after this one finished with nothing unresolved, and nobody has to accept a warning for that: the stage's own fixer solves its warnings here (bounded rounds,
         each followed by a fresh LLM review of the changed report). `rerun` executes the stage again (a fixer that only decides, like Motion Planning's, needs it to apply the decisions).
@@ -746,7 +757,7 @@ class PipelineOrchestrator:
                     detail=f"The warnings of '{stage_id}' could not be fixed automatically: {e}", run_id=run.run_id, correlation_id=run.correlation_id,
                 )
                 return
-            llm_review.run_stage_llm_review(self.pdir, stage_id, aspect=self.aspect, auto_pilot=self.auto_pilot_mode)
+            llm_review.run_stage_llm_review(self.pdir, stage_id, aspect=self.aspect)
 
     def _planning_needed(self) -> bool:
         """No scene plan yet, or one that does not follow the current Scene Segmentation (and nothing depends on it)."""
@@ -885,8 +896,9 @@ class PipelineOrchestrator:
                 save_run_record(self.pdir, run)
                 from .legacy_pipeline_adapter import set_job
                 set_job(self.pdir, stage_id)                                    # job.json still held the percent of the step before: a new stage starts at 0
+                self._ensure_reviews(stage_id)
                 # Check stage eligibility
-                elig = evaluate_stage_eligibility(self.pdir, stage_id, self.aspect, auto_pilot_mode=self.auto_pilot_mode)
+                elig = evaluate_stage_eligibility(self.pdir, stage_id, self.aspect)
 
                 if not elig["eligible"]:
                     # Stage blocked by a gate or a missing input
@@ -989,7 +1001,6 @@ class PipelineOrchestrator:
                                 "aspect": self.aspect,
                                 "resume": resume,
                                 "force": not resume,
-                                "auto_pilot": self.auto_pilot_mode,
                                 "task_id": run.run_id,
                             },
                         )
@@ -1013,17 +1024,7 @@ class PipelineOrchestrator:
                         res: AgentResult = agent_adapter.execute(self.pdir, req)
 
                         if res.status == "succeeded":
-                            # Ensure Phase 2 mandatory LLM review gate is executed and fresh
-                            try:
-                                llm_review.run_stage_llm_review(
-                                    self.pdir,
-                                    stage_id,
-                                    aspect=self.aspect,
-                                    auto_pilot=self.auto_pilot_mode,
-                                )
-                            except Exception as review_err:
-                                logger.warning(f"Stage {stage_id} review execution: {review_err}")
-
+                            self._review(stage_id)
                             self._resolve_stage_issues(stage_id, run, lambda: agent_adapter.execute(self.pdir, req))
 
                             # Strict fail-closed completion transition

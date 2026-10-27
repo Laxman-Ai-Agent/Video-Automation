@@ -49,8 +49,11 @@ def texts(c, pid):
 
 
 def approve_analysis(c, pid):
-    r = c.post(f"/projects/{pid}/approve", json={"gate": "analysis"})
-    assert r.status_code == 200, r.text
+    """The analysis gate is set by the pipeline (`/continue`) and that starts the prompt writer; no route lets a person approve it."""
+    from backend import store
+    pdir = store.project_dir(pid)
+    review.set_gate(pdir, "analysis", True)
+    promptgen.start(pdir)
 
 
 def test_approving_the_analysis_writes_every_prompt_and_keeps_the_history(proj, fake):

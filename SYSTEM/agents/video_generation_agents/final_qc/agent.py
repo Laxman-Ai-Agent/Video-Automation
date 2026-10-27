@@ -184,7 +184,6 @@ class FinalQcAgent(BaseAgent):
         sfx = "_9x16" if aspect == "9:16" else ""
         vid = project_dir / ("out_9x16.mp4" if aspect == "9:16" else "out.mp4")
         task_id = request.parameters.get("task_id") or request.run_id
-        auto_pilot = bool(request.parameters.get("auto_pilot", False))
 
         from VIDEO_ENGINE.stages import final_qc
         from SYSTEM.core.artifact_contracts import validate_qc_artifacts, _file_sha256
@@ -223,18 +222,17 @@ class FinalQcAgent(BaseAgent):
         else:
             rep = cur_report
 
-        if not auto_pilot:
-            status_val = rep.get("status")
-            if status_val in ("failed", "blocked"):
-                return AgentResult(
-                    agent_id=self.agent_id,
-                    stage_id="qc",
-                    project_id=project_dir.name,
-                    status="failed",
-                    summary=f"Deterministic QC checks failed: status is {status_val}",
-                    error=f"qc_status_{status_val}",
-                    metadata={"report": rep},
-                )
+        status_val = rep.get("status")
+        if status_val in ("failed", "blocked"):
+            return AgentResult(
+                agent_id=self.agent_id,
+                stage_id="qc",
+                project_id=project_dir.name,
+                status="failed",
+                summary=f"Deterministic QC checks failed: status is {status_val}",
+                error=f"qc_status_{status_val}",
+                metadata={"report": rep},
+            )
 
         sha = file_sha256_full(vid)
 
@@ -248,31 +246,30 @@ class FinalQcAgent(BaseAgent):
         if rev_file.exists():
             outputs.append(ArtifactRef(path=str(rev_file), description="Final QC Review JSON"))
 
-        if auto_pilot:
-            if not tech_passed:
-                try:
-                    communication.publish_lifecycle_event(
-                        project_id=project_dir.name,
-                        stage_id="qc",
-                        sender_agent_id=self.agent_id,
-                        event="stage_failed",
-                        detail=f"Autonomous technical QC rejected: {'; '.join(failures[:2])}",
-                        telugu_activity="వీడియో నాణ్యత పరీక్షలో సమస్య కనిపించింది. దాన్ని సరిచేయడానికి ప్రయత్నిస్తున్నాను.",
-                        task_id=task_id,
-                    )
-                except Exception:
-                    pass
-
-                return AgentResult(
-                    agent_id=self.agent_id,
-                    stage_id="qc",
+        if not tech_passed:
+            try:
+                communication.publish_lifecycle_event(
                     project_id=project_dir.name,
-                    status="failed",
-                    summary=f"Autonomous technical QC failed: {'; '.join(failures[:3])}",
-                    error="; ".join(failures),
-                    output_refs=outputs,
-                    metadata={"failures": failures, "metrics": metrics, "report": rep},
+                    stage_id="qc",
+                    sender_agent_id=self.agent_id,
+                    event="stage_failed",
+                    detail=f"Autonomous technical QC rejected: {'; '.join(failures[:2])}",
+                    telugu_activity="వీడియో నాణ్యత పరీక్షలో సమస్య కనిపించింది. దాన్ని సరిచేయడానికి ప్రయత్నిస్తున్నాను.",
+                    task_id=task_id,
                 )
+            except Exception:
+                pass
+
+            return AgentResult(
+                agent_id=self.agent_id,
+                stage_id="qc",
+                project_id=project_dir.name,
+                status="failed",
+                summary=f"Autonomous technical QC failed: {'; '.join(failures[:3])}",
+                error="; ".join(failures),
+                output_refs=outputs,
+                metadata={"failures": failures, "metrics": metrics, "report": rep},
+            )
 
         # The decision about this exact file: the Final QC LLM review's (no person). A decision already recorded for this file and QC run is reused.
         dec = final_qc.current_review(project_dir, aspect, sha)

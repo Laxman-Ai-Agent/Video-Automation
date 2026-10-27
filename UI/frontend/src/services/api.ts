@@ -358,24 +358,18 @@ export async function createProject(title: string, aspectRatio: string = '16:9')
   return await res.json();
 }
 
-export async function startProjectRun(projectId: string, autoPilot: boolean = false): Promise<any> {
-  try {
-    const res = await fetch(`${API_BASE}/projects/${projectId}/orchestrator/run`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ auto_pilot: autoPilot, aspect: '16:9' })
-    });
-    if (res.ok) return await res.json();
-  } catch {
-    // fallback
+// Starts the autonomous run: every stage from `fromStage` (or the first unfinished one) to the end, each starting by itself when the one before it completed with nothing unresolved.
+export async function startProjectRun(projectId: string, fromStage?: string): Promise<any> {
+  const res = await fetch(`${API_BASE}/projects/${projectId}/orchestrator/run`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(fromStage ? { from_stage: fromStage, resume: true } : { resume: true })
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.detail?.message || err.detail || err.message || `Failed to start the run (HTTP ${res.status})`);
   }
-
-  const fb = await fetch(`${API_BASE}/projects/${projectId}/transcribe`, { method: 'POST' });
-  if (!fb.ok) {
-    const err = await fb.json().catch(() => ({}));
-    throw new Error(err.detail?.message || err.detail || 'Failed to start run');
-  }
-  return await fb.json();
+  return await res.json();
 }
 
 export async function cancelProjectRun(projectId: string): Promise<any> {
@@ -429,30 +423,6 @@ export async function fetchTimelineApprovalState(projectId: string): Promise<any
   } catch {
     return null;
   }
-}
-
-export async function decideTimelineApproval(
-  projectId: string,
-  decision: 'approved' | 'changes_requested',
-  reviewId: string,
-  expectedFingerprint: string
-): Promise<any> {
-  const res = await fetch(`${API_BASE}/projects/${projectId}/timeline-approval/decision`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      decision,
-      review_id: reviewId,
-      expected_fingerprint: expectedFingerprint,
-      decision_by: 'Producer',
-      idempotency_key: `timeline-decision-${Date.now()}`
-    })
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.detail?.message || err.detail || 'Timeline approval decision failed');
-  }
-  return await res.json();
 }
 
 export async function fetchRenderVideoState(projectId: string): Promise<any | null> {
@@ -510,20 +480,6 @@ export interface StageSubtasks {
   overall_progress?: number;
 }
 
-// A person's recorded decision to continue with a stage's current warnings (errors can never be accepted)
-export async function acceptStageWarnings(projectId: string, stageId: string, note: string): Promise<{ ok: boolean; message?: string }> {
-  try {
-    const res = await fetch(`${API_BASE}/projects/${projectId}/stages/${stageId}/accept-warnings`, {
-      method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ note })
-    });
-    if (res.ok) return { ok: true };
-    const body = await res.json().catch(() => null);
-    return { ok: false, message: body?.message || body?.detail?.message || `HTTP ${res.status}` };
-  } catch (e: any) {
-    return { ok: false, message: String(e?.message || e) };
-  }
-}
-
 export async function runStageStepChecks(projectId: string, stageId: string): Promise<{ started: boolean; pending: number; running: boolean } | null> {
   try {
     const res = await fetch(`${API_BASE}/projects/${projectId}/stages/${stageId}/subtasks/llm-check`, { method: 'POST' });
@@ -566,76 +522,9 @@ export async function fetchProjectMonitor(projectId: string): Promise<any | null
   }
 }
 
+// RUN / Retry of a stage = the autonomous run from that stage: it works the stage (what is already current is reused) and every later stage starts by itself when the one before completed clean.
 export async function runStage(projectId: string, stageId: string): Promise<any> {
-  let endpoint = '';
-  let method = 'POST';
-  let body: any = null;
-
-  switch (stageId) {
-    case 'audio':
-    case 'analyzer':
-      endpoint = `${API_BASE}/projects/${projectId}/transcribe`;
-      break;
-    case 'segmentation':
-      endpoint = `${API_BASE}/projects/${projectId}/segmentation/run`;
-      break;
-    case 'planning':
-      endpoint = `${API_BASE}/projects/${projectId}/visual-planning/run`;
-      break;
-    case 'motion_plan':
-      endpoint = `${API_BASE}/projects/${projectId}/motion-planning/run`;
-      break;
-    case 'motion_gen':
-      endpoint = `${API_BASE}/projects/${projectId}/motion-generation/run`;
-      break;
-    case 'motion_validation':
-      endpoint = `${API_BASE}/projects/${projectId}/motion-timeline-validation/run`;
-      break;
-    case 'timeline':
-      endpoint = `${API_BASE}/projects/${projectId}/timeline-build/run`;
-      break;
-    case 'approval':
-      endpoint = `${API_BASE}/projects/${projectId}/timeline/approve`;
-      break;
-    case 'render':
-      endpoint = `${API_BASE}/projects/${projectId}/render`;
-      break;
-    case 'qc':
-      endpoint = `${API_BASE}/projects/${projectId}/final-qc/run`;
-      break;
-    case 'final':
-    default:
-      endpoint = `${API_BASE}/projects/${projectId}/orchestrator/run`;
-      body = JSON.stringify({ from_stage: stageId, resume: true, aspect: '16:9', auto_pilot: false });
-      break;
-  }
-
-  const res = await fetch(endpoint, {
-    method,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
-    body
-  });
-
-  if (!res.ok) {
-    let errMsg = `Failed to run stage '${stageId}' (HTTP ${res.status})`;
-    try {
-      const err = await res.json();
-      const code = err.code || err.detail?.code || err.error?.code;
-      const msg = err.message || err.detail?.message || err.detail || err.error?.message;
-      const hint = err.hint || err.detail?.hint || err.error?.hint;
-      if (msg) {
-        errMsg = msg;
-        if (hint) errMsg += ` (${hint})`;
-      } else if (code) {
-        errMsg = `Error [${code}]`;
-      }
-    } catch {
-      // ignore JSON parse error
-    }
-    throw new Error(errMsg);
-  }
-
-  return await res.json();
+  return await startProjectRun(projectId, stageId);
 }
 
 export async function stopStage(projectId: string, stageId?: string): Promise<any> {

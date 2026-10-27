@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo } from 'react';
 import { StageConfig, StageState, StageStatus } from '../../types/pipeline';
 import { 
   fetchTimelineApprovalState, 
-  decideTimelineApproval, 
   fetchRenderVideoState, 
   fetchSceneSegmentation, 
   fetchAudioAnalysis, 
@@ -285,40 +284,6 @@ export function useStageDrawerData({
     }
   };
 
-  const handleApproveTimeline = async (decision: 'approved' | 'changes_requested') => {
-    if (!projectId) return;
-    try {
-      setActionLoading(true);
-      setActionMessage(null);
-      const reviewId = timelineApproval?.review_id || `rev-${Date.now()}`;
-      const fingerprint = timelineApproval?.expected_fingerprint || 'fp-authoritative';
-      await decideTimelineApproval(projectId, decision, reviewId, fingerprint);
-      const updated = await fetchTimelineApprovalState(projectId);
-      if (updated) setTimelineApproval(updated);
-
-      if (decision === 'approved') {
-        try {
-          if (onRunStage) {
-            onRunStage('render');
-            setActionMessage('Timeline approved! Auto-starting Render Video...');
-          } else {
-            await runStage(projectId, 'render');
-            setActionMessage('Timeline approved! Auto-starting Render Video...');
-          }
-        } catch (autoErr: any) {
-          console.warn('Auto-start Render Video note:', autoErr);
-          setActionMessage('Timeline approved! Run Stage button for Render Video is now activated.');
-        }
-      } else {
-        setActionMessage('Changes requested.');
-      }
-    } catch (err: any) {
-      setActionMessage(`Error: ${err?.message || 'Failed to submit decision'}`);
-    } finally {
-      setActionLoading(false);
-    }
-  };
-
   const overallProgressValue = (() => {
     if (realSub?.overall_progress !== undefined && realSub.overall_progress !== null) {
       return realSub.overall_progress;
@@ -398,7 +363,6 @@ export function useStageDrawerData({
     actionMessage,
     llmReviewLoading,
     llmReviewMessage,
-    handleRunLlmReview,
-    handleApproveTimeline
+    handleRunLlmReview
   };
 }

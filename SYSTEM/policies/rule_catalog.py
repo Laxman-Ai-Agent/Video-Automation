@@ -18,6 +18,7 @@ import functools
 from pathlib import Path
 
 from SYSTEM.core import config
+from SYSTEM.policies import llm_review
 
 STAGES_DIR = config.PROJECT_ROOT / "VIDEO_ENGINE" / "stages"
 SEVERITIES = ("blocker", "error", "warning", "review", "info")
@@ -91,5 +92,8 @@ def catalog() -> list[dict]:
         for m in merged.values():
             m["says"] = m["says"] or m["rule"].replace("_", " ").replace(".", ": ")          # a message that is built at run time: the rule's own name says it
         out += sorted(merged.values(), key=lambda r: r["rule"])
+    labels = {"analyzer": "Audio Analyzer", "segmentation": "Scene Segmentation", "planning": "Visual Planning", "motion_gen": "Motion Generation"}
+    out += [{"stage": st, "stage_label": SOURCES.get(st, (labels[st],))[0], "rule": "llm_review", "severity": "error", "calls": 1,
+             "says": "The stage LLM review must pass before the next stage starts (switched off: the next stage starts without it, and the record says so)."} for st in llm_review.SWITCHABLE]
     out += [{"stage": "assets", "stage_label": "Asset Collection", "rule": code, "severity": sev, "says": says, "calls": 1} for code, (sev, says) in ASSET_RULES.items()]
     return out

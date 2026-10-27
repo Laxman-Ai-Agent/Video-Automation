@@ -47,7 +47,7 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
   activeLlmCount: _activeLlmCount = 0,
   backendHealthy = true,
   onReloadState,
-  onStartRun: _onStartRun,
+  onStartRun,
   onCancelRun: _onCancelRun,
   onNewProject,
   onAnalyze,
@@ -156,9 +156,6 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
     }
   };
 
-  // Manual Execution Mode: Automatic cascading and auto-advance have been removed.
-  // Each stage must be triggered explicitly by the user via the RUN button.
-
   // Load pending approvals
   const loadApprovals = async () => {
     try {
@@ -257,6 +254,20 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
                     {sseStatus === 'connected' ? 'Live Connected' : (sseStatus === 'reconnecting' ? 'Reconnecting...' : 'Disconnected')}
                   </span>
                 </div>
+              </div>
+
+              <div className={styles.runRow}>
+                <button
+                  type="button"
+                  className={styles.runVideoBtn}
+                  data-testid="run-video"
+                  disabled={isRunning || isAudioMissing}
+                  onClick={onStartRun}
+                  title="Runs every unfinished stage in order: each starts by itself when the one before it completed with nothing unresolved, and a stage with an issue stops the run there."
+                >
+                  {isRunning ? 'Running…' : (isFinalDelivered ? 'Run again (changed stages only)' : 'Run Video')}
+                </button>
+                <span className={styles.runHint}>Fully automatic: the LLM reviews decide, nobody approves anything.</span>
               </div>
 
               {/* 12 CANONICAL STAGE CARDS CONNECTED IN SEQUENCE */}

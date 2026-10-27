@@ -15,11 +15,10 @@ router = APIRouter(prefix="/projects/{pid}/orchestrator", tags=["orchestrator"])
 class RunRequestBody(BaseModel):
     from_stage: str | None = None
     resume: bool = True
-    aspect: str = "16:9"
+    aspect: str | None = None                                  # default: the project's own aspect
     max_retries: int = Field(default=3, ge=0, le=10)
     idempotency_key: str | None = None
     synchronous: bool = False
-    auto_pilot: bool = False
 
 
 class CancelRequestBody(BaseModel):
@@ -30,18 +29,20 @@ class CancelRequestBody(BaseModel):
 def start_orchestrator_run(pid: str, body: RunRequestBody | None = None) -> dict[str, Any]:
     """Starts or resumes a pipeline run coordinated by the canonical Orchestrator."""
     body = body or RunRequestBody()
-    if body.aspect not in ("16:9", "9:16"):
+    from UI.backend import pipeline_view
+    from SYSTEM.memory import store
+    aspect = body.aspect or pipeline_view.aspect_of(store.project_dir(pid))
+    if aspect not in ("16:9", "9:16"):
         raise HTTPException(status_code=422, detail="Aspect ratio must be '16:9' or '9:16'")
 
     try:
-        orch = orchestrator.PipelineOrchestrator(pid, body.aspect, auto_pilot_mode=body.auto_pilot)
+        orch = orchestrator.PipelineOrchestrator(pid, aspect)
         run = orch.start_run(
             from_stage=body.from_stage,
             resume=body.resume,
             idempotency_key=body.idempotency_key,
             max_retries=body.max_retries,
             synchronous=body.synchronous,
-            auto_pilot_mode=body.auto_pilot,
         )
         return run.to_dict()
     except ApiError as e:

@@ -30,6 +30,8 @@ from SYSTEM.policies.llm_reviewer import LlmFinding, LlmReviewStatus, ask_review
 
 SCHEMA = "1.0"
 VERSION = 1
+LLM_STAGES = ("analyzer", "segmentation", "planning", "motion_gen", "approval", "qc")     # the stages whose result needs an LLM review; every other stage is decided by its own deterministic checks
+SWITCHABLE = ("analyzer", "segmentation", "planning", "motion_gen")                      # approval and qc ARE an LLM decision (nobody else decides them): they cannot be switched off
 EVIDENCE_REVISION = {"approval": 2}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
 
 
@@ -226,11 +228,21 @@ def save_review(pdir: Path, stage: str, aspect: str, result: LlmReviewResult) ->
     return path
 
 
+def review_required(stage: str) -> bool:
+    """Does this stage need a passed LLM review before the next stage may start? The one place that decides it (the Rules page switch is `<stage>:llm_review`)."""
+    return stage in LLM_STAGES and not (stage in SWITCHABLE and rule_switches.is_off(stage, "llm_review"))
+
+
+def review_is_current(pdir: Path, stage: str, aspect: str = "16:9") -> bool:
+    """A stored review exists for the stage's current inputs and outputs (whatever it decided): nothing to ask the LLM again."""
+    rev = load_review(pdir, stage, aspect)
+    return bool(rev) and rev.get("input_fingerprint") == compute_stage_input_fingerprint(pdir, stage, aspect) and rev.get("output_fingerprint") == compute_stage_output_fingerprint(pdir, stage, aspect)
+
+
 def is_stage_review_passed(
     pdir: Path,
     stage: str,
     aspect: str = "16:9",
-    auto_pilot: bool = True,
 ) -> tuple[bool, str, LlmReviewResult | None]:
     """Evaluates whether the stage has a fresh, valid LLM review with zero blockers.
     Returns (passed: bool, reason: str, review: LlmReviewResult | None).
@@ -259,9 +271,7 @@ def is_stage_review_passed(
     if blockers:
         return False, "llm_review_has_blockers", rev
 
-    if status == "needs_review":
-        if auto_pilot:
-            return True, "passed", rev
+    if status == "needs_review":                                              # only `passed` approves: a review that wants something looked at is not a pass, whatever the mode
         return False, "llm_review_needs_review", rev
 
     if status == "passed":
@@ -889,7 +899,6 @@ def run_stage_llm_review(
     aspect: str = "16:9",
     force: bool = False,
     timeout: int = 60,
-    auto_pilot: bool = False,
 ) -> LlmReviewResult:
     """Executes a mandatory stage-specific LLM review and persists the structured result.
     If the LLM is unavailable or fails, it fails closed (status='blocked').
@@ -925,7 +934,6 @@ def run_stage_llm_review(
         input_fingerprint=in_fp,
         artifact_refs=[{"path": str(f), "description": f.name} for f in stage_input_files(pdir, stage, aspect)],
         metadata={"aspect": aspect},
-        auto_pilot=auto_pilot,
     )
     result: LlmReviewResult = {
         "schema": SCHEMA,

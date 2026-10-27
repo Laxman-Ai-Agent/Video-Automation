@@ -8,9 +8,7 @@ Only a stage whose own rules classify its warnings (POLICY_VERDICTS) lets policy
 """
 from __future__ import annotations
 
-import hashlib
 import json
-import time
 from pathlib import Path
 
 STEP_REPORTS = {                                                                    # stage -> the report whose "stages" list the stage itself writes ({sfx} = the 9:16 suffix)
@@ -18,7 +16,6 @@ STEP_REPORTS = {                                                                
     "motion_plan": "motion_planning{sfx}.json", "motion_gen": "motion_generation{sfx}.json",
     "motion_validation": "motion_timeline_validation{sfx}.json", "timeline": "timeline_build_report{sfx}.json", "qc": "final_qc_report.json",
 }
-ACCEPTANCES = "stage_warning_acceptances.json"
 _ERROR_STATES = ("failed", "blocked", "error")
 
 
@@ -54,56 +51,33 @@ def step_issues(pdir: Path, stage_id: str, aspect: str) -> list[dict]:
     return out
 
 
-def _fingerprint(warnings: list[dict]) -> str:
-    return hashlib.sha256(json.dumps([[w["n"], w["name"], w["message"]] for w in warnings], ensure_ascii=False).encode("utf-8")).hexdigest()[:16]
-
-
-def _key(stage_id: str, aspect: str) -> str:
-    return f"{stage_id}{'_9x16' if aspect == '9:16' else ''}"
-
-
-def _acceptances(pdir: Path) -> dict:
-    try:
-        return json.loads((pdir / ACCEPTANCES).read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return {}
-
-
 # A stage whose own rules classify its warnings: the report field and the values that mean "only policy-permitted warnings remain" (still disclosed; errors always block).
 # Timeline Build: every warning is blocks_build=false (timeline_build.OK). Motion Validation: `ready_with_warnings`; `needs_review` is NOT in the list.
 POLICY_VERDICTS = {"timeline": ("status", ("completed_with_warnings",)), "motion_validation": ("readiness", ("ready_with_warnings",)),
                    "qc": ("status", ("passed", "passed_with_warnings"))}           # Final QC: only after its LLM decision approved the file and named every accepted warning
 
 
+def llm_issue(pdir: Path, stage_id: str, aspect: str) -> dict | None:
+    """The stage LLM review as an issue: None when the stage needs none or its review passed. Fail-closed: a missing, stale, blocked or `needs_review` review is an error."""
+    from SYSTEM.policies import llm_review
+    if not llm_review.review_required(stage_id):
+        return None
+    passed, reason, rev = llm_review.is_stage_review_passed(pdir, stage_id, aspect)
+    if passed:
+        return None
+    why = (rev or {}).get("summary") or ""
+    return {"n": None, "name": "LLM review", "severity": "error", "message": f"the stage LLM review did not pass ({reason})" + (f": {why[:200]}" if why else "")}
+
+
 def unresolved(pdir: Path, stage_id: str, aspect: str) -> list[dict]:
-    """The issues of a stage that still block the next one: every error, and the warnings unless the stage's own rules permit them or a person accepted exactly this warning list."""
+    """The issues of a stage that still block the next one: every error, the warnings unless the stage's own rules permit them, and a stage LLM review that did not pass."""
     issues = step_issues(pdir, stage_id, aspect)
     warnings = [i for i in issues if i["severity"] == "warning"]
     if warnings and len(warnings) == len(issues) and stage_id in POLICY_VERDICTS:
         field, ok = POLICY_VERDICTS[stage_id]
         if (report_steps(pdir, stage_id, aspect)[1] or {}).get(field) in ok:
-            return []
-    if warnings and _acceptances(pdir).get(_key(stage_id, aspect), {}).get("hash") == _fingerprint(warnings):
-        return [i for i in issues if i["severity"] != "warning"]
-    return issues
-
-
-def accept_warnings(pdir: Path, stage_id: str, aspect: str, note: str) -> dict:
-    """A person's recorded decision to continue with these exact warnings (never errors). Raises ValueError when there is nothing to accept or errors remain."""
-    issues = step_issues(pdir, stage_id, aspect)
-    if any(i["severity"] == "error" for i in issues):
-        raise ValueError("the stage still has errors; they cannot be accepted, only fixed")
-    warnings = [i for i in issues if i["severity"] == "warning"]
-    if not warnings:
-        raise ValueError("the stage has no warnings to accept")
-    if not note.strip():
-        raise ValueError("a note saying why these warnings are acceptable is required")
-    data = _acceptances(pdir)
-    data[_key(stage_id, aspect)] = {"hash": _fingerprint(warnings), "note": note.strip(), "at": time.time(), "warnings": len(warnings)}
-    tmp = pdir / (ACCEPTANCES + ".part")
-    tmp.write_text(json.dumps(data, indent=1, ensure_ascii=False), encoding="utf-8")
-    tmp.replace(pdir / ACCEPTANCES)
-    return data[_key(stage_id, aspect)]
+            issues = []
+    return issues + ([i] if (i := llm_issue(pdir, stage_id, aspect)) else [])
 
 
 def describe(issues: list[dict]) -> str:

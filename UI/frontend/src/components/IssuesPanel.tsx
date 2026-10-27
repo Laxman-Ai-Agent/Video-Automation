@@ -7,7 +7,6 @@ interface IssuesPanelProps {
   issues: PipelineIssue[];
   stageFilter?: string | null; // show only this stage's issues (opened from its card)
   onShowAll?: () => void;
-  onAcceptWarnings?: (stageId: string, stageLabel: string) => void; // a person's recorded decision to continue with a stage's step warnings
   onClose: () => void;
   onLocate: (stageId: string) => void;
 }
@@ -26,7 +25,7 @@ function ago(epochSeconds?: number | null): string {
   return `${Math.round(s / 3600)} h ago`;
 }
 
-export const IssuesPanel: React.FC<IssuesPanelProps> = ({ open, issues: allIssues, stageFilter, onShowAll, onAcceptWarnings, onClose, onLocate }) => {
+export const IssuesPanel: React.FC<IssuesPanelProps> = ({ open, issues: allIssues, stageFilter, onShowAll, onClose, onLocate }) => {
   if (!open) return null;
   const issues = stageFilter ? allIssues.filter((i) => i.stageId === stageFilter) : allIssues;
   const order = { error: 0, stuck: 1, warning: 2 };
@@ -82,16 +81,6 @@ export const IssuesPanel: React.FC<IssuesPanelProps> = ({ open, issues: allIssue
                 {i.code && (<><span style={{ color: 'var(--text-muted)' }}>Code</span><span style={{ color: 'var(--text-primary)', fontFamily: 'var(--font-mono)' }}>{i.code}</span></>)}
                 {i.attempts ? (<><span style={{ color: 'var(--text-muted)' }}>Attempt</span><span style={{ color: 'var(--text-primary)' }}>{i.attempts}{i.retryLimit ? ` of ${i.retryLimit}` : ''}</span></>) : null}
               </div>
-              {i.stageId && onAcceptWarnings && i.severity === 'warning' && i.source.startsWith('step report') && (
-                <button
-                  onClick={() => onAcceptWarnings(i.stageId as string, i.stageLabel)}
-                  data-testid={`accept-warnings-${i.stageId}`}
-                  title="Record that you accept this stage's current warnings so the next stage may start"
-                  style={{ marginTop: '10px', marginRight: '8px', height: '28px', padding: '0 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', color: '#FBBF24', backgroundColor: 'rgba(245, 158, 11, 0.12)', border: '1px solid rgba(245, 158, 11, 0.45)' }}
-                >
-                  Accept this stage's warnings…
-                </button>
-              )}
               {i.stageId && (
                 <button
                   onClick={() => onLocate(i.stageId as string)}

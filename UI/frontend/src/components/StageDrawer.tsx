@@ -218,7 +218,6 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
           renderVideo={drawerData.renderVideo}
           onRunStage={onRunStage}
           onRetryStage={onRetryStage}
-          handleApproveTimeline={drawerData.handleApproveTimeline}
           setActiveTab={setActiveTab}
         />
       </div>

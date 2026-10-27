@@ -512,17 +512,6 @@ def run_motion_generation(pid: str):
 
 
 # ---------- Motion & Timeline Validation, Stage 10 (read-only: the report is a view, the buttons are the only starts; no route here builds a timeline or renders) ----------
-class ExceptionBody(BaseModel):
-    decision_by: str
-    reason: str
-    applies_to_fingerprint: str
-
-
-class ReviewBody(BaseModel):
-    level: str
-    by: str
-
-
 def _validation(pid: str):
     from .. import motion_validation
     pdir = store.project_dir(pid)
@@ -579,45 +568,6 @@ def get_motion_validation_preview_frame(pid: str, name: str):
     if not re.fullmatch(r"[A-Za-z0-9_.-]+\.png", name) or not f.is_file():
         raise ApiError(404, "not_found", "no such preview frame", "generate the preview first")
     return FileResponse(f, media_type="image/png")
-
-
-@router.post("/motion-timeline-validation/findings/{finding_id}/exception")
-def accept_motion_validation_finding(pid: str, finding_id: str, body: ExceptionBody):
-    """Record an explicit exception for ONE finding: who decides, why, and the exact fingerprint of the report it applies to. Only a missing required visual or a review warning can be accepted;
-    an error or another blocker is fixed in its owner stage. It never edits an artifact and the finding stays technically unresolved (status accepted_for_version)."""
-    mv, pdir, aspect = _validation(pid)
-    _idle(pid)                                                     # the report is rewritten: not while a job writes it
-    try:
-        rec = mv.record_exception(pdir, aspect, finding_id, body.decision_by, body.reason, body.applies_to_fingerprint)
-    except mv.ValidationError as e:
-        raise ApiError(409, "exception_refused", str(e), "validate again, or fix it in the owner stage") from e
-    return {"exception": rec, "report": mv.load(pdir, aspect)}
-
-
-@router.delete("/motion-timeline-validation/exceptions/{exception_id}")
-def withdraw_motion_validation_exception(pid: str, exception_id: str):
-    """Withdraw an exception (the record stays in the ledger, marked revoked)."""
-    mv, pdir, aspect = _validation(pid)
-    _idle(pid)
-    try:
-        mv.revoke_exception(pdir, aspect, exception_id)
-    except mv.ValidationError as e:
-        raise ApiError(404, "not_found", str(e), "see the exceptions of the report") from e
-    return mv.load(pdir, aspect)
-
-
-@router.post("/motion-timeline-validation/preview/review")
-def review_motion_validation_preview(pid: str, body: ReviewBody):
-    """A person says they looked at the preview stills (`stills`) or watched the moving video with its audio (`playback`). Recorded with name, time and the composition it applies to; it is not a check."""
-    from .. import motion_validation_preview as pv
-    mv, pdir, aspect = _validation(pid)
-    _idle(pid)
-    try:
-        rec = pv.review(pdir, aspect, body.level, body.by)
-        mv.run(pdir, aspect)                                       # stage 11 and the gate read the review: the report is made again (unchanged stages are reused)
-    except mv.ValidationError as e:
-        raise ApiError(409, "review_refused", str(e), "generate the preview first") from e
-    return {"review": rec, "report": mv.load(pdir, aspect)}
 
 
 @router.post("/motion-planning/fix-warnings", response_model=JobStarted, status_code=202)
@@ -777,25 +727,6 @@ def run_timeline_build(pid: str):
 
 
 # ---------- Timeline Approval, Stage 12 (an explicit human decision about ONE exact timeline version; opening, previewing or having no errors approves nothing; no route here renders) ----------
-class DecisionBody(BaseModel):
-    decision: str
-    review_id: str
-    expected_fingerprint: str
-    decision_by: str
-    idempotency_key: str
-    warning_acknowledgements: list[dict] = []
-    notes: list[str] = []
-    comments: list[dict] = []
-
-
-class NoteBody(BaseModel):
-    text: str
-    expected_fingerprint: str
-    decision_by: str
-    scene_id: str | None = None
-    time_seconds: float | None = None
-
-
 def _approval(pid: str):
     from .. import timeline_approval
     pdir = store.project_dir(pid)
@@ -822,40 +753,6 @@ def prepare_timeline_review(pid: str):
         return ta.prepare_review(pdir, aspect)
     except ta.ApprovalError as e:
         raise ApiError(409, e.code, str(e), "; ".join(e.blockers) or "see the approval record") from e
-
-
-@router.post("/timeline-approval/decision")
-def decide_timeline(pid: str, body: DecisionBody):
-    """Record Approve / Request Changes / Withdraw for the version the person reviewed (`expected_fingerprint`, `review_id`). Success only after the record was written AND read back. A changed version, a missing
-    acknowledgement, a blocker or a job that is running refuses it and records nothing; the same `idempotency_key` returns the same outcome. It never starts a job."""
-    ta, pdir, aspect = _approval(pid)
-    try:
-        res = ta.decide(pdir, aspect, body.model_dump())
-        if body.decision == "approved":
-            llm_review.run_stage_llm_review(pdir, aspect=aspect, stage="approval")
-            if not jobs.is_running(pid):
-                try:
-                    why = timeline_gate.render_blockers(pdir, aspect)
-                    if not why:
-                        label = "build-9x16" if aspect == "9:16" else "build"
-                        jobs.start(pid, label, chain_for(pdir, label), Ctx(preview=False))
-                except Exception:
-                    pass
-        return res
-    except ta.ApprovalError as e:
-        code = 409 if e.code != "invalid_decision" else 422
-        raise ApiError(code, e.code, str(e), "; ".join(e.blockers[:8]) or "reload the page and review the current version") from e
-
-
-@router.post("/timeline-approval/notes")
-def add_timeline_review_note(pid: str, body: NoteBody):
-    """A review note about the current version (scene / timecode optional). It decides nothing."""
-    ta, pdir, aspect = _approval(pid)
-    _idle(pid)
-    try:
-        return ta.add_note(pdir, aspect, body.model_dump())
-    except ta.ApprovalError as e:
-        raise ApiError(409 if e.code != "invalid_decision" else 422, e.code, str(e), "reload the page and review the current version") from e
 
 
 # ---------- Render Video, Stage 13 (the start is POST /render below; these read its state and stop it) ----------
@@ -1234,21 +1131,6 @@ def get_stage_subtasks(pid: str, stage_id: str):
             calls[kind] = calls.get(kind, 0) + 1
     return {"stage_id": stage_id, "report": report, "written": written, "steps": steps, "llm_review": review, "llm_calls": calls,
             "llm_checks_running": checks["running"], "active_step": active_step, "active_model": active_model, "overall_progress": overall_progress}
-
-
-class AcceptWarningsBody(BaseModel):
-    note: str
-
-
-@router.post("/stages/{stage_id}/accept-warnings")
-def accept_stage_warnings(pid: str, stage_id: str, body: AcceptWarningsBody):
-    """A person's recorded decision to let the next stage start with this stage's current warnings (bound to exactly these warnings; errors can never be accepted)."""
-    from VIDEO_ENGINE.pipeline import stage_gate
-    pdir = store.project_dir(pid)
-    try:
-        return stage_gate.accept_warnings(pdir, stage_id, pipeline_view.aspect_of(pdir), body.note)
-    except ValueError as e:
-        raise ApiError(409, "cannot_accept", str(e)) from e
 
 
 @router.post("/stages/{stage_id}/subtasks/llm-check", status_code=202)

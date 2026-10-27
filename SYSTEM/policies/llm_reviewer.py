@@ -32,7 +32,6 @@ def ask_reviewer(
     input_fingerprint: str | None = None,
     artifact_refs: list[dict[str, str]] | None = None,
     metadata: dict[str, Any] | None = None,
-    auto_pilot: bool = False,
 ) -> dict[str, Any]:
     """The one LLM reviewer call: returns status, score, summary, findings, provider, model, latency_ms, error.
     Fails closed: an unavailable LLM or a malformed answer is status='blocked' with a blocker finding."""
@@ -110,9 +109,6 @@ def ask_reviewer(
         status_val = "blocked"
     elif any(f.get("severity") == "error" for f in findings) and status_val == "passed":
         status_val = "needs_review"
-    elif auto_pilot and status_val == "needs_review" and not any(f.get("severity") in ("blocker", "error") for f in findings):
-        status_val = "passed"
-        score = max(score, 0.85)
     return {
         "status": status_val,
         "score": score,

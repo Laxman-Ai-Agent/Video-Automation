@@ -7,7 +7,7 @@ import { IssuesPanel } from './components/IssuesPanel';
 import { PipelinePillBar, PipelineTabType } from './components/layout/PipelinePillBar';
 import { useSystemHealth } from './hooks/useSystemHealth';
 import { useProjectPipeline } from './hooks/useProjectPipeline';
-import { createProject, fetchProjects, fetchLlmHealth, acceptStageWarnings } from './services/api';
+import { createProject, fetchProjects, fetchLlmHealth } from './services/api';
 
 // Lazy-loaded secondary pages to minimize initial bundle size and speed up page load
 const ProjectsPage = lazy(() => import('./pages/ProjectsPage').then(m => ({ default: m.ProjectsPage })));
@@ -150,13 +150,6 @@ export const App: React.FC = () => {
           issues={issues}
           stageFilter={issuesStage}
           onShowAll={() => setIssuesStage(null)}
-          onAcceptWarnings={async (stageId, stageLabel) => {
-            const note = window.prompt(`Accept current warnings of "${stageLabel}" and let next stage start?\n\nThis records your decision for exactly these warnings. Reason:`);
-            if (!note || !note.trim()) return;
-            const r = await acceptStageWarnings(activeProjectId, stageId, note);
-            if (!r.ok) window.alert(`Not recorded: ${r.message}`);
-            loadState();
-          }}
           onClose={() => setIssuesOpen(false)}
           onLocate={(stageId) => {
             setIssuesOpen(false);

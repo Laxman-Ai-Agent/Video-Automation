@@ -21,9 +21,10 @@ def test_the_catalog_lists_every_rule_of_every_stage_once():
     ids = [(r["stage"], r["rule"]) for r in cat]
     assert len(ids) == len(set(ids)) and len(ids) > 300
     stages = {r["stage"] for r in cat}
-    assert stages == {"planning", "motion_plan", "motion_gen", "motion_validation", "timeline", "render", "qc", "assets"}
+    assert stages == {"analyzer", "segmentation", "planning", "motion_plan", "motion_gen", "motion_validation", "timeline", "render", "qc", "assets"}        # analyzer / segmentation only have their LLM review switch
     assert ("planning", "hierarchy") in ids and ("motion_validation", "animation.no_untrusted_execution") in ids and ("assets", "asset_provenance") in ids and ("qc", "QC_ASSETS_PROVENANCE") in ids
     assert all(r["says"] for r in cat)
+    assert {r["stage"] for r in cat if r["rule"] == "llm_review"} == {"analyzer", "segmentation", "planning", "motion_gen"}      # the four reviews that can be switched off; Approval and Final QC cannot
 
 
 def test_a_rule_that_is_off_is_never_evaluated_by_its_stage(tmp_path):

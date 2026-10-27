@@ -541,7 +541,7 @@ def stage_view(pdir: Path, aspect: str, percent: float | None = None) -> dict:
         return dict(id="render", label=label, status="running", detail=f"{(job.get('phase') or 'rendering').replace('_', ' ')}: {job.get('frames_done', 0)} of {job.get('frames_total') or '?'} frames", percent=percent, action=open_it)
     if n == "completed":
         more = f" (the newest attempt {job.get('status')}: {job.get('error') or 'no detail'}; the video above is the last good one)" if s["last_attempt_failed"] else ""
-        return dict(id="render", label=label, status="completed", detail=f"{s['output']['name']} rendered, verified and published; Final QC has not judged it yet{more}", action=open_it)
+        return dict(id="render", label=label, status="completed", detail=f"{s['output']['name']} rendered, verified and published{more}", action=open_it)
     if n == "stale":
         return dict(id="render", label=label, status="queued", detail="the approved timeline changed since this video was rendered: render again", action=open_it)
     if n in ("failed", "cancelled", "interrupted"):

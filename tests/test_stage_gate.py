@@ -17,6 +17,13 @@ def _report(pdir: Path, stage_file: str, steps: list[tuple[str, str]]) -> None:
     (pdir / stage_file).write_text(json.dumps({"stages": [{"n": i + 1, "name": f"Step {i + 1}", "status": st, "detail": d} for i, (st, d) in enumerate(steps)]}), encoding="utf-8")
 
 
+@pytest.fixture(autouse=True)
+def reviews_pass(monkeypatch):
+    """These tests are about the stages' own warnings and errors: the stage LLM reviews pass, except in the tests that are about the review itself."""
+    from SYSTEM.policies import llm_review
+    monkeypatch.setattr(llm_review, "is_stage_review_passed", lambda *a, **k: (True, "passed", {}))
+
+
 @pytest.fixture
 def pdir(tmp_path: Path) -> Path:
     p = tmp_path / "proj_gate"
@@ -35,27 +42,36 @@ def test_warning_and_error_steps_are_unresolved(pdir):
     assert [(i["name"], i["severity"]) for i in issues] == [("Step 2", "warning"), ("Step 3", "error")]
 
 
-def test_errors_can_never_be_accepted(pdir):
-    _report(pdir, "motion_planning.json", [("warning", "w"), ("failed", "e")])
-    with pytest.raises(ValueError):
-        stage_gate.accept_warnings(pdir, "motion_plan", "16:9", "ship it")
-
-
-def test_accepting_needs_a_note_and_something_to_accept(pdir):
-    _report(pdir, "motion_planning.json", [("warning", "w")])
-    with pytest.raises(ValueError):
-        stage_gate.accept_warnings(pdir, "motion_plan", "16:9", "   ")
-    _report(pdir, "motion_generation.json", [("completed", "ok")])
-    with pytest.raises(ValueError):
-        stage_gate.accept_warnings(pdir, "motion_gen", "16:9", "nothing to accept")
-
-
-def test_acceptance_is_bound_to_exactly_these_warnings(pdir):
+def test_nobody_can_accept_a_warning(pdir):
+    """No person decides anything at the gate: there is no acceptance, an old acceptance file changes nothing, only the stage's own fixer clears a warning."""
+    assert not hasattr(stage_gate, "accept_warnings")
     _report(pdir, "motion_planning.json", [("warning", "scene_01 overlaps")])
-    stage_gate.accept_warnings(pdir, "motion_plan", "16:9", "library has no primitive")
-    assert stage_gate.unresolved(pdir, "motion_plan", "16:9") == []
-    _report(pdir, "motion_planning.json", [("warning", "scene_01 overlaps"), ("warning", "a NEW warning")])      # the report changed: the old decision does not cover it
-    assert len(stage_gate.unresolved(pdir, "motion_plan", "16:9")) == 2
+    (pdir / "stage_warning_acceptances.json").write_text(json.dumps({"motion_plan": {"hash": "anything", "note": "ship it"}}), encoding="utf-8")
+    assert [i["severity"] for i in stage_gate.unresolved(pdir, "motion_plan", "16:9")] == ["warning"]
+
+
+def test_a_stage_that_needs_an_llm_review_is_unresolved_until_it_passed(pdir, monkeypatch):
+    from SYSTEM.policies import llm_review
+    _report(pdir, "motion_generation.json", [("completed", "ok")])
+    verdict = {"v": (False, "llm_review_missing", None)}
+    monkeypatch.setattr(llm_review, "is_stage_review_passed", lambda *a, **k: verdict["v"])
+    issues = stage_gate.unresolved(pdir, "motion_gen", "16:9")
+    assert [(i["name"], i["severity"]) for i in issues] == [("LLM review", "error")] and "llm_review_missing" in issues[0]["message"]
+    verdict["v"] = (False, "llm_review_needs_review", {"summary": "scene 3 looks empty"})                 # a review that wants something looked at is not a pass
+    assert "scene 3 looks empty" in stage_gate.unresolved(pdir, "motion_gen", "16:9")[0]["message"]
+    verdict["v"] = (True, "passed", {})
+    assert stage_gate.unresolved(pdir, "motion_gen", "16:9") == []
+
+
+def test_stages_without_an_llm_review_and_switched_off_ones_never_wait_for_it(pdir, monkeypatch):
+    from SYSTEM.policies import llm_review, rule_switches
+    monkeypatch.setattr(llm_review, "is_stage_review_passed", lambda *a, **k: (False, "llm_review_missing", None))
+    _report(pdir, "motion_planning.json", [("completed", "ok")])
+    assert stage_gate.unresolved(pdir, "motion_plan", "16:9") == []                                          # decided by its own deterministic checks
+    _report(pdir, "motion_generation.json", [("completed", "ok")])
+    monkeypatch.setattr(rule_switches, "is_off", lambda stage, rule: (stage, rule) == ("motion_gen", "llm_review"))
+    assert stage_gate.unresolved(pdir, "motion_gen", "16:9") == []                                           # switched off on the Rules page
+    assert llm_review.review_required("approval") and llm_review.review_required("qc")                        # these two ARE an LLM decision: no switch
 
 
 def _state(**stage_status: str):
@@ -71,14 +87,6 @@ def test_orchestrator_blocks_next_stage_then_resumes(pdir, monkeypatch):
     assert any("motion_plan" in b and "unresolved" in b for b in blocked["blockers"])
 
     _report(pdir, "motion_planning.json", [("completed", "ok"), ("completed", "fixed")])                         # the issue is resolved by the stage itself
-    assert orchestrator.evaluate_stage_eligibility(pdir, "motion_gen", "16:9")["eligible"] is True
-
-
-def test_orchestrator_resumes_after_a_person_accepts_the_warnings(pdir, monkeypatch):
-    monkeypatch.setattr(orchestrator.pipeline_state, "load_pipeline_state", lambda _p: _state(motion_plan="completed"))
-    _report(pdir, "motion_planning.json", [("warning", "scene_01 overlaps")])
-    assert orchestrator.evaluate_stage_eligibility(pdir, "motion_gen", "16:9")["eligible"] is False
-    stage_gate.accept_warnings(pdir, "motion_plan", "16:9", "reviewed, harmless")
     assert orchestrator.evaluate_stage_eligibility(pdir, "motion_gen", "16:9")["eligible"] is True
 
 
@@ -198,7 +206,7 @@ def test_a_stage_with_unresolved_warnings_keeps_the_next_one_waiting_not_blocked
 
 def _orch(pdir: Path):
     o = object.__new__(orchestrator.PipelineOrchestrator)
-    o.pdir, o.aspect, o.project_id, o.auto_pilot_mode = pdir, "16:9", "proj_gate", False
+    o.pdir, o.aspect, o.project_id = pdir, "16:9", "proj_gate"
     return o
 
 

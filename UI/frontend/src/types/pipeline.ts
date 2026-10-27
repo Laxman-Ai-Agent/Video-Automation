@@ -83,7 +83,6 @@ export interface PipelineProjectState {
   projectId: string;
   title: string;
   aspectRatio: '16:9' | '9:16';
-  autoPilot: boolean;
   overallProgress: number;
   currentStageId: string;
   status: 'idle' | 'running' | 'completed' | 'failed' | 'paused';

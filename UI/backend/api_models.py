@@ -234,11 +234,6 @@ class CropResult(BaseModel):
     crop: CropValue | None
 
 
-class ApproveRequest(BaseModel):
-    gate: GateName
-    approved: bool = True
-
-
 class RunRequest(BaseModel):
     stage: Literal["timeline", "preview", "final"]
     aspect: Aspect = "9:16"

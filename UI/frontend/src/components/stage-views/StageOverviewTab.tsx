@@ -38,7 +38,6 @@ export interface StageOverviewTabProps {
   actionLoading: boolean;
   renderVideo?: any;
   onRetryStage?: (id: string) => void;
-  handleApproveTimeline: (decision: 'approved' | 'changes_requested') => void;
   setActiveTab: (tab: any) => void;
 }
 
@@ -62,7 +61,6 @@ export const StageOverviewTab: React.FC<StageOverviewTabProps> = ({
   actionLoading,
   renderVideo,
   onRetryStage,
-  handleApproveTimeline,
   setActiveTab,
 }) => {
   return (
@@ -244,47 +242,8 @@ export const StageOverviewTab: React.FC<StageOverviewTabProps> = ({
               </div>
             )}
 
-            <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-              <button
-                onClick={() => handleApproveTimeline('approved')}
-                disabled={actionLoading}
-                style={{
-                  flex: 1,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '6px',
-                  padding: '10px 16px',
-                  backgroundColor: 'var(--status-completed)',
-                  color: '#FFFFFF',
-                  border: 'none',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '12.5px',
-                  fontWeight: 700,
-                  cursor: actionLoading ? 'not-allowed' : 'pointer',
-                  opacity: actionLoading ? 0.7 : 1
-                }}
-              >
-                <Check size={14} />
-                Approve Timeline
-              </button>
-
-              <button
-                onClick={() => handleApproveTimeline('changes_requested')}
-                disabled={actionLoading}
-                style={{
-                  padding: '10px 16px',
-                  backgroundColor: 'transparent',
-                  color: 'var(--text-secondary)',
-                  border: '1px solid var(--border-card)',
-                  borderRadius: 'var(--radius-sm)',
-                  fontSize: '12.5px',
-                  fontWeight: 600,
-                  cursor: actionLoading ? 'not-allowed' : 'pointer'
-                }}
-              >
-                Request Changes
-              </button>
+            <div style={{ fontSize: '12px', color: 'var(--text-muted)', fontWeight: 600 }}>
+              The LLM approval review decides this timeline automatically; nobody has to approve it.
             </div>
           </div>
         )}

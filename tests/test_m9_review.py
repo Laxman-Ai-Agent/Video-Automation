@@ -34,13 +34,18 @@ def get(c, pid):
     return r.json()
 
 
+def set_gate(pid, gate):
+    """The gates are set by the pipeline itself (`/continue`), there is no route a person approves them through: the tests call the function."""
+    from backend import store
+    return review.set_gate(store.project_dir(pid), gate, True)
+
+
 def approve_all(c, pid, upto="images"):
     order = ("analysis", "prompts", "images")
     for gate in order[: order.index(upto) + 1]:
         if gate == "prompts":
             assert c.post(f"/projects/{pid}/prompts/approve", json={}).status_code == 200
-        r = c.post(f"/projects/{pid}/approve", json={"gate": gate})
-        assert r.status_code == 200, r.text
+        set_gate(pid, gate)
 
 
 # ---- Phase 1: the scene table ----
@@ -60,20 +65,24 @@ def test_without_a_plan_the_review_is_empty_and_nothing_can_be_approved(client):
     pid = create(client).json()["id"]
     r = get(client, pid)
     assert r["plan_ready"] is False and r["analysis"]["status"] == "empty" and r["analysis"]["scenes"] == [] and r["prompts"] == []
-    refused = client.post(f"/projects/{pid}/approve", json={"gate": "analysis"})
-    assert refused.status_code == 409 and refused.json()["error"]["code"] == "not_allowed" and "plan" in refused.json()["error"]["hint"]
+    with pytest.raises(review.ReviewError) as refused:
+        set_gate(pid, "analysis")
+    assert "cannot be approved" in str(refused.value) and any("plan" in b for b in refused.value.blockers)
 
 
 # ---- Phase 3: prompt edit, approval, regenerate request ----
 # ---- Phase 5: gates ----
 def test_gates_must_be_approved_in_order_and_say_what_blocks_them(proj):
     c, pid, _ = proj
-    r = c.post(f"/projects/{pid}/approve", json={"gate": "prompts"})
-    assert r.status_code == 409 and "analysis" in r.json()["error"]["message"]
-    assert c.post(f"/projects/{pid}/approve", json={"gate": "analysis"}).status_code == 200
-    r = c.post(f"/projects/{pid}/approve", json={"gate": "prompts"})
-    assert r.status_code == 409 and "not approved" in r.json()["error"]["hint"]
-    assert c.post(f"/projects/{pid}/approve", json={"gate": "bogus"}).status_code == 422
+    with pytest.raises(review.ReviewError) as e:
+        set_gate(pid, "prompts")
+    assert "analysis" in str(e.value)
+    set_gate(pid, "analysis")
+    with pytest.raises(review.ReviewError) as e:
+        set_gate(pid, "prompts")
+    assert any("not approved" in b for b in e.value.blockers)
+    with pytest.raises(review.ReviewError):
+        set_gate(pid, "bogus")
 
 
 # ---- Phase 4: crops ----

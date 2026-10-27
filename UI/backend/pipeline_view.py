@@ -78,13 +78,12 @@ def _enrich_stages_with_timings(pdir: Path, stages: list[dict], pid: str) -> lis
             s["detail"] = f"waits for '{prev['label']}' to complete ({why})"
         prev_issues = stage_gate.unresolved(pdir, s["id"], aspect) if s["status"] in ("completed", "failed") else []
         prev = s
-    for s in stages:                                                                # the card shows "LLM verified" only when the stage's stored LLM review passed
+    for s in stages:                                                                # "LLM verified" is the stage's stored review having PASSED; a stage without an LLM review (decided by its own checks) has none: null
+        if not llm_review.review_required(s["id"]):
+            s["llm_verified"] = None
+            continue
         try:
-            passed, reason, rev = llm_review.is_stage_review_passed(pdir, s["id"], aspect)
-            if not passed and rev and rev.get("status") in ("passed", "needs_review") and float(rev.get("score") or 0) >= 0.7:
-                s["llm_verified"] = True
-            else:
-                s["llm_verified"] = bool(passed)
+            s["llm_verified"] = bool(llm_review.is_stage_review_passed(pdir, s["id"], aspect)[0])
         except Exception:
             s["llm_verified"] = False
 
@@ -177,6 +176,9 @@ def build(pid: str) -> dict:
     use_images = store.uses_images(pdir)
     job, running, disk = jobs.current(pid), jobs.is_running(pid), _job(pdir)
     step = (job.step if job and job.step else disk.get("step")) or ""
+    sfx = "-9x16" if aspect == "9:16" else ""
+    plan_step, build_step = motion_branch.names(aspect)
+    step = {"analyzer": "transcribe", "motion_plan": plan_step, "motion_gen": build_step, "motion_validation": f"motion-validation{sfx}", "timeline": f"timeline-build{sfx}"}.get(step, step)       # the orchestrator names the step after the stage it has just started, before the stage's own step begins
     failed_step = None if running else ((job.error if job else None) or disk.get("error"))
     has = lambda n: (pdir / n).exists()
     gen = promptgen.state(pdir) if has("scene_plan.json") or has("transcript.json") else {"state": "idle"}

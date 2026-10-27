@@ -3,7 +3,7 @@ from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
 from .. import jobs, promptgen, review, store, timeline_gate, video_qc
-from ..api_models import (ApproveRequest, CropRequest, CropResult, Gate, JobStarted, QcReport, ReviewState, RunRequest)
+from ..api_models import (CropRequest, CropResult, Gate, JobStarted, QcReport, ReviewState, RunRequest)
 from ..errors import ApiError
 from ..pipeline import Ctx, chain_for
 from .uploads import safe_name
@@ -50,22 +50,6 @@ def set_crop(pid: str, n: int, body: CropRequest):
     except review.ReviewError as e:
         raise ApiError(422, "invalid_crop", str(e)) from e
     return CropResult(n=n, aspect=body.aspect, crop={**saved, "stale": False})
-
-
-@router.post("/approve", response_model=Gate)
-def approve(pid: str, body: ApproveRequest):
-    pdir = _pdir(pid)
-    _busy(pid)
-    try:
-        gate = review.set_gate(pdir, body.gate, body.approved)
-    except review.ReviewError as e:
-        raise _refused(e) from e
-    if body.gate == "analysis" and body.approved:      # approving the analysis is what starts the prompt writer; it never runs before
-        try:
-            promptgen.start(pdir)
-        except review.ReviewError:
-            pass                                       # already running: the approval stands, the state shows the running job
-    return gate
 
 
 @router.post("/run", response_model=JobStarted, status_code=202)

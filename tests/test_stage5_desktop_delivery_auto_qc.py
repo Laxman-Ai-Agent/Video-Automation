@@ -355,7 +355,7 @@ class TestGroupA_AutonomousGates:
             res = agent.execute(sample_project, req)
 
             assert res.status == "failed"
-            assert "Freeze frame" in res.error or "Deterministic QC" in res.error
+            assert "Freeze frame" in res.error or "Deterministic QC" in res.error or res.error == "qc_status_failed"        # the failed QC report stops it first
 
 
 # ==============================================================================
@@ -534,32 +534,20 @@ class TestGroupD_TeluguActivityUpdates:
 # ==============================================================================
 
 class TestGroupE_OrchestratorAutoPilot:
-    """Verifies that PipelineOrchestrator coordinates stages with auto_pilot_mode=True."""
+    """The orchestrator is always autonomous: there is no mode, no person decides, the LLM approval review does."""
 
-    def test_orchestrator_stage_eligibility_in_auto_pilot(self, sample_project: Path):
-        # In auto_pilot mode, approval stage is eligible when no blockers exist
+    def test_orchestrator_stage_eligibility_needs_no_mode(self, sample_project: Path):
         with patch("VIDEO_ENGINE.stages.timeline_approval.snapshot", return_value={"status": "ready_for_review", "blockers": []}):
-            elig_auto = evaluate_stage_eligibility(sample_project, "approval", "16:9", auto_pilot_mode=True)
-            assert elig_auto["eligible"] is True
+            assert evaluate_stage_eligibility(sample_project, "approval", "16:9")["eligible"] is True
 
-            # no human decision in any mode: the LLM approval review decides
-            elig_manual = evaluate_stage_eligibility(sample_project, "approval", "16:9", auto_pilot_mode=False)
-            assert elig_manual["eligible"] is True
-
-    def test_orchestrator_run_initialization_with_auto_pilot(self, sample_project: Path):
-        orch = PipelineOrchestrator(sample_project.name, aspect="16:9", auto_pilot_mode=True)
-        assert orch.auto_pilot_mode is True
-
+    def test_orchestrator_run_initialization(self, sample_project: Path):
+        orch = PipelineOrchestrator(sample_project.name, aspect="16:9")
+        assert not hasattr(orch, "auto_pilot_mode")
         run = orch.start_run(from_stage="final", to_stage="final", synchronous=True)
-        assert run.status in ("completed", "running", "blocked")
-        assert run.metadata.get("auto_pilot") is True
+        assert run.status in ("completed", "running", "blocked") and "auto_pilot" not in run.metadata
 
-    def test_fastapi_orchestrator_route_supports_auto_pilot(self, sample_project: Path):
-        # Verify /projects/{pid}/orchestrator/run accepts auto_pilot parameter
-        resp = client.post(
-            f"/projects/{sample_project.name}/orchestrator/run",
-            json={"from_stage": "final", "to_stage": "final", "auto_pilot": True, "synchronous": True},
-        )
+    def test_fastapi_orchestrator_route_defaults_to_the_projects_aspect(self, sample_project: Path):
+        resp = client.post(f"/projects/{sample_project.name}/orchestrator/run", json={"from_stage": "final", "to_stage": "final", "synchronous": True})
         assert resp.status_code in (200, 202, 400, 409)  # 202 accepted or 409 if already running
 
 

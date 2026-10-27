@@ -336,12 +336,14 @@ def api_project(c):
 
 
 def accept_all(c, pid, rep):
+    """Test helper only: no route lets a person accept a finding any more; the ledger function is called directly (it has no production caller)."""
+    from backend import pipeline_view, store
+    pdir = store.project_dir(pid)
     for f in [f for f in rep["findings"] if f["exceptionable"] and f["status"] == "unresolved"]:
-        r = c.post(f"/projects/{pid}/motion-timeline-validation/findings/{f['finding_id']}/exception", json={"decision_by": "Asha", "reason": REASON, "applies_to_fingerprint": rep["source_fingerprint"]})
-        assert r.status_code == 200, r.text
+        mv.record_exception(pdir, pipeline_view.aspect_of(pdir), f["finding_id"], "Asha", REASON, rep["source_fingerprint"])
 
 
-def test_the_api_reports_runs_accepts_withdraws_and_never_starts_a_build(client):
+def test_the_api_reports_and_runs_and_never_starts_a_build_and_has_no_route_to_accept_a_finding(client):
     c = client
     pid, pdir = api_project(c)
     r = c.get(f"/projects/{pid}/motion-timeline-validation")
@@ -355,20 +357,9 @@ def test_the_api_reports_runs_accepts_withdraws_and_never_starts_a_build(client)
     assert rep["phase_status"] == "completed" and rep["stale"] is False and len(rep["stages"]) == 12 and rep["readiness"] in ("ready", "needs_review", "ready_with_warnings", "blocked")
     assert not (pdir / "out.mp4").exists() and _mo.stages(c, pid)["timeline"]["status"] == "queued"            # validation never builds the timeline or renders
     assert _mo.stages(c, pid)["motion_validation"]["status"] == {"ready": "completed", "needs_review": "waiting_for_approval", "ready_with_warnings": "completed", "blocked": "failed"}[rep["readiness"]]
-    err = next((f for f in rep["findings"] if f["severity"] in ("error", "blocker") and not f["exceptionable"]), None)
-    if err:
-        r = c.post(f"/projects/{pid}/motion-timeline-validation/findings/{err['finding_id']}/exception", json={"decision_by": "Asha", "reason": REASON, "applies_to_fingerprint": rep["source_fingerprint"]})
-        assert r.status_code == 409 and r.json()["error"]["code"] == "exception_refused"
-    for f in [f for f in rep["findings"] if f["exceptionable"] and f["status"] == "unresolved"][:1]:
-        r = c.post(f"/projects/{pid}/motion-timeline-validation/findings/{f['finding_id']}/exception", json={"decision_by": "Asha", "reason": REASON, "applies_to_fingerprint": "wrong"})
-        assert r.status_code == 409
-    accept_all(c, pid, rep)
-    after = c.get(f"/projects/{pid}/motion-timeline-validation").json()
-    if after["exceptions"]:
-        eid = after["exceptions"][0]["exception_id"]
-        assert c.delete(f"/projects/{pid}/motion-timeline-validation/exceptions/{eid}").status_code == 200
-        assert c.delete(f"/projects/{pid}/motion-timeline-validation/exceptions/{eid}").status_code == 404
-    assert c.post(f"/projects/{pid}/motion-timeline-validation/preview/review", json={"level": "stills", "by": "Asha"}).status_code == 200      # the run made its own preview stills
+    for f in rep["findings"][:1]:                                                                              # no route lets a person accept a finding or say they looked at the preview
+        assert c.post(f"/projects/{pid}/motion-timeline-validation/findings/{f['finding_id']}/exception", json={"decision_by": "Asha", "reason": REASON, "applies_to_fingerprint": rep["source_fingerprint"]}).status_code in (404, 405)
+    assert c.post(f"/projects/{pid}/motion-timeline-validation/preview/review", json={"level": "stills", "by": "Asha"}).status_code in (404, 405)
     assert c.get(f"/projects/{pid}/motion-timeline-validation/preview/nothing.png").status_code == 404
     assert c.get(f"/projects/{pid}/motion-timeline-validation/preview/..%2Fproject.json").status_code in (404, 422)
     assert c.get("/projects/no-such-project/motion-timeline-validation").status_code == 404

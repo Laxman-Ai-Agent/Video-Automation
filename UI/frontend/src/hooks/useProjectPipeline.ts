@@ -30,7 +30,6 @@ export function useProjectPipeline({
     projectId: 'sample-01',
     title: 'Telugu Audio-to-Video Production',
     aspectRatio: '16:9',
-    autoPilot: true,
     overallProgress: 0,
     currentStageId: 'audio',
     status: 'idle',
@@ -151,7 +150,7 @@ export function useProjectPipeline({
 
   const handleStartRun = async () => {
     try {
-      await startProjectRun(activeProjectId, true);
+      await startProjectRun(activeProjectId);
       setProjectState((prev) => ({ ...prev, status: 'running' }));
       setTimeout(loadState, 600);
     } catch (e) {
@@ -204,7 +203,7 @@ export function useProjectPipeline({
     }));
 
     try {
-      await startProjectRun(newId, true);
+      await startProjectRun(newId);
     } catch (runErr) {
       console.warn('Pipeline run started with background monitoring:', runErr);
     }

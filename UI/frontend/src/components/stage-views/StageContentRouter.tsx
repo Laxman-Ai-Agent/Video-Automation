@@ -66,7 +66,6 @@ export interface StageContentRouterProps {
   renderVideo: any;
   onRunStage?: (stageId: string) => void;
   onRetryStage?: (stageId: string) => void;
-  handleApproveTimeline: (decision: 'approved' | 'changes_requested') => Promise<void>;
   setActiveTab: (t: 'overview' | 'scenes' | 'subtasks' | 'agent' | 'artifacts' | 'logs' | 'about') => void;
 }
 
@@ -116,7 +115,6 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
   renderVideo,
   onRunStage,
   onRetryStage,
-  handleApproveTimeline,
   setActiveTab
 }) => {
   return (
@@ -215,7 +213,6 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
           actionLoading={actionLoading}
           renderVideo={renderVideo}
           onRetryStage={onRetryStage}
-          handleApproveTimeline={handleApproveTimeline}
           setActiveTab={setActiveTab}
         />
       )}
