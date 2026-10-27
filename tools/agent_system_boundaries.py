@@ -28,6 +28,7 @@ VIDEO_OWNED = (
     "SYSTEM/skills/archive/*",
     "SYSTEM/skills/staging/*",
     "SYSTEM/policies/llm_review.py",                  # the video stage gate built on the generic SYSTEM/policies/llm_reviewer.py
+    "SYSTEM/policies/rule_catalog.py",                 # the catalog of the video stages' rules (reads their source and llm_review)
     "SYSTEM/core/pipeline_state.py",
     "SYSTEM/core/artifact_contracts.py",
     "SYSTEM/core/cli.py",

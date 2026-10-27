@@ -25,7 +25,7 @@ STEP_REPORTS = {                                                                
     "final": "delivery_summary{sfx}.json",
 }
 EVIDENCE_CHARS = 30_000                                                            # the part of the report the LLM sees besides the step (a full report can be very large)
-CHECK_VERSION = "2.6"                                                          # cache version: bump to invalidate stale checks across all projects
+CHECK_VERSION = "2.7"                                                         # cache version: bump to invalidate stale checks across all projects
 _running: set[tuple[str, str]] = set()
 _active_step: dict[tuple[str, str], int] = {}
 _lock = threading.Lock()
@@ -464,6 +464,19 @@ def _step_checks(report: dict, n: int, legacy: dict) -> dict:
     return {r: by_rule.get(r) for r in legacy.get(n, ("", ()))[1] if r in by_rule}
 
 
+def _segmentation_source_data(report: dict) -> dict:
+    """What the segmentation read: the report's `source_data`, else the flat counts older reports carry."""
+    return report.get("source_data") or {
+        "source_transcript_file": report.get("source_transcript"),
+        "source_audio_analysis": report.get("source_audio_analysis"),
+        "transcript_segment_count": report.get("source_segments"),
+        "word_count": report.get("source_words"),
+        "measured_pause_count": report.get("source_pauses"),
+        "audio_duration_seconds": report.get("audio_duration_seconds"),
+        "scene_count": len(report.get("scenes", [])) if isinstance(report.get("scenes"), list) else None,
+    }
+
+
 def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
     """Builds focused, authoritative evidence for verifying a deterministic stage step.
     Ensures critical source metrics, sentences/clause splits, and validation fields are preserved
@@ -796,7 +809,7 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
 
     if stage_id == "segmentation":
         n = step.get("n", 1)
-        source_data = report.get("source_data") or {}
+        source_data = _segmentation_source_data(report)
         sc_det = report.get("sentence_and_clause_detection") or {}
         scenes = report.get("scenes") or []
         val = report.get("validation") or {}
@@ -822,6 +835,7 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
                     "clause_split_count": sc_det.get("clause_split_count"),
                     "potential_cut_count": sc_det.get("potential_cut_count"),
                     "candidate_cut_points_by_type": sc_det.get("candidate_cut_points_by_type"),
+                    "sentences": sc_det.get("sentences"),
                 }
             })
         elif n == 3:
@@ -975,19 +989,7 @@ def build_step_evidence(stage_id: str, step: dict, report: dict) -> dict:
     }
 
     # Authoritative source data metrics
-    source_data = report.get("source_data")
-    if source_data:
-        evidence["source_data"] = source_data
-    else:
-        evidence["source_data"] = {
-            "source_transcript_file": report.get("source_transcript"),
-            "source_audio_analysis": report.get("source_audio_analysis"),
-            "transcript_segment_count": report.get("source_segments"),
-            "word_count": report.get("source_words"),
-            "measured_pause_count": report.get("source_pauses"),
-            "audio_duration_seconds": report.get("audio_duration_seconds"),
-            "scene_count": len(report.get("scenes", [])) if isinstance(report.get("scenes"), list) else None,
-        }
+    evidence["source_data"] = _segmentation_source_data(report)
 
     # Sentence & clause detection data
     if "sentence_and_clause_detection" in report:
