@@ -124,6 +124,11 @@ export const StageDrawer: React.FC<StageDrawerProps> = ({
       label: 'Visual Timeline',
       icon: <Film size={18} strokeWidth={activeTab === 'scenes' ? 2.3 : 1.8} />
     }] : []),
+    ...(config.id === 'render' ? [{
+      id: 'scenes',
+      label: 'Render Video',
+      icon: <Film size={18} strokeWidth={activeTab === 'scenes' ? 2.3 : 1.8} />
+    }] : []),
     { id: 'overview', label: 'Overview', icon: <Layers size={18} strokeWidth={activeTab === 'overview' ? 2.3 : 1.8} /> },
     { id: 'subtasks', label: `Subtasks (${subSteps.length})`, icon: <CheckCircle2 size={18} strokeWidth={activeTab === 'subtasks' ? 2.3 : 1.8} /> },
     { id: 'agent', label: 'Agent', icon: <Cpu size={18} strokeWidth={activeTab === 'agent' ? 2.3 : 1.8} /> },

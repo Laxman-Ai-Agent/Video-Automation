@@ -10,6 +10,7 @@ import { StageOverviewTab } from './StageOverviewTab';
 import { SegmentationSceneTable } from './SegmentationSceneTable';
 import { MotionPlanSceneTable } from './MotionPlanSceneTable';
 import { MotionGenSceneTable } from './motion-gen/MotionGenSceneTable';
+import { RenderVideoView } from './render/RenderVideoView';
 import { StageSubtasksTab } from './StageSubtasksTab';
 import { StageAgentTab, StageArtifactsTab, StageLogsTab } from './StageMetaTabs';
 
@@ -189,6 +190,10 @@ export const StageContentRouter: React.FC<StageContentRouterProps> = ({
           onRetryTimeline={() => onRetryStage ? onRetryStage('timeline') : onRunStage?.('timeline')}
           isPipelineRunning={isPipelineRunning}
         />
+      )}
+
+      {activeTab === 'scenes' && config.id === 'render' && projectId && (
+        <RenderVideoView projectId={projectId} refreshKey={state?.status} onRetryStage={onRetryStage ?? onRunStage} />
       )}
 
       {/* Overview Tab */}

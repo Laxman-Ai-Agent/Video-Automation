@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from '../PipelineCanvas.module.css';
-import { AlertTriangle, RotateCcw, Clock, Video } from 'lucide-react';
+import { AlertTriangle, RotateCcw, Clock } from 'lucide-react';
 import { PipelineProjectState, StageConfig } from '../../types/pipeline';
 
 export interface PipelineAlertBannersProps {
@@ -15,7 +15,6 @@ export interface PipelineAlertBannersProps {
   handleRetryStage: (stageId: string) => Promise<void>;
   isAudioMissing: boolean;
   onUploadAudio: () => void;
-  isFinalDelivered: boolean;
 }
 
 export const PipelineAlertBanners: React.FC<PipelineAlertBannersProps> = ({
@@ -29,8 +28,7 @@ export const PipelineAlertBanners: React.FC<PipelineAlertBannersProps> = ({
   failedStage,
   handleRetryStage,
   isAudioMissing,
-  onUploadAudio,
-  isFinalDelivered
+  onUploadAudio
 }) => {
   const failedStageState = failedStage ? projectState.stages[failedStage.id] : null;
 
@@ -165,59 +163,6 @@ export const PipelineAlertBanners: React.FC<PipelineAlertBannersProps> = ({
           >
             Upload Audio
           </button>
-        </div>
-      )}
-
-      {/* Delivery Alert when Final Stage 12 is Completed */}
-      {isFinalDelivered && (
-        <div 
-          data-testid="delivery-success-banner"
-          style={{
-            backgroundColor: 'var(--status-completed-bg)',
-            border: '1px solid var(--status-completed-border)',
-            borderRadius: '4px',
-            padding: '16px 20px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <div style={{
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              backgroundColor: 'var(--status-completed)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF'
-            }}>
-              <Video size={18} />
-            </div>
-            <div>
-              <h4 style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>
-                Production Video Delivered to Desktop
-              </h4>
-              <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                All 12 stages passed technical QC with zero manual intervention.
-              </p>
-            </div>
-          </div>
-
-          <div style={{
-            fontSize: '11px',
-            fontFamily: 'var(--font-mono)',
-            backgroundColor: 'var(--bg-card)',
-            padding: '6px 12px',
-            borderRadius: '4px',
-            border: '1px solid var(--border-card)',
-            color: 'var(--accent-blue)'
-          }}>
-            Desktop/darkworld-renders/{projectState.projectId}
-          </div>
         </div>
       )}
     </>

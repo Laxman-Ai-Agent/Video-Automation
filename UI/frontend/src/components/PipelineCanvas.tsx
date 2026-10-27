@@ -199,7 +199,6 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
           handleRetryStage={handleRetryStage}
           isAudioMissing={isAudioMissing}
           onUploadAudio={() => handleTabChange('new-project')}
-          isFinalDelivered={isFinalDelivered}
         />
 
         {/* TAB 1: PIPELINE EXECUTION FLOW */}
