@@ -102,6 +102,33 @@ Code done, NOT yet proven on a real render. Details and the exact rules: `docs/R
 - `tests/test_scene_shots.py` (11 tests) plus one fast-suite run.
 - Everything downstream of planning is stale by design: the next `POST /projects/{pid}/orchestrator/run` writes the plan, all scenes and the preview again.
 
+## Phase 1 run of the test project (2026-10-27, 20:30-21:15): 4 system bugs found and fixed (`140a26f`)
+The first real run with shots (`POST /projects/{pid}/orchestrator/run`, run_20e1ddc4) got analyzer/segmentation/planning/assets/motion_plan
+from cache and stopped in Motion Generation. None of it was a Phase 1 bug:
+1. **Every LLM request was cut off after 60 s.** `LlmGatewayRequest.timeout` was 60 and `execute_llm_gateway_call` forced 60 on the legacy
+   envelope as well, so writing a scene's TSX (a few hundred lines) always timed out; after three scenes the provider's circuit opened.
+   ONE definition now: `PROFILE_TIMEOUT` in `SYSTEM/core/llm_gateway.py` (code_generation 600 s, reasoning_review 300 s, fast_structured 60 s,
+   default 120 s), `profile_timeout()` resolves it, a caller's own timeout still wins, both envelopes default to `0` = "the profile's".
+   With it all 8 scenes were written (20:48-21:03, 1-5 min each).
+2. **A failed stage threw away every finished scene.** The input fingerprints lived only in `motion_animation.json`, written when the WHOLE
+   stage succeeded, so one type error in the last scene made the next run ask the LLM for all 8 scenes again. Three attempts x 8 generations
+   is what exhausted the Claude Code session. `motion_animation.record_fingerprint()` now writes `generated_motion/fingerprints<sfx>.json`
+   the moment a scene's code is on disk; `previous_fingerprints()` reads it and the manifest (keys as strings).
+3. **The generated code did not know the project is type-checked with `strict: true`** and read fields of values that can be null
+   (`getPointAtLength` of @remotion/paths returns `Point | null`): scene 8 failed with TS18047. Rule 12 of the generator prompt now says it
+   with the APIs that return null. `CODEGEN_VERSION` is NOT bumped on purpose (the rule only restates what the tsc check already enforces,
+   so stored code that compiles stays valid; a bump would rewrite 8 scenes for nothing).
+4. **A compile repair that cannot run reported the compiler errors as the cause.** `repair_scene_compile_errors` now fails with its own cause
+   (session limit, open circuit), so a run says what really blocked it.
+
+**Where the test project stands:** `generated_motion/scene_1..8.tsx` are written (21:03) but `motion_gen` is `failed` and
+`motion_animation.json` is from 12:20, so those 8 files have NO fingerprint record (the sidecar was built after they were written): the next
+run writes all 8 again once, and from then on they are kept. Scene 8's TS18047 needs ONE repair call. Every later stage of the project
+(motion_validation ... final) still shows `completed` from the earlier run of 08:07: they are stale, the run redoes them.
+**Blocked on the LLM:** Claude Code (`claude_cli`/`claude-sonnet-5-5`) is at its session limit until 00:10 IST (`POST /llm/test` says so);
+the pipeline cannot generate code until then. Either wait, or set the LLM page to Antigravity `gemini-3.8-flash-high` (it failed before at the
+old 120 s timeout; code generation now gets 600 s, so it is worth one try) and run again.
+
 ## Next steps (in this order)
 0. The analyzer of the test project has 2 errors after the re-run (step 10 "Word Timestamp Integrity": 1 error in 130 word timestamps; step 13 follows from it). They block Scene Segmentation: fix at the root (a re-aligned corrected word), then the full autonomous run of the test project, then one fast-suite run. All pending tasks: `docs/ROADMAP.md` section 3.
 1. Phase 1 of the roadmap: shots of 1.5-3.5 s inside every scene, snapped to word times (beats exist; `snap_beats`), the code generator gets per-shot frames + word timestamps, validation of maximum shot length and visual change.
