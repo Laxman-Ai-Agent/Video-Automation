@@ -1,5 +1,6 @@
 import React from 'react';
 import { Video, Volume2, Type, Sparkles, Layers } from 'lucide-react';
+import styles from './TimelineTrackHeaderColumn.module.css';
 
 interface TimelineTrackHeaderColumnProps {
   showVisualsTrack: boolean;
@@ -16,56 +17,25 @@ export const TimelineTrackHeaderColumn: React.FC<TimelineTrackHeaderColumnProps>
   showTypographyTrack,
   showMotionFxTrack,
 }) => {
+  // One row per track, in the order the tracks are drawn in TimelineTrackCanvas; `height` tells which rows are taller there.
+  const tracks = [
+    { key: 'visuals', show: showVisualsTrack, Icon: Video, color: 'var(--accent-cyan)', label: 'Visual Scenes', height: styles.visuals },
+    { key: 'audio', show: showAudioTrack, Icon: Volume2, color: '#60A5FA', label: 'Narration Waveform', height: styles.audio },
+    { key: 'captions', show: showCaptionsTrack, Icon: Type, color: 'var(--status-completed)', label: 'Captions / Speech', height: '' },
+    { key: 'typography', show: showTypographyTrack, Icon: Sparkles, color: '#F59E0B', label: 'Kinetic Text', height: '' },
+    { key: 'motionfx', show: showMotionFxTrack, Icon: Layers, color: '#C084FC', label: 'Motion & FX', height: '' },
+  ];
+
   return (
-    <div style={{
-      width: '180px',
-      flexShrink: 0,
-      backgroundColor: '#090D1A',
-      borderRight: '1px solid var(--border-subtle)',
-      zIndex: 10,
-      display: 'flex',
-      flexDirection: 'column'
-    }}>
-      {/* Ruler label placeholder */}
-      <div style={{ height: '36px', borderBottom: '1px solid var(--border-subtle)', padding: '8px 12px', fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-        Timecode / Frame
-      </div>
+    <div className={styles.column}>
+      <div className={styles.rulerLabel}>Timecode / Frame</div>
 
-      {/* Track Labels */}
-      {showVisualsTrack && (
-        <div style={{ height: '84px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Video size={16} color="var(--accent-cyan)" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Visual Scenes</span>
+      {tracks.filter((t) => t.show).map(({ key, Icon, color, label, height }) => (
+        <div key={key} className={`${styles.row} ${height}`.trim()} data-testid={`timeline-track-label-${key}`}>
+          <Icon size={16} color={color} />
+          <span className={styles.label}>{label}</span>
         </div>
-      )}
-
-      {showAudioTrack && (
-        <div style={{ height: '56px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Volume2 size={16} color="#60A5FA" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Narration Waveform</span>
-        </div>
-      )}
-
-      {showCaptionsTrack && (
-        <div style={{ height: '52px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Type size={16} color="var(--status-completed)" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Captions / Speech</span>
-        </div>
-      )}
-
-      {showTypographyTrack && (
-        <div style={{ height: '52px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Sparkles size={16} color="#F59E0B" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Kinetic Text</span>
-        </div>
-      )}
-
-      {showMotionFxTrack && (
-        <div style={{ height: '52px', borderBottom: '1px solid var(--border-subtle)', padding: '10px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <Layers size={16} color="#C084FC" />
-          <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-primary)' }}>Motion & FX</span>
-        </div>
-      )}
+      ))}
     </div>
   );
 };

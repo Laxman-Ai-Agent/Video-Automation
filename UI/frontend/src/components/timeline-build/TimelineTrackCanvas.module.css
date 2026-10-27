@@ -1,0 +1,125 @@
+/* The multi-track timeline canvas. Only the positions computed from the frame (left/width) stay inline in the component. */
+.canvas {
+  background-color: #030712;
+  border-radius: 8px;
+  border: 1px solid var(--border-card);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.headerBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.headerStats { display: flex; gap: 16px; }
+
+.grid { display: flex; position: relative; }
+
+.scroller {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  background-color: #020617;
+}
+
+.tracks { position: relative; user-select: none; }
+
+/* Ruler ------------------------------------------------------------------ */
+.ruler {
+  height: 36px;
+  background-color: #0b1120;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  cursor: pointer;
+}
+
+.tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  border-left: 1px solid rgba(255, 255, 255, 0.25);
+  padding-left: 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.tickTimecode { font-size: 10px; font-family: var(--font-mono); color: var(--accent-cyan); font-weight: 700; }
+.tickFrame { font-size: 9px; font-family: var(--font-mono); color: var(--text-muted); }
+
+/* Playhead --------------------------------------------------------------- */
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #ef4444;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.8);
+  z-index: 40;
+  pointer-events: none;
+  transition: left 0.05s ease-out;
+}
+
+.playhead.playing { transition: none; }          /* while it plays the needle follows every frame: a transition would lag behind */
+
+.playheadPin {
+  position: absolute;
+  top: 0;
+  left: -6px;
+  width: 14px;
+  height: 14px;
+  background-color: #ef4444;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* Tracks (the heights must stay equal to the label rows in TimelineTrackHeaderColumn) */
+.track {
+  height: 52px;
+  border-bottom: 1px solid var(--border-subtle);
+  position: relative;
+  background-color: rgba(15, 23, 42, 0.2);
+}
+
+.track.visuals { height: 84px; background-color: rgba(15, 23, 42, 0.3); }
+.track.audio { height: 56px; background-color: rgba(11, 19, 43, 0.4); }
+.track.typography { background-color: rgba(15, 23, 42, 0.3); }
+
+.waveform { width: 100%; height: 100%; display: block; }
+.noWaveform { font-size: 11px; color: var(--text-muted); padding: 18px 16px; }
+
+/* A text or FX clip on its track ----------------------------------------- */
+.clip {
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  border-radius: 4px;
+  padding: 4px 8px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.clip.text { background-color: rgba(245, 158, 11, 0.18); border: 1px solid rgba(245, 158, 11, 0.5); gap: 6px; }
+.clip.fx { background-color: rgba(168, 85, 247, 0.18); border: 1px solid rgba(168, 85, 247, 0.5); }
+
+.clipLabel {
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.clip.text .clipLabel { color: #fcd34d; }
+.clip.fx .clipLabel { color: #d8b4fe; }
