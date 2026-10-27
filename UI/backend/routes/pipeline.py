@@ -723,6 +723,31 @@ def get_timeline_stills(pid: str):
     return {"current": current, "exists": man is not None, "samples": samples}
 
 
+@router.get("/timeline-build/thumbnails")
+def get_timeline_thumbnails(pid: str):
+    """The thumbnail sheet of the rendered video for smooth scrubbing on the Timeline page. Only the video that is the verified render of the currently approved timeline has one (`available`);
+    without it the page keeps the preview stills. The sheet is made once per video (ffmpeg, low priority) and cached."""
+    from .. import render_video as rv, timeline_media
+    pdir = store.project_dir(pid)
+    cand = rv.current_candidate(pdir, pipeline_view.aspect_of(pdir))
+    if cand is None:
+        return {"available": False, "reason": "no rendered video of the current approved timeline yet"}
+    meta = timeline_media.thumbnails(pdir, cand["path"], cand["sha256"], float(((cand["report"].get("observed") or {}).get("duration_seconds")) or 0))
+    if meta is None:
+        return {"available": False, "reason": "the thumbnails could not be made from the video"}
+    return {"available": True, "url": f"/projects/{pid}/timeline-build/thumbnails/sheet.jpg?v={meta['key'][:12]}", **{k: meta[k] for k in ("interval_s", "cols", "rows", "count", "tile_w", "tile_h")}}
+
+
+@router.get("/timeline-build/thumbnails/sheet.jpg")
+def get_timeline_thumbnail_sheet(pid: str):
+    from fastapi.responses import FileResponse
+    from .. import timeline_media
+    f = store.project_dir(pid) / timeline_media.THUMBS
+    if not f.is_file():
+        raise ApiError(404, "not_found", "no thumbnail sheet yet", "open the Timeline page after a render")
+    return FileResponse(f, media_type="image/jpeg", headers={"Cache-Control": "max-age=86400"})
+
+
 @router.get("/timeline-build/audio")
 def get_timeline_audio(pid: str):
     """The narration file the published timeline uses (for listening on the Timeline page)."""

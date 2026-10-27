@@ -25,6 +25,12 @@
   display: flex;
 }
 
+.cell {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+}
+
 .frame {
   flex: 1 1 0;
   min-width: 0;

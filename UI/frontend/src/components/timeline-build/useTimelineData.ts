@@ -4,10 +4,11 @@ import {
   fetchTimelineJson, 
   fetchTimelineWaveform, 
   fetchTimelineStills,
+  fetchTimelineThumbnails,
   fetchMotionData, 
   fetchSceneSegmentation 
 } from '../../services/api';
-import type { StillsResponse } from './timelineStills';
+import type { StillsResponse, Thumbs } from './timelineStills';
 
 export interface TimelineSceneItem {
   item_id: string;
@@ -51,6 +52,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
   const [motionPlan, setMotionPlan] = useState<any | null>(null);
   const [segmentationScenes, setSegmentationScenes] = useState<any[]>([]);
   const [stills, setStills] = useState<StillsResponse>({ current: false, exists: false, samples: [] });
+  const [thumbs, setThumbs] = useState<Thumbs | null>(null);
 
   const fps = 30;
 
@@ -89,6 +91,13 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
   useEffect(() => {
     loadTimelineDatasets();
   }, [loadTimelineDatasets]);
+
+  // The sheet of the rendered video is made by ffmpeg on the first request (about 10 s), so it loads on its own and never holds the page back.
+  useEffect(() => {
+    let alive = true;
+    if (projectId) fetchTimelineThumbnails(projectId).then(r => { if (alive && r.ok) setThumbs(r.data as Thumbs); });
+    return () => { alive = false; };
+  }, [projectId]);
 
   const totalFrames = useMemo(() => {
     if (timelineBuildReport?.counts?.duration_frames) return timelineBuildReport.counts.duration_frames;
@@ -209,6 +218,7 @@ export function useTimelineData(projectId: string, currentFrame: number, selecte
     motionPlan,
     segmentationScenes,
     stills,
+    thumbs,
     fps,
     totalFrames,
     totalDurationSeconds,

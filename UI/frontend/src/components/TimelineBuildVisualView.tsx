@@ -43,6 +43,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
     motionPlan,
     segmentationScenes,
     stills,
+    thumbs,
     fps,
     totalFrames,
     totalDurationSeconds,
@@ -163,6 +164,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
         aspect={aspect}
         activeScene={activeScene}
         stills={stills}
+        thumbs={thumbs}
         currentFrame={currentFrame}
         totalFrames={totalFrames}
         fps={fps}
@@ -211,6 +213,7 @@ export const TimelineBuildVisualView: React.FC<TimelineBuildVisualViewProps> = (
         waveformPeaks={waveformPeaks}
         segmentationScenes={segmentationScenes}
         stills={stills}
+        thumbs={thumbs}
         motionPlan={motionPlan}
       />
 

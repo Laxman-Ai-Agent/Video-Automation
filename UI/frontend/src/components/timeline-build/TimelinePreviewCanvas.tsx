@@ -1,12 +1,13 @@
 import React from 'react';
 import { SkipBack, ChevronLeft, Pause, Play, ChevronRight, SkipForward } from 'lucide-react';
 import styles from './TimelinePreviewCanvas.module.css';
-import { stillAt, type StillsResponse } from './timelineStills';
+import { stillAt, thumbStyle, type StillsResponse, type Thumbs } from './timelineStills';
 
 export interface TimelinePreviewCanvasProps {
   aspect: string;
   activeScene: any;
   stills: StillsResponse;
+  thumbs: Thumbs | null;
   currentFrame: number;
   totalFrames: number;
   fps: number;
@@ -37,9 +38,10 @@ function noFrameReason(stills: StillsResponse): string {
 }
 
 export const TimelinePreviewCanvas: React.FC<TimelinePreviewCanvasProps> = ({
-  aspect, activeScene, stills, currentFrame, totalFrames, fps, isPlaying, setIsPlaying, setCurrentFrame, formatTimecode, formatSeconds, waveformPeaks, segmentationScenes,
+  aspect, activeScene, stills, thumbs, currentFrame, totalFrames, fps, isPlaying, setIsPlaying, setCurrentFrame, formatTimecode, formatSeconds, waveformPeaks, segmentationScenes,
   showVisualsTrack, setShowVisualsTrack, showAudioTrack, setShowAudioTrack, showCaptionsTrack, setShowCaptionsTrack, showTypographyTrack, setShowTypographyTrack, showMotionFxTrack, setShowMotionFxTrack
 }) => {
+  const frameOfVideo = thumbStyle(thumbs, currentFrame, fps);                         // the rendered video's own frame at this second: smooth while scrubbing or playing
   const still = activeScene ? stillAt(stills.samples, activeScene.scene_id, currentFrame) : null;
   const filters = [
     { label: 'Visuals', on: showVisualsTrack, set: setShowVisualsTrack, cls: styles.fVisuals },
@@ -55,7 +57,12 @@ export const TimelinePreviewCanvas: React.FC<TimelinePreviewCanvasProps> = ({
     <div className={styles.layout}>
       <div className={styles.player}>
         <div className={styles.viewport} style={{ aspectRatio: aspect === '9:16' ? '9/16' : '16/9' }} data-testid="timeline-preview-viewport">
-          {still ? (
+          {frameOfVideo ? (
+            <>
+              <div className={styles.videoFrame} style={frameOfVideo} data-testid="timeline-preview-video-frame" />
+              <span className={styles.stillBadge}>rendered video • {formatTimecode(currentFrame, fps)}</span>
+            </>
+          ) : still ? (
             <>
               <img className={styles.still} src={still.url} alt={`${activeScene.scene_id} ${still.kind}`} data-testid="timeline-preview-still" />
               <span className={styles.stillBadge}>{activeScene.scene_id} • {still.kind} still F{still.frame}</span>

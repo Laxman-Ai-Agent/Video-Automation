@@ -1,7 +1,7 @@
 import React from 'react';
 import { TimelineTrackHeaderColumn } from './TimelineTrackHeaderColumn';
 import { TimelineSceneTile } from './TimelineSceneTile';
-import type { StillsResponse } from './timelineStills';
+import type { StillsResponse, Thumbs } from './timelineStills';
 
 
 export interface TimelineTrackCanvasProps {
@@ -29,6 +29,7 @@ export interface TimelineTrackCanvasProps {
   waveformPeaks: number[];
   segmentationScenes: any[];
   stills: StillsResponse;
+  thumbs: Thumbs | null;
   motionPlan: any;
 }
 
@@ -57,6 +58,7 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
   waveformPeaks,
   segmentationScenes,
   stills,
+  thumbs,
   motionPlan
 }) => {
   return (
@@ -195,6 +197,7 @@ export const TimelineTrackCanvas: React.FC<TimelineTrackCanvasProps> = ({
                     key={scene.item_id || idx}
                     scene={scene}
                     stills={stills.samples}
+                    thumbs={thumbs}
                     fps={fps}
                     leftPx={frameToPx(scene.start_frame)}
                     widthPx={frameToPx(scene.duration_frames)}

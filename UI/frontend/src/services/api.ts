@@ -1038,6 +1038,16 @@ export async function fetchTimelineStills(projectId: string): Promise<TimelineBu
   }
 }
 
+export async function fetchTimelineThumbnails(projectId: string): Promise<TimelineBuildResult> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/timeline-build/thumbnails`);
+    if (!res.ok) return { ok: false, status: res.status, error: 'Thumbnails are not available.' };
+    return { ok: true, status: 200, data: await res.json() };
+  } catch (err: any) {
+    return { ok: false, status: 0, error: err?.message || 'Network error accessing thumbnails' };
+  }
+}
+
 export async function fetchTimelineWaveform(projectId: string): Promise<TimelineBuildResult> {
   try {
     const res = await fetch(`${API_BASE}/projects/${projectId}/timeline-build/waveform`);

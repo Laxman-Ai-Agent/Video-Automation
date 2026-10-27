@@ -20,3 +20,21 @@ test('the frame shown is the nearest one of the playing scene, never one of its 
   assert.equal(stillAt(samples, 'scene_001', 340).kind, 'transition');          // frame 340 is closest to the transition still of scene 1, not to scene 2's entry (368)
   assert.equal(stillAt(samples, 'scene_003', 700), null);                        // a scene without stills shows none
 });
+
+import { thumbStyle } from '../../UI/frontend/src/components/timeline-build/timelineStills.ts';
+
+const sheet = { available: true, url: '/s.jpg?v=1', interval_s: 1, cols: 10, rows: 6, count: 60, tile_w: 320, tile_h: 180 };
+
+test('the sheet picture of a frame is the one at or before its second, cut by percentages', () => {
+  assert.equal(thumbStyle(sheet, 0, 30).backgroundPosition, '0% 0%');
+  assert.equal(thumbStyle(sheet, 29, 30).backgroundPosition, '0% 0%');                  // still second 0
+  assert.equal(thumbStyle(sheet, 30, 30).backgroundPosition, '11.11111111111111% 0%');  // second 1: column 1 of 10
+  assert.equal(thumbStyle(sheet, 300, 30).backgroundPosition, '0% 20%');                 // second 10: first column of row 1 of 6
+  assert.equal(thumbStyle(sheet, 99999, 30).backgroundPosition, '100% 100%');            // past the end: the last picture (index 59 = column 9, row 5)
+  assert.equal(thumbStyle(sheet, 0, 30).backgroundSize, '1000% 600%');
+});
+
+test('no sheet, no style', () => {
+  assert.equal(thumbStyle(null, 5, 30), null);
+  assert.equal(thumbStyle({ available: false }, 5, 30), null);
+});

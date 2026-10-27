@@ -33,6 +33,12 @@
   display: block;
 }
 
+.videoFrame {
+  width: 100%;
+  height: 100%;
+  background-repeat: no-repeat;
+}
+
 .stillBadge {
   position: absolute;
   left: 8px;

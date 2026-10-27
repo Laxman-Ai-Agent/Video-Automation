@@ -18,3 +18,18 @@ export function stillAt(samples: Still[], sceneId: string, frame: number): Still
   if (!own.length) return null;
   return own.reduce((best, s) => (Math.abs(s.frame - frame) < Math.abs(best.frame - frame) ? s : best));
 }
+
+// The thumbnail sheet of the rendered video: one small frame per `interval_s` seconds, `cols` per row, read left to right and top to bottom.
+export interface Thumbs { available: boolean; url?: string; interval_s?: number; cols?: number; rows?: number; count?: number; tile_w?: number; tile_h?: number }
+
+// CSS that shows the sheet's picture for `frame` (the picture at or before it) inside any box of the video's shape; null when there is no sheet.
+export function thumbStyle(t: Thumbs | null, frame: number, fps: number): { backgroundImage: string; backgroundSize: string; backgroundPosition: string } | null {
+  if (!t || !t.available || !t.url || !t.cols || !t.rows || !t.count || !t.interval_s) return null;
+  const i = Math.min(t.count - 1, Math.max(0, Math.floor(frame / fps / t.interval_s)));
+  const col = i % t.cols, row = Math.floor(i / t.cols);
+  return {
+    backgroundImage: `url(${t.url})`,
+    backgroundSize: `${t.cols * 100}% ${t.rows * 100}%`,
+    backgroundPosition: `${t.cols > 1 ? (col / (t.cols - 1)) * 100 : 0}% ${t.rows > 1 ? (row / (t.rows - 1)) * 100 : 0}%`,
+  };
+}
