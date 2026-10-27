@@ -184,7 +184,7 @@ def verify(ids: list[str] | None = None, progress=None) -> dict:
     try:
         with jobs.RENDER_LOCK, browser_profiles.cleaned_after():
             say("bundling the renderer")
-            r = subprocess.run(f'npx remotion bundle src/index.ts --out-dir="{tmp / "b"}" --quiet', cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=400)
+            r = subprocess.run(f'npx remotion bundle src/index.ts --out-dir="{tmp / "b"}" --quiet', cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=400, creationflags=config.LOW_PRIORITY)
             if r.returncode != 0:
                 raise rl.ResourceError("bundle_failed", f"the Remotion bundle could not be made: {(r.stderr or r.stdout)[-240:]}")
             for aspect in ASPECTS:

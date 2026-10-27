@@ -1,5 +1,6 @@
 """Central config. Import this FIRST so model caches are set before torch/HF/rembg load."""
 import os
+import subprocess
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -111,3 +112,5 @@ def project_dir(project: str | Path) -> Path:
     return p if p.exists() else PROJECTS_DIR / str(project)
 
 
+# Heavy child processes (Remotion renders, the type check) run below normal priority, so the API and the UI stay responsive while they use every core of this CPU (children inherit it on Windows; 0 elsewhere).
+LOW_PRIORITY = getattr(subprocess, "BELOW_NORMAL_PRIORITY_CLASS", 0)

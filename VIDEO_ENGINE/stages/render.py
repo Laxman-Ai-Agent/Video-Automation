@@ -195,7 +195,7 @@ def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", o
     cmd = build_command(pdir, preview, aspect, out) + [f"--port={_free_port()}"]     # Remotion's own server must not land on a port another app already answers on ("Does this look like a foreign page?")
     remotion_dir = config.REMOTION_DIR
     proc = subprocess.Popen(cmd, cwd=remotion_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                            text=True, encoding="utf-8", errors="replace", shell=True)
+                            text=True, encoding="utf-8", errors="replace", shell=True, creationflags=config.LOW_PRIORITY)
     try:
         from VIDEO_ENGINE.pipeline import procs
     except ImportError:

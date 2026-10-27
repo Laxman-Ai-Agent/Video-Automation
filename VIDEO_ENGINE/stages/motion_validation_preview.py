@@ -52,7 +52,7 @@ def is_current(man: dict | None, gen_sha: str | None) -> bool:
 
 
 def _bundle(dest: Path) -> None:
-    r = subprocess.run(f'npx remotion bundle src/index.ts --out-dir="{dest}" --quiet', cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8",
+    r = subprocess.run(f'npx remotion bundle src/index.ts --out-dir="{dest}" --quiet', cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", creationflags=config.LOW_PRIORITY,
                        errors="replace", timeout=300)
     if r.returncode != 0:
         raise ValidationError(f"the Remotion bundle could not be made: {(r.stderr or r.stdout)[-240:]}")
@@ -70,7 +70,7 @@ def _still(bundle: Path, comp_file: Path, frame: int, dest: Path, attempts: int 
         f"--props={c_posix}", f"--port={render._free_port()}"
     ]
     for attempt in range(attempts):                                              # the page fetches its web fonts: one slow or failed fetch is tried again, a real error fails every time
-        r = subprocess.run(cmd, cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180)
+        r = subprocess.run(cmd, cwd=config.REMOTION_DIR, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=180, creationflags=config.LOW_PRIORITY)
         if r.returncode == 0 and dest.exists():
             return
         time.sleep(3 * (attempt + 1))                                            # back off: a network blip lasts longer than three immediate retries

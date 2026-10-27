@@ -129,7 +129,7 @@ def run_tsc(remotion_dir: Path) -> tuple[bool, str]:
     """The project's own type check (`npm run tsc` in the Remotion folder): (passed, its output). The output format is pinned (plain, no colour) whatever the caller's environment
     (FORCE_COLOR makes tsc print a coloured `file:line:col - error` layout that `tsc_errors_by_scene` cannot read, so no compile error would ever reach the repair loop)."""
     env = {**os.environ, "FORCE_COLOR": "0", "NO_COLOR": "1"}
-    r = subprocess.run("npm run tsc -- --pretty false", cwd=remotion_dir, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, env=env)
+    r = subprocess.run("npm run tsc -- --pretty false", cwd=remotion_dir, shell=True, capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120, env=env, creationflags=config.LOW_PRIORITY)
     return r.returncode == 0, (r.stdout or "") + (r.stderr or "")
 
 
