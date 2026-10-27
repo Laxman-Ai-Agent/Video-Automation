@@ -400,15 +400,19 @@ class LLMTimelineAssessor:
                 )
             )
 
+        # An unavailable LLM never approves (CLAUDE.md): this rubric checks frame timing and the disclosures, it does not judge pacing, continuity or
+        # the narrative, so it says what it could not determine instead of claiming an approval nobody made. The decision itself is the LLM approval
+        # review in timeline_approval.auto_approve; this record is the evidence beside it and must not read as a verdict.
         return {
             "assessor": "deterministic_rubric_engine",
-            "status": "approved",
-            "confidence": 0.95,
-            "summary": "Deterministic timeline rubrics verified: valid frame timing, continuity, and acknowledged disclosures.",
-            "pacing_score": 88,
-            "continuity_score": 92,
+            "status": "cannot_determine",
+            "confidence": 0.0,
+            "summary": "The LLM reviewer was unavailable, so no quality verdict was made. Deterministic rubrics checked the frame timing and listed the "
+                       "disclosures; pacing, continuity and the narrative were NOT assessed.",
+            "pacing_score": None,
+            "continuity_score": None,
             "findings": [asdict(f) for f in findings],
-            "evaluation_mode": "metadata_based_only",
+            "evaluation_mode": "deterministic_rubrics_only",
         }
 
 

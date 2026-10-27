@@ -160,10 +160,13 @@ def test_llm_timeline_assessor_fallback():
         visual_diff_meta=vis,
     )
 
-    assert res["status"] == "approved"
-    assert res["pacing_score"] >= 80
-    assert res["evaluation_mode"] == "metadata_based_only"
-    assert len(res["findings"]) >= 1
+    # An unavailable LLM never approves: the deterministic rubric reports what it could not judge instead of claiming a verdict (it is advisory
+    # evidence beside the real decision, timeline_approval.auto_approve, and used to say "approved" with confidence 0.95 and "verified" in its summary).
+    assert res["status"] == "cannot_determine"
+    assert res["confidence"] == 0.0 and res["pacing_score"] is None and res["continuity_score"] is None
+    assert res["evaluation_mode"] == "deterministic_rubrics_only"
+    assert "NOT assessed" in res["summary"]
+    assert len(res["findings"]) >= 1                                   # the disclosures it did check are still listed
 
 
 def test_llm_timeline_assessor_with_gateway():
