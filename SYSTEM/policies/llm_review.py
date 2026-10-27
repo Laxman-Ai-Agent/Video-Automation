@@ -487,13 +487,16 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
         payload["has_timeline_report"] = tbf.exists()
         events = (json.loads(ahf.read_text(encoding="utf-8")).get("events", []) if ahf.exists() else [])
         payload["history_records"] = len(events)
-        last = next((e for e in reversed(events) if e.get("kind") == "decision" and not e.get("voided")), None)
-        payload["latest_decision"] = {k: last.get(k) for k in ("decision", "decided_by", "decided_at", "timeline_fingerprint", "notes")} if last else None
         try:
             from VIDEO_ENGINE.stages import timeline_approval as _ta
             payload["current_timeline_fingerprint"] = _ta.fingerprint(pdir, aspect)
         except Exception:
             payload["current_timeline_fingerprint"] = None
+        last = next((e for e in reversed(events) if e.get("kind") == "decision" and not e.get("voided")), None)
+        if last and last.get("timeline_fingerprint") != payload["current_timeline_fingerprint"]:     # a decision about an older build is history, not evidence about this one: this review is what decides the current version
+            payload["superseded_decisions"] = f"{sum(1 for e in events if e.get('kind') == 'decision')} earlier decision(s) belong to older builds of the timeline; the current version has no decision yet"
+            last = None
+        payload["latest_decision"] = {k: last.get(k) for k in ("decision", "decided_by", "decided_at", "timeline_fingerprint", "notes")} if last else None
         payload["decision_policy"] = "Timeline Approval is decided by this LLM review (no human gate): approve only a timeline that is valid in every respect."
         if tbf.exists():
             try:
