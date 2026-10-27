@@ -2,7 +2,7 @@
 from fastapi import APIRouter
 from fastapi.responses import FileResponse
 
-from .. import store
+from .. import review, store
 from ..errors import ApiError
 from .uploads import safe_name
 
@@ -90,3 +90,14 @@ def download_delivery(pid: str, aspect: str = "16:9"):
         media_type="video/mp4",
         filename=safe_filename,
     )
+
+
+@router.get("/video")
+def video(pid: str, aspect: str = "9:16", preview: bool = True):
+    pdir = store.project_dir(pid)
+    if aspect not in review.ASPECTS:
+        raise ApiError(422, "invalid_request", "aspect must be 16:9 or 9:16")
+    f = pdir / f"{'out_preview' if preview else 'out'}{'_9x16' if aspect == '9:16' else ''}.mp4"
+    if not f.exists():
+        raise ApiError(404, "result_missing", "the video has not been rendered yet", "run Preview or Render")
+    return FileResponse(f, media_type="video/mp4")

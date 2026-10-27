@@ -222,7 +222,7 @@ def build(pid: str) -> dict:
     elif gen.get("state") == "failed" and gen.get("kind") == "plan":
         stages.append(_stage("planning", "Visual Planning", "failed", gen.get("error") or "planning failed", action={"kind": "retry_plan", "label": "Retry"}))
     elif plan_ok:
-        errs = review.gates(pdir)["analysis"]["blockers"] + _visual_plan_errors(pdir) + visual_planning.plan_mismatch(pdir)
+        errs = review.plan_blockers(pdir) + _visual_plan_errors(pdir) + visual_planning.plan_mismatch(pdir)
         if errs:
             stages.append(_stage("planning", "Visual Planning", "failed", "; ".join(errs[:2]), action={"kind": "retry_plan", "label": "Retry"}))
         else:

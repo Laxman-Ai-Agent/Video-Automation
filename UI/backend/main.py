@@ -21,12 +21,10 @@ from .routes import (
     projects,
     resources,
     results,
-    review,
     rules,
     run,
     skills,
     uploads,
-    visual,
     work_log,
 )
 
@@ -61,9 +59,7 @@ for module in (
     uploads,
     run,
     results,
-    review,
     assets,
-    visual,
     pipeline,
     resources,
     llm,

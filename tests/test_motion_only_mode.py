@@ -23,14 +23,6 @@ FIXTURE = Path(__file__).parent / "fixtures" / "plan_sample"
 REMOTION = Path(__file__).parent.parent / "VIDEO_ENGINE" / "remotion"
 
 
-@pytest.fixture(autouse=True)
-def stage10_review_warnings_do_not_stop_these_tests(monkeypatch):
-    """These tests are about the job chains and the modes. The fixture project has a 1 s dummy audio and planner layouts nobody reviewed: with Stage 10's review rules on, the timeline
-    would wait for a person's decision (that gate has its own tests in test_motion_validation.py). Errors, blockers and stale results still stop the timeline here."""
-    from backend import motion_validation
-    monkeypatch.setattr(motion_validation, "REVIEW_RULES", frozenset())
-
-
 def make(c, use_images: bool | None, aspect: str = "16:9") -> str:
     data = {"name": "Motion Demo", "aspect": aspect, **({} if use_images is None else {"use_images": "true" if use_images else "false"})}
     r = c.post("/projects", data=data, files={"audio": ("talk.wav", wav_bytes(), "audio/wav")})

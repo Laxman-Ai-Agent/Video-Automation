@@ -211,7 +211,7 @@ def test_job_json_schema_and_progress_route(env, monkeypatch):
 
 # ---------- 3. registry ----------
 def test_registry_is_complete_and_used_by_chains():
-    assert list(STEPS) == ["transcribe", "refine", "cuts", "segment", "plan-input", "prompts",
+    assert list(STEPS) == ["transcribe", "refine", "cuts", "segment", "plan-input",
                            "motion-plan", "motion-build", "motion-plan-9x16", "motion-build-9x16", "motion-validate", "motion-validate-9x16",      # the motion branch
                            "motion-validation", "motion-validation-preview", "motion-validation-9x16", "motion-validation-preview-9x16",       # Stage 10: Motion & Timeline Validation (read-only) and its optional preview stills
                                "timeline-build", "timeline-build-9x16",       # Stage 11: Timeline Build (timeline.json + its report)
@@ -229,10 +229,10 @@ def test_registry_is_complete_and_used_by_chains():
 
 
 def test_missing_requirements_give_a_hint_and_chain_stops(env):
-    with pytest.raises(StepError, match="run /plan"):
-        execute(env, "prompts", Ctx())                # no scene_plan.json in the fake project
     with pytest.raises(StepError):
-        run_chain(env, ["prompts", "segment"], "t", Ctx())          # prompts stops the chain: segment never runs
+        execute(env, "motion-plan", Ctx())            # no scene_plan.json in the fake project
+    with pytest.raises(StepError):
+        run_chain(env, ["motion-plan", "segment"], "t", Ctx())      # motion-plan stops the chain: segment never runs
     last = json.loads((env / "timings.json").read_text())["last_build"]
     assert "segment" not in last["steps"]
 

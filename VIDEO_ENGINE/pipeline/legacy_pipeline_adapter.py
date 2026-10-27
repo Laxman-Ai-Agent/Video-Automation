@@ -234,7 +234,6 @@ CHAINS = {
     "transcribe": ("transcribe", "refine", "cuts"),
     "segment": ("segment",),                # Scene Segmentation: its own stage, started by the user
     "plan-input": ("plan-input",),
-    "prompts": ("prompts",),
     # the composition is built straight from the scene plan (Motion-Only: no picture layers)
     "build": ("motion-plan", "motion-build", "render-final"),
     "build-preview": ("motion-plan", "motion-build", "render-preview"),
@@ -339,13 +338,6 @@ def _plan_input(pdir, ctx):
     merge(pdir)
     (pdir / "plan_input.txt").write_text(build(pdir), encoding="utf-8")
     return "plan_input.txt ready"
-
-
-@step("prompts", requires=("scene_plan.json", "prompts_map.json"), hint="run /plan <id> in Claude Code first",
-      outputs=lambda p: [p / "prompts.txt"], fingerprint=lambda p, c: digest(p / "scene_plan.json", p / "prompts_map.json"))
-def _prompts(pdir, ctx):
-    review.reapply_edits(pdir)
-    return "prompts.txt generation is deprecated in Motion-Only mode"
 
 
 def _prerender(pdir: Path, aspect: str) -> str:

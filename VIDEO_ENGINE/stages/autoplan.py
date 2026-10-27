@@ -125,8 +125,6 @@ def replace_blocker(pdir: Path) -> str | None:
     from .api_status import image_count
     if image_count(pdir):
         return "images were already uploaded for the current prompts: remove them (or make a new project) before the plan is made again"
-    if any(g.get("approved") for g in (review.gates(pdir).get("prompts"), review.gates(pdir).get("images")) if g):
-        return "the prompts were already approved: the plan cannot be replaced under them"
     return None
 
 

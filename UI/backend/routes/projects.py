@@ -104,19 +104,6 @@ def status(pid: str):
     return build_status(pid)
 
 
-@router.get("/{pid}/prompts", response_class=PlainTextResponse)
-def download_prompts(pid: str):
-    pdir = store.project_dir(pid)
-    if not (pdir / "scene_plan.json").exists() or not (pdir / "prompts_map.json").exists():
-        raise ApiError(409, "plan_missing", "the plan does not exist yet", f"run /plan {pid} in Claude Code")
-    try:
-        pipeline.execute(pdir, "prompts", pipeline.Ctx())      # fresh-skip when prompts.txt is up to date
-    except pipeline.StepError as e:
-        raise ApiError(409, "prompts_unavailable", str(e)) from e
-    return PlainTextResponse((pdir / "prompts.txt").read_text(encoding="utf-8"),
-                             headers={"Content-Disposition": f'attachment; filename="prompts_{pid}.txt"'})
-
-
 @router.post("/{pid}/transcript/correct")
 def correct_transcript(pid: str):
     """Make the transcript the LLM-corrected one (what the `refine` step does, for a project that has none yet): Claude checks every word (answers are cached: asking again costs nothing),
@@ -358,19 +345,10 @@ def project_monitor(pid: str):
             "steps": list(active_job.names),
         }
 
-    qc_data = None
-    if active_video and active_video.exists():
-        try:
-            from .. import video_qc
-            qc_data = video_qc.check(pdir, info.get("aspect", "16:9"), preview=(active_video == preview_video))
-        except Exception:
-            pass
-
     return {
         "project_id": pid,
         "name": info.get("name", pid),
         "job": job_data,
-        "qc": qc_data,
         "created": info.get("created", ""),
         "aspect": info.get("aspect", "16:9"),
         "state": info.get("state", ""),

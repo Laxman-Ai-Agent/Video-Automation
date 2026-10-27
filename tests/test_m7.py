@@ -144,11 +144,6 @@ def test_upload_rejections(client, monkeypatch):
 
 
 # ---------- submit rules, review, fix ----------
-def test_fix_validation(client):
-    pid = create(client).json()["id"]
-    assert client.post(f"/projects/{pid}/match/fix", json={"file": "a.png"}).status_code == 422            # needs n or unused
-    assert client.post(f"/projects/{pid}/match/fix", json={"file": "a.png", "n": 1, "unused": True}).status_code == 422
-    assert client.post(f"/projects/{pid}/match/fix", json={"file": "a.png", "n": 1}).json()["error"]["code"] == "match_missing"
 
 
 # ---------- jobs ----------
@@ -219,10 +214,13 @@ def test_cli_projects_are_listed_and_hidden_folders_are_not(client):
 
 def test_openapi_lists_every_endpoint(client):
     paths = client.get("/openapi.json").json()["paths"]
-    for p in ("/projects", "/projects/{pid}", "/projects/{pid}/transcribe", "/projects/{pid}/status", "/projects/{pid}/prompts",
+    for p in ("/projects", "/projects/{pid}", "/projects/{pid}/transcribe", "/projects/{pid}/status",
               "/projects/{pid}/pipeline", "/projects/{pid}/motion", "/projects/{pid}/render", "/projects/{pid}/final-qc",
               "/projects/{pid}/result", "/projects/{pid}/cancel"):
         assert p in paths, p
+    for gone in ("/projects/{pid}/prompts", "/projects/{pid}/review", "/projects/{pid}/crops/{n}", "/projects/{pid}/qc", "/projects/{pid}/visual", "/projects/{pid}/run"):      # the old prompt / crop / scene-table / video-QC workflow
+        assert gone not in paths, gone
+    assert "/projects/{pid}/video" in paths                                                                       # the rendered video is still served
 
 
 def test_rename_changes_only_the_display_name(client):

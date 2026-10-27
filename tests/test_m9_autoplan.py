@@ -28,7 +28,7 @@ class Llm:
         self.gate = None
         self.during = None
 
-    def __call__(self, user, system=promptgen.SYSTEM, timeout=0):
+    def __call__(self, user, system="", timeout=0):
         stage = "translate" if system == autoplan.TRANSLATE_SYSTEM else "visual" if system == visual_planning.VISUAL_SYSTEM else "plan"
         self.calls.append(stage)
         if self.gate:
@@ -77,7 +77,8 @@ def auto(client, monkeypatch):
 
 
 def generation(c, pid):
-    return c.get(f"/projects/{pid}/review").json()["generation"]
+    from backend import store
+    return promptgen.state(store.project_dir(pid))                  # the generation record (there is no page that reads it any more)
 
 
 def settle(c, pid):
@@ -114,9 +115,8 @@ def test_planning_runs_on_the_run_request_and_builds_the_plan_files(auto):
     assert g["kind"] == "plan" and g["state"] == "done" and g["done"] == g["total"] == 4 and g["error"] is None
     assert all((pdir / f).exists() for f in (*PLAN_FILES, "translation.json", "transcript_en.json", "plan_input.txt"))
     assert llm.calls == ["translate", "plan", "visual"]
-    r = c.get(f"/projects/{pid}/review").json()
-    assert r["plan_ready"] is True and r["gates"]["analysis"]["approved"] is False       # the analysis still waits for the user
-    assert r["analysis"]["scenes"] and "generated_for" not in (pdir / "review.json").read_text(encoding="utf-8")   # no prompt was written
+    from backend import review
+    assert review.plan_blockers(pdir) == [] and "generated_for" not in (pdir / "review.json").read_text(encoding="utf-8")      # the plan can be used and no prompt was written
 
 
 def test_planning_does_not_start_before_the_transcription_job_has_finished(auto):
@@ -240,10 +240,11 @@ def test_a_run_request_on_a_planned_project_never_changes_the_prompts(auto):
     c, llm = auto
     pid, pdir = upload_and_transcribe(c)
     settle(c, pid)
-    texts = [p["text"] for p in c.get(f"/projects/{pid}/review").json()["prompts"]]
+    prompts = lambda: [p["text"] for p in json.loads((pdir / "prompts_map.json").read_text(encoding="utf-8"))["prompts"]]
+    texts = prompts()
     assert c.post(f"/projects/{pid}/visual-planning/run").status_code == 202            # plan exists: the visual plan is made over it
     settle(c, pid)
-    assert [p["text"] for p in c.get(f"/projects/{pid}/review").json()["prompts"]] == texts and llm.calls[:2] == ["translate", "plan"]
+    assert prompts() == texts and llm.calls[:2] == ["translate", "plan"]
 
 
 def test_run_waits_for_the_plan_and_raises_the_cause_when_it_fails(auto):

@@ -40,8 +40,7 @@ def fake_start(monkeypatch):
 
 def test_continue_starts_one_timeline_job_and_a_repeat_returns_it(proj, fake_start, monkeypatch):
     c, pid, pdir = proj
-    monkeypatch.setattr(review, "set_gate", lambda *a, **k: {})
-    monkeypatch.setattr(review, "approve_prompts", lambda *a, **k: 0)
+    monkeypatch.setattr(review, "plan_blockers", lambda pdir: [])
     first, second = c.post(f"/projects/{pid}/continue"), c.post(f"/projects/{pid}/continue")
     assert first.status_code == second.status_code == 202 and first.json() == second.json()
     assert fake_start == ["timeline-9x16"]                                                   # one job, the build up to the timeline, no render

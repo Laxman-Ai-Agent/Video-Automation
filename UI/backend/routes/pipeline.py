@@ -115,20 +115,18 @@ def run_motion(pid: str):
 @router.post("/pipeline/advance")
 def advance(pid: str, part: str = "all"):
     """The step after Visual Planning, started by a user click (nothing calls it by itself): build the timeline from the plan (`part=timeline`, or `all`). Idempotent;
-    it approves only the analysis and never starts a render. `prompts` and `motion` are accepted and do nothing (Motion-Only has no prompt writer)."""
+    it never starts a render. `prompts` and `motion` are accepted and do nothing (Motion-Only has no prompt writer)."""
     if part not in ("all", "prompts", "motion", "timeline"):
         raise ApiError(422, "invalid_request", "part must be all, prompts, motion or timeline")
     pdir = store.project_dir(pid)
-    g = review.gates(pdir)["analysis"]
+    blockers = review.plan_blockers(pdir)
     if part in ("prompts", "motion"):
         return {"advanced": False, "reason": "Motion-Only mode: use part=timeline"}
     aspect = pipeline_view.aspect_of(pdir)
-    if not (pdir / "scene_plan.json").exists() or not g["ready"] or jobs.is_running(pid):
-        return {"advanced": False, "reason": "; ".join(g["blockers"][:2]) or "a job is running"}
+    if not (pdir / "scene_plan.json").exists() or blockers or jobs.is_running(pid):
+        return {"advanced": False, "reason": "; ".join(blockers[:2]) or "a job is running"}
     if timeline_gate.state(pdir, aspect)["ready"] or pipeline_view._job(pdir).get("error"):
         return {"advanced": False, "reason": "nothing to do"}          # built already, or the last build failed (the card's Retry starts it again)
-    if not g["approved"]:
-        review.set_gate(pdir, "analysis", True)
     _motion_timeline(pdir, pid)
     return {"advanced": True, "reason": "Motion-Only mode: the timeline is being built from the plan"}
 
@@ -616,11 +614,8 @@ def continue_pipeline(pid: str):
     if (j := _same_job(pid, "timeline")):
         return _started(j)
     _idle(pid)
-    try:
-        if not review.gates(pdir)["analysis"]["approved"]:
-            review.set_gate(pdir, "analysis", True)
-    except review.ReviewError as e:
-        raise ApiError(409, "not_allowed", str(e), "; ".join(e.blockers)) from e
+    if (blockers := review.plan_blockers(pdir)):
+        raise ApiError(409, "not_allowed", "the scene plan cannot be used yet", "; ".join(blockers))
     return _started(_motion_timeline(pdir, pid))
 
 
