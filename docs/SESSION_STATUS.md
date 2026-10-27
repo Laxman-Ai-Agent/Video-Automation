@@ -1,6 +1,21 @@
 # Session status and handoff (2026-10-27, updated 19:25)
 
-**Testing rule from the user (2026-10-27):** make all the changes of a task first, run the complete test suite ONCE at the end, then re-run only the tests of what failed. Fast suite: `pytest tests -m "not slow and not live_ui"` (~8 min).
+**Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
+
+## Working with the user (these lived only in the old laptop's local memory: they are the rules now)
+- The user writes Telugu in English letters: answer the same way (Telugu script only when asked), keep file names, commands and technical terms in English. "Don't generate code" = explain only.
+- Explain the cause of a warning/error with evidence first. Fix at the root, with a regression test; never accept a warning. Never claim what was not verified; say what was not run.
+- The LLM review decides what stays in the transcript and the plan (no Whisper-confidence vetoes, no hand edits).
+- **Testing rule (2026-10-27):** make all the changes of a task first, run the complete test suite ONCE at the end, then re-run only the tests of what failed. Fast suite: `pytest tests -m "not slow and not live_ui"` (~8 min); `slow` / `live_ui` modules are listed in `tests/conftest.py`.
+- Never restart the backend while a job runs (the job dies, progress resets). Commit and push to `main` are pre-authorized; runtime state (`SYSTEM/config/llm_usage.json`, `config/shared_memory.json`, agents' `memory/experiences.json`) goes in a separate "chore: runtime state" commit.
+- Never delete user data or project files without the user's explicit yes (a restore + delete was declined once, then approved later with the exact list).
+- Before an LLM-heavy run check `GET /llm/settings`: the active LLM can change on the LLM page (once it was Antigravity and timed out at 120 s). Claude Code = `claude_cli` / `claude-sonnet-5-5`.
+
+## Moving to a new laptop or account (not in git)
+- `projects/` is git-ignored: the test project `projects/my-first-project-01-df7f` (128 MB: audio, transcripts, plans, generated scenes, `out.mp4`) must be COPIED by hand from the old laptop (`E:\movies\Audio-to-video-main\projects\`), or the work restarts from a new upload.
+- Local, not in git: `.venv` (Python 3.12: `python -m venv .venv` + `pip install -r requirements.txt`), `node_modules` (`npm ci` in `VIDEO_ENGINE/remotion` and in `UI/frontend`), the Whisper model cache (large-v3, downloads on first use), `config/llm_settings.json` (choose the LLM on the LLM page; Claude Code must be signed in), `config/rule_switches.json` (all rules ON = the default), API keys (`PEXELS_API_KEY`, `PIXABAY_API_KEY`, `UNSPLASH_ACCESS_KEY` are not set anywhere yet).
+- Start the servers only from the repository root (`.claude/launch.json`: `backend` :8000, `frontend` :5173).
+- First message for the new session: "Read CLAUDE.md, then docs/SESSION_STATUS.md, then docs/ROADMAP.md, and continue with the Next steps."
 
 Read this after `CLAUDE.md`. It says what is done, what is open, and what to do next, so nothing is repeated. Older status: `docs/VISUAL_PLANNING_STATUS.md` (2026-10-23).
 
@@ -80,7 +95,7 @@ An evidence-based assessment of the whole system was made (frames of the real re
 **Open (needs the user):** clean the test leftovers committed in `d39df0f` (`catalog.json`: `cinematic-lut-grader`, `idempotent-test-skill`; 8 folders in `SYSTEM/skills/archive/library_history/`; empty `SYSTEM/skills/library/color_grading`); `test_phase9_e2e_integration` / `test_e2e_production_readiness` still write `synthetic_test_p*_e2e_*.wav` into `VIDEO_ENGINE/remotion/public`, and tests write the real agents' `memory/experiences.json` (they hold the test projects' ids: part of the "runtime state" that changes on every run); set `PEXELS_API_KEY`, `PIXABAY_API_KEY`, `UNSPLASH_ACCESS_KEY`.
 
 ## Next steps (in this order)
-0. Finish the analyzer re-run of the test project (see "Analyzer prompt restored" above), then the full autonomous run of the test project, then one fast-suite run.
+0. The analyzer of the test project has 2 errors after the re-run (step 10 "Word Timestamp Integrity": 1 error in 130 word timestamps; step 13 follows from it). They block Scene Segmentation: fix at the root (a re-aligned corrected word), then the full autonomous run of the test project, then one fast-suite run. All pending tasks: `docs/ROADMAP.md` section 3.
 1. Phase 1 of the roadmap: shots of 1.5-3.5 s inside every scene, snapped to word times (beats exist; `snap_beats`), the code generator gets per-shot frames + word timestamps, validation of maximum shot length and visual change.
 2. The open items above that need the user's go.
 3. Prove the autonomous run on a NEW project from the audio upload (not done on purpose: the user asked not to run it again for now). The test project `my-first-project-01-df7f` has all 13 stages completed (2026-10-27, analyzer review passed 0.88, Final QC passed, 0 warnings).
