@@ -48,53 +48,6 @@
       "updated_at": "2026-10-16T04:19:34.472945+00:00",
       "metadata": {}
     },
-    "cinematic-lut-grader": {
-      "skill_id": "cinematic-lut-grader",
-      "name": "Cinematic LUT Grader",
-      "summary": "Category-managed skill for color_grading",
-      "domain": "color_grading",
-      "tags": [
-        "color_grading",
-        "general",
-        "cinematic-lut-grader"
-      ],
-      "version": "1.0.0",
-      "entrypoint": "library/color_grading/cinematic-lut-grader/SKILL.md",
-      "status": "deprecated",
-      "source": "local",
-      "repository_url": null,
-      "commit_sha": null,
-      "content_sha256": "75a56e0bcc9c625da25f8735ad00d2b8169cc0b64d264f8ea782ceb83cced6e2",
-      "license": "MIT",
-      "license_evidence": "",
-      "capabilities": [
-        "cinematic-lut-grader"
-      ],
-      "dependencies": [],
-      "compatible_agents": [
-        "render_video",
-        "final_qc",
-        "timeline_build"
-      ],
-      "compatible_project_modes": [
-        "motion_only"
-      ],
-      "input_contracts": {},
-      "output_contracts": {},
-      "risk_level": "low",
-      "approval": {
-        "reviewer": "category_skill_library_installer",
-        "timestamp": "2026-10-24T03:08:29.407886+00:00",
-        "evidence": "Passed automated validation and load tests with score 67.0/100"
-      },
-      "last_audited_at": "2026-10-24T03:08:29.407886+00:00",
-      "created_at": "2026-10-24T03:08:29.407886+00:00",
-      "updated_at": "2026-10-24T03:08:29.424559+00:00",
-      "metadata": {
-        "category": "color_grading",
-        "subcategory": null
-      }
-    },
     "draft.skill": {
       "skill_id": "draft.skill",
       "name": "Draft Skill",
@@ -199,54 +152,6 @@
           "donut",
           "counter"
         ]
-      }
-    },
-    "idempotent-test-skill": {
-      "skill_id": "idempotent-test-skill",
-      "name": "Idempotent Skill",
-      "summary": "Tests that repeated installation reuses existing files.",
-      "domain": "transitions",
-      "tags": [
-        "transitions",
-        "general",
-        "idempotent-cut"
-      ],
-      "version": "1.1.0",
-      "entrypoint": "library/transitions/idempotent-test-skill/SKILL.md",
-      "status": "deprecated",
-      "source": "local",
-      "repository_url": null,
-      "commit_sha": null,
-      "content_sha256": "c9308487aac3e66665c11c96d13c4ee475a8f8e9c3e26733544978b6e77369f5",
-      "license": "MIT",
-      "license_evidence": "",
-      "capabilities": [
-        "idempotent-cut"
-      ],
-      "dependencies": [],
-      "compatible_agents": [
-        "motion_animation",
-        "motion_planning",
-        "timeline_build",
-        "main_orchestrator"
-      ],
-      "compatible_project_modes": [
-        "motion_only"
-      ],
-      "input_contracts": {},
-      "output_contracts": {},
-      "risk_level": "low",
-      "approval": {
-        "reviewer": "category_skill_library_installer",
-        "timestamp": "2026-10-24T03:08:29.318026+00:00",
-        "evidence": "Passed automated validation and load tests with score 67.0/100"
-      },
-      "last_audited_at": "2026-10-24T03:08:29.318026+00:00",
-      "created_at": "2026-10-24T03:08:29.318026+00:00",
-      "updated_at": "2026-10-24T03:08:29.327767+00:00",
-      "metadata": {
-        "category": "transitions",
-        "subcategory": null
       }
     },
     "media.ffmpeg_operations": {
@@ -1429,70 +1334,6 @@
           "filename": "remote_skill.md"
         }
       }
-    },
-    "test.checksum": {
-      "skill_id": "test.checksum",
-      "name": "Checksum Test",
-      "summary": "Test checksum validation",
-      "domain": "testing",
-      "tags": [],
-      "version": "1.0.0",
-      "entrypoint": "test_check.md",
-      "status": "approved",
-      "source": "local",
-      "repository_url": null,
-      "commit_sha": null,
-      "content_sha256": "ff792a8ea03fcf57bc02814f461b6ab7bff27b01ee7b22a621e7a7d6d52a1790",
-      "license": "Apache-2.0",
-      "license_evidence": "",
-      "capabilities": [],
-      "dependencies": [],
-      "compatible_agents": [],
-      "compatible_project_modes": [
-        "motion_only"
-      ],
-      "input_contracts": {},
-      "output_contracts": {},
-      "risk_level": "low",
-      "approval": null,
-      "last_audited_at": "",
-      "created_at": "2026-10-16T14:52:42.320206+00:00",
-      "updated_at": "2026-10-16T14:52:42.320206+00:00",
-      "metadata": {}
-    },
-    "test.skill": {
-      "skill_id": "test.skill",
-      "name": "Test Skill",
-      "summary": "A test skill",
-      "domain": "testing",
-      "tags": [],
-      "version": "1.0.0",
-      "entrypoint": "",
-      "status": "approved",
-      "source": "local",
-      "repository_url": null,
-      "commit_sha": null,
-      "content_sha256": "",
-      "license": "Apache-2.0",
-      "license_evidence": "",
-      "capabilities": [],
-      "dependencies": [],
-      "compatible_agents": [],
-      "compatible_project_modes": [
-        "motion_only"
-      ],
-      "input_contracts": {},
-      "output_contracts": {},
-      "risk_level": "low",
-      "approval": {
-        "reviewer": "lead_engineer",
-        "timestamp": "2026-10-16T14:51:43.050482+00:00",
-        "evidence": "Manual code review and unit tests passed"
-      },
-      "last_audited_at": "2026-10-16T14:51:43.050482+00:00",
-      "created_at": "2026-10-16T14:51:43.042013+00:00",
-      "updated_at": "2026-10-16T14:51:43.050482+00:00",
-      "metadata": {}
     },
     "timeline.composition_assembly": {
       "skill_id": "timeline.composition_assembly",

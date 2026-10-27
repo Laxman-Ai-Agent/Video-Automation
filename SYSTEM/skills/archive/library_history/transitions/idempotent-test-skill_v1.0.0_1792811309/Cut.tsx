@@ -1,1 +1,0 @@
-export const Cut = () => <div>Cut</div>;
