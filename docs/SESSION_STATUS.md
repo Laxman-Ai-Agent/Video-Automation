@@ -73,7 +73,8 @@ Rule the user set: **the LLM review decides what stays** (no Whisper-confidence 
 
 ## Next steps (in this order)
 1. Prove the autonomous run on a NEW project from the audio upload (Run Video): every stage starts by itself, a stage with an issue stops the run there. The test project `my-first-project-01-df7f` has all 13 stages completed (2026-10-27).
-2. Delete the dead human-decision functions and the legacy M9 review module (Open item 1) with their tests; Timeline Phase 3 (captions from Telugu words, transition markers, scene popup); the old failing tests (Open item 3).
+2. **Analyzer review of the test project is `needs_review` 0.72 (strict gate, shown red on its card).** Fixed in the evidence/code: word-timing legend (edited words keeping the measured Whisper time now reconcile), cuts breakdown, and `cuts.py` no longer makes a cut from a segment without words (that made a spurious cut at 5.35 s inside speech; new projects only, the test project keeps its valid cuts). Still real, not fixed: segment 10 has a garbled phrase ('వాస్ అవర్ రెడీ'), 'directగా' lacks the space the other segments have, segment 0 'మరి'. Needs an analyzer fixer: feed the review's findings back into the transcript correction step (bounded rounds, then re-review), like Visual Planning / Motion Planning have. Until then a re-run of the analyzer on that project stops at the analyzer, as designed.
+3. Delete the dead human-decision functions and the legacy M9 review module (Open item 1) with their tests; Timeline Phase 3 (captions from Telugu words, transition markers, scene popup); the old failing tests (Open item 3).
 3. Optional: continue the Whisper benchmark (chunk size, beam) with an accuracy check; restore more of the 48 deleted files if something needs them.
 
 Verification commands: `$env:PYTHONPATH="."; .venv\Scripts\python.exe -m pytest tests/<file> -q`; `cd UI/frontend && npx tsc --noEmit`.

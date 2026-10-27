@@ -32,7 +32,7 @@ SCHEMA = "1.0"
 VERSION = 1
 LLM_STAGES = ("analyzer", "segmentation", "planning", "motion_gen", "approval", "qc")     # the stages whose result needs an LLM review; every other stage is decided by its own deterministic checks
 SWITCHABLE = ("analyzer", "segmentation", "planning", "motion_gen")                      # approval and qc ARE an LLM decision (nobody else decides them): they cannot be switched off
-EVIDENCE_REVISION = {"approval": 2}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
+EVIDENCE_REVISION = {"approval": 2, "analyzer": 2}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
 
 
 class LlmReviewResult(TypedDict):
@@ -306,15 +306,21 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
         # The approval judges the FINAL transcript (the user's fix, else the LLM-corrected one, else the raw one), what the correction changed, and the word times: not the raw ASR text.
         cf = pdir / "cuts.json"
         cuts = json.loads(cf.read_text(encoding="utf-8")) if cf.exists() else {}
-        payload["cuts_count"] = len(cuts.get("cuts", [])) if isinstance(cuts, dict) else len(cuts)
+        cut_list = cuts.get("cuts", []) if isinstance(cuts, dict) else cuts
+        payload["cuts_count"] = len(cut_list)
+        payload["cuts"] = [{"t": c.get("t"), "reason": c.get("reason"), "silence_after_s": c.get("silence")} for c in cut_list if isinstance(c, dict)][:30]
+        payload["cuts_note"] = "every cut is snapped to the end of a spoken word; a segment without words (noise, a pause) makes no cut of its own, so the number of cuts is not the number of segments"
         final_f = next((pdir / n for n in ("transcript_fixed.json", "transcript_corrected.json", "transcript.json") if (pdir / n).exists()), None)
         payload["final_transcript_file"] = final_f.name if final_f else None
         if final_f:
             segs = json.loads(final_f.read_text(encoding="utf-8")).get("segments", [])
             words = [w for s in segs for w in s.get("words", [])]
             payload["final_transcript"] = [{"segment": s.get("id"), "start": round(s.get("start", 0), 2), "end": round(s.get("end", 0), 2), "text": s.get("text")} for s in segs][:15]
+            payload["empty_segments"] = [s.get("id") for s in segs if not s.get("words")]
             payload["word_timing"] = {"words": len(words), "llm_edited": sum(1 for w in words if w.get("edit")), "aligned": sum(1 for w in words if w.get("timing") == "aligned"),
                                       "estimated": sum(1 for w in words if w.get("timing") == "estimated"),
+                                      "edited_keeping_whisper_time": sum(1 for w in words if w.get("edit") and w.get("timing") is None),      # a respelling keeps the MEASURED Whisper time of the word it replaces
+                                      "legend": "llm_edited = edited_keeping_whisper_time (measured time kept, same word count) + aligned (re-aligned against the audio) + estimated (word count changed: a warning); the applied corrections are spans of words, so their number is smaller than the number of edited words",
                                       "overlapping": sum(1 for a, b in zip(words, words[1:]) if b.get("start", 0) < a.get("end", 0) - 0.05)}
         rf = pdir / "transcript_review.json"
         if rf.exists():

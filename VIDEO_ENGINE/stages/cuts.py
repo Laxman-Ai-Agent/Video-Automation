@@ -27,7 +27,9 @@ def make_cuts(pdir: Path) -> list[dict]:
     cand: list[tuple[float, str]] = []
     # ponytail: pysbd has no Telugu rules; split on punctuation + Whisper segment ends. Upgrade: Telugu sentence model.
     for s in t.segments:
-        cand.append((s.words[-1].end if s.words else s.end, "segment_end"))
+        if not s.words:
+            continue                         # noise or a pause: nothing is spoken, so the segment has no end of speech (its own end would be snapped into the NEXT segment as a cut in the middle of speech)
+        cand.append((s.words[-1].end, "segment_end"))
         for w in s.words:
             if w.w.endswith(END_MARKS):
                 cand.append((w.end, "sentence_end"))
