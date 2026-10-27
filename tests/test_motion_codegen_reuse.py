@@ -21,6 +21,18 @@ def test_a_manifest_without_fingerprints_gives_none_so_its_code_is_written_again
     assert ma.previous_fingerprints(tmp_path, "") == {}                                                   # no manifest
     (tmp_path / "motion_animation.json").write_text(json.dumps({"scenes": [{"scene_id": 1, "source_sha256": "x"}, {"scene_id": 2, "input_fingerprint": "abc"}]}), encoding="utf-8")
     got = ma.previous_fingerprints(tmp_path, "")
-    assert got[1] is None and got[2] == "abc"
+    assert got["1"] is None and got["2"] == "abc"
     (tmp_path / "motion_animation_9x16.json").write_text("not json", encoding="utf-8")
     assert ma.previous_fingerprints(tmp_path, "_9x16") == {}
+
+
+def test_a_scene_generated_before_the_stage_failed_is_reused_and_not_written_again(tmp_path):
+    """The manifest is written only when the whole stage succeeded. A type error in the last scene used to make the next run ask the LLM for EVERY scene again
+    (8 code generations, which is what exhausted the LLM session once); the fingerprint recorded with each scene keeps them."""
+    (tmp_path / "generated_motion").mkdir()
+    ma.record_fingerprint(tmp_path, "", 1, "fp1")
+    ma.record_fingerprint(tmp_path, "", 2, "fp2")
+    assert ma.previous_fingerprints(tmp_path, "") == {"1": "fp1", "2": "fp2"}
+    assert ma.previous_fingerprints(tmp_path, "_9x16") == {}                                              # the other aspect has its own record
+    (tmp_path / "motion_animation.json").write_text(json.dumps({"scenes": [{"scene_id": 2, "input_fingerprint": "from_manifest"}]}), encoding="utf-8")
+    assert ma.previous_fingerprints(tmp_path, "")["2"] == "from_manifest"                                 # a finished stage is the stronger record

@@ -50,6 +50,17 @@ LlmPurpose = Literal["decision", "generation", "review", "repair"]
 ModelProfile = Literal["fast_structured", "reasoning_review", "code_generation", "default"]
 GatewayStatus = Literal["passed", "blocked", "failed", "needs_review"]
 
+# How long an answer of each profile may take. ONE definition: a request that does not set its own timeout gets its profile's
+# (a 60 s cut-off was applied to every call, so generating a scene's TSX - a few hundred lines - always timed out and, after three
+# scenes, opened the provider's circuit breaker).
+PROFILE_TIMEOUT: dict[str, int] = {"fast_structured": 60, "reasoning_review": 300, "code_generation": 600, "default": 120}
+
+
+def profile_timeout(profile: str | None, given: int | None = None) -> int:
+    """The timeout for this request: what the caller asked for, else the profile's own."""
+    return int(given) if given else PROFILE_TIMEOUT.get(profile or "default", PROFILE_TIMEOUT["default"])
+
+
 # Profile to model preference mapping per provider
 PROFILE_ROUTING: dict[str, dict[ModelProfile, str]] = {
     "gemini": {
@@ -114,7 +125,7 @@ class LlmGatewayRequest:
     system_prompt: str = ""
     model_profile: ModelProfile = "default"
     structured_schema: dict[str, Any] | None = None
-    timeout: int = 60
+    timeout: int = 0                                     # 0 = the timeout of the model profile (PROFILE_TIMEOUT); a caller may set its own
     max_retries: int = 2
     correlation_id: str = field(default_factory=lambda: f"corr_{uuid.uuid4().hex[:12]}")
     request_id: str = field(default_factory=lambda: f"req_{uuid.uuid4().hex[:12]}")
@@ -245,7 +256,7 @@ class LlmGateway:
                     raw_text = self.client.generate_text(
                         user=current_user_prompt,
                         system=current_system_prompt,
-                        timeout=req.timeout,
+                        timeout=profile_timeout(req.model_profile, req.timeout),
                         provider=prov,
                         model=effective_mdl,
                     )
@@ -470,7 +481,7 @@ class GatewayRequest:
     correlation_id: str | None = None
     caller_agent_id: str = "agent"
     metadata: dict[str, Any] = field(default_factory=dict)
-    timeout: int = 60
+    timeout: int = 0                                     # 0 = the timeout of the model profile (PROFILE_TIMEOUT), like LlmGatewayRequest
     max_retries: int = 4
     user_prompt: str = ""
     project_id: str = ""
@@ -532,7 +543,7 @@ def execute_llm_gateway_call(req: Any) -> GatewayResponse:
         model_profile=model_profile,
         correlation_id=getattr(req, "correlation_id", None) or f"corr_{uuid.uuid4().hex[:12]}",
         metadata=meta,
-        timeout=getattr(req, "timeout", None) or 60,                  # the caller's timeout is kept: it was dropped here, so every GatewayRequest was cut off after 60 s
+        timeout=getattr(req, "timeout", None) or 0,                   # the caller's timeout is kept; 0 lets the model profile decide (PROFILE_TIMEOUT)
     )
     res = gw.execute(legacy_req)
     return GatewayResponse(

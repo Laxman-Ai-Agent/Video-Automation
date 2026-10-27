@@ -832,6 +832,10 @@ class PipelineOrchestrator:
                 for sid in ACTIVE_STAGES:
                     if sid in reused_ids:
                         is_valid, issues, _ = validate_checkpoint_deep(self.pdir, sid, self.aspect)
+                        # A checkpoint whose own stage still has unresolved issues is NOT reusable: reusing it would block every later stage for ever
+                        # (the stage is never run again, so neither its own fixer nor its LLM review can ever clear them).
+                        if is_valid and (own := stage_gate.unresolved(self.pdir, sid, self.aspect)):
+                            is_valid, issues = False, [f"the stage's own report has unresolved issues: {stage_gate.describe(own)}"]
                         if is_valid:
                             reused_stages.append(sid)
                             communication.publish_lifecycle_event(

@@ -162,8 +162,8 @@ def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[st
     except Exception as e:
         logger.warning(f"Scene {sid} compile repair call failed: {e}")
         return None
-    if resp.status in ("blocked", "failed"):
-        return None
+    if resp.status in ("blocked", "failed"):                                   # the LLM, not the code, is the blocker: say so instead of reporting the compiler errors as the cause
+        raise AnimationCodegenError(f"Scene {sid}: the compile errors cannot be repaired, the LLM is unavailable: {resp.error or resp.status}")
     fixed = extract_tsx_code(resp.raw_text)
     if fixed and f"Scene{sid}" in fixed and audit_scene_tsx_security(fixed)["passed"]:
         return fixed
@@ -673,6 +673,9 @@ def generate_scene_tsx_via_llm(
         "arrangement, another focal element, another scale or position of the hero, a new card entering while the one before it leaves. A shot is not one more element appearing on an "
         "unchanged layout. The background, the palette and the headline style stay the same across the shots of one scene (it is one scene, not several); inside a Sequence the frame "
         "counts from that shot's start, so animate each shot from frame 0 of its own Sequence and keep its content visible to its last frame (rule 8 holds for the scene as a whole).\n"
+        "12. The scenes are type-checked with TypeScript `strict: true`, and code that does not compile is rejected: never use a value that may be null or undefined without "
+        "checking it first. `getPointAtLength`/`getPointAtLengthDescribed` of @remotion/paths return `Point | null`, `Array.find` returns `undefined`, a `useRef` holds `| null`: "
+        "guard the value (`if (!p) return null;`) or give it a fallback before you read a field of it.\n"
         "11. Each shot lists the words spoken in it with their frames: a word that is drawn on screen appears at its own start_frame, never on a fixed schedule.\n"
         "9. Output valid, complete React TSX source code only."
     )
@@ -842,12 +845,36 @@ def scene_input_fingerprint(**inputs: Any) -> str:
 
 
 def previous_fingerprints(pdir: Path, sfx: str) -> dict:
-    """scene id -> the input fingerprint the stored code of that scene was written from (a manifest made before this was recorded gives none: its code is written again)."""
+    """scene id (as a string) -> the input fingerprint the stored code of that scene was written from (none recorded = its code is written again).
+
+    The manifest is written only when the WHOLE stage succeeded, so the sidecar `generated_motion/fingerprints<sfx>.json`, written as each scene is generated, is read as well:
+    a stage that fails after the scenes were generated (one type error in the last scene) must not throw away the code of every other scene and have the LLM write it all again."""
+    fps: dict = {}
+    try:
+        side = json.loads((pdir / "generated_motion" / f"fingerprints{sfx}.json").read_text(encoding="utf-8"))
+        fps.update({str(k): v for k, v in side.items()} if isinstance(side, dict) else {})
+    except (OSError, ValueError, AttributeError):
+        pass
     try:
         prev = json.loads((pdir / f"motion_animation{sfx}.json").read_text(encoding="utf-8"))
-        return {x.get("scene_id"): x.get("input_fingerprint") for x in prev.get("scenes", [])}
+        fps.update({str(x.get("scene_id")): x.get("input_fingerprint") for x in prev.get("scenes", [])})
     except (OSError, ValueError, AttributeError):
-        return {}
+        pass
+    return fps
+
+
+def record_fingerprint(pdir: Path, sfx: str, sid: Any, fp: str) -> None:
+    """Record, the moment a scene's code is on disk, the inputs it was written from, so a later failure of the stage does not cost every scene a new LLM call (see previous_fingerprints)."""
+    path = pdir / "generated_motion" / f"fingerprints{sfx}.json"
+    try:
+        cur = json.loads(path.read_text(encoding="utf-8"))
+        cur = cur if isinstance(cur, dict) else {}
+    except (OSError, ValueError):
+        cur = {}
+    cur[str(sid)] = fp
+    tmp = path.with_suffix(".tmp")
+    tmp.write_text(json.dumps(cur, indent=1), encoding="utf-8")
+    tmp.replace(path)
 
 
 def generate_custom_motion_code(
@@ -958,7 +985,7 @@ def generate_custom_motion_code(
         scene_file = out_dir / f"scene_{sid}.tsx"
         shots = vp_sc.get("shots") or []
         scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots)
-        if scene_file.exists() and prev_fps.get(sid) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
+        if scene_file.exists() and prev_fps.get(str(sid)) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
                 code = existing_code
@@ -1009,6 +1036,7 @@ def generate_custom_motion_code(
             tmp_scene_file.write_text(code, encoding="utf-8")
             tmp_scene_file.replace(scene_file)
             time.sleep(2.0)
+        record_fingerprint(pdir, sfx, sid, scene_fp)
 
         sha_hash = file_sha256(scene_file)
         gen_missing = set(gen_meta.get("missing_elements", []))

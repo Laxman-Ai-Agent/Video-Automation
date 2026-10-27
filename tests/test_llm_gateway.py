@@ -35,7 +35,9 @@ def test_gateway_request_and_response_dataclasses():
     assert req.stage_id == "planning"
     assert req.correlation_id.startswith("corr_")
     assert req.request_id.startswith("req_")
-    assert req.timeout == 60
+    assert req.timeout == 0                                      # 0 = the timeout of the model profile: a scene's TSX cannot be written in the 60 s every call used to get
+    assert llm_gateway.profile_timeout(req.model_profile, req.timeout) == llm_gateway.PROFILE_TIMEOUT[req.model_profile]
+    assert llm_gateway.profile_timeout("code_generation", 0) == 600 and llm_gateway.profile_timeout("code_generation", 45) == 45    # the caller's own timeout still wins
     assert req.max_retries == 2
 
     resp = LlmGatewayResponse(

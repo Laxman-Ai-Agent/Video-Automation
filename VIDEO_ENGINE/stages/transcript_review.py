@@ -33,6 +33,8 @@ TIMEOUT = 120
 MAX_SHIFT = 0.4                   # seconds: the largest median disagreement between a forced alignment and Whisper's own timestamps of the UNCHANGED words that still lets us trust it
 ONSET_GAP = 0.15                  # seconds: a corrected word whose aligned start is this long before the first sound in its span is moved to that sound (measured from the signal)
 PAD = 0.3                         # seconds of audio around an edited segment given to the aligner
+MIN_WORD = 0.04                   # seconds: the shortest a re-aligned word may be inside its window
+ALIGN_VERSION = 2                 # the arithmetic that places a re-aligned word in its window (part of the refine fingerprint, not of the LLM cache key: a change re-aligns, it never re-asks). 2: a start is clamped into the window too, so a word can no longer start after its own end
 
 SYSTEM = (
     "You proofread an automatic transcript (Whisper) of Telugu speech that contains English technical terms, company names, loanwords, and numbers. "
@@ -337,8 +339,8 @@ def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
             for k, (x, y) in fits:
                 lo = s.words[k - 1].end if k and s.words[k - 1].edit is None else (s.words[k - 1].end if k else s.start)
                 hi = s.words[k + 1].start if k + 1 < len(s.words) and s.words[k + 1].edit is None else (s.words[k + 1].start if k + 1 < len(s.words) else s.end)
-                x = max(lo, round(x, 3))
-                y = min(hi, max(x + 0.05, round(y, 3)))
+                x = min(max(lo, round(x, 3)), max(lo, round(hi - MIN_WORD, 3)))         # the aligner may find the word in the PAD beyond the window: its start stays inside the window
+                y = min(hi, max(x + MIN_WORD, round(y, 3)))
                 s.words[k].start, s.words[k].end, s.words[k].timing = x, y, "aligned"
             cur = s.start
             for w in s.words:
@@ -347,8 +349,11 @@ def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
                 if w.end < w.start + 0.04:
                     w.end = w.start + 0.04
                 cur = w.end
-            if s.words and s.words[-1].end > s.end:
-                s.words[-1].end = s.end
+            if s.words and s.words[-1].end > s.end:                                     # a word never ends after its segment: its start moves with its end, never past it
+                last = s.words[-1]
+                floor = s.words[-2].end if len(s.words) > 1 else s.start
+                last.end = s.end
+                last.start = min(last.start, max(floor, round(last.end - MIN_WORD, 3)))
             rec["status"] = "aligned"
         except Exception as e:
             rec["reason"] = str(e)[:160]                  # the new words keep the ESTIMATED timing from apply_corrections
@@ -360,7 +365,7 @@ def realign(pdir: Path, fixed: Transcript, aligner=None) -> dict:
 
 def _alignment_block(align_r: dict, edited: int, estimated: int) -> dict:
     """The "alignment" record of transcript_review.json for an alignment result; `estimated_words` is how many corrected words still have an ESTIMATED timing."""
-    return {"status": align_r["status"], "edited_words": edited, "estimated_words": estimated, "segments": align_r["segments"],
+    return {"status": align_r["status"], "align_version": ALIGN_VERSION, "edited_words": edited, "estimated_words": estimated, "segments": align_r["segments"],
             "method": {"unchanged": "whisper word timestamps (model-inferred); a corrected word that replaces one word keeps that word's timestamp",
                        "aligned_for_edits": "corrected words re-aligned against the original audio (faster-whisper cross-attention forced alignment, model-inferred) and cross-checked against the unchanged words",
                        "partial": "some corrected words re-aligned, the others keep ESTIMATED timestamps (see segments)",
@@ -546,7 +551,9 @@ def is_verified(pdir: Path) -> bool:
             review = json.loads(review_f.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return False
+        a = review.get("alignment") or {}
         return (review.get("version") == VERSION                                       # a check made under older correction rules is not the current check
+                and (a.get("align_version", 1) == ALIGN_VERSION or a.get("status") == "unchanged")   # words placed by older alignment arithmetic (no version recorded = 1) are re-aligned first
                 and (review.get("llm") or {}).get("status") in ("applied", "cached") and not alignment_pending(review))
     return corrected.exists() and corrected.stat().st_mtime >= raw.stat().st_mtime        # no current review file: an older project that has only the corrected transcript
 
