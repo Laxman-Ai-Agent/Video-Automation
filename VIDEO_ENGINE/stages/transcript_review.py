@@ -540,7 +540,8 @@ def is_verified(pdir: Path) -> bool:
             review = json.loads(review_f.read_text(encoding="utf-8"))
         except (OSError, ValueError):
             return False
-        return (review.get("llm") or {}).get("status") in ("applied", "cached") and not alignment_pending(review)
+        return (review.get("version") == VERSION                                       # a check made under older correction rules is not the current check
+                and (review.get("llm") or {}).get("status") in ("applied", "cached") and not alignment_pending(review))
     return corrected.exists() and corrected.stat().st_mtime >= raw.stat().st_mtime        # no current review file: an older project that has only the corrected transcript
 
 

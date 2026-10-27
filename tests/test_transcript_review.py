@@ -134,6 +134,9 @@ def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_correcte
     assert not tr.is_verified(tmp_path)                                                     # corrected words still wait for their timestamps
     _review(tmp_path, **{"alignment.status": "aligned_for_edits"})
     assert tr.is_verified(tmp_path)
+    _review(tmp_path, version=tr.VERSION - 1)
+    assert not tr.is_verified(tmp_path)                                                     # checked under older correction rules: the analyzer runs again
+    _review(tmp_path, version=tr.VERSION)
     later = (tmp_path / "transcript_review.json").stat().st_mtime + 5
     os.utime(tmp_path / "transcript.json", (later, later))
     assert not tr.is_verified(tmp_path)                                                     # the review was made from an older raw transcript
