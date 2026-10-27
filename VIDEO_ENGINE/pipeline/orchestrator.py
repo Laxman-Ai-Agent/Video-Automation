@@ -728,7 +728,7 @@ class PipelineOrchestrator:
         """The next stage starts only after this one finished with nothing unresolved, and nobody has to accept a warning for that: the stage's own fixer solves its warnings here (bounded rounds,
         each followed by a fresh LLM review of the changed report). `rerun` executes the stage again (a fixer that only decides, like Motion Planning's, needs it to apply the decisions).
         What the fixer cannot solve stays, the event names the cause, and the next stage waits for it."""
-        from VIDEO_ENGINE.stages import motion_autofix, motion_planning, visual_planning
+        from VIDEO_ENGINE.stages import motion_autofix, motion_planning, transcript_review, visual_planning
         from VIDEO_ENGINE.stages.promptgen import GenError
 
         def fix_motion_plan() -> None:
@@ -740,7 +740,11 @@ class PipelineOrchestrator:
             if res.status != "succeeded":
                 raise StageFixError(res.error or res.summary or "the stage failed when it ran again with the fixes")
 
-        fixer = {"planning": lambda: visual_planning.fix_warnings(self.pdir), "motion_plan": fix_motion_plan}.get(stage_id)
+        def fix_transcript() -> None:
+            # the Audio Analyzer: what its stage review still found goes back to the transcript correction (the LLM, same checks, re-aligned), then the loop reviews again
+            transcript_review.fix(self.pdir, (llm_review.load_review(self.pdir, "analyzer", self.aspect) or {}).get("findings", []))
+
+        fixer = {"planning": lambda: visual_planning.fix_warnings(self.pdir), "motion_plan": fix_motion_plan, "analyzer": fix_transcript}.get(stage_id)
         for _ in range(MAX_AUTOFIX_ROUNDS):
             open_issues = stage_gate.unresolved(self.pdir, stage_id, self.aspect)
             if fixer is None or not open_issues:
@@ -751,7 +755,7 @@ class PipelineOrchestrator:
             )
             try:
                 fixer()
-            except (GenError, motion_planning.MotionError, motion_autofix.Exhausted, StageFixError) as e:
+            except (GenError, motion_planning.MotionError, motion_autofix.Exhausted, StageFixError, transcript_review.FixError) as e:
                 communication.publish_lifecycle_event(
                     project_id=self.project_id, stage_id=stage_id, sender_agent_id="main_orchestrator", event="stage_progress",
                     detail=f"The warnings of '{stage_id}' could not be fixed automatically: {e}", run_id=run.run_id, correlation_id=run.correlation_id,

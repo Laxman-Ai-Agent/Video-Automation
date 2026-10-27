@@ -15,6 +15,7 @@ that no longer exists. If Claude is not available the raw transcript stays the t
 import hashlib
 import json
 import os
+import time
 import re
 import statistics
 import sys
@@ -420,6 +421,71 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None) -> dict:
     tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
     os.replace(tmp, pdir / "transcript_review.json")
     return review
+
+
+MAX_FIX_ROUNDS = 2                # passes that tell the LLM what the stage review still found, counted on disk per raw transcript (a new raw transcript starts again)
+FIX_SYSTEM = SYSTEM + (" THIS IS A SECOND PASS over a transcript you already proofread: a reviewer still found the problems listed under 'review_findings'. Fix exactly those problems, with the same JSON "
+                       "answer, and change nothing else. A script boundary with no space ('directగా') is written 'direct గా', as everywhere else in this transcript. Never guess a word that neither the words, "
+                       "their probabilities nor the sentence around them support: leave it (an empty list is a good answer).")
+
+
+class FixError(RuntimeError):
+    """The review's findings could not be fixed automatically; the message says why (the stage then stops with it)."""
+
+
+def fix(pdir: Path, findings: list[dict], ask=None, aligner=None) -> dict:
+    """One more pass over the transcript the LLM already corrected, told what the Audio Analyzer's stage review still found. The corrections go through the same checks as the first pass
+    (`validate_corrections`: only exact, non-overlapping, bounded ones are applied), corrected words that changed the word count are re-aligned against the audio, and the pass is recorded in
+    transcript_review.json (`fix_rounds`). Raises FixError when no pass is left, there is nothing to fix, or the LLM changed nothing."""
+    raw_f = pdir / "transcript.json"
+    review = last_review(pdir)
+    raw_id = hashlib.sha1(raw_f.read_bytes()).hexdigest()[:12]
+    rounds = [r for r in review.get("fix_rounds", []) if r.get("raw") == raw_id]
+    if len(rounds) >= MAX_FIX_ROUNDS:
+        raise FixError(f"{MAX_FIX_ROUNDS} automatic fix passes were already made for this transcript; what the review still finds could not be solved automatically")
+    items = [{"severity": f.get("severity"), "category": f.get("category"), "message": str(f.get("message"))[:400]} for f in findings if f.get("severity") in ("warning", "error", "blocker")]
+    if not items:
+        raise FixError("the review has no warning or error left to solve")
+    src = pdir / "transcript_corrected.json"
+    t = Transcript.model_validate_json((src if src.exists() else raw_f).read_text(encoding="utf-8"))
+    ids = sorted(s.id for s in t.segments if s.words)
+    cache_f = pdir / "asr_llm_cache.json"
+    cache = json.loads(cache_f.read_text(encoding="utf-8")) if cache_f.exists() else {}
+    corrections: list[dict] = []
+    try:
+        for n in range(0, len(ids), MAX_SEGMENTS):
+            body = json.loads(_request(t, ids[n:n + MAX_SEGMENTS]))
+            body["review_findings"] = items
+            user = json.dumps(body, ensure_ascii=False)
+            key = hashlib.sha1(f"fix{VERSION}|{_model()}|{FIX_SYSTEM}|{user}".encode()).hexdigest()
+            if key not in cache:
+                from . import promptgen
+                cache[key] = (ask or promptgen.run_claude)(user, system=FIX_SYSTEM, timeout=TIMEOUT)
+                cache_f.write_text(json.dumps(cache, ensure_ascii=False), encoding="utf-8")
+            corrections += validate_corrections(t, _json_from(cache[key]).get("corrections", []))
+    except Exception as e:                                         # CLI missing / not signed in / timeout / an answer that is not the JSON asked for
+        raise FixError(f"the LLM could not be asked for the fix: {str(e)[:200]}") from e
+    for n, c in enumerate(corrections):
+        c["id"] = f"f{len(rounds) + 1}c{n + 1:03d}"
+    fixed, edited = apply_corrections(t, corrections)
+    rec = {"round": len(rounds) + 1, "raw": raw_id, "at": time.strftime("%Y-%m-%dT%H:%M:%S"), "findings": items, "corrections": corrections, "edited_words": edited}
+    review["fix_rounds"] = review.get("fix_rounds", []) + [rec]
+    if edited:
+        align_r = realign(pdir, fixed, aligner)
+        total = sum(1 for s in fixed.segments for w in s.words if w.edit)
+        est = sum(w.timing == "estimated" for s in fixed.segments for w in s.words)
+        if align_r["status"] == "unchanged":                        # only respellings: they keep the measured Whisper times, the earlier alignment record stands
+            review["alignment"] = {**(review.get("alignment") or {}), "edited_words": total, "estimated_words": est}
+        else:
+            review["alignment"] = _alignment_block(align_r, total, est)
+        src.write_text(fixed.model_dump_json(indent=1), encoding="utf-8")
+        review["corrected_file"] = "transcript_corrected.json"
+    tmp = pdir / "transcript_review.json.part"
+    tmp.write_text(json.dumps(review, ensure_ascii=False, indent=1), encoding="utf-8")
+    os.replace(tmp, pdir / "transcript_review.json")
+    if not edited:
+        raise FixError("the LLM found nothing it could fix with the words and probabilities it has: " + "; ".join(f"{c.get('why')}" for c in corrections if c["status"] != "applied")[:200])
+    return rec
 
 
 def is_verified(pdir: Path) -> bool:
