@@ -222,7 +222,6 @@ def test_the_api_builds_reads_and_hands_the_version_to_the_llm_approval_and_the_
     assert c.get(f"/projects/{pid}/timeline-build").status_code == 409 and c.get(f"/projects/{pid}/timeline-build").json()["error"]["code"] == "timeline_build_missing"
     assert c.get(f"/projects/{pid}/timeline-build/timeline").status_code == 409
     assert c.post(f"/projects/{pid}/motion-timeline-validation/run").status_code == 202 and _mo.wait_job(c, pid, timeout=240)["error"] is None
-    _v.accept_all(c, pid, c.get(f"/projects/{pid}/motion-timeline-validation").json())
     r = c.post(f"/projects/{pid}/timeline-build/run")
     assert r.status_code == 202 and r.json()["steps"] == ["motion-validate", "timeline-build", "timeline-approve", "render-final"]      # no person between the build, the approval and the render
     assert _mo.wait_job(c, pid, timeout=240)["error"] is None

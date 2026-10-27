@@ -295,3 +295,11 @@ def test_motion_generation_does_not_wait_for_the_removed_template_selection(pdir
     monkeypatch.setattr(routes.jobs, "start", lambda pid, label, *a, **k: started.append(label) or label)
     monkeypatch.setattr(routes, "_started", lambda job: job)
     assert routes.run_motion_generation("proj_gate") == "motion-gen" and started == ["motion-gen"]
+
+
+def test_a_stage_that_never_ran_has_no_llm_review_to_wait_for(pdir, monkeypatch):
+    from SYSTEM.policies import llm_review
+    _report(pdir, "motion_generation.json", [("completed", "ok")])
+    monkeypatch.setattr(llm_review, "is_stage_review_passed", lambda *a, **k: (False, "llm_review_missing", None))
+    assert stage_gate.unresolved(pdir, "motion_gen", "16:9", ran=False) == []                                  # the route gate asks this for a dependency that never completed
+    assert [i["name"] for i in stage_gate.unresolved(pdir, "motion_gen", "16:9")] == ["LLM review"]

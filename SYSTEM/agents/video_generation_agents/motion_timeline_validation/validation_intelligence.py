@@ -68,7 +68,7 @@ class StructuredFinding:
     evidence: dict[str, Any] = field(default_factory=dict)
     can_auto_fix: bool = False
     suggested_action: str = ""
-    status: str = "unresolved"  # "unresolved", "repaired", "accepted_for_version"
+    status: str = "unresolved"  # "unresolved", "repaired"
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)

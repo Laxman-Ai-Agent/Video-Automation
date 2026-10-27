@@ -75,10 +75,10 @@ def input_files(pdir: Path, aspect: str) -> dict[str, Path]:
 
 @memo
 def input_digests(pdir: Path, aspect: str) -> dict[str, str | None]:
-    """Every material input by role: the Stage 10 verdict (fingerprint, readiness, accepted exceptions), the artifacts, the audio (name and size), the words, the renderer, the policies and this module."""
+    """Every material input by role: the Stage 10 verdict (fingerprint, readiness), the artifacts, the audio (name and size), the words, the renderer, the policies and this module."""
     d = {k: v for k, v in mv.input_digests(pdir, aspect).items() if k in ("project", "segmentation", "visual_plan", "scene_plan", "motion_plan", "motion_planning", "motion_generation", "composition", "audio", "words", "renderer", "resources")}
     rep = mv.load(pdir, aspect)
-    d["stage10"] = None if rep is None else sha(canon([rep.get("source_fingerprint"), rep.get("readiness"), rep.get("phase_status"), sorted(r["exception_id"] for r in rep.get("exceptions", []) if not r.get("revoked_at"))]))
+    d["stage10"] = None if rep is None else sha(canon([rep.get("source_fingerprint"), rep.get("readiness"), rep.get("phase_status"), []]))                    # [] was the accepted exceptions (none can exist any more): kept so the fingerprint of finished timelines does not change
     d["policies"] = sha(canon([SCHEMA, VERSION, RULE_SET, POLICY, aspect]))
     d["builder"] = _file_sha(Path(__file__))
     return d
@@ -202,7 +202,7 @@ class Builder:
         r.check(S, "freshness.stage10_ready", not bl, "blocker", bl[0] if bl else "", None, "stage10", {"readiness": rep and rep.get("readiness")}, "motion_validation", "run Motion & Timeline Validation and resolve its findings")
         if rep and rep.get("phase_status") == "completed" and not rep.get("stale"):
             s = rep["summary"]
-            r.check(S, "freshness.required_visuals_drawn", s.get("required_not_drawn", 0) == 0 or s.get("accepted_exceptions", 0) > 0, "blocker", f"{s.get('required_not_drawn')} required element(s) are not drawn and no exception was recorded", None, "required_elements",
+            r.check(S, "freshness.required_visuals_drawn", s.get("required_not_drawn", 0) == 0, "blocker", f"{s.get('required_not_drawn')} required element(s) are not drawn", None, "required_elements",
                     {"required_not_drawn": s.get("required_not_drawn")}, "motion_validation")
             for row in rep.get("elements", []):                    # what is not drawn stays visible here: accepted does not mean drawn
                 if row["state"] == "approximate":                  # drawn, but as a stand-in for what the plan describes
@@ -439,7 +439,7 @@ class Builder:
 
     def _disclosures(self) -> dict:
         s = (self.val or {}).get("summary", {})
-        return {"required_not_drawn": s.get("required_not_drawn", 0), "optional_not_drawn": s.get("optional_not_drawn", 0), "approximate": s.get("approximate", 0), "accepted_exceptions": s.get("accepted_exceptions", 0),
+        return {"required_not_drawn": s.get("required_not_drawn", 0), "optional_not_drawn": s.get("optional_not_drawn", 0), "approximate": s.get("approximate", 0),
                 "note": "accepted does not mean drawn: see the findings of the build report"}
 
     # --- 11 ---
@@ -489,7 +489,7 @@ class Builder:
         r.check(S, "trans.scene_times_unchanged", all(next(c for c in clips if c["scene_id"] == t["to_scene"])["start_frame"] == t["boundary_frame"] for t in T["transitions"]), "blocker", "a transition moves a scene boundary", None, "transitions", {}, "timeline_build")
         r.check(S, "mode.respected", (T["profile"]["mode"] == "motion_only") == (not store.uses_images(self.pdir)), "blocker", "the timeline's visual mode is not the project's", None, "mode", {}, "timeline_build")
         dis = T["disclosures"]
-        r.check(S, "visual.required_not_hidden", dis["required_not_drawn"] == 0 or dis["accepted_exceptions"] > 0, "blocker", "a required visual is not drawn and no exception exists", None, "disclosures", dis, "motion_generation")
+        r.check(S, "visual.required_not_hidden", dis["required_not_drawn"] == 0, "blocker", "a required visual is not drawn", None, "disclosures", dis, "motion_generation")
 
     # --- run ---
     def run(self, say) -> tuple[list[dict], dict]:
@@ -569,7 +569,7 @@ def _report(pdir: Path, aspect: str, rec: Rec, recs: list[dict], T: dict, digest
     n = lambda sev: sum(1 for f in findings if f["severity"] == sev)
     passed, total, skipped = (sum(s[k] for s in recs) for k in ("checks_passed", "checks_total", "checks_skipped"))
     d = (T or {}).get("disclosures", {})
-    disclosed = d.get("optional_not_drawn", 0) + d.get("approximate", 0) + d.get("accepted_exceptions", 0) + d.get("required_not_drawn", 0)
+    disclosed = d.get("optional_not_drawn", 0) + d.get("approximate", 0) + d.get("required_not_drawn", 0)
     if forced:
         status = forced
     elif n("blocker") or n("error") or any(s["status"] in ("blocked", "skipped_due_to_dependency") for s in recs):

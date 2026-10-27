@@ -71,10 +71,8 @@ def validation_stage(pdir: Path, aspect: str, step: str, running: bool, failed: 
     if rep["stale"]:
         return dict(id=sid, label=label, status="queued", detail="an input changed since the last validation: run it again", action=open_it)
     if rep["readiness"] in ("ready", "ready_with_warnings"):
-        warn_msg = f"ready with warnings: {s['warnings']} warning(s), {s['accepted_exceptions']} accepted exception(s)" if rep["readiness"] == "ready_with_warnings" else f"ready: {s['checks_passed']} of {s['checks_total']} checks passed"
+        warn_msg = f"ready with warnings: {s['warnings']} warning(s), disclosed to the approval and Final QC reviews" if rep["readiness"] == "ready_with_warnings" else f"ready: {s['checks_passed']} of {s['checks_total']} checks passed"
         return dict(id=sid, label=label, status="completed", detail=warn_msg, action=open_it)
-    if rep["readiness"] == "needs_review":
-        return dict(id=sid, label=label, status="waiting_for_approval", detail=f"{s['unresolved_review_items']} warning(s) need a decision", action=open_it)
     return dict(id=sid, label=label, status="failed", detail=f"blocked: {s['blockers']} blocker(s), {s['errors']} error(s) (the timeline is not built)", action=open_it)
 
 

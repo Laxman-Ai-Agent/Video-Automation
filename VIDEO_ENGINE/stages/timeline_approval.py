@@ -6,11 +6,10 @@ Stage 10 verdict ...) and what the final render depends on besides that (render 
 and the CURRENT inputs every time, never read from a stored boolean.
 
 States: not_ready | ready_for_review | changes_requested | approved | stale | approval_error (job status is separate). `reviewing` is a page state, not a stored one.
-Records (append-only history, never overwritten): `timeline_approval_history[_9x16].json` = events (decision approved / changes_requested / withdrawn, note). `timeline_review[_9x16].json` = the review manifest of
+Records (append-only history, never overwritten): `timeline_approval_history[_9x16].json` = events (decision approved / changes_requested / withdrawn). `timeline_review[_9x16].json` = the review manifest of
 the current version (derived: the same inputs give the same review id).
-Honesty rules: a warning is never removed because it was acknowledged; a still is not motion playback; `review_coverage` says whether a PERSON looked at the stills / watched the motion (recorded by the Stage 10
-review route, bound to the composition) and the approval needs an explicit acknowledgement of every material limitation, including the coverage it does not have. The approver's name is what the person typed:
-this application has no accounts, so it is recorded as `self_declared`."""
+Honesty rules: a warning is never removed because it was acknowledged; a still is not motion playback; nobody watches the video, so the approval is the LLM review's decision and it acknowledges every
+material limitation (disclosed approximations, required visuals not drawn, Stage 10 and Stage 11 warnings). The decider is recorded as `llm:<provider>/<model>`."""
 from __future__ import annotations
 
 import json
@@ -106,16 +105,6 @@ def preview(pdir: Path, aspect: str, scenes: int) -> dict:
     return out
 
 
-def coverage(pdir: Path, aspect: str) -> dict:
-    """Did a PERSON look? From the Stage 10 review records, bound to the current composition. Nothing here is a technical check."""
-    man = pv.load(pdir, aspect) or {}
-    gen = mp._read(pdir / mg.names(aspect)[1]) or {}
-    sha_ = (gen.get("output") or {}).get("composition_sha")
-    rec = {r["level"]: r for r in man.get("reviews", []) if r.get("composition_sha") == sha_}
-    return {"stills_reviewed_by_person": "stills" in rec, "motion_playback_reviewed": "playback" in rec, "reviews": list(rec.values()),
-            "note": "recorded by a person through Motion & Timeline Validation; a still does not show how the motion or a transition plays"}
-
-
 # ---------- what has to be acknowledged ----------
 _tail_memo: dict = {}
 
@@ -163,9 +152,9 @@ _ACK = {
 }
 
 
-def requirements(tbs: dict, val: dict | None, cov: dict, tail: dict | None) -> list[dict]:
+def requirements(tbs: dict, val: dict | None, tail: dict | None) -> list[dict]:
     """Every material limitation the approver must acknowledge, each kept visible and distinct: warnings of Stage 11 and Stage 10, approximations (drawn as a stand-in, NOT missing), required visuals not drawn,
-    accepted exceptions, and the review coverage nobody has. Informational findings (an optional element not drawn) are shown, not required."""
+    and nothing else (no person looks at anything). Informational findings (an optional element not drawn) are shown, not required."""
     out = []
     for f in tbs["report"]["findings"]:
         if f["severity"] != "warning":
@@ -174,15 +163,9 @@ def requirements(tbs: dict, val: dict | None, cov: dict, tail: dict | None) -> l
         out.append({"key": f"{code}:{f['item_id'] or f['scene_id'] or '-'}", "code": code, "category": cat, "scene_id": f["scene_id"], "element_id": f["item_id"], "source": "timeline_build", "rule_id": f["rule_id"],
                     "text": f["message"], "evidence": ({**f["evidence"], "measured": tail} if f["rule_id"] == "audio.tail_quantization" and tail else f["evidence"])})
     for f in (val or {}).get("findings", []):
-        if f["severity"] == "warning" or f["status"] == "accepted_for_version":
-            out.append({"key": f"stage10:{f['rule_id']}:{f['scene_id'] or '-'}:{f['element_id'] or '-'}", "code": f"stage10_{f['rule_id'].replace('.', '_')}", "category": "accepted_exception" if f["status"] == "accepted_for_version" else "warning",
+        if f["severity"] == "warning":
+            out.append({"key": f"stage10:{f['rule_id']}:{f['scene_id'] or '-'}:{f['element_id'] or '-'}", "code": f"stage10_{f['rule_id'].replace('.', '_')}", "category": "warning",
                         "scene_id": f["scene_id"], "element_id": f["element_id"], "source": "motion_validation", "rule_id": f["rule_id"], "text": f["message"], "evidence": f["evidence"]})
-    if not cov["stills_reviewed_by_person"]:
-        out.append({"key": "stills_not_reviewed_by_person:-", "code": "stills_not_reviewed_by_person", "category": "review_coverage", "scene_id": None, "element_id": None, "source": "review", "rule_id": "coverage.stills",
-                    "text": "No person has recorded looking at the review stills of this version.", "evidence": {}})
-    if not cov["motion_playback_reviewed"]:
-        out.append({"key": "motion_playback_not_reviewed:-", "code": "motion_playback_not_reviewed", "category": "review_coverage", "scene_id": None, "element_id": None, "source": "review", "rule_id": "coverage.playback",
-                    "text": "Nobody has watched the motion, the transitions or the narration timing of this version (this page shows stills only, no video is rendered for review).", "evidence": {}})
     return out
 
 
@@ -232,7 +215,6 @@ def snapshot(pdir: Path, aspect: str) -> dict:
     prev = preview(pdir, aspect, scenes) if current else {"kind": "review_proxy_stills", "verified": False, "reason": "no current timeline", "samples": 0, "scenes": 0, "composition_sha": None, "scale": None, "files": []}
     if current and not prev["verified"]:
         why.append(f"no matching review preview: {prev['reason']}")
-    cov = coverage(pdir, aspect)
     words = []
     if T:
         try:
@@ -240,7 +222,7 @@ def snapshot(pdir: Path, aspect: str) -> dict:
         except (OSError, ValueError):
             pass
     tail = audio_tail_impact(pdir, T, words) if T else None
-    reqs = requirements(tbs, val, cov, tail) if current else []
+    reqs = requirements(tbs, val, tail) if current else []
     last = _latest_decision(events)
     on_current = bool(last and fp and last["timeline_fingerprint"] == fp)
     if err:
@@ -257,7 +239,7 @@ def snapshot(pdir: Path, aspect: str) -> dict:
         status = "changes_requested"
     else:
         status = "ready_for_review"
-    return {"status": status, "blockers": ([err] if err else why), "fingerprint": fp, "tbs": tbs, "timeline": T, "validation": val, "preview": prev, "coverage": cov, "audio_tail": tail, "requirements": reqs,
+    return {"status": status, "blockers": ([err] if err else why), "fingerprint": fp, "tbs": tbs, "timeline": T, "validation": val, "preview": prev, "audio_tail": tail, "requirements": reqs,
             "events": events, "last": last, "approved": status == "approved", "busy": busy, "review_id": f"review_{fp[:12]}" if fp else None}
 
 
@@ -286,7 +268,7 @@ def manifest(pdir: Path, aspect: str, s: dict) -> dict | None:
                         "scale": s["preview"]["scale"], "note": "quarter-size stills of the composition at deterministic frames: a proxy, not the final video and not motion playback"},
             "readiness": {"status": s["status"], "errors": rep["summary"]["errors"] + rep["summary"]["blockers"], "warnings": rep["summary"]["warnings"], "required_visuals_not_drawn": dis.get("required_not_drawn", 0),
                           "approximate_visuals": dis.get("approximate", 0), "optional_not_drawn": dis.get("optional_not_drawn", 0)},
-            "review_coverage": s["coverage"], "audio_tail": s["audio_tail"], "created_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
+            "audio_tail": s["audio_tail"], "created_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
 
 
 def state(pdir: Path, aspect: str, s: dict | None = None) -> dict:
@@ -295,9 +277,9 @@ def state(pdir: Path, aspect: str, s: dict | None = None) -> dict:
     rep = (s["tbs"] or {}).get("report") or {}
     return {"aspect": aspect, "status": s["status"], "blockers": s["blockers"], "fingerprint": fp, "review_id": s["review_id"], "approval_allowed": s["status"] == "ready_for_review", "approved": s["approved"], "stale": s["status"] == "stale",
             "last_decision": _view(last, fp) if last else None, "history": [_view(e, fp) for e in s["events"]], "notes": [e for e in s["events"] if e["kind"] == "note" and e.get("timeline_fingerprint") == fp],
-            "manifest": manifest(pdir, aspect, s), "requirements": s["requirements"], "preview": s["preview"], "review_coverage": s["coverage"], "audio_tail": s["audio_tail"], "timeline_status": (s["tbs"] or {}).get("status"),
+            "manifest": manifest(pdir, aspect, s), "requirements": s["requirements"], "preview": s["preview"], "audio_tail": s["audio_tail"], "timeline_status": (s["tbs"] or {}).get("status"),
             "disclosures": rep.get("disclosures"), "info": [f for f in rep.get("findings", []) if f["severity"] == "info"],
-            "note": "a technically valid approval record is not a visual review: see review_coverage for what a person actually looked at"}
+            "note": "the LLM approval review decided this version from the measured timeline and its disclosed limitations; nobody watched the video"}
 
 
 # ---------- decisions ----------
@@ -371,7 +353,7 @@ def decide(pdir: Path, aspect: str, body: dict, in_job: bool = False) -> dict:
         ev = {"event_id": "decision_" + mv.sha(f"{key}:{s['fingerprint']}:{time.time()}"), "kind": "decision", "decision": dec, "project_id": pdir.name, "aspect": aspect, "timeline_build_id": s["timeline"]["timeline_id"],
               "timeline_fingerprint": s["fingerprint"], "source_fingerprints": man["source_fingerprints"], "review_manifest_id": s["review_id"], "idempotency_key": key,
               "warning_acknowledgements": ([{"key": r["key"], "code": r["code"], "element_id": r["element_id"], "scene_id": r["scene_id"], "category": r["category"], "acknowledged": True} for r in s["requirements"]] if dec == "approved" else []),
-              "review_coverage": {k: s["coverage"][k] for k in ("stills_reviewed_by_person", "motion_playback_reviewed")}, "notes": notes, "comments": [{k: c.get(k) for k in ("scene_id", "time_seconds", "severity", "text")} for c in comments],
+              "notes": notes, "comments": [{k: c.get(k) for k in ("scene_id", "time_seconds", "severity", "text")} for c in comments],
               "decided_by": by, "decided_by_source": "self_declared", "decided_at": time.strftime("%Y-%m-%dT%H:%M:%S"), "supersedes": (last["event_id"] if on_this else None)}
         _append(pdir, aspect, ev)
         if fingerprint(pdir, aspect) != s["fingerprint"]:                    # the version moved while the decision was written: it is voided, never left standing
@@ -429,20 +411,6 @@ def auto_approve(pdir: Path, aspect: str, in_job: bool = False) -> dict:
     why = [f"{f.get('severity')}: {f.get('message')}" for f in (rev or {}).get("findings", []) if f.get("severity") in ("blocker", "error", "warning")]
     raise ApprovalError("llm_review_rejected", f"the LLM approval review did not pass ({(rev or {}).get('status')}, score {(rev or {}).get('score')}): {(rev or {}).get('summary', '')}"[:400], why[:6])
 
-
-def add_note(pdir: Path, aspect: str, body: dict) -> dict:
-    """A review note about the current version (scene and timecode when known). It decides nothing."""
-    with _lock(pdir):
-        s = snapshot(pdir, aspect)
-        text = (body.get("text") or "").strip()
-        if not s["fingerprint"] or body.get("expected_fingerprint") != s["fingerprint"]:
-            raise ApprovalError("timeline_changed", "the timeline changed since this review was opened: reload the current version")
-        if not text or not (body.get("decision_by") or "").strip():
-            raise ApprovalError("invalid_decision", "a note needs its text and the name of the person who wrote it")
-        ev = {"event_id": "note_" + mv.sha(f"{text}:{s['fingerprint']}:{time.time()}"), "kind": "note", "timeline_fingerprint": s["fingerprint"], "scene_id": body.get("scene_id"), "time_seconds": body.get("time_seconds"),
-              "text": text[:1000], "written_by": body["decision_by"].strip()[:80], "written_at": time.strftime("%Y-%m-%dT%H:%M:%S")}
-        _append(pdir, aspect, ev)
-        return state(pdir, aspect)
 
 
 def _save_review(pdir: Path, aspect: str, man: dict | None) -> None:

@@ -6,8 +6,8 @@ No Claude call, no code from a plan is executed. It does NOT validate a timeline
 The 12 internal stages (checks of one module, not 12 agents; the rules are in motion_validation_rules.py):
   1 Input Reader & Provenance   2 Fingerprint & Freshness   3 Scene Mapping & Coverage   4 Timing & Frame Integrity   5 Element Completeness & Drawn Support   6 Animation & Preset Validity
   7 Layout & Collision          8 Audio & Text Sync          9 Transition & Continuity    10 Buildability & Determinism  11 Preview Validation   12 Readiness Gate
-Readiness: ready | ready_with_warnings | needs_review | blocked | stale | failed. A required element that is not drawn is a BLOCKER unless an authorized, reasoned, fingerprint-bound exception
-(`motion_validation_exceptions[_9x16].json`) exists; "accepted" in motion_fixes.json (Solve warnings) is not such an exception. Stale or failed validation is never green."""
+Readiness: ready | ready_with_warnings | blocked | stale | failed (a warning is disclosed and judged by the Timeline Approval and Final QC LLM reviews, nobody else decides). A required element that is not drawn is a BLOCKER, fixed in its owner stage: nobody can waive a finding.
+Stale or failed validation is never green."""
 from __future__ import annotations
 
 import hashlib
@@ -42,12 +42,6 @@ STAGES = (
 )
 N = len(STAGES)
 SEVERITIES = ("blocker", "error", "warning", "info")
-# Warnings of these rules are visual / readability defects only a person can judge: unresolved they make the readiness `needs_review`. Every other warning is policy-permitted
-# (it stays visible and traceable and gives `ready_with_warnings`).
-REVIEW_RULES = frozenset({"layout.text_graphic_collision", "layout.graphic_graphic_collision", "layout.safe_margins", "layout.overflow_clip", "text.safe_area", "timing.readability_before_exit",
-                          "audio.duration_compatible", "continuity.motif_notes_valid"})
-EXCEPTIONABLE = frozenset({"element.required_has_drawable"} | REVIEW_RULES)       # an error or another blocker is never waived: it is fixed in the stage that owns it
-MIN_REASON = 10
 CONFIG = {
     "timing": {"frame_rounding_policy": "floor(seconds x fps + 0.5), the end frame is exclusive (the project's one rule, motion_planning.fr)", "emphasis_alignment_tolerance_ms": 60,
                "preserve_intentional_gaps": True},
@@ -64,7 +58,7 @@ class ValidationError(Exception):
 
 def names(aspect: str) -> dict[str, str]:
     sfx = "_9x16" if aspect == "9:16" else ""
-    return {"report": f"motion_timeline_validation{sfx}.json", "exceptions": f"motion_validation_exceptions{sfx}.json", "preview": f"motion_validation_preview{sfx}",
+    return {"report": f"motion_timeline_validation{sfx}.json", "preview": f"motion_validation_preview{sfx}",
             "live": f"motion_validation_progress{sfx}.json"}
 
 
@@ -174,8 +168,7 @@ class V:
             self.findings[fid]["occurrences"] += 1
             return
         self.findings[fid] = {"finding_id": fid, "rule_id": rule, "stage_id": stage, "severity": severity, "status": "unresolved", "scene_id": scene, "element_id": target, "message": message,
-                              "evidence": evidence or {}, "owner_stage": owner, "suggested_action": action, "can_auto_fix": False, "exceptionable": rule in EXCEPTIONABLE and severity in ("blocker", "warning"),
-                              "exception": None, "occurrences": 1}
+                              "evidence": evidence or {}, "owner_stage": owner, "suggested_action": action, "can_auto_fix": False, "occurrences": 1}
         if scene and severity in ("blocker", "error", "warning"):
             self.flagged_scenes.add(scene)
 
@@ -198,39 +191,11 @@ class V:
         return [f for f in self.findings.values() if f["stage_id"] == stage]
 
 
-# ---------- exceptions (explicit human decisions) ----------
-def ledger(pdir: Path, aspect: str) -> list[dict]:
-    data = mp._read(pdir / names(aspect)["exceptions"])
-    return data if isinstance(data, list) else []
-
-
-def _save_ledger(pdir: Path, aspect: str, records: list[dict]) -> None:
-    f = pdir / names(aspect)["exceptions"]
-    tmp = f.with_suffix(".tmp")
-    tmp.write_text(json.dumps(records, ensure_ascii=False, indent=1), encoding="utf-8")
-    os.replace(tmp, f)
-
-
-def _active(rec: dict, fp: str) -> bool:
-    return not rec.get("revoked_at") and rec.get("applies_to_fingerprint") == fp and rec.get("expires_when_inputs_change") is True
-
-
-def apply_exceptions(findings: list[dict], recs: list[dict], fp: str) -> None:
-    """An exception counts only for the exact fingerprint it was given for and never for an error: the finding becomes `accepted_for_version`, the technical issue is NOT fixed."""
-    by = {r["finding_id"]: r for r in recs if _active(r, fp)}
-    for f in findings:
-        f["exception"], f["status"] = None, "unresolved"
-        r = by.get(f["finding_id"])
-        if r and f.get("exceptionable"):
-            f["exception"], f["status"] = {k: r[k] for k in ("exception_id", "decision", "decision_by", "decision_at", "reason", "applies_to_fingerprint", "expires_when_inputs_change")}, "accepted_for_version"
-
-
 # ---------- aggregation (stage 12) ----------
 def counts_of(findings: list[dict]) -> dict:
     live = [f for f in findings if f["status"] == "unresolved"]
     n = lambda sev: sum(1 for f in live if f["severity"] == sev)
-    return {"blockers": n("blocker"), "errors": n("error"), "warnings": n("warning"), "info": n("info"), "accepted_exceptions": sum(1 for f in findings if f["status"] == "accepted_for_version"),
-            "unresolved_review_items": sum(1 for f in live if f["severity"] == "warning" and f["rule_id"] in REVIEW_RULES)}
+    return {"blockers": n("blocker"), "errors": n("error"), "warnings": n("warning"), "info": n("info")}
 
 
 def readiness_of(findings: list[dict], stages: list[dict]) -> str:
@@ -239,26 +204,13 @@ def readiness_of(findings: list[dict], stages: list[dict]) -> str:
         return "failed"
     if any(f["severity"] in ("blocker", "error") for f in live) or any(s["status"] == "skipped_due_to_dependency" for s in stages):      # a "blocked" stage always has such a finding: a decision on it can lift it
         return "blocked"
-    if any(f["severity"] == "warning" and f["rule_id"] in REVIEW_RULES for f in live):
-        return "needs_review"
-    if any(f["severity"] == "warning" for f in live) or any(f["status"] == "accepted_for_version" for f in findings) or any(s["checks_skipped"] for s in stages):
+    if any(f["severity"] == "warning" for f in live) or any(s["checks_skipped"] for s in stages):
         return "ready_with_warnings"
     return "ready"
 
 
-def restatus(findings: list[dict], stages: list[dict]) -> None:
-    """The stage statuses follow the decisions: a stage whose blockers were accepted is no longer shown as blocked (its findings still are, as accepted_for_version)."""
-    by = {f["finding_id"]: f for f in findings}
-    for s in stages:
-        if s["status"] in ("skipped_due_to_dependency", "failed") or not s["finding_ids"] and s["status"] == "completed":
-            continue
-        fs = [by[i] for i in s["finding_ids"] if i in by]
-        live = [f for f in fs if f["status"] == "unresolved"]
-        s["status"] = "blocked" if any(f["severity"] in ("blocker", "error") for f in live) else "warning" if (any(f["severity"] == "warning" for f in fs) or s["checks_skipped"] or any(f["status"] == "accepted_for_version" for f in fs)) else "completed"
-
-
-NEXT = {"ready": "build_timeline_when_you_choose", "ready_with_warnings": "build_timeline_when_you_choose", "needs_review": "review_warnings_or_record_explicit_exceptions",
-        "blocked": "resolve_blockers_in_the_owner_stage_or_record_an_explicit_exception", "stale": "run_validation_again", "failed": "see_error_and_run_validation_again"}
+NEXT = {"ready": "build_timeline_when_you_choose", "ready_with_warnings": "build_timeline_when_you_choose",
+        "blocked": "resolve_blockers_in_the_owner_stage", "stale": "run_validation_again", "failed": "see_error_and_run_validation_again"}
 
 
 def _stage_record(sid: str, v: V, key: str, ms: int, cache: dict) -> dict:
@@ -324,7 +276,7 @@ def _run(pdir: Path, aspect: str, say, force: bool, live: live_steps.LiveSteps, 
                 for fid in cached["finding_ids"]:
                     f = old_findings.get(fid)
                     if f:
-                        v.findings[fid] = {**f, "status": "unresolved", "exception": None}
+                        v.findings[fid] = {**f, "status": "unresolved"}
                         if f.get("scene_id") and f["severity"] in ("blocker", "error", "warning"):
                             v.flagged_scenes.add(f["scene_id"])
                 v.counts[sid] = {"passed": cached["checks_passed"], "total": cached["checks_total"], "skipped": cached["checks_skipped"]}
@@ -347,7 +299,7 @@ def _run(pdir: Path, aspect: str, say, force: bool, live: live_steps.LiveSteps, 
         say(92)
         findings = sorted(v.findings.values(), key=lambda f: (SEVERITIES.index(f["severity"]), f["scene_id"] or "", f["finding_id"]))
         records.append(_stage_record("readiness_gate", v, "", 0, {"hit": False, "reason": "always recomputed"}))
-        rep = assemble(pdir, aspect, x, digests, fp0, findings, records, ledger(pdir, aspect))
+        rep = assemble(pdir, aspect, x, digests, fp0, findings, records)
         rep["timings_seconds"] = {"validate": round(time.perf_counter() - t0, 3)}
         res = commit(pdir, aspect, rep, fp0)
         from . import llm_review
@@ -359,8 +311,7 @@ def _run(pdir: Path, aspect: str, say, force: bool, live: live_steps.LiveSteps, 
         raise
 
 
-def assemble(pdir: Path, aspect: str, x, digests: dict, fp: str, findings: list[dict], records: list[dict], recs: list[dict]) -> dict:
-    apply_exceptions(findings, recs, fp)
+def assemble(pdir: Path, aspect: str, x, digests: dict, fp: str, findings: list[dict], records: list[dict]) -> dict:
     gate = records[-1]
     el = x.element_summary
     readiness = readiness_of(findings, records)
@@ -392,7 +343,7 @@ def assemble(pdir: Path, aspect: str, x, digests: dict, fp: str, findings: list[
     }
     return {"schema_version": SCHEMA, "phase": "motion_timeline_validation", "phase_status": "completed", "readiness": readiness, "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"), "project_id": pdir.name,
             "validator": {"version": VERSION, "rule_set_version": RULE_SET}, "rule_set": RULE_SET, "config": x.cfg(), "policy": CONFIG, "source_fingerprint": fp, "inputs": x.inputs_block(digests),
-            "summary": summary, "stages": records, "findings": findings, "elements": x.element_rows, "preview_evidence": x.preview_block(), "preview": x.preview_levels, "exceptions": recs,
+            "summary": summary, "stages": records, "findings": findings, "elements": x.element_rows, "preview_evidence": x.preview_block(), "preview": x.preview_levels,
             "quality_assessment": quality_assessment,
             "cache": {"stages_reused": sum(1 for s in records if s["cache"]["hit"]), "stages_run": sum(1 for s in records if not s["cache"]["hit"])}, "next_action": NEXT[readiness], "error": None,
             "note": "read-only: nothing upstream was changed; a timeline that is not built yet is not validated here (the pre-render check after the build does that)"}
@@ -404,7 +355,7 @@ def commit(pdir: Path, aspect: str, rep: dict, fp0: str) -> dict:
         rep["readiness"], rep["next_action"] = "stale", NEXT["stale"]
         rep["findings"].append({"finding_id": "report.commit_freshness:project:-", "rule_id": "report.commit_freshness", "stage_id": "readiness_gate", "severity": "blocker", "status": "unresolved", "scene_id": None,
                                 "element_id": None, "message": "an input changed while the validation was running", "evidence": {}, "owner_stage": "project", "suggested_action": "validate again",
-                                "can_auto_fix": False, "exceptionable": False, "exception": None, "occurrences": 1})
+                                "can_auto_fix": False, "occurrences": 1})
     return _write(pdir, aspect, rep)
 
 
@@ -421,7 +372,7 @@ def _write(pdir: Path, aspect: str, rep: dict) -> dict:
 def write_failed(pdir: Path, aspect: str, fp: str, exc: Exception) -> None:
     """A validator that could not finish never leaves a green report: the old one is replaced by a failed one that says why."""
     rep = {"schema_version": SCHEMA, "phase": "motion_timeline_validation", "phase_status": "failed", "readiness": "failed", "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"), "project_id": pdir.name,
-           "validator": {"version": VERSION, "rule_set_version": RULE_SET}, "rule_set": RULE_SET, "source_fingerprint": fp, "summary": {}, "stages": [], "findings": [], "inputs": {}, "exceptions": [],
+           "validator": {"version": VERSION, "rule_set_version": RULE_SET}, "rule_set": RULE_SET, "source_fingerprint": fp, "summary": {}, "stages": [], "findings": [], "inputs": {},
            "next_action": NEXT["failed"], "error": f"{type(exc).__name__}: {exc}"[:400]}
     try:
         _write(pdir, aspect, rep)
@@ -436,7 +387,7 @@ def _read_report(pdir: Path, aspect: str) -> dict | None:
 
 
 def load(pdir: Path, aspect: str) -> dict | None:
-    """The stored report with `stale` (the inputs differ from the ones it was made from) and the exceptions applied for the CURRENT fingerprint. None when it has not been made.
+    """The stored report with `stale` (the inputs differ from the ones it was made from) None when it has not been made.
     A stale report keeps the readiness it had (`readiness_at_validation`) but its readiness is `stale`."""
     rep = _read_report(pdir, aspect)
     if rep is None:
@@ -448,65 +399,11 @@ def load(pdir: Path, aspect: str) -> dict | None:
     rep["current_fingerprint"], rep["stale"] = cur, cur is None or rep.get("source_fingerprint") != cur
     if rep["stale"] and rep["phase_status"] == "completed":
         rep["readiness_at_validation"], rep["readiness"], rep["next_action"] = rep["readiness"], "stale", NEXT["stale"]
-    elif rep["phase_status"] == "completed":
-        apply_exceptions(rep["findings"], ledger(pdir, aspect), rep["source_fingerprint"])
-        restatus(rep["findings"], rep["stages"])
+    elif rep["phase_status"] == "completed":                      # the verdict is always derived from the findings and the stages that are stored, never taken on trust
         rep["summary"].update(counts_of(rep["findings"]), stages_blocked=sum(1 for st in rep["stages"] if st["status"] in ("blocked", "skipped_due_to_dependency")))
         rep["readiness"] = readiness_of(rep["findings"], rep["stages"])
         rep["next_action"] = NEXT[rep["readiness"]]
-        rep["exceptions"] = ledger(pdir, aspect)
     return rep
-
-
-def record_exception(pdir: Path, aspect: str, finding_id_: str, decision_by: str, reason: str, fp: str) -> dict:
-    """An authorized, reasoned, fingerprint-bound decision about ONE finding. Refused for anything that is not exceptionable, for a stale report and for another fingerprint. It never edits an artifact."""
-    rep = load(pdir, aspect)
-    if rep is None or rep["phase_status"] != "completed":
-        raise ValidationError("there is no completed validation report")
-    if rep["stale"]:
-        raise ValidationError("the report is out of date: validate again before deciding")
-    if fp != rep["source_fingerprint"]:
-        raise ValidationError("the exception names another fingerprint than the current report")
-    f = next((x for x in rep["findings"] if x["finding_id"] == finding_id_), None)
-    if f is None:
-        raise ValidationError(f"no finding {finding_id_}")
-    if not f.get("exceptionable"):
-        raise ValidationError(f"{f['rule_id']} cannot be accepted: a {f['severity']} of this kind is fixed in {f['owner_stage'].replace('_', ' ')}")
-    if not (decision_by or "").strip() or len((reason or "").strip()) < MIN_REASON:
-        raise ValidationError(f"an exception needs the name of the person who decides and a reason of at least {MIN_REASON} characters")
-    recs = ledger(pdir, aspect)
-    same = next((r for r in recs if _active(r, fp) and r["finding_id"] == finding_id_), None)
-    if same:
-        return same
-    rec = {"exception_id": f"exc-{sha(f'{finding_id_}:{fp}:{time.time()}')}", "finding_id": finding_id_, "rule_id": f["rule_id"], "decision": "accepted_for_this_version", "decision_by": decision_by.strip()[:80],
-           "decision_at": time.strftime("%Y-%m-%dT%H:%M:%S"), "reason": reason.strip()[:500], "applies_to_fingerprint": fp, "expires_when_inputs_change": True, "revoked_at": None}
-    _save_ledger(pdir, aspect, recs + [rec])
-    _rewrite_readiness(pdir, aspect)
-    return rec
-
-
-def revoke_exception(pdir: Path, aspect: str, exception_id: str) -> None:
-    recs = ledger(pdir, aspect)
-    hit = next((r for r in recs if r["exception_id"] == exception_id and not r.get("revoked_at")), None)
-    if hit is None:
-        raise ValidationError(f"no active exception {exception_id}")
-    hit["revoked_at"] = time.strftime("%Y-%m-%dT%H:%M:%S")                   # the record stays: the decision and its withdrawal are both history
-    _save_ledger(pdir, aspect, recs)
-    _rewrite_readiness(pdir, aspect)
-
-
-def _rewrite_readiness(pdir: Path, aspect: str) -> None:
-    """Stage 12 only: the stored report is saved again with the decisions applied (nothing else is recomputed)."""
-    rep = _read_report(pdir, aspect)
-    if rep is None or rep["phase_status"] != "completed":
-        return
-    apply_exceptions(rep["findings"], ledger(pdir, aspect), rep["source_fingerprint"])
-    rep["exceptions"] = ledger(pdir, aspect)
-    restatus(rep["findings"], rep["stages"])
-    rep["summary"].update(counts_of(rep["findings"]), stages_blocked=sum(1 for st in rep["stages"] if st["status"] in ("blocked", "skipped_due_to_dependency")))
-    rep["readiness"] = readiness_of(rep["findings"], rep["stages"])
-    rep["next_action"] = NEXT[rep["readiness"]]
-    _write(pdir, aspect, rep)
 
 
 # ---------- the gate (Stage 10 -> Stage 11) ----------
@@ -532,7 +429,7 @@ def blockers(pdir: Path, aspect: str, validate_if_needed: bool = False) -> list[
     if rep["readiness"] in READY:
         return []
     s = rep["summary"]
-    why = {"blocked": f"{s.get('blockers', 0)} blocker(s), {s.get('errors', 0)} error(s)", "needs_review": f"{s.get('unresolved_review_items', 0)} warning(s) need a decision", "failed": "the validation did not finish"}
+    why = {"blocked": f"{s.get('blockers', 0)} blocker(s), {s.get('errors', 0)} error(s)", "failed": "the validation did not finish"}
     first = (next((f for f in rep["findings"] if f["status"] == "unresolved" and f["severity"] in ("blocker", "error")), None)
              or next((f for f in rep["findings"] if f["status"] == "unresolved" and f["severity"] == "warning"), None))
     return [f"Motion & Timeline Validation is {rep['readiness'].replace('_', ' ')} ({why.get(rep['readiness'], '')})" + (f": {first['message']}" if first else "")]

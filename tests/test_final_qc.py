@@ -119,6 +119,8 @@ def test_a_rejecting_or_unavailable_llm_never_opens_the_gate(pd, good, monkeypat
         raise RuntimeError("offline")
     rendered(pd, good, monkeypatch)
     fq.run(pd, A)
+    from SYSTEM.policies import llm_review as _lr
+    _lr.review_path(pd, "qc", A).unlink(missing_ok=True)                    # a review stored for these exact files is reused (no second LLM call): this test is about asking while the LLM is down
     with monkeypatch.context() as m:
         m.setattr(llm_gateway.gateway, "execute", offline)
         out = fq.llm_decide(pd, A)
@@ -282,7 +284,6 @@ def test_the_api_runs_final_qc_records_a_decision_and_moves_the_pipeline_stages(
     pid, pdir = _v.api_project(c)
     assert c.get(f"/projects/{pid}/final-qc").json()["status"] == "blocked" and c.post(f"/projects/{pid}/final-qc/cancel").status_code == 409
     assert c.post(f"/projects/{pid}/motion-timeline-validation/run").status_code == 202 and _mo.wait_job(c, pid, timeout=240)["error"] is None
-    _v.accept_all(c, pid, c.get(f"/projects/{pid}/motion-timeline-validation").json())
     monkeypatch.setattr(fq, "_words", lambda *a: [])                                                              # (the fixture's audio does not hold its transcript: the speech check has its own tests)
     assert c.post(f"/projects/{pid}/timeline-build/run").status_code == 202 and _mo.wait_job(c, pid, timeout=240)["error"] is None   # build -> LLM approval -> render -> Final QC checks
     st = c.get(f"/projects/{pid}/render-video").json()

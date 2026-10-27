@@ -19,7 +19,6 @@ RULE_VERSION = "1"                              # the sampling rule: bump it and
 SCALE = 0.25                                    # a quarter of the frame: cheap, enough to see layers and blankness
 BLANK_STD = 2.0                                 # a frame whose grey values hardly vary is blank
 FRACTIONS = (("entry", 0.12), ("mid", 0.5), ("pre_exit", 0.9))        # of every scene, by frame
-LEVELS = ("stills", "playback")
 ATTEMPTS = 5                                    # tries per still
 
 
@@ -153,9 +152,8 @@ def generate(pdir: Path, aspect: str, progress=None) -> dict:
                 samples.append({**smp, "file": name, "time_s": round(smp["frame"] / fps, 3), "sha": sha(dest.read_bytes()), **_measure(dest)})
     finally:
         shutil.rmtree(tmp_bundle, ignore_errors=True)
-    old = load(pdir, aspect) or {}
     man = {"sampling_rule_version": RULE_VERSION, "composition_sha": gen["output"]["composition_sha"], "renderer_digest": pipeline._remotion_src_digest(), "scale": SCALE, "created_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
-           "level": "stills (level 1): a decoded, non-blank still is not proof that the motion or a transition plays well", "samples": samples, "reviews": old.get("reviews", [])}
+           "level": "stills (level 1): a decoded, non-blank still is not proof that the motion or a transition plays well", "samples": samples}
     tmp = out / "manifest.tmp"
     tmp.write_text(json.dumps(man, ensure_ascii=False, indent=1), encoding="utf-8")
     os.replace(tmp, out / "manifest.json")
@@ -165,20 +163,3 @@ def generate(pdir: Path, aspect: str, progress=None) -> dict:
             f.unlink()
     say(100)
     return man
-
-
-def review(pdir: Path, aspect: str, level: str, by: str) -> dict:
-    """A person says they looked: `stills` = at the generated stills, `playback` = at the moving video with its audio (made elsewhere). Bound to this composition and the current fingerprint; it is not a technical check."""
-    man = load(pdir, aspect)
-    gen = mp._read(pdir / mg.names(aspect)[1]) or {}
-    if man is None or man.get("composition_sha") != (gen.get("output") or {}).get("composition_sha"):
-        raise ValidationError("there is no preview of the current composition to review: generate it first")
-    if level not in LEVELS or not (by or "").strip():
-        raise ValidationError("a review needs a level (stills or playback) and the name of the person who looked")
-    rec = {"level": level, "by": by.strip()[:80], "at": time.strftime("%Y-%m-%dT%H:%M:%S"), "composition_sha": man["composition_sha"], "fingerprint": fingerprint(pdir, aspect)}
-    man["reviews"] = [r for r in man.get("reviews", []) if not (r["level"] == level and r["composition_sha"] == man["composition_sha"])] + [rec]
-    f = folder(pdir, aspect) / "manifest.json"
-    tmp = f.with_suffix(".tmp")
-    tmp.write_text(json.dumps(man, ensure_ascii=False, indent=1), encoding="utf-8")
-    os.replace(tmp, f)
-    return rec

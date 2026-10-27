@@ -210,7 +210,7 @@ def verify_output(path: Path, exp: dict, audio_seconds: float | None) -> tuple[d
 def _approval_block(snap: dict) -> dict:
     last = snap["last"] or {}
     return {"approval_id": last.get("event_id"), "timeline_fingerprint": snap["fingerprint"], "approved_at": last.get("decided_at"), "approved_by": last.get("decided_by"), "approved_by_source": last.get("decided_by_source"),
-            "review_coverage": last.get("review_coverage"), "acknowledgements": len(last.get("warning_acknowledgements") or [])}
+            "acknowledgements": len(last.get("warning_acknowledgements") or [])}
 
 
 def _carried(snap: dict) -> list[dict]:

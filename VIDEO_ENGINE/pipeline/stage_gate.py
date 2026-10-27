@@ -69,15 +69,15 @@ def llm_issue(pdir: Path, stage_id: str, aspect: str) -> dict | None:
     return {"n": None, "name": "LLM review", "severity": "error", "message": f"the stage LLM review did not pass ({reason})" + (f": {why[:200]}" if why else "")}
 
 
-def unresolved(pdir: Path, stage_id: str, aspect: str) -> list[dict]:
-    """The issues of a stage that still block the next one: every error, the warnings unless the stage's own rules permit them, and a stage LLM review that did not pass."""
+def unresolved(pdir: Path, stage_id: str, aspect: str, ran: bool = True) -> list[dict]:
+    """The issues of a stage that still block the next one: every error, the warnings unless the stage's own rules permit them, and a stage LLM review that did not pass (`ran=False`: the stage never ran, so there is no review to wait for)."""
     issues = step_issues(pdir, stage_id, aspect)
     warnings = [i for i in issues if i["severity"] == "warning"]
     if warnings and len(warnings) == len(issues) and stage_id in POLICY_VERDICTS:
         field, ok = POLICY_VERDICTS[stage_id]
         if (report_steps(pdir, stage_id, aspect)[1] or {}).get(field) in ok:
             issues = []
-    return issues + ([i] if (i := llm_issue(pdir, stage_id, aspect)) else [])
+    return issues + ([i] if ran and (i := llm_issue(pdir, stage_id, aspect)) else [])
 
 
 def describe(issues: list[dict]) -> str:

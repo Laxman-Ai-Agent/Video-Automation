@@ -556,8 +556,6 @@ def _reconcile(q: Q, pdir: Path, aspect: str, manifest: dict, snap: dict | None,
              for a in e.get("warning_acknowledgements", [])}
     frames_of = lambda sid: [s["file"] for s in samples if s.get("scene_id") == sid and s.get("file")][:4]
     for w in manifest.get("carried_warnings", []):
-        if w["category"] == "review_coverage":
-            continue
         rule = {"approximation": "QC_UPSTREAM_STAND_IN", "undrawn_required": "QC_UPSTREAM_REQUIRED_NOT_DRAWN", "limitation": "QC_UPSTREAM_LIMITATION"}.get(w["category"], "QC_UPSTREAM_WARNING")
         req = w["category"] == "undrawn_required"
         q.add(rule, "failed" if req else "requires_review", "blocker" if req else "warning", w["text"], scene=w["scene_id"], target=w["element_id"],
@@ -576,9 +574,6 @@ def _reconcile(q: Q, pdir: Path, aspect: str, manifest: dict, snap: dict | None,
     q.ok("QC_UPSTREAM_ELEMENTS_COUNTED", f"{sum(1 for r in elements if r['state'] == 'drawn')} of {len(elements)} planned elements were drawn exactly as planned according to Motion Generation (a plan fact, not measured on this video)")
     emph = [c for c in (mp._read(pdir / mp.FIXES) or {}).get("changes", []) if c.get("kind") == "emphasis_aligned"]
     q.ok("QC_UPSTREAM_EMPHASIS", f"Stage 10 reports {((val or {}).get('summary') or {}).get('warnings', 0)} warning(s); {len(emph)} emphasis time(s) were aligned to spoken words by recorded decisions (not measured in the rendered video)")
-    if snap and snap.get("status") == "approved":
-        cov = (snap.get("last") or {}).get("review_coverage") or {}
-        q.ok("QC_APPROVAL_REVIEW_COVERAGE", f"the timeline approval recorded its review coverage: stills {cov.get('stills_reviewed_by_person')}, motion playback {cov.get('motion_playback_reviewed')}")
 
 
 # ---------- the Final QC LLM decision (append-only, bound to the candidate hash) ----------
@@ -637,10 +632,10 @@ def llm_decide(pdir: Path, aspect: str) -> dict:
           "accepted_findings": open_warn if dec == "approved_with_accepted_risks" else [], "notes": notes, "decided_at": now()}
     _append_review(pdir, aspect, ev)
     _regate(pdir, aspect)                                                  # the report's status follows the decision; the media evidence is untouched
-    if dec in ("approved", "approved_with_accepted_risks"):
-        audit_passed, _, _ = llm_review.is_stage_review_passed(pdir, "qc", aspect)
-        if not (audit_passed or ta._review_ok(rev)):
-            _void(pdir, aspect, ev["review_id"], f"the Final QC LLM audit did not pass: {rev.get('status')} {rev.get('summary', '')}")
+    if dec in ("approved", "approved_with_accepted_risks"):                  # the recorded decision is audited by the same review, asked again about the record (like the timeline approval): an audit that does not pass voids it
+        audit = llm_review.run_stage_llm_review(pdir, "qc", aspect, force=False)
+        if not ta._review_ok(audit):
+            _void(pdir, aspect, ev["review_id"], f"the Final QC LLM audit did not pass: {audit.get('status')} {audit.get('summary', '')}")
         else:
             llm_review.run_stage_llm_review(pdir, "final", aspect)
     return {**state(pdir, aspect), "outcome": "recorded", "review": current_review(pdir, aspect, cand["sha256"])}

@@ -69,7 +69,7 @@ def test_a_run_writes_one_report_with_12_stages_provenance_and_no_false_green(pd
     assert rep["validator"] == {"version": mv.VERSION, "rule_set_version": mv.RULE_SET} and rep["config"]["aspect_ratio"] == ASPECT and rep["config"]["fps"] == 30
     assert {"visual_plan_fingerprint", "motion_plan_fingerprint", "motion_generation_fingerprint", "composition_fingerprint", "renderer_registry_fingerprint"} <= set(rep["inputs"])
     assert rep["summary"]["errors"] == 0 and rep["summary"]["blockers"] == 0 and rep["summary"]["scenes_checked"] == rep["summary"]["scenes_expected"] > 0
-    assert rep["readiness"] in ("ready_with_warnings", "needs_review")                                          # an old project (no Scene Segmentation) is never plain "ready"
+    assert rep["readiness"] == "ready_with_warnings"                                                            # an old project (no Scene Segmentation) is never plain "ready"
     assert finding(rep, "input.exists") and finding(rep, "preview.evidence_present") is None                    # the legacy sources are a visible finding; the run made its own preview
     assert rep["preview"]["evidence_generated"] is True and rep["preview"]["technical_checks_passed"] is True
     assert upstream(pd) == before                                                                              # read-only: no artifact upstream was touched
@@ -101,7 +101,7 @@ def test_a_changed_input_makes_the_report_stale_the_gate_stops_and_the_next_run_
     mv.run(pd, ASPECT)
     touch_composition(pd)
     rep = mv.load(pd, ASPECT)
-    assert rep["stale"] is True and rep["readiness"] == "stale" and rep["readiness_at_validation"] in mv.READY + ("needs_review",)
+    assert rep["stale"] is True and rep["readiness"] == "stale" and rep["readiness_at_validation"] in mv.READY
     assert "out of date" in mv.blockers(pd, ASPECT)[0]
     again = mv.run(pd, ASPECT)                                                                                   # Motion Generation's own report no longer matches the composition: Stage 2 blocks
     assert again["readiness"] == "blocked" and finding(again, "input.fingerprint_current")["severity"] == "blocker"
@@ -158,12 +158,12 @@ def test_a_new_rule_set_version_invalidates_every_stage(pd, monkeypatch):
     assert rep["cache"]["stages_reused"] == 0 and rep["rule_set"] == "9.9"
 
 
-# ---------- exceptions: explicit, authorized, fingerprint-bound ----------
-def with_finding(pd, rule="element.required_has_drawable", severity="blocker", exceptionable=True):
+# ---------- nobody can waive a finding ----------
+def with_finding(pd, rule="element.required_has_drawable", severity="blocker"):
     """The real report plus one more finding (the fingerprint is made from the inputs, so the stored report stays current)."""
     rep = mv.run(pd, ASPECT)
     f = {"finding_id": f"{rule}:scene_01:x", "rule_id": rule, "stage_id": "element_completeness", "severity": severity, "status": "unresolved", "scene_id": "scene_01", "element_id": "x", "message": "m",
-         "evidence": {}, "owner_stage": "motion_generation", "suggested_action": "", "can_auto_fix": False, "exceptionable": exceptionable, "exception": None, "occurrences": 1}
+         "evidence": {}, "owner_stage": "motion_generation", "suggested_action": "", "can_auto_fix": False, "occurrences": 1}
     rep["findings"].append(f)
     rep["stages"][4]["finding_ids"].append(f["finding_id"])
     rep["stages"][4]["status"] = "blocked" if severity in ("blocker", "error") else "warning"
@@ -171,51 +171,26 @@ def with_finding(pd, rule="element.required_has_drawable", severity="blocker", e
     return f
 
 
-def test_a_required_visual_that_is_not_drawn_blocks_until_an_explicit_exception_and_it_stays_visible(pd, monkeypatch):
-    monkeypatch.setattr(mv, "REVIEW_RULES", frozenset())                                                         # the fixture's dummy 1 s audio is a review warning of its own: this test is about the blocker
-    f = with_finding(pd)
+def test_a_required_visual_that_is_not_drawn_blocks_and_nobody_can_waive_it(pd):
+    with_finding(pd)
     cur = mv.load(pd, ASPECT)
     assert cur["readiness"] == "blocked" and mv.blockers(pd, ASPECT)
-    for who, why, fp in (("", "a real reason here", cur["source_fingerprint"]), ("Asha", "short", cur["source_fingerprint"]), ("Asha", "a real reason here", "wrong")):
-        with pytest.raises(mv.ValidationError):
-            mv.record_exception(pd, ASPECT, f["finding_id"], who, why, fp)
-    assert mv.load(pd, ASPECT)["readiness"] == "blocked"                                                         # a generic "accepted" never bypasses it
-    rec = mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "the dome is cut from this edit, the narration still works", cur["source_fingerprint"])
-    assert rec["applies_to_fingerprint"] == cur["source_fingerprint"] and rec["decision_by"] == "Asha" and rec["expires_when_inputs_change"] is True
-    after = mv.load(pd, ASPECT)
-    ff = next(x for x in after["findings"] if x["finding_id"] == f["finding_id"])
-    assert after["readiness"] == "ready_with_warnings" and ff["status"] == "accepted_for_version" and ff["severity"] == "blocker" and after["summary"]["accepted_exceptions"] == 1
-    assert after["stages"][4]["status"] == "warning" and after["summary"]["stages_blocked"] == 0                    # the stage no longer reads blocked, the finding still reads accepted_for_version
-    assert mv.blockers(pd, ASPECT) == []
-    assert mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "the dome is cut from this edit, the narration still works", cur["source_fingerprint"]) == rec     # idempotent
-    mv.revoke_exception(pd, ASPECT, rec["exception_id"])
-    assert mv.load(pd, ASPECT)["readiness"] == "blocked" and mv.ledger(pd, ASPECT)[0]["revoked_at"]            # the decision and its withdrawal both stay in the ledger
+    assert not any(hasattr(mv, n) for n in ("record_exception", "revoke_exception", "apply_exceptions", "ledger"))      # no person decides about a finding
+    assert "exceptions" not in cur and "accepted_exceptions" not in cur["summary"]
 
 
-def test_an_error_or_another_blocker_can_never_be_accepted(pd):
-    f = with_finding(pd, rule="timing.within_parent", severity="error", exceptionable=False)
-    with pytest.raises(mv.ValidationError, match="cannot be accepted"):
-        mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "a real reason here", mv.load(pd, ASPECT)["source_fingerprint"])
-    assert mv.load(pd, ASPECT)["readiness"] == "blocked"
-
-
-def test_an_exception_expires_when_an_input_changes(pd):
-    f = with_finding(pd)
-    fp = mv.load(pd, ASPECT)["source_fingerprint"]
-    mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "the dome is cut from this edit, the narration still works", fp)
+def test_a_blocked_report_goes_stale_when_an_input_changes(pd):
+    with_finding(pd)
     (pd / "motion_fixes.json").write_text(json.dumps({"version": 1, "accepted": [], "scenes": {}, "changes": []}), encoding="utf-8")
     cur = mv.load(pd, ASPECT)
     assert cur["stale"] is True and cur["readiness"] == "stale" and mv.blockers(pd, ASPECT)
-    with pytest.raises(mv.ValidationError, match="out of date"):
-        mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "the dome is cut from this edit, the narration still works", fp)
 
 
-def test_review_warnings_need_a_decision_and_an_accepted_one_gives_ready_with_warnings(pd):
-    f = with_finding(pd, rule="layout.text_graphic_collision", severity="warning")
+def test_layout_warnings_are_disclosed_and_judged_by_the_llm_reviews_not_waited_on(pd):
+    with_finding(pd, rule="layout.text_graphic_collision", severity="warning")
     cur = mv.load(pd, ASPECT)
-    assert cur["readiness"] == "needs_review" and cur["summary"]["unresolved_review_items"] >= 1 and "need a decision" in mv.blockers(pd, ASPECT)[0]
-    mv.record_exception(pd, ASPECT, f["finding_id"], "Asha", "the line is meant to cross the title", cur["source_fingerprint"])
-    assert mv.load(pd, ASPECT)["readiness"] in ("ready_with_warnings", "needs_review")
+    assert cur["readiness"] == "ready_with_warnings" and mv.blockers(pd, ASPECT) == []                           # nobody could decide on it: Timeline Approval and Final QC see it
+    assert any(f["rule_id"] == "layout.text_graphic_collision" and f["severity"] == "warning" for f in cur["findings"])
 
 
 def test_readiness_rules_never_call_a_blocker_an_error_a_skipped_check_or_a_failed_stage_green():
@@ -223,9 +198,8 @@ def test_readiness_rules_never_call_a_blocker_an_error_a_skipped_check_or_a_fail
     ok = [{"status": "completed", "checks_skipped": 0}]
     assert mv.readiness_of([], ok) == "ready" and mv.readiness_of([f("info", "x")], ok) == "ready"
     assert mv.readiness_of([f("warning", "timing.emphasis_alignment")], ok) == "ready_with_warnings"
-    assert mv.readiness_of([f("warning", "layout.safe_margins")], ok) == "needs_review"
+    assert mv.readiness_of([f("warning", "layout.safe_margins")], ok) == "ready_with_warnings"
     assert mv.readiness_of([f("blocker", "x")], ok) == "blocked" and mv.readiness_of([f("error", "x")], ok) == "blocked"
-    assert mv.readiness_of([f("blocker", "x", "accepted_for_version")], ok) == "ready_with_warnings"
     assert mv.readiness_of([], [{"status": "completed", "checks_skipped": 1}]) == "ready_with_warnings"          # a skipped check is not a pass
     assert mv.readiness_of([], [{"status": "skipped_due_to_dependency", "checks_skipped": 0}]) == "blocked"
     assert mv.readiness_of([], [{"status": "failed", "checks_skipped": 0}]) == "failed"
@@ -269,16 +243,12 @@ def test_the_sampling_is_deterministic_and_covers_every_scene_and_transition(pd)
         assert mine == sorted(mine) and all(pv.mp.fr(s["start"]) <= f <= pv.mp.fr(s["end"]) for f in mine)
 
 
-def test_preview_evidence_separates_generated_decoded_reviewed_by_a_person_and_motion_watched(pd):
+def test_preview_evidence_is_generated_and_decoded_and_nobody_reviews_it(pd):
     rep = mv.run(pd, ASPECT)                                                                                   # the run makes the stills itself (fully automatic): evidence, not a person's review
     p = rep["preview"]
-    assert p["evidence_generated"] is True and p["technical_checks_passed"] is True and p["stills_reviewed_by_person"] is False and p["motion_playback_reviewed"] is False
-    assert finding(rep, "preview.evidence_present") is None and rep["preview_evidence"] and all(not s["human_reviewed"] for s in rep["preview_evidence"])
-    pv.review(pd, ASPECT, "stills", "Asha")
-    p = mv.run(pd, ASPECT)["preview"]
-    assert p["stills_reviewed_by_person"] is True and p["motion_playback_reviewed"] is False and p["reviews"][0]["by"] == "Asha"      # looking at stills is not watching the motion
-    with pytest.raises(mv.ValidationError):
-        pv.review(pd, ASPECT, "stills", "")
+    assert p["evidence_generated"] is True and p["technical_checks_passed"] is True and not {"stills_reviewed_by_person", "motion_playback_reviewed", "reviews"} & set(p)
+    assert finding(rep, "preview.evidence_present") is None and rep["preview_evidence"] and all("human_reviewed" not in s for s in rep["preview_evidence"])
+    assert not hasattr(pv, "review")
 
 
 def test_a_blank_or_broken_or_outdated_preview_frame_is_a_warning_not_a_pass(pd):
@@ -317,10 +287,8 @@ def test_a_still_that_fails_once_is_tried_again_and_one_that_always_fails_stops_
         pv._still(tmp_path, pd / "composition.json", 5, tmp_path / "y.png")
 
 
-def test_a_preview_is_refused_without_a_current_motion_generation_and_a_review_without_a_preview(pd):
+def test_a_preview_is_refused_without_a_current_motion_generation(pd):
     assert pv.load(pd, ASPECT) is None
-    with pytest.raises(mv.ValidationError):
-        pv.review(pd, ASPECT, "stills", "Asha")
     (pd / "motion_generation.json").unlink()
     with pytest.raises(mv.ValidationError):
         pv.generate(pd, ASPECT)
@@ -335,14 +303,6 @@ def api_project(c):
     return pid, pdir
 
 
-def accept_all(c, pid, rep):
-    """Test helper only: no route lets a person accept a finding any more; the ledger function is called directly (it has no production caller)."""
-    from backend import pipeline_view, store
-    pdir = store.project_dir(pid)
-    for f in [f for f in rep["findings"] if f["exceptionable"] and f["status"] == "unresolved"]:
-        mv.record_exception(pdir, pipeline_view.aspect_of(pdir), f["finding_id"], "Asha", REASON, rep["source_fingerprint"])
-
-
 def test_the_api_reports_and_runs_and_never_starts_a_build_and_has_no_route_to_accept_a_finding(client):
     c = client
     pid, pdir = api_project(c)
@@ -354,9 +314,9 @@ def test_the_api_reports_and_runs_and_never_starts_a_build_and_has_no_route_to_a
     assert r.status_code == 202 and r.json()["steps"] == ["motion-validation"]
     assert _mo.wait_job(c, pid, timeout=240)["error"] is None
     rep = c.get(f"/projects/{pid}/motion-timeline-validation").json()
-    assert rep["phase_status"] == "completed" and rep["stale"] is False and len(rep["stages"]) == 12 and rep["readiness"] in ("ready", "needs_review", "ready_with_warnings", "blocked")
+    assert rep["phase_status"] == "completed" and rep["stale"] is False and len(rep["stages"]) == 12 and rep["readiness"] in ("ready", "ready_with_warnings", "blocked")
     assert not (pdir / "out.mp4").exists() and _mo.stages(c, pid)["timeline"]["status"] == "queued"            # validation never builds the timeline or renders
-    assert _mo.stages(c, pid)["motion_validation"]["status"] == {"ready": "completed", "needs_review": "waiting_for_approval", "ready_with_warnings": "completed", "blocked": "failed"}[rep["readiness"]]
+    assert _mo.stages(c, pid)["motion_validation"]["status"] == {"ready": "completed", "ready_with_warnings": "completed", "blocked": "failed"}[rep["readiness"]]
     for f in rep["findings"][:1]:                                                                              # no route lets a person accept a finding or say they looked at the preview
         assert c.post(f"/projects/{pid}/motion-timeline-validation/findings/{f['finding_id']}/exception", json={"decision_by": "Asha", "reason": REASON, "applies_to_fingerprint": rep["source_fingerprint"]}).status_code in (404, 405)
     assert c.post(f"/projects/{pid}/motion-timeline-validation/preview/review", json={"level": "stills", "by": "Asha"}).status_code in (404, 405)
@@ -371,7 +331,6 @@ def test_the_timeline_waits_for_stage_10_and_a_stale_result_never_lets_the_rende
     from backend import timeline_gate
     assert c.post(f"/projects/{pid}/motion-timeline-validation/run").status_code == 202
     assert _mo.wait_job(c, pid, timeout=240)["error"] is None
-    accept_all(c, pid, c.get(f"/projects/{pid}/motion-timeline-validation").json())
     if c.get(f"/projects/{pid}/motion-timeline-validation").json()["readiness"] not in mv.READY:
         pytest.skip("this fixture has an error or blocker that cannot be accepted: covered by the other tests")
     assert not any("Motion & Timeline Validation" in b for b in timeline_gate.render_blockers(pdir, ASPECT))

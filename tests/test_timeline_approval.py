@@ -101,9 +101,9 @@ def test_opening_and_preparing_the_review_approves_nothing_and_shows_every_limit
     m = s["manifest"]
     assert s["status"] == "ready_for_review" and not s["approved"] and events(pd) == [] and (pd / ta.names(A)["review"]).exists()
     assert m["scene_count"] == len(m["scenes"]) > 0 and m["timeline_fingerprint"] == s["fingerprint"] and m["preview"]["verified"] and m["preview"]["note"].startswith("quarter-size stills")
-    assert m["review_coverage"]["stills_reviewed_by_person"] is False and m["review_coverage"]["motion_playback_reviewed"] is False
+    assert "review_coverage" not in m
     codes = {r["code"] for r in s["requirements"]}
-    assert {"stills_not_reviewed_by_person", "motion_playback_not_reviewed"} <= codes                           # the coverage nobody has is a limitation, never silently green
+    assert not any(c.startswith(("stills_not_reviewed", "motion_playback_not_reviewed")) for c in codes)       # nobody looks at anything: no coverage to acknowledge
     assert {n: (pd / n).read_bytes() for n in mine} == before                                                  # the timeline itself was not touched
 
 
@@ -124,7 +124,7 @@ def test_an_approval_needs_every_acknowledgement_the_name_and_the_current_versio
     assert out["outcome"] == "recorded" and out["status"] == "approved" and out["approved"] and len(ev) == 1      # one record, read back
     d = ev[0]
     assert d["decision"] == "approved" and d["timeline_fingerprint"] == s["fingerprint"] and d["decided_by"] == "Asha" and d["decided_by_source"] == "self_declared"
-    assert d["review_coverage"] == {"stills_reviewed_by_person": False, "motion_playback_reviewed": False} and len(d["warning_acknowledgements"]) == len(s["requirements"])
+    assert "review_coverage" not in d and len(d["warning_acknowledgements"]) == len(s["requirements"])
     assert {r["rule_id"] for r in ta.state(pd, A)["requirements"]} == {r["rule_id"] for r in s["requirements"]}   # acknowledging removed no warning
 
 
@@ -209,14 +209,11 @@ def test_a_preview_that_does_not_match_blocks_the_review(pd, break_it, why):
     assert s["status"] == "not_ready" and not s["preview"]["verified"] and why in s["preview"]["reason"] and not s["approval_allowed"]
 
 
-def test_review_coverage_is_only_what_a_person_recorded_and_playback_stays_unreviewed_here(pd):
+def test_no_person_looks_at_anything_so_the_approval_has_no_review_coverage_and_no_notes(pd):
     reviewable(pd)
-    pv.review(pd, A, "stills", "Asha")
     s = ta.state(pd, A)
-    codes = {r["code"] for r in s["requirements"]}
-    assert s["review_coverage"]["stills_reviewed_by_person"] is True and "stills_not_reviewed_by_person" not in codes and "motion_playback_not_reviewed" in codes
-    ta.decide(pd, A, body(s))
-    assert events(pd)[0]["review_coverage"] == {"stills_reviewed_by_person": True, "motion_playback_reviewed": False}
+    assert "review_coverage" not in s and not any(r["category"] == "review_coverage" for r in s["requirements"])
+    assert not hasattr(ta, "add_note") and not hasattr(ta, "coverage") and "notes" not in s or s["notes"] == []
 
 
 # ---------- fail closed ----------

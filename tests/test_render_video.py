@@ -113,7 +113,7 @@ def test_an_approved_timeline_is_rendered_to_a_temp_file_verified_published_and_
     assert rep["input_fingerprints"]["approved_version"] == st0["fingerprint"] and rep["approval"]["approved_by"] == "Asha" and rep["approval"]["approved_by_source"] == "self_declared"
     assert rep["expected"]["frames"] == rep["observed"]["frame_count"] == 2104 and (rep["observed"]["width"], rep["observed"]["height"]) == (1920, 1080) and rep["observed"]["audio_stream_present"]
     assert all(c["status"] in ("passed", "not_applicable") for c in rep["verification"]) and rep["final_qc_status"] == "pending" and "not been reviewed" in rep["note"]
-    assert {w["category"] for w in rep["carried_warnings"]} >= {"review_coverage"}                              # the limitations the approver acknowledged travel on to Final QC
+    assert "review_coverage" not in {w["category"] for w in rep["carried_warnings"]}                            # nobody looks at anything: the acknowledged limitations (not a coverage) travel on to Final QC
     man = json.loads((pd / "render_manifest.json").read_text(encoding="utf-8"))
     assert man["manifest_fingerprint"] == rv.manifest_fingerprint(man) == rep["input_fingerprints"]["manifest"] and man["approval"]["timeline_fingerprint"] == st0["fingerprint"]
     assert seen and max(seen) < 100 and all(a <= b for a, b in zip(seen, seen[1:]))                              # never 100 % before verification and publishing; the step itself finishes it
@@ -297,7 +297,7 @@ def test_the_final_render_step_runs_the_stage_for_motion_only_projects(pd, good,
     approved(pd)
     monkeypatch.setattr(render, "render", fake(good))
     r = pipeline.execute(pd, "render-final", pipeline.Ctx())
-    assert r["status"] == "ran" and "verified and published" in r["msg"] and "playback decision is pending" in r["msg"] and (pd / "render_report.json").exists()
+    assert r["status"] == "ran" and "verified and published" in r["msg"] and "decided by the Final QC LLM review" in r["msg"] and (pd / "render_report.json").exists()
 
 
 def test_the_api_reads_the_render_state_and_cancel_needs_a_running_render(client):

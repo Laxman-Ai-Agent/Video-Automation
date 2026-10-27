@@ -369,7 +369,7 @@ def stage_element_completeness(x: X, v: V) -> None:
                     v.check(S, "element.required_has_drawable", False, "blocker", f"{sid}: {eid} is a required visual with no drawable representation in the current composition"
                             + (" (accepted in Solve warnings, which does not draw it)" if state == "accepted_not_drawn" else ""), sid, eid,
                             {"visual_plan_required": True, "composition_layer_found": False, "plan_status": pe["status"], "accepted_in_solve_warnings": sid in accepted, "reason": why}, "motion_generation",
-                            "implement a supported drawable representation for it, or record an explicit authorized exception")
+                            "implement a supported drawable representation for it")
                 else:
                     v.check(S, "element.required_has_drawable", True, "blocker", "", sid, eid)
             if state == "optional_missing":
@@ -692,7 +692,7 @@ def stage_preview_validation(x: X, v: V) -> None:
     S = "preview_validation"
     man = pv.load(x.pdir, x.aspect)
     gen_sha = ((x.gen or {}).get("output") or {}).get("composition_sha")
-    levels = {"evidence_generated": False, "technical_checks_passed": False, "stills_reviewed_by_person": False, "motion_playback_reviewed": False, "samples": 0, "scenes_sampled": 0, "reviews": []}
+    levels = {"evidence_generated": False, "technical_checks_passed": False, "samples": 0, "scenes_sampled": 0}
     x.preview_levels = levels
     if man is None:
         v.skip(S, "preview.evidence_present", "no preview was generated: the scenes have not been looked at (Generate Preview makes low-resolution stills; it never renders the video)", None, "preview", {}, "motion_generation", "warning")
@@ -714,7 +714,5 @@ def stage_preview_validation(x: X, v: V) -> None:
     sampled = {smp["scene_id"] for smp in samples}
     for s in x.scenes():
         v.check(S, "preview.scene_sampled", sid_of(s["id"]) in sampled, "warning", f"{sid_of(s['id'])}: no preview frame was made for it", sid_of(s["id"]), "sampled", {}, "motion_generation", "generate the preview again")
-    revs = [r for r in man.get("reviews", []) if r.get("composition_sha") == gen_sha]
-    levels.update(evidence_generated=True, technical_checks_passed=bool(good_all) and all(good_all), samples=len(samples), scenes_sampled=len(sampled), reviews=revs,
-                  stills_reviewed_by_person=any(r["level"] == "stills" for r in revs), motion_playback_reviewed=any(r["level"] == "playback" for r in revs))
-    x.preview_samples = [{**smp, "human_reviewed": levels["stills_reviewed_by_person"]} for smp in samples]
+    levels.update(evidence_generated=True, technical_checks_passed=bool(good_all) and all(good_all), samples=len(samples), scenes_sampled=len(sampled))
+    x.preview_samples = list(samples)

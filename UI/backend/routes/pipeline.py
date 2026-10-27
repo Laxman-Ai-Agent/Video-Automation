@@ -39,9 +39,10 @@ def _gate(stage_id: str):
                                "wait for the upstream stage to complete (or fix it) first")
             # a stage that never ran is left to the route's own input checks (missing analysis JSON, no scene plan ...)
         for dep in STAGE_DEPENDENCIES.get(stage_id, ()):
-            if (open_issues := stage_gate.unresolved(pdir, dep, aspect)):
+            ran = getattr(pstate.stages.get(dep), "status", None) == "completed"             # a stage that never ran has no LLM review to wait for
+            if (open_issues := stage_gate.unresolved(pdir, dep, aspect, ran=ran)):
                 raise ApiError(409, "upstream_blocked", f"'{stage_id}' is blocked: upstream stage '{dep}' has {stage_gate.describe(open_issues)}",
-                               "fix the upstream issues, or accept its warnings from the Issues panel")
+                               "fix the upstream issues: the stage's own fixer solves what it can, nobody can accept a warning")
     return check
 
 
