@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "timeline_build",
-  "updated_at": "2026-10-24T03:18:43.272675+00:00",
-  "total_experiences": 37,
+  "updated_at": "2026-10-27T01:52:56.343592+00:00",
+  "total_experiences": 38,
   "experiences": {
     "exp-timeline_build-026772deb2": {
       "experience_id": "exp-timeline_build-026772deb2",
@@ -102,6 +102,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T07:33:47.584324+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_build-218038aa6e": {
+      "experience_id": "exp-timeline_build-218038aa6e",
+      "agent_id": "timeline_build",
+      "task_type": "timeline_build",
+      "task_id": "task-71b190de59",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_frames": 1784,
+        "fps": 30,
+        "duration_seconds": 59.45,
+        "speech_coverage_percent": 97.3,
+        "continuity_score": 60.0,
+        "repaired_count": 0
+      },
+      "reflection": "Timeline Build compiled 1784 frames at 30 fps (59.45s). Speech coverage: 97.3%. Continuity score: 60.0/100. Transitions recommended: 6.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-27T01:52:56.309923+00:00",
       "schema_version": 1
     },
     "exp-timeline_build-23f23e0644": {

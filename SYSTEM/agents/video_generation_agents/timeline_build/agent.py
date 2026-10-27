@@ -106,15 +106,6 @@ class TimelineBuildAgent(BaseAgent):
         cur = timeline_build.load(project_dir, aspect) if not force else None
         if cur and cur.get("current") and tl_path.exists() and rep_path.exists():
             report = cur.get("report", {})
-        elif tl_path.exists() and rep_path.exists() and not force:
-            try:
-                rep_data = json.loads(rep_path.read_text(encoding="utf-8"))
-                if rep_data.get("status") in ("completed", "completed_with_warnings"):
-                    report = rep_data
-                else:
-                    report = timeline_build.run(project_dir, aspect)
-            except Exception:
-                report = timeline_build.run(project_dir, aspect)
         else:
             try:
                 report = timeline_build.run(project_dir, aspect)
