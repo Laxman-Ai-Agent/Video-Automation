@@ -367,5 +367,7 @@ def test_the_audio_analyzer_approval_judges_the_final_transcript_and_is_bound_to
     assert llm_review.compute_stage_output_fingerprint(pdir, "analyzer") != before                  # the final transcript is part of what the approval covers
     p = llm_review.build_stage_payload(pdir, "analyzer")
     assert p["final_transcript_file"] == "transcript_corrected.json" and p["final_transcript"][0]["text"] == "question అడిగితే" and p["cuts_count"] == 1
-    assert p["word_timing"] == {"words": 2, "llm_edited": 1, "aligned": 1, "estimated": 0, "overlapping": 0}
+    wt = p["word_timing"]
+    assert {k: wt[k] for k in ("words", "llm_edited", "aligned", "estimated", "overlapping", "edited_keeping_whisper_time")} == {"words": 2, "llm_edited": 1, "aligned": 1, "estimated": 0, "overlapping": 0, "edited_keeping_whisper_time": 0}
+    assert "legend" in wt and p["empty_segments"] == [] and "cuts_note" in p                        # the counts reconcile for the reviewer
     assert p["llm_correction"]["applied"] == 1 and p["llm_correction"]["corrections"][0]["to"] == "question" and "transcript_sample" not in p

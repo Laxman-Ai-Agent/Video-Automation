@@ -32,7 +32,7 @@ SCHEMA = "1.0"
 VERSION = 1
 LLM_STAGES = ("analyzer", "segmentation", "planning", "motion_gen", "approval", "qc")     # the stages whose result needs an LLM review; every other stage is decided by its own deterministic checks
 SWITCHABLE = ("analyzer", "segmentation", "planning", "motion_gen")                      # approval and qc ARE an LLM decision (nobody else decides them): they cannot be switched off
-EVIDENCE_REVISION = {"approval": 2, "analyzer": 2}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
+EVIDENCE_REVISION = {"approval": 2, "analyzer": 3}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
 
 
 class LlmReviewResult(TypedDict):
@@ -791,7 +791,9 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         "}\n"
         "Rules:\n"
         '- If there are fatal flaws, set status="blocked" and include at least one finding with severity="blocker".\n'
-        '- If minor visual/editorial warnings exist, set status="passed" with severity="warning" or status="needs_review".\n'
+        '- Only `passed` lets the next stage start; `needs_review` stops the pipeline. Set status="passed" (score >= 0.8) when there is no blocker or error: minor warnings are still listed with severity="warning" and do not prevent it.\n'
+        '- Set status="needs_review" only for a real defect you can point at in the artifacts (a wrong value, a contradiction, a missing required piece) that the stage could still fix; a defect that is merely possible is not one.\n'
+        '- You cannot hear the audio or watch the video. A doubt that only listening or watching could settle (a word that might have been heard differently, a style preference) is severity="info", never a warning that blocks.\n'
         '- If everything satisfies standards, set status="passed" and score >= 0.85.\n'
         "- Respond with ONLY the JSON object, with no markdown backticks, no comments, and no preamble."
     )

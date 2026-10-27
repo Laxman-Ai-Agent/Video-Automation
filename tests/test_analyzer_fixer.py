@@ -60,7 +60,9 @@ def test_it_is_bounded_per_raw_transcript_and_a_new_raw_transcript_starts_again(
     (pdir / "transcript_corrected.json").write_text(raw, encoding="utf-8")                                 # as if the LLM undid it
     tr.fix(pdir, FINDINGS, ask=lambda *a, **k: _answer("direct  గా "))
     (pdir / "transcript_corrected.json").write_text(raw, encoding="utf-8")
-    with pytest.raises(tr.FixError, match="2 automatic fix passes"):
+    tr.fix(pdir, FINDINGS, ask=lambda *a, **k: _answer("direct గా  "))
+    (pdir / "transcript_corrected.json").write_text(raw, encoding="utf-8")
+    with pytest.raises(tr.FixError, match="3 automatic fix passes"):
         tr.fix(pdir, FINDINGS, ask=lambda *a, **k: _answer())
     t = Transcript.model_validate_json(raw)
     t.segments[0].words[0].w = "THIS"                                                                       # another raw transcript

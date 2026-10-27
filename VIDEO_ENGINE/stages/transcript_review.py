@@ -423,10 +423,11 @@ def refine(pdir: Path, progress=None, ask=None, aligner=None) -> dict:
     return review
 
 
-MAX_FIX_ROUNDS = 2                # passes that tell the LLM what the stage review still found, counted on disk per raw transcript (a new raw transcript starts again)
+MAX_FIX_ROUNDS = 3                # passes that tell the LLM what the stage review still found, counted on disk per raw transcript (a new raw transcript starts again)
 FIX_SYSTEM = SYSTEM + (" THIS IS A SECOND PASS over a transcript you already proofread: a reviewer still found the problems listed under 'review_findings'. Fix exactly those problems, with the same JSON "
                        "answer, and change nothing else. A script boundary with no space ('directగా') is written 'direct గా', as everywhere else in this transcript. Never guess a word that neither the words, "
-                       "their probabilities nor the sentence around them support: leave it (an empty list is a good answer).")
+                       "their probabilities nor the sentence around them support: leave it (an empty list is a good answer). A phrase that is unintelligible, that cannot be corrected with confidence and that the "
+                       "sentence does not need (it stays grammatical without it) is removed (\"to\": \"\"): nonsense must not reach the subtitles.")
 
 
 class FixError(RuntimeError):
