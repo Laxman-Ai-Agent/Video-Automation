@@ -21,6 +21,7 @@ import time
 from pathlib import Path
 from typing import Any, Literal, TypedDict
 
+from SYSTEM.core.request_memo import memo
 from SYSTEM.policies import rule_switches
 
 from SYSTEM.core import llm_client, llm_gateway
@@ -72,6 +73,7 @@ def _sha(data: str | bytes) -> str:
     return hashlib.sha256(data).hexdigest()[:16]
 
 
+@memo
 def _file_hash(p: Path) -> str:
     if not p.exists() or not p.is_file():
         return "missing"

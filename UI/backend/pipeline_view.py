@@ -31,6 +31,7 @@ def _stage(id_: str, label: str, status: str, detail: str = "", percent: float |
     return {"id": id_, "label": label, "status": status, "detail": detail, "percent": None if percent is None else round(percent, 1), "action": action, **extra}
 
 
+from SYSTEM.core.request_memo import scoped
 from VIDEO_ENGINE.stages import live_steps
 
 
@@ -169,6 +170,7 @@ def run_started_at(pid: str, stage_id: str) -> float | None:
     return s["started_at"] if s and s["status"] == "running" else None
 
 
+@scoped
 def build(pid: str) -> dict:
     pdir = store.project_dir(pid)
     aspect = aspect_of(pdir)

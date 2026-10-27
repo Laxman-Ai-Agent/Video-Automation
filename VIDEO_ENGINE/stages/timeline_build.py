@@ -21,6 +21,7 @@ import threading
 import time
 from pathlib import Path
 
+from SYSTEM.core.request_memo import memo
 from SYSTEM.policies import rule_switches
 from . import config, motion_planning as mp, motion_validation as mv, resource_library as rl, store
 
@@ -72,6 +73,7 @@ def input_files(pdir: Path, aspect: str) -> dict[str, Path]:
     return {**mv.input_files(pdir, aspect), "scene_plan": pdir / "scene_plan.json"}
 
 
+@memo
 def input_digests(pdir: Path, aspect: str) -> dict[str, str | None]:
     """Every material input by role: the Stage 10 verdict (fingerprint, readiness, accepted exceptions), the artifacts, the audio (name and size), the words, the renderer, the policies and this module."""
     d = {k: v for k, v in mv.input_digests(pdir, aspect).items() if k in ("project", "segmentation", "visual_plan", "scene_plan", "motion_plan", "motion_planning", "motion_generation", "composition", "audio", "words", "renderer", "resources")}

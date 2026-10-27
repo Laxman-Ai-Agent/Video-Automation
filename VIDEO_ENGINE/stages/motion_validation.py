@@ -17,6 +17,7 @@ import re
 import time
 from pathlib import Path
 
+from SYSTEM.core.request_memo import memo
 from SYSTEM.policies import rule_switches
 from . import config, live_steps, motion_generation as mg, motion_planning as mp
 
@@ -100,6 +101,7 @@ def input_files(pdir: Path, aspect: str) -> dict[str, Path]:
     }
 
 
+@memo
 def input_digests(pdir: Path, aspect: str) -> dict[str, str | None]:
     """A digest per input. The audio is its name and size (it is large; a changed take changes the size), the transcript is the file the composition was built from."""
     from . import pipeline

@@ -18,6 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable
 
+from SYSTEM.core.request_memo import memo
 from SYSTEM.memory import store
 from SYSTEM.policies import llm_review
 
@@ -73,6 +74,7 @@ def step(name, requires=(), outputs=lambda p: [], fingerprint=None, hint="", too
 
 
 # ---------- hashing (inputs only) ----------
+@memo
 def digest(*parts) -> str:
     """sha1 over files/folders (content + relative names, sorted) and plain values."""
     m = hashlib.sha1()
@@ -440,6 +442,7 @@ def _validate_step(name: str, aspect: str) -> None:
 _src_memo: dict = {}
 
 
+@memo
 def _remotion_src_digest() -> str:
     """Digest of the renderer's source (what the motion steps depend on). The view asks for freshness every few seconds, so the content hash is only recomputed when a
     file's size or modification time changed. Generated scene modules under VIDEO_ENGINE/remotion/src/generated are excluded because they are stage outputs."""
