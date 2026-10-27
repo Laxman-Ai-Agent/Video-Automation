@@ -121,6 +121,14 @@ def _review(tmp_path, **changes):
     f.write_text(json.dumps(data), encoding="utf-8")
 
 
+def test_a_failed_llm_check_leaves_the_refine_step_unfinished():
+    """An LLM that did not answer (the earlier correction was kept) must not count as a finished check: the step runs again even though no input changed."""
+    assert tr.unfinished({"llm": {"status": "failed", "kept_earlier_correction": True}, "alignment": {"status": "unchanged"}})
+    assert tr.unfinished({"llm": {"status": "unavailable"}})
+    assert not tr.unfinished({"llm": {"status": "applied"}, "alignment": {"status": "aligned_for_edits"}})
+    assert not tr.unfinished({})                                                            # no review yet: the missing review file already makes the step run
+
+
 def test_a_transcript_the_llm_checked_is_verified_even_when_nothing_was_corrected(tmp_path):
     """transcript_corrected.json exists only when something was corrected, so the gate cannot look for the file: a transcript the LLM checked and left as it was is verified too."""
     import os

@@ -374,6 +374,12 @@ def alignment_pending(review: dict) -> bool:
     return a.get("estimated_words", 1) > 0 and a.get("status") in ("partial", "estimated_for_edits")
 
 
+def unfinished(review: dict) -> bool:
+    """The `refine` step is not finished: corrected words still wait for their timing, or the LLM check itself did not run (a failed or unavailable LLM; an earlier correction may be kept
+    on disk, but it was not checked under the current rules). Its outputs then list a file that never exists, so the next run tries again even though no input changed."""
+    return alignment_pending(review) or (bool(review) and (review.get("llm") or {}).get("status") in ("failed", "unavailable"))
+
+
 def last_review(pdir: Path) -> dict:
     try:
         return json.loads((pdir / "transcript_review.json").read_text(encoding="utf-8"))

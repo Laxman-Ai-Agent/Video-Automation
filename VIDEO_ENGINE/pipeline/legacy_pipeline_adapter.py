@@ -279,15 +279,16 @@ def _transcribe(pdir, ctx):
 
 
 @step("refine", requires=("transcript.json",), hint="run: python -m backend.cli transcribe <id>",
-      outputs=lambda p: [p / "transcript_review.json"] + ([p / "transcript_review.incomplete"] if transcript_review.alignment_pending(transcript_review.last_review(p)) else []),
+      outputs=lambda p: [p / "transcript_review.json"] + ([p / "transcript_review.incomplete"] if transcript_review.unfinished(transcript_review.last_review(p)) else []),
       fingerprint=lambda p, c: digest(p / "transcript.json", p / "vocabulary.txt", _audio(p), config.WHISPER_MODEL, transcript_review.VERSION, transcript_review.LOW_P, os.environ.get("PROMPTGEN_MODEL", "")))
 def _refine(pdir, ctx):
     """Audio Analyzer stages 6-9: technical vocabulary, uncertain words, the Claude check of every word (validated), the final corrected transcript. The raw transcript.json is never edited."""
     r = transcript_review.refine(pdir, progress=ctx.progress)
     n = sum(c["status"] == "applied" for c in r["corrections"])
-    if r["llm"]["status"] in ("unavailable", "failed") and not r["corrected_file"]:
-        # the final transcript is the LLM-verified one: without it the analysis is not finished (finished steps are kept, running again retries only this one)
-        raise StepError(f"The LLM check of the transcript could not run ({r['llm']['error'] or r['llm']['status']}). The final JSON is saved only after the LLM check: sign in to the Claude CLI and run the Audio Analyzer again.")
+    if r["llm"]["status"] in ("unavailable", "failed"):
+        # the final transcript is the one the LLM checked under the current rules: without that check the analysis is not finished (an earlier correction stays on disk;
+        # running again retries only this step)
+        raise StepError(f"The LLM check of the transcript could not run ({r['llm']['error'] or r['llm']['status']}). The final JSON is the LLM-checked one: make the LLM available and run the Audio Analyzer again.")
     return f"{len(r['confidence']['flagged'])} uncertain words, {n} corrected, Claude: {r['llm']['status']}"
 
 
