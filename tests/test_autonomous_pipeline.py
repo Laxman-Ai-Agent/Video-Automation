@@ -137,3 +137,19 @@ def test_the_visual_planning_agent_gives_the_gateway_the_planners_timeout(tmp_pa
     assert seen["timeout"] == 900
     ask("p")
     assert seen["timeout"] == 900
+
+
+def test_the_gateway_keeps_the_callers_timeout():
+    """execute_llm_gateway_call turned a GatewayRequest into the gateway's own request and dropped the timeout: every such call was cut off after 60 s, whatever the caller asked for."""
+    from SYSTEM.core import llm_gateway
+    seen = {}
+    fake_gw = SimpleNamespace(execute=lambda r: seen.setdefault("req", r) and SimpleNamespace(status="passed", raw_text="x", provider="p", model="m", model_profile="fast", purpose="generation", stage_id="planning",
+                                                                                               error=None, structured_data=None, token_usage={}))
+    import pytest as _pt
+    with _pt.MonkeyPatch.context() as m:
+        m.setattr(llm_gateway, "get_gateway", lambda: fake_gw)
+        llm_gateway.execute_llm_gateway_call(llm_gateway.GatewayRequest(prompt="p", timeout=900))
+        assert seen["req"].timeout == 900
+        seen.clear()
+        llm_gateway.execute_llm_gateway_call(llm_gateway.GatewayRequest(prompt="p"))
+        assert seen["req"].timeout == 60                                                  # the default stays

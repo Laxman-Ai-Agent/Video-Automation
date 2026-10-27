@@ -532,6 +532,7 @@ def execute_llm_gateway_call(req: Any) -> GatewayResponse:
         model_profile=model_profile,
         correlation_id=getattr(req, "correlation_id", None) or f"corr_{uuid.uuid4().hex[:12]}",
         metadata=meta,
+        timeout=getattr(req, "timeout", None) or 60,                  # the caller's timeout is kept: it was dropped here, so every GatewayRequest was cut off after 60 s
     )
     res = gw.execute(legacy_req)
     return GatewayResponse(
