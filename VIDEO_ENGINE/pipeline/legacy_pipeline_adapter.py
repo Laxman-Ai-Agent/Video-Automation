@@ -476,16 +476,28 @@ def _run_build_script(pdir: Path, aspect: str, plan_only: bool) -> None:
 _STAGES_DIR = Path(__file__).resolve().parent.parent / "stages"
 
 
-def _motion_inputs(pdir: Path, aspect: str) -> list:
-    return [pdir / "scene_plan.json", pdir / "visual_planning.json", pdir / "motion_fixes.json", *transcript_inputs(pdir), _audio(pdir) or "no-audio", _remotion_src_digest(),
-            _REMOTION / "scripts" / "build_composition.ts", aspect, ("with-pictures" if __import__("SYSTEM.memory.store", fromlist=["uses_images"]).uses_images(pdir) else "motion-only"), config.MOTION_SPEED or "",
+def _plan_code() -> list:
+    """The CODE that makes the motion plan (the renderer's source, the build script, the settings and the files that plan and check it): a change in any of it must rebuild the plan.
+    The one list: the step's fingerprint (`_motion_inputs`) and the orchestrator's stage fingerprint (`code_digest`, via llm_review._stage_logic_tag) both read it, so the pipeline view and the run never disagree."""
+    return [_remotion_src_digest(), _REMOTION / "scripts" / "build_composition.ts", config.MOTION_SPEED or "",
             *([f"style-kit:{config.STYLE_KIT}"] if config.STYLE_KIT not in ("", "0") else []),      # only when on: a project without a kit keeps its fingerprint
-            _STAGES_DIR / "motion_planning.py", _STAGES_DIR / "motion_scenes.py"]                  # the files that make the plan: a change in them must rebuild it
+            _STAGES_DIR / "motion_planning.py", _STAGES_DIR / "motion_scenes.py"]
+
+
+def _motion_inputs(pdir: Path, aspect: str) -> list:
+    return [pdir / "scene_plan.json", pdir / "visual_planning.json", pdir / "motion_fixes.json", *transcript_inputs(pdir), _audio(pdir) or "no-audio", aspect,
+            ("with-pictures" if __import__("SYSTEM.memory.store", fromlist=["uses_images"]).uses_images(pdir) else "motion-only"), *_plan_code()]
 
 
 def _generation_inputs() -> list:
     """What Motion Generation is made of besides the plan: the modules that check it and the renderer's validator."""
     return [_STAGES_DIR / n for n in ("motion_generation.py", "motion_gen_rules.py", "motion_gen_report.py", "motion_animation.py")] + [_REMOTION / "scripts" / "motion_validate.ts"]
+
+
+@memo
+def code_digest(stage: str) -> str:
+    """The digest of the code behind a motion stage ('motion_plan' = `_plan_code`, 'motion_gen' = that plus `_generation_inputs`), for the orchestrator's stage fingerprint."""
+    return digest(*_plan_code(), *(_generation_inputs() if stage == "motion_gen" else []))
 
 
 def _planned(plan: dict) -> list:

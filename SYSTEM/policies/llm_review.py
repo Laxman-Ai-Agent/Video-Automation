@@ -186,6 +186,9 @@ def _stage_logic_tag(stage: str, pdir: Path | None = None, aspect: str = "16:9")
     if stage == "render":                                        # the sound design (version, cuts, music bed) decides what the render plays
         from VIDEO_ENGINE.stages import sound_design
         return f"|snd{sound_design.fingerprint(pdir, aspect)}"
+    if stage in ("motion_plan", "motion_gen"):                   # the code that plans / writes the motion: a change in it makes the stage stale, exactly as the step's own fingerprint says
+        from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter
+        return f"|code{legacy_pipeline_adapter.code_digest(stage)}"
     if stage == "qc":                                            # what the Final QC reviewer is shown (frames, metrics) is part of its verdict
         from VIDEO_ENGINE.stages import qc_sight
         return f"|sight{qc_sight.VERSION}"
@@ -773,18 +776,17 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
         upstream_stages = ["analyzer", "segmentation", "planning", "assets", "motion_plan", "motion_gen", "motion_validation", "timeline", "approval", "render", "qc"]
         upstream_summary = []
         for stg in upstream_stages:
-            rf = pdir / f"llm_review_{stg}{sfx}.json"
-            if rf.exists():
-                try:
-                    rd = json.loads(rf.read_text(encoding="utf-8"))
-                    upstream_summary.append({
-                        "stage": stg,
-                        "status": rd.get("status"),
-                        "score": rd.get("score"),
-                        "summary": rd.get("summary", "")[:120],
-                    })
-                except Exception:
-                    pass
+            if not review_required(stg):                                       # a stage decided by its own checks: a review file left on disk from before is not evidence about this video
+                continue
+            rd = load_review(pdir, stg, aspect)
+            if rd:
+                current = review_is_current(pdir, stg, aspect)
+                upstream_summary.append({
+                    "stage": stg,
+                    "status": rd.get("status") if current else "stale",         # a verdict about other inputs says nothing about these
+                    "score": rd.get("score") if current else None,
+                    "summary": rd.get("summary", "")[:120] if current else "this review was made for other inputs than the current ones",
+                })
         payload["upstream_stage_reviews"] = upstream_summary
 
     return payload
