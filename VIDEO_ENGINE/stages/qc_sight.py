@@ -3,7 +3,7 @@
 No new frame is cut from the video: the sheets are drawn from `final_qc_frames/` (the files the media checks decoded) and the motion numbers from the timeline thumbnail sheet
 (`timeline_media.thumbnails`, one picture per second, also used by the Timeline page). Two kinds of sheet, one row per scene / per cut, so a finding can name its scene:
   scenes: the scene's entry, middle and pre-exit frame      cuts: the frame before the cut, the middle of its transition and the frame after the cut
-Cells are phone-width (about 320 px), so text that cannot be read in a cell cannot be read on a phone either. Cached by the video's hash and the sampled frames."""
+Cells are phone-width (about 320 px; the label sits in a 40 px strip above the frame, so no corner of the frame is hidden), so text that cannot be read in a cell cannot be read on a phone either. Cached by the video's hash and the sampled frames."""
 from __future__ import annotations
 
 import json
@@ -15,7 +15,7 @@ from PIL import Image
 
 from . import contact_grid, final_qc as fq, render_video as rv, timeline_media
 
-VERSION = 1                                  # part of the qc review's fingerprint (llm_review._stage_logic_tag): a change of what the reviewer is shown makes its verdict stale
+VERSION = 2                                  # 2: the label sits in a strip above each frame (it covered the top-left corner); part of the qc review's fingerprint (llm_review._stage_logic_tag): a change of what the reviewer is shown makes its verdict stale
 CELL_LONG, COLUMNS, SHEET_MAX_PX = 320, 3, 1500      # the long edge of a cell; a sheet taller than ~1500 px is shrunk by the model, which defeats the phone-size cells
 CHANGE_MIN = 8.0                             # mean grey difference (0-255) between two pictures one second apart that counts as the picture changing (a new layout, not a fade-in of one element)
 USAGE_EDGE, USAGE_BLOCK = 12, 0.015          # a pixel is "content" when its edge step exceeds USAGE_EDGE; a block of the 16x9 grid has content when more than USAGE_BLOCK of its pixels do
@@ -51,11 +51,12 @@ def _sheets(folder: Path, files: dict[int, Path], sha: str, name: str, cells: li
     first = next((p for p in pics if p), None)
     w, h = first.size if first else (16, 9)
     cell = (CELL_LONG, round(CELL_LONG * h / w)) if w >= h else (round(CELL_LONG * w / h), CELL_LONG)
+    cell = (cell[0], cell[1] + contact_grid.STRIP)                                           # the label has its own strip above the picture: it never covers a corner of the frame
     per_sheet = max(1, SHEET_MAX_PX // cell[1]) * COLUMNS
     out = []
     for n, i in enumerate(range(0, len(cells), per_sheet), 1):
         file = f"{sha[:12]}_{name}_{n}.jpg"
-        contact_grid.grid(pics[i:i + per_sheet], [lab for lab, _ in cells[i:i + per_sheet]], cell, COLUMNS, empty="no frame").save(folder / file, "JPEG", quality=82)
+        contact_grid.grid(pics[i:i + per_sheet], [lab for lab, _ in cells[i:i + per_sheet]], cell, COLUMNS, empty="no frame", strip=True).save(folder / file, "JPEG", quality=82)
         out.append(file)
     return out
 

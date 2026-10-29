@@ -62,12 +62,23 @@ def test_a_grid_stamps_every_cell_with_its_label_and_says_what_is_missing():
     assert px(320 + 300, 150) == contact_grid.BACKGROUND                                    # cell 1 has no picture: only the background and its words
 
 
+def test_a_strip_label_never_covers_the_frame_while_the_default_label_sits_on_it():
+    red = Image.new("RGB", (640, 360), (220, 20, 20))
+    on = contact_grid.grid([red], ["s1 mid 2.5s"], (320, 180), 1)
+    off = contact_grid.grid([red], ["s1 mid 2.5s"], (320, 220), 1, strip=True)
+    assert on.getpixel((5, 5))[2] < 80 and on.getpixel((5, 5))[0] > 200 and on.getpixel((5, 30))[1] > 200      # the tag (yellow) hides the picture's top-left corner
+    assert off.getpixel((300, 20))[1] > 200                                                                      # the strip is yellow across the whole cell width
+    top_left = off.getpixel((4, contact_grid.STRIP + 4))                                                         # the picture's own top-left corner is visible (red, not yellow)
+    assert top_left[0] > 180 and top_left[1] < 60
+
+
 def test_the_sheets_have_one_row_per_scene_and_per_cut_and_the_metrics_name_the_flat_scene(tmp_path, monkeypatch):
     pdir = _project(tmp_path, monkeypatch)
     out = qc_sight.build(pdir, "16:9")
     assert [p.name.split("_", 1)[1] for p in out["sheets"]] == ["scenes_1.jpg", "cuts_1.jpg"]
-    assert Image.open(out["sheets"][0]).size == (3 * 320, 2 * 180)                          # 2 scenes x (entry, mid, exit)
-    assert Image.open(out["sheets"][1]).size == (3 * 320, 1 * 180)                          # 1 cut x (before, mid, after)
+    strip = contact_grid.STRIP
+    assert Image.open(out["sheets"][0]).size == (3 * 320, 2 * (180 + strip))                # 2 scenes x (entry, mid, exit), a label strip above every frame
+    assert Image.open(out["sheets"][1]).size == (3 * 320, 1 * (180 + strip))                # 1 cut x (before, mid, after)
     one, two = out["metrics"]["scenes"]
     assert one["frame_usage_pct"] > 15 and two["frame_usage_pct"] == 0.0                    # scene 2 draws nothing
     assert one["big_changes_per_10s"] == 10.0 and one["motion_energy"] == 100.0             # a new picture every second
