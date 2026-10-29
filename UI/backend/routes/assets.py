@@ -46,7 +46,7 @@ def get_assets(pid: str):
         a, f = got.get(r["requirement_id"]), missed.get(r["requirement_id"])
         k = "photo" if r.get("media_type") == "image" or r.get("kind") in ("photo", "image") else r.get("kind") or r.get("media_type") or "photo"
         items.append({**r, "kind": k, "status": "collected" if a else "fallback" if f else "pending", "asset": {**a, "url": _url(pid, a)} if a else None, "reason": f["reason"] if f else None,
-                      "ai_prompt": ac.picture_prompt(r, aspect)})            # a picture always has a prompt: when nothing is found the person can make it elsewhere and upload it here
+                      "ai_prompt": ac.media_prompt(r, aspect)})            # a picture or a clip always has a prompt: when the file is missing or not good the person can make or find one elsewhere and upload it here
 
     # Discover and include icon elements from visual_planning.json if present
     vp_path = pdir / "visual_planning.json"

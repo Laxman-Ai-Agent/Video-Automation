@@ -16,6 +16,13 @@ Details in `docs/ROADMAP.md` Phase 3. Short: `stock.py` has `inaturalist`, `met`
 a real contact sheet with wrong titles still gave the right pick. Still open: real provider APIs, a real run with B-roll, restart the backend (no job running) to load the Phase 2/3 code.
 The motion-kit option (Phase 2) is committed (`4d0cca5`).
 
+## Asset Collection page: click a picture or clip to open its prompt and upload (2026-10-29)
+User request: on the Asset Collection page every collected (or missing) image / clip opens on click with its prompt and a manual upload, so a person can replace a download they do not like.
+Built: `AssetDetailModal` (`components/assets-view/`, CSS Modules) = large preview with player controls, prompt + Copy, "Replace image / video" (or "Upload ..." when nothing was collected), trim for clips, file/licence/source, the fallback reason;
+`ItemCard` is now a compact card whose preview is the click target (`data-testid asset-open-<requirement_id>`; the old inline prompt box and upload button moved into the modal, one implementation); `MediaPreview` got `compact` (no player controls in the card).
+Backend: `asset_collection.media_prompt` (was `picture_prompt`) now also writes a prompt for a CLIP (the item field is still `ai_prompt`); the upload route already replaced an asset per requirement. Escape closes only the modal (capture + stopPropagation, the stage page listens for Escape too).
+Tests: `tests/test_assets_api.py` (clip prompt, replace-by-hand for a photo and a clip, one asset per request). Checked in the browser with the API faked (a collected photo, a collected clip, a no-file request): modal, copy button, upload request body, Escape. NOT checked with a real project's data (the project had 0 media requests at that time).
+
 ## Earlier: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
 `docs/ROADMAP.md` section 3 item 6 is closed - full detail is there. Short version: every one of the 16 modules
 in `tests/conftest.py`'s `LIVE_UI_MODULES` now passes for real reasons against the live app, run together

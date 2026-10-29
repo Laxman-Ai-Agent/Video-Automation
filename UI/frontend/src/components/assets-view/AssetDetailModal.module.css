@@ -1,0 +1,246 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(6, 13, 26, 0.78);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1050;
+  padding: 16px;
+}
+
+.modal {
+  width: 1000px;
+  max-width: 96vw;
+  max-height: 92vh;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border-card);
+  background-color: var(--bg-elevated);
+  flex-shrink: 0;
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.status {
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+
+.status[data-status='collected'] {
+  background-color: rgba(52, 211, 153, 0.15);
+  color: var(--status-completed, #34d399);
+  border-color: rgba(52, 211, 153, 0.2);
+}
+
+.status[data-status='fallback'],
+.status[data-status='pending'] {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: var(--status-warning, #f59e0b);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 6px;
+}
+
+.close:hover {
+  color: var(--text-primary);
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 18px 20px;
+  overflow-y: auto;
+}
+
+@media (max-width: 800px) {
+  .body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.label {
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.subject {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.muted {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.promptBox {
+  background-color: rgba(59, 130, 246, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  border-radius: 6px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.promptHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.promptTitle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #60a5fa;
+}
+
+.copy {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--accent-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.copy[data-copied='true'] {
+  color: #34d399;
+}
+
+.promptText {
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-secondary);
+  user-select: text;
+}
+
+.uploadBox {
+  border: 1px dashed var(--border-subtle);
+  border-radius: 6px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.03);
+}
+
+.upload {
+  align-self: flex-start;
+  padding: 7px 14px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: var(--accent-blue, #3b82f6);
+  border: 1px solid transparent;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.upload:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.hidden {
+  display: none;
+}
+
+.error {
+  font-size: 11.5px;
+  color: var(--status-failed, #f87171);
+}
+
+.done {
+  font-size: 11.5px;
+  color: var(--status-completed, #34d399);
+}
+
+.fileInfo {
+  border-top: 1px solid var(--border-card);
+  padding-top: 8px;
+  display: grid;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.source {
+  color: var(--accent-blue);
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fallback {
+  font-size: 11px;
+  background-color: rgba(245, 158, 11, 0.08);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: var(--status-warning, #f59e0b);
+  display: flex;
+  gap: 6px;
+  align-items: flex-start;
+}

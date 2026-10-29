@@ -106,14 +106,19 @@ def has_provenance(a: dict) -> bool:
     return bool((a.get("source_url") or a.get("selected_by") == "manual_upload") and (a.get("license") or {}).get("name"))
 
 
-def picture_prompt(req: dict, aspect: str = "16:9") -> str | None:
-    """What a person can give an image generator for a requirement that is a picture (the planner's own AI prompt when it wrote one, else written from what the scene needs); None for a clip or a page."""
-    if req.get("kind") != "photo":
+def media_prompt(req: dict, aspect: str = "16:9") -> str | None:
+    """What a person can give an image or video generator (or use as search words for footage) for a requirement that is a picture or a clip, so that they can make or find the file themselves and upload it
+    when the collected one is not good: a picture's is the planner's own AI prompt when it wrote one, else written from what the scene needs; None for a page."""
+    kind = req.get("kind")
+    if kind not in ("photo", "video"):
         return None
-    if (given := (req.get("ai_prompt") or "").strip()):
+    if kind == "photo" and (given := (req.get("ai_prompt") or "").strip()):
         return given
     what = (req.get("description") or req.get("why") or "").strip().rstrip(".")
-    return (f"{req['query']}. " + (f"{what}. " if what else "") + f"Photorealistic photograph, natural lighting, sharp focus, {aspect} wide frame composition, no text, no logos, no watermark.")
+    lead = f"{req['query']}. " + (f"{what}. " if what and what.casefold() != str(req["query"]).strip().casefold() else "")
+    if kind == "video":
+        return lead + f"Realistic video footage, {aspect} wide frame, steady or slowly moving camera, 5 to 10 seconds, natural lighting, no text, no logos, no watermark."
+    return lead + f"Photorealistic photograph, natural lighting, sharp focus, {aspect} wide frame composition, no text, no logos, no watermark."
 
 
 def _sha(text: str) -> str:

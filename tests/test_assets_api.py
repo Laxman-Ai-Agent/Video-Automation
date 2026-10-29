@@ -185,7 +185,10 @@ def test_a_picture_that_was_not_found_gets_a_prompt_to_make_it_elsewhere_and_a_h
     reqs["requirements"][0]["ai_prompt"] = None                                                     # the planner wrote none (a project made without that choice)
     ac._save(ac.requirements_path(pdir), reqs)
     items = {i["requirement_id"]: i for i in client.get(f"/projects/{pid}/assets").json()["items"]}
-    assert "office workers" in items["req_1_1"]["ai_prompt"] and "no text" in items["req_1_1"]["ai_prompt"] and items["req_2_1"]["ai_prompt"] is None      # a clip has none
+    assert "office workers" in items["req_1_1"]["ai_prompt"] and "no text" in items["req_1_1"]["ai_prompt"]
+    clip = items["req_2_1"]["ai_prompt"]
+    assert "busy street" in clip and "video footage" in clip and "5 to 10 seconds" in clip and "photograph" not in clip      # a clip has its own prompt: to make or find the footage elsewhere and upload it
+    assert clip.count("busy street") == 1 and items["req_1_1"]["ai_prompt"].count("office workers") == 1                     # the subject is not said twice when the scene's description is the same words
     up = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_1_1", "scene_id": "1"}, files={"file": ("mine.png", _png(), "image/png")})
     assert up.status_code == 200 and up.json()["asset"]["authenticity"] == "user_provided" and up.json()["asset"]["source_url"] == "user-upload://mine.png"
     man = ac.load_manifest(pdir)
@@ -202,3 +205,21 @@ def _png():
     b = io.BytesIO()
     Image.new("RGB", (64, 36), (10, 20, 30)).save(b, "PNG")
     return b.getvalue()
+
+
+def test_a_collected_picture_or_clip_can_be_replaced_by_hand_and_the_old_one_does_not_stay(client, monkeypatch):
+    """The page opens a picture or a clip on click with its prompt and an upload: a second upload for the same request replaces the first (one asset per request), for a clip as well."""
+    pid = create(client).json()["id"]
+    pdir = _m7.config.PROJECTS_DIR / pid
+    plan_with_requests(pdir, monkeypatch)
+    ac.plan_requirements(pdir, client.get(f"/projects/{pid}").json().get("aspect") or "9:16")
+    first = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_1_1", "scene_id": "1"}, files={"file": ("a.png", _png(), "image/png")}).json()["asset"]
+    second = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_1_1", "scene_id": "1"}, files={"file": ("b.jpg", _png() + b"x", "image/jpeg")}).json()["asset"]
+    clip = client.post(f"/projects/{pid}/assets/upload", data={"requirement_id": "req_2_1", "scene_id": "2"}, files={"file": ("c.mp4", b"\x00\x00\x00\x18ftypmp42" + b"\x00" * 32, "video/mp4")})
+    assert clip.status_code == 200 and clip.json()["asset"]["kind"] == "video" and clip.json()["asset"]["authenticity"] == "user_provided"
+    assert first["asset_id"] != second["asset_id"]
+    mine = [a for a in ac.load_manifest(pdir)["assets"] if a["requirement_id"] == "req_1_1"]
+    assert len(mine) == 1 and mine[0]["asset_id"] == second["asset_id"]                                 # replaced, not added
+    items = {i["requirement_id"]: i for i in client.get(f"/projects/{pid}/assets").json()["items"]}
+    assert items["req_1_1"]["status"] == "collected" and items["req_1_1"]["asset"]["selected_by"] == "manual_upload"
+    assert items["req_2_1"]["asset"]["kind"] == "video" and items["req_2_1"]["ai_prompt"]              # the prompt stays available after an upload, so a person can try another
