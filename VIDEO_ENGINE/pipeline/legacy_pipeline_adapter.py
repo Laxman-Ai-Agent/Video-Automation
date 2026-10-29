@@ -21,6 +21,7 @@ from typing import Callable
 from SYSTEM.core.request_memo import memo
 from SYSTEM.memory import store
 from SYSTEM.policies import llm_review
+from VIDEO_ENGINE.stages import scene_feedback
 
 try:
     from backend import config
@@ -530,7 +531,8 @@ def _motion_steps(aspect: str) -> None:
 
     @step(f"motion-build{tag}", requires=(f"motion_plan{sfx}.json", "scene_plan.json"), hint="run Motion Planning first", tools=("node", "npx"),
           outputs=lambda p: [p / f"composition{sfx}.json", p / f"motion_generation{sfx}.json", p / f"motion_animation{sfx}.json"],
-          fingerprint=lambda p, c: digest(*_motion_inputs(p, aspect), p / f"motion_plan{sfx}.json", p / f"motion_planning{sfx}.json", *_generation_inputs()))
+          fingerprint=lambda p, c: digest(*_motion_inputs(p, aspect), p / f"motion_plan{sfx}.json", p / f"motion_planning{sfx}.json", *_generation_inputs(),
+                                          *[f for f in [scene_feedback.path(p, aspect)] if f.exists()]))      # Final QC's repair notes make Motion Generation run again (only when there are some: no note, no change)
     def _build(pdir, ctx):
         """Motion Animation: generates executable scene-specific React/TSX animation code."""
         from backend import motion_animation, motion_gen_report, motion_planning

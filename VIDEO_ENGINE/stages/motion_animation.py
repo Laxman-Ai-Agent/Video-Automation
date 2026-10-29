@@ -29,7 +29,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from . import asset_collection, config, llm_gateway, llm_review, motion_planning, shared_memory, skill_registry, store
+from . import asset_collection, config, llm_gateway, llm_review, motion_planning, scene_feedback, shared_memory, skill_registry, store
 from SYSTEM.core import media_kinds as mk
 from SYSTEM.core.resilience import CREDENTIAL_KINDS, redact_secrets
 
@@ -663,8 +663,10 @@ def generate_scene_tsx_via_llm(
     texts: list[str] | None = None,
     shots: list[dict[str, Any]] | None = None,
     motion_kit: bool = False,
+    feedback: str | None = None,
 ) -> tuple[str, dict[str, Any]]:
     """Generates scene TSX source code via canonical LLM Gateway with bounded diagnostic repair.
+    feedback: what Final QC saw wrong in the RENDERED scene (scene_feedback.py); the new code must fix it.
     Employs skills and shared memory context, strict security auditing, and fallbacks.
     Returns (tsx_code, generation_metadata).
     """
@@ -727,7 +729,8 @@ def generate_scene_tsx_via_llm(
         f"Palette: {', '.join(palette)}\n"
         f"Visual elements: {json.dumps(safe_visual_elements)}\n"
         + (f"Shots (one <Sequence> each; frames are relative to this scene's frame 0): {json.dumps(shots, ensure_ascii=False)}\n\n" if shots else "\n")
-        + 
+        + (f"A reviewer LOOKED at the rendered video of this scene and found a problem; the new code must fix it, and keep everything else the plan asks for: {feedback}\n\n" if feedback else "")
+        +
         f"Approved Skills:\n" + "\n".join(skill_summaries) + "\n\n"
         f"Verified Memory Guidelines:\n" + "\n".join(memory_summaries) + "\n\n"
         "Draw EVERY visual element listed above with its own JSX node and put the attribute "
@@ -1021,7 +1024,9 @@ def generate_custom_motion_code(
 
         scene_file = out_dir / f"scene_{sid}.tsx"
         shots = vp_sc.get("shots") or []
-        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots, **({"motion_kit": True} if motion_kit else {}))       # the key exists only when on: a project without the kit keeps the fingerprints it has
+        note = scene_feedback.note_for(pdir, aspect, sid)                               # what Final QC saw wrong in this scene's rendered video: only this scene is written again
+        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots,
+                                           **({"motion_kit": True} if motion_kit else {}), **({"feedback": note} if note else {}))       # the keys exist only when on / when there is a note: a scene without them keeps the fingerprint it has
         if scene_file.exists() and prev_fps.get(str(sid)) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
@@ -1041,6 +1046,7 @@ def generate_custom_motion_code(
                     texts=texts,
                     shots=shots,
                     motion_kit=motion_kit,
+                    feedback=note,
                 )
         else:
             # Generate TSX via LLM Gateway with bounded repair loop
@@ -1057,6 +1063,7 @@ def generate_custom_motion_code(
                 texts=texts,
                 shots=shots,
                 motion_kit=motion_kit,
+                feedback=note,
             )
 
         all_skills_used.update(gen_meta.get("skills_referenced", []))

@@ -120,7 +120,9 @@ def stage_input_files(pdir: Path, stage: str, aspect: str = "16:9") -> list[Path
     elif stage == "motion_plan":
         return [pdir / "visual_planning.json", pdir / "scene_plan.json"]
     elif stage == "motion_gen":
-        return [pdir / f"motion_plan{sfx}.json", pdir / "visual_planning.json", pdir / "assets_manifest.json"]       # the scenes draw the collected assets
+        from VIDEO_ENGINE.stages import scene_feedback
+        notes = scene_feedback.path(pdir, aspect)                                                                       # Final QC's repair notes for scenes: only when there are some (no note, no change)
+        return [pdir / f"motion_plan{sfx}.json", pdir / "visual_planning.json", pdir / "assets_manifest.json", *([notes] if notes.exists() else [])]       # the scenes draw the collected assets
     elif stage == "motion_validation":
         return [pdir / f"composition{sfx}.json", pdir / f"motion_animation{sfx}.json"]
     elif stage == "timeline":

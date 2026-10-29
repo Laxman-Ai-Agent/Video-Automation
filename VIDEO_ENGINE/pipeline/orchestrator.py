@@ -770,6 +770,22 @@ class PipelineOrchestrator:
                 return
             llm_review.run_stage_llm_review(self.pdir, stage_id, aspect=self.aspect)
 
+    def _visual_fix(self, run: RunRecord, max_retries: int) -> bool:
+        """Final QC looked at the rendered frames and named scenes (category `visual`): their repair notes go to Motion Generation and the stages from there run again; only the named scenes are
+        written again (the others keep their code by fingerprint). One round per plan (`scene_feedback.MAX_ROUNDS`), so this never loops: what the second look still finds stays in the QC report
+        (warnings) or blocks QC with its cause (errors). True when the stages ran again (this run is then finished)."""
+        from VIDEO_ENGINE.stages import scene_feedback
+        scenes = scene_feedback.apply(self.pdir, self.aspect)
+        if not scenes:
+            return False
+        communication.publish_lifecycle_event(
+            project_id=self.project_id, stage_id="qc", sender_agent_id="main_orchestrator", event="stage_progress",
+            detail=f"Final QC looked at the frames and asked for scene(s) {', '.join(scenes)} to be written again: only those scenes are regenerated, then validation, timeline, approval, render and Final QC run again.",
+            run_id=run.run_id, correlation_id=run.correlation_id,
+        )
+        self._execute_run(run, from_stage="motion_gen", resume=False, max_retries=max_retries)
+        return True
+
     def _planning_needed(self) -> bool:
         """No scene plan yet, or one that does not follow the current Scene Segmentation (and nothing depends on it)."""
         from VIDEO_ENGINE.stages import autoplan, visual_planning
@@ -1110,6 +1126,8 @@ class PipelineOrchestrator:
                                 )
 
                         elif res.status in ("blocked", "needs_review"):
+                            if stage_id == "qc" and self._visual_fix(run, max_retries):          # the QC review found visual errors: the scenes it names are written again first
+                                return
                             # Blocked, or the LLM review did not approve
                             pipeline_state.transition_stage(
                                 self.pdir,
@@ -1293,6 +1311,9 @@ class PipelineOrchestrator:
                                 correlation_id=run.correlation_id,
                             )
                             return
+
+            if "qc" in stages_to_run and self._visual_fix(run, max_retries):
+                return
 
             # All stages completed successfully
             run.status = "completed"
