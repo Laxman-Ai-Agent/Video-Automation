@@ -334,3 +334,34 @@ def test_the_new_providers_need_no_key_and_their_hosts_are_the_only_new_download
         stock.permitted_url({"download_url": "https://evil.artic.edu.example.org/a.jpg"})
     with pytest.raises(stock.StockError):
         stock.permitted_url({"download_url": "http://images.metmuseum.org/a.jpg"})               # https only
+
+
+# ---------- found by the first live run (2026-10-29): the Met retired its v1 search, the Art Institute needs its identification header ----------
+def test_the_met_search_uses_the_v1_1_endpoint_the_old_one_answers_410(net, monkeypatch):
+    urls = []
+    real = stock._open
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: urls.append(url) or real(url, headers, **kw))
+    stock.met("wheat")
+    search = next(u for u in urls if "/search?" in u)
+    assert "/public/collection/v1.1/search?" in search and "limit=" in search and "/v1/search" not in search
+
+
+def test_only_the_art_institute_hosts_get_its_identification_header(monkeypatch):
+    sent = []
+
+    class Resp:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+        def read(self, n):
+            return b"{}"
+    monkeypatch.setattr(stock.urllib.request, "urlopen", lambda req, timeout=0: sent.append((req.full_url, dict(req.header_items()))) or Resp())
+    for url in ("https://api.artic.edu/api/v1/artworks/search?q=x", "https://www.artic.edu/iiif/2/a/full/843,/0/default.jpg", "https://images.metmuseum.org/a.jpg", "https://api.inaturalist.org/v1/observations"):
+        stock._open(url)
+    got = {u.split("/")[2]: h for u, h in sent}
+    assert got["api.artic.edu"]["Aic-user-agent"] == got["www.artic.edu"]["Aic-user-agent"] == "audio-to-video-local-tool"
+    assert "Aic-user-agent" not in got["images.metmuseum.org"] and "Aic-user-agent" not in got["api.inaturalist.org"]       # nobody else is sent it
+    assert all(h["User-agent"] == stock.UA for h in got.values())                                                               # we always say who we are: no browser disguise

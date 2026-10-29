@@ -56,7 +56,7 @@ def _now() -> str:
 
 def _open(url: str, headers: dict | None = None, limit: int = MAX_BYTES, timeout: float = TIMEOUT) -> bytes:
     """The only network call (tests replace it). One bounded retry for timeouts and 5xx; 429 is reported, never hammered. Reads at most limit+1 bytes."""
-    req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
+    req = urllib.request.Request(url, headers={"User-Agent": UA, **HOST_HEADERS.get(urllib.parse.urlparse(url).hostname or "", {}), **(headers or {})})
     for attempt in (0, 1):
         try:
             with urllib.request.urlopen(req, timeout=timeout) as r:
@@ -223,6 +223,8 @@ def unsplash(q: str) -> list[StockAsset]:
 INAT_LICENCES = {"cc0": ("CC0 1.0", "https://creativecommons.org/publicdomain/zero/1.0/"), "cc-by": ("CC BY", "https://creativecommons.org/licenses/by/4.0/")}      # the photo licences that allow commercial use AND changes: no -nc, no -nd
 MET_LOOKUPS = 10                             # the Met search returns only object ids: at most this many objects are looked up (one request each)
 ARTIC_WIDTH = 843                            # the width the Art Institute's image server documents as always available
+# The identification the Art Institute's API and image server document for clients; without it Cloudflare answers HTTP 403 with a bot check (checked live 2026-10-29). Added to every request to those hosts by _open.
+HOST_HEADERS = {"api.artic.edu": {"AIC-User-Agent": "audio-to-video-local-tool"}, "www.artic.edu": {"AIC-User-Agent": "audio-to-video-local-tool"}}
 
 
 def inaturalist(q: str) -> list[StockAsset]:
@@ -253,7 +255,7 @@ def inaturalist(q: str) -> list[StockAsset]:
 
 def met(q: str) -> list[StockAsset]:
     """The Metropolitan Museum of Art Open Access (no key): only objects the museum marks isPublicDomain, with an image on its own host. Their images are CC0."""
-    d = _json("https://collectionapi.metmuseum.org/public/collection/v1/search?" + urllib.parse.urlencode({"q": q, "hasImages": "true"}))
+    d = _json("https://collectionapi.metmuseum.org/public/collection/v1.1/search?" + urllib.parse.urlencode({"q": q, "hasImages": "true", "limit": MET_LOOKUPS}))      # v1/search was retired on 2026-10-01 (HTTP 410)
     out = []
     for oid in (d.get("objectIDs") or [])[:MET_LOOKUPS]:
         try:
