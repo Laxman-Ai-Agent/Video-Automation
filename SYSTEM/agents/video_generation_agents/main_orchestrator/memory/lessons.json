@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0.0",
-  "updated_at": 1793042092.4033308,
-  "total_lessons": 5,
+  "updated_at": 1793293144.5641143,
+  "total_lessons": 6,
   "lessons": {
     "lsn_orch_001": {
       "lesson_id": "lsn_orch_001",
@@ -103,6 +103,26 @@
       ],
       "created_at": 1793042092.4033308,
       "updated_at": 1793042092.4033308
+    },
+    "lsn_orch_b84663c0": {
+      "lesson_id": "lsn_orch_b84663c0",
+      "tier": "candidate",
+      "stage_id": "render",
+      "error_category": "TRANSIENT",
+      "error_code": "transient_recovered",
+      "trigger_condition": "Recovered stage 'render' on attempt 2",
+      "recommended_action": "SAFE_STOP",
+      "repair_recipe": "Applied recovery action 'SAFE_STOP' with backoff",
+      "rationale": "Empirically validated recovery of stage render on attempt 2.",
+      "confidence": 0.6,
+      "times_applied": 1,
+      "times_succeeded": 1,
+      "times_failed": 0,
+      "supporting_evidence": [
+        "run:run_899f7e7f:attempt_2"
+      ],
+      "created_at": 1793293144.5641143,
+      "updated_at": 1793293144.5641143
     }
   }
 }
