@@ -1,6 +1,7 @@
 """Remotion render wrapper. composition.json is the single source of truth and is passed to Remotion as is.
-The only derived input is a staged COPY of the project audio at VIDEO_ENGINE/remotion/public/<meta.audio> (Remotion serves
-audio through staticFile()); it is a byte copy of projects/<id>/audio.*, never edited, never fingerprinted.
+The only derived input is a staged COPY of the audio at VIDEO_ENGINE/remotion/public/<meta.audio> (Remotion serves
+audio through staticFile()): the sound-design mix projects/<id>/audio_mix.wav (stages/sound_design.py: narration + transition whooshes + an optional licensed music bed, -14 LUFS),
+or the bare projects/<id>/audio.* when no mix exists; the narration file itself is never edited.
 Renders must therefore run one at a time (the staged name is shared).
 preview = 960x540 at the project fps (--scale 0.5), final = 1920x1080 at the project fps.
 The optional 9:16 variant renders composition_9x16.json (1080x1920; preview 540x960) to out_9x16.mp4 / out_preview_9x16.mp4;
@@ -15,7 +16,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from . import asset_collection, config
+from . import asset_collection, config, sound_design
 from .diagnose import UserProblem, check_disk, explain_text
 
 CONCURRENCY = 3
@@ -54,7 +55,7 @@ def stage_audio(pdir: Path, aspect: str = "16:9") -> Path:
     remotion_dir = config.REMOTION_DIR
     dst = remotion_dir / "public" / name
     dst.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(audio, dst)
+    shutil.copyfile(sound_design.audio_for_render(pdir, audio), dst)          # the sound-design mix (narration + transition whooshes + music bed, -14 LUFS) when it was built, else the narration itself
     return dst
 
 
@@ -186,6 +187,8 @@ def render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", ou
 
 def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", out: Path | None = None) -> Path:
     preflight(pdir, aspect)
+    if (narration := project_audio(pdir)) is not None:
+        sound_design.build(pdir, narration, aspect)                           # raises SoundDesignError with the cause: a render never plays a mix that was not measured
     stage_audio(pdir, aspect)
     stage_motion(pdir)
     out = out or output_path(pdir, preview, aspect)

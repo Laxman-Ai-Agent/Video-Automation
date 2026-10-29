@@ -60,7 +60,7 @@ SLOW_MODULES = {
     "test_final_qc.py", "test_improve_p1.py", "test_main_orchestrator_intelligence.py", "test_motion_animation_intelligence.py",
     "test_motion_approved_libraries.py", "test_motion_codegen.py", "test_motion_codegen_and_concurrency.py", "test_motion_generation.py",
     "test_motion_library.py", "test_motion_only_mode.py", "test_motion_planning.py", "test_motion_validation.py",
-    "test_motion_validation_intelligence.py", "test_phase2_capability_system.py", "test_phase3_capability_learning.py",
+    "test_motion_validation_intelligence.py", "test_phase2_capability_system.py", "test_phase3_capability_learning.py", "test_sound_design.py",
     "test_phase9_e2e_integration.py", "test_render_smoke.py", "test_render_video.py", "test_scene_segmentation.py",
     "test_stage5_desktop_delivery_auto_qc.py", "test_stage_lifecycle_and_gate_removal.py", "test_timeline_approval.py",
     "test_timeline_approval_intelligence.py", "test_timeline_build.py", "test_timeline_render_qc_delivery.py",

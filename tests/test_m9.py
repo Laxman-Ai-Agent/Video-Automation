@@ -321,6 +321,7 @@ def run_render(env, monkeypatch, steps, exit_code=0):
     clock = [100.0]
     monkeypatch.setattr(render, "time", SimpleNamespace(time=lambda: clock[0]))
     monkeypatch.setattr(render.subprocess, "Popen", lambda cmd, **k: FakeRemotion(clock, steps, exit_code))
+    monkeypatch.setattr(render.sound_design, "build", lambda *a, **k: {})                 # these tests are about the render profile; the fake Popen above would also catch the sound design's ffmpeg (tests/test_sound_design.py covers the mix)
     return render.render(env, True)
 
 

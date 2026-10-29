@@ -110,7 +110,9 @@ def render_inputs(pdir: Path, mode: str, aspect: str = "16:9") -> str:
     """composition + the image files it references + the project audio + render mode + Remotion code/config.
     NOT included: the staged audio copy and the output mp4 (both are created by render itself)."""
     root = _REMOTION
-    return digest(_comp(pdir, aspect), *_referenced_public_files(pdir, aspect), _audio(pdir) or "no-audio", mode,
+    from VIDEO_ENGINE.stages import sound_design                       # what the render plays: the mix of the narration, the transition whooshes and the music bed
+    sound = sound_design.inputs(pdir, _audio(pdir), aspect) if _audio(pdir) else ["no-audio"]
+    return digest(_comp(pdir, aspect), *_referenced_public_files(pdir, aspect), *sound, mode,
                   root / "src", root / "remotion.config.ts", root / "package.json", root / "public" / "geo")
 
 
