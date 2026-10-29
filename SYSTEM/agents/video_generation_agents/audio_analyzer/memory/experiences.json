@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "audio_analyzer",
-  "updated_at": "2026-10-27T12:25:12.383041+00:00",
-  "total_experiences": 15,
+  "updated_at": "2026-10-28T02:51:39.678815+00:00",
+  "total_experiences": 16,
   "experiences": {
     "exp-audio_analyzer-29c2e65deb": {
       "experience_id": "exp-audio_analyzer-29c2e65deb",
@@ -364,6 +364,49 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:21:00.723834+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-ab10fdf535": {
+      "experience_id": "exp-audio_analyzer-ab10fdf535",
+      "agent_id": "audio_analyzer",
+      "task_type": "recovery_analyzer",
+      "task_id": "run_343f7764",
+      "project_id": "e2e-playwright-auto-test-4306",
+      "context": {
+        "stage_id": "analyzer",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "e2e-playwright-auto-test-4306",
+            "task_id": "run_343f7764",
+            "agent_id": "audio_analyzer",
+            "stage_id": "analyzer",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "The LLM check of the transcript could not run (Failed to authenticate: OAuth session expired and could not be refreshed). The final JSON is the LLM-checked one: make the LLM available and run the Audio Analyzer again.",
+            "timestamp": "2026-10-28T02:51:39.462142+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_analyzer",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for analyzer resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-28T02:51:39.632473+00:00",
       "schema_version": 1
     },
     "exp-audio_analyzer-cb09cbcc0e": {
