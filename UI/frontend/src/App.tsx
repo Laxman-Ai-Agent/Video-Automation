@@ -123,6 +123,7 @@ export const App: React.FC = () => {
         onSelectNewProject={handleOpenNewProject}
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed(!sidebarCollapsed)}
+        agentCount={agents.length}
       />
 
       {/* 2. MAIN APPLICATION CONTENT AREA */}
@@ -268,7 +269,7 @@ export const App: React.FC = () => {
                 </h2>
                 <div className={styles.diagnosticsConsole}>
                   <div>[STATUS] FastAPI Backend: {backendHealthy ? 'ONLINE (http://127.0.0.1:8000)' : 'UNREACHABLE'}</div>
-                  <div>[AGENTS] Canonical Agents: {agents.length} Registered (13 Video + 7 System)</div>
+                  <div>[AGENTS] Canonical Agents: {agents.length} Registered (15 Video + 7 System)</div>
                   <div>[PROJECTS] Total Workspaces: {projects.length}</div>
                   <div>[LLM GATEWAY] Active In-Flight LLM Dispatches: {activeLlmCount}</div>
                 </div>

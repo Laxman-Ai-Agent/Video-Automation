@@ -70,7 +70,7 @@ LIVE_UI_MODULES = {
     "test_playwright_about_tab_all_stages.py", "test_playwright_agent_intelligence_system.py", "test_playwright_audio_analysis_card.py",
     "test_playwright_e2e_features.py", "test_playwright_e2e_visible_video_generation.py", "test_playwright_fixed_layout_scroll.py",
     "test_playwright_live_pipeline_status.py", "test_playwright_no_blinking.py", "test_playwright_pipeline_11_stages.py",
-    "test_playwright_ui_smoke.py", "test_verify_all_pipeline_cards_fullpage.py", "test_verify_audio_analysis_fullpage.py",
+    "test_playwright_ui_smoke.py", "test_verify_all_pipeline_cards_fullpage.py",
     "test_verify_backend_stability.py", "test_verify_realtime_status_indicators.py", "test_verify_scene_segmentation_tab.py",
     "test_verify_sidebar_buttons_removed.py",
 }

@@ -23,6 +23,7 @@ interface SidebarProps {
   onToggleCollapse?: () => void;
   pipelineTab?: string;
   onSelectNewProject?: () => void;
+  agentCount?: number;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -31,7 +32,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
   collapsed = false,
   onToggleCollapse,
   pipelineTab = 'flow',
-  onSelectNewProject
+  onSelectNewProject,
+  agentCount = 0
 }) => {
 
   const navItems = [
@@ -55,7 +57,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
     },
     {
       id: 'agents',
-      label: '20 Agents',
+      label: agentCount ? `${agentCount} Agents` : 'Agents',
       icon: Users,
       view: 'agents' as const
     },

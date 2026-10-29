@@ -1,5 +1,5 @@
 """Playwright verification to ensure Pipeline Execution Flow displays 12 connected stages starting at Audio Analysis,
-and Agents Center displays 20 registered agents (13 Video + 7 System).
+and Agents Center displays 22 registered agents (15 Video + 7 System).
 Captures verification screenshot to artifacts directory.
 """
 import os
@@ -11,7 +11,7 @@ from playwright.sync_api import sync_playwright
 ARTIFACTS_DIR = Path(os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts"))
 
 def test_pipeline_11_stages():
-    print("\n--- Verifying Pipeline Execution Flow (12 Stages) & 20 Canonical Agents ---")
+    print("\n--- Verifying Pipeline Execution Flow (12 Stages) & 22 Canonical Agents ---")
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1440, "height": 900})
@@ -45,10 +45,10 @@ def test_pipeline_11_stages():
         assert len(stage_cards) == 12, f"Expected 12 stage cards, found {len(stage_cards)}"
         print(f"  -> PASSED: Exactly 12 stage cards rendered in pipeline grid")
 
-        # 6. Verify sidebar navigation has '20 Agents'
-        sidebar_agents_item = page.locator("text=20 Agents").first
-        assert sidebar_agents_item.is_visible(), "Sidebar label '20 Agents' not visible"
-        print("  -> PASSED: Sidebar confirms '20 Agents'")
+        # 6. Verify sidebar navigation has '22 Agents'
+        sidebar_agents_item = page.locator("text=22 Agents").first
+        assert sidebar_agents_item.is_visible(), "Sidebar label '22 Agents' not visible"
+        print("  -> PASSED: Sidebar confirms '22 Agents'")
 
         # Capture Pipeline Screenshot
         screenshot_path = ARTIFACTS_DIR / "live_pipeline_11_stages.png"
@@ -60,9 +60,9 @@ def test_pipeline_11_stages():
         page.wait_for_timeout(800)
 
         # Verify Agents Center heading or subtext
-        agents_header = page.locator("text=20 Registered").first
-        assert agents_header.is_visible(), "Agents Center '20 Registered' not visible"
-        print("  -> PASSED: Agents Center displays '20 Registered' agents")
+        agents_header = page.locator("text=22 Registered").first
+        assert agents_header.is_visible(), "Agents Center '22 Registered' not visible"
+        print("  -> PASSED: Agents Center displays '22 Registered' agents")
 
         # Capture Agents Center Screenshot
         agents_screenshot_path = ARTIFACTS_DIR / "agents_center_20_agents.png"

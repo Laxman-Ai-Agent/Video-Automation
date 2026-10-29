@@ -1,140 +1,81 @@
 """
 Automated Playwright test to verify Scene Segmentation tab and full-page drawer view.
 """
-import sys
 import os
 import time
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-def main():
-    print("=== Testing Scene Segmentation Tab & In-Place View ===")
-    artifacts_dir = os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts")
-    os.makedirs(artifacts_dir, exist_ok=True)
+# All 12 stages are completed for this project, so every stage card is clickable
+# (a fresh project's later cards are disabled until their prior stage finishes).
+TEST_PROJECT_ID = "my-first-project-01-df7f"
+
+def test_scene_segmentation_tab():
+    artifacts_dir = Path(os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts"))
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
 
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         context = browser.new_context(viewport={"width": 1440, "height": 900})
         page = context.new_page()
 
-        # Navigate to project with segmentation data
-        target_url = "http://localhost:5173/?projectId=01-2f64"
-        print(f"Navigating to {target_url}...")
-        page.goto(target_url, wait_until="networkidle", timeout=15000)
-        time.sleep(1)
+        page.goto(f"http://localhost:5173/?projectId={TEST_PROJECT_ID}", wait_until="load", timeout=15000)
+        page.locator("[data-testid='stage-card-segmentation']").wait_for(state="visible", timeout=10000)
+        page.wait_for_timeout(1000)
 
-        # Click on Stage 02 - Scene Segmentation card
         seg_card = page.locator('[data-testid="stage-card-segmentation"]')
-        if not seg_card.is_visible():
-            print("ERROR: Stage card segmentation not found!")
-            sys.exit(1)
-
-        print("Clicking Scene Segmentation stage card...")
         seg_card.click()
-        time.sleep(1.5)
+        page.wait_for_timeout(800)
 
-        # Verify full-page drawer opened
         full_view = page.locator('[data-testid="stage-detail-full-view"]')
-        if not full_view.is_visible():
-            print("ERROR: stage-detail-full-view not visible!")
-            sys.exit(1)
-        print("PASS: Stage details full-page view is open.")
+        assert full_view.is_visible(), "stage-detail-full-view not visible"
 
-        # Verify back button exists
         back_btn = page.locator('[data-testid="stage-drawer-back-btn"]')
-        if not back_btn.is_visible():
-            print("ERROR: Back button not visible!")
-            sys.exit(1)
-        print("PASS: 'Back to Pipeline' button is visible.")
+        assert back_btn.is_visible(), "Back button not visible"
 
-        # Verify Scenes tab exists and is active
-        scenes_tab = page.locator('button[data-testid="stage-drawer-tab-scenes"]')
-        if not scenes_tab.is_visible():
-            print("ERROR: Scenes tab button not found!")
-            sys.exit(1)
-        print(f"PASS: Scenes tab button visible with text: '{scenes_tab.inner_text()}'.")
+        scenes_tab = page.locator('[data-testid="stage-drawer-tab-scenes"]')
+        assert scenes_tab.is_visible(), "Scenes tab button not found"
+        scenes_tab.click()
+        page.wait_for_timeout(800)
 
-        # Verify scenes tab content is visible
         scenes_content = page.locator('[data-testid="scene-segmentation-tab-content"]')
-        if not scenes_content.is_visible():
-            print("ERROR: scene-segmentation-tab-content not visible!")
-            sys.exit(1)
-        print("PASS: Scene segmentation tab content rendered.")
+        assert scenes_content.is_visible(), "scene-segmentation-tab-content not visible"
 
-        # Verify search filter input
         search_input = page.locator('[data-testid="scenes-filter-input"]')
-        if not search_input.is_visible():
-            print("ERROR: scenes-filter-input not found!")
-            sys.exit(1)
-        print("PASS: Search filter input 'Filter words or utterances...' is rendered.")
+        assert search_input.is_visible(), "scenes-filter-input not found"
 
-        # Wait for scenes to load from backend API
-        print("Waiting for scene cards to render from backend...")
-        try:
-            page.wait_for_selector('[data-testid="scene-card-0"]', timeout=10000)
-            print("PASS: First scene card rendered.")
-        except Exception as e:
-            print(f"ERROR: Timed out waiting for scene-card-0: {e}")
-            # Take a debug screenshot
-            debug_shot = os.path.join(artifacts_dir, "debug_scene_tab_timeout.png")
-            page.screenshot(path=debug_shot)
-            print(f"Debug screenshot saved to {debug_shot}")
-            sys.exit(1)
+        page.wait_for_selector('[data-testid="scene-header-0"]', timeout=10000)
 
-        # Verify scene cards rendered
-        scene_cards = page.locator('[data-testid^="scene-card-"]')
-        count = scene_cards.count()
-        print(f"PASS: Rendered {count} scene cards (expected 6).")
-        if count != 6:
-            print(f"WARNING: Expected 6 scene cards, got {count}")
+        scene_headers = page.locator('[data-testid^="scene-header-"]')
+        count = scene_headers.count()
+        assert count > 0, "No scene headers rendered"
 
-        # Check card #0 has expanded details
-        first_card = page.locator('[data-testid="scene-card-0"]')
-        snippet = first_card.inner_text()[:120].encode('ascii', errors='replace').decode('ascii')
-        print(f"First scene card text snippet: {snippet}...")
+        # Filter narrows the list, clearing it restores the full list
+        search_input.fill("business")
+        page.wait_for_timeout(500)
+        filtered_count = page.locator('[data-testid^="scene-header-"]').count()
+        assert 0 < filtered_count <= count, f"Filter did not narrow the list ({filtered_count} of {count})"
 
-        # Test filter functionality
-        print("Testing search filter...")
-        search_input.fill("సూపర్")
-        time.sleep(0.5)
-        filtered_count = page.locator('[data-testid^="scene-card-"]').count()
-        print(f"PASS: Filter for 'సూపర్' returned {filtered_count} scene cards.")
-
-        # Clear filter
         search_input.fill("")
-        time.sleep(0.5)
-        all_count = page.locator('[data-testid^="scene-card-"]').count()
-        print(f"PASS: Reset filter returned {all_count} scene cards.")
+        page.wait_for_timeout(500)
+        restored_count = page.locator('[data-testid^="scene-header-"]').count()
+        assert restored_count == count, f"Clearing the filter did not restore all {count} scenes (got {restored_count})"
 
-        # Toggle scene card #1 to expand it
-        header_1 = page.locator('[data-testid="scene-header-1"]')
-        header_1.click()
-        time.sleep(0.5)
+        page.locator('[data-testid="scene-header-1"]').click()
+        page.wait_for_timeout(500)
 
-        # Capture high-res screenshot of the Scenes view
-        screenshot_path = os.path.join(artifacts_dir, "scene_segmentation_scenes_tab_verified.png")
-        page.screenshot(path=screenshot_path, full_page=False)
-        print(f"PASS: Saved screenshot to {screenshot_path}")
+        page.screenshot(path=str(artifacts_dir / "scene_segmentation_scenes_tab_verified.png"), full_page=False)
 
-        # Test Back to Pipeline button
-        print("Testing 'Back to Pipeline' button...")
         back_btn.click()
-        time.sleep(0.8)
+        page.wait_for_timeout(800)
 
-        # Verify pipeline flow is visible again
         pipeline_cards = page.locator('[data-testid^="stage-card-"]')
-        if pipeline_cards.count() >= 11:
-            print(f"PASS: Restored pipeline flow canvas with {pipeline_cards.count()} stage cards.")
-        else:
-            print("ERROR: Pipeline canvas not restored properly after clicking Back button.")
-            sys.exit(1)
+        assert pipeline_cards.count() == 12, f"Pipeline canvas not restored properly after Back ({pipeline_cards.count()} cards)"
 
-        # Capture screenshot of restored pipeline
-        pipeline_screenshot = os.path.join(artifacts_dir, "scene_segmentation_pipeline_restored.png")
-        page.screenshot(path=pipeline_screenshot, full_page=False)
-        print(f"PASS: Saved restored pipeline screenshot to {pipeline_screenshot}")
+        page.screenshot(path=str(artifacts_dir / "scene_segmentation_pipeline_restored.png"), full_page=False)
 
         browser.close()
-        print("=== ALL CHECKS PASSED SUCCESSFULLY ===")
 
 if __name__ == "__main__":
-    main()
+    test_scene_segmentation_tab()
+    print("All Scene Segmentation tab checks passed.")

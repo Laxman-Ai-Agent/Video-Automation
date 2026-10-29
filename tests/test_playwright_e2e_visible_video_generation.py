@@ -22,7 +22,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 FRONTEND_URL = "http://localhost:5173"
-SAMPLE_AUDIO_PATH = Path(os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts"))
+SAMPLE_AUDIO_PATH = Path("tests/fixtures/audio_test.wav").resolve()
 DESKTOP_DIR = Path.home() / "Desktop" / "First Video Automation"
 
 
@@ -48,7 +48,7 @@ def probe_media_file(video_path: Path) -> dict:
     return json.loads(res.stdout)
 
 
-def run_e2e_visible_test():
+def test_e2e_visible_video_generation():
 
     assert SAMPLE_AUDIO_PATH.exists(), f"Sample audio missing at {SAMPLE_AUDIO_PATH}"
     print(f"[PREFLIGHT] Sample audio verified: {SAMPLE_AUDIO_PATH} ({SAMPLE_AUDIO_PATH.stat().st_size} bytes)")
@@ -115,12 +115,12 @@ def run_e2e_visible_test():
         """)
 
         print(f"[NAVIGATE] Loading frontend application at {FRONTEND_URL}...")
-        page.goto(FRONTEND_URL, wait_until="networkidle")
+        page.goto(FRONTEND_URL, wait_until="load")
         page.wait_for_timeout(1000)
 
         # 1. Switch to New Project tab
         print("[ACTION] Switching to 'New Project' tab...")
-        new_proj_tab = page.locator("[data-testid='header-new-project-btn'], [data-testid='pipeline-new-project-btn'], [data-testid='sidebar-nav-pipeline']").first
+        new_proj_tab = page.locator("[data-testid='sidebar-nav-pipeline']")
         new_proj_tab.wait_for(state="visible", timeout=15000)
         new_proj_tab.click()
         page.wait_for_timeout(800)
@@ -154,7 +154,7 @@ def run_e2e_visible_test():
         page.wait_for_timeout(2000)
 
         # Ensure we are in the flow tab
-        flow_tab = page.locator("[data-testid='tab-pipeline-flow']")
+        flow_tab = page.locator("[data-testid='pill-tab-flow']")
         if flow_tab.is_visible():
             flow_tab.click()
 
@@ -202,14 +202,14 @@ def run_e2e_visible_test():
                 completed = True
                 break
 
-            # Click a card periodically to exercise drawer inspection
+            # Click a card periodically to exercise the full-page stage view
             if elapsed % 25 == 0 and elapsed > 0 and len(cards) > 0:
                 try:
                     cards[0].click()
                     page.wait_for_timeout(600)
-                    close_btn = page.locator("button[aria-label='Close drawer'], button:has-text('✕')").first
-                    if close_btn.is_visible():
-                        close_btn.click()
+                    back_btn = page.locator("[data-testid='stage-drawer-back-btn']").first
+                    if back_btn.is_visible():
+                        back_btn.click()
                 except Exception:
                     pass
 
@@ -273,4 +273,4 @@ def run_e2e_visible_test():
 
 
 if __name__ == "__main__":
-    run_e2e_visible_test()
+    test_e2e_visible_video_generation()

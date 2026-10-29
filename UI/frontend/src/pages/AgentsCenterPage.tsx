@@ -72,7 +72,7 @@ export const AgentsCenterPage: React.FC<AgentsCenterPageProps> = ({ agents }) =>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <h2 style={{ fontSize: '24px', fontWeight: 800, color: 'var(--text-primary)', margin: 0 }}>
-              Canonical Agent Swarm ({agents.length || 20} Registered)
+              Canonical Agent Swarm ({agents.length} Registered)
             </h2>
             <span
               style={{
@@ -95,7 +95,7 @@ export const AgentsCenterPage: React.FC<AgentsCenterPageProps> = ({ agents }) =>
         {/* Filter Pills */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           {[
-            { id: 'all', label: `All (${agents.length || 20})` },
+            { id: 'all', label: `All (${agents.length})` },
             { id: 'video', label: `Video Pipeline (${videoCount})` },
             { id: 'system', label: `System Subagents (${systemCount})` }
           ].map((f) => (

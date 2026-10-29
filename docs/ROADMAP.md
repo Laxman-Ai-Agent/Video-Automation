@@ -24,8 +24,8 @@ Evidence: the real render of the test project `my-first-project-01-df7f` (one fr
 |---|---|---|
 | 0 | Reliability fixes | **DONE 2026-10-27** |
 | 1 | Shots + narration sync | **DONE 2026-10-27, proven on a real render** (run_9272a250) |
-| 2 | Motion kit + art direction | pending (needs the user's decision) |
-| 3 | Real footage + images, chosen by looking at them | pending (needs API keys) |
+| 2 | Motion kit + art direction | pending, design decided 2026-10-28 (optional, per-project, default OFF) |
+| 3 | Real footage + images, chosen by looking at them | pending, NOT blocked (keyless providers only) |
 | 4 | Sound design | pending |
 | 5 | QC that sees the frames | pending |
 | 6 | Captions + retention | pending |
@@ -48,16 +48,23 @@ What was built, and proven on `run_9272a250` (full detail: `docs/SESSION_STATUS.
 - **How:** Visual Planning splits every scene into shots of 1.5-3.5 s whose times are snapped to word timestamps (beats already exist in all scenes; `visual_planning.rules.snap_beats` snaps them). The code generator (`motion_animation.generate_scene_tsx_via_llm`) receives each shot's frame range and the word timestamps of the key terms, and builds the scene as one `<Sequence>` per shot with a real layout change per shot. New validation rules: maximum shot length; minimum visual change per 3 s, measured on the preview stills (frame difference).
 - **Expected:** a visual change every ~2.5 s; on-screen words land on the spoken word.
 
-### Phase 2 - professional motion kit + art direction (USER DECIDES)
+### Phase 2 - professional motion kit + art direction (design decided 2026-10-28, optional)
 - **Why:** reinventing every scene from scratch gives generic, inconsistent motion.
-- **How:** a small vetted kit in `VIDEO_ENGINE/remotion/src/kit/`: camera rig (pan, push, parallax, rack focus, motion blur), kinetic typography engine (word by word, masks, emphasis, driven by timestamps), transitions chosen by narrative role (whip-pan, match cut, zoom-through, light leak), maps (`public/geo`), charts (Nivo/ECharts), lower thirds, several background style families. Generated scenes may import ONLY from the kit (change `PROHIBITED_IMPORT_REGEX` into an allowlist); the LLM composes. Each video picks one of several art directions (palette, typography, grain, texture), so not every video is dark navy.
-- **Note:** this partly reverses the "no reusable templates" rule in CLAUDE.md, so the user must approve it first.
-- **Expected:** consistent professional motion, fewer tokens, fewer compile retries.
+- **Decision (the user, 2026-10-28):** the motion kit is OPTIONAL, controlled by an option, not a blanket policy reversal.
+  - **Option OFF (default):** no kit, no reusable templates. Every scene stays custom code written from scratch, exactly as today. Kit imports stay rejected by the audit (`PROHIBITED_IMPORT_REGEX` unchanged for these projects). Existing projects behave unchanged.
+  - **Option ON:** generated scenes may import the kit (camera rig, kinetic typography, transitions, charts, maps, art directions) and the LLM composes scenes from it.
+  - **Where the option lives:** chosen at upload, once per project, locked after upload - the same shape as the existing `ai_images` option (`project.json` key `media`, `SYSTEM/core/media_kinds.py`).
+  - **Fingerprinting:** the option value goes into the scene fingerprint, so changing it regenerates the scenes.
+  - CLAUDE.md's Custom Code Mode line now reads "...permanently removed, unless the project's motion-kit option is on."
+- **How:** a small vetted kit in `VIDEO_ENGINE/remotion/src/kit/`: camera rig (pan, push, parallax, rack focus, motion blur), kinetic typography engine (word by word, masks, emphasis, driven by timestamps), transitions chosen by narrative role (whip-pan, match cut, zoom-through, light leak), maps (`public/geo`), charts (Nivo/ECharts), lower thirds, several background style families. Each video picks one of several art directions (palette, typography, grain, texture), so not every video is dark navy.
+- **Expected:** consistent professional motion, fewer tokens, fewer compile retries, for projects that opt in; zero change for projects that don't.
+- **Next:** implement the option (schema, upload UI, fingerprint, allowlist gated by the option) - starts after the current task (the 16 live-UI tests) is committed and pushed.
 
 ### Phase 3 - real footage and images, chosen intelligently
-- **Needs:** `PEXELS_API_KEY`, `PIXABAY_API_KEY`, `UNSPLASH_ACCESS_KEY` (set by the user).
+- **Keyless only (the user, 2026-10-28):** there are no paid API keys and there will not be any. Phase 3 runs on keyless sources only; it is NOT blocked. The keyless providers already in `VIDEO_ENGINE/stages/stock.py` stay: NASA, Wikimedia Commons, Openverse, Internet Archive.
+- **Candidate additions:** the user wants specific free, keyless GitHub-library APIs added as providers; names/links were not supplied yet. Before adding any candidate to `PROVIDERS`, check: (1) it needs no API key, (2) its licence allows commercial use and modification, (3) provenance (source URL, licence, author) can be recorded the same way the existing providers do. Ask the user for the candidate list before starting this part.
 - **How:** video clips as full-frame B-roll shots with typography over them (not thumbnails in cards); asset ranking (`asset_collection.choose`) sends a contact sheet of the candidate pictures to a vision-capable model (one call per batch) instead of titles only; plan rule: footage-led shots when the narration is about the real world.
-- **Expected:** a real mix of footage, images and graphics; relevant pictures.
+- **Expected:** a real mix of footage, images and graphics from keyless sources; relevant pictures.
 
 ### Phase 4 - sound design
 Licensed music bed ducked under the narration, SFX on transitions/reveals, loudness normalised to -14 LUFS. The biggest jump in perceived "cinematic" quality per unit of work.
@@ -74,10 +81,10 @@ Render scene by scene with a cache (only changed scenes re-render, then join), h
 ## 3. Pending tasks (outside the phases)
 1. ~~Analyzer of the test project has 2 errors~~ **DONE** (the re-run of 19:25 passed 0.88; the analyzer/segmentation checkpoints were valid and reused by run_9272a250 on 2026-10-27).
 2. ~~Full run of the test project~~ **DONE** (`run_9272a250`, 2026-10-27 22:10: all 13 stages completed; fast suite 1079 passed).
-3. The transcript re-run has one wrong word: segment 3 "Instagram ad caption" became "add caption" (homophone). The LLM decides the transcript (no hand edits); it may be worth an instruction example.
+3. ~~The transcript re-run has one wrong word: segment 3 "Instagram ad caption" became "add caption" (homophone)~~ **DECIDED 2026-10-28** (the user): the LLM's transcript is final - no hand edits, no extra prompt example. Closed, not a bug to chase.
 4. Two e2e tests (`test_phase9_e2e_integration`, `test_e2e_production_readiness`) still write `synthetic_test_p*_e2e_*.wav` into `VIDEO_ENGINE/remotion/public`, and tests write the real agents' `memory/experiences.json`.
 5. ~~The timeline assessor's deterministic fallback returns `approved` when the LLM is unavailable~~ **DONE 2026-10-27** (`049cf0c`: returns `cannot_determine`, no made-up scores, says what it did not assess; advisory component, no approval path changed).
-6. The 16 live-UI browser tests are stale (they look for old texts like "20 Registered", "11 stages").
+6. ~~The 16 live-UI browser tests are stale~~ **DONE 2026-10-28.** Every module now passes for real reasons against the live app (backend :8000, frontend :5173), run together (`A2V_BROWSER_TESTS=1 pytest tests -m live_ui`, 16 of 17 collected items pass - the 17th, the real ~8-minute full-pipeline visible-browser test, was fixed at the code level but deliberately not executed: it needs a real visible display this environment doesn't have, and a fresh full pipeline run was declared out of scope for now, see item 8). One file (`test_verify_audio_analysis_fullpage.py`) tested a "drawer" design fully superseded by the current full-page `StageDrawer`; merged into `test_verify_all_pipeline_cards_fullpage.py` and deleted. Five files (`test_playwright_audio_analysis_card.py`, `test_verify_scene_segmentation_tab.py`, `test_playwright_fixed_layout_scroll.py`, `test_playwright_e2e_features.py`, `test_playwright_e2e_visible_video_generation.py`) had a recurring bug: their entry function was never named `test_*`, so pytest silently collected zero tests from them - fixed in all five. Found and removed genuinely dead frontend code the stale tests pointed at: `StageExecutionTracking.tsx` + `components/stage-tracking/` (an inline per-stage sub-stage panel on the main flow page, fully superseded by the StageDrawer's own Subtasks tab; verified unimported anywhere before deletion). Found and fixed a real UI bug the tests caught: the sidebar's "20 Agents" label and two "|| 20" fallbacks on the Agents Center page were hardcoded against an old count; the registry now has 22 agents (15 video + 7 system) and both now read the live count. Root-caused the `pytest tests -m live_ui` bulk-selection oddity: the root `conftest.py` (not `tests/conftest.py`) excludes every `test_playwright_*`/`test_verify_*` file from collection by default via `collect_ignore_glob`, unless `A2V_BROWSER_TESTS=1` is set - intentional (keeps a plain whole-repo `pytest` light), and the fast suite's `-m "not slow and not live_ui"` exclusion is unaffected by it and works correctly either way; left as is. Fast suite re-run clean: 1079 passed, 0 failed.
 7. Decide about the 5 `remotion-animated-bar-chart_v1.2.0_*` copies in `SYSTEM/skills/archive/library_history/charts/` (made within 100 s; probably test reinstalls, not proven).
 8. Prove the autonomous run on a NEW project from an audio upload (not done: the user asked to wait).
 9. ~~`TimelineTrackCanvas` / `TimelineTrackHeaderColumn` still carry inline styles~~ **DONE 2026-10-27** (`f9dba9c`: both use CSS modules; the 5 remaining inline styles are runtime positions from `frameToPx`, which rule 11 reserves for).

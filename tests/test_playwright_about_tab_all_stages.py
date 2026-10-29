@@ -3,6 +3,10 @@ import time
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
+# A project with every stage completed, so every stage card is clickable
+# (a fresh project's later cards are disabled until their prior stage finishes).
+TEST_PROJECT_ID = "my-first-project-01-df7f"
+
 def test_about_tab_all_stages():
     artifacts_dir = Path(os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts"))
     artifacts_dir.mkdir(parents=True, exist_ok=True)
@@ -13,17 +17,12 @@ def test_about_tab_all_stages():
         page = context.new_page()
 
         print("[NAVIGATE] Opening http://localhost:5173...")
-        page.goto("http://localhost:5173", wait_until="networkidle")
+        page.goto(f"http://localhost:5173/?projectId={TEST_PROJECT_ID}", wait_until="load")
+        page.locator("[data-testid='stage-card-analyzer']").wait_for(state="visible", timeout=10000)
         page.wait_for_timeout(1000)
 
-        # Ensure we are in Pipeline Execution Flow tab
-        flow_tab = page.locator("[data-testid='tab-pipeline-flow']")
-        if flow_tab.is_visible():
-            flow_tab.click()
-            page.wait_for_timeout(500)
-
         canonical_stages = [
-            ("analyzer", "Audio Analysis", "audio-analysis-back-btn", "audio-tab-about"),
+            ("analyzer", "Audio Analysis", "stage-drawer-back-btn", "stage-drawer-tab-about"),
             ("segmentation", "Scene Segmentation", "stage-drawer-back-btn", "stage-drawer-tab-about"),
             ("planning", "Visual Planning", "stage-drawer-back-btn", "stage-drawer-tab-about"),
             ("motion_plan", "Motion Planning", "stage-drawer-back-btn", "stage-drawer-tab-about"),
@@ -64,7 +63,7 @@ def test_about_tab_all_stages():
             resp_sec = page.locator("[data-testid='agent-about-section-responsibilities']")
             assert resp_sec.is_visible(), f"Responsibilities section missing for {label}"
 
-            flow_sec = page.locator("[data-testid='agent-about-section-internal-flow']")
+            flow_sec = page.locator("[data-testid='agent-about-section-flow']")
             assert flow_sec.is_visible(), f"Internal flow section missing for {label}"
 
             source_sec = page.locator("[data-testid='agent-about-section-source-code']")

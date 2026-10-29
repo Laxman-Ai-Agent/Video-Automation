@@ -1,19 +1,26 @@
-# Session status and handoff (2026-10-27, updated 19:25)
+# Session status and handoff (2026-10-28, updated - 16 live-UI tests fixed)
 
 **Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
 
-## IN PROGRESS at 23:45 - check this first
-A background session ("Fix the 16 stale live-UI Playwright tests") is mid-flight, working on the item 6 backlog task
-(`docs/ROADMAP.md` section 3). As of 23:45 it has **not yet committed or pushed** - the working tree has its
-uncommitted edits to `UI/frontend/src/App.tsx`, `UI/frontend/src/components/Sidebar.tsx`,
-`tests/test_playwright_about_tab_all_stages.py`, `tests/test_playwright_live_pipeline_status.py`,
-`tests/test_playwright_pipeline_11_stages.py`. `git log -1` on `main` was still `95a81f1` at that point.
-Its brief told it to commit and push to `main` itself when done and mark ROADMAP item 6 done.
-**On resume:** `git log --oneline -5` and `git status --short` first - if `main` has moved past `95a81f1` and the
-tree is clean, the session finished and pushed; read its commit(s) for what changed. If the tree still has
-uncommitted changes matching the files above, the session was interrupted (e.g. the desktop app was closed) -
-read what it changed (`git diff`), decide whether to keep going from there or restart the task, and only then
-commit (don't assume its state is finished or correct without checking).
+## Latest: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
+`docs/ROADMAP.md` section 3 item 6 is closed - full detail is there. Short version: every one of the 16 modules
+in `tests/conftest.py`'s `LIVE_UI_MODULES` now passes for real reasons against the live app, run together
+(`A2V_BROWSER_TESTS=1 pytest tests -m live_ui`), except the one real ~8-minute full-pipeline visible-browser test
+(`test_playwright_e2e_visible_video_generation.py`), which was fixed at the code level but deliberately not
+executed (needs a real visible display; a fresh full pipeline run is item 8, out of scope for now). One stale
+duplicate file was deleted (`test_verify_audio_analysis_fullpage.py`, merged into
+`test_verify_all_pipeline_cards_fullpage.py`). Two real bugs the stale tests had been masking were fixed: a
+hardcoded "20 Agents" sidebar label and two "|| 20" Agents Center fallbacks (actual count is 22 - 15 video + 7
+system), and dead frontend code (`StageExecutionTracking.tsx` + `components/stage-tracking/`, fully unimported,
+superseded by the StageDrawer's own Subtasks tab) was removed. Fast suite re-run clean: 1079 passed, 0 failed.
+Commit(s) are on `main`; `git log --oneline -5` shows them.
+
+Also recorded this session (the user's decisions, `docs/ROADMAP.md` has the full text): Phase 2's motion kit is
+now designed as OPTIONAL (per-project, chosen once at upload like `media.ai_images`, default OFF, locked after
+upload, in the scene fingerprint) - not yet implemented, starts next. Phase 3 confirmed NOT blocked: keyless
+providers only (no paid API keys, ever); the "Needs: PEXELS/PIXABAY/UNSPLASH keys" line is removed. Pending task 3
+(the "ad caption" -> "add caption" transcript word) is closed as decided: the LLM's transcript is final, no hand
+edits.
 
 ## Working with the user (these lived only in the old laptop's local memory: they are the rules now)
 - The user writes Telugu in English letters: answer the same way (Telugu script only when asked), keep file names, commands and technical terms in English. "Don't generate code" = explain only.

@@ -13,12 +13,17 @@ from playwright.sync_api import sync_playwright
 
 ARTIFACTS_DIR = Path(os.environ.get("A2V_ARTIFACTS_DIR", "test-artifacts"))
 
+# A project with every stage completed, so every stage card is clickable
+# (a fresh project's later cards are disabled until their prior stage finishes).
+TEST_PROJECT_ID = "my-first-project-01-df7f"
+
 def test_live_pipeline_status():
     print("\n--- Verifying Live Pipeline Status, Animations & Error Visibility ---")
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1440, "height": 900})
-        page.goto("http://localhost:5173", wait_until="networkidle", timeout=15000)
+        page.goto(f"http://localhost:5173/?projectId={TEST_PROJECT_ID}", wait_until="load")
+        page.locator("[data-testid='stage-card-analyzer']").wait_for(state="visible", timeout=10000)
         page.wait_for_timeout(1000)
 
         # 1. Verify live SSE connection badge
@@ -43,12 +48,12 @@ def test_live_pipeline_status():
         card_01.click()
         page.wait_for_timeout(600)
 
-        audio_view = page.locator("[data-testid='pipeline-audio-analysis-fullpage-container']")
+        audio_view = page.locator("[data-testid='pipeline-stage-fullpage-container']")
         assert audio_view.is_visible(), "Audio Analysis full-page view did not open on clicking Stage 01"
         print("  -> PASSED: Clicking Stage 01 opens the Audio Analysis full-page view")
 
         # Back to the pipeline
-        page.locator("[data-testid='audio-analysis-back-btn']").first.click()
+        page.locator("[data-testid='stage-drawer-back-btn']").first.click()
         page.wait_for_timeout(500)
 
         # 5. Check Stage 02 (Scene Segmentation) drawer interaction
@@ -64,7 +69,7 @@ def test_live_pipeline_status():
         print("  -> PASSED: Clicking Stage 02 opens StageDrawer with operational details")
 
         # Check subtasks tab inside stage drawer
-        subtasks_tab = stage_drawer.locator("button:has-text('Subtasks')").first
+        subtasks_tab = page.locator("[data-testid='stage-drawer-tab-subtasks']").first
         if subtasks_tab.is_visible():
             subtasks_tab.click()
             page.wait_for_timeout(400)

@@ -23,20 +23,16 @@ def test_agent_intelligence_system():
         page.set_viewport_size({"width": 1440, "height": 900})
 
         print("Navigating to frontend...")
-        page.goto(FRONTEND_URL, wait_until="networkidle")
-        page.wait_for_timeout(2000)
+        page.goto(FRONTEND_URL, wait_until="load")
 
         # 1. Navigate to Agents Center Page
         print("Clicking Agents sidebar button...")
-        agents_btn = page.locator('button:has-text("Agents")').first
-        if not agents_btn.is_visible():
-            agents_btn = page.locator('nav button:has-text("Agents")')
-        agents_btn.click()
-        page.wait_for_timeout(1000)
+        page.locator('[data-testid="sidebar-nav-agents"]').click()
 
-        # Verify Agents Center Page is loaded
+        # Verify Agents Center Page is loaded (cards arrive with the /agents fetch)
         agents_page = page.locator('[data-testid="agents-center-page"]')
-        assert agents_page.is_visible(), "Agents Center Page not visible"
+        agents_page.wait_for(state="visible", timeout=10000)
+        page.locator('[data-testid^="agent-card-"]').first.wait_for(state="visible", timeout=10000)
         print("Agents Center Page loaded successfully.")
 
         # Capture screenshot of Agents Swarm Grid

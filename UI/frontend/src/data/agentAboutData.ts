@@ -342,7 +342,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       ],
       testFiles: [
         'tests/test_playwright_audio_analysis_card.py',
-        'tests/test_verify_audio_analysis_fullpage.py',
+        'tests/test_verify_all_pipeline_cards_fullpage.py',
         'tests/test_audio_visual_agents_integration.py'
       ],
       failureModesAndRecovery: [
@@ -387,7 +387,7 @@ export const AGENT_ABOUT_DATA: Record<string, AgentAboutData> = {
       ],
       testFiles: [
         'tests/test_playwright_audio_analysis_card.py',
-        'tests/test_verify_audio_analysis_fullpage.py'
+        'tests/test_verify_all_pipeline_cards_fullpage.py'
       ]
     }
   },
