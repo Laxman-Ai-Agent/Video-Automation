@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-29T15:41:51.152878+00:00",
-  "total_experiences": 87,
+  "updated_at": "2026-10-29T17:34:40.665973+00:00",
+  "total_experiences": 88,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -1842,6 +1842,49 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-27T10:16:43.220991+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-dc940c0ab7": {
+      "experience_id": "exp-motion_animation-dc940c0ab7",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_a2bf25ed",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_a2bf25ed",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Scene 2: LLM code generation blocked: Circuit for 'claude_cli:claude-sonnet-5-5' is OPEN (6 consecutive failures). Cooldown: 18.7s remaining. (details in projects/my-first-project-01-df7f/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-29T17:34:40.457477+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T17:34:40.657329+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-dfc010247a": {
