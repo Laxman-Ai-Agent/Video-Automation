@@ -38,6 +38,29 @@ PIXABAY = {"hits": [{"id": 9, "pageURL": "https://pixabay.com/p/9", "user": "Cy"
 UNSPLASH = {"results": [{"id": "u1", "links": {"html": "https://unsplash.com/photos/u1"}, "urls": {"regular": "https://images.unsplash.com/u1.jpg", "small": "https://images.unsplash.com/u1-s.jpg"}, "width": 1920, "height": 1080, "description": "lake", "user": {"name": "Dana", "username": "dana"}}]}
 
 
+INAT = {"results": [
+    {"id": 1, "uri": "https://www.inaturalist.org/observations/1", "user": {"login": "bee", "name": "Bea"}, "taxon": {"name": "Apis mellifera", "preferred_common_name": "Honey Bee"},
+     "photos": [{"id": 11, "license_code": "cc-by-nc", "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/11/square.jpg"},          # not commercial: skipped, the next photo is used
+                {"id": 12, "license_code": "CC-BY", "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/12/square.jpg", "attribution": "(c) Bea, some rights reserved (CC BY)",
+                 "original_dimensions": {"width": 2048, "height": 1365}}]},
+    {"id": 2, "user": {"login": "x"}, "photos": [{"id": 21, "license_code": "cc-by-nd", "url": "https://inaturalist-open-data.s3.amazonaws.com/photos/21/square.jpg"}]},                  # no changes allowed: skipped
+    {"id": 3, "user": {"login": "y"}, "photos": [{"id": 31, "license_code": "cc0", "url": "https://evil.example.org/photos/31/square.jpg"}]},                                                   # a host that is not permitted: skipped
+    {"id": 4, "uri": "https://www.inaturalist.org/observations/4", "user": {"login": "zed"}, "taxon": {"name": "Quercus"},
+     "photos": [{"id": 41, "license_code": "cc0", "url": "https://static.inaturalist.org/photos/41/square.jpg", "original_dimensions": {"width": 1600, "height": 1200}}]},
+    {"photos": "malformed"}]}
+MET_SEARCH = {"total": 4, "objectIDs": [101, 102, 103, 104]}
+MET_OBJECTS = {
+    101: {"objectID": 101, "isPublicDomain": True, "primaryImage": "https://images.metmuseum.org/CRDImages/ep/original/101.jpg", "primaryImageSmall": "https://images.metmuseum.org/CRDImages/ep/web-large/101.jpg",
+          "title": "Wheat Field", "artistDisplayName": "Van Gogh", "objectURL": "https://www.metmuseum.org/art/collection/search/101"},
+    102: {"objectID": 102, "isPublicDomain": False, "primaryImage": "https://images.metmuseum.org/CRDImages/ep/original/102.jpg", "title": "Under copyright"},                              # not public domain: skipped
+    103: {"objectID": 103, "isPublicDomain": True, "primaryImage": "https://evil.example.org/103.jpg", "title": "Elsewhere"},                                                               # a host that is not permitted: skipped
+    104: {"objectID": 104, "isPublicDomain": True, "primaryImage": "", "title": "No picture"}}
+ARTIC = {"config": {"iiif_url": "https://www.artic.edu/iiif/2"}, "data": [
+    {"id": 5, "title": "Water Lilies", "artist_title": "Claude Monet", "image_id": "abc-1", "is_public_domain": True, "thumbnail": {"width": 1000, "height": 500}},
+    {"id": 6, "title": "Copyrighted", "image_id": "abc-2", "is_public_domain": False},                                      # the filter was ignored: skipped
+    {"id": 7, "title": "No image", "image_id": None, "is_public_domain": True}]}
+
+
 @pytest.fixture
 def net(monkeypatch):
     monkeypatch.setenv("PEXELS_API_KEY", "k1")
@@ -46,7 +69,11 @@ def net(monkeypatch):
 
     def fake(url, headers=None, **kw):
         host = url.split("/")[2]
-        data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.openverse.org": OPENVERSE, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY, "api.unsplash.com": UNSPLASH}[host]
+        if host == "collectionapi.metmuseum.org":
+            data = MET_SEARCH if "/search?" in url else MET_OBJECTS[int(url.rsplit("/", 1)[1])]
+        else:
+            data = {"images-api.nasa.gov": NASA, "commons.wikimedia.org": COMMONS, "api.openverse.org": OPENVERSE, "api.pexels.com": PEXELS, "pixabay.com": PIXABAY, "api.unsplash.com": UNSPLASH,
+                    "api.inaturalist.org": INAT, "api.artic.edu": ARTIC}[host]
         return json.dumps(data).encode()
     monkeypatch.setattr(stock, "_open", fake)
 
@@ -55,7 +82,7 @@ def test_every_adapter_normalises_to_one_schema_and_keeps_rights(net):
     found, state = stock.search("river sunrise", "16:9")
     by = {a.provider: a for a in reversed(found)}      # the best-ranked result of each provider
     by["wikimedia"] = next(a for a in found if a.id == "wikimedia:1")
-    assert set(by) == {"nasa", "wikimedia", "openverse", "pexels", "pixabay", "unsplash"} and all(s["ok"] for s in state.values())
+    assert set(by) == {"nasa", "wikimedia", "openverse", "inaturalist", "met", "artic", "pexels", "pixabay", "unsplash"} and all(s["ok"] for s in state.values())
     assert by["unsplash"].attribution_text == "Photo by Dana on Unsplash" and by["unsplash"].commercial_use_known is True
     assert by["pexels"].attribution_text == "Photo by Bo on Pexels" and by["pexels"].commercial_use_known is True and by["pexels"].source_page_url
     assert by["nasa"].commercial_use_known is None and "credit" in by["nasa"].license_name.lower()             # unclear rights are never claimed as free
@@ -94,7 +121,7 @@ def test_one_failing_provider_never_fails_the_search(net, monkeypatch):
     monkeypatch.setattr(stock, "_open", flaky)
     found, state = stock.search("river")
     assert state["pexels"]["error"].startswith("rate limit") and not state["nasa"]["ok"] and state["pixabay"]["ok"]
-    assert {a.provider for a in found} == {"wikimedia", "openverse", "pixabay", "unsplash"}
+    assert {a.provider for a in found} == {"wikimedia", "openverse", "inaturalist", "met", "artic", "pixabay", "unsplash"}
 
 
 def test_empty_results(monkeypatch):
@@ -264,3 +291,46 @@ def test_the_slow_anonymous_openverse_query_gets_a_longer_timeout(monkeypatch):
     seen = {}
     monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: seen.update(kw) or b'{"results": []}')
     assert stock.openverse("x") == [] and seen == {"timeout": stock.OPENVERSE_TIMEOUT} and stock.OPENVERSE_TIMEOUT > stock.TIMEOUT
+
+
+# ---------- the keyless open-licence providers: iNaturalist, the Met, the Art Institute of Chicago ----------
+def test_inaturalist_keeps_only_cc0_and_cc_by_photos_on_permitted_hosts(net):
+    got = {a.provider_asset_id: a for a in stock.inaturalist("bee")}
+    assert set(got) == {"12", "41"}                                                             # -nc, -nd and the foreign host never get through
+    bee = got["12"]
+    assert bee.license_name == "CC BY" and bee.license_url.endswith("/licenses/by/4.0/") and bee.author == "Bea" and bee.commercial_use_known is True
+    assert bee.download_url.endswith("/photos/12/original.jpg") and (bee.width, bee.height) == (2048, 1365) and bee.title == "Honey Bee (Apis mellifera)"
+    assert bee.source_page_url.endswith("/observations/1") and bee.attribution_text == "(c) Bea, some rights reserved (CC BY)"
+    assert got["41"].license_name == "CC0 1.0" and got["41"].author == "zed" and got["41"].title == "Quercus" and got["41"].attribution_text.endswith("iNaturalist / CC0 1.0")
+
+
+def test_the_met_gives_only_public_domain_objects_with_an_image_on_its_own_host(net):
+    got = stock.met("wheat")
+    assert [a.provider_asset_id for a in got] == ["101"]
+    a = got[0]
+    assert a.license_name.startswith("CC0") and a.author == "Van Gogh" and a.commercial_use_known is True and a.source_page_url.endswith("/101")
+    assert a.attribution_text == "Wheat Field, Van Gogh, The Metropolitan Museum of Art (CC0)"
+
+
+def test_the_met_skips_an_object_that_cannot_be_looked_up(net, monkeypatch):
+    real = stock._open
+    monkeypatch.setattr(stock, "_open", lambda url, headers=None, **kw: (_ for _ in ()).throw(stock.StockError("provider answered HTTP 404")) if url.endswith("/101") else real(url, headers, **kw))
+    assert stock.met("wheat") == []                                                              # 101 failed, 102 to 104 are not usable: nothing, and no exception
+
+
+def test_artic_gives_only_public_domain_artworks_at_the_documented_width(net):
+    got = stock.artic("lilies")
+    assert [a.provider_asset_id for a in got] == ["5"]
+    a = got[0]
+    assert a.download_url == "https://www.artic.edu/iiif/2/abc-1/full/843,/0/default.jpg" and (a.width, a.height) == (843, 422)
+    assert a.license_name.startswith("CC0") and a.author == "Claude Monet" and a.commercial_use_known is True and a.source_page_url == "https://www.artic.edu/artworks/5"
+
+
+def test_the_new_providers_need_no_key_and_their_hosts_are_the_only_new_download_hosts(net):
+    for name in ("inaturalist", "met", "artic"):
+        assert stock.PROVIDERS[name][1] is None and stock.providers_status()[name]["available"]
+    assert stock.permitted_url({"download_url": "https://images.metmuseum.org/a.jpg"}) and stock.permitted_url({"download_url": "https://www.artic.edu/iiif/2/x/full/843,/0/default.jpg"})
+    with pytest.raises(stock.StockError):
+        stock.permitted_url({"download_url": "https://evil.artic.edu.example.org/a.jpg"})
+    with pytest.raises(stock.StockError):
+        stock.permitted_url({"download_url": "http://images.metmuseum.org/a.jpg"})               # https only

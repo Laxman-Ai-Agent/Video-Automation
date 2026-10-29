@@ -132,6 +132,7 @@ class LlmGatewayRequest:
     input_artifact_refs: list[dict[str, str]] = field(default_factory=list)
     input_fingerprint: str = ""
     metadata: dict[str, Any] = field(default_factory=dict)
+    images: list[str] = field(default_factory=list)      # files (paths) the model must look at; only a provider that can see pictures accepts them (llm_client.generate_text)
 
 
 @dataclass
@@ -259,6 +260,7 @@ class LlmGateway:
                         timeout=profile_timeout(req.model_profile, req.timeout),
                         provider=prov,
                         model=effective_mdl,
+                        **({"images": req.images} if req.images else {}),
                     )
 
                     # If structured schema is expected, parse JSON

@@ -4,6 +4,8 @@ import importlib
 import json
 import re
 
+import pytest
+
 from SYSTEM.core import config
 from VIDEO_ENGINE.stages import motion_animation as ma
 from VIDEO_ENGINE.stages import store
@@ -34,6 +36,27 @@ def test_the_fingerprint_changes_only_when_the_kit_is_on():
     base = dict(duration=3.0, headline="h", subtext="", texts=["h"], elements=[], palette=["#000"], aspect="16:9", shots=[])
     assert ma.scene_input_fingerprint(**base) == ma.scene_input_fingerprint(**base)
     assert ma.scene_input_fingerprint(**base, motion_kit=True) != ma.scene_input_fingerprint(**base)
+
+
+class _Stop(Exception):
+    pass
+
+
+@pytest.mark.parametrize("kit", [False, True])
+def test_the_stage_puts_the_motion_kit_key_into_the_scene_inputs_only_when_it_is_on(tmp_path, monkeypatch, kit):
+    monkeypatch.setattr(config, "PROJECTS_DIR", tmp_path)
+    pdir = store.create("Fp", "16:9", motion_kit=kit)
+    (pdir / "scene_plan.json").write_text(json.dumps({"scenes": [{"id": 1, "start": 0, "end": 3, "meaning": "m"}], "style": {"palette": ["#000"]}}), encoding="utf-8")
+    seen = {}
+
+    def capture(**inputs):
+        seen.update(inputs)
+        raise _Stop
+
+    monkeypatch.setattr(ma, "scene_input_fingerprint", capture)
+    with pytest.raises(_Stop):
+        ma.generate_custom_motion_code(pdir)
+    assert ("motion_kit" in seen) is kit and (seen.get("motion_kit") is True or not kit)
 
 
 def test_a_project_stores_the_kit_choice_at_creation_and_old_projects_have_it_off(tmp_path, monkeypatch):

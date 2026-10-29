@@ -594,21 +594,28 @@ def _call_antigravity_cli(user: str, system: str, timeout: int, model: str = "ge
             return r.stdout.strip()
 
 
-def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = None) -> str:
+def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = None, images: list[str] | None = None) -> str:
+    """images: picture files the model must look at. The CLI then gets the Read tool (and nothing else) for the folders those files are in; without images it gets no tool and one turn."""
     exe = shutil.which("claude")
     if not exe:
         raise LlmError("The Claude CLI was not found on this machine. Select Gemini or OpenAI in LLM Settings, or install Claude Code.")
     cli_default = DEFAULT_MODELS["claude_cli"]   # the label for "no --model": the CLI uses its own default
     model = model if model and model != cli_default else os.environ.get("PROMPTGEN_MODEL")
     cmd = [
-        exe, "-p", "--output-format", "json", "--max-turns", "1",
-        "--tools", "", "--setting-sources", "", "--disable-slash-commands",
+        exe, "-p", "--output-format", "json", "--max-turns", "6" if images else "1",
+        "--tools", "Read" if images else "", "--setting-sources", "", "--disable-slash-commands",
         "--strict-mcp-config", "--no-session-persistence"
     ]
     if system.strip():
         cmd.extend(["--system-prompt", system])
     if model:
         cmd.extend(["--model", model])
+    if images:
+        paths = [str(Path(p).resolve()) for p in images]
+        user = f"{user}\n\nThe pictures to look at are these files; open every one with the Read tool before you answer:\n" + "\n".join(paths)
+        cmd.extend(["--allowedTools", "Read"])
+        for folder in sorted({str(Path(p).parent) for p in paths}):
+            cmd.extend(["--add-dir", folder])
 
     try:
         r = subprocess.run(
@@ -651,14 +658,17 @@ def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = N
     return str(data["result"])
 
 
-def generate_text(user: str, system: str = "", timeout: int = 180, provider: str | None = None, model: str | None = None) -> str:
-    """Central text generation dispatch for any configured LLM. Returns the text response."""
+def generate_text(user: str, system: str = "", timeout: int = 180, provider: str | None = None, model: str | None = None, images: list[str] | None = None) -> str:
+    """Central text generation dispatch for any configured LLM. Returns the text response.
+    images: picture files the model must look at; only Claude Code (claude_cli) is wired to show them, any other provider raises LlmError so the caller can fall back to text."""
     global _ACTIVE_GENERATION_COUNT
     with _GENERATION_LOCK:
         _ACTIVE_GENERATION_COUNT += 1
     try:
         prov, mdl, key, base_url = resolve_provider_config(override_provider=provider, override_model=model)
 
+        if images and prov != "claude_cli":
+            raise LlmError(f"{prov} is not set up to look at pictures here: choose Claude Code on the LLM page")
         if prov == "gemini":
             return _call_gemini(user, system, mdl, key, timeout)
         elif prov == "openai":
@@ -682,7 +692,7 @@ def generate_text(user: str, system: str = "", timeout: int = 180, provider: str
         elif prov == "antigravity":
             return _call_antigravity_cli(user, system, timeout, mdl)
         elif prov == "claude_cli":
-            return _call_claude_cli(user, system, timeout, model=mdl)
+            return _call_claude_cli(user, system, timeout, model=mdl, images=images)
         else:
             raise LlmError(f"Unknown or unsupported LLM provider: '{prov}'. Choose gemini, antigravity, openai, anthropic, or claude_cli.")
     finally:

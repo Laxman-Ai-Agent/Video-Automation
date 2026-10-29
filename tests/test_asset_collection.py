@@ -618,3 +618,84 @@ def test_the_search_cache_is_not_used_for_a_different_set_of_providers(pdir, mon
     monkeypatch.setenv("PEXELS_API_KEY", "k")
     ac.search(req, "16:9")
     assert len(searches) == 2                                                        # a key was set: a provider that was not asked before is asked now
+
+
+# ---------- ranking by LOOKING at a contact sheet of the candidates' previews ----------
+def _jpeg(colour):
+    buf = io.BytesIO()
+    Image.new("RGB", (640, 360), colour).save(buf, "JPEG")
+    return buf.getvalue()
+
+
+def _with_previews(i, url="https://images.pexels.com/{}-m.jpg"):
+    return {**cand(i), "thumbnail_url": url.format(i)}
+
+
+def _near(px, rgb, tol=40):
+    return all(abs(a - b) <= tol for a, b in zip(px, rgb))
+
+
+def test_a_contact_sheet_shows_every_candidate_in_a_numbered_cell_and_is_built_once(tmp_path, monkeypatch):
+    fetched = []
+
+    def fake_open(url, headers=None, limit=0, **kw):
+        fetched.append(url)
+        return _jpeg((220, 20, 20) if "/1-m" in url else (20, 200, 20))
+    monkeypatch.setattr(stock, "_open", fake_open)
+    cands = [_with_previews(1), _with_previews(2), {**cand(3)}, _with_previews(4, "https://evil.example.org/{}.jpg")]          # 3 has no preview, 4's preview is on a host that is not permitted
+    sheet = ac.contact_sheet(tmp_path, cands)
+    assert sheet and sheet.parent == tmp_path / "assets" / "contact_sheets" and fetched == ["https://images.pexels.com/1-m.jpg", "https://images.pexels.com/2-m.jpg"]
+    img = Image.open(sheet)
+    w, h = ac.SHEET_CELL
+    assert img.size == (w * ac.SHEET_COLUMNS, h * 2)                                              # 4 candidates, 3 columns: two rows
+    assert _near(img.getpixel((w // 2, h // 2)), (220, 20, 20)) and _near(img.getpixel((w + w // 2, h // 2)), (20, 200, 20))
+    assert _near(img.getpixel((2 * w + w - 6, h - 6)), (24, 24, 24))                               # candidate 2 has no preview: the empty cell
+    assert any(img.getpixel((x, 20))[0] > 200 and img.getpixel((x, 20))[2] < 80 for x in range(0, 40))      # the yellow number tag of cell 0
+    assert ac.contact_sheet(tmp_path, cands) == sheet and len(fetched) == 2                         # same candidates: reused, nothing fetched again
+
+
+def test_no_contact_sheet_when_no_candidate_has_a_preview(tmp_path, monkeypatch):
+    monkeypatch.setattr(stock, "_open", lambda *a, **k: pytest.fail("nothing may be fetched"))
+    assert ac.contact_sheet(tmp_path, [cand(1), cand(2)]) is None
+
+
+def _rows(cands):
+    return [{"requirement": {"requirement_id": "req_a", "query": "river", "kind": "photo"}, "scene": {"meaning": "a river"}, "candidates": cands}]
+
+
+def test_choose_lets_the_model_look_at_the_sheet_and_names_it_in_the_request(tmp_path, monkeypatch):
+    monkeypatch.setattr(stock, "_open", lambda *a, **k: _jpeg((10, 10, 200)))
+    seen = []
+
+    def llm(req):
+        seen.append(req)
+        return SimpleNamespace(error=None, structured_data={"choices": [{"requirement_id": "req_a", "index": 1}]}, provider="stub", model="stub")
+    monkeypatch.setattr(llm_gateway.gateway, "execute", llm)
+    assert ac.choose(tmp_path, _rows([_with_previews(1), _with_previews(2)])) == {"req_a": (1, "llm")}
+    assert len(seen) == 1 and len(seen[0].images) == 1 and Path(seen[0].images[0]).exists() and "contact sheet" in seen[0].system_prompt
+    assert json.loads(seen[0].user_prompt.split("\n", 1)[1])[0]["sheet"] == 1                         # the request says which attached picture is this requirement's sheet
+
+
+def test_choose_asks_again_with_titles_only_when_the_model_cannot_look(tmp_path, monkeypatch):
+    monkeypatch.setattr(stock, "_open", lambda *a, **k: _jpeg((10, 10, 200)))
+    seen = []
+
+    def llm(req):
+        seen.append(bool(req.images))
+        if req.images:
+            return SimpleNamespace(error="gemini is not set up to look at pictures here", structured_data=None, provider="stub", model="stub")
+        return SimpleNamespace(error=None, structured_data={"choices": [{"requirement_id": "req_a", "index": 0}]}, provider="stub", model="stub")
+    monkeypatch.setattr(llm_gateway.gateway, "execute", llm)
+    assert ac.choose(tmp_path, _rows([_with_previews(1), _with_previews(2)])) == {"req_a": (0, "llm")}
+    assert seen == [True, False]                                                                      # first with the sheet, then the same question with titles only
+
+
+def test_choose_sends_no_image_when_no_candidate_has_a_preview(tmp_path, monkeypatch):
+    seen = []
+
+    def llm(req):
+        seen.append(list(req.images))
+        return SimpleNamespace(error=None, structured_data={"choices": [{"requirement_id": "req_a", "index": 0}]}, provider="stub", model="stub")
+    monkeypatch.setattr(llm_gateway.gateway, "execute", llm)
+    ac.choose(tmp_path, _rows([cand(1), cand(2)]))
+    assert seen == [[]]

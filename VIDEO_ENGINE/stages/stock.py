@@ -18,7 +18,8 @@ MAX_BYTES = 30 * 1024 * 1024
 MAX_VIDEO_BYTES = 150 * 1024 * 1024
 PER_PROVIDER = 6
 UA = "audio-to-video/1.0 (local tool)"
-DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com", "staticflickr.com", "archive.org", "images.unsplash.com")
+DOWNLOAD_HOSTS = ("images-assets.nasa.gov", "upload.wikimedia.org", "thumb.wikimedia.org", "images.pexels.com", "videos.pexels.com", "pixabay.com", "staticflickr.com", "archive.org", "images.unsplash.com",
+                  "inaturalist-open-data.s3.amazonaws.com", "static.inaturalist.org", "images.metmuseum.org", "www.artic.edu")
 FREE_LICENSES = {"by": "CC BY", "by-sa": "CC BY-SA", "cc0": "CC0", "pdm": "Public Domain Mark"}      # Openverse licence codes that allow commercial use AND changes (a crop or a dim is a change: no -nd, no -nc)
 OPENVERSE_TIMEOUT = 45                       # an anonymous Openverse query answers in 15 to 20 s
 MAX_ARCHIVE_SECONDS = 900                    # a recording of hours says nothing about its title: only short items of the Internet Archive
@@ -219,7 +220,86 @@ def unsplash(q: str) -> list[StockAsset]:
     return out
 
 
-PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "openverse": (openverse, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY"), "unsplash": (unsplash, "UNSPLASH_ACCESS_KEY")}
+INAT_LICENCES = {"cc0": ("CC0 1.0", "https://creativecommons.org/publicdomain/zero/1.0/"), "cc-by": ("CC BY", "https://creativecommons.org/licenses/by/4.0/")}      # the photo licences that allow commercial use AND changes: no -nc, no -nd
+MET_LOOKUPS = 10                             # the Met search returns only object ids: at most this many objects are looked up (one request each)
+ARTIC_WIDTH = 843                            # the width the Art Institute's image server documents as always available
+
+
+def inaturalist(q: str) -> list[StockAsset]:
+    """iNaturalist (no key): research-grade observations with a photo that is CC0 or CC BY. The API is asked for those licences and every photo's own licence code is checked again here,
+    so an -nc / -nd photo cannot get through. One photo per observation, at its original size."""
+    d = _json("https://api.inaturalist.org/v1/observations?" + urllib.parse.urlencode({"q": q, "photos": "true", "photo_license": "cc0,cc-by", "quality_grade": "research", "order_by": "votes", "per_page": PER_PROVIDER * 2}))
+    out = []
+    for o in d.get("results", []):
+        try:
+            p = next((p for p in o.get("photos") or [] if str(p.get("license_code") or "").lower() in INAT_LICENCES), None)
+            url = (p or {}).get("url", "").replace("/square.", "/original.")
+            if not p or not _host_ok(url):
+                continue
+            name, lic_url = INAT_LICENCES[str(p["license_code"]).lower()]
+            taxon, user, dims = o.get("taxon") or {}, o.get("user") or {}, p.get("original_dimensions") or {}
+            common, latin = taxon.get("preferred_common_name") or "", taxon.get("name") or ""
+            author = user.get("name") or user.get("login") or ""
+            out.append(StockAsset(id=f"inaturalist:{p['id']}", provider="inaturalist", provider_asset_id=str(p["id"]), source_page_url=o.get("uri") or f"https://www.inaturalist.org/observations/{o['id']}",
+                                  download_url=url, thumbnail_url=p["url"].replace("/square.", "/medium."), title=f"{common} ({latin})" if common and latin else common or latin or o.get("species_guess") or "",
+                                  width=dims.get("width"), height=dims.get("height"), license_name=name, license_url=lic_url, author=author,
+                                  attribution_text=p.get("attribution") or f"{author} / iNaturalist / {name}".strip(" /"), commercial_use_known=True, search_query=q, retrieved_at=_now()))
+        except (KeyError, TypeError, AttributeError):
+            continue
+        if len(out) >= PER_PROVIDER:
+            break
+    return out
+
+
+def met(q: str) -> list[StockAsset]:
+    """The Metropolitan Museum of Art Open Access (no key): only objects the museum marks isPublicDomain, with an image on its own host. Their images are CC0."""
+    d = _json("https://collectionapi.metmuseum.org/public/collection/v1/search?" + urllib.parse.urlencode({"q": q, "hasImages": "true"}))
+    out = []
+    for oid in (d.get("objectIDs") or [])[:MET_LOOKUPS]:
+        try:
+            o = _json(f"https://collectionapi.metmuseum.org/public/collection/v1/objects/{int(oid)}")
+        except (StockError, ValueError, TypeError):
+            continue
+        img = o.get("primaryImage") or ""
+        if o.get("isPublicDomain") is not True or not _host_ok(img):
+            continue
+        artist = o.get("artistDisplayName") or ""
+        title = o.get("title") or ""
+        out.append(StockAsset(id=f"met:{o['objectID']}", provider="met", provider_asset_id=str(o["objectID"]), source_page_url=o.get("objectURL", ""), download_url=img,
+                              thumbnail_url=o.get("primaryImageSmall") or None, title=title, license_name="CC0 1.0 (Met Open Access)",
+                              license_url="https://www.metmuseum.org/about-the-met/policies-and-documents/open-access", author=artist,
+                              attribution_text=", ".join(x for x in (title, artist, "The Metropolitan Museum of Art (CC0)") if x), commercial_use_known=True, search_query=q, retrieved_at=_now()))
+        if len(out) >= PER_PROVIDER:
+            break
+    return out
+
+
+def artic(q: str) -> list[StockAsset]:
+    """The Art Institute of Chicago (no key): artworks marked is_public_domain (their images are CC0), served by the IIIF image server at the documented width."""
+    d = _json("https://api.artic.edu/api/v1/artworks/search?" + urllib.parse.urlencode({
+        "q": q, "query[term][is_public_domain]": "true", "limit": PER_PROVIDER * 2, "fields": "id,title,image_id,artist_title,is_public_domain,thumbnail"}))
+    base = (d.get("config") or {}).get("iiif_url") or "https://www.artic.edu/iiif/2"
+    out = []
+    for a in d.get("data", []):
+        try:
+            url = f"{base}/{a['image_id']}/full/{ARTIC_WIDTH},/0/default.jpg"
+            if a.get("is_public_domain") is not True or not a["image_id"] or not _host_ok(url):
+                continue
+            th = a.get("thumbnail") or {}
+            ratio = th["height"] / th["width"] if th.get("width") and th.get("height") else None
+            artist, title = a.get("artist_title") or "", a.get("title") or ""
+            out.append(StockAsset(id=f"artic:{a['id']}", provider="artic", provider_asset_id=str(a["id"]), source_page_url=f"https://www.artic.edu/artworks/{a['id']}", download_url=url,
+                                  thumbnail_url=f"{base}/{a['image_id']}/full/400,/0/default.jpg", title=title, width=ARTIC_WIDTH, height=round(ARTIC_WIDTH * ratio) if ratio else None,
+                                  license_name="CC0 1.0 (public domain artwork)", license_url="https://creativecommons.org/publicdomain/zero/1.0/", author=artist,
+                                  attribution_text=", ".join(x for x in (title, artist, "Art Institute of Chicago (CC0)") if x), commercial_use_known=True, search_query=q, retrieved_at=_now()))
+        except (KeyError, TypeError, AttributeError, ZeroDivisionError):
+            continue
+        if len(out) >= PER_PROVIDER:
+            break
+    return out
+
+
+PROVIDERS = {"nasa": (nasa, None), "wikimedia": (wikimedia, None), "openverse": (openverse, None), "inaturalist": (inaturalist, None), "met": (met, None), "artic": (artic, None), "pexels": (pexels, "PEXELS_API_KEY"), "pixabay": (pixabay, "PIXABAY_API_KEY"), "unsplash": (unsplash, "UNSPLASH_ACCESS_KEY")}
 
 
 # ---------- video adapters (same rules: official APIs, one malformed item is skipped) ----------

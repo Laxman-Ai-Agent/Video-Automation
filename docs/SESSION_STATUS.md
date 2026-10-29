@@ -9,6 +9,12 @@ fingerprint gets a `motion_kit` key only when on). First kit in `VIDEO_ENGINE/re
 the touched modules' tests, Remotion `tsc` and frontend `tsc` clean. NOT done: a real kit-on run (no LLM call was made), the upload page in a browser (the backend has no `--reload`: restart it
 when no job runs). Next: grow the kit, pick an art direction per video, prove it on a new kit-on project.
 
+## Phase 3 built (2026-10-29), not proven on a real run
+Details in `docs/ROADMAP.md` Phase 3. Short: `stock.py` has `inaturalist`, `met`, `artic` (keyless, CC0 / CC BY / public domain only, hosts allow-listed); the planner may use a clip as full-frame B-roll
+(`visual_planning.VERSION` 4: existing plans are made again on their next run); `asset_collection.choose` sends a contact sheet of the candidates' previews to ONE ranking call
+(`LlmGatewayRequest.images`; only Claude Code can look, otherwise titles-only). The pipeline's `claude` CLI login had EXPIRED when I tried a live vision probe ("OAuth session expired"): run `claude auth login`
+(with the pipeline's `CLAUDE_CONFIG_DIR`), then try one `llm_client._call_claude_cli(..., images=[a jpg])` before trusting the ranking. The motion-kit option (Phase 2) is committed (`4d0cca5`).
+
 ## Earlier: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
 `docs/ROADMAP.md` section 3 item 6 is closed - full detail is there. Short version: every one of the 16 modules
 in `tests/conftest.py`'s `LIVE_UI_MODULES` now passes for real reasons against the live app, run together

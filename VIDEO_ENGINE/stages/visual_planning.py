@@ -38,7 +38,7 @@ from .visual_planning_rules import overlap as _overlap
 
 log = logging.getLogger(__name__)
 SCHEMA = "2.0"
-VERSION = 3                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: max_texts; 3: every scene carries its derived shots (1.5-3.5 s, cut on spoken words)
+VERSION = 4                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: max_texts; 3: every scene carries its derived shots (1.5-3.5 s, cut on spoken words); 4: a clip may be full-frame B-roll
 FILE = "visual_planning.json"                # NOT visual_plan.json: that file is the user-editable shots/layers plan of visual_plan.py (untouched); this one is its semantic layer, joined by scene_NN
 STAGES = ("Semantic Understanding", "Scene Objective & Visual Concept", "Element Breakdown", "Relationships & Visual Hierarchy", "Media Mix", "Audio Timing & Text",
           "Style & Continuity", "Validation & Confidence")
@@ -232,17 +232,21 @@ def media_rules(opts: dict) -> str:
     """The MEDIA rule of the instructions: 100% Motion Canvas with embedded card assets (rule 5)."""
     lines = [
         "This project is a 100% Motion Graphics production. The entire canvas is animated with kinetic typography, shapes, and motion cards.",
-        "Real photographs (type image) and video clips (type video) must ALWAYS be embedded visual assets inside animated motion cards, bento grids, circular cutouts, or device frames (phones/laptops), never standalone full-frame static slides.",
+        "Real photographs (type image) and reference pages must ALWAYS be embedded visual assets inside animated motion cards, bento grids, circular cutouts, or device frames (phones/laptops), never standalone full-frame static slides. "
+        "A video clip (type video) is either framed in a device frame (below) or FULL-FRAME B-ROLL (the rule after it).",
         "When the narration mentions a tangible object, product, person, or fruit (e.g. phone, desk, creator, item), display it as an isolated cutout asset inside a focused motion card with a subtitle pill instead of plain text.",
         "When the narration lists multiple items, steps, or features, generate an animated Bento Grid or Card Deck (3 to 5 cards) that appear sequentially matching the spoken words.",
         "When the narration mentions a video, screencast, or dynamic action, embed the video clip inside a modern device frame (laptop, tablet, or smartphone mockup with rounded corners and glass glow).",
-        "Floating Card Aesthetic: In visual_description and constraints, say how the picture is framed (for example 'rounded floating glassmorphic card with subtle glow', 'circular cutout', 'device frame mockup') so it is never a blocky full-frame wallpaper photo.",
+        "FULL-FRAME B-ROLL: when the narration is about the real world and the MOVEMENT is the point (a place, a crowd, a machine working, an activity), a video clip may fill the whole frame as the background "
+        "of its scene: give that element placement.region 'full_frame' and depth_layer 'background', and keep the scene's kinetic typography and graphics on top of it (a clip never stands alone: the drawn words and "
+        "graphics carry the meaning). Use at most one full-frame clip at a time (a second one belongs to another shot). A screencast or an interface stays in a device frame, not B-roll.",
+        "Floating Card Aesthetic: In visual_description and constraints, say how a photograph is framed (for example 'rounded floating glassmorphic card with subtle glow', 'circular cutout', 'device frame mockup') so it is never a blocky full-frame wallpaper photo.",
         "Every real element (type image, video or reference) carries the object `media`: query (2 to 6 plain English words naming what is visible; NEVER a brand or product name, a living person's name or a "
         "Telugu word; describe the generic thing instead, e.g. a chatbot -> 'person typing on laptop'), alt_queries (one broader and one synonym query), why (one sentence), must_be_real "
         "(true ONLY when the narration cites a specific real event or document that a generic picture would misrepresent) and fallback (one sentence: the flat motion graphic that is drawn "
         "instead when no suitable real media is found). At most "
         f"{rules.MAX_REAL_PER_SCENE} real elements in a scene; every scene keeps its text and graphics layer integrated. There is no share of the video to reach: use as many real pictures and clips as "
-        "the narration calls for, each inside an animated card, frame or bento grid.",
+        "the narration calls for: each photograph inside an animated card, frame or bento grid, each clip framed or full-frame B-roll.",
         "A reference is for facts and figures: when the narration states dates, sizes, statistics or other facts about a person, place, event, organisation or object that "
         "a Wikipedia article summarises, give the scene a reference whose media.query is the article's exact title (for example 'Mount Everest') and media.section is 'infobox' (the summary box) or "
         "'table' (its main table). It is shown beside or after a picture of the subject, never instead of it, usually as a supporting element in a side region (not full_frame), and the figures "
