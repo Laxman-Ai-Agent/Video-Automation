@@ -29,5 +29,6 @@ def test_the_code_generator_is_told_to_draw_a_full_frame_clip_as_the_background_
     except ma.AnimationCodegenError:
         pass
     prompt = seen[0].system_prompt
-    assert "B-ROLL" in prompt and 'placement.region is "full_frame"' in prompt and "BACKGROUND of its shot" in prompt and "<OffthreadVideo muted loop>" in prompt
+    assert "B-ROLL" in prompt and 'placement.region is "full_frame"' in prompt and "BACKGROUND of its shot" in prompt and "<OffthreadVideo muted>" in prompt
+    assert "NO loop prop" in prompt and "<Loop durationInFrames=" in prompt and "muted loop" not in prompt          # a loop prop does not exist on OffthreadVideo (tsc TS2322, found by a real scene)
     assert "framed card with objectFit contain" in prompt                                                       # reference pages are still never full-bleed

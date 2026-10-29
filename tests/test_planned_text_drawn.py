@@ -16,6 +16,9 @@ from VIDEO_ENGINE.stages import motion_animation, motion_planning as mp, motion_
     "<b>Tech Video</b><b>Intro</b>",                                     # in two pieces
     'const lines = ["Tech Video", "Intro!"];',
     'const w = ["Tech", "Video", "Intro."]; const other = "x";',         # punctuation at the edge of a literal
+    'const words = ["Tech", "Video", "x", "Intro"];',                    # a style literal in between
+    # the real pattern of a scene whose title is split over two shots (found by the B-roll scratch scene, 2026-10-29)
+    '<Shot1><Word text="Tech" delay={0} /><Word text="Video" delay={40} color="#38bdf8" /></Shot1><Shot2 style={{ background: "#000", position: "absolute" }}><Word text="Intro" delay={20} size={220} /></Shot2>',
 ])
 def test_a_text_drawn_as_a_phrase_or_word_by_word_counts_as_drawn(code):
     assert mp.text_is_drawn(code, "Tech Video Intro")
@@ -25,11 +28,15 @@ def test_a_text_drawn_as_a_phrase_or_word_by_word_counts_as_drawn(code):
     "const tech = video; // intro",                                      # the words only occur as identifiers and comments
     'const words = ["Tech", "Video"];',                                  # a word is missing
     'const words = ["Intro", "Video", "Tech"];',                         # wrong order
-    'const words = ["Tech", "Video", "x", "Intro"];',                    # another literal in between: not the phrase
     "",
 ])
 def test_words_that_are_not_drawn_in_order_as_literals_do_not_count(code):
     assert not mp.text_is_drawn(code, "Tech Video Intro")
+
+
+def test_words_far_apart_do_not_make_the_phrase():
+    far = 'const a = ["Tech", "Video"]; ' + " ".join(f'const s{i} = "v{i}";' for i in range(mp.WORD_GAP + 5)) + ' const b = ["Intro"];'
+    assert not mp.text_is_drawn(far, "Tech Video Intro")
 
 
 def test_a_single_word_needs_to_be_there_as_written_and_an_empty_text_is_never_drawn():

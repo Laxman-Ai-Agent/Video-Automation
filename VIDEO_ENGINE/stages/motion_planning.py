@@ -223,6 +223,7 @@ def norm(s: str) -> str:
 
 _LITERAL = re.compile(r"\"([^\"\\\n]*)\"|'([^'\\\n]*)'|`([^`\\]*)`|>([^<>{}\n]+)<")      # a string literal of the code, or the text between two JSX tags
 _EDGE_PUNCT = ".,;:!?\"'()[]{}<>-–—…“”‘’"
+WORD_GAP = 40                                                    # string literals that may sit between the first and the last word of a phrase (style values, the markup of another shot: a title can be split over shots)
 
 
 def _tokens(s: str) -> list[str]:
@@ -231,8 +232,8 @@ def _tokens(s: str) -> list[str]:
 
 def text_is_drawn(source: str, text: str) -> bool:
     """Does the scene code draw this planned on-screen text? The ONE definition (Motion Generation's own check and Motion Validation both ask it): the whole phrase as it is written (case and spacing aside), or word by word
-    for kinetic typography, where every word of the phrase is a string literal / JSX text of its own and the words follow each other (["Tech", "Video", "Intro"], <b>Tech Video</b><b>Intro</b>). Words that only occur in
-    identifiers or comments do not count."""
+    for kinetic typography, where every word of the phrase is a string literal / JSX text of its own and the words follow each other in order within WORD_GAP literals (["Tech", "Video", "Intro"], <b>Tech Video</b><b>Intro</b>,
+    <Word text="Nature" /> in one shot and <Word text="Silence" /> in the next). Words that only occur in identifiers or comments, or far apart, do not count."""
     src, want = norm((source or "").replace("&amp;", "&")), norm(text)
     if not want:
         return False
@@ -244,7 +245,17 @@ def text_is_drawn(source: str, text: str) -> bool:
     if len(words) < 2:
         return False
     stream = [t for m in _LITERAL.finditer(source or "") for t in _tokens(next(g for g in m.groups() if g is not None))]
-    return f" {' '.join(words)} " in f" {' '.join(stream)} "
+    for i, tok in enumerate(stream):
+        if tok != words[0]:
+            continue
+        k, end = i, min(len(stream), i + len(words) + WORD_GAP)
+        for w in words[1:]:
+            k = next((n for n in range(k + 1, end) if stream[n] == w), None)
+            if k is None:
+                break
+        else:
+            return True
+    return False
 
 
 def _read(path: Path):
