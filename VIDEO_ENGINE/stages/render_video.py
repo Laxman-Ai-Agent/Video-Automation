@@ -18,7 +18,7 @@ import uuid
 from pathlib import Path
 
 from SYSTEM.policies import rule_switches
-from . import config, media_probe as mprobe, motion_planning as mp, motion_validation as mv, pipeline, render, resource_library as rl, store
+from . import config, media_probe as mprobe, motion_planning as mp, motion_validation as mv, pipeline, render, resource_library as rl, sound_design, store
 from . import timeline_approval as ta
 
 SCHEMA = "1.0"
@@ -430,7 +430,8 @@ def _run_locked(pdir: Path, aspect: str, say, job_id: str, paths: dict) -> dict:
         },
     ]
     rep = {"schema_version": SCHEMA, "project_id": pdir.name, "aspect": aspect, "job_id": job_id, "status": "completed", "profile": PROFILE, "created_at": now(),
-           "input_fingerprints": {"approval": man["approval"]["approval_id"], "timeline": man["timeline"]["fingerprint"], "approved_version": fp, "dependencies": man["dependencies_fingerprint"], "manifest": man["manifest_fingerprint"]},
+           "input_fingerprints": {"approval": man["approval"]["approval_id"], "timeline": man["timeline"]["fingerprint"], "approved_version": fp, "dependencies": man["dependencies_fingerprint"], "manifest": man["manifest_fingerprint"],
+                                  "sound_design": sound_design.fingerprint(pdir, aspect)},
            "approval": man["approval"], "renderer": man["renderer"], "expected": man["expected"], "observed": observed,
            "output": {"artifact_ref": final.name, "size_bytes": size, "sha256": sha}, "previous_output": previous.name if previous.exists() else None, "verification": checks, "warnings": warnings, "errors": [],
            "carried_warnings": man["carried_warnings"], "resources": man.get("resources"), "timings_seconds": {"render_job": seconds, "x_video_length": round(seconds / exp["duration_seconds"], 2) if exp["duration_seconds"] else None},
@@ -476,7 +477,12 @@ def current_candidate(pdir: Path, aspect: str) -> dict | None:
         return None
     snap = ta.snapshot(pdir, aspect)
     approved = snap["status"] == "approved" and snap["fingerprint"] == (cand["report"].get("input_fingerprints") or {}).get("approved_version")
-    return cand if approved else None
+    return cand if approved and sound_current(pdir, aspect, cand["report"]) else None
+
+
+def sound_current(pdir: Path, aspect: str, rep: dict) -> bool:
+    """The video was rendered with the sound design as it is now (its cuts, music bed and mix version). A report without the fingerprint was made before the sound design existed: its audio is the bare narration."""
+    return (rep.get("input_fingerprints") or {}).get("sound_design") == sound_design.fingerprint(pdir, aspect)
 
 
 def state(pdir: Path, aspect: str) -> dict:
@@ -499,7 +505,7 @@ def state(pdir: Path, aspect: str) -> dict:
     name = "not_ready"
     if job and job.get("status") in ACTIVE:
         name = "running" if running else "interrupted"
-    elif cand is not None and rep and approved_now and rep["input_fingerprints"]["approved_version"] == approved_now:
+    elif cand is not None and rep and approved_now and rep["input_fingerprints"]["approved_version"] == approved_now and sound_current(pdir, aspect, rep):
         name = "completed"
     elif cand is not None and rep:
         name = "stale"                                                        # a verified video of a version that is not the approved one now

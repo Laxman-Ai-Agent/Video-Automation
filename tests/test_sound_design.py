@@ -160,3 +160,17 @@ def test_the_render_stages_the_mix_and_the_render_stage_fingerprint_follows_the_
     _bed(pdir, GOOD)
     assert llm_review.compute_stage_input_fingerprint(pdir, "render") != fp0                       # a music bed makes the Render stage stale (and with it QC and Final)
     assert llm_review.compute_stage_input_fingerprint(pdir, "assets") == llm_review.compute_stage_input_fingerprint(pdir, "assets")
+
+
+def test_a_render_made_before_the_sound_design_or_with_another_mix_is_never_reused(tmp_path, monkeypatch):
+    """Found on the real project (2026-10-29): the render agent reused out.mp4 because the approved timeline was unchanged, so the new mix never reached the video."""
+    from VIDEO_ENGINE.stages import render_video
+    pdir, nar = _project(tmp_path)
+    old_report = {"input_fingerprints": {"approved_version": "x"}}                                   # a report from before the sound design existed
+    assert not render_video.sound_current(pdir, "16:9", old_report)
+    current = {"input_fingerprints": {"approved_version": "x", "sound_design": sd.fingerprint(pdir)}}
+    assert render_video.sound_current(pdir, "16:9", current)
+    _bed(pdir, GOOD)                                                                                 # a music bed arrives: the video must be rendered again
+    assert not render_video.sound_current(pdir, "16:9", current)
+    (pdir / "timeline.json").write_text(json.dumps({"transitions": []}), encoding="utf-8")           # or a cut moves
+    assert sd.fingerprint(pdir) != current["input_fingerprints"]["sound_design"]

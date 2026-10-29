@@ -26,7 +26,7 @@ Evidence: the real render of the test project `my-first-project-01-df7f` (one fr
 | 1 | Shots + narration sync | **DONE 2026-10-27, proven on a real render** (run_9272a250) |
 | 2 | Motion kit + art direction | **option + first kit built 2026-10-29** (optional, per-project, default OFF); more kit pieces pending |
 | 3 | Real footage + images, chosen by looking at them | **built 2026-10-29** (3 new keyless providers, full-frame B-roll, contact-sheet ranking); vision call VERIFIED live 2026-10-29; NOT proven on a real project run |
-| 4 | Sound design | pending |
+| 4 | Sound design | **built and proven on the real video 2026-10-29** (whooshes + loudness -14 LUFS; music bed optional, needs a licensed file) |
 | 5 | QC that sees the frames | pending |
 | 6 | Captions + retention | pending |
 | 7 | Performance | pending |
@@ -68,8 +68,12 @@ What was built, and proven on `run_9272a250` (full detail: `docs/SESSION_STATUS.
 - **How (original plan):** video clips as full-frame B-roll shots with typography over them (not thumbnails in cards); asset ranking (`asset_collection.choose`) sends a contact sheet of the candidate pictures to a vision-capable model (one call per batch) instead of titles only; plan rule: footage-led shots when the narration is about the real world.
 - **Expected:** a real mix of footage, images and graphics from keyless sources; relevant pictures.
 
-### Phase 4 - sound design
+### Phase 4 - sound design - BUILT 2026-10-29
 Licensed music bed ducked under the narration, SFX on transitions/reveals, loudness normalised to -14 LUFS. The biggest jump in perceived "cinematic" quality per unit of work.
+- **Built:** `VIDEO_ENGINE/stages/sound_design.py` (ffmpeg only, no LLM) makes `audio_mix.wav` + `sound_design.json`: a synthesised whoosh at every cut of the approved timeline (no licence to track), an OPTIONAL music bed (`assets/music/bed.<ext>` + `bed.json` with source_url, license_name, attribution_text, commercial_use_known true; without complete provenance it is NOT used) ducked by a sidechain compressor and faded, then a two-pass loudnorm to -14 LUFS / -1.5 dBTP. The build refuses (with the numbers) a mix whose length differs from the narration by more than one frame or whose loudness misses the target. `render._render` builds it, `render.stage_audio` plays it, the nothing else in Remotion changed.
+- **Freshness (two gaps found by the real run):** the mix is part of the render fingerprint (`llm_review._stage_logic_tag("render")`, legacy `render_inputs`) AND of the render report (`input_fingerprints.sound_design`, checked by `render_video.sound_current` in `current_candidate` and `state`): without the second, the render agent reused the old `out.mp4` because the approved timeline was unchanged.
+- **Proven (project `my-first-project-01-df7f`, `run_899f7e7f`, from_stage render):** `out.mp4` audio -21.43 LUFS -> **-14.04 LUFS**, true peak -1.45 dBTP, LRA 2.0, 7 whooshes at the cuts (5.07 / 11.37 / 19.1 / 29.1 / 32.37 / 44.6 / 50.7 s), duration unchanged (59.477 s), Final QC passed_with_warnings, QC review 0.86. Tests (real ffmpeg, synthetic audio): `tests/test_sound_design.py` (loudness, peak, exact length, whoosh energy 20x at the cuts, music ducked >= 6 dB, provenance rule, rebuild only on changed inputs, render stages the mix, an old render is never reused); render_video / final_qc / m9 tests pass.
+- **Not done / limits:** nobody listened to it (the whoosh level `WHOOSH_DB` -12 and the music constants are measured, not judged by ear: tune them); NO music was used on the test project (it needs a licensed file; automatic music search is deliberately not built, an unattended pipeline cannot judge a track); only transitions get SFX (no reveal / emphasis sounds); scenes that read `useSceneData().audio` (waveforms) now see the mix. Still in the QC report from before: 5 warnings, "frames at the cut show no content" at 5 of 7 cuts (the empty-cut problem of Phase 0 still shows).
 
 ### Phase 5 - QC that sees
 The Final QC LLM review receives the thumbnail sheet and the cut frames (they already exist) plus measured metrics: shot-change rate, motion energy, text size at mobile scale, frame usage. Its findings go back as "regenerate scene N because X".
