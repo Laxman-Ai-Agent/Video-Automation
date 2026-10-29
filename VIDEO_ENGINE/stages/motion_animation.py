@@ -100,12 +100,23 @@ def lottie_manifest() -> list[dict]:
         return []
 
 
-def approved_libraries_hint() -> str:
-    """APPROVED_LIBRARIES_HINT plus the Lottie animations that really exist (so the LLM never invents a file name)."""
+# The optional motion kit (VIDEO_ENGINE/remotion/src/kit, chosen once per project at upload): a scene may import it only when the project's kit is on.
+KIT_IMPORT = re.compile(r"""["']\.\./kit(?:/[^"']*)?["']""")
+KIT_HINT = (
+    " MOTION KIT (this project has it on; import from \"../kit\"): "
+    "<CameraRig from={{scale,x,y}} to={{scale,x,y}} start={frame} duration={frames}>children</CameraRig> = a smooth push / pan of its children over a frame range (x, y in % of the canvas); "
+    "<KineticWords words={[{text, frame}]} fontSize={px} color={css} /> = words that spring in one by one, each at its own frame; "
+    "ART_DIRECTIONS (record of {name, background, text, accent, muted}: pick ONE by key and use its colours instead of the default palette) and ArtDirectionKey. "
+    "Compose scenes from these where they fit; everything else is still written from scratch."
+)
+
+
+def approved_libraries_hint(motion_kit: bool = False) -> str:
+    """APPROVED_LIBRARIES_HINT plus the Lottie animations that really exist (so the LLM never invents a file name), plus the motion kit when the project has it on."""
     lot = lottie_manifest()
     extra = (" Available Lottie files (import animationData from \"../lottie/<file>\" and render <Lottie animationData={animationData} loop />): "
              + "; ".join(f"{a['file']} = {a.get('description', a['id'])}" for a in lot) + ".") if lot else ""
-    return APPROVED_LIBRARIES_HINT + extra
+    return APPROVED_LIBRARIES_HINT + extra + (KIT_HINT if motion_kit else "")
 
 
 _IMPORT_SPECIFIER = re.compile(r"""(?:\bfrom\s+|\bimport\s+|\brequire\s*\(\s*)["']([^"']+)["']""")
@@ -149,14 +160,14 @@ def tsc_errors_by_scene(output: str) -> dict[str, list[str]]:
     return out
 
 
-def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[str]) -> str | None:
+def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[str], motion_kit: bool = False) -> str | None:
     """Ask the LLM to fix the errors of ONE scene (compiler errors, or a runtime error raised while a frame is drawn); the answer must still pass the security/import audit. None when the LLM is unavailable or answers unusably (the stage then fails with the errors)."""
     try:
         resp = llm_gateway.gateway.execute(llm_gateway.LlmGatewayRequest(
             project_id=pdir.name, stage_id="motion_gen", agent_id="motion_animation", purpose="repair", model_profile="code_generation",
             system_prompt=("You fix the errors of one Remotion scene component (TypeScript compiler errors, or an error thrown while a frame is drawn, e.g. `interpolate` needs a strictly increasing input range) "
                            "and return the COMPLETE corrected TSX only. Keep the design, text and animation; change only what the errors require "
-                           "(e.g. remove a prop the component does not have, fix a type, make an input range increasing). Approved libraries only: " + approved_libraries_hint()),
+                           "(e.g. remove a prop the component does not have, fix a type, make an input range increasing). Approved libraries only: " + approved_libraries_hint(motion_kit)),
             user_prompt=f"Scene{sid} fails with these errors:\n- " + "\n- ".join(errors[:8]) + f"\n\n```tsx\n{code}\n```",
             correlation_id=f"gen-scene-{sid}-tsc-{uuid.uuid4().hex[:6]}"))
     except Exception as e:
@@ -165,7 +176,7 @@ def repair_scene_compile_errors(pdir: Path, sid: str, code: str, errors: list[st
     if resp.status in ("blocked", "failed"):                                   # the LLM, not the code, is the blocker: say so instead of reporting the compiler errors as the cause
         raise AnimationCodegenError(f"Scene {sid}: the compile errors cannot be repaired, the LLM is unavailable: {resp.error or resp.status}")
     fixed = extract_tsx_code(resp.raw_text)
-    if fixed and f"Scene{sid}" in fixed and audit_scene_tsx_security(fixed)["passed"]:
+    if fixed and f"Scene{sid}" in fixed and audit_scene_tsx_security(fixed, motion_kit)["passed"]:
         return fixed
     return None
 
@@ -317,7 +328,7 @@ def scan_prohibited_presets(source_code: str) -> list[str]:
     return sorted(set(found))
 
 
-def audit_scene_tsx_security(source_code: str) -> dict[str, Any]:
+def audit_scene_tsx_security(source_code: str, motion_kit: bool = False) -> dict[str, Any]:
     """Static security and safety scan for custom React/TSX animation code.
     Rejects:
     - Prohibited presets
@@ -327,6 +338,7 @@ def audit_scene_tsx_security(source_code: str) -> dict[str, Any]:
     - Direct filesystem access (fs, fs/promises)
     - Secret and token leakage
     - Path traversal in imports
+    - Imports of the motion kit (../kit) unless the project's motion kit is on
     """
     findings: list[str] = []
 
@@ -358,6 +370,8 @@ def audit_scene_tsx_security(source_code: str) -> dict[str, Any]:
     # 2b. Only approved (installed, frame-safe) libraries may be imported
     if (extra := unapproved_imports(source_code)):
         findings.append(f"Unapproved library import: {', '.join(extra)}")
+    if not motion_kit and KIT_IMPORT.search(source_code):
+        findings.append("Motion kit import (../kit) but the project's motion kit is off: write the scene from scratch")
     listed = {a["file"] for a in lottie_manifest()}
     if (unknown := sorted({n for n in _LOTTIE_IMPORT.findall(source_code) if n not in listed})):
         findings.append(f"Lottie file without a licence record (not in src/lottie/manifest.json): {', '.join(unknown)}")
@@ -648,6 +662,7 @@ def generate_scene_tsx_via_llm(
     run_id: str | None = None,
     texts: list[str] | None = None,
     shots: list[dict[str, Any]] | None = None,
+    motion_kit: bool = False,
 ) -> tuple[str, dict[str, Any]]:
     """Generates scene TSX source code via canonical LLM Gateway with bounded diagnostic repair.
     Employs skills and shared memory context, strict security auditing, and fallbacks.
@@ -675,7 +690,7 @@ def generate_scene_tsx_via_llm(
         "Strict rules:\n"
         "1. Exactly 30 fps frame-accuracy.\n"
         "2. Use Remotion primitives (AbsoluteFill, useCurrentFrame, useVideoConfig, interpolate, spring) and, when the scene needs them, ONLY these approved libraries: "
-        + approved_libraries_hint() + " Every animation is driven by the current frame (the library's own animation/timers are OFF); no 3D, WebGL, shaders or canvas; never fetch anything.\n"
+        + approved_libraries_hint(motion_kit) + " Every animation is driven by the current frame (the library's own animation/timers are OFF); no 3D, WebGL, shaders or canvas; never fetch anything.\n"
         "3. NEVER import or use prohibited presets: MotionTextLayer, MotionScene, HighlightText, IconPop, etc.\n"
         "4. NEVER use shell commands, eval, network calls (fetch, axios), or filesystem access.\n"
         "5. Keep content inside the safe area: the root AbsoluteFill has padding of at least 5% (e.g. padding: \"8%\") or centers its content (justifyContent: \"center\").\n"
@@ -765,7 +780,7 @@ def generate_scene_tsx_via_llm(
             raw_code += f"\nexport const Scene{sid}: React.FC = () => <AbsoluteFill />;\nexport default Scene{sid};\n"
 
     # Security & Prohibited preset audit
-    audit = audit_scene_tsx_security(raw_code)
+    audit = audit_scene_tsx_security(raw_code, motion_kit)
     attempt = 1
     max_repair = 2
 
@@ -779,7 +794,7 @@ def generate_scene_tsx_via_llm(
             )
             gen_meta["retries_prevented"] = True
             raw_code = generate_scene_tsx(sid, duration_s, headline, subtext, safe_visual_elements, palette, aspect)
-            audit = audit_scene_tsx_security(raw_code)
+            audit = audit_scene_tsx_security(raw_code, motion_kit)
             break
 
         attempt += 1
@@ -813,7 +828,7 @@ def generate_scene_tsx_via_llm(
         if not repaired_code or f"Scene{sid}" not in repaired_code:
             break
         raw_code = repaired_code
-        audit = audit_scene_tsx_security(raw_code)
+        audit = audit_scene_tsx_security(raw_code, motion_kit)
 
     if not audit["passed"]:
         raise AnimationCodegenError(
@@ -844,7 +859,7 @@ def generate_scene_tsx_via_llm(
                              f"```tsx\n{raw_code}\n```"),
                 correlation_id=f"{corr_id}-quality"))
             fixed = extract_tsx_code(fix.raw_text) if fix.status not in ("blocked", "failed") else ""
-            if fixed and f"Scene{sid}" in fixed and audit_scene_tsx_security(fixed)["passed"] and len(quality_issues(fixed)) < len(issues):
+            if fixed and f"Scene{sid}" in fixed and audit_scene_tsx_security(fixed, motion_kit)["passed"] and len(quality_issues(fixed)) < len(issues):
                 raw_code = fixed
                 gen_meta["repaired"] = True
         except Exception as e:
@@ -949,6 +964,7 @@ def generate_custom_motion_code(
     reporter = StructuredGenerationReporter()
 
     prev_fps = previous_fingerprints(pdir, sfx)
+    motion_kit = store.motion_kit(pdir)
     scenes_manifest = []
     template_warnings = []
     all_clean = True
@@ -1003,7 +1019,7 @@ def generate_custom_motion_code(
 
         scene_file = out_dir / f"scene_{sid}.tsx"
         shots = vp_sc.get("shots") or []
-        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots)
+        scene_fp = scene_input_fingerprint(duration=round(duration, 3), headline=headline, subtext=subtext, texts=texts, elements=transformed_visual_els, palette=palette, aspect=aspect, shots=shots, **({"motion_kit": True} if motion_kit else {}))       # the key exists only when on: a project without the kit keeps the fingerprints it has
         if scene_file.exists() and prev_fps.get(str(sid)) == scene_fp:                  # the stored code was written from exactly these inputs; any change of the plan, the pictures or the texts writes it again
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
@@ -1022,6 +1038,7 @@ def generate_custom_motion_code(
                     run_id=run_id,
                     texts=texts,
                     shots=shots,
+                    motion_kit=motion_kit,
                 )
         else:
             # Generate TSX via LLM Gateway with bounded repair loop
@@ -1037,6 +1054,7 @@ def generate_custom_motion_code(
                 run_id=run_id,
                 texts=texts,
                 shots=shots,
+                motion_kit=motion_kit,
             )
 
         all_skills_used.update(gen_meta.get("skills_referenced", []))
@@ -1081,7 +1099,7 @@ def generate_custom_motion_code(
             "missing_required_elements": missing_req,
             "warnings": scene_warnings,
             "compile_status": "pending",
-            "security_audit": audit_scene_tsx_security(code),
+            "security_audit": audit_scene_tsx_security(code, motion_kit),
             "generation": gen_meta,
             "preview_result": {
                 "passed": preview_res.passed,
@@ -1133,12 +1151,12 @@ def generate_custom_motion_code(
                         scene_file = out_dir / f"scene_{sid_s}.tsx"
                         if sc_man is None or not scene_file.exists():
                             continue
-                        fixed = repair_scene_compile_errors(pdir, sid_s, scene_file.read_text(encoding="utf-8"), errs)
+                        fixed = repair_scene_compile_errors(pdir, sid_s, scene_file.read_text(encoding="utf-8"), errs, motion_kit)
                         if fixed:
                             scene_file.write_text(fixed, encoding="utf-8")
                             (remotion_gen_dir / f"scene_{sid_s}.tsx").write_text(fixed, encoding="utf-8")
                             sc_man["source_sha256"] = file_sha256(scene_file)
-                            sc_man["security_audit"] = audit_scene_tsx_security(fixed)
+                            sc_man["security_audit"] = audit_scene_tsx_security(fixed, motion_kit)
                             sc_man["generation"]["repaired"] = True
                             sc_man["generation"]["compile_repairs"] = sc_man["generation"].get("compile_repairs", 0) + 1
                     ok, output = run_tsc(remotion_dir)

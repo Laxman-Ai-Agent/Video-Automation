@@ -99,7 +99,7 @@ def test_a_type_error_is_sent_back_to_the_llm_and_recompiled(tmp_path, monkeypat
     results = iter([(False, "src/generated/scene_1.tsx(3,1): error TS2322: bad prop\n"), (True, "")])
     monkeypatch.setattr(ma, "run_tsc", lambda remotion_dir: next(results))
     repairs = []
-    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda pdir, sid, code, errs: repairs.append((sid, errs)) or code + "\n// fixed\n")
+    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda pdir, sid, code, errs, motion_kit=False: repairs.append((sid, errs)) or code + "\n// fixed\n")
     manifest = ma.generate_custom_motion_code(d, "16:9")
     assert [r[0] for r in repairs] == ["1"] and "bad prop" in repairs[0][1][0]
     assert manifest["status"] == "generated" and manifest["scenes"][0]["generation"]["compile_repairs"] == 1
@@ -124,7 +124,7 @@ def test_a_scene_that_throws_when_drawn_is_sent_back_to_the_llm_and_drawn_again(
     results = iter([{"1": [RUNTIME_ERROR]}, {}])
     monkeypatch.setattr(ma, "render_errors_by_scene", lambda *a: next(results))
     repairs = []
-    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda pdir, sid, code, errs: repairs.append((sid, errs)) or code + "\n// fixed\n")
+    monkeypatch.setattr(ma, "repair_scene_compile_errors", lambda pdir, sid, code, errs, motion_kit=False: repairs.append((sid, errs)) or code + "\n// fixed\n")
     manifest = ma.generate_custom_motion_code(d, "16:9")
     assert [r[0] for r in repairs] == ["1"] and "inputRange" in repairs[0][1][0]
     assert manifest["status"] == "generated" and manifest["scenes"][0]["generation"]["compile_repairs"] == 1

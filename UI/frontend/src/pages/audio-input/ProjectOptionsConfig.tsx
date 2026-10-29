@@ -2,6 +2,7 @@ import React from 'react';
 import { Tv, Check, Sliders } from 'lucide-react';
 import { MediaMix } from '../../services/mediaMix';
 import { AiPicturesOption } from '../../components/AiPicturesOption';
+import { MotionKitOption } from '../../components/MotionKitOption';
 
 export interface ProjectOptionsConfigProps {
   aspect: '16:9' | '9:16';
@@ -198,6 +199,7 @@ export const ProjectOptionsConfig: React.FC<ProjectOptionsConfigProps> = ({
         </div>
 
         <AiPicturesOption value={media} onChange={setMedia} disabled={submitting} />
+        <MotionKitOption value={media} onChange={setMedia} disabled={submitting} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px' }}>
           <label style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', cursor: 'pointer' }}>

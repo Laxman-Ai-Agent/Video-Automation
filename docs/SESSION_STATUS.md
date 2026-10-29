@@ -2,7 +2,14 @@
 
 **Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
 
-## Latest: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
+## Latest: Phase 2 started - the optional motion kit (2026-10-29), built, NOT committed yet
+`docs/ROADMAP.md` Phase 2 has the full text. The per-project option `motion_kit` (own key in `project.json`, default OFF, set at upload, no route changes it) works end to end:
+upload checkbox -> `POST /projects` -> `store.motion_kit` -> `motion_animation` (the audit rejects `../kit` imports unless on, the LLM is told about the kit only when on, the scene
+fingerprint gets a `motion_kit` key only when on). First kit in `VIDEO_ENGINE/remotion/src/kit/` (`CameraRig`, `KineticWords`, `ART_DIRECTIONS`). Checked: `tests/test_motion_kit.py` (5 tests),
+the touched modules' tests, Remotion `tsc` and frontend `tsc` clean. NOT done: a real kit-on run (no LLM call was made), the upload page in a browser (the backend has no `--reload`: restart it
+when no job runs). Next: grow the kit, pick an art direction per video, prove it on a new kit-on project.
+
+## Earlier: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
 `docs/ROADMAP.md` section 3 item 6 is closed - full detail is there. Short version: every one of the 16 modules
 in `tests/conftest.py`'s `LIVE_UI_MODULES` now passes for real reasons against the live app, run together
 (`A2V_BROWSER_TESTS=1 pytest tests -m live_ui`), except the one real ~8-minute full-pipeline visible-browser test

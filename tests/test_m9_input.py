@@ -100,7 +100,7 @@ def test_projects_made_before_aspect_and_audio_existed_read_unchanged(client):
     old = {"id": "old-one", "name": "Old", "created": "2026-01-01T00:00:00", "state": "done"}
     (pdir / "project.json").write_text(json.dumps(old), encoding="utf-8")
     got = client.get("/projects/old-one").json()
-    assert got == {**old, "aspect": None, "audio": None, "use_images": True, "motion_branch": False, "reusable_motion_templates": True, "media": None}      # a project made before the Use Images setting keeps the image workflow; one made before the media mix has none (defaults apply)
+    assert got == {**old, "aspect": None, "audio": None, "use_images": True, "motion_branch": False, "reusable_motion_templates": True, "media": None, "motion_kit": False}      # a project made before the Use Images setting keeps the image workflow; one made before the media mix has none (defaults apply)
     assert json.loads((pdir / "project.json").read_text(encoding="utf-8")) == old        # the file itself is never rewritten by a read
     assert post(client).status_code == 201
     assert json.loads((pdir / "project.json").read_text(encoding="utf-8")) == old        # creating another project leaves it alone

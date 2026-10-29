@@ -28,6 +28,7 @@ class ProjectInfo(BaseModel):
     motion_branch: bool = False                        # the run has the Motion Planning -> Motion Generation branch (projects made before it existed: false)
     reusable_motion_templates: bool = True             # Reusable Motion Templates toggle: True = Template Mode, False = Custom Code Mode
     media: MediaMix | None = None                      # the media settings chosen at upload (SYSTEM/core/media_kinds.py); projects made before it existed have none (defaults apply)
+    motion_kit: bool = False                           # the optional motion kit (VIDEO_ENGINE/remotion/src/kit) is on; chosen at upload, locked afterwards
     audio: AudioRef | None = None
 
 

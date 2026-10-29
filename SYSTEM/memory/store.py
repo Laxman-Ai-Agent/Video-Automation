@@ -62,7 +62,7 @@ def write_info(pdir: Path, info: dict) -> None:
 ASPECTS = ("9:16", "16:9")
 
 
-def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None) -> Path:
+def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None, motion_kit: bool = False) -> Path:
     media = media_kinds.normalise(media)                  # ValueError before anything is made: the media settings are set here, at upload, and never change afterwards
     pid = slug(name)
     while (config.PROJECTS_DIR / pid).exists():
@@ -76,8 +76,14 @@ def create(name: str, aspect: str | None = None, reusable_motion_templates: bool
     info["motion_branch"] = True                          # new projects run the Motion Planning -> Motion Generation branch
     info["reusable_motion_templates"] = bool(reusable_motion_templates)
     info["media"] = media
+    info["motion_kit"] = bool(motion_kit)                 # set here, at upload, never afterwards (own key, not in `media`: the Visual Plan fingerprint hashes `media` and does not depend on the kit)
     write_info(pdir, info)
     return pdir
+
+
+def motion_kit(pdir: Path) -> bool:
+    """Is the optional motion kit on for this project? Off by default and for every project made before the option existed."""
+    return read_info(pdir).get("motion_kit", False) is True
 
 
 def media(pdir: Path) -> dict:

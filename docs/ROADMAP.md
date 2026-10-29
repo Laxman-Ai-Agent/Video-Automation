@@ -24,7 +24,7 @@ Evidence: the real render of the test project `my-first-project-01-df7f` (one fr
 |---|---|---|
 | 0 | Reliability fixes | **DONE 2026-10-27** |
 | 1 | Shots + narration sync | **DONE 2026-10-27, proven on a real render** (run_9272a250) |
-| 2 | Motion kit + art direction | pending, design decided 2026-10-28 (optional, per-project, default OFF) |
+| 2 | Motion kit + art direction | **option + first kit built 2026-10-29** (optional, per-project, default OFF); more kit pieces pending |
 | 3 | Real footage + images, chosen by looking at them | pending, NOT blocked (keyless providers only) |
 | 4 | Sound design | pending |
 | 5 | QC that sees the frames | pending |
@@ -58,7 +58,8 @@ What was built, and proven on `run_9272a250` (full detail: `docs/SESSION_STATUS.
   - CLAUDE.md's Custom Code Mode line now reads "...permanently removed, unless the project's motion-kit option is on."
 - **How:** a small vetted kit in `VIDEO_ENGINE/remotion/src/kit/`: camera rig (pan, push, parallax, rack focus, motion blur), kinetic typography engine (word by word, masks, emphasis, driven by timestamps), transitions chosen by narrative role (whip-pan, match cut, zoom-through, light leak), maps (`public/geo`), charts (Nivo/ECharts), lower thirds, several background style families. Each video picks one of several art directions (palette, typography, grain, texture), so not every video is dark navy.
 - **Expected:** consistent professional motion, fewer tokens, fewer compile retries, for projects that opt in; zero change for projects that don't.
-- **Next:** implement the option (schema, upload UI, fingerprint, allowlist gated by the option) - starts after the current task (the 16 live-UI tests) is committed and pushed.
+- **Built (2026-10-29):** the option is its own `project.json` key `motion_kit` (NOT inside `media`: the Visual Plan fingerprint hashes `media` and does not depend on the kit), set by `POST /projects` form field `motion_kit`, read by `store.motion_kit(pdir)`, shown on the project as `ProjectInfo.motion_kit`, no route changes it. The upload page has a "Motion kit" checkbox (`MotionKitOption.tsx`). In `motion_animation.py` a scene's `../kit` import is rejected by the audit unless the kit is on (`KIT_IMPORT`), the kit is described to the LLM only when on (`KIT_HINT`), and the scene fingerprint gets a `motion_kit` key only when on (so existing projects keep their fingerprints and their code). First kit in `VIDEO_ENGINE/remotion/src/kit/`: `CameraRig` (push/pan), `KineticWords` (words spring in at their own frames), `ART_DIRECTIONS` (5 looks). Tests: `tests/test_motion_kit.py`.
+- **Next:** grow the kit (transitions by narrative role, maps, charts, lower thirds, more art directions), have the planner/codegen pick an art direction per video, and prove it on a real render of a NEW kit-on project (not run yet: needs a fresh run).
 
 ### Phase 3 - real footage and images, chosen intelligently
 - **Keyless only (the user, 2026-10-28):** there are no paid API keys and there will not be any. Phase 3 runs on keyless sources only; it is NOT blocked. The keyless providers already in `VIDEO_ENGINE/stages/stock.py` stay: NASA, Wikimedia Commons, Openverse, Internet Archive.
