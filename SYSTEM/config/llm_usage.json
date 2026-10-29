@@ -32839,6 +32839,25 @@
       "total_tokens": 3379,
       "cost_usd": 0.017589,
       "cost_inr": 1.51
+    },
+    {
+      "id": "be_cbe4c39af0575796",
+      "session_id": "cbe4c39af0575796",
+      "timestamp": "2026-10-29T18:13:12.404877+00:00",
+      "source": "backend_api",
+      "provider": "claude_cli",
+      "provider_name": "Claude Code (CLI)",
+      "model": "claude-sonnet-5-5",
+      "task": "qc:review",
+      "is_subscription": true,
+      "tracking_mode": "actual_recorded",
+      "input_tokens": 3075,
+      "output_tokens": 689,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 3764,
+      "cost_usd": 0.01956,
+      "cost_inr": 1.68
     }
   ]
 }
