@@ -221,6 +221,28 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s or "").strip().casefold()
 
 
+_LITERAL = re.compile(r"\"([^\"\\\n]*)\"|'([^'\\\n]*)'|`([^`\\]*)`|>([^<>{}\n]+)<")      # a string literal of the code, or the text between two JSX tags
+_EDGE_PUNCT = ".,;:!?\"'()[]{}<>-–—…“”‘’"
+
+
+def _tokens(s: str) -> list[str]:
+    return [t for t in (w.strip(_EDGE_PUNCT) for w in norm(s).split()) if t]
+
+
+def text_is_drawn(source: str, text: str) -> bool:
+    """Does the scene code draw this planned on-screen text? The ONE definition (Motion Generation's own check and Motion Validation both ask it): the whole phrase as it is written (case and spacing aside), or word by word
+    for kinetic typography, where every word of the phrase is a string literal / JSX text of its own and the words follow each other (["Tech", "Video", "Intro"], <b>Tech Video</b><b>Intro</b>). Words that only occur in
+    identifiers or comments do not count."""
+    src, want = norm((source or "").replace("&amp;", "&")), norm(text)
+    if not want or want in src:
+        return bool(want)
+    words = _tokens(want)
+    if len(words) < 2:
+        return False
+    stream = [t for m in _LITERAL.finditer(source or "") for t in _tokens(next(g for g in m.groups() if g is not None))]
+    return f" {' '.join(words)} " in f" {' '.join(stream)} "
+
+
 def _read(path: Path):
     try:
         return json.loads(path.read_text(encoding="utf-8"))

@@ -23,7 +23,7 @@ from . import config, live_steps, motion_generation as mg, motion_planning as mp
 
 SCHEMA = "1.0"
 VERSION = 1                                    # the validator (structure of the report, how the stages run)
-RULE_SET = "1.2"                               # bump when a rule's meaning changes (part of every fingerprint and of every stage cache key); 1.2: the shots of a scene (preview.shots_sampled, preview.shot_changes)
+RULE_SET = "1.3"                               # bump when a rule's meaning changes (part of every fingerprint and of every stage cache key); 1.2: the shots of a scene (preview.shots_sampled, preview.shot_changes); 1.3: a planned text may be drawn word by word (text.planned_text_drawn)
 EPS = mp.EPS
 READY = ("ready", "ready_with_warnings")
 STAGES = (

@@ -199,7 +199,7 @@ def test_deterministic_12_stages_preserved():
     assert stage_ids == expected
     assert mv.SCHEMA == "1.0"
     assert mv.VERSION == 1
-    assert mv.RULE_SET == "1.1"      # 1.1: per-scene checks of generated-code scenes (layout, planned text)
+    assert mv.RULE_SET == "1.3"      # 1.1: per-scene checks of generated-code scenes (layout, planned text); 1.2: shots; 1.3: a planned text may be drawn word by word
 
 
 def test_visual_quality_assessor_heuristics(tmp_path: Path):

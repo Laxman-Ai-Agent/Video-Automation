@@ -589,9 +589,8 @@ def stage_audio_text_sync(x: X, v: V) -> None:
     for s in x.scenes():
         sid = sid_of(s["id"])
         if (cc := x.custom_code(s)) is not None and cc[1] is not None:       # generated code: the planned on-screen text must be in the source
-            src = mp.norm(cc[1].replace("&amp;", "&"))
             for content, req in planned.get(s["id"], []):
-                v.check(S, "text.planned_text_drawn", mp.norm(content) in src, "error" if req else "warning", f"{sid}: the planned text '{content}' is not in the generated code", sid, mp.norm(content)[:40],
+                v.check(S, "text.planned_text_drawn", mp.text_is_drawn(cc[1], content), "error" if req else "warning", f"{sid}: the planned text '{content}' is not in the generated code", sid, mp.norm(content)[:40],
                         {"required": req}, "motion_generation", "generate the scene again")
         for l in x.text_layers(s):
             txt, at = l.get("text", ""), l.get("at", s["start"])

@@ -29,7 +29,7 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from . import asset_collection, config, llm_gateway, llm_review, shared_memory, skill_registry, store
+from . import asset_collection, config, llm_gateway, llm_review, motion_planning, shared_memory, skill_registry, store
 from SYSTEM.core import media_kinds as mk
 from SYSTEM.core.resilience import CREDENTIAL_KINDS, redact_secrets
 
@@ -843,7 +843,7 @@ def generate_scene_tsx_via_llm(
     def quality_issues(code: str) -> list[str]:
         """What the downstream validation would flag in this code: required elements not drawn, planned text missing, the preview verifier's layout findings."""
         out = [f"the planned element '{i}' has no node with data-element-id=\"{i}\"" for i in missing_element_ids(code, ids) if i in required_ids]
-        out += [f"the planned on-screen text '{t}' is not drawn verbatim" for t in texts if t and t not in code]
+        out += [f"the planned on-screen text '{t}' is not drawn (as one string, or word by word as separate string literals in order)" for t in texts if t and not motion_planning.text_is_drawn(code, t)]
         out += scene_self_fades(code, dur_frames)
         out += missing_shot_sequences(code, shots or [])
         from SYSTEM.agents.video_generation_agents.motion_animation.animation_intelligence import VisualPreviewVerifier
