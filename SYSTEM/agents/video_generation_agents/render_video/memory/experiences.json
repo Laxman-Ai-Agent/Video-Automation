@@ -1,9 +1,32 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-27T16:39:07.216609+00:00",
-  "total_experiences": 38,
+  "updated_at": "2026-10-29T16:03:39.307280+00:00",
+  "total_experiences": 39,
   "experiences": {
+    "exp-render_video-020b3c2dca": {
+      "experience_id": "exp-render_video-020b3c2dca",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-c94de79e06",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 29765938,
+        "sha256_short": "84de40119fc4",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T16:03:39.299282+00:00",
+      "schema_version": 1
+    },
     "exp-render_video-027d470a17": {
       "experience_id": "exp-render_video-027d470a17",
       "agent_id": "render_video",

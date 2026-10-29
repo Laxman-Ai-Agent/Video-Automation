@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-27T16:26:07.414554+00:00",
+  "updated_at": "2026-10-29T16:10:37.520139+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -5313,6 +5313,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-6873dabf4fe5": {
+      "memory_id": "mem-6873dabf4fe5",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 8, \"elements_generated\": 34, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "04e9eb0ee35863ea3045ef772a01cce3303ad0cd10308c4b52939f0b1994e58a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-29T15:41:51.154416+00:00",
+      "updated_at": "2026-10-29T15:41:51.154416+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-68e68c6823db": {
