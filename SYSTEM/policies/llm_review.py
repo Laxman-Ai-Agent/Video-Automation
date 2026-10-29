@@ -175,12 +175,21 @@ def stage_output_files(pdir: Path, stage: str, aspect: str = "16:9") -> list[Pat
     return []
 
 
+def _stage_logic_tag(stage: str) -> str:
+    """The version of a stage's OWN logic where a change must make its stored result stale although no input file changed (the planner's instructions and rules: visual_planning.VERSION).
+    Without it the resume plan reuses a plan made under the old instructions and every stage after it."""
+    if stage == "planning":
+        from VIDEO_ENGINE.stages import visual_planning          # imported here: that module imports this one
+        return f"|plan{visual_planning.VERSION}"
+    return ""
+
+
 def compute_stage_input_fingerprint(pdir: Path, stage: str, aspect: str = "16:9") -> str:
     files = stage_input_files(pdir, stage, aspect)
     hashes = [f"{f.name}:{_file_hash(f)}" for f in files]
     mode = "template" if store.reusable_motion_templates(pdir) else "custom_code"
     asp_tag = aspect if stage in ASPECT_DEPENDENT_STAGES else "common"
-    return _sha("|".join(hashes) + f"|{asp_tag}|{mode}|v{VERSION}" + (f"|e{EVIDENCE_REVISION[stage]}" if stage in EVIDENCE_REVISION else ""))
+    return _sha("|".join(hashes) + f"|{asp_tag}|{mode}|v{VERSION}" + (f"|e{EVIDENCE_REVISION[stage]}" if stage in EVIDENCE_REVISION else "") + _stage_logic_tag(stage))
 
 
 def compute_stage_output_fingerprint(pdir: Path, stage: str, aspect: str = "16:9") -> str:
