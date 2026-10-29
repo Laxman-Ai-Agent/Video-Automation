@@ -12,8 +12,9 @@ when no job runs). Next: grow the kit, pick an art direction per video, prove it
 ## Phase 3 built (2026-10-29), not proven on a real run
 Details in `docs/ROADMAP.md` Phase 3. Short: `stock.py` has `inaturalist`, `met`, `artic` (keyless, CC0 / CC BY / public domain only, hosts allow-listed); the planner may use a clip as full-frame B-roll
 (`visual_planning.VERSION` 4: existing plans are made again on their next run); `asset_collection.choose` sends a contact sheet of the candidates' previews to ONE ranking call
-(`LlmGatewayRequest.images`; only Claude Code can look, otherwise titles-only). The pipeline's `claude` CLI login had EXPIRED when I tried a live vision probe ("OAuth session expired"): run `claude auth login`
-(with the pipeline's `CLAUDE_CONFIG_DIR`), then try one `llm_client._call_claude_cli(..., images=[a jpg])` before trusting the ranking. The motion-kit option (Phase 2) is committed (`4d0cca5`).
+(`LlmGatewayRequest.images`; only Claude Code can look, otherwise titles-only). The vision ranking is VERIFIED live (the CLI had to be signed in again with `claude auth login`; it is now logged in as `laxmand7221@gmail.com` in the default config folder `C:\Users\dprwe\.claude`):
+a real contact sheet with wrong titles still gave the right pick. Still open: real provider APIs, a real run with B-roll, restart the backend (no job running) to load the Phase 2/3 code.
+The motion-kit option (Phase 2) is committed (`4d0cca5`).
 
 ## Earlier: the 16 live-UI Playwright tests, DONE and pushed (2026-10-28)
 `docs/ROADMAP.md` section 3 item 6 is closed - full detail is there. Short version: every one of the 16 modules
