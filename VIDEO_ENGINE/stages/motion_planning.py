@@ -234,8 +234,12 @@ def text_is_drawn(source: str, text: str) -> bool:
     for kinetic typography, where every word of the phrase is a string literal / JSX text of its own and the words follow each other (["Tech", "Video", "Intro"], <b>Tech Video</b><b>Intro</b>). Words that only occur in
     identifiers or comments do not count."""
     src, want = norm((source or "").replace("&amp;", "&")), norm(text)
-    if not want or want in src:
-        return bool(want)
+    if not want:
+        return False
+    if len(want) <= 3:                                           # a short text ("5G") must stand alone, not sit inside a name such as m5Gx
+        return re.search(rf"(?<![A-Za-z0-9_]){re.escape(want)}(?![A-Za-z0-9_])", src) is not None
+    if want in src:
+        return True
     words = _tokens(want)
     if len(words) < 2:
         return False

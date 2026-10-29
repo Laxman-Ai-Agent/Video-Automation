@@ -25,6 +25,8 @@ from typing import Any, Literal
 
 from PIL import Image, ImageFilter, ImageStat
 
+from VIDEO_ENGINE.stages import motion_planning
+
 logger = logging.getLogger("motion_validation.intelligence")
 
 # Canonical machine-readable defect categories
@@ -399,14 +401,6 @@ class VisualQualityAssessor:
             }
 
 
-def _text_is_drawn(content: str, tsx_code: str) -> bool:
-    """A planned text is drawn when it appears word for word in the scene code. A short text ("5G", "6G") must stand alone (not inside a name such as `m5Gx`), a longer one is found as a substring."""
-    snippet = content[:20]
-    if len(snippet) > 3:
-        return snippet in tsx_code
-    return re.search(rf"(?<![A-Za-z0-9_]){re.escape(snippet)}(?![A-Za-z0-9_])", tsx_code) is not None
-
-
 class SemanticAlignmentEngine:
     """Verifies that generated motion components faithfully represent the visual plan
 
@@ -490,7 +484,7 @@ class SemanticAlignmentEngine:
                 found = False
                 if tsx_code:
                     if el_type in ("text", "label") and content:
-                        found = _text_is_drawn(content, tsx_code)          # Motion Generation is asked to draw the planned texts verbatim, not to tag them with their element id
+                        found = motion_planning.text_is_drawn(tsx_code, content)          # the ONE definition (also Motion Generation's and the validator's): the planned text is drawn as a phrase or word by word, not tagged with its element id
                     elif el_id:
                         found = el_id in tsx_code
                     elif content and len(content) > 3:

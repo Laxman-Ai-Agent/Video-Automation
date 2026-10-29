@@ -43,3 +43,13 @@ def test_telugu_words_drawn_one_by_one_count_too():
 
 def test_both_checks_use_the_shared_definition():
     assert "text_is_drawn" in inspect.getsource(motion_validation_rules) and "text_is_drawn" in inspect.getsource(motion_animation)
+
+
+def test_a_short_text_must_stand_alone_not_sit_inside_a_name():                      # the rule Motion Validation's semantic check had on its own, now part of the one definition
+    assert mp.text_is_drawn("const m9Zx = 1;\n<div>\n  5G\n</div>", "5G")
+    assert not mp.text_is_drawn("const m9Zx = 1;", "9Z") and not mp.text_is_drawn("nothing", "7Q")
+
+
+def test_the_semantic_check_no_longer_has_a_private_copy():
+    from SYSTEM.agents.video_generation_agents.motion_timeline_validation import validation_intelligence as vi
+    assert not hasattr(vi, "_text_is_drawn") and "motion_planning.text_is_drawn" in inspect.getsource(vi)
