@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-29T17:53:34.307563+00:00",
+  "updated_at": "2026-10-29T18:32:09.875481+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -252,6 +252,38 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-03a7f893175d": {
+      "memory_id": "mem-03a7f893175d",
+      "title": "Experience exp_4650c664b767: Delegated action to verification_and_test",
+      "content": "Goal: Delegated action to verification_and_test | Status: succeeded | Agents: verification_and_test",
+      "kind": "pattern",
+      "scope": "agent",
+      "owner": "main_architecture_agent",
+      "status": "proposed",
+      "evidence": [
+        {
+          "ref_type": "experience",
+          "ref_id": "exp_4650c664b767",
+          "status": "succeeded"
+        }
+      ],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "fca038463b1dbe2301c95c0cceeec10383e1711168562f154010676b264d5178",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "main_architecture_agent"
+      ],
+      "created_at": "2026-10-29T18:32:09.875481+00:00",
+      "updated_at": "2026-10-29T18:32:09.875481+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "test_coordination"
       }
     },
     "mem-03bf8ef589a6": {
@@ -3158,6 +3190,38 @@
       "review_by": null,
       "metadata": {
         "project_id": "my-first-project-01-df7f"
+      }
+    },
+    "mem-3c77441b20be": {
+      "memory_id": "mem-3c77441b20be",
+      "title": "Experience exp_462ea88dd71d: Delegated action to capability_finder",
+      "content": "Goal: Delegated action to capability_finder | Status: succeeded | Agents: capability_finder",
+      "kind": "pattern",
+      "scope": "agent",
+      "owner": "main_architecture_agent",
+      "status": "proposed",
+      "evidence": [
+        {
+          "ref_type": "experience",
+          "ref_id": "exp_462ea88dd71d",
+          "status": "succeeded"
+        }
+      ],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "4da13add6a66413ce2305d5c36ef5ffbde60cfa913f470989e302f7338023719",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "main_architecture_agent"
+      ],
+      "created_at": "2026-10-29T18:32:02.275175+00:00",
+      "updated_at": "2026-10-29T18:32:02.275175+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "test_reorg"
       }
     },
     "mem-3d23e837b865": {
@@ -7831,6 +7895,38 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-9a4438a1ef12": {
+      "memory_id": "mem-9a4438a1ef12",
+      "title": "Experience exp_a2b67f268857: Delegated action to skill_factory",
+      "content": "Goal: Delegated action to skill_factory | Status: succeeded | Agents: skill_factory",
+      "kind": "pattern",
+      "scope": "agent",
+      "owner": "main_architecture_agent",
+      "status": "proposed",
+      "evidence": [
+        {
+          "ref_type": "experience",
+          "ref_id": "exp_a2b67f268857",
+          "status": "succeeded"
+        }
+      ],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "12bb21713a04cd5d1b704b08300be29949bbc44651a0f1b676c697845a990791",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "main_architecture_agent"
+      ],
+      "created_at": "2026-10-29T18:32:02.423996+00:00",
+      "updated_at": "2026-10-29T18:32:02.423996+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "test_reorg"
+      }
+    },
     "mem-9a829e0e8ef4": {
       "memory_id": "mem-9a829e0e8ef4",
       "title": "Experience exp_170cc7cf4889: Delegated action to skill_factory",
@@ -7952,6 +8048,34 @@
       "metadata": {
         "project_id": "test_reorg"
       }
+    },
+    "mem-9c1254f6561d": {
+      "memory_id": "mem-9c1254f6561d",
+      "title": "Unverified Fast Pace Fact",
+      "content": "Pacing should always run at 2.0x without pause.",
+      "kind": "heuristic",
+      "scope": "global",
+      "owner": "experimental_agent",
+      "status": "proposed",
+      "evidence": [
+        {
+          "ref": "exp_run_1"
+        }
+      ],
+      "confidence": 0.5,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "f9a1d70c8b8f41052ad7a6efd4fbffa2be2e3b8232da2519534310a97ee8d0b2",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "*"
+      ],
+      "created_at": "2026-10-29T18:30:06.334777+00:00",
+      "updated_at": "2026-10-29T18:30:06.334777+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {}
     },
     "mem-9c4f45e9db42": {
       "memory_id": "mem-9c4f45e9db42",
@@ -9073,6 +9197,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-ad68e198d1d4": {
+      "memory_id": "mem-ad68e198d1d4",
+      "title": "Motion Animation Execution - my-first-project-01-df7f",
+      "content": "{\"project_id\": \"my-first-project-01-df7f\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 8, \"elements_generated\": 34, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "04e9eb0ee35863ea3045ef772a01cce3303ad0cd10308c4b52939f0b1994e58a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-29T18:22:25.904544+00:00",
+      "updated_at": "2026-10-29T18:22:25.904544+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "my-first-project-01-df7f"
       }
     },
     "mem-ae297cea3589": {
@@ -12780,6 +12930,38 @@
       "verified_at": null,
       "review_by": null,
       "metadata": {}
+    },
+    "mem-ea8e3ba9e0bf": {
+      "memory_id": "mem-ea8e3ba9e0bf",
+      "title": "Experience exp_30ea0c319974: Delegated action to architecture_validator",
+      "content": "Goal: Delegated action to architecture_validator | Status: succeeded | Agents: architecture_validator",
+      "kind": "pattern",
+      "scope": "agent",
+      "owner": "main_architecture_agent",
+      "status": "proposed",
+      "evidence": [
+        {
+          "ref_type": "experience",
+          "ref_id": "exp_30ea0c319974",
+          "status": "succeeded"
+        }
+      ],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "2f6e46b4f72537322aef9ce82b66bd9e805799da86a98e923cd03d3af6389bec",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "main_architecture_agent"
+      ],
+      "created_at": "2026-10-29T18:32:02.784584+00:00",
+      "updated_at": "2026-10-29T18:32:02.784584+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "system"
+      }
     },
     "mem-eaf79f7cfa6f": {
       "memory_id": "mem-eaf79f7cfa6f",

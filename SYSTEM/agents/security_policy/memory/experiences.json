@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "security_policy",
-  "updated_at": "2026-10-27T12:25:12.449105+00:00",
-  "total_experiences": 186,
+  "updated_at": "2026-10-29T18:32:10.357988+00:00",
+  "total_experiences": 194,
   "experiences": {
     "exp-security_policy-00c0fd0993": {
       "experience_id": "exp-security_policy-00c0fd0993",
@@ -470,6 +470,78 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T04:56:45.258041+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-14621cfe09": {
+      "experience_id": "exp-security_policy-14621cfe09",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298729",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "resource",
+          "parameters",
+          "payload",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:09.825023+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-14a9ae9f8d": {
+      "experience_id": "exp-security_policy-14a9ae9f8d",
+      "agent_id": "security_policy",
+      "task_type": "system",
+      "task_id": "req-1793298730",
+      "project_id": "test_system",
+      "context": {
+        "parameters": [
+          "operation",
+          "resource",
+          "target_agent_id",
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'system' with outcome 'succeeded' in 1.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 1.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:10.008268+00:00",
       "schema_version": 1
     },
     "exp-security_policy-1589ef69b6": {
@@ -1032,6 +1104,58 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-17T16:26:44.448513+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-2d086a909d": {
+      "experience_id": "exp-security_policy-2d086a909d",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298730",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "resource",
+          "parameters",
+          "payload",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env')",
+        "error_category": "runtime_error",
+        "takeaway": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+        "proposed_lesson": {
+          "title": "Lesson from security_policy on execution",
+          "description": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+          "affected_domain": "general",
+          "observed_pattern": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without ele",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from security_policy on execution",
+        "description": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+        "affected_domain": "general",
+        "observed_pattern": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without ele",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:10.109835+00:00",
       "schema_version": 1
     },
     "exp-security_policy-2deb6db8f3": {
@@ -4209,6 +4333,42 @@
       "timestamp": "2026-10-19T04:39:47.789146+00:00",
       "schema_version": 1
     },
+    "exp-security_policy-9ec9afec5f": {
+      "experience_id": "exp-security_policy-9ec9afec5f",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298730",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "parameters",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:10.357988+00:00",
+      "schema_version": 1
+    },
     "exp-security_policy-9f29fe8403": {
       "experience_id": "exp-security_policy-9f29fe8403",
       "agent_id": "security_policy",
@@ -4435,6 +4595,44 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T04:56:49.059068+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-aa2981c986": {
+      "experience_id": "exp-security_policy-aa2981c986",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298722",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "resource",
+          "parameters",
+          "payload",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:02.367539+00:00",
       "schema_version": 1
     },
     "exp-security_policy-aa641712bd": {
@@ -5947,6 +6145,44 @@
       "timestamp": "2026-10-17T16:26:45.923309+00:00",
       "schema_version": 1
     },
+    "exp-security_policy-db73f41f46": {
+      "experience_id": "exp-security_policy-db73f41f46",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298722",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "resource",
+          "parameters",
+          "payload",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:02.729748+00:00",
+      "schema_version": 1
+    },
     "exp-security_policy-db8f7e910d": {
       "experience_id": "exp-security_policy-db8f7e910d",
       "agent_id": "security_policy",
@@ -6069,6 +6305,54 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:20:57.999595+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-e02db7de03": {
+      "experience_id": "exp-security_policy-e02db7de03",
+      "agent_id": "security_policy",
+      "task_type": "system",
+      "task_id": "req-1793298730",
+      "project_id": "test_system",
+      "context": {
+        "parameters": [
+          "operation",
+          "resource",
+          "target_agent_id",
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'security_policy' completed task 'system' with outcome 'failed' in 0.0ms.",
+        "error": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env')",
+        "error_category": "runtime_error",
+        "takeaway": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+        "proposed_lesson": {
+          "title": "Lesson from security_policy on system",
+          "description": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+          "affected_domain": "general",
+          "observed_pattern": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without ele",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from security_policy on system",
+        "description": "Security boundary enforced: Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without elevated authentication. (Agent: 'audio_input', Operation: 'file_write', Resource: '.env'). Operation correctly prevented.",
+        "affected_domain": "general",
+        "observed_pattern": "Security Policy Violation [SEC-FILE-002] - DENY: Access to protected credential/secret pattern '.env' denied without ele",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:10.058054+00:00",
       "schema_version": 1
     },
     "exp-security_policy-e0b7740464": {
@@ -6834,6 +7118,44 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:20:58.855254+00:00",
+      "schema_version": 1
+    },
+    "exp-security_policy-f9e27eed19": {
+      "experience_id": "exp-security_policy-f9e27eed19",
+      "agent_id": "security_policy",
+      "task_type": "execution",
+      "task_id": "req-1793298722",
+      "project_id": "",
+      "context": {
+        "parameters": [
+          "action",
+          "target_agent_id",
+          "operation",
+          "resource",
+          "parameters",
+          "payload",
+          "approval_request_id",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'security_policy' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Security policy evaluated; all operations verified within permission boundaries.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:32:02.093777+00:00",
       "schema_version": 1
     },
     "exp-security_policy-fa2ac31f4b": {

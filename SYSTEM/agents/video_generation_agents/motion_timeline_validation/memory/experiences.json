@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_timeline_validation",
-  "updated_at": "2026-10-29T17:54:02.336663+00:00",
-  "total_experiences": 71,
+  "updated_at": "2026-10-29T18:23:08.960544+00:00",
+  "total_experiences": 72,
   "experiences": {
     "exp-motion_timeline_validation-03f91fab64": {
       "experience_id": "exp-motion_timeline_validation-03f91fab64",
@@ -1870,6 +1870,33 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:31:57.078451+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_timeline_validation-f57dacd821": {
+      "experience_id": "exp-motion_timeline_validation-f57dacd821",
+      "agent_id": "motion_timeline_validation",
+      "task_type": "motion_timeline_validation",
+      "task_id": "task-446554507d",
+      "project_id": "my-first-project-01-df7f",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "overall_score": 90.9,
+        "technical_score": 97.0,
+        "visual_score": 68.0,
+        "semantic_score": 100.0,
+        "runtime_score": 100.0,
+        "total_findings": 5,
+        "repaired_count": 0,
+        "readiness": "ready_with_warnings"
+      },
+      "reflection": "Motion Validation evaluated with overall quality 90.9 (Tech: 97.0, Visual: 68.0, Semantic: 100.0, Runtime: 100.0). Readiness: ready_with_warnings. Repaired 0 defects.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-29T18:23:08.937932+00:00",
       "schema_version": 1
     },
     "exp-motion_timeline_validation-f72228da41": {
