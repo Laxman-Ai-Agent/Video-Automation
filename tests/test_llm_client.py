@@ -183,7 +183,7 @@ def test_claude_cli_default_label_leaves_the_model_to_the_cli(monkeypatch):
 def test_the_model_saved_for_claude_cli_reaches_every_call(bare_machine, monkeypatch):
     seen = []
     monkeypatch.setattr(llm_client.shutil, "which", lambda t: "/fake/claude")
-    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout, model=None: seen.append(model) or "ok")
+    monkeypatch.setattr(llm_client, "_call_claude_cli", lambda prompt, system, timeout, model=None, images=None: seen.append(model) or "ok")
     client.post("/llm/settings", json={"provider": "claude_cli", "model": "sonnet"})
     llm_client.generate_text("hi")
     assert client.post("/llm/test", json={}).json()["ok"] is True

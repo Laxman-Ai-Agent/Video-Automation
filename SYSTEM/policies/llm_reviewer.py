@@ -32,8 +32,10 @@ def ask_reviewer(
     input_fingerprint: str | None = None,
     artifact_refs: list[dict[str, str]] | None = None,
     metadata: dict[str, Any] | None = None,
+    images: list[str] | None = None,
 ) -> dict[str, Any]:
     """The one LLM reviewer call: returns status, score, summary, findings, provider, model, latency_ms, error.
+    images: picture files the reviewer must look at (only a provider that can see accepts them: llm_client.can_look).
     Fails closed: an unavailable LLM or a malformed answer is status='blocked' with a blocker finding."""
     t0 = time.perf_counter()
     structured_schema = {
@@ -80,6 +82,7 @@ def ask_reviewer(
         input_fingerprint=input_fingerprint,
         input_artifact_refs=artifact_refs or [],
         metadata=metadata or {},
+        images=images or [],
     )
     try:
         resp = llm_gateway.get_gateway().execute(req)

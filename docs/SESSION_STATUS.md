@@ -1,6 +1,10 @@
-# Session status and handoff (2026-10-29, end of session: Phases 2, 3, 4 built)
+# Session status and handoff (2026-10-29, later session: Phase 5a built on top of Phases 2, 3, 4)
 
 **Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
+
+## Phase 5a (QC that sees), built and proven on the real project
+Full text: `docs/ROADMAP.md` Phase 5. Short version: `VIDEO_ENGINE/stages/qc_sight.py` + `contact_grid.py` draw phone-size contact sheets (scenes: entry/mid/exit; cuts: before/mid/after) from the frames Final QC already sampled and measure frame usage / motion per scene; `llm_review._show_frames` attaches them to the `qc` review only (Claude Code only; another LLM reviews as before and the verdict says `pixels_not_seen`). Proven with `POST /projects/my-first-project-01-df7f/orchestrator/run {"from_stage":"qc"}` (`run_8bc8abf8`, 17 s): the reviewer named scene 2 and scene 8 as `visual` warnings "regenerate scene N: ...", and accepted the 1-3 frame empty cut washes. Tests `tests/test_qc_sight.py`. **Next: 5b** (a `visual` finding regenerates only that scene: repair note in that scene's input fingerprint, one bounded round).
+**Found, NOT caused by this work, still open:** (1) the legacy step digest says Motion Planning is stale (`motion_planning.py` was edited 21:42 after its last run 20:57, so the Motion Planning / Motion Generation cards show "queued / waiting" while the orchestrator's stage fingerprints call them fresh): another case of freshness decided in two places; re-running Motion Planning would redo everything after it, so it needs your go; (2) `llm_review_final.json` (written 22:30 by the previous session) is `blocked` 0.62 because the upstream `timeline` review is `needs_review` 0.72; `final` is not in `LLM_STAGES`, so nothing gates on it, but the timeline review's `needs_review` should be looked at.
 
 ## Latest handoff (end of session 2026-10-29): Phases 2, 3 and 4 are BUILT, committed and pushed (`main`, last code commit `0c07c3d`)
 Full text of every phase: `docs/ROADMAP.md`. Short version, then what is open.

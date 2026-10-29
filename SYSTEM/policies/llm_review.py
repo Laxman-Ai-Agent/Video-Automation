@@ -184,6 +184,9 @@ def _stage_logic_tag(stage: str, pdir: Path | None = None, aspect: str = "16:9")
     if stage == "render":                                        # the sound design (version, cuts, music bed) decides what the render plays
         from VIDEO_ENGINE.stages import sound_design
         return f"|snd{sound_design.fingerprint(pdir, aspect)}"
+    if stage == "qc":                                            # what the Final QC reviewer is shown (frames, metrics) is part of its verdict
+        from VIDEO_ENGINE.stages import qc_sight
+        return f"|sight{qc_sight.VERSION}"
     return ""
 
 
@@ -810,6 +813,8 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         "- Respond with ONLY the JSON object, with no markdown backticks, no comments, and no preamble."
     )
 
+    if (payload.get("pictures") or {}).get("seen"):
+        sys_prompt += "\nFor this stage you ARE shown still frames of the video (the attached pictures): judge what they show. You still cannot hear the audio or see the motion between frames."
     stage_desc = STAGE_DESCRIPTIONS.get(stage, f"{stage} Review")
     user_prompt = (
         f"### STAGE: {stage.upper()} ({stage_desc})\n"
@@ -902,6 +907,14 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
             "Decide from the evidence whether each is acceptable; name every one you accept as a 'warning' finding with the reason, and set status='blocked' with a 'blocker' finding only if there is a genuine corrupt defect (e.g. missing audio or undecodable video).\n"
             "- When media measurements match approved timeline (1080p, 30fps, 51.9s, clean audio) and open heuristic items are acceptable in context, approve with status='passed' and score >= 0.85."
         )
+        if (payload.get("pictures") or {}).get("seen"):
+            user_prompt += (
+                "- LOOK at the attached pictures (the payload's `pictures` says what each shows) and use `visual_metrics` as measurements of the same frames. Judge: (1) a frame at a cut with no drawn content (an empty background where the scenes should stay visible); "
+                "(2) text that is cut off, overlapping or too small to read at this phone-size cell; (3) a scene that uses only a small part of the frame, or shows the same layout in its entry, middle and exit frames while the narration continues; "
+                "(4) a picture that does not fit what the narration is about. Look at what is drawn, do not assume it from the metrics.\n"
+                "- Name every visual problem as its own finding with category 'visual', the scene in scene_id (the sNN of the label) and a recommendation of the form 'regenerate scene N: <what is wrong and what it should show>'. "
+                "Severity 'error' only for what any viewer would notice at once (a blank or empty screen, unreadable or cropped text, content that contradicts the narration); polish is 'warning'. Never raise a finding for something you cannot see in these pictures.\n"
+            )
     elif stage == "final":
         user_prompt += (
             "- Verify end-to-end delivery provenance from the payload only: every upstream stage review passed, qc_approved is true (the Final QC LLM decision about this exact file), "
@@ -911,6 +924,27 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
         )
 
     return sys_prompt, user_prompt
+
+
+def _show_frames(pdir: Path, stage: str, aspect: str, payload: dict[str, Any]) -> list[Path]:
+    """Final QC only: puts the measurements of the video's sampled frames (`visual_metrics`) and what is attached (`pictures`) into the payload and returns the contact sheets the reviewer must look at.
+    [] when nothing can be shown (no sampled frames, or the active LLM cannot look at pictures); `pictures.why_not` then says it, and the review records it as a warning."""
+    if stage != "qc":
+        return []
+    from VIDEO_ENGINE.stages import qc_sight          # imported here: that module imports the stages, which import this one
+    seen = qc_sight.build(pdir, aspect)
+    payload["visual_metrics"] = seen["metrics"]
+    if not seen["sheets"]:
+        why = "no frame was sampled from the video, so the review could not look at it"
+    elif not llm_client.can_look():
+        why = "the active LLM cannot look at pictures, so this review judged the video from measurements only"
+    else:
+        payload["pictures"] = {"seen": True, "attached_in_order": [p.name for p in seen["sheets"]],
+                               "scenes_sheets": "one row per scene, cells = entry, middle and exit frame, labelled 'sNN kind time'",
+                               "cuts_sheets": "one row per cut, cells = the frame before the cut, the middle of its transition and the frame after the cut, labelled 'cut sA>sB when time'; 'no frame' = not sampled"}
+        return seen["sheets"]
+    payload["pictures"] = {"seen": False, "why_not": why}
+    return []
 
 
 def run_stage_llm_review(
@@ -941,6 +975,7 @@ def run_stage_llm_review(
     payload = build_stage_payload(pdir, stage, aspect)
     if (off := rule_switches.off_in(stage)):                                    # a check the user switched off was not made: the reviewer is told, so it is never read as a pass
         payload["rules_switched_off_by_the_user"] = off
+    sheets = _show_frames(pdir, stage, aspect, payload)
     sys_prompt, user_prompt = generate_stage_review_prompt(stage, payload)
 
     from SYSTEM.core.pipeline_state import STAGE_TO_AGENT_MAP as stage_to_agent
@@ -950,11 +985,14 @@ def run_stage_llm_review(
         agent_id=stage_to_agent.get(stage, "main_orchestrator"),
         system_prompt=sys_prompt,
         user_prompt=user_prompt,
-        timeout=timeout,
+        timeout=llm_client.VISION_TIMEOUT_S if sheets else timeout,
         input_fingerprint=in_fp,
         artifact_refs=[{"path": str(f), "description": f.name} for f in stage_input_files(pdir, stage, aspect)],
         metadata={"aspect": aspect},
+        images=[str(p) for p in sheets],
     )
+    if stage == "qc" and not sheets:                                            # said in the review itself, never hidden: this verdict was made without seeing the video's frames
+        verdict["findings"] = [*verdict["findings"], {"severity": "warning", "category": "pixels_not_seen", "message": payload["pictures"]["why_not"], "scene_id": None, "recommendation": "choose Claude Code on the LLM page to let the review look at the frames"}]
     result: LlmReviewResult = {
         "schema": SCHEMA,
         "version": VERSION,

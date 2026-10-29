@@ -27,12 +27,13 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from SYSTEM.core import llm_client
 from SYSTEM.policies import rule_switches
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image
 
 from VIDEO_ENGINE.ffmpeg import media_probe
 
-from . import live_steps
+from . import contact_grid, live_steps
 from . import config, llm_gateway, stock, visual_planning, web_capture
 
 STAGE_ID = "assets"
@@ -245,7 +246,6 @@ VISION_NOTE = (" Some requirements come with a contact sheet: one of the attache
 SHEET_CELL = (320, 180)
 SHEET_COLUMNS = 3
 PREVIEW_BYTES = 2 * 1024 * 1024
-VISION_TIMEOUT_S = 240
 
 
 def _preview(cand: dict) -> Image.Image | None:
@@ -266,20 +266,8 @@ def contact_sheet(pdir: Path, cands: list[dict]) -> Path | None:
     previews = [_preview(c) for c in cands]
     if not any(previews):
         return None
-    w, h = SHEET_CELL
-    sheet = Image.new("RGB", (w * SHEET_COLUMNS, h * -(-len(cands) // SHEET_COLUMNS)), (24, 24, 24))
-    draw, font = ImageDraw.Draw(sheet), ImageFont.load_default(size=28)
-    for i, p in enumerate(previews):
-        x, y = (i % SHEET_COLUMNS) * w, (i // SHEET_COLUMNS) * h
-        if p:
-            p.thumbnail((w - 4, h - 4))
-            sheet.paste(p, (x + (w - p.width) // 2, y + (h - p.height) // 2))
-        else:
-            draw.text((x + 12, y + h // 2 - 14), "no preview", fill=(170, 170, 170), font=font)
-        draw.rectangle((x, y, x + 44, y + 40), fill=(255, 235, 0))
-        draw.text((x + 10, y + 4), str(i), fill=(0, 0, 0), font=font)
     path.parent.mkdir(parents=True, exist_ok=True)
-    sheet.save(path, "JPEG", quality=80)
+    contact_grid.grid(previews, [str(i) for i in range(len(cands))], SHEET_CELL, SHEET_COLUMNS).save(path, "JPEG", quality=80)
     return path
 
 
@@ -289,7 +277,7 @@ def _ask_ranker(pdir: Path, body: list[dict], images: list[Path]) -> list | None
         resp = llm_gateway.gateway.execute(llm_gateway.LlmGatewayRequest(
             project_id=pdir.name, stage_id=STAGE_ID, agent_id=AGENT_ID, purpose="decision", model_profile="fast_structured", system_prompt=RANK_SYSTEM + (VISION_NOTE if images else ""),
             user_prompt="Requirements and candidates:\n" + json.dumps(body, ensure_ascii=False), structured_schema={"choices": [{"requirement_id": "...", "index": 0}]},
-            timeout=VISION_TIMEOUT_S if images else 90, images=[str(p) for p in images]))
+            timeout=llm_client.VISION_TIMEOUT_S if images else 90, images=[str(p) for p in images]))
         return resp.structured_data.get("choices") if not resp.error and isinstance(resp.structured_data, dict) else None
     except Exception:                                                  # ranking is advice: the deterministic order is a legitimate answer
         return None

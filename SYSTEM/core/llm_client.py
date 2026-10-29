@@ -658,6 +658,14 @@ def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = N
     return str(data["result"])
 
 
+VISION_TIMEOUT_S = 240                       # a call that looks at pictures takes longer (the CLI reads each file first)
+
+
+def can_look(provider: str | None = None) -> bool:
+    """Whether the (active) provider is set up to look at picture files: only Claude Code is."""
+    return (provider or resolve_provider_config()[0]) == "claude_cli"
+
+
 def generate_text(user: str, system: str = "", timeout: int = 180, provider: str | None = None, model: str | None = None, images: list[str] | None = None) -> str:
     """Central text generation dispatch for any configured LLM. Returns the text response.
     images: picture files the model must look at; only Claude Code (claude_cli) is wired to show them, any other provider raises LlmError so the caller can fall back to text."""
@@ -667,7 +675,7 @@ def generate_text(user: str, system: str = "", timeout: int = 180, provider: str
     try:
         prov, mdl, key, base_url = resolve_provider_config(override_provider=provider, override_model=model)
 
-        if images and prov != "claude_cli":
+        if images and not can_look(prov):
             raise LlmError(f"{prov} is not set up to look at pictures here: choose Claude Code on the LLM page")
         if prov == "gemini":
             return _call_gemini(user, system, mdl, key, timeout)
