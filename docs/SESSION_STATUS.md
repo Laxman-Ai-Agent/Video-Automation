@@ -1,20 +1,29 @@
-# Session status and handoff (2026-10-28, updated - 16 live-UI tests fixed)
+# Session status and handoff (2026-10-29, end of session: Phases 2, 3, 4 built)
 
 **Roadmap, assessment, all phases and every pending task: `docs/ROADMAP.md` (read it third).**
 
-## Latest: Phase 2 started - the optional motion kit (2026-10-29), built, NOT committed yet
-`docs/ROADMAP.md` Phase 2 has the full text. The per-project option `motion_kit` (own key in `project.json`, default OFF, set at upload, no route changes it) works end to end:
-upload checkbox -> `POST /projects` -> `store.motion_kit` -> `motion_animation` (the audit rejects `../kit` imports unless on, the LLM is told about the kit only when on, the scene
-fingerprint gets a `motion_kit` key only when on). First kit in `VIDEO_ENGINE/remotion/src/kit/` (`CameraRig`, `KineticWords`, `ART_DIRECTIONS`). Checked: `tests/test_motion_kit.py` (5 tests),
-the touched modules' tests, Remotion `tsc` and frontend `tsc` clean. NOT done: a real kit-on run (no LLM call was made), the upload page in a browser (the backend has no `--reload`: restart it
-when no job runs). Next: grow the kit, pick an art direction per video, prove it on a new kit-on project.
+## Latest handoff (end of session 2026-10-29): Phases 2, 3 and 4 are BUILT, committed and pushed (`main`, last code commit `0c07c3d`)
+Full text of every phase: `docs/ROADMAP.md`. Short version, then what is open.
 
-## Phase 3 built (2026-10-29), not proven on a real run
-Details in `docs/ROADMAP.md` Phase 3. Short: `stock.py` has `inaturalist`, `met`, `artic` (keyless, CC0 / CC BY / public domain only, hosts allow-listed); the planner may use a clip as full-frame B-roll
-(`visual_planning.VERSION` 4: existing plans are made again on their next run); `asset_collection.choose` sends a contact sheet of the candidates' previews to ONE ranking call
-(`LlmGatewayRequest.images`; only Claude Code can look, otherwise titles-only). The vision ranking is VERIFIED live (the CLI had to be signed in again with `claude auth login`; it is now logged in as `laxmand7221@gmail.com` in the default config folder `C:\Users\dprwe\.claude`):
-a real contact sheet with wrong titles still gave the right pick. Still open: real provider APIs, a real run with B-roll, restart the backend (no job running) to load the Phase 2/3 code.
-The motion-kit option (Phase 2) is committed (`4d0cca5`).
+**Done this session**
+- **Phase 2 (motion kit, optional):** `project.json` key `motion_kit` (own key, NOT in `media`; default off; set at upload; no route changes it); the audit rejects `../kit` imports unless on; the scene fingerprint gets a `motion_kit` key only when on; first kit in `VIDEO_ENGINE/remotion/src/kit/` (`CameraRig`, `KineticWords`, `ART_DIRECTIONS`); upload checkbox. NOT run with the kit on yet.
+- **Phase 3 (real media):** keyless providers `inaturalist`, `met` (v1.1 search), `artic` (needs the `AIC-User-Agent` header, `stock.HOST_HEADERS`) verified LIVE with real downloads; the planner may use a clip as full-frame B-roll (`visual_planning.VERSION` 4); `asset_collection.choose` ranks by LOOKING at a contact sheet of the candidates' previews (`LlmGatewayRequest.images` -> `llm_client`, Claude Code only, titles-only fallback), verified live with deliberately wrong titles. B-roll proven on a scratch scene (real clip, real codegen, tsc after one repair round), NOT rendered to pixels.
+- **Phase 4 (sound):** `VIDEO_ENGINE/stages/sound_design.py` (ffmpeg only): `audio_mix.wav` = narration + a synthesised whoosh at every cut + an OPTIONAL ducked licensed music bed (`assets/music/bed.<ext>` + `bed.json`, used only with complete provenance), loudnorm -14 LUFS. PROVEN on the real video: -21.43 -> -14.04 LUFS, 7 whooshes, same duration, Final QC passed_with_warnings.
+- **Bugs the real runs found (all fixed, with tests):** Planning stayed "fresh" after a planner version change (`llm_review._stage_logic_tag`); three divergent "planned text is drawn" checks rejected word-by-word titles (one `motion_planning.text_is_drawn`, `RULE_SET` 1.3); my codegen rule said `<OffthreadVideo loop>` (no such prop; now `<Loop>`); the render agent reused `out.mp4` after the mix changed (`render_video.sound_current`, `input_fingerprints.sound_design`); the Met retired its v1 search; the Art Institute needs its identification header. Pattern worth remembering: freshness is decided in several places from different input sets (stage fingerprint in `llm_review`, the legacy step digest, the render report); a change of a stage's own logic must reach all of them.
+- The test project `my-first-project-01-df7f` now has ALL 13 stages completed again with the new code (`run_899f7e7f`); its v4 plan contains NO real media (the v3 plan had 3 photo slots), so B-roll and contact sheets did not run inside the pipeline.
+
+**Pending (in the order I would do them)** - details and evidence in `docs/ROADMAP.md`
+1. **Phase 5, QC that sees** (next, the user said yes): give the Final QC LLM the thumbnail sheet and cut frames plus measured metrics (shot-change rate, motion energy, text size at mobile scale, frame usage); findings go back as "regenerate scene N because X". Existing project only.
+2. **Empty frames at cuts still show:** Final QC warns "frames at the cut show no content" at 5 of 7 cuts (the Phase 0 problem is not gone); plus the `preview.shot_changes` warning of scene 8 (5.5 vs 6.0).
+3. **Prove the optional pieces on a real run:** kit ON (needs a kit-on project: CLAUDE.md says no new test project, so it needs the user's exception), B-roll rendered to pixels (the test project's plan has no real media), a music bed (needs a licensed file + `bed.json`); nobody has listened to the whoosh level: tune `WHOOSH_DB` by ear.
+4. **Phase 3 follow-ups:** a stock search gives all 5 slots to Wikimedia (rank = rights, ratio, width) so iNaturalist / Met / Art Institute rarely reach the top 5; Openverse often times out (a search takes 100+ s); keyless VIDEO supply is thin for generic subjects and video candidates rarely have previews; the Gemini / OpenAI / Anthropic-API providers cannot look at pictures (only Claude Code can).
+5. **Phase 6 (captions + retention), Phase 7 (performance)** as in the roadmap; kit pieces still to build: transitions by narrative role, maps, charts, lower thirds, more art directions, an art direction chosen per video.
+6. **Housekeeping:** run the fast suite ONCE (the last full run was before Phase 3/4: 1082 passed, 2 failed, one fixed; `test_stage3_agent_memory_learning::test_rollback_manager_restores_verified_baseline` failed once in the full run and passed alone: unexplained); `projects/_broll_probe/candidates.json` is a scratch file of mine (delete it); the two e2e tests that write `synthetic_test_p*_e2e_*.wav` into `public/`; the 5 `remotion-animated-bar-chart` archive copies; the Whisper benchmark.
+
+**How the machine is set up now**
+- Backend runs from this repo's `.venv` on :8000 (through `.claude/launch.json` `backend`, restarted after the last code change; it has no `--reload`: restart it when no job runs). The pipeline's LLM is the `claude` CLI, logged in as `laxmand7221@gmail.com` in the default config folder `C:\Users\dprwe\.claude` (`POST /llm/test` with body `{}` -> ok); it had to be signed in again this session after "OAuth session expired".
+- To redo ONE stage use `POST /projects/<pid>/orchestrator/run` with `{"from_stage": "render"}` (a plain run reuses everything whose stage fingerprint matches).
+- The "Fact-Forcing Gate" hook denies the FIRST edit/write of every file in a session: state importers / affected API / data / the user's words, then retry. When several edits are sent in ONE batch, the others still apply while the first-touch one is denied (a half-applied change): send the first-touch edit alone, or retry it at once.
 
 ## Asset Collection page: click a picture or clip to open its prompt and upload (2026-10-29)
 User request: on the Asset Collection page every collected (or missing) image / clip opens on click with its prompt and a manual upload, so a person can replace a download they do not like.
