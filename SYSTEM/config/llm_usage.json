@@ -33105,6 +33105,44 @@
       "total_tokens": 12,
       "cost_usd": 2e-06,
       "cost_inr": 0.0
+    },
+    {
+      "id": "be_3d5affe0f792e37e",
+      "session_id": "3d5affe0f792e37e",
+      "timestamp": "2026-10-30T08:11:24.098066+00:00",
+      "source": "backend_api",
+      "provider": "claude_cli",
+      "provider_name": "Claude Code (CLI)",
+      "model": "claude-sonnet-5-5",
+      "task": "render:review",
+      "is_subscription": true,
+      "tracking_mode": "actual_recorded",
+      "input_tokens": 1647,
+      "output_tokens": 486,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 2133,
+      "cost_usd": 0.012231,
+      "cost_inr": 1.05
+    },
+    {
+      "id": "be_3e68074fe734a740",
+      "session_id": "3e68074fe734a740",
+      "timestamp": "2026-10-30T08:33:57.182539+00:00",
+      "source": "backend_api",
+      "provider": "claude_cli",
+      "provider_name": "Claude Code (CLI)",
+      "model": "claude-sonnet-5-5",
+      "task": "qc:review",
+      "is_subscription": true,
+      "tracking_mode": "actual_recorded",
+      "input_tokens": 2515,
+      "output_tokens": 657,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "total_tokens": 3172,
+      "cost_usd": 0.0174,
+      "cost_inr": 1.5
     }
   ]
 }
