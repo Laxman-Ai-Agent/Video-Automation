@@ -915,7 +915,7 @@ def generate_stage_review_prompt(stage: str, payload: dict[str, Any]) -> tuple[s
             user_prompt += (
                 "- LOOK at the attached pictures (the payload's `pictures` says what each shows) and use `visual_metrics` as measurements of the same frames. Judge: (1) a frame at a cut with no drawn content (an empty background where the scenes should stay visible); "
                 "(2) text that is cut off, overlapping or too small to read at this phone-size cell; (3) a scene that uses only a small part of the frame, or shows the same layout in its entry, middle and exit frames while the narration continues; "
-                "(4) a picture that does not fit what the narration is about. Look at what is drawn, do not assume it from the metrics.\n"
+                "(4) a picture that does not fit what the narration is about; (5) a card, panel or step list that shows only grey bars or lines where words, a title or an icon belong (placeholder content: every card must show its own readable words and a picture). Look at what is drawn, do not assume it from the metrics.\n"
                 "- Name every visual problem as its own finding with category 'visual', the scene in scene_id (the sNN of the label) and a recommendation of the form 'regenerate scene N: <what is wrong and what it should show>'. "
                 "Severity 'error' only for what any viewer would notice at once (a blank or empty screen, unreadable or cropped text, content that contradicts the narration); polish is 'warning'. Never raise a finding for something you cannot see in these pictures.\n"
             )

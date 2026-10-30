@@ -62,7 +62,7 @@ def write_info(pdir: Path, info: dict) -> None:
 ASPECTS = ("9:16", "16:9")
 
 
-def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None, motion_kit: bool = False) -> Path:
+def create(name: str, aspect: str | None = None, reusable_motion_templates: bool = False, media: dict | None = None, motion_kit: bool = False, captions: bool = True) -> Path:
     media = media_kinds.normalise(media)                  # ValueError before anything is made: the media settings are set here, at upload, and never change afterwards
     pid = slug(name)
     while (config.PROJECTS_DIR / pid).exists():
@@ -77,8 +77,14 @@ def create(name: str, aspect: str | None = None, reusable_motion_templates: bool
     info["reusable_motion_templates"] = bool(reusable_motion_templates)
     info["media"] = media
     info["motion_kit"] = bool(motion_kit)                 # set here, at upload, never afterwards (own key, not in `media`: the Visual Plan fingerprint hashes `media` and does not depend on the kit)
+    info["captions"] = bool(captions)                     # set here, at upload, never afterwards: the captions are a layer over the scenes (no scene code depends on them)
     write_info(pdir, info)
     return pdir
+
+
+def captions(pdir: Path) -> bool:
+    """Are word-timed captions drawn over this project's video? On by default for a new project; off for every project made before the option existed (it keeps rendering as it did)."""
+    return read_info(pdir).get("captions", False) is True
 
 
 def motion_kit(pdir: Path) -> bool:

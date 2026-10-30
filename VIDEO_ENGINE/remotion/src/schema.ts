@@ -51,6 +51,11 @@ export const CompositionSchema = z.object({
   }),
   scenes: z.array(Scene).min(1),
   words: z.array(z.object({ w: z.string(), start: z.number(), end: z.number() })).optional(),
+  // the caption lines (backend stages/captions.py builds them; Subtitles.tsx only draws them): `hook` = the large first caption, `key` = a word the picture stresses too
+  captions: z.array(z.object({
+    start: z.number(), end: z.number(), hook: z.boolean().default(false),
+    words: z.array(z.object({ w: z.string(), start: z.number(), end: z.number(), key: z.boolean().default(false) })),
+  })).optional(),
 });
 
 export type Comp = z.infer<typeof CompositionSchema>;

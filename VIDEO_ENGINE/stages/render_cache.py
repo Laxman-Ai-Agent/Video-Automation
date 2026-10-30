@@ -45,6 +45,17 @@ def _scene_material(pdir: Path, scene: dict, public: Path) -> dict:
     return {"scene": scene, "code": code, "files": files}
 
 
+CAPTION_PAD = 0.3     # seconds: a caption is on screen from 0.05 s before its first word to 0.25 s after its last one (components/Subtitles.tsx LEAD_S / TAIL_S), a word is read by the scenes at its own time
+
+
+def _spoken(comp: dict, first: int, last: int) -> dict:
+    """The captions (when they are drawn) and the spoken words that fall inside the window [first, last) of frames: a changed word redraws the chunks it is heard in, not the whole video."""
+    fps = comp["meta"]["fps"]
+    a, b = first / fps - CAPTION_PAD, last / fps + CAPTION_PAD
+    inside = lambda x: x["end"] >= a and x["start"] <= b          # noqa: E731
+    return {"captions": [c for c in comp.get("captions") or [] if inside(c)] if comp["meta"].get("subtitles") else [], "words": [x for x in comp.get("words") or [] if inside(x)]}
+
+
 def global_part(pdir: Path, comp: dict, preview: bool, flags: list[str]) -> str:
     """Everything that changes the pixels of every scene: the composition's own settings, the Remotion code (not the generated scenes: those are per scene), the files
     in public/ (fonts, maps, ...; the staged audio is not part of a muted chunk), the collected assets and the render mode."""
@@ -54,8 +65,8 @@ def global_part(pdir: Path, comp: dict, preview: bool, flags: list[str]) -> str:
     public = root / "public"
     pub = {p.relative_to(public).as_posix(): p.stat().st_size for p in sorted(public.rglob("*"))
            if p.is_file() and p.name != meta.get("audio") and "projects" not in p.relative_to(public).parts}
-    return mv.sha(mv.canon({"meta": {k: v for k, v in meta.items() if k not in ("duration", "audio")},
-                            "words": comp.get("words") if meta.get("subtitles") else None, "src": src, "public": pub,
+    return mv.sha(mv.canon({"meta": {k: v for k, v in meta.items() if k not in ("duration", "audio", "subtitles")},      # `subtitles` is in the chunk key through the captions of its window: a chunk without a caption is the same picture with or without them
+                            "src": src, "public": pub,
                             "config": [mv._file_sha(root / "remotion.config.ts"), mv._file_sha(root / "package.json")],
                             "assets": mv._file_sha(pdir / "assets_manifest.json"), "preview": preview, "flags": flags}))
 
@@ -68,7 +79,7 @@ def plan(pdir: Path, comp: dict, preview: bool, flags: list[str], cache: Path) -
         prev = w["prev"]
         tail = {"material": _scene_material(pdir, prev["scene"], public), "frames": prev["out_frames"]} if prev and prev["out_frames"] else None
         key = mv.sha(mv.canon({"g": g, "range": [w["from"], w["to"]], "out_frames": w["out_frames"], "tail": tail,
-                               "material": _scene_material(pdir, w["scene"], public)}))
+                               "material": _scene_material(pdir, w["scene"], public), **_spoken(comp, w["from"], w["to"])}))
         chunks.append({"scene": w["scene"]["id"], "from": w["from"], "to": w["to"], "key": key, "path": cache / f"{key}.mp4"})
     return chunks
 

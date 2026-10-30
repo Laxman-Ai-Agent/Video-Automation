@@ -30,7 +30,7 @@ compatible_project_modes:
 
 # Infographic Layouts
 
-Compose these on the dark gradient with glass cards (motion.design_kit). One idea per scene, max 3 to 4 items, the key number is the biggest element.
+Compose these on the dark gradient with glass cards (motion.design_kit). One idea per scene, as many cards or steps as the idea needs (each with its own readable words, see motion.ui_cards), the key number or title is the biggest element.
 - **Timeline**: a horizontal line drawn with `evolvePath` (`@remotion/paths`), nodes (circles + icon) appearing with `spring` stagger 8 frames, year above, caption below; the current node glows.
 - **Comparison (A vs B)**: two equal glass columns with a "VS" badge between; metric bars animate width from 0 with `spring`; the winner gets the accent gradient, the other stays neutral.
 - **Progress**: ring = `strokeDasharray` / `strokeDashoffset` computed from `value * spring`; bar = width %; the number counts up with `Math.round(value * progress)`.

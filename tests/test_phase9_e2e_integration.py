@@ -18,6 +18,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import math
 import os
 import shutil
 import struct
@@ -88,7 +89,7 @@ def isolated_video_project(tmp_path: Path):
         wf.setnchannels(1)
         wf.setsampwidth(2)
         wf.setframerate(44100)
-        wf.writeframes(struct.pack("<" + "h" * 22050, *([0] * 22050)))
+        wf.writeframes(struct.pack("<" + "h" * 22050, *[int(8000 * math.sin(2 * math.pi * 440 * i / 44100)) for i in range(22050)]))      # a tone, not silence: the sound design measures the loudness and cannot normalise a silent file
 
     # 2. Base info.json
     info = {

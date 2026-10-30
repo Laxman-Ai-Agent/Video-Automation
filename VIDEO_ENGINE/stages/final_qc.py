@@ -27,7 +27,7 @@ from . import timeline_build as tb
 
 SCHEMA = "1.0"
 VERSION = 1
-RULES_VERSION = "2"                                  # the meaning of the rules: part of every cache key
+RULES_VERSION = "3"                                 # the meaning of the rules: part of every cache key
 PROFILES = {                                          # named profiles with recorded parameters (roadmap 10); only `standard` is implemented, and it says so
     "standard": {"decode": "full", "black_min_s": 0.5, "black_pix_th": 0.10, "freeze_min_s": 3.0, "freeze_noise": 0.001, "clip_db": -0.1, "silent_db": -50.0, "silence_min_s": 2.0, "sample_fractions": (0.12, 0.5, 0.9),
                  "frame_width": 480, "blank_std": 2.0, "empty_detail_pct": 0.5, "static_diff": 0.5, "static_scene_min_s": 3.0, "av_offset_warn_s": 0.04, "av_offset_error_s": 0.25, "audio_tail_warn_s": 0.5},
@@ -125,6 +125,25 @@ def _assets_provenance(q: Q, pdir: Path) -> None:
     if review:
         q.add("QC_ASSET_RIGHTS_REVIEW", "requires_review", "review", "; ".join(f["message"] for f in review),
               evidence={"assets": [f["asset_id"] for f in review]}, action="confirm that these assets may be used in this video, or replace them")
+
+
+def _captions(q: Q, pdir: Path, aspect: str) -> None:
+    """A project with captions: the composition draws every spoken word, and the first caption (the hook) starts inside the first seconds. What the captions look like on the frames is judged by the LLM review (it sees them on the contact sheets)."""
+    comp = rv._composition(pdir, aspect)
+    if not (comp.get("meta") or {}).get("subtitles"):
+        return
+    from . import captions as cap
+    spoken = sum(1 for w in comp.get("words") or [] if str(w.get("w", "")).strip())
+    lines = comp.get("captions") or []
+    drawn = sum(len(c["words"]) for c in lines)
+    ok = drawn == spoken and drawn > 0
+    q.add("QC_CAPTIONS_COMPLETE", "passed" if ok else "failed", "info" if ok else "error",
+          f"the captions draw all {spoken} spoken words" if ok else f"the captions draw {drawn} of {spoken} spoken words",
+          evidence={"caption_words": drawn, "spoken_words": spoken}, action="" if ok else "build the composition again (Motion Generation)")
+    hook = bool(lines and lines[0].get("hook"))
+    q.add("QC_CAPTIONS_HOOK", "passed" if hook else "warning", "info" if hook else "warning",
+          f"the first caption starts inside the first {cap.HOOK_SECONDS:g} s and is drawn large" if hook else f"nothing is said in the first {cap.HOOK_SECONDS:g} s, so no caption can be the hook",
+          evidence={"first_caption_start": lines[0]["start"] if lines else None}, action="" if hook else "start the narration earlier, or accept a quiet opening")
 
 
 def _run(cmd: list[str], timeout: int = 900) -> tuple[int, str]:
@@ -278,6 +297,7 @@ def _run_locked(pdir: Path, aspect: str, say, profile: str) -> dict:
         stable = a0 == (cand["path"].stat().st_size, cand["path"].stat().st_mtime_ns) and not writing
         q.add("QC_CANDIDATE_STABLE", "passed" if stable else "failed", "info" if stable else "blocker", "the file did not change between reads and no render is writing" if stable else "the file is still being written: wait for the render to finish")
     _assets_provenance(q, pdir)
+    _captions(q, pdir, aspect)
     close("provenance_gate", s)
     if any(c["status"] == "failed" and c["severity"] == "blocker" for c in q.checks):
         q.stage = ""

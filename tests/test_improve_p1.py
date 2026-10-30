@@ -183,11 +183,14 @@ def test_subtitles_stay_inside_safe_area_in_the_real_renderer(tmp_path):
     seven = "ఈరోజులో మనం చేత్లో మోబైలేకుండా ఒక్క క్షనం కూడా".split()
     long7 = "ఉహించుకొలేమ్ మోబైలేకుండా కార్యక్రమాలకు ఆలోచించినప్పుడు ప్రపంచమంతటా చేసుకుంటున్నారు తెలుసుకోవాలంటే".split()
 
+    from VIDEO_ENGINE.stages import captions as cap
+
     def comp(words, w, h):
         ws = [{"w": x, "start": 1.0 + 0.4 * i, "end": 1.0 + 0.4 * i + 0.35} for i, x in enumerate(words)]
         return {"meta": {"fps": 15, "width": w, "height": h, "audio": "audio_test.wav", "duration": 6.0, "subtitles": True, "palette": ["#0B1D26", "#F2A541", "#2A9D8F"]},
                 "scenes": [{"id": 1, "start": 0, "end": 6, "camera": {"move": "static", "from": 1, "to": 1, "focus": [0.5, 0.5]},
-                            "layers": [{"type": "background", "kind": "gradient", "colors": ["#0B1D26", "#2A9D8F"], "z": 0}]}], "words": ws}
+                            "layers": [{"type": "background", "kind": "gradient", "colors": ["#0B1D26", "#2A9D8F"], "z": 0}]}], "words": ws,
+                "captions": cap.build(ws, "9:16" if h > w else "16:9", [])}                   # the lines are built by the backend (stages/captions.py), Subtitles.tsx only draws them
     cases = {"portrait_7": (comp(seven, 1080, 1920), True), "landscape_7": (comp(seven, 1920, 1080), False), "portrait_long7": (comp(long7, 1080, 1920), True)}
     (tmp_path / "cases.json").write_text(json.dumps({"scale": 0.3333, "cases": [{"name": n, "frame": 33, "props": c} for n, (c, _) in cases.items()]}, ensure_ascii=False), encoding="utf-8")
     cmd = f'npx tsx scripts/caption_probe.ts "{tmp_path / "cases.json"}" "{tmp_path / "out"}"'

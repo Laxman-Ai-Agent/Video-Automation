@@ -297,13 +297,13 @@ def test_every_scene_needs_a_primary_element(tmp_path):
     assert any("no primary element" in m for m in problems)
 
 
-def test_a_cluttered_scene_is_a_warning(tmp_path):
+def test_a_scene_may_have_as_many_elements_as_its_idea_needs(tmp_path):
     d, sp = project(tmp_path)
 
-    def clutter(r):
+    def many(r):
         r["scenes"][0]["elements"] += [{"element_id": f"extra_{i}", "type": "graphic", "role": "decoration", "required": False, "visual_description": "spark", "placement": {"region": "center", "priority": 5}} for i in range(6)]
-    plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=clutter))
-    assert problems == [] and any("clutter" in w for w in plan["validation"]["warnings"])
+    plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=many))
+    assert problems == [] and not any("clutter" in w for w in plan["validation"]["warnings"])           # there is no cap on elements: Final QC judges what the picture looks like
 
 
 # ---------- text, regions, registry ----------
@@ -332,16 +332,31 @@ def test_text_over_the_whole_frame_has_no_safe_area_but_a_side_placement_is_fine
         assert not any("safe area" in w for w in plan["validation"]["warnings"]), region
 
 
-def test_more_on_screen_texts_than_the_scenes_pattern_draws_is_an_error_that_names_them(tmp_path):
+def test_a_scene_may_show_several_texts_and_the_planner_is_told_there_is_no_text_cap(tmp_path):
     d, sp = project(tmp_path)
     label = lambda: {"element_id": "tool_names", "type": "label", "role": "explanatory", "required": True, "visual_description": "the names", "content": "AI agents", "placement": {"region": "upper_safe_area", "priority": 4}}
-    _, problems = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: r["scenes"][0]["elements"].append(label())))
-    assert any("scene_01 has 2 on-screen text elements (text_main, tool_names) but its pattern 'hero_text' draws 1" in m for m in problems)
-    plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: r["scenes"][4]["elements"].append(label())))        # quote_type draws two
-    assert problems == [] and scene(plan, 4)["counts"]["text"] == 2
+    plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=lambda r: r["scenes"][0]["elements"].append(label())))
+    assert problems == [] and scene(plan)["counts"]["text"] == 2                                         # a pattern no longer limits the texts of a scene
     ask = Planner(raw_for(sp, REAL))
     vp.run(d, ask=ask)
-    assert '"max_texts": 1' in ask.asked[0][1] and '"max_texts": 2' in ask.asked[0][1] and "draw only that many text elements" in ask.asked[0][1]
+    assert "max_texts" not in ask.asked[0][1] and "`items` of that element" in ask.asked[0][1] and "empty rectangle with grey lines" in ask.asked[0][1]
+
+
+def card(items, **kw):
+    return {"element_id": "card_a", "type": "graphic", "role": "supporting", "required": False, "visual_description": "a glass card", "placement": {"region": "right", "priority": 4}, "items": items, **kw}
+
+
+def test_a_card_carries_its_items_and_they_are_checked_like_every_other_text(tmp_path):
+    d, sp = project(tmp_path)
+    add = lambda items: (lambda r: r["scenes"][0]["elements"].append(card(items)))
+    plan, problems = vp.assemble(d, sp, raw_for(sp, mutate=add([{"label": "AI agents", "caption": "do the work", "progress": 1}])))
+    assert problems == [] and next(e for e in scene(plan)["elements"] if e["element_id"] == "card_a")["items"][0]["label"] == "AI agents"
+    _, problems = vp.assemble(d, sp, raw_for(sp, mutate=add([{"label": "97% faster"}])))
+    assert any("number that is not in the narration" in m for m in problems)                            # a statistic is never invented, in a card either
+    plan, _ = vp.assemble(d, sp, raw_for(sp, mutate=add([{"label": "Quantum blockchain synergy platform"}])))
+    assert any("(item of card_a) is mostly not from the narration" in w for w in plan["validation"]["warnings"])
+    _, problems = vp.assemble(d, sp, raw_for(sp, mutate=add([{"label": "x", "progress": 2}])))          # a fill level is 0 to 1
+    assert problems
 
 
 def test_a_description_may_say_placeholder_but_an_unfinished_description_or_placeholder_text_is_rejected(tmp_path):
@@ -546,11 +561,12 @@ def test_every_run_keeps_the_previous_visual_plan(tmp_path):
 
 # ---------- solve the warnings of the stored plan ----------
 def cluttered_plan(tmp_path):
+    """A stored plan whose scene 1 has ONE warning (a text that is mostly not from the narration)."""
     d, sp = project(tmp_path)
 
-    def clutter(r):
-        r["scenes"][0]["elements"] += [{"element_id": f"extra_{i}", "type": "graphic", "role": "decoration", "required": False, "visual_description": "spark", "placement": {"region": "center", "priority": 5}} for i in range(6)]
-    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=clutter))
+    def ungrounded(r):
+        next(e for e in r["scenes"][0]["elements"] if e["type"] == "text").update(content="Quantum blockchain synergy platform")
+    plan, problems = vp.assemble(d, sp, raw_for(sp, REAL, mutate=ungrounded))
     assert problems == [] and vp.warned(plan).keys() == {1}
     vp.save(d, plan)
     return d, sp, plan
@@ -563,13 +579,13 @@ def test_solving_warnings_asks_only_about_the_scenes_with_warnings_and_keeps_eve
     def ask(user, system="", timeout=0):
         asked.append(user)
         fixed = vp._to_llm(old["scenes"][0])
-        fixed["elements"] = [e for e in fixed["elements"] if not e["element_id"].startswith("extra_")]
+        next(e for e in fixed["elements"] if e["type"] == "text").update(content="AI agents")
         return json.dumps({"visual_plan": {"scenes": [fixed]}})
     plan = vp.fix_warnings(d, ask=ask)
-    assert len(asked) == 1 and "SOLVE ONLY THE WARNINGS" in asked[0] and old["validation"]["warnings"][0] in asked[0] and "at most 6 elements" in asked[0] and asked[0].count('"meaning"') == 1
+    assert len(asked) == 1 and "SOLVE ONLY THE WARNINGS" in asked[0] and old["validation"]["warnings"][0] in asked[0] and "words of this scene's own narration" in asked[0] and asked[0].count('"meaning"') == 1
     assert plan["validation"]["warnings"] == [] and plan["warning_fix"]["status"] == "solved" and plan["warning_fix"]["scenes"] == ["scene_01"]
     assert [json.dumps(s, sort_keys=True) for s in plan["scenes"][1:]] == [json.dumps(s, sort_keys=True) for s in old["scenes"][1:]]       # every other scene is exactly as it was
-    assert len(plan["scenes"][0]["elements"]) == len(old["scenes"][0]["elements"]) - 6 and scene(plan)["media_requirements"] == old["scenes"][0]["media_requirements"]
+    assert len(plan["scenes"][0]["elements"]) == len(old["scenes"][0]["elements"]) and scene(plan)["media_requirements"] == old["scenes"][0]["media_requirements"]
     assert vp.load(d)["warning_fix"]["status"] == "solved" and list((d / "plan_backups").iterdir())
 
 
@@ -593,7 +609,7 @@ def test_solving_retries_once_with_the_problems_then_fails_without_changing_the_
 
 def test_a_step_retry_solves_only_the_warnings_that_step_raised(tmp_path):
     d, sp, old = cluttered_plan(tmp_path)
-    note = next(n for n in old["scenes"][0]["validation_notes"] if n["code"] == "cluttered")
+    note = next(n for n in old["scenes"][0]["validation_notes"] if n["code"] == "text_ungrounded")
     own, other = note["stage"], note["stage"] % 7 + 1                              # the step that raised it / another step (never the last one)
     assert vp.warned(old, own).keys() == {1} and vp.warned(old, len(vp.STAGES)).keys() == {1}      # the last step is the verdict on the whole plan
     assert vp.warned(old, other) == {}

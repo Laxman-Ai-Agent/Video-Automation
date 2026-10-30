@@ -26,6 +26,7 @@ async def create_project(
     reusable_templates: bool | None = Form(None),
     ai_images: bool = Form(False),
     motion_kit: bool = Form(False),
+    captions: bool = Form(True),
 ):
     if not name.strip():
         raise ApiError(422, "invalid_name", "the project needs a name", "send a non-empty name")
@@ -37,7 +38,7 @@ async def create_project(
         raise ApiError(422, "invalid_aspect", f"aspect must be one of {', '.join(store.ASPECTS)}", "send 9:16 or 16:9, or leave it out")
     ext = Path(audio.filename or "").suffix.lower()
     check_ext(f"audio{ext}", store.AUDIO_EXTS, "audio")
-    pdir = store.create(name, aspect, reusable_motion_templates=False, media=media, motion_kit=motion_kit)
+    pdir = store.create(name, aspect, reusable_motion_templates=False, media=media, motion_kit=motion_kit, captions=captions)
     dest = pdir / f"audio{ext}"
     try:
         await receive(audio, dest, store.MAX_AUDIO_BYTES)

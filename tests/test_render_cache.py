@@ -1,4 +1,5 @@
 """Phase 7: the scene-by-scene render cache (stages/render_cache.py + render.render). Run: python -m pytest tests/test_render_cache.py -q (with the project .venv)"""
+import contextlib
 import json
 import shutil
 import subprocess
@@ -35,6 +36,7 @@ def env(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "PROJECT_ROOT", root)
     monkeypatch.setattr(config, "PROJECTS_DIR", root / "projects")
     monkeypatch.setattr(config, "REMOTION_DIR", rd)
+    monkeypatch.setattr("VIDEO_ENGINE.pipeline.browser_profiles.cleaned_after", contextlib.nullcontext)      # no browser runs here: the sweep of Chrome profile folders reads the machine's temp folder and process list
     return pdir
 
 
@@ -103,6 +105,35 @@ def test_a_global_change_renders_every_scene_again(env, change):
         c["meta"]["palette"] = "y"
         (env / "composition.json").write_text(json.dumps(c), encoding="utf-8")
     assert all(a != b for a, b in zip(before, keys(env)))
+
+
+def captioned(subtitles=True):
+    c = comp()
+    c["meta"]["subtitles"] = subtitles
+    c["words"] = [{"w": "a", "start": 0.5, "end": 1.5}, {"w": "z", "start": 7.0, "end": 7.5}]
+    c["captions"] = [{"start": 0.5, "end": 1.5, "hook": True, "words": [{"w": "a", "start": 0.5, "end": 1.5, "key": False}]},
+                     {"start": 7.0, "end": 7.5, "hook": False, "words": [{"w": "z", "start": 7.0, "end": 7.5, "key": False}]}]
+    return c
+
+
+def test_a_changed_caption_redraws_only_the_chunks_it_is_heard_in(env):
+    c = captioned()
+    before = keys(env, c)
+    c["captions"][1]["words"][0]["w"] = "y"
+    c["words"][1]["w"] = "y"
+    assert [a != b for a, b in zip(before, keys(env, c))] == [False, False, False, True]    # the caption at 7 s is in the last scene's window only
+
+
+def test_captions_that_are_not_drawn_do_not_change_a_chunk(env):
+    c = captioned(subtitles=False)
+    before = keys(env, c)
+    c["captions"][0]["words"][0]["w"] = "q"                                                  # nothing draws it: the pixels are the same
+    assert keys(env, c) == before
+
+
+def test_turning_the_captions_on_redraws_every_chunk_that_has_one(env):
+    off, on = keys(env, captioned(subtitles=False)), keys(env, captioned(subtitles=True))
+    assert [a != b for a, b in zip(off, on)] == [True, False, False, True]                   # scenes 2 and 3 have no caption: they are the same pictures
 
 
 def test_preview_and_final_do_not_share_chunks(env):

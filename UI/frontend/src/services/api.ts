@@ -261,6 +261,7 @@ export async function createProjectWithAudio(
   formData.append('reusable_motion_templates', reusableTemplates ? 'true' : 'false');
   formData.append('ai_images', media.ai_images ? 'true' : 'false');
   formData.append('motion_kit', media.motion_kit ? 'true' : 'false');
+  formData.append('captions', media.captions ? 'true' : 'false');
 
   const res = await fetch(`${API_BASE}/projects`, {
     method: 'POST',

@@ -29,6 +29,7 @@ class ProjectInfo(BaseModel):
     reusable_motion_templates: bool = True             # Reusable Motion Templates toggle: True = Template Mode, False = Custom Code Mode
     media: MediaMix | None = None                      # the media settings chosen at upload (SYSTEM/core/media_kinds.py); projects made before it existed have none (defaults apply)
     motion_kit: bool = False                           # the optional motion kit (VIDEO_ENGINE/remotion/src/kit) is on; chosen at upload, locked afterwards
+    captions: bool = False                             # word-timed captions are drawn over the scenes; chosen at upload (on by default), locked afterwards; False for a project made before the option existed
     audio: AudioRef | None = None
 
 

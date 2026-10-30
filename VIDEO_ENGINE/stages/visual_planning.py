@@ -38,7 +38,7 @@ from .visual_planning_rules import overlap as _overlap
 
 log = logging.getLogger(__name__)
 SCHEMA = "2.0"
-VERSION = 4                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: max_texts; 3: every scene carries its derived shots (1.5-3.5 s, cut on spoken words); 4: a clip may be full-frame B-roll
+VERSION = 5                                   # bump when the rules or the instructions to the planner change (part of the fingerprint); 2: max_texts; 3: every scene carries its derived shots (1.5-3.5 s, cut on spoken words); 4: a clip may be full-frame B-roll; 5: no cap on texts or elements, a card's words are `items`
 FILE = "visual_planning.json"                # NOT visual_plan.json: that file is the user-editable shots/layers plan of visual_plan.py (untouched); this one is its semantic layer, joined by scene_NN
 STAGES = ("Semantic Understanding", "Scene Objective & Visual Concept", "Element Breakdown", "Relationships & Visual Hierarchy", "Media Mix", "Audio Timing & Text",
           "Style & Continuity", "Validation & Confidence")
@@ -75,6 +75,15 @@ class MediaSpec(Strict):
     fallback: str = Field(min_length=3)
 
 
+class Item(Strict):
+    """One thing a card, panel, node or step shows: the words (and the picture and fill) the scene draws INSIDE it, so that no card is an empty rectangle."""
+    label: str = Field(min_length=1, max_length=70)       # its title
+    caption: str | None = None                            # one short line that says what it is or does
+    value: str | None = None                              # a figure, only when the narration states it
+    icon_hint: str | None = None                          # what small picture belongs to it, in plain words ('document with a magnifier'); the scene picks the drawing
+    progress: float | None = Field(default=None, ge=0, le=1)      # a decorative fill level of a bar (never printed as a number)
+
+
 class Element(Strict):
     element_id: str = Field(min_length=1)
     type: Literal[mk.TYPES]                   # type: ignore[valid-type]
@@ -83,7 +92,8 @@ class Element(Strict):
     visual_description: str = Field(min_length=1)
     content: str | None = None                # text and labels only: the words shown on the screen (never the narration sentence)
     language: Literal["en", "te"] | None = None
-    text_purpose: str | None = None           # title, short_caption, label, number, keyword, cta
+    text_purpose: str | None = None           # title, subtitle, short_caption, label, number, keyword, cta
+    items: list[Item] = []                    # what the card / panel / diagram / step list shows inside (not for text elements: those use `content`)
     appearance: dict = {}
     placement: Placement = Placement()
     registry_requirements: Registry | None = None
@@ -195,12 +205,12 @@ Rules per scene, in this order:
    Specify depth_layer: "foreground" for primary hero card/cutout and on-screen titles, "midground" for bento cards, relational nodes, or networks, "background" for ambient glow or particle field.
    Regions are areas of the frame: {layout}. {policy}
    Elements of one scene must not share an area of the frame (a text never sits over the primary visual); choose regions so that they do not overlap.
-   Few elements: clutter is a defect (at most 6). In constraints, specify styling cues: 'isolated subject cutout, transparent background', 'glassmorphic card with subtle glow', or 'device frame mockup'.
+   There is no cap on elements: a scene has as many as its idea needs (a bento of several cards, a step list, connectors, badges), as long as every one has its own area and its own job. In constraints, specify styling cues: 'isolated subject cutout, transparent background', 'glassmorphic card with subtle glow', or 'device frame mockup'.
    The types an element can have:
    {kinds}
 4. element_relationships: between element_ids of this scene, with one relation of: {relations}. No disconnected piles of icons.
 5. MEDIA. {media}
-6. On-screen text is short, punchy headlines, metric badges, or labels in English or native Telugu script (U+0C00-U+0C7F), never full narration sentences. Max_texts: draw only that many text elements (usually 1: the punchy headline or metric). Put words in "content", reason in "text_purpose" (title, short_caption, label, number, keyword, cta).
+6. On-screen text: a scene shows as many words as its idea needs, in English or native Telugu script (U+0C00-U+0C7F), never a full narration sentence. A headline (text_purpose title), optionally a one-line subtitle, and for EVERY card, panel, node, bar or step the words it shows inside, as `items` of that element: label = its title, caption = one short line saying what it is or does, value = a figure ONLY when the narration states it, icon_hint = the small picture that belongs to it (plain words), progress = a decorative fill level 0 to 1 of a bar (it is never printed as a number). A card, panel, diagram or step list WITHOUT items is an empty rectangle with grey lines: never plan one. Every text is at most 8 words and is built from this scene's own narration (shorten, regroup or translate its words; never invent a fact, a name or a statistic). Put the words of text elements in "content", the reason in "text_purpose" (title, subtitle, short_caption, label, number, keyword, cta).
 7. icon elements: registry_requirements.icon is a lucide-react icon name in kebab-case only when you are sure it exists; otherwise icon null and search_descriptors.
 8. motion_hints: Directorial intent only (e.g. reveal_in_sequence, bento_cascade, card_deck_flip, emphasize_growth, danger_pulse, focal_spotlight, transform_shape, smooth_pan). Never preset names, easing, durations or frames.
 9. word_animation_events: Map 2 to 4 key expressive spoken words (using provided "words": word@start-end) to synchronized kinetic visual and sound-design cues.
@@ -556,7 +566,7 @@ def _ask_text(ctx: dict, only: list[int] | None = None, note: str = "") -> str:
         if only is not None and s.id not in only:
             continue
         nar = _narration(ctx, s, k)
-        row_dict = {"id": s.id, "start": nar["start_seconds"], "end": nar["end_seconds"], "meaning": s.meaning, "concept": s.concept, "mood": s.mood, "pattern": s.pattern, "max_texts": rules.text_slots(s.pattern),
+        row_dict = {"id": s.id, "start": nar["start_seconds"], "end": nar["end_seconds"], "meaning": s.meaning, "concept": s.concept, "mood": s.mood, "pattern": s.pattern,
                      "keywords": [x.text for x in s.keywords], "params": s.params.model_dump(exclude_none=True, exclude_defaults=True), "narration_en": nar["text_en"],
                      "words": " ".join(f"{w.w}@{w.start:g}-{w.end:g}" for w in ctx["words"] if nar["start_seconds"] - EPS <= (w.start + w.end) / 2 <= nar["end_seconds"] + EPS)}
         if s.id in hints:
@@ -607,7 +617,6 @@ def run(pdir: Path, ask=None, progress=None) -> dict:
 
 # ---------- solve the warnings of the plan that exists (one planner call about the scenes that have them) ----------
 FIX_HINTS = {
-    "cluttered": "a scene may have at most 6 elements: drop or merge the least useful supporting/decoration elements (never one that is required) and remove every relationship, motion hint and beat reference to an element you drop",
     "text_ungrounded": "on-screen text must be words of this scene's own narration (narration_en and its words): use words that are in it, or drop the text element if no short phrase of the narration fits",
     "brand_query": "rewrite media.query and every alt_query so they name only what a camera shows, with no brand, product or person name and no word made from one (e.g. 'youtuber recording video camera tripod' -> 'person recording video with camera on tripod')",
     "real_media_alone": "keep the real picture or clip, and add one drawn element (a short text from the narration, or a graphic, diagram or chart) that says what the narration means",

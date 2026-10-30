@@ -209,7 +209,8 @@ def reading_end(t: dict, scene_end: float) -> float:
 
 
 def reading_need(t: dict) -> float:
-    return (t.get("enter_s") or 0.5) + 0.8 + 0.3 * max(1, len(t["text"].split()))
+    """Seconds a text must stay on screen: a text can be read once half of its entrance has passed, then about 0.3 s per word after a 0.8 s start (a whole entrance counted on top made a 5-word line need 0.25 s more than the eye does)."""
+    return 0.5 * (t.get("enter_s") or 0.5) + 0.8 + 0.3 * max(1, len(t["text"].split()))
 
 
 def fr(seconds: float, fps: int = FPS) -> int:
@@ -372,7 +373,6 @@ def _rules(scenes: list[dict], reg: dict, aspect: str, images: bool, run: Run) -
             run.rule("text_readable", 9, sid, until - at < need, "warning", "text_too_short", f"{sid}: '{t['text']}' is on screen {until - at:.1f} s before it starts to leave but needs about {need:.1f} s to be read")
             if t.get("emphasis_at"):
                 run.rule("emphasis_inside_text", 8, sid, not at - EPS <= t["emphasis_at"][0] <= until + EPS, "error", "invalid_timing", f"{sid}: the emphasis of '{t['text']}' at {t['emphasis_at'][0]:g} s is outside its visible time")
-        run.rule("text_count", 9, sid, len(m["texts"]) > 2, "warning", "layout_density", f"{sid}: {len(m['texts'])} animated texts (at most 2 keep a scene readable)")
         for g in m["graphics"]:
             if g["preset"] not in reg["graphic"]:
                 continue

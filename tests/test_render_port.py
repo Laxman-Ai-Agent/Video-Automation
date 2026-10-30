@@ -1,5 +1,6 @@
 """Regression: the real render gave "Does this look like a foreign page?" because Remotion's own server landed on a port another application answers on.
 render.render now passes a free --port to every chunk render, and the colour codes of Remotion's messages are removed from the error the user sees. Run: python -m pytest tests/test_render_port.py -q"""
+import contextlib
 import json
 
 import pytest
@@ -22,6 +23,7 @@ def fake(monkeypatch, tmp_path):
     comp.write_text(json.dumps({"meta": {"fps": 30, "duration": 1, "audio": "a.wav"}, "scenes": [{"id": 1, "start": 0, "end": 1, "layers": []}]}), encoding="utf-8")
     (tmp_path / "cache").mkdir()
     chunk = {"scene": 1, "from": 0, "to": 30, "key": "k", "path": tmp_path / "cache" / "k.mp4"}
+    monkeypatch.setattr("VIDEO_ENGINE.pipeline.browser_profiles.cleaned_after", contextlib.nullcontext)      # no browser runs here: the sweep of Chrome profile folders reads the machine's temp folder and process list
     monkeypatch.setattr(render, "preflight", lambda *a, **k: None)
     monkeypatch.setattr(render, "stage_audio", lambda *a, **k: None)
     monkeypatch.setattr(render, "stage_motion", lambda *a, **k: None)

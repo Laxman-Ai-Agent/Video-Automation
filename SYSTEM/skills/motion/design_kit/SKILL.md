@@ -36,7 +36,7 @@ compatible_project_modes:
 - Gradient text: `linear-gradient(90deg, #fff, <violet11>)` with `WebkitBackgroundClip: "text"` and `color: "transparent"`.
 
 ## Variety (avoid the same look in every video)
-- One hero per scene: a single element (a big number, the chart, one word) carries the scene; everything else is quiet and smaller.
+- One focal element per scene (a big number, the chart, the title) leads; the supporting cards are smaller but are never empty: each carries its own readable words (motion.ui_cards).
 - No identical card grids: sizes and radii follow importance, not one radius and one shadow for everything.
 - Let the subject pick the mood (finance, health, tech, history): choose the accent pair and background from it, not always dark + cyan.
 - Number markers (01, 02, 03) only when the content really is a sequence.

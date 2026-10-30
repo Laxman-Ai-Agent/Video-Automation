@@ -48,8 +48,6 @@ SEMANTIC_LEXICON: list[tuple[set[str], str, str]] = [
     ({"super", "బలమైన", "తెలివైన", "expand", "scale", "intelligence"}, "scale_expand", "dimensional scale enlargement reinforcing authoritative dominance")]
 CANDIDATES = {"text": ("lower_safe_area", "upper_safe_area"), "icon": ("upper_right", "upper_left", "lower_right", "lower_left"),
               "other": ("center", "left", "right", "lower_left", "lower_right", "upper_left", "upper_right")}
-TEXT_SLOTS = {"quote_type": 2}                 # how many on-screen texts a scene pattern of src/patterns/index.ts draws: every pattern draws ONE (params.text), quote_type two (text, text2)
-DEFAULT_TEXT_SLOTS = 1
 LINKED = ("connects_to", "flows_from", "follows", "part_of", "contains")        # related elements may share an area (a path and the places it joins, a part and its whole)
 
 
@@ -63,10 +61,6 @@ class Issues:
 
     def of(self, severity: str) -> list[dict]:
         return [i for i in self.items if i["severity"] == severity]
-
-
-def text_slots(pattern: str) -> int:
-    return TEXT_SLOTS.get(pattern, DEFAULT_TEXT_SLOTS)
 
 
 def scene_id(n: int) -> str:
@@ -368,10 +362,6 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
         rule("element_ids_unique", sid, len(ids) != len(set(ids)), 3, "error", "element_id_duplicate", f"element ids repeat in {sid}: {sorted({x for x in ids if ids.count(x) > 1})}")
         rule("primary_element", sid, not any(e["role"] == "primary" for e in els), 4, "error", "no_primary", f"{sid} has no primary element")
         rule("required_element", sid, not any(e["required"] for e in els), 3, "warning", "no_required", f"{sid} has no required element")
-        rule("element_count", sid, len(els) > 6, 3, "warning", "cluttered", f"{sid} has {len(els)} elements: clutter")
-        slots = text_slots(ps.pattern)
-        rule("text_capacity", sid, len(texts) > slots, 6, "error", "text_capacity",
-             f"{sid} has {len(texts)} on-screen text elements ({', '.join(e['element_id'] for e in texts)}) but its pattern '{ps.pattern}' draws {slots}: keep the {slots} most important and put the other words into the description of the graphic they belong to")
         prim = [e["placement"]["priority"] for e in els if e["role"] == "primary"]
         rule("hierarchy", sid, bool(prim) and any(e["placement"]["priority"] < min(prim) for e in els if e["role"] != "primary"), 4, "warning", "hierarchy", f"{sid}: a supporting element has a higher priority than the primary one")
         odd = sorted({e["placement"]["region"] for e in els if e["placement"]["region"] not in REGIONS})
@@ -443,6 +433,18 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
             rule("text_grounded", sid, bool(w) and sum(x in known for x in w) / len(w) < 0.5, 6, "warning", "text_ungrounded", f"{sid}: '{c}' is mostly not from the narration")
             rule("text_short", sid, len(c.split()) > 8 or len(c) > 70, 6, "warning", "text_long", f"{sid}: '{c[:40]}' is too long for an on-screen label")
             rule("text_not_narration", sid, len(c) > 20 and w == words(n["text"])[:len(w)], 6, "warning", "text_is_narration", f"{sid}: the on-screen text repeats the narration")
+        for e in els:                                                    # the words a card, node or step shows (`items`): grounded in the narration like every other text, short, and a number only when the narration says it
+            for it in e.get("items") or []:
+                rule("item_label", sid, not (it.get("label") or "").strip(), 6, "error", "item_without_label", f"{sid}: an item of {e['element_id']} has no label")
+                for c in (it.get("label"), it.get("value"), it.get("caption")):
+                    c = (c or "").strip()
+                    if not c:
+                        continue
+                    w = words(c)
+                    nums = [x for x in re.findall(r"\d+(?:[.,]\d+)?", c) if x not in digits]
+                    rule("item_numbers_grounded", sid, bool(nums), 6, "error" if llm and re.search(r"%|[$€£₹]|\d[.,]\d|\d{4,}", c) else "warning", "number_ungrounded", f"{sid}: '{c}' (item of {e['element_id']}) has a number that is not in the narration")
+                    rule("item_grounded", sid, bool(w) and sum(x in known for x in w) / len(w) < 0.5, 6, "warning", "text_ungrounded", f"{sid}: '{c}' (item of {e['element_id']}) is mostly not from the narration")
+                    rule("item_short", sid, len(c.split()) > 8 or len(c) > 70, 6, "warning", "text_long", f"{sid}: '{c[:40]}' (item of {e['element_id']}) is too long for a card")
         if i:
             b, c = plan["scenes"][i - 1]["visual_concept"], s["visual_concept"]
             rule("variety", sid, b["representation"] == c["representation"] and b["primary_focus"] == c["primary_focus"] and c["representation"] != "typography", 7, "warning", "repeated_concept", f"{sid} repeats the concept of the scene before it")

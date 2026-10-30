@@ -111,12 +111,27 @@ KIT_HINT = (
 )
 
 
+# The UI parts of VIDEO_ENGINE/remotion/src/ui (always available, unlike the optional kit: they are low-level parts, never a finished scene).
+UI_HINT = (
+    " UI PARTS (import from \"../ui\"; colours are #RRGGBB): "
+    "<GlassPanel accent width height padding enterAt>children</GlassPanel> = a glass card with a glowing border that rises in at frame enterAt; "
+    "<IconChip accent size enterAt>icon</IconChip> = a gradient chip with a glow that holds a white Phosphor weight=\"duotone\" icon or an Illustration; "
+    "<Illustration name=\"document-search\"|\"profile-card\"|\"growth-chart\" size enterAt /> = a two-colour illustration for a card's hero picture; "
+    "<ProgressRow label progress={0..1} accent enterAt /> = label + filling bar + check badge when full (decorative: it prints no number); <CheckBadge size enterAt />; "
+    "<FlowLines width height lines={[[x1,y1,x2,y2]]} color enterAt /> = connectors with glowing nodes between cards; "
+    "<Headline text accent accentWords={[...]} size enterAt /> = the display headline with its accent words coloured; "
+    "<StarField from to /> = the scene backdrop (gradient, drifting stars, dark horizon: first child of the scene's AbsoluteFill); <RingBadge accent ring size enterAt>icon</RingBadge> = a glowing orb with a turning orbit ring on top of a card; "
+    "<RatingStars rating size enterAt />; <MiniBars values={[0..1]} accent width height enterAt /> = a card's footer bar chart; <ThumbsBadge accent size enterAt /> = the round approval badge. "
+    "Build cards from these and your own JSX instead of redrawing a card each time."
+)
+
+
 def approved_libraries_hint(motion_kit: bool = False) -> str:
     """APPROVED_LIBRARIES_HINT plus the Lottie animations that really exist (so the LLM never invents a file name), plus the motion kit when the project has it on."""
     lot = lottie_manifest()
     extra = (" Available Lottie files (import animationData from \"../lottie/<file>\" and render <Lottie animationData={animationData} loop />): "
              + "; ".join(f"{a['file']} = {a.get('description', a['id'])}" for a in lot) + ".") if lot else ""
-    return APPROVED_LIBRARIES_HINT + extra + (KIT_HINT if motion_kit else "")
+    return APPROVED_LIBRARIES_HINT + UI_HINT + extra + (KIT_HINT if motion_kit else "")
 
 
 _IMPORT_SPECIFIER = re.compile(r"""(?:\bfrom\s+|\bimport\s+|\brequire\s*\(\s*)["']([^"']+)["']""")
@@ -250,15 +265,18 @@ def custom_composition(pdir: Path, aspect: str, scenes: list[dict[str, Any]], pa
 
     spoken = [{"w": str(x.get("w") or x.get("word") or ""), "start": float(x["start"]), "end": float(x["end"])} for x in mg.words(pdir)
               if isinstance(x.get("start"), (int, float)) and isinstance(x.get("end"), (int, float))]
+    from . import captions as cap
+    caps = cap.build(spoken, aspect, cap.scene_terms(scenes, {s.get("id"): (mpl_scenes.get(s.get("id")) or {}).get("texts", []) for s in scenes})) if store.captions(pdir) else []
     return {
         "words": spoken,
+        **({"captions": caps} if caps else {}),
         "meta": {
             "fps": 30,
             "width": w,
             "height": h,
             "audio": audio_file.name if audio_file else "audio.wav",
             "duration": total_dur,
-            "subtitles": False,
+            "subtitles": bool(caps),
             "palette": palette,
             "motion": "rich",
             "motionOnly": not store.uses_images(pdir),
@@ -715,6 +733,8 @@ def generate_scene_tsx_via_llm(
         "checking it first. `getPointAtLength`/`getPointAtLengthDescribed` of @remotion/paths return `Point | null`, `Array.find` returns `undefined`, a `useRef` holds `| null`: "
         "guard the value (`if (!p) return null;`) or give it a fallback before you read a field of it.\n"
         "11. Each shot lists the words spoken in it with their frames: a word that is drawn on screen appears at its own start_frame, never on a fixed schedule.\n"
+        "13. CARDS: every card, panel, node or step carries readable content from the `items` of its element (a title of 36px or more, a one-line caption of 24px or more, a picture: an Illustration or a duotone icon in an IconChip) and is NEVER an empty rectangle or grey placeholder lines; a bar has its label next to it. "
+        "No text is smaller than 24px on the 1920x1080 canvas (a credit line may be 20px; scale it for 9:16). Accent colours and glows come from the palette, at most two accent colours in a scene.\n"
         "9. Output valid, complete React TSX source code only."
     )
     texts = [t for t in (texts or [headline, subtext]) if t]
@@ -875,7 +895,7 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
-CODEGEN_VERSION = "3"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames)
+CODEGEN_VERSION = "4"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames; 4: the UI parts, cards carry the plan's items)
 
 
 def scene_input_fingerprint(**inputs: Any) -> str:
@@ -1003,6 +1023,7 @@ def generate_custom_motion_code(
         texts = [e.get("content", "") for e in vp_sc.get("elements", []) if mk.is_text(e.get("type", "")) and e.get("content")]
         headline = texts[0] if texts else sc.get("meaning") or sc.get("concept") or f"Scene {sid}"
         subtext = texts[1] if len(texts) > 1 else ""
+        texts += [x for e in vp_sc.get("elements", []) for it in e.get("items") or [] for x in (it.get("label"), it.get("caption"), it.get("value")) if x]      # the words inside the cards are drawn verbatim and checked like the headline
 
         # A real element of the Visual Plan (type image or video) is drawn from the file Asset Collection kept for it (the same "drawn with its data-element-id" check applies); when none was
         # collected, the scene draws the motion fallback the plan wrote for it instead.

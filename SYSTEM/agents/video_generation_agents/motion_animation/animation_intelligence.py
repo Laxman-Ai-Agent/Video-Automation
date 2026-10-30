@@ -252,6 +252,8 @@ class VisualPreviewVerifier:
             if headline_size < 32:
                 typography_passed = False
                 findings.append(f"Headline typography too small ({headline_size}px); minimum standard is 32px")
+            if min(font_sizes) < 20:                       # a phone shows nothing below this readably (a credit line is the smallest text a scene has: 20px)
+                findings.append(f"Text too small ({min(font_sizes)}px): nothing is drawn below 20px")
             if len(font_sizes) >= 2:
                 # If there are multiple text elements, verify hierarchy (largest > second largest)
                 sorted_sizes = sorted(font_sizes, reverse=True)
@@ -262,7 +264,7 @@ class VisualPreviewVerifier:
         # Ensure text is not dark-on-dark or invisible
         has_text_color = bool(re.search(r"color:\s*[\"']#(?:fff|faf|f8|f1|e2|cbd|ffffff|f8fafc)", source_code, re.I))
         has_text_shadow = "textShadow" in source_code
-        has_contrast = has_text_color or has_text_shadow or "radial-gradient" in source_code
+        has_contrast = has_text_color or has_text_shadow or "radial-gradient" in source_code or "../ui" in source_code      # the UI parts set their own high-contrast colours
 
         if not has_contrast:
             contrast_passed = False

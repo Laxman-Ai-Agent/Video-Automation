@@ -8,7 +8,7 @@ import type { Comp } from "./schema";
 import { DEFAULT_PALETTE, PaletteCtx, mix, roles } from "./theme";
 import "./fonts";
 
-export const Main: React.FC<Comp> = ({ meta, scenes, words }) => {
+export const Main: React.FC<Comp> = ({ meta, scenes, words, captions }) => {
   const palette = roles(meta.palette ?? DEFAULT_PALETTE);
   return (
     <PaletteCtx.Provider value={palette}>
@@ -18,7 +18,7 @@ export const Main: React.FC<Comp> = ({ meta, scenes, words }) => {
           <SceneRoot scenes={scenes} fps={meta.fps} />
           <Grade grade={meta.grade} />
           <FilmLook />
-          {meta.subtitles && words && <Subtitles words={words} />}
+          {meta.subtitles && captions && <Subtitles captions={captions} />}
         </AbsoluteFill>
       </SceneData.Provider>
     </PaletteCtx.Provider>

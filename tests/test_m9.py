@@ -327,6 +327,7 @@ def run_render(env, monkeypatch, steps, exit_code=0):
     monkeypatch.setattr(render.subprocess, "Popen", lambda cmd, **k: FakeRemotion(clock, steps, exit_code, cmd))
     monkeypatch.setattr(render.sound_design, "build", lambda *a, **k: {})                 # these tests are about the render profile; the fake Popen above would also catch the sound design's ffmpeg (tests/test_sound_design.py covers the mix)
     monkeypatch.setattr(render.render_cache, "assemble", lambda chunks, audio, fps, out, work: out.write_bytes(b"mp4"))      # the join is ffmpeg's (tests/test_render_cache.py)
+    monkeypatch.setattr("VIDEO_ENGINE.pipeline.browser_profiles.cleaned_after", __import__("contextlib").nullcontext)          # no browser runs here: the sweep of Chrome profile folders reads the machine's temp folder and process list
     return render.render(env, True)
 
 

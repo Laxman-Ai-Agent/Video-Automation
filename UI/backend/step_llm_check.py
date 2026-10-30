@@ -1042,7 +1042,7 @@ MOTION_PLAN_STAGE_RULES: dict[int, tuple[str, tuple[str, ...]]] = {
     6: ("Animation Engine Adapter", ("telugu_safe_preset", "text_style", "intensity_range", "min_duration", "speed_range")),
     7: ("Composition & Transition Builder", ("transition_not_repeated", "transition_fits", "transition_present")),
     8: ("Timing & Audio Sync", ("action_in_scene", "frames_valid", "emphasis_inside_text")),
-    9: ("Layout Validator", ("text_readable", "text_count", "graphic_in_safe_area", "graphic_clear_of_drawn_text", "graphic_clear_of_text")),
+    9: ("Layout Validator", ("text_readable", "graphic_in_safe_area", "graphic_clear_of_drawn_text", "graphic_clear_of_text")),
     10: ("Code & Plan Validator", ("ids_unique", "no_code", "mode_requirement")),
     11: ("Motion Test Runner", ("motion_checks", "motion_checks_ran")),
     12: ("Error Repair Handler", ()),
