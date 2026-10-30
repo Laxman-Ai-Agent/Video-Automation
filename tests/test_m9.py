@@ -300,15 +300,19 @@ def test_heavy_scenes_needs_enough_scenes_to_compare():
 
 
 class FakeRemotion:
-    """Stands in for `npx remotion render`: prints progress lines and moves a fake clock."""
-    def __init__(self, clock, steps, exit_code=0):
-        self.clock, self.steps, self.exit_code = clock, steps, exit_code
+    """Stands in for `npx remotion bundle` / `npx remotion render --frames=a-b` (one scene chunk): writes the chunk file, prints the progress lines of its frames and moves a fake clock."""
+    def __init__(self, clock, steps, exit_code, cmd):
+        self.clock, self.exit_code = clock, exit_code if cmd[2] == "render" else 0                      # the bundle step succeeds; the chunks fail
+        self.first, self.last = (map(int, next(a for a in cmd if a.startswith("--frames=")).split("=")[1].split("-"))) if cmd[2] == "render" else (0, -1)
+        self.steps = [(at, done) for at, done in steps if self.first < done <= self.last + 1] if cmd[2] == "render" else []
+        if cmd[2] == "render":
+            Path(cmd[5]).write_bytes(b"chunk")
         self.stdout = self._lines()
 
     def _lines(self):
         for at, done in self.steps:
             self.clock[0] = at
-            yield f"Rendered {done}/120\r\n"
+            yield f"Rendered {done - self.first}/{self.last - self.first + 1}\r\n"
 
     def wait(self):
         return self.exit_code
@@ -320,8 +324,9 @@ def run_render(env, monkeypatch, steps, exit_code=0):
     (env / "audio.wav").write_bytes(b"audio")
     clock = [100.0]
     monkeypatch.setattr(render, "time", SimpleNamespace(time=lambda: clock[0]))
-    monkeypatch.setattr(render.subprocess, "Popen", lambda cmd, **k: FakeRemotion(clock, steps, exit_code))
+    monkeypatch.setattr(render.subprocess, "Popen", lambda cmd, **k: FakeRemotion(clock, steps, exit_code, cmd))
     monkeypatch.setattr(render.sound_design, "build", lambda *a, **k: {})                 # these tests are about the render profile; the fake Popen above would also catch the sound design's ffmpeg (tests/test_sound_design.py covers the mix)
+    monkeypatch.setattr(render.render_cache, "assemble", lambda chunks, audio, fps, out, work: out.write_bytes(b"mp4"))      # the join is ffmpeg's (tests/test_render_cache.py)
     return render.render(env, True)
 
 

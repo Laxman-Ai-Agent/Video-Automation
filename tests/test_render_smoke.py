@@ -2,12 +2,15 @@
 (`render.render(..., out=)`), and Stage 13's own verifier accepts the encoded file against what the composition asks for. Everything else in the Stage 13 / 14 tests replaces the renderer with a real mp4 made by ffmpeg;
 this is the one test where the real renderer runs. It never touches a real project. Run: python -m pytest tests/test_render_smoke.py -q"""
 import importlib
+import io
 import json
+import math
+import struct
+import wave
 
 from backend import media_probe as mprobe, render, render_video as rv
 
 _rv = importlib.import_module("test_render_video")
-_m7 = importlib.import_module("test_m7")
 built = _rv.built
 
 
@@ -20,7 +23,13 @@ def test_the_installed_remotion_renders_a_small_composition_to_a_temp_target_and
     d = tmp_path / "smoke"
     d.mkdir()
     (d / "composition.json").write_text(json.dumps(comp, ensure_ascii=False), encoding="utf-8")
-    wav = _m7.wav_bytes(3.0)
+    buf = io.BytesIO()
+    with wave.open(buf, "wb") as w:                                                                              # a tone, not silence: the sound design measures the narration's loudness and cannot normalise a silent file (Stage 1 never lets one through)
+        w.setnchannels(1)
+        w.setsampwidth(2)
+        w.setframerate(16000)
+        w.writeframes(b"".join(struct.pack("<h", int(8000 * math.sin(2 * math.pi * 440 * i / 16000))) for i in range(3 * 16000)))
+    wav = buf.getvalue()
     for name in {"audio.wav", comp["meta"]["audio"]}:
         (d / name).write_bytes(wav)
     out = d / "out.rendering-smoke.mp4"

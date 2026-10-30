@@ -3,10 +3,12 @@ The only derived input is a staged COPY of the audio at VIDEO_ENGINE/remotion/pu
 audio through staticFile()): the sound-design mix projects/<id>/audio_mix.wav (stages/sound_design.py: narration + transition whooshes + an optional licensed music bed, -14 LUFS),
 or the bare projects/<id>/audio.* when no mix exists; the narration file itself is never edited.
 Renders must therefore run one at a time (the staged name is shared).
+The picture is rendered scene by scene (stages/render_cache.py, cache in projects/<id>/render_cache/<final|preview>/): only a scene that changed (and the one after it) is rendered again.
 preview = 960x540 at the project fps (--scale 0.5), final = 1920x1080 at the project fps.
 The optional 9:16 variant renders composition_9x16.json (1080x1920; preview 540x960) to out_9x16.mp4 / out_preview_9x16.mp4;
 16:9 stays the default and its files and command are unchanged."""
 import json
+import os
 import re
 import shutil
 import statistics
@@ -16,7 +18,7 @@ from pathlib import Path
 
 from PIL import Image
 
-from . import asset_collection, config, sound_design
+from . import asset_collection, config, render_cache, sound_design
 from .diagnose import UserProblem, check_disk, explain_text
 
 CONCURRENCY = 3
@@ -75,10 +77,12 @@ def render_flags(preview: bool) -> list[str]:
     return [f"--concurrency={CONCURRENCY}"] + (["--scale=0.5"] if preview else [])
 
 
-def build_command(pdir: Path, preview: bool, aspect: str = "16:9", out: Path | None = None) -> list[str]:
-    """`out`: another target than the project's output slot (Stage 13 renders a final video to a temporary file first and publishes it only after it was verified)."""
-    cmd = ["npx", "remotion", "render", "src/index.ts", "Main", str(out or output_path(pdir, preview, aspect)),
-           f"--props={comp_path(pdir, aspect)}", *render_flags(preview)]
+def build_command(pdir: Path, preview: bool, aspect: str = "16:9", out: Path | None = None, entry: str = "src/index.ts",
+                  frames: tuple[int, int] | None = None) -> list[str]:
+    """`out`: another target than the project's output slot (Stage 13 renders a final video to a temporary file first and publishes it only after it was verified).
+    `entry` + `frames`: one scene's chunk (first and last frame, inclusive) of an already bundled project; a chunk is muted, the audio is muxed once after the join."""
+    cmd = ["npx", "remotion", "render", entry, "Main", str(out or output_path(pdir, preview, aspect)),
+           f"--props={comp_path(pdir, aspect)}", *render_flags(preview), *([f"--frames={frames[0]}-{frames[1]}", "--muted"] if frames else [])]
     try:
         from .orchestrator import find_browser_executable
         b_path, _ = find_browser_executable()
@@ -152,13 +156,13 @@ def heavy_scenes(rows: list[dict]) -> list[int]:
     return [r["id"] for r in rows if median > 0 and r["s_per_frame"] > HEAVY_RATIO * median]
 
 
-def write_profile(pdir: Path, preview: bool, marks: list[tuple[int, float]], seconds: float, aspect: str = "16:9") -> dict:
-    """render_profile.json: total time vs video length and the cost of every scene. Not an input of any step."""
+def write_profile(pdir: Path, preview: bool, marks: list[tuple[int, float]], seconds: float, aspect: str = "16:9", cached_frames: int = 0) -> dict:
+    """render_profile.json: total time vs video length and the cost of every scene (a scene taken from the render cache costs 0 s; `cached_frames` says how many frames that was). Not an input of any step."""
     comp = json.loads(comp_path(pdir, aspect).read_text(encoding="utf-8"))
     rows = scene_profile(comp, marks)
     video = comp["meta"]["duration"]
     data = {"mode": "preview" if preview else "final", "seconds": round(seconds, 1), "video_seconds": video,
-            "x_video_length": round(seconds / video, 1) if video else None, "heavy": heavy_scenes(rows), "scenes": rows}
+            "x_video_length": round(seconds / video, 1) if video else None, "heavy": heavy_scenes(rows), "scenes": rows, "cached_frames": cached_frames}
     (pdir / f"render_profile{suffix(aspect)}.json").write_text(json.dumps(data, indent=1), encoding="utf-8")
     return data
 
@@ -185,16 +189,9 @@ def render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", ou
         return _render(pdir, preview, on_progress, aspect, out)
 
 
-def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", out: Path | None = None) -> Path:
-    preflight(pdir, aspect)
-    if (narration := project_audio(pdir)) is not None:
-        sound_design.build(pdir, narration, aspect)                           # raises SoundDesignError with the cause: a render never plays a mix that was not measured
-    stage_audio(pdir, aspect)
-    stage_motion(pdir)
-    out = out or output_path(pdir, preview, aspect)
-    cmd = build_command(pdir, preview, aspect, out) + [f"--port={_free_port()}"]     # Remotion's own server must not land on a port another app already answers on ("Does this look like a foreign page?")
-    remotion_dir = config.REMOTION_DIR
-    proc = subprocess.Popen(cmd, cwd=remotion_dir, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+def _run(cmd: list[str], pdir: Path, label: str, on_line=None) -> None:
+    """One Remotion command: its output is read line by line, it is registered so that a cancel can stop it, a failure is explained by name."""
+    proc = subprocess.Popen(cmd, cwd=config.REMOTION_DIR, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                             text=True, encoding="utf-8", errors="replace", shell=True, creationflags=config.LOW_PRIORITY)
     try:
         from VIDEO_ENGINE.pipeline import procs
@@ -204,16 +201,12 @@ def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", o
         except ImportError:
             from . import procs
     procs.register(pdir.name, proc)
-    t0, tail, marks = time.time(), [], []
+    tail = []
     for line in proc.stdout:
         line = _ANSI.sub("", line.strip())
         tail = (tail + [line])[-15:]
-        m = re.search(r"Rendered (\d+)/(\d+)", line)
-        if m:
-            done, total = int(m.group(1)), int(m.group(2))
-            marks.append((done, time.time() - t0))
-            if on_progress:
-                on_progress(min(99.0, 100 * done / total), (time.time() - t0) / max(done, 1) * (total - done))      # the last frame is not the end: encoding and the verification follow (the step says 100)
+        if on_line:
+            on_line(line)
     rc = proc.wait()
     procs.unregister(pdir.name, proc)
     if rc != 0:
@@ -221,6 +214,56 @@ def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", o
         known = explain_text("\n".join(tail))
         if known:
             raise UserProblem(f"{known} (Remotion said: {detail[:300]})")
-        raise RuntimeError("remotion render failed: " + detail)
-    write_profile(pdir, preview, marks, time.time() - t0, aspect)
+        raise RuntimeError(f"remotion {label} failed: " + detail)
+
+
+def _render(pdir: Path, preview: bool, on_progress=None, aspect: str = "16:9", out: Path | None = None) -> Path:
+    """Scene by scene (stages/render_cache.py): a scene whose chunk is cached is not rendered again, the chunks are joined and the audio is muxed once."""
+    preflight(pdir, aspect)
+    if (narration := project_audio(pdir)) is not None:
+        sound_design.build(pdir, narration, aspect)                           # raises SoundDesignError with the cause: a render never plays a mix that was not measured
+    audio = stage_audio(pdir, aspect)
+    stage_motion(pdir)
+    out = out or output_path(pdir, preview, aspect)
+    comp = json.loads(comp_path(pdir, aspect).read_text(encoding="utf-8"))
+    cache = pdir / f"render_cache{suffix(aspect)}" / ("preview" if preview else "final")
+    cache.mkdir(parents=True, exist_ok=True)
+    chunks = render_cache.plan(pdir, comp, preview, render_flags(preview), cache)
+    total = chunks[-1]["to"]
+    missing = [c for c in chunks if not c["path"].is_file()]
+    cached = total - sum(c["to"] - c["from"] for c in missing)
+    bundle = cache.parent / "_bundle"
+    t0, marks, done = time.time(), [], 0
+
+    def report(frames_done: int) -> None:
+        if on_progress:
+            rendered = frames_done - cached                                   # cached frames cost no time: the estimate counts only the frames that are really rendered
+            on_progress(min(99.0, 100 * frames_done / total), (time.time() - t0) / max(rendered, 1) * (total - frames_done))      # the last frame is not the end: the join and the verification follow (the step says 100)
+
+    try:
+        if missing:
+            shutil.rmtree(bundle, ignore_errors=True)
+            _run(["npx", "remotion", "bundle", "src/index.ts", f"--out-dir={bundle}", "--quiet"], pdir, "bundle")      # once, after the staging above: the bundle carries the staged scenes, assets and audio
+        for c in chunks:
+            if c in missing:
+                part = c["path"].with_suffix(".part.mp4")                    # a chunk is in the cache only when it is complete
+                cmd = build_command(pdir, preview, aspect, part, entry=str(bundle), frames=(c["from"], c["to"] - 1)) + [f"--port={_free_port()}"]     # Remotion's own server must not land on a port another app already answers on ("Does this look like a foreign page?")
+
+                def on_line(line: str, base: int = done) -> None:
+                    m = re.search(r"Rendered (\d+)/(\d+)", line)
+                    if m:
+                        marks.append((base + int(m.group(1)), time.time() - t0))
+                        report(base + int(m.group(1)))
+                _run(cmd, pdir, "render", on_line)
+                os.replace(part, c["path"])
+            done += c["to"] - c["from"]
+            marks.append((done, time.time() - t0))
+            report(done)
+    finally:
+        shutil.rmtree(bundle, ignore_errors=True)
+        for stray in cache.glob("*.part.mp4"):
+            stray.unlink(missing_ok=True)
+    render_cache.assemble(chunks, audio, comp["meta"]["fps"], out, cache.parent)
+    render_cache.prune(cache, chunks)
+    write_profile(pdir, preview, marks, time.time() - t0, aspect, cached)
     return out

@@ -48,7 +48,8 @@ def client(tmp_path, monkeypatch, llm_review_pass):
     (root / "VIDEO_ENGINE" / "remotion" / "src" / "Main.tsx").write_text("x")
     monkeypatch.setattr(config, "PROJECT_ROOT", root)
     monkeypatch.setattr(config, "PROJECTS_DIR", root / "projects")
-    monkeypatch.setattr(pipeline.shutil, "which", lambda t: "/fake/" + t)
+    real_which = pipeline.shutil.which
+    monkeypatch.setattr(pipeline.shutil, "which", lambda t: real_which(t) or "/fake/" + t)      # a tool the machine lacks is faked; one it has stays real (Final QC's contact sheets run the real ffmpeg)
 
     from backend.transcribe import Transcript
 
