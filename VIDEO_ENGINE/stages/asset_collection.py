@@ -586,6 +586,12 @@ def _collect(pdir: Path, aspect: str, force: bool, rep: live_steps.LiveSteps) ->
     manifest = {"schema": SCHEMA_MAN, "version": VERSION, "input_fingerprint": fp, "aspect": aspect, "requirement_count": len(reqs), "assets": assets, "fallbacks": fallbacks,
                 "providers": providers, "generated_at": _now()}
     _save(manifest_path(pdir), manifest)
+    try:
+        from SYSTEM.registries.skill_registry import record_skill_usage
+        record_skill_usage("dynamic-asset-generator")
+        record_skill_usage("motion.real_media")
+    except Exception:
+        pass
     if (missing := [f for f in fallbacks if f["must_be_real"]]):
         raise AssetError("no acceptable real media for " + "; ".join(f"{m['requirement_id']} ({m['reason']})" for m in missing))
     rep.step(5, "completed", f"manifest written; {sum(1 for a in assets if a.get('needs_human_review'))} asset(s) listed for the rights review in Final QC", 1, 1, _end_facts(pdir, manifest))

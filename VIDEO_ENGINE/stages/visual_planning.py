@@ -620,6 +620,17 @@ def run(pdir: Path, ask=None, progress=None) -> dict:
     if final:
         _keep_previous(pdir)
         save(pdir, final)
+        try:
+            from SYSTEM.registries.skill_registry import record_skill_usage
+            record_skill_usage('visual.scene_planning')
+            record_skill_usage('validation.layout_safe_zones')
+            elements = [el.get('kind') for sc in final.get('scenes', []) for el in sc.get('elements', [])]
+            if any('chart' in str(e) for e in elements):
+                record_skill_usage('graphics.data_visualization')
+            if any('typography' in str(e) or 'text' in str(e) for e in elements):
+                record_skill_usage('typography.telugu_rendering')
+        except Exception as e:
+            log.debug('Failed to record skill usage in visual_planning: %s', e)
     if best is None:
         raise GenError("the visual plan did not pass the checks: " + "; ".join(problems[:4]))
     return best

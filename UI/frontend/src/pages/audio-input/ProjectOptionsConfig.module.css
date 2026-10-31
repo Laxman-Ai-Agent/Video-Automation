@@ -3,23 +3,25 @@
   flex-direction: column;
   background-color: var(--bg-elevated);
   border: 1px solid var(--border-card);
-  border-radius: 8px;
-  padding: 16px 18px;
-  gap: 14px;
+  border-radius: 6px;
+  padding: 10px 12px;
+  gap: 6px;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 4px;
 }
 
 .label {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 12.5px;
+  gap: 5px;
+  font-size: 11.5px;
   font-weight: 600;
   color: var(--text-primary);
   margin: 0;
@@ -30,30 +32,31 @@
 }
 
 .headerHint {
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-muted);
 }
 
 .aspectGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: 6px;
 }
 
 .aspectCard {
-  padding: 12px 14px;
-  border-radius: 6px;
+  padding: 6px 8px;
+  border-radius: 5px;
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  gap: 8px;
+  transition: all 0.18s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   user-select: none;
+  min-height: 38px;
 }
 
 .aspectCardIdle {
-  border: 1.5px solid var(--border-card);
+  border: 1px solid var(--border-card);
   background-color: var(--bg-card);
 }
 
@@ -66,33 +69,33 @@
 .aspectCardActive {
   border: 1.5px solid var(--accent-blue);
   background: linear-gradient(135deg, var(--status-running-bg) 0%, rgba(24, 144, 255, 0.1) 100%);
-  box-shadow: 0 0 12px rgba(24, 144, 255, 0.2);
+  box-shadow: 0 0 8px rgba(24, 144, 255, 0.2);
 }
 
 .aspectPreview169 {
-  width: 32px;
-  height: 20px;
-  border-radius: 3px;
+  width: 24px;
+  height: 15px;
+  border-radius: 2px;
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
 .aspectPreview916 {
-  width: 20px;
-  height: 30px;
-  border-radius: 3px;
+  width: 15px;
+  height: 22px;
+  border-radius: 2px;
   flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
 .previewActive {
-  border: 2px solid var(--accent-blue);
+  border: 1.5px solid var(--accent-blue);
   background-color: rgba(24, 144, 255, 0.3);
-  box-shadow: 0 0 8px rgba(24, 144, 255, 0.3);
+  box-shadow: 0 0 6px rgba(24, 144, 255, 0.3);
 }
 
 .previewIdle {
-  border: 2px solid var(--text-muted);
+  border: 1.5px solid var(--text-muted);
   background-color: transparent;
   opacity: 0.7;
 }
@@ -103,10 +106,10 @@
 }
 
 .aspectTitle {
-  font-size: 13px;
+  font-size: 11.5px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .aspectTitleActive {
@@ -114,13 +117,13 @@
 }
 
 .aspectSubtitle {
-  font-size: 10.5px;
+  font-size: 9.5px;
   color: var(--text-muted);
 }
 
 .checkCircle {
-  width: 18px;
-  height: 18px;
+  width: 15px;
+  height: 15px;
   border-radius: 50%;
   background: linear-gradient(135deg, var(--accent-blue), #177ddc);
   display: flex;
@@ -128,38 +131,38 @@
   justify-content: center;
   color: #ffffff;
   flex-shrink: 0;
-  box-shadow: 0 2px 6px rgba(24, 144, 255, 0.4);
+  box-shadow: 0 2px 4px rgba(24, 144, 255, 0.4);
 }
 
 /* Visual Engine Features */
 .featuresSection {
   border-top: 1px solid var(--border-subtle);
-  padding-top: 12px;
+  padding-top: 6px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 4px;
 }
 
 .featuresHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .featuresTitle {
-  font-size: 11.5px;
+  font-size: 10.5px;
   font-weight: 700;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
 }
 
 .featuresTag {
-  font-size: 10.5px;
+  font-size: 9.5px;
   color: var(--accent-cyan);
   font-weight: 600;
   letter-spacing: 0.2px;
@@ -168,9 +171,9 @@
 .reusableTemplatesCard {
   display: flex;
   align-items: flex-start;
-  gap: 10px;
-  padding: 8px 10px;
-  border-radius: 6px;
+  gap: 7px;
+  padding: 4px 6px;
+  border-radius: 5px;
   background-color: var(--bg-card);
   border: 1px solid var(--border-card);
   cursor: pointer;
@@ -182,19 +185,19 @@
 }
 
 .reusableTemplatesCheckbox {
-  margin-top: 3px;
+  margin-top: 2px;
   accent-color: var(--accent-blue);
   cursor: pointer;
 }
 
 .reusableTemplatesTitle {
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 600;
   color: var(--text-primary);
 }
 
 .reusableTemplatesHint {
-  font-size: 10.5px;
+  font-size: 9.5px;
   color: var(--text-muted);
-  line-height: 1.35;
+  line-height: 1.25;
 }

@@ -8,9 +8,6 @@ import {
 } from 'lucide-react';
 import { AudioUploadZone } from './audio-input/AudioUploadZone';
 import { ProjectOptionsConfig } from './audio-input/ProjectOptionsConfig';
-import { TranscriptionModeSelector } from './audio-input/TranscriptionModeSelector';
-import { ImageModeSelector } from './audio-input/ImageModeSelector';
-import { VideoModeSelector } from './audio-input/VideoModeSelector';
 import styles from './AudioInputPage.module.css';
 
 interface AudioInputPageProps {
@@ -19,10 +16,7 @@ interface AudioInputPageProps {
     audioFile: File, 
     aspect: string,
     reusableTemplates: boolean,
-    media: MediaMix,
-    transcribeMode?: 'colab' | 'local',
-    imageMode?: 'colab' | 'normal',
-    videoMode?: 'colab' | 'normal'
+    media: MediaMix
   ) => Promise<void>;
   onCancel: () => void;
 }
@@ -36,9 +30,6 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
   const [title, setTitle] = useState('');
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [aspect, setAspect] = useState<'16:9' | '9:16'>('16:9');
-  const [transcribeMode, setTranscribeMode] = useState<'colab' | 'local'>('colab');
-  const [imageMode, setImageMode] = useState<'colab' | 'normal'>('colab');
-  const [videoMode, setVideoMode] = useState<'colab' | 'normal'>('colab');
   const [reusableTemplates, setReusableTemplates] = useState(false);
   const [media, setMedia] = useState<MediaMix>(DEFAULT_MEDIA);
   const [dragOver, setDragOver] = useState(false);
@@ -92,7 +83,7 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
 
     try {
       setSubmitting(true);
-      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates, media, transcribeMode, imageMode, videoMode);
+      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates, media);
     } catch (err: any) {
       setError(err?.message || 'Failed to initialize project and start analysis.');
       setSubmitting(false);
@@ -107,239 +98,118 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
   };
 
   return (
-    <div style={{
-      width: '100%',
-      maxWidth: '1280px',
-      margin: '0 auto',
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '14px',
-      fontFamily: 'var(--font-sans)'
-    }}>
+    <div className={styles.pageContainer}>
       {/* Top Banner / Heading Area */}
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
-        gap: '8px'
-      }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          <div style={{
-            width: '32px',
-            height: '32px',
-            borderRadius: '6px',
-            backgroundColor: 'var(--status-running-bg)',
-            border: '1px solid rgba(24, 144, 255, 0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--accent-blue)'
-          }}>
+      <div className={styles.headerArea}>
+        <div className={styles.headerLeft}>
+          <div className={styles.headerIconWrapper}>
             <Film size={16} />
           </div>
-          <div>
-            <h2 style={{
-              fontSize: '16px',
-              fontWeight: 700,
-              color: 'var(--text-primary)',
-              margin: 0,
-              letterSpacing: '-0.3px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}>
-              <span>Create New Video Project</span>
-              <span style={{
-                fontSize: '11px',
-                fontWeight: 600,
-                backgroundColor: 'rgba(0, 216, 245, 0.1)',
-                color: 'var(--accent-cyan)',
-                padding: '2px 8px',
-                borderRadius: '12px',
-                border: '1px solid rgba(0, 216, 245, 0.25)'
-              }}>
-                Automated Production
-              </span>
-            </h2>
-            <p style={{
-              fontSize: '12px',
-              color: 'var(--text-muted)',
-              margin: '2px 0 0 0'
-            }}>
-              Set project details, upload narration audio, and configure video dimensions for automated generation.
+          <div className={styles.headerText}>
+            <div className={styles.headerTitleRow}>
+              <h2 className={styles.title}>New Motion Video Project</h2>
+              <span className={styles.stageBadge}>STAGE 01 • INGESTION</span>
+            </div>
+            <p className={styles.subtitle}>
+              Upload spoken audio narration to generate frame-accurate 30 FPS Remotion animated video.
             </p>
           </div>
         </div>
       </div>
 
-      {/* Main Form Container */}
-      <div style={{
-        backgroundColor: 'var(--bg-card)',
-        borderRadius: 'var(--radius-sm)',
-        border: '1px solid var(--border-card)',
-        boxShadow: 'var(--shadow-card)',
-        overflow: 'hidden'
-      }}>
-        <form onSubmit={handleSubmit} style={{ padding: '18px 22px' }}>
-          {/* Validation / API Error Banner */}
-          {error && (
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              backgroundColor: 'var(--status-failed-bg)',
-              border: '1px solid var(--status-failed-border)',
-              borderRadius: '4px',
-              padding: '9px 14px',
-              marginBottom: '14px',
-              color: 'var(--status-failed)',
-              fontSize: '12.5px',
-              fontWeight: 500
-            }}>
-              <AlertCircle size={15} style={{ flexShrink: 0 }} />
-              <span>{error}</span>
-            </div>
-          )}
+      {/* Main Single Form Box */}
+      <form onSubmit={handleSubmit} className={styles.formContainer}>
+        {/* Error Alert Banner */}
+        {error && (
+          <div className={styles.errorBanner}>
+            <AlertCircle size={15} className={styles.errorIcon} />
+            <div className={styles.errorText}>{error}</div>
+          </div>
+        )}
 
-          {/* Top Section: Project Title Input */}
-          <div style={{ marginBottom: '16px' }}>
-            <label 
-              htmlFor="project-title"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                fontSize: '12.5px',
-                fontWeight: 600,
-                color: 'var(--text-primary)',
-                marginBottom: '6px'
-              }}
+        {/* 1. PROJECT TITLE INPUT */}
+        <div className={styles.sectionBlock}>
+          <label className={styles.label}>
+            <span>Project Title <span className={styles.requiredAsterisk}>*</span></span>
+            <span className={styles.labelHint}>Used for export file names and timeline scene title headers</span>
+          </label>
+          <input
+            type="text"
+            data-testid="project-title-input"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="e.g. History of Rome - Episode 1"
+            className={styles.titleInput}
+            disabled={submitting}
+            autoFocus
+          />
+        </div>
+
+        {/* 2. MIDDLE TWO-COLUMN STUDIO GRID */}
+        <div className={styles.twoColGrid}>
+          {/* LEFT SIDE: Audio Narration File Upload Zone */}
+          <AudioUploadZone
+            audioFile={audioFile}
+            setAudioFile={setAudioFile}
+            submitting={submitting}
+            fileInputRef={fileInputRef}
+            dragOver={dragOver}
+            setDragOver={setDragOver}
+            handleFileChange={handleFileChange}
+            handleDrop={handleDrop}
+            formatFileSize={formatFileSize}
+          />
+
+          {/* RIGHT SIDE: Video Options & Settings */}
+          <ProjectOptionsConfig
+            aspect={aspect}
+            setAspect={setAspect}
+            media={media}
+            setMedia={setMedia}
+            reusableTemplates={reusableTemplates}
+            setReusableTemplates={setReusableTemplates}
+            submitting={submitting}
+          />
+        </div>
+
+        {/* 3. BOTTOM ACTION ROW: Summary & Primary Analyze Button */}
+        <div className={styles.footerRow}>
+          <div className={styles.footerWorkflow}>
+            <Zap size={13} color="var(--accent-cyan)" />
+            <span>Full automated workflow: Whisper ASR → Scene Segmentation → Motion Planning → Remotion 30 FPS Render</span>
+          </div>
+
+          <div className={styles.footerActions}>
+            <button
+              type="button"
+              onClick={onCancel}
+              disabled={submitting}
+              className={styles.cancelBtn}
             >
-              <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Film size={13} color="var(--accent-blue)" />
-                Project Title <span style={{ color: 'var(--accent-red)' }}>*</span>
-              </span>
-              <span style={{ fontSize: '11px', color: 'var(--text-muted)', fontWeight: 400 }}>
-                Unique workspace name & video metadata
-              </span>
-            </label>
+              Cancel
+            </button>
 
-            <div style={{ position: 'relative' }}>
-              <input
-                id="project-title"
-                data-testid="project-title-input"
-                type="text"
-                placeholder="e.g. Telugu Tech Insights — Episode 01"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                disabled={submitting}
-                className={styles.titleInput}
-              />
-            </div>
+            <button
+              type="submit"
+              data-testid="analyze-button"
+              disabled={submitting}
+              className={styles.submitBtn}
+            >
+              {submitting ? (
+                <>
+                  <span className={styles.spinner} />
+                  <span>Ingesting &amp; Analyzing...</span>
+                </>
+              ) : (
+                <>
+                  <Sparkles size={15} />
+                  <span>Analyze Audio</span>
+                </>
+              )}
+            </button>
           </div>
-
-          {/* Transcription Engine Selector (Default: Colab with Google Drive) */}
-          <TranscriptionModeSelector
-            mode={transcribeMode}
-            onChange={setTranscribeMode}
-            disabled={submitting}
-          />
-
-          {/* Scene Image Generation Engine Selector (Default: Colab Ultra GPU) */}
-          <ImageModeSelector
-            mode={imageMode}
-            onChange={setImageMode}
-            disabled={submitting}
-          />
-
-          {/* Scene Video Clip Engine Selector (Default: Colab Lightning AI Video) */}
-          <VideoModeSelector
-            mode={videoMode}
-            onChange={setVideoMode}
-            disabled={submitting}
-          />
-
-          {/* Middle Section: Side-by-Side 2-Column Grid */}
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(360px, 1fr))',
-            gap: '16px',
-            alignItems: 'stretch'
-          }}>
-            {/* COLUMN 1: Audio Narration File Upload */}
-            <AudioUploadZone
-              audioFile={audioFile}
-              setAudioFile={setAudioFile}
-              submitting={submitting}
-              fileInputRef={fileInputRef}
-              dragOver={dragOver}
-              setDragOver={setDragOver}
-              handleFileChange={handleFileChange}
-              handleDrop={handleDrop}
-              formatFileSize={formatFileSize}
-            />
-
-            {/* COLUMN 2: Video Aspect Ratio & Visual Engine Options */}
-            <ProjectOptionsConfig
-              aspect={aspect}
-              setAspect={setAspect}
-              media={media}
-              setMedia={setMedia}
-              reusableTemplates={reusableTemplates}
-              setReusableTemplates={setReusableTemplates}
-              submitting={submitting}
-            />
-          </div>
-
-          {/* Bottom Action Row: Summary and Primary Action Button */}
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            borderTop: '1px solid var(--border-card)',
-            paddingTop: '14px',
-            marginTop: '16px',
-            flexWrap: 'wrap',
-            gap: '12px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '11.5px', color: 'var(--text-muted)' }}>
-              <Zap size={14} color="var(--accent-cyan)" />
-              <span>Full automated workflow: Whisper ASR → Scene Segmentation → Motion Planning → Remotion 30 FPS Render</span>
-            </div>
-
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-              <button
-                type="button"
-                onClick={onCancel}
-                disabled={submitting}
-                className={styles.cancelBtn}
-              >
-                Cancel
-              </button>
-
-              <button
-                type="submit"
-                data-testid="analyze-button"
-                disabled={submitting}
-                className={styles.submitBtn}
-              >
-                {submitting ? (
-                  <>
-                    <span className="animate-spin" style={{ display: 'inline-block', width: '14px', height: '14px', border: '2px solid #FFFFFF', borderTopColor: 'transparent', borderRadius: '50%' }} />
-                    <span>Ingesting & Analyzing...</span>
-                  </>
-                ) : (
-                  <>
-                    <Sparkles size={16} />
-                    <span>Analyze Audio</span>
-                  </>
-                )}
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </div>
   );
 };

@@ -25,18 +25,65 @@ export const Subtitles: React.FC<{ captions: Caption[] }> = ({ captions }) => {
   const { secondary: highlight } = usePalette();            // not `accent`: that role is the BRIGHTEST palette colour (cream in the test project), which does not stand out from the white words
   const cap = captions.find((c) => t >= c.start - LEAD_S && t <= c.end + TAIL_S);
   if (!cap) return null;
-  const size = cap.hook ? Math.round(lay.type.display * 0.55) : lay.type.body;
+
+  // 1. 50% smaller font size than the original (compact, cinematic & readable)
+  const currentSize = cap.hook ? Math.round(lay.type.display * 0.55) : lay.type.body;
+  const size = Math.round(currentSize * 0.5);
+
+  // 2. Cumulative / progressive word-by-word reveal as spoken
+  const visibleWords = cap.words.filter((w) => t >= w.start);
+  if (visibleWords.length === 0) return null;
+
   return (
-    <div style={{ position: "absolute", left: "8%", right: "8%", bottom: lay.portrait ? lay.captionBottom : `${SAFE * 100}%`, textAlign: "center", fontFamily: FONT, fontSize: size, lineHeight: 1.3, textWrap: "balance" }}>
-      <span style={{ display: "inline-block", padding: "0.2em 0.55em", borderRadius: "0.35em", background: "rgba(0,0,0,0.5)", textShadow: "0 3px 14px rgba(0,0,0,0.9)" }}>
-        {cap.words.map((w, i) => {
+    <div
+      style={{
+        position: "absolute",
+        left: "5%",
+        right: "5%",
+        bottom: lay.portrait ? lay.captionBottom : `${SAFE * 100}%`,
+        textAlign: "center",
+        fontFamily: FONT,
+        fontSize: size,
+        lineHeight: 1.3,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        pointerEvents: "none",
+      }}
+    >
+      <span
+        style={{
+          display: "inline-block",
+          padding: "0.22em 0.7em",
+          borderRadius: "0.4em",
+          background: "rgba(0, 0, 0, 0.65)",
+          backdropFilter: "blur(4px)",
+          textShadow: "0 2px 8px rgba(0, 0, 0, 0.9)",
+          whiteSpace: "nowrap",
+          maxWidth: "92%",
+          overflow: "hidden",
+          textOverflow: "ellipsis",
+        }}
+      >
+        {visibleWords.map((w, i) => {
           const active = t >= w.start && t <= w.end + 0.05;
           const since = frame - Math.round(w.start * fps);
           const pop = active ? interpolate(since, [0, POP_FRAMES], [1.14, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" }) : 1;
           return (
             <span key={i}>
-              <span style={{ display: "inline-block", transform: `scale(${pop})`, fontWeight: w.key ? 800 : 600, color: active ? highlight : "#fff",
-                textDecoration: w.key ? "underline" : "none", textDecorationColor: highlight, textUnderlineOffset: "0.12em" }}>{w.w}</span>
+              <span
+                style={{
+                  display: "inline-block",
+                  transform: `scale(${pop})`,
+                  fontWeight: w.key ? 800 : 600,
+                  color: active ? highlight : "#fff",
+                  textDecoration: w.key ? "underline" : "none",
+                  textDecorationColor: highlight,
+                  textUnderlineOffset: "0.12em",
+                }}
+              >
+                {w.w}
+              </span>
               {" "}
             </span>
           );

@@ -1,10 +1,10 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import styles from './SkillsPage.module.css';
-import { Cpu, Search, RefreshCw } from 'lucide-react';
+import { Cpu, Search, RefreshCw, Film, BarChart3, Zap, Bot } from 'lucide-react';
 import { deleteSkill, fetchSkills } from '../services/api';
-import { SkillTableRow } from './skills/SkillTableRow';
 import { SkillDetailModal } from './skills/SkillDetailModal';
 import { DeleteSkillModal } from './skills/DeleteSkillModal';
+import { SkillSectionCard } from './skills/SkillSectionCard';
 
 interface SkillsPageProps {
   skills: any[];
@@ -33,11 +33,61 @@ export function formatRelativeTime(isoString?: string | null): string {
   return date.toLocaleDateString();
 }
 
+interface SectionDefinition {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+  iconThemeClass: string;
+  badgeThemeClass: string;
+  domains: string[];
+}
+
+const SECTION_DEFINITIONS: SectionDefinition[] = [
+  {
+    id: 'video_motion',
+    title: 'Video & Motion Graphics Engine',
+    description: 'Remotion animations, kinetic typography, spring dynamics, camera moves, and scene transitions',
+    icon: Film,
+    iconThemeClass: styles.iconWrapperBlue,
+    badgeThemeClass: styles.badgeBlue,
+    domains: ['motion', 'remotion', 'motion_animation', 'video_editing', 'timeline'],
+  },
+  {
+    id: 'visual_assets',
+    title: 'Dynamic Visual Assets & Data Generators',
+    description: 'Interactive charts, SVG maps, infographics, science diagrams, layouts, and visual scene planning',
+    icon: BarChart3,
+    iconThemeClass: styles.iconWrapperPurple,
+    badgeThemeClass: styles.badgePurple,
+    domains: ['graphics', 'charts', 'science_visuals', 'layouts', 'validation', 'visual_planning'],
+  },
+  {
+    id: 'automation_qc',
+    title: 'Production Automation, Audio & Quality Inspection',
+    description: 'Pipeline automation, Whisper audio transcription, Remotion rendering, and automated QC verification',
+    icon: Zap,
+    iconThemeClass: styles.iconWrapperEmerald,
+    badgeThemeClass: styles.badgeEmerald,
+    domains: ['qc', 'testing', 'audio', 'transcript', 'rendering', 'external'],
+  },
+  {
+    id: 'agent_workflows',
+    title: 'AI Agent Engineering Workflows',
+    description: 'Autonomous engineering: systematic debugging, test-driven development, planning, and memory',
+    icon: Bot,
+    iconThemeClass: styles.iconWrapperAmber,
+    badgeThemeClass: styles.badgeAmber,
+    domains: ['agent_workflows'],
+  },
+];
+
 export const SkillsPage: React.FC<SkillsPageProps> = ({ skills: initialSkills }) => {
   const [skills, setSkills] = useState<any[]>(initialSkills || []);
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedDomain, setSelectedDomain] = useState<string>('all');
   const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
+  const [collapsedSections, setCollapsedSections] = useState<Record<string, boolean>>({});
 
   // Modals state
   const [viewingSkill, setViewingSkill] = useState<any | null>(null);
@@ -84,6 +134,36 @@ export const SkillsPage: React.FC<SkillsPageProps> = ({ skills: initialSkills })
     });
   }, [skills, selectedDomain, searchQuery]);
 
+  // Partition filtered skills into defined sections
+  const sectionedSkills = useMemo(() => {
+    const map: Record<string, any[]> = {
+      video_motion: [],
+      visual_assets: [],
+      automation_qc: [],
+      agent_workflows: [],
+    };
+
+    filteredSkills.forEach((skill) => {
+      const domain = skill.domain || '';
+      const matched = SECTION_DEFINITIONS.find((sec) => sec.domains.includes(domain));
+      if (matched) {
+        map[matched.id].push(skill);
+      } else {
+        // Fallback for unclassified domains
+        map.automation_qc.push(skill);
+      }
+    });
+
+    return map;
+  }, [filteredSkills]);
+
+  const toggleSectionCollapse = (sectionId: string) => {
+    setCollapsedSections((prev) => ({
+      ...prev,
+      [sectionId]: !prev[sectionId],
+    }));
+  };
+
   const handleConfirmDelete = async () => {
     if (!skillToDelete) return;
     setIsDeleting(true);
@@ -108,120 +188,110 @@ export const SkillsPage: React.FC<SkillsPageProps> = ({ skills: initialSkills })
     <div className={styles.container} data-testid="skills-page">
       {/* Header: Title, Search, Refresh */}
       <div className={styles.header}>
-          <div>
-            <div className={styles.titleGroup}>
-              <Cpu size={22} color="var(--accent-blue)" />
-              <h2 className={styles.title} data-testid="skills-count-title">
-                Skills &amp; Capabilities Library
-              </h2>
-              <span className={styles.countBadge} data-testid="skills-count-badge">
-                {filteredSkills.length} of {skills.length} Total
-              </span>
-            </div>
-            <p className={styles.subtitle}>
-              Audited video generation capabilities and agent workflows. Click on any row or View to inspect full details, or Delete to remove.
-            </p>
+        <div>
+          <div className={styles.titleGroup}>
+            <Cpu size={22} color="var(--accent-blue)" />
+            <h2 className={styles.title} data-testid="skills-count-title">
+              Skills &amp; Capabilities Library
+            </h2>
+            <span className={styles.countBadge} data-testid="skills-count-badge">
+              {filteredSkills.length} of {skills.length} Total
+            </span>
+          </div>
+          <p className={styles.subtitle}>
+            Organized library of Remotion motion graphics, dynamic asset generators, automation pipelines, and engineering workflows.
+          </p>
+        </div>
+
+        {/* Search and Refresh Bar */}
+        <div className={styles.searchBar}>
+          <div className={styles.searchWrapper}>
+            <Search size={14} color="var(--text-muted)" />
+            <input
+              type="text"
+              placeholder="Search by skill name, ID, domain..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className={styles.searchInput}
+              data-testid="skills-search-input"
+            />
           </div>
 
-          {/* Search and Refresh Bar */}
-          <div className={styles.searchBar}>
-            <div className={styles.searchWrapper}>
-              <Search size={14} color="var(--text-muted)" />
-              <input
-                type="text"
-                placeholder="Search by skill name, ID, domain..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchInput}
-                data-testid="skills-search-input"
-              />
-            </div>
+          <button
+            onClick={handleRefresh}
+            title="Refresh Skills"
+            className={styles.refreshBtn}
+            data-testid="skills-refresh-btn"
+          >
+            <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+          </button>
+        </div>
+      </div>
 
+      {/* Domain Filter Pills */}
+      <div className={styles.filterBar} data-testid="skills-filter-bar">
+        {domains.map((d) => {
+          const isSelected = selectedDomain === d;
+          const label = d === 'all' ? 'All Skills' : d.replace(/_/g, ' ');
+          return (
             <button
-              onClick={handleRefresh}
-              title="Refresh Skills"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                padding: '8px',
-                backgroundColor: 'var(--bg-elevated)',
-                border: '1px solid var(--border-card)',
-                borderRadius: 'var(--radius-sm)',
-                color: 'var(--text-secondary)',
-                cursor: 'pointer',
-              }}
-              data-testid="skills-refresh-btn"
+              key={d}
+              data-testid={`filter-domain-${d}`}
+              onClick={() => setSelectedDomain(d)}
+              className={`${styles.filterBtn} ${isSelected ? styles.filterBtnActive : ''}`}
             >
-              <RefreshCw size={14} className={isRefreshing ? 'animate-spin' : ''} />
+              {label}
             </button>
-          </div>
-        </div>
+          );
+        })}
+      </div>
 
-        {/* Domain Filter Pills */}
-        <div className={styles.filterBar} data-testid="skills-filter-bar">
-          {domains.map((d) => {
-            const isSelected = selectedDomain === d;
-            const label = d === 'all' ? 'All Skills' : d.replace(/_/g, ' ');
-            return (
-              <button
-                key={d}
-                data-testid={`filter-domain-${d}`}
-                onClick={() => setSelectedDomain(d)}
-                className={`${styles.filterBtn} ${isSelected ? styles.filterBtnActive : ''}`}
-              >
-                {label}
-              </button>
-            );
-          })}
+      {/* Alerts */}
+      {deleteSuccess && (
+        <div className={styles.alertSuccess} data-testid="skill-delete-success-banner">
+          {deleteSuccess}
         </div>
+      )}
 
-        {/* Alerts */}
-        {deleteSuccess && (
-          <div className={styles.alertSuccess} data-testid="skill-delete-success-banner">
-            {deleteSuccess}
+      {deleteError && (
+        <div className={styles.alertError} data-testid="skill-delete-error-banner">
+          {deleteError}
+        </div>
+      )}
+
+      {/* Section-wise Cards */}
+      <div className={styles.sectionsContainer}>
+        {SECTION_DEFINITIONS.map((sec) => {
+          const items = sectionedSkills[sec.id] || [];
+          if (items.length === 0) return null;
+
+          return (
+            <SkillSectionCard
+              key={sec.id}
+              id={sec.id}
+              title={sec.title}
+              description={sec.description}
+              icon={sec.icon}
+              iconThemeClass={sec.iconThemeClass}
+              badgeThemeClass={sec.badgeThemeClass}
+              skills={items}
+              isCollapsed={Boolean(collapsedSections[sec.id])}
+              onToggleCollapse={toggleSectionCollapse}
+              onView={(s) => setViewingSkill(s)}
+              onDeleteRequest={(s) => setSkillToDelete({ skill_id: s.skill_id, name: s.name || s.skill_id })}
+              formatRelativeTime={formatRelativeTime}
+            />
+          );
+        })}
+
+        {filteredSkills.length === 0 && (
+          <div className={styles.tableWrapper}>
+            <div className={styles.emptyState}>
+              No skills found matching your search or selected domain filter.
+            </div>
           </div>
         )}
-
-        {deleteError && (
-          <div className={styles.alertError} data-testid="skill-delete-error-banner">
-            {deleteError}
-          </div>
-        )}
-
-        {/* Table View */}
-        <div className={styles.tableWrapper}>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th className={styles.th}>Skill ID &amp; Name</th>
-                <th className={styles.th} style={{ width: '160px' }}>Type / Domain</th>
-                <th className={styles.th} style={{ width: '110px' }}>Version</th>
-                <th className={styles.th} style={{ width: '150px' }}>Last Used</th>
-                <th className={styles.th} style={{ width: '180px', textAlign: 'right' }}>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredSkills.map((skill) => (
-                <SkillTableRow
-                  key={skill.skill_id}
-                  skill={skill}
-                  onView={(s) => setViewingSkill(s)}
-                  onDeleteRequest={(s) => setSkillToDelete({ skill_id: s.skill_id, name: s.name || s.skill_id })}
-                  formatRelativeTime={formatRelativeTime}
-                />
-              ))}
-
-              {filteredSkills.length === 0 && (
-                <tr>
-                  <td colSpan={5} className={styles.emptyState}>
-                    No skills found matching your search or selected domain filter.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+      </div>
 
       {/* Detail Pop-up Modal */}
       {viewingSkill && (

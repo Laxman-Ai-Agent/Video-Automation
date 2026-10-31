@@ -714,8 +714,11 @@ def generate_scene_tsx_via_llm(
     fallback_engine = ThreeDFallbackEngine()
     safe_visual_elements, classifications = fallback_engine.transform_elements_for_codegen(visual_elements)
 
-    # Discover relevant approved skills
-    approved_skills = skill_registry.registry.search_skills(domain="motion", status="approved")
+    # Discover relevant approved skills across motion, remotion, graphics, charts, typography, and validation
+    approved_skills = [
+        s for s in skill_registry.registry.search_skills(status="approved")
+        if s.domain in {"motion", "remotion", "graphics", "charts", "typography", "validation"}
+    ]
     skill_summaries = [f"- {s.skill_id}: {s.summary}" for s in approved_skills]
 
     # Retrieve relevant verified memory
@@ -1262,6 +1265,12 @@ def generate_custom_motion_code(
             "downstream_readiness_pct": gen_report.get("aggregate_metrics", {}).get("downstream_readiness_pct", 100.0),
         },
     }
+    for sk_id in all_skills_used:
+        try:
+            skill_registry.record_skill_usage(sk_id)
+        except Exception as e:
+            logger.debug(f"Failed to record skill usage for {sk_id}: {e}")
+
     save_animation(pdir, aspect, manifest)
 
     comp_data = custom_composition(pdir, aspect, scenes, palette)               # composition.json referencing the custom_scene layers
