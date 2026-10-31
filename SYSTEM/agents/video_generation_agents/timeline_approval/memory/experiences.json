@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "timeline_approval",
-  "updated_at": "2026-10-27T02:13:28.849687+00:00",
-  "total_experiences": 20,
+  "updated_at": "2026-10-31T02:18:42.414269+00:00",
+  "total_experiences": 22,
   "experiences": {
     "exp-timeline_approval-10e87d0dbb": {
       "experience_id": "exp-timeline_approval-10e87d0dbb",
@@ -34,6 +34,49 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T01:11:09.875652+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-11fa53cdb6": {
+      "experience_id": "exp-timeline_approval-11fa53cdb6",
+      "agent_id": "timeline_approval",
+      "task_type": "recovery_approval",
+      "task_id": "run_f6568244",
+      "project_id": "my-first-project-01-df7f",
+      "context": {
+        "stage_id": "approval",
+        "attempt": 1,
+        "details": {
+          "diagnostic": {
+            "project_id": "my-first-project-01-df7f",
+            "task_id": "run_f6568244",
+            "agent_id": "timeline_approval",
+            "stage_id": "approval",
+            "category": "VALIDATION",
+            "code": "contract_validation_error",
+            "message": "the LLM approval review did not pass (needs_review, score 0.62): Duration, frame accounting and validation are consistent. 1784 frames at 30 fps is 59.467s against 59.451s of audio, a 0.016s difference that is within 1 frame. Scenes 0 to 1784 are contiguous with no frame gaps, and 224/224 checks passed with 0 blockers. One contradiction remains from the previous audit and has not been fixed: trans; warning: Transition count mismatch. transitions_summary.total = 7 and counts.transitions = 7, but the transitions array contains 6 entries (transition_001_002 to transition_006_007). The motion plan's 7th transition, scene_007 to scene_008 (light-leak, 0.43s), has no timeline entry such as transition_007_008. Its supported status and applied_frames cannot be verified, and the 'unsupported_count: 0' claim does not cover it.; warning: The 224/224 passed checks and zero findings did not catch the mismatch between the transition summary and the transition list. The validation either does not cross-check these, or it counted the missing transition as passed without evidence. The build should either emit the missing light-leak transition entry or correct the counts and the motion plan, then re-run validation.",
+            "timestamp": "2026-10-31T02:18:42.001765+00:00",
+            "recovery_permitted": false,
+            "attempt": 1,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_approval",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Deterministic VALIDATION error cannot succeed by retrying without input changes.",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "VALIDATION",
+      "metrics": {
+        "attempt": 1
+      },
+      "reflection": "Recovery execution for approval resulted in failed on attempt 1.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T02:18:42.376153+00:00",
       "schema_version": 1
     },
     "exp-timeline_approval-2298021af8": {
@@ -480,6 +523,38 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T05:55:15.253683+00:00",
+      "schema_version": 1
+    },
+    "exp-timeline_approval-8efcf53d47": {
+      "experience_id": "exp-timeline_approval-8efcf53d47",
+      "agent_id": "timeline_approval",
+      "task_type": "approval",
+      "task_id": "req-1793356614",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action",
+          "aspect"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 1923.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'timeline_approval' completed task 'approval' with outcome 'succeeded' in 1923.0ms.",
+        "takeaway": "Parameters and inputs for 'approval' produced verified output.",
+        "performance": {
+          "duration_ms": 1923.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:54.302287+00:00",
       "schema_version": 1
     },
     "exp-timeline_approval-9a9cea1534": {

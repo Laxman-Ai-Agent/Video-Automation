@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "capability_finder",
-  "updated_at": "2026-10-29T18:32:10.514996+00:00",
-  "total_experiences": 25,
+  "updated_at": "2026-10-30T10:36:33.232659+00:00",
+  "total_experiences": 28,
   "experiences": {
     "exp-capability_finder-005ae5a227": {
       "experience_id": "exp-capability_finder-005ae5a227",
@@ -388,6 +388,70 @@
       "timestamp": "2026-10-19T03:42:37.402087+00:00",
       "schema_version": 1
     },
+    "exp-capability_finder-506be3b343": {
+      "experience_id": "exp-capability_finder-506be3b343",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1793356578",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 49.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 49.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 49.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:18.351075+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-5e348905df": {
+      "experience_id": "exp-capability_finder-5e348905df",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1793356582",
+      "project_id": "test_reorg",
+      "context": {
+        "parameters": [
+          "query",
+          "check_prerequisites"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 760.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 760.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 760.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:22.075025+00:00",
+      "schema_version": 1
+    },
     "exp-capability_finder-6a16333650": {
       "experience_id": "exp-capability_finder-6a16333650",
       "agent_id": "capability_finder",
@@ -566,6 +630,38 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-18T13:41:45.764299+00:00",
+      "schema_version": 1
+    },
+    "exp-capability_finder-865fcf0907": {
+      "experience_id": "exp-capability_finder-865fcf0907",
+      "agent_id": "capability_finder",
+      "task_type": "execution",
+      "task_id": "req-1793356593",
+      "project_id": "tmplppvla9n",
+      "context": {
+        "parameters": [
+          "action",
+          "role"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 53.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'capability_finder' completed task 'execution' with outcome 'succeeded' in 53.0ms.",
+        "takeaway": "Capability requirement resolved without discovery regressions.",
+        "performance": {
+          "duration_ms": 53.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:33.232659+00:00",
       "schema_version": 1
     },
     "exp-capability_finder-9dbca2366c": {

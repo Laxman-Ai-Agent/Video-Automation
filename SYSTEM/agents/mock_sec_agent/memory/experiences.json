@@ -1,9 +1,54 @@
 {
   "schema_version": 1,
   "agent_id": "mock_sec_agent",
-  "updated_at": "2026-10-20T02:20:58.902229+00:00",
-  "total_experiences": 7,
+  "updated_at": "2026-10-30T10:36:41.524096+00:00",
+  "total_experiences": 8,
   "experiences": {
+    "exp-mock_sec_agent-090a4b088a": {
+      "experience_id": "exp-mock_sec_agent-090a4b088a",
+      "agent_id": "mock_sec_agent",
+      "task_type": "execution",
+      "task_id": "req-1793356601",
+      "project_id": "tmpfe6jvrb8",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_sec_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Security policy denied: unauthorized access",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_sec_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+          "affected_domain": "general",
+          "observed_pattern": "Security policy denied: unauthorized access",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_sec_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Security policy denied: unauthorized access.",
+        "affected_domain": "general",
+        "observed_pattern": "Security policy denied: unauthorized access",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:41.524096+00:00",
+      "schema_version": 1
+    },
     "exp-mock_sec_agent-0b273f437d": {
       "experience_id": "exp-mock_sec_agent-0b273f437d",
       "agent_id": "mock_sec_agent",

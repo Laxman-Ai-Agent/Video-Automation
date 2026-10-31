@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "scene_segmentation",
-  "updated_at": "2026-10-24T03:45:49.056479+00:00",
-  "total_experiences": 16,
+  "updated_at": "2026-10-30T10:36:44.630849+00:00",
+  "total_experiences": 17,
   "experiences": {
     "exp-scene_segmentation-056274e17b": {
       "experience_id": "exp-scene_segmentation-056274e17b",
@@ -508,6 +508,37 @@
       "confidence": 0.8,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T02:21:01.346324+00:00",
+      "schema_version": 1
+    },
+    "exp-scene_segmentation-eef4ab1642": {
+      "experience_id": "exp-scene_segmentation-eef4ab1642",
+      "agent_id": "scene_segmentation",
+      "task_type": "segmentation",
+      "task_id": "req-1793356604",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 976.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'scene_segmentation' completed task 'segmentation' with outcome 'succeeded' in 976.0ms.",
+        "takeaway": "Scene boundaries aligned successfully within audio duration constraints.",
+        "performance": {
+          "duration_ms": 976.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:44.624745+00:00",
       "schema_version": 1
     },
     "exp-scene_segmentation-f166cce82d": {

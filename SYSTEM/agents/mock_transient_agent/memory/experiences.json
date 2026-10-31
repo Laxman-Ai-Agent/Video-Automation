@@ -1,9 +1,85 @@
 {
   "schema_version": 1,
   "agent_id": "mock_transient_agent",
-  "updated_at": "2026-10-20T02:20:57.897615+00:00",
-  "total_experiences": 14,
+  "updated_at": "2026-10-30T10:36:40.913449+00:00",
+  "total_experiences": 16,
   "experiences": {
+    "exp-mock_transient_agent-10206549f1": {
+      "experience_id": "exp-mock_transient_agent-10206549f1",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1793356600",
+      "project_id": "tmpau7730g2",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "failed",
+      "error_category": "execution_error",
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "failure",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'failed' in 0.0ms.",
+        "error": "Transient error: resource temporarily unavailable",
+        "error_category": "runtime_error",
+        "takeaway": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "proposed_lesson": {
+          "title": "Lesson from mock_transient_agent on execution",
+          "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+          "affected_domain": "general",
+          "observed_pattern": "Transient error: resource temporarily unavailable",
+          "recommended_action": "adjust_parameters_or_retry",
+          "risk_level": "low"
+        }
+      },
+      "proposed_lesson": {
+        "title": "Lesson from mock_transient_agent on execution",
+        "description": "Task 'execution' failed with runtime_error: Transient error: resource temporarily unavailable.",
+        "affected_domain": "general",
+        "observed_pattern": "Transient error: resource temporarily unavailable",
+        "recommended_action": "adjust_parameters_or_retry",
+        "risk_level": "low"
+      },
+      "evidence": [],
+      "confidence": 0.4,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:40.849707+00:00",
+      "schema_version": 1
+    },
+    "exp-mock_transient_agent-3a3753baa6": {
+      "experience_id": "exp-mock_transient_agent-3a3753baa6",
+      "agent_id": "mock_transient_agent",
+      "task_type": "execution",
+      "task_id": "req-1793356600",
+      "project_id": "tmpau7730g2",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 0.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'mock_transient_agent' completed task 'execution' with outcome 'succeeded' in 0.0ms.",
+        "takeaway": "Parameters and inputs for 'execution' produced verified output.",
+        "performance": {
+          "duration_ms": 0.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:40.913449+00:00",
+      "schema_version": 1
+    },
     "exp-mock_transient_agent-54fd564233": {
       "experience_id": "exp-mock_transient_agent-54fd564233",
       "agent_id": "mock_transient_agent",

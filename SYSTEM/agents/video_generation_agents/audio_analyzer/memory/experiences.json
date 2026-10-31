@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "audio_analyzer",
-  "updated_at": "2026-10-28T02:51:39.678815+00:00",
-  "total_experiences": 16,
+  "updated_at": "2026-10-30T10:36:43.491773+00:00",
+  "total_experiences": 17,
   "experiences": {
     "exp-audio_analyzer-29c2e65deb": {
       "experience_id": "exp-audio_analyzer-29c2e65deb",
@@ -181,6 +181,37 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-25T03:53:37.325192+00:00",
+      "schema_version": 1
+    },
+    "exp-audio_analyzer-60821ede10": {
+      "experience_id": "exp-audio_analyzer-60821ede10",
+      "agent_id": "audio_analyzer",
+      "task_type": "analyzer",
+      "task_id": "req-1793356603",
+      "project_id": "test_p9_e2e_project",
+      "context": {
+        "parameters": [
+          "action"
+        ]
+      },
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "duration_ms": 5.0
+      },
+      "reflection": {
+        "status": "success",
+        "summary": "Agent 'audio_analyzer' completed task 'analyzer' with outcome 'succeeded' in 5.0ms.",
+        "takeaway": "Parameters and inputs for 'analyzer' produced verified output.",
+        "performance": {
+          "duration_ms": 5.0
+        }
+      },
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.8,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-30T10:36:43.491773+00:00",
       "schema_version": 1
     },
     "exp-audio_analyzer-66b7bf37a2": {
