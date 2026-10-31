@@ -448,8 +448,16 @@ def missing_shot_sequences(code: str, shots: list[dict[str, Any]]) -> list[str]:
 
 
 def missing_element_ids(code: str, element_ids: list[str]) -> list[str]:
-    """Planned element ids the TSX does not draw (no node carries data-element-id for it)."""
-    return [i for i in element_ids if not re.search(rf"""data-element-id=\{{?\s*["']{re.escape(i)}["']""", code)]
+    """Planned element ids the TSX does not draw: no node carries data-element-id="<id>", and the id is not passed as the prop (`elementId="<id>"`) of a helper component that renders `data-element-id={elementId}` (a card helper used several times)."""
+    props = set(re.findall(r"data-element-id=\{\s*(?:props\.)?(\w+)\s*\}", code))
+    prop_alt = "|".join(re.escape(p) for p in sorted(props))
+
+    def drawn(i: str) -> bool:
+        if re.search(rf"""data-element-id=\{{?\s*["']{re.escape(i)}["']""", code):
+            return True
+        return bool(props) and bool(re.search(rf"""\b(?:{prop_alt})=\{{?\s*["']{re.escape(i)}["']""", code))
+
+    return [i for i in element_ids if not drawn(i)]
 
 
 def generate_scene_tsx(
@@ -1052,7 +1060,8 @@ def generate_custom_motion_code(
             existing_code = scene_file.read_text(encoding="utf-8")
             if f"Scene{sid}" in existing_code and "AbsoluteFill" in existing_code:
                 code = existing_code
-                gen_meta = {"provider": "cache", "model": "reused", "latency_ms": 0, "attempt_count": 1}
+                gen_meta = {"provider": "cache", "model": "reused", "latency_ms": 0, "attempt_count": 1,
+                            "missing_elements": missing_element_ids(code, [e["element_id"] for e in transformed_visual_els if e.get("element_id")])}      # the same "is it drawn" check the written code went through (a manifest without it makes the Element Resolver doubt every planned fallback)
             else:
                 code, gen_meta = generate_scene_tsx_via_llm(
                     pdir=pdir,

@@ -18,6 +18,13 @@ def test_every_exported_part_is_in_the_hint():
     assert {n for n in exported if f"<{n}" not in ma.UI_HINT} == set()
 
 
+def test_an_element_id_passed_to_a_card_helper_counts_as_drawn():
+    helper = 'const Card = ({ elementId }: { elementId: string }) => <div data-element-id={elementId} />;\n'
+    code = helper + '<Card elementId="owner" /><Card elementId={"free"} />'
+    assert ma.missing_element_ids(code, ["owner", "free", "other"]) == ["other"]
+    assert ma.missing_element_ids('<Card elementId="owner" />', ["owner"]) == ["owner"]      # no helper renders the prop: not drawn
+
+
 def test_a_scene_may_import_the_ui_parts():
     src = 'import { GlassPanel, StarField } from "../ui";\nexport default () => null;'
     assert ma.audit_scene_tsx_security(src)["passed"]

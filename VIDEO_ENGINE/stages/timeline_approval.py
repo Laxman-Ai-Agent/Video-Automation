@@ -374,6 +374,12 @@ def _review_ok(rev: dict | None) -> bool:
     return bool(rev) and rev.get("status") == "passed" and float(rev.get("score") or 0) >= PASS_SCORE and not any(f.get("severity") in ("blocker", "error") for f in rev.get("findings", []))
 
 
+def _review_tag(rev: dict | None, attempt: int) -> str:
+    """Part of an LLM decision's idempotency key: the review's own output, so the same review result is recorded once (a repeated request is a no-op) but a NEW review of the same, unchanged version
+    (after an audit withdrew the earlier decision) is a new decision; the bare attempt number repeated and silently dropped it."""
+    return str((rev or {}).get("output_fingerprint") or attempt)
+
+
 def auto_approve(pdir: Path, aspect: str, in_job: bool = False) -> dict:
     """The LLM decides (no person): the current, deterministically clean timeline version is reviewed by the stage LLM review ('approval': timing, scenes, transitions, layers,
     audio sync), and only a `passed` verdict with score >= PASS_SCORE and no blocker is recorded, through decide() and every check it makes (fingerprint, blockers,
@@ -392,18 +398,21 @@ def auto_approve(pdir: Path, aspect: str, in_job: bool = False) -> dict:
         if s["status"] != "approved":
             verdict = rev = llm_review.run_stage_llm_review(pdir, "approval", aspect, force=False)
             if _review_ok(rev):
-                decide(pdir, aspect, {"decision": "approved", "decision_by": f"llm:{rev.get('provider')}/{rev.get('model')}", "idempotency_key": f"llm_{s['fingerprint']}_{attempt}",
+                decide(pdir, aspect, {"decision": "approved", "decision_by": f"llm:{rev.get('provider')}/{rev.get('model')}", "idempotency_key": f"llm_{s['fingerprint']}_{_review_tag(rev, attempt)}",
                                       "expected_fingerprint": s["fingerprint"], "review_id": s["review_id"],
                                       "warning_acknowledgements": [{"key": r["key"], "acknowledged": True} for r in s["requirements"]],   # disclosed in the review's payload
                                       "notes": [f"LLM approval review: {rev.get('status')} {rev.get('score')}: {rev.get('summary', '')}"[:1000]]}, in_job=in_job)
         if verdict is None or _review_ok(verdict):                           # audit the recorded decision (the review's output is the decision history)
             rev = llm_review.run_stage_llm_review(pdir, "approval", aspect, force=False)
             if _review_ok(rev) and llm_review.is_stage_review_passed(pdir, "approval", aspect)[0]:
+                done = state(pdir, aspect)
+                if done["status"] != "approved":                              # a decision that was not recorded must never read as an approval
+                    raise ApprovalError("approval_not_recorded", f"the LLM review passed but the approval is not recorded for this version (status '{done['status']}')", [])
                 write_approval_report(pdir, aspect)
-                return state(pdir, aspect)
+                return done
             s2 = snapshot(pdir, aspect)
             if s2["status"] == "approved":
-                decide(pdir, aspect, {"decision": "withdrawn", "decision_by": "llm:audit", "idempotency_key": f"llm_withdraw_{s2['fingerprint']}_{attempt}",
+                decide(pdir, aspect, {"decision": "withdrawn", "decision_by": "llm:audit", "idempotency_key": f"llm_withdraw_{s2['fingerprint']}_{_review_tag(rev, attempt)}",
                                       "expected_fingerprint": s2["fingerprint"], "review_id": s2["review_id"], "notes": [f"LLM audit did not pass: {(rev or {}).get('summary', '')}"[:1000]]}, in_job=in_job)
         if attempt < MAX_AUTO_ATTEMPTS:                                       # rejected: rebuild the timeline from the current inputs and review the new version
             from VIDEO_ENGINE.pipeline import legacy_pipeline_adapter as pa

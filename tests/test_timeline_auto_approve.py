@@ -31,6 +31,26 @@ def test_a_passing_review_approves_and_the_audit_confirms(monkeypatch):
     assert st["decisions"] == ["approved"] and st["status"] == "approved"
 
 
+def test_a_decision_that_was_not_recorded_is_never_reported_as_an_approval(monkeypatch):
+    """Regression: re-approving an unchanged version after an audit withdrew it reused the old idempotency key, decide() recorded nothing ('already_recorded') and auto_approve still returned: the stage read
+    'completed' while the status stayed ready_for_review and Render refused to start."""
+    ok = {"status": "passed", "score": 0.9, "findings": []}
+    st = _setup(monkeypatch, [ok, ok])
+    monkeypatch.setattr(ta, "decide", lambda p, a, body, in_job=False: None)                       # nothing recorded
+    monkeypatch.setattr(ta, "state", lambda p, a, s=None: {"status": "ready_for_review", "fingerprint": "fp1"})
+    from backend import llm_review
+    monkeypatch.setattr(llm_review, "is_stage_review_passed", lambda *a, **k: (True, "", None))
+    with pytest.raises(ta.ApprovalError, match="not recorded"):
+        ta.auto_approve(None, "16:9")
+    assert st["decisions"] == []
+
+
+def test_every_new_review_of_the_same_version_makes_a_new_decision_key():
+    assert ta._review_tag({"output_fingerprint": "aaa"}, 1) != ta._review_tag({"output_fingerprint": "bbb"}, 1)
+    assert ta._review_tag({"output_fingerprint": "aaa"}, 1) == ta._review_tag({"output_fingerprint": "aaa"}, 2)      # the same review result stays idempotent
+    assert ta._review_tag({}, 3) == "3"
+
+
 def test_a_rejected_version_is_rebuilt_once_and_never_approved(monkeypatch):
     bad = {"status": "needs_review", "score": 0.6, "summary": "audio drifts", "findings": [{"severity": "blocker", "message": "audio out of sync"}]}
     st = _setup(monkeypatch, [bad, bad])

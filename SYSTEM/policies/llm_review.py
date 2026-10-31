@@ -32,7 +32,7 @@ SCHEMA = "1.0"
 VERSION = 1
 LLM_STAGES = ("analyzer", "segmentation", "planning", "motion_gen", "approval", "qc")     # the stages whose result needs an LLM review; every other stage is decided by its own deterministic checks
 SWITCHABLE = ("analyzer", "segmentation", "planning", "motion_gen")                      # approval and qc ARE an LLM decision (nobody else decides them): they cannot be switched off
-EVIDENCE_REVISION = {"approval": 2, "analyzer": 3}        # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
+EVIDENCE_REVISION = {"approval": 3, "analyzer": 3}       # bump a stage's number when what its review is shown changes (a verdict made on the old evidence is not reused); other stages keep theirs
 
 
 class LlmReviewResult(TypedDict):
@@ -565,7 +565,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                         "applied_frames": tr.get("applied_frames"),
                         "supported": tr.get("supported"),
                     }
-                    for tr in raw_trans[:6]
+                    for tr in raw_trans                                 # all of them: the summary counts every one, so a cut list reads as a missing transition
                 ]
                 for trk in tl.get("tracks", []):
                     if trk.get("track_type") in ("composition", "video"):
@@ -579,7 +579,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                                 "narration_end_seconds": it.get("narration_end_seconds"),
                                 "layers_count": len(it.get("layers", [])),
                             }
-                            for it in trk.get("items", [])[:8]
+                            for it in trk.get("items", [])
                         ]
             except Exception:
                 pass
@@ -609,7 +609,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                         "duration": round((s.get("end_time") or 0) - (s.get("start_time") or 0), 3),
                         "transcript": (s.get("transcript") or "")[:60],
                     }
-                    for s in ss.get("scenes", [])[:8]
+                    for s in ss.get("scenes", [])
                 ]
             except Exception:
                 pass
@@ -630,7 +630,7 @@ def build_stage_payload(pdir: Path, stage: str, aspect: str = "16:9") -> dict[st
                             "graphics_count": len(sc.get("graphics", [])),
                             "transition": sc.get("transition"),
                         }
-                        for sc in mp.get("scenes", [])[:8]
+                        for sc in mp.get("scenes", [])
                     ],
                 }
             except Exception:

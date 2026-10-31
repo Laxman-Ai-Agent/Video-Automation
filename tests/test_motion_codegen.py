@@ -262,6 +262,15 @@ def test_manifest_records_drawn_and_missing_elements(tmp_path):
     assert motion_animation.missing_element_ids('<div data-element-id="a"/>', ["a", "b"]) == ["b"]
 
 
+def test_a_scene_reused_from_the_cache_still_records_the_element_check(tmp_path):
+    """A reused scene used to carry no `missing_elements`, so the Element Resolver did not trust it and reported every planned fallback of that scene as NOT drawn."""
+    d, *_ = make_project(tmp_path / "proj_reuse")
+    store.set_reusable_motion_templates(d, False)
+    motion_animation.generate_custom_motion_code(d, "16:9")
+    again = motion_animation.generate_custom_motion_code(d, "16:9")
+    assert again["scenes"] and all(sc["generation"]["provider"] == "cache" and sc["generation"]["missing_elements"] == [] for sc in again["scenes"])
+
+
 def test_stage2_trusts_only_manifests_that_recorded_the_element_check(tmp_path):
     from types import SimpleNamespace
     from backend import motion_gen_rules
