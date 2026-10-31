@@ -247,12 +247,25 @@ export async function fetchLlmActive(): Promise<any> {
   }
 }
 
+export async function fetchDriveStatus(): Promise<{ connected: boolean; folder?: string; account?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/drive-status`);
+    if (!res.ok) return { connected: false };
+    return await res.json();
+  } catch {
+    return { connected: false };
+  }
+}
+
 export async function createProjectWithAudio(
   name: string,
   audioFile: File,
   aspect: string = '16:9',
   reusableTemplates: boolean = false,
-  media: MediaMix = DEFAULT_MEDIA
+  media: MediaMix = DEFAULT_MEDIA,
+  transcribeMode: 'colab' | 'local' = 'colab',
+  imageMode: 'colab' | 'normal' = 'colab',
+  videoMode: 'colab' | 'normal' = 'colab'
 ): Promise<any> {
   const formData = new FormData();
   formData.append('name', name);
@@ -262,6 +275,9 @@ export async function createProjectWithAudio(
   formData.append('ai_images', media.ai_images ? 'true' : 'false');
   formData.append('motion_kit', media.motion_kit ? 'true' : 'false');
   formData.append('captions', media.captions ? 'true' : 'false');
+  formData.append('transcribe_mode', transcribeMode);
+  formData.append('image_mode', imageMode);
+  formData.append('video_mode', videoMode);
 
   const res = await fetch(`${API_BASE}/projects`, {
     method: 'POST',

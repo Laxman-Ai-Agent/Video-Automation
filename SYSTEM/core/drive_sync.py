@@ -151,3 +151,100 @@ def upload_audio_to_drive(local_audio_path: Path) -> str | None:
     media = MediaFileUpload(str(local_audio_path), resumable=True)
     file = service.files().create(body=file_metadata, media_body=media, fields="id").execute()
     return file.get("id")
+
+
+def sync_images_from_drive(target_dir: Path) -> list[Path]:
+    """Downloads all generated scene images from Google Drive into target_dir/assets/raw
+    and formats them into assets/work for Remotion video rendering.
+    """
+    service = get_drive_service()
+    if not service:
+        return []
+
+    main_id = get_main_folder_id(service)
+    if not main_id:
+        return []
+
+    images_id = get_subfolder_id(service, main_id, "images")
+    if not images_id:
+        return []
+
+    raw_dir = target_dir / "assets" / "raw"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+
+    q = f"'{images_id}' in parents and trashed = false"
+    res = service.files().list(q=q, fields="files(id, name, size)").execute()
+    files = res.get("files", [])
+
+    downloaded: list[Path] = []
+    for f in files:
+        file_name = f["name"]
+        if not any(file_name.lower().endswith(ext) for ext in [".png", ".jpg", ".jpeg", ".webp"]):
+            continue
+        dest_file = raw_dir / file_name
+        req = service.files().get_media(fileId=f["id"])
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, req)
+        done = False
+        while not done:
+            _, done = downloader.next_chunk()
+        dest_file.write_bytes(fh.getvalue())
+        downloaded.append(dest_file)
+
+    if downloaded:
+        try:
+            from VIDEO_ENGINE.stages.assets import save_uploads
+            save_uploads(target_dir, downloaded)
+            logger.info("Synced %d images from Google Drive to %s", len(downloaded), target_dir)
+        except Exception as e:
+            logger.warning("save_uploads post-process warning: %s", e)
+
+    return downloaded
+
+
+def sync_videos_from_drive(target_dir: Path) -> list[Path]:
+    """Downloads all generated scene video clips from Google Drive into target_dir/assets/raw."""
+    service = get_drive_service()
+    if not service:
+        return []
+
+    main_id = get_main_folder_id(service)
+    if not main_id:
+        return []
+
+    videos_id = get_subfolder_id(service, main_id, "videos")
+    if not videos_id:
+        return []
+
+    raw_dir = target_dir / "assets" / "raw"
+    work_dir = target_dir / "assets" / "work"
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    work_dir.mkdir(parents=True, exist_ok=True)
+
+    q = f"'{videos_id}' in parents and trashed = false"
+    res = service.files().list(q=q, fields="files(id, name, size)").execute()
+    files = res.get("files", [])
+
+    downloaded: list[Path] = []
+    for f in files:
+        file_name = f["name"]
+        if not any(file_name.lower().endswith(ext) for ext in [".mp4", ".mov", ".webm", ".mkv"]):
+            continue
+        dest_file = raw_dir / file_name
+        req = service.files().get_media(fileId=f["id"])
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, req)
+        done = False
+        while not done:
+            _, done = downloader.next_chunk()
+        dest_file.write_bytes(fh.getvalue())
+        # Also copy to work dir for Remotion asset pipeline
+        work_file = work_dir / file_name
+        work_file.write_bytes(dest_file.read_bytes())
+        downloaded.append(dest_file)
+
+    if downloaded:
+        logger.info("Synced %d video clips from Google Drive to %s", len(downloaded), target_dir)
+
+    return downloaded
+

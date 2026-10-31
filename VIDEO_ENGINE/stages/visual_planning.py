@@ -294,7 +294,7 @@ def fingerprint(pdir: Path, plan_dir: Path | None = None) -> str:
     seg = scene_segmentation.load_fresh(pdir)
     h = hashlib.sha1()
     for part in ((d / "scene_plan.json").read_bytes(), json.dumps(store.read_info(pdir).get("media"), sort_keys=True).encode(), str(store.read_info(pdir).get("aspect") or "16:9").encode(),
-                 (seg or {}).get("source_fingerprint", "").encode(), f"{VERSION}".encode()):
+                 (seg or {}).get("source_fingerprint", "").encode(), f"{VERSION}".encode(), *([b"captions"] if store.captions(pdir) else [])):      # the caption layer owns the bottom of the frame: a plan made for it is another plan (only when on, so a plan of a project without captions stays valid)
         h.update(part)
         h.update(b"\x00")
     return h.hexdigest()

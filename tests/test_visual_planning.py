@@ -711,3 +711,15 @@ def test_with_captions_on_a_subtitle_text_is_asked_against_and_reported(tmp_path
     (d / "project.json").write_text(json.dumps({**info, "captions": False}), encoding="utf-8")
     plan, _ = vp.assemble(d, sp, raw_for(sp, mutate=sub))
     assert not any("caption layer already shows it" in w for w in plan["validation"]["warnings"])
+
+
+def test_the_captions_option_makes_a_plan_made_without_it_stale_and_changes_nothing_when_off(tmp_path):
+    d, sp = project(tmp_path)
+    info = json.loads((d / "project.json").read_text(encoding="utf-8"))
+    put = lambda on: (d / "project.json").write_text(json.dumps({**info, "captions": on}), encoding="utf-8")
+    put(False)
+    off = vp.fingerprint(d)
+    (d / "project.json").write_text(json.dumps({k: v for k, v in info.items() if k != "captions"}), encoding="utf-8")
+    assert vp.fingerprint(d) == off                      # an old project (no key) keeps its plan
+    put(True)
+    assert vp.fingerprint(d) != off

@@ -8,6 +8,9 @@ import {
 } from 'lucide-react';
 import { AudioUploadZone } from './audio-input/AudioUploadZone';
 import { ProjectOptionsConfig } from './audio-input/ProjectOptionsConfig';
+import { TranscriptionModeSelector } from './audio-input/TranscriptionModeSelector';
+import { ImageModeSelector } from './audio-input/ImageModeSelector';
+import { VideoModeSelector } from './audio-input/VideoModeSelector';
 import styles from './AudioInputPage.module.css';
 
 interface AudioInputPageProps {
@@ -16,7 +19,10 @@ interface AudioInputPageProps {
     audioFile: File, 
     aspect: string,
     reusableTemplates: boolean,
-    media: MediaMix
+    media: MediaMix,
+    transcribeMode?: 'colab' | 'local',
+    imageMode?: 'colab' | 'normal',
+    videoMode?: 'colab' | 'normal'
   ) => Promise<void>;
   onCancel: () => void;
 }
@@ -30,6 +36,9 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
   const [title, setTitle] = useState('');
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [aspect, setAspect] = useState<'16:9' | '9:16'>('16:9');
+  const [transcribeMode, setTranscribeMode] = useState<'colab' | 'local'>('colab');
+  const [imageMode, setImageMode] = useState<'colab' | 'normal'>('colab');
+  const [videoMode, setVideoMode] = useState<'colab' | 'normal'>('colab');
   const [reusableTemplates, setReusableTemplates] = useState(false);
   const [media, setMedia] = useState<MediaMix>(DEFAULT_MEDIA);
   const [dragOver, setDragOver] = useState(false);
@@ -83,7 +92,7 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
 
     try {
       setSubmitting(true);
-      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates, media);
+      await onAnalyze(trimmedTitle, audioFile, aspect, reusableTemplates, media, transcribeMode, imageMode, videoMode);
     } catch (err: any) {
       setError(err?.message || 'Failed to initialize project and start analysis.');
       setSubmitting(false);
@@ -229,6 +238,27 @@ export const AudioInputPage: React.FC<AudioInputPageProps> = ({
               />
             </div>
           </div>
+
+          {/* Transcription Engine Selector (Default: Colab with Google Drive) */}
+          <TranscriptionModeSelector
+            mode={transcribeMode}
+            onChange={setTranscribeMode}
+            disabled={submitting}
+          />
+
+          {/* Scene Image Generation Engine Selector (Default: Colab Ultra GPU) */}
+          <ImageModeSelector
+            mode={imageMode}
+            onChange={setImageMode}
+            disabled={submitting}
+          />
+
+          {/* Scene Video Clip Engine Selector (Default: Colab Lightning AI Video) */}
+          <VideoModeSelector
+            mode={videoMode}
+            onChange={setVideoMode}
+            disabled={submitting}
+          />
 
           {/* Middle Section: Side-by-Side 2-Column Grid */}
           <div style={{

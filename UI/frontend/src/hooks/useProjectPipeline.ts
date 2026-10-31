@@ -173,9 +173,12 @@ export function useProjectPipeline({
     audioFile: File, 
     aspect: string,
     reusableTemplates: boolean = false,
-    media: MediaMix = DEFAULT_MEDIA
+    media: MediaMix = DEFAULT_MEDIA,
+    transcribeMode: 'colab' | 'local' = 'colab',
+    imageMode: 'colab' | 'normal' = 'colab',
+    videoMode: 'colab' | 'normal' = 'colab'
   ) => {
-    const res = await createProjectWithAudio(title, audioFile, aspect, reusableTemplates, media);
+    const res = await createProjectWithAudio(title, audioFile, aspect, reusableTemplates, media, transcribeMode, imageMode, videoMode);
     const newId = res.id || res.project_id || res.name;
     
     const updatedList = await fetchProjects();

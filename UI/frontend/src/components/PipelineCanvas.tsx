@@ -28,7 +28,10 @@ interface PipelineCanvasProps {
     audioFile: File, 
     aspect: string,
     reusableTemplates: boolean,
-    media: MediaMix
+    media: MediaMix,
+    transcribeMode?: 'colab' | 'local',
+    imageMode?: 'colab' | 'normal',
+    videoMode?: 'colab' | 'normal'
   ) => Promise<void>;
   activeTab?: 'flow' | 'approvals' | 'communication' | 'new-project' | 'projects';
   onTabChange?: (tab: 'flow' | 'approvals' | 'communication' | 'new-project' | 'projects') => void;
@@ -332,9 +335,9 @@ export const PipelineCanvas: React.FC<PipelineCanvasProps> = ({
         {activeTab === 'new-project' && (
           <div style={{ padding: '16px 20px' }}>
             <AudioInputPage
-              onAnalyze={async (title, audioFile, aspect, reusableTemplates, media) => {
+              onAnalyze={async (title, audioFile, aspect, reusableTemplates, media, transcribeMode, imageMode, videoMode) => {
                 if (onAnalyze) {
-                  await onAnalyze(title, audioFile, aspect, reusableTemplates, media);
+                  await onAnalyze(title, audioFile, aspect, reusableTemplates, media, transcribeMode, imageMode, videoMode);
                 }
                 handleTabChange('flow');
               }}

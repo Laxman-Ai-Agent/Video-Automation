@@ -17,6 +17,17 @@ from .uploads import check_ext, receive
 router = APIRouter(prefix="/projects", tags=["projects"])
 
 
+@router.get("/drive-status")
+def get_drive_status():
+    from SYSTEM.core import drive_sync
+    connected = drive_sync.is_drive_connected()
+    return {
+        "connected": connected,
+        "folder": drive_sync.MAIN_FOLDER_NAME,
+        "account": "drive-video-automation@n8n-first-project-484410.iam.gserviceaccount.com" if connected else None,
+    }
+
+
 @router.post("", response_model=ProjectInfo, status_code=201)
 async def create_project(
     name: str = Form(...),
@@ -27,6 +38,9 @@ async def create_project(
     ai_images: bool = Form(False),
     motion_kit: bool = Form(False),
     captions: bool = Form(True),
+    transcribe_mode: str = Form("colab"),
+    image_mode: str = Form("colab"),
+    video_mode: str = Form("colab"),
 ):
     if not name.strip():
         raise ApiError(422, "invalid_name", "the project needs a name", "send a non-empty name")
@@ -48,7 +62,37 @@ async def create_project(
         except Exception:                     # the length is only shown in the UI; the analysis reports an unreadable file itself
             seconds = None
         info["audio"] = {"file": dest.name, "original_name": Path(audio.filename or dest.name).name[:200], "size_bytes": dest.stat().st_size, "format": ext[1:].upper(), "duration": seconds}
+        info["transcribe_mode"] = transcribe_mode
+        info["image_mode"] = image_mode
+        info["video_mode"] = video_mode
         store.write_info(pdir, info)
+
+        if transcribe_mode == "colab":
+            try:
+                import threading
+                from SYSTEM.core import drive_sync
+                if drive_sync.is_drive_connected():
+                    threading.Thread(target=drive_sync.upload_audio_to_drive, args=(dest,), daemon=True).start()
+            except Exception:
+                pass
+
+        if image_mode == "colab":
+            try:
+                import threading
+                from SYSTEM.core import drive_sync
+                if drive_sync.is_drive_connected():
+                    threading.Thread(target=drive_sync.sync_images_from_drive, args=(pdir,), daemon=True).start()
+            except Exception:
+                pass
+
+        if video_mode == "colab":
+            try:
+                import threading
+                from SYSTEM.core import drive_sync
+                if drive_sync.is_drive_connected():
+                    threading.Thread(target=drive_sync.sync_videos_from_drive, args=(pdir,), daemon=True).start()
+            except Exception:
+                pass
     except BaseException:
         store.delete(pdir)                    # the half-made project this request just created
         raise
