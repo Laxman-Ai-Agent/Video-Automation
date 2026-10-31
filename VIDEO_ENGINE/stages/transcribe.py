@@ -130,6 +130,19 @@ def transcribe(pdir: Path, progress=None) -> Transcript:
         print("cache hit: transcript.json unchanged")
         return Transcript.model_validate_json(tf.read_text(encoding="utf-8"))
 
+    # Check if a remote transcript exists on Google Drive (Colab GPU execution)
+    try:
+        from SYSTEM.core import drive_sync
+        if not tf.exists() and drive_sync.is_drive_connected():
+            print("Google Drive connected: checking for cloud transcript...")
+            synced = drive_sync.sync_transcript_from_drive(pdir)
+            if synced and synced.exists():
+                print("Successfully fetched transcript.json from Google Drive!")
+                hf.write_text(h)
+                return Transcript.model_validate_json(synced.read_text(encoding="utf-8"))
+    except Exception as e:
+        print(f"Drive sync check skipped: {e}")
+
     from .audio_analysis import probe
     probe(audio)   # empty / damaged / no audio stream: a clear error before any expensive work
 
