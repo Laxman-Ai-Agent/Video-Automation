@@ -13,16 +13,23 @@ FFMPEG_DIR = PROJECT_ROOT / "VIDEO_ENGINE" / "ffmpeg"
 os.environ.setdefault("TORCH_HOME", str(MODELS_DIR / "torch"))
 os.environ.setdefault("U2NET_HOME", str(MODELS_DIR / "u2net"))
 
-# Whisper (CPU). Reused from the user HF cache; set WHISPER_MODEL=medium/small for speed.
+# Whisper (Auto-detects GPU CUDA on Kaggle/servers, CPU fallback on local laptop)
 WHISPER_MODEL = os.environ.get("WHISPER_MODEL", "large-v3")
-WHISPER_DEVICE = "cpu"
-WHISPER_COMPUTE = "int8"
+_has_cuda = False
+try:
+    import torch
+    _has_cuda = torch.cuda.is_available()
+except Exception:
+    pass
+
+WHISPER_DEVICE = os.environ.get("WHISPER_DEVICE", "cuda" if _has_cuda else "cpu")
+WHISPER_COMPUTE = os.environ.get("WHISPER_COMPUTE", "float16" if WHISPER_DEVICE == "cuda" else "int8")
 # Whisper's decoder is limited to 448 tokens and Telugu is token-hungry, so 30 s windows get cut
 # mid-character and speech is lost. We transcribe short chunks cut at low-energy points instead.
 WHISPER_CHUNK_MAX = 9.0     # seconds
 WHISPER_CHUNK_MIN = 4.0
 WHISPER_VERSION = "v3"      # bump to invalidate cached transcripts after changing decode options
-WHISPER_LOCAL_ONLY = True   # never download; fail loudly if the cache is missing
+WHISPER_LOCAL_ONLY = os.environ.get("WHISPER_LOCAL_ONLY", "0" if _has_cuda else "1").lower() in ("1", "true")
 
 # Cuts
 SILENCE_MIN = 0.35        # seconds
