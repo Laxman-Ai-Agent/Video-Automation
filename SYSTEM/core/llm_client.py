@@ -594,6 +594,17 @@ def _call_antigravity_cli(user: str, system: str, timeout: int, model: str = "ge
             return r.stdout.strip()
 
 
+PIPELINE_LOGIN_DIR = Path.home() / ".claude-pipeline"      # the pipeline's own `claude` sign-in; the folder of the Claude app's login (~/.claude) is another account
+
+
+def _claude_env() -> dict[str, str]:
+    """The environment of the `claude` subprocess. When this computer has a dedicated pipeline login folder and the backend was started without CLAUDE_CONFIG_DIR (a plain `uvicorn` in any window), the pipeline still signs in with it, never with the app's account."""
+    env = dict(os.environ)
+    if not env.get("CLAUDE_CONFIG_DIR") and PIPELINE_LOGIN_DIR.is_dir():
+        env["CLAUDE_CONFIG_DIR"] = str(PIPELINE_LOGIN_DIR)
+    return env
+
+
 def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = None, images: list[str] | None = None) -> str:
     """images: picture files the model must look at. The CLI then gets the Read tool (and nothing else) for the folders those files are in; without images it gets no tool and one turn."""
     exe = shutil.which("claude")
@@ -625,7 +636,8 @@ def _call_claude_cli(user: str, system: str, timeout: int, model: str | None = N
             text=True,
             encoding="utf-8",
             timeout=timeout,
-            cwd=tempfile.gettempdir()
+            cwd=tempfile.gettempdir(),
+            env=_claude_env(),
         )
     except subprocess.TimeoutExpired as e:
         raise LlmError(f"The Claude CLI did not answer within {timeout} s") from e
