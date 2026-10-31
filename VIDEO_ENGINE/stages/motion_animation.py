@@ -438,6 +438,16 @@ def scene_self_fades(code: str, dur_frames: int) -> list[str]:
     return out
 
 
+MIN_TEXT_PX = {"16:9": 24, "9:16": 32}      # the floor of rule 13 of the code generator's instructions
+
+
+def small_text(code: str, aspect: str) -> list[str]:
+    """Literal font sizes under the floor of the canvas (a credit line is exempt). ponytail: only literal `fontSize: 28`, a computed size is not seen; the Final QC review looks at the rendered result."""
+    floor = MIN_TEXT_PX.get(aspect, 24)
+    small = sorted({int(m.group(1)) for line in code.splitlines() if "credit" not in line.lower() for m in re.finditer(r"\bfontSize\s*[:=]\s*\{?\s*(\d+)\b", line) if int(m.group(1)) < floor})
+    return [f"text of {', '.join(map(str, small))}px is too small for the {aspect} canvas (at least {floor}px): enlarge it and make room for it"] if small else []
+
+
 def missing_shot_sequences(code: str, shots: list[dict[str, Any]]) -> list[str]:
     """The shots of the scene the code starts no <Sequence> for (with the shot's own frame range): without them the whole scene is one unchanging layout."""
     if len(shots) < 2:
@@ -742,7 +752,9 @@ def generate_scene_tsx_via_llm(
         "guard the value (`if (!p) return null;`) or give it a fallback before you read a field of it.\n"
         "11. Each shot lists the words spoken in it with their frames: a word that is drawn on screen appears at its own start_frame, never on a fixed schedule.\n"
         "13. CARDS: every card, panel, node or step carries readable content from the `items` of its element (a title of 36px or more, a one-line caption of 24px or more, a picture: an Illustration or a duotone icon in an IconChip) and is NEVER an empty rectangle or grey placeholder lines; a bar has its label next to it. "
-        "No text is smaller than 24px on the 1920x1080 canvas (a credit line may be 20px; scale it for 9:16). Accent colours and glows come from the palette, at most two accent colours in a scene.\n"
+        "No text is smaller than 24px on the 1920x1080 canvas and 32px on the 1080x1920 canvas, where the video is watched on a phone (a credit line may be 20px / 26px): card captions and sub-labels are 32px or more there, titles 44px or more. Accent colours and glows come from the palette, at most two accent colours in a scene.\n"
+        "14. FILLED FRAMES: the first frame of every shot already shows its composition: the cards, the hero and the headline of the shot are on screen within its first 6 frames (they may still move or scale in, starting at opacity 0.5 or more and at most 40px away from their place), "
+        "and the later items follow at most 8 frames apart. A shot never opens on an empty background with one small element.\n"
         "9. Output valid, complete React TSX source code only."
     )
     texts = [t for t in (texts or [headline, subtext]) if t]
@@ -876,6 +888,7 @@ def generate_scene_tsx_via_llm(
         out = [f"the planned element '{i}' has no node with data-element-id=\"{i}\"" for i in missing_element_ids(code, ids) if i in required_ids]
         out += [f"the planned on-screen text '{t}' is not drawn (as one string, or word by word as separate string literals in order)" for t in texts if t and not motion_planning.text_is_drawn(code, t)]
         out += scene_self_fades(code, dur_frames)
+        out += small_text(code, aspect)
         out += missing_shot_sequences(code, shots or [])
         from SYSTEM.agents.video_generation_agents.motion_animation.animation_intelligence import VisualPreviewVerifier
         out += VisualPreviewVerifier().verify(code, aspect=aspect).findings
@@ -903,7 +916,7 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
-CODEGEN_VERSION = "4"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames; 4: the UI parts, cards carry the plan's items)
+CODEGEN_VERSION = "5"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames; 4: the UI parts, cards carry the plan's items; 5: 32px minimum on 9:16, filled first frames)
 
 
 def scene_input_fingerprint(**inputs: Any) -> str:
