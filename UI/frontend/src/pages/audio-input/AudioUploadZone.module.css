@@ -1,53 +1,214 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-elevated);
+  border: 1px solid var(--border-card);
+  border-radius: 8px;
+  padding: 16px 18px;
+  gap: 12px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.requiredAsterisk {
+  color: var(--accent-red);
+}
+
+.headerHint {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.hiddenInput {
+  display: none;
+}
+
+/* Dropzone */
 .dropzone {
   flex: 1;
-  min-height: 120px;
-  border-radius: 5px;
-  padding: 16px 14px;
+  min-height: 150px;
+  border-radius: 8px;
+  padding: 24px 18px;
   text-align: center;
-  transition: all 0.15s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 8px;
+  position: relative;
 }
 
 .dropzoneIdle {
   border: 1.5px dashed var(--border-card);
-  background-color: var(--bg-card);
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(20, 24, 33, 0.4) 100%);
   cursor: pointer;
 }
 
 .dropzoneIdle:hover {
   border-color: var(--accent-blue);
+  background: linear-gradient(180deg, var(--bg-card) 0%, rgba(24, 144, 255, 0.05) 100%);
+  transform: translateY(-1px);
 }
 
 .dropzoneActive {
-  border: 1.5px dashed var(--accent-blue);
+  border: 2px dashed var(--accent-blue);
   background-color: var(--status-running-bg);
   cursor: pointer;
+  box-shadow: 0 0 16px rgba(24, 144, 255, 0.2);
 }
 
 .dropzoneDisabled {
+  opacity: 0.6;
   cursor: not-allowed;
 }
 
+.uploadIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(24, 144, 255, 0.15), rgba(0, 216, 245, 0.1));
+  border: 1px solid rgba(24, 144, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-blue);
+  margin-bottom: 2px;
+  transition: all 0.2s ease;
+}
+
+.dropzone:hover .uploadIconCircle {
+  transform: scale(1.08);
+  box-shadow: 0 0 12px rgba(24, 144, 255, 0.35);
+}
+
+.dropTitle {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.dropSubtitle {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.browseBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  padding: 5px 14px;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-card);
+  border-radius: 6px;
+  color: var(--accent-blue);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.browseBtn:hover {
+  background-color: rgba(24, 144, 255, 0.12);
+  border-color: var(--accent-blue);
+}
+
+/* File Loaded Card */
+.fileCard {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 18px;
+  background: linear-gradient(135deg, var(--status-completed-bg) 0%, rgba(16, 185, 129, 0.04) 100%);
+  border: 1.5px solid var(--status-completed-border);
+  border-radius: 8px;
+  gap: 14px;
+  box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08);
+}
+
+.fileInfoLeft {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+  flex: 1;
+}
+
+.fileIconCircle {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, var(--status-completed) 0%, #059669 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+}
+
+.fileName {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fileMetaRow {
+  font-size: 11.5px;
+  color: var(--text-secondary);
+  margin-top: 3px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.verifiedBadge {
+  font-weight: 700;
+  color: var(--status-completed);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.metaDot {
+  color: var(--text-muted);
+}
+
 .removeBtn {
-  background: none;
+  background-color: var(--bg-card);
   border: 1px solid var(--border-card);
   color: var(--text-muted);
   cursor: pointer;
   padding: 6px;
-  border-radius: 4px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background-color: var(--bg-card);
   transition: all 0.15s ease;
 }
 
 .removeBtn:hover {
-  color: var(--status-failed);
-  border-color: var(--status-failed-border);
+  color: var(--accent-red);
+  border-color: rgba(239, 68, 68, 0.4);
+  background-color: rgba(239, 68, 68, 0.1);
 }

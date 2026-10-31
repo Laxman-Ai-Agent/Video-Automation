@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-31T08:14:06.517247+00:00",
+  "updated_at": "2026-10-31T12:01:46.537118+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -3276,6 +3276,32 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-3ac2b860c8f9": {
+      "memory_id": "mem-3ac2b860c8f9",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 24, \"fallbacks_applied\": 2, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 83.3}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "baf3f5b526a16fa95b9904c2f677890edfeef90051fb4cb226fe8d3b6e96660c",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T12:01:46.537118+00:00",
+      "updated_at": "2026-10-31T12:01:46.537118+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
+      }
+    },
     "mem-3ac6d93bddeb": {
       "memory_id": "mem-3ac6d93bddeb",
       "title": "Experience exp_9c0b9c35cf64: Delegated action to capability_finder",
@@ -3428,6 +3454,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_e2e_capability_finder_to_0"
+      }
+    },
+    "mem-3dd6e38989a3": {
+      "memory_id": "mem-3dd6e38989a3",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 24, \"fallbacks_applied\": 2, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 83.3}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "baf3f5b526a16fa95b9904c2f677890edfeef90051fb4cb226fe8d3b6e96660c",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T11:45:01.969582+00:00",
+      "updated_at": "2026-10-31T11:45:01.969582+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
       }
     },
     "mem-3ebf00fe4578": {

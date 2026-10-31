@@ -75,6 +75,34 @@ def get_main_folder_id(service: Any) -> str | None:
         return files[0]["id"]
     return None
 
+def get_project_asset_folder(service: Any, main_id: str, project_name: str | None, asset_type: str) -> str | None:
+    """Finds the folder for a specific project asset type (e.g. 'images', 'videos', 'transcripts', 'audio_files').
+    Hierarchy:
+      1. AI_Video_Project/projects/{project_name}/{asset_type}
+      2. AI_Video_Project/{project_name}/{asset_type}
+      3. AI_Video_Project/{asset_type} (Global fallback)
+    """
+    if project_name:
+        # Check 1: AI_Video_Project/projects/{project_name}/{asset_type}
+        projects_id = get_subfolder_id(service, main_id, "projects")
+        if projects_id:
+            proj_id = get_subfolder_id(service, projects_id, project_name)
+            if proj_id:
+                asset_id = get_subfolder_id(service, proj_id, asset_type)
+                if asset_id:
+                    return asset_id
+
+        # Check 2: Direct AI_Video_Project/{project_name}/{asset_type}
+        proj_direct_id = get_subfolder_id(service, main_id, project_name)
+        if proj_direct_id:
+            asset_id = get_subfolder_id(service, proj_direct_id, asset_type)
+            if asset_id:
+                return asset_id
+
+    # Fallback to global AI_Video_Project/{asset_type}
+    return get_subfolder_id(service, main_id, asset_type)
+
+
 
 def sync_transcript_from_drive(target_dir: Path) -> Path | None:
     """Downloads the latest transcript.json from Google Drive into target_dir.
@@ -90,7 +118,8 @@ def sync_transcript_from_drive(target_dir: Path) -> Path | None:
         logger.warning("Main folder '%s' not found on Google Drive.", MAIN_FOLDER_NAME)
         return None
 
-    transcripts_id = get_subfolder_id(service, main_id, "transcripts")
+    project_name = target_dir.name
+    transcripts_id = get_project_asset_folder(service, main_id, project_name, "transcripts")
     if not transcripts_id:
         logger.warning("'transcripts' folder not found inside %s.", MAIN_FOLDER_NAME)
         return None
@@ -165,7 +194,8 @@ def sync_images_from_drive(target_dir: Path) -> list[Path]:
     if not main_id:
         return []
 
-    images_id = get_subfolder_id(service, main_id, "images")
+    project_name = target_dir.name
+    images_id = get_project_asset_folder(service, main_id, project_name, "images")
     if not images_id:
         return []
 
@@ -212,7 +242,8 @@ def sync_videos_from_drive(target_dir: Path) -> list[Path]:
     if not main_id:
         return []
 
-    videos_id = get_subfolder_id(service, main_id, "videos")
+    project_name = target_dir.name
+    videos_id = get_project_asset_folder(service, main_id, project_name, "videos")
     if not videos_id:
         return []
 

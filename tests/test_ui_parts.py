@@ -34,7 +34,7 @@ def test_a_scene_may_import_the_ui_parts():
 def test_the_codegen_rules_ask_for_phone_sized_text_and_filled_first_frames():
     """Polish rules (CODEGEN_VERSION 5): small card labels were unreadable on a phone and shots opened nearly empty."""
     src = Path(ma.__file__).read_text(encoding="utf-8")
-    assert "32px on the 1080x1920 canvas" in src and "FILLED FRAMES" in src
+    assert "32px on the 1080x1920 canvas" in src and "FILLED FRAMES" in src and "CAPTION ZONE" in src
     assert int(ma.CODEGEN_VERSION) >= 5
 
 

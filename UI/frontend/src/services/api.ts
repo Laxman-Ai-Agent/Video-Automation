@@ -1149,3 +1149,19 @@ export async function switchRules(body: { on: boolean; stage?: string; rule?: st
     return null;
   }
 }
+
+
+export async function syncDriveAssets(projectId: string): Promise<{ ok: boolean; synced_images: number; synced_videos: number; files: string[]; message?: string }> {
+  try {
+    const res = await fetch(`${API_BASE}/projects/${projectId}/assets/sync-drive`, {
+      method: 'POST'
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      return { ok: false, synced_images: 0, synced_videos: 0, files: [], message: err.detail || 'Drive sync failed' };
+    }
+    return await res.json();
+  } catch (err: any) {
+    return { ok: false, synced_images: 0, synced_videos: 0, files: [], message: err?.message || 'Network error syncing drive assets' };
+  }
+}

@@ -331,3 +331,20 @@ def get_sfx_catalog(pid: str = ""):
     return {"ok": True, "sfx": list_builtin_sfx()}
 
 
+
+
+@router.post("/assets/sync-drive")
+def sync_drive_assets_endpoint(pid: str):
+    """Sync all high-res photos, logos, and video clips from Google Drive AI_Video_Project into this project."""
+    pdir = store.project_dir(pid)
+    from SYSTEM.core import drive_sync
+    if not drive_sync.is_drive_connected():
+        raise ApiError(400, "drive_not_connected", "Google Drive is not connected")
+    downloaded_images = drive_sync.sync_images_from_drive(pdir)
+    downloaded_videos = drive_sync.sync_videos_from_drive(pdir)
+    return {
+        "ok": True,
+        "synced_images": len(downloaded_images),
+        "synced_videos": len(downloaded_videos),
+        "files": [f.name for f in downloaded_images + downloaded_videos]
+    }

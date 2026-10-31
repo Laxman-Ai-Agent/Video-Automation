@@ -755,6 +755,7 @@ def generate_scene_tsx_via_llm(
         "No text is smaller than 24px on the 1920x1080 canvas and 32px on the 1080x1920 canvas, where the video is watched on a phone (a credit line may be 20px / 26px): card captions and sub-labels are 32px or more there, titles 44px or more. Accent colours and glows come from the palette, at most two accent colours in a scene.\n"
         "14. FILLED FRAMES: the first frame of every shot already shows its composition: the cards, the hero and the headline of the shot are on screen within its first 6 frames (they may still move or scale in, starting at opacity 0.5 or more and at most 40px away from their place), "
         "and the later items follow at most 8 frames apart. A shot never opens on an empty background with one small element.\n"
+        "15. CAPTION ZONE: the spoken words are drawn over the picture on a plate in the bottom 22% of the frame, so no card, label, headline or graphic of the scene sits in that zone (a small credit line may); the scene's content fills the upper 78%.\n"
         "9. Output valid, complete React TSX source code only."
     )
     texts = [t for t in (texts or [headline, subtext]) if t]
@@ -916,7 +917,7 @@ def generate_scene_tsx_via_llm(
     return raw_code, gen_meta
 
 
-CODEGEN_VERSION = "5"                # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames; 4: the UI parts, cards carry the plan's items; 5: 32px minimum on 9:16, filled first frames)
+CODEGEN_VERSION = "6"               # bump when the instructions or the checks of the code generation change: every scene is then written again (3: one Sequence per shot, word frames; 4: the UI parts, cards carry the plan's items; 5: 32px minimum on 9:16, filled first frames; 6: the bottom 22% belongs to the captions)
 
 
 def scene_input_fingerprint(**inputs: Any) -> str:

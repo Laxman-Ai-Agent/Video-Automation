@@ -244,16 +244,21 @@ def media_rules(opts: dict) -> str:
         "This project is a 100% Motion Graphics production. The entire canvas is animated with kinetic typography, shapes, and motion cards.",
         "Real photographs (type image) and reference pages must ALWAYS be embedded visual assets inside animated motion cards, bento grids, circular cutouts, or device frames (phones/laptops), never standalone full-frame static slides. "
         "A video clip (type video) is either framed in a device frame (below) or FULL-FRAME B-ROLL (the rule after it).",
-        "When the narration mentions a tangible object, product, person, or fruit (e.g. phone, desk, creator, item), display it as an isolated cutout asset inside a focused motion card with a subtitle pill instead of plain text.",
+        "When the narration mentions a tangible object, product, person, or item (e.g. phone, desk, creator, tool), display it as an isolated cutout asset inside a focused motion card with a subtitle pill instead of plain text.",
+        "Named Entity & Real Subject Recognition: When the narration mentions a specific company, tech brand, or app (e.g. ChatGPT, Google, Apple, Microsoft, OpenAI, Tesla), "
+        "plan an official logo or brand card (e.g. media.query='<Brand> logo' or registry icon). "
+        "When the narration mentions a specific real person (e.g. Narendra Modi, Elon Musk, Sundar Pichai), plan an authentic photograph with their exact English name (media.query='<Person Name>', must_be_real=True). "
+        "When the narration mentions a specific real landmark or place (e.g. Charminar, Taj Mahal, ISRO Sriharikota), plan a real photograph with the landmark name (media.query='<Landmark Name>', must_be_real=True).",
         "When the narration lists multiple items, steps, or features, generate an animated Bento Grid or Card Deck (3 to 5 cards) that appear sequentially matching the spoken words.",
         "When the narration mentions a video, screencast, or dynamic action, embed the video clip inside a modern device frame (laptop, tablet, or smartphone mockup with rounded corners and glass glow).",
         "FULL-FRAME B-ROLL: when the narration is about the real world and the MOVEMENT is the point (a place, a crowd, a machine working, an activity), a video clip may fill the whole frame as the background "
         "of its scene: give that element placement.region 'full_frame' and depth_layer 'background', and keep the scene's kinetic typography and graphics on top of it (a clip never stands alone: the drawn words and "
         "graphics carry the meaning). Use at most one full-frame clip at a time (a second one belongs to another shot). A screencast or an interface stays in a device frame, not B-roll.",
         "Floating Card Aesthetic: In visual_description and constraints, say how a photograph is framed (for example 'rounded floating glassmorphic card with subtle glow', 'circular cutout', 'device frame mockup') so it is never a blocky full-frame wallpaper photo.",
-        "Every real element (type image, video or reference) carries the object `media`: query (2 to 6 plain English words naming what is visible; NEVER a brand or product name, a living person's name or a "
-        "Telugu word; describe the generic thing instead, e.g. a chatbot -> 'person typing on laptop'), alt_queries (one broader and one synonym query), why (one sentence), must_be_real "
-        "(true ONLY when the narration cites a specific real event or document that a generic picture would misrepresent) and fallback (one sentence: the flat motion graphic that is drawn "
+        "Every real element (type image, video or reference) carries the object `media`: query (2 to 6 plain English words naming what is visible: "
+        "for specific brands, persons, or monuments use their exact English name, e.g. 'ChatGPT logo', 'Narendra Modi', 'Charminar Hyderabad'; "
+        "for generic concepts describe the visible object in plain English, never Telugu words), alt_queries (one broader and one synonym query), why (one sentence), must_be_real "
+        "(true when the narration cites a specific real person, brand, monument, or historical event that a generic picture would misrepresent) and fallback (one sentence: the flat motion graphic that is drawn "
         "instead when no suitable real media is found). At most "
         f"{rules.MAX_REAL_PER_SCENE} real elements in a scene; every scene keeps its text and graphics layer integrated. There is no share of the video to reach: use as many real pictures and clips as "
         "the narration calls for: each photograph inside an animated card, frame or bento grid, each clip framed or full-frame B-roll.",

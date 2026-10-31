@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "render_video",
-  "updated_at": "2026-10-31T08:48:12.440278+00:00",
-  "total_experiences": 56,
+  "updated_at": "2026-10-31T12:09:00.973895+00:00",
+  "total_experiences": 58,
   "experiences": {
     "exp-render_video-020b3c2dca": {
       "experience_id": "exp-render_video-020b3c2dca",
@@ -166,6 +166,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-27T10:48:43.004754+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-1913cc7723": {
+      "experience_id": "exp-render_video-1913cc7723",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-6a26f7c7e0",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 27844410,
+        "sha256_short": "621ebe714c12",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T12:09:00.973895+00:00",
       "schema_version": 1
     },
     "exp-render_video-1a2453def2": {
@@ -1118,6 +1141,29 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-27T16:39:07.214708+00:00",
+      "schema_version": 1
+    },
+    "exp-render_video-c43a69f045": {
+      "experience_id": "exp-render_video-c43a69f045",
+      "agent_id": "render_video",
+      "task_type": "render_video",
+      "task_id": "task-095f5ca2b5",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "byte_size": 28859668,
+        "sha256_short": "c012a29643dc",
+        "recovery_attempts": 0,
+        "audit_passed": true
+      },
+      "reflection": null,
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T11:56:12.148733+00:00",
       "schema_version": 1
     },
     "exp-render_video-c4413e11a6": {

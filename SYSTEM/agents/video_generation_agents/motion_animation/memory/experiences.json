@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-31T08:14:06.506285+00:00",
-  "total_experiences": 120,
+  "updated_at": "2026-10-31T12:01:46.537118+00:00",
+  "total_experiences": 122,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -924,6 +924,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-20T03:04:19.834371+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-57d501ff5e": {
+      "experience_id": "exp-motion_animation-57d501ff5e",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-8af6b936d8",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 6,
+        "elements_generated": 24,
+        "fallbacks_applied": 2,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 83.3
+      },
+      "reflection": "Motion Animation completed with 2 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T11:45:01.962013+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-582fb4c968": {
@@ -3075,6 +3100,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-22T16:51:07.624766+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-f7d1b5c35a": {
+      "experience_id": "exp-motion_animation-f7d1b5c35a",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-4df7cc482a",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 6,
+        "elements_generated": 24,
+        "fallbacks_applied": 2,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 83.3
+      },
+      "reflection": "Motion Animation completed with 2 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T12:01:46.537118+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-f84cda32cb": {

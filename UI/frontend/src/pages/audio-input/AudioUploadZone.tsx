@@ -26,36 +26,13 @@ export const AudioUploadZone: React.FC<AudioUploadZoneProps> = ({
   formatFileSize
 }) => {
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      backgroundColor: 'var(--bg-elevated)',
-      border: '1px solid var(--border-card)',
-      borderRadius: '6px',
-      padding: '14px 16px'
-    }}>
-      <div style={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginBottom: '10px'
-      }}>
-        <label 
-          htmlFor="audio-file"
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontSize: '12.5px',
-            fontWeight: 600,
-            color: 'var(--text-primary)',
-            margin: 0
-          }}
-        >
+    <div className={styles.container}>
+      <div className={styles.headerRow}>
+        <label htmlFor="audio-file" className={styles.label}>
           <Music size={14} color="var(--accent-cyan)" />
-          <span>Audio Narration File <span style={{ color: 'var(--accent-red)' }}>*</span></span>
+          <span>Audio Narration File <span className={styles.requiredAsterisk}>*</span></span>
         </label>
-        <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+        <span className={styles.headerHint}>
           MP3, WAV, M4A, FLAC, AAC (≤ 500MB)
         </span>
       </div>
@@ -66,7 +43,7 @@ export const AudioUploadZone: React.FC<AudioUploadZoneProps> = ({
         data-testid="audio-file-input"
         type="file"
         accept=".mp3,.wav,.m4a,.flac,.ogg,.aac,audio/*"
-        style={{ display: 'none' }}
+        className={styles.hiddenInput}
         onChange={handleFileChange}
         disabled={submitting}
       />
@@ -79,109 +56,42 @@ export const AudioUploadZone: React.FC<AudioUploadZoneProps> = ({
           onDrop={handleDrop}
           className={`${styles.dropzone} ${dragOver ? styles.dropzoneActive : styles.dropzoneIdle} ${submitting ? styles.dropzoneDisabled : ''}`}
         >
-          <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            backgroundColor: 'var(--status-running-bg)',
-            border: '1px solid rgba(24, 144, 255, 0.25)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'var(--accent-blue)'
-          }}>
-            <UploadCloud size={20} />
+          <div className={styles.uploadIconCircle}>
+            <UploadCloud size={22} />
           </div>
 
-          <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text-primary)' }}>
+          <div className={styles.dropTitle}>
             Drop narration audio here, or click to browse
           </div>
-          <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
+          <div className={styles.dropSubtitle}>
             Telugu or English speech • Auto-detected by Whisper ASR
           </div>
 
           <button
             type="button"
             onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '5px',
-              marginTop: '4px',
-              padding: '4px 12px',
-              backgroundColor: 'var(--bg-elevated)',
-              border: '1px solid var(--border-card)',
-              borderRadius: '4px',
-              color: 'var(--accent-blue)',
-              fontSize: '11.5px',
-              fontWeight: 600,
-              cursor: 'pointer'
-            }}
+            className={styles.browseBtn}
           >
-            <FolderOpen size={12} />
+            <FolderOpen size={13} />
             Browse Files
           </button>
         </div>
       ) : (
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          padding: '14px 16px',
-          backgroundColor: 'var(--status-completed-bg)',
-          border: '1px solid var(--status-completed-border)',
-          borderRadius: '5px',
-          gap: '12px',
-          boxShadow: '0 2px 8px rgba(16, 185, 129, 0.08)'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: 0, flex: 1 }}>
-            <div style={{
-              width: '40px',
-              height: '40px',
-              borderRadius: '6px',
-              backgroundColor: 'var(--status-completed)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: '#FFFFFF',
-              flexShrink: 0
-            }}>
+        <div className={styles.fileCard}>
+          <div className={styles.fileInfoLeft}>
+            <div className={styles.fileIconCircle}>
               <FileAudio size={22} />
             </div>
             <div style={{ minWidth: 0, flex: 1 }}>
-              <div 
-                title={audioFile.name}
-                style={{ 
-                  fontSize: '13.5px', 
-                  fontWeight: 600, 
-                  color: 'var(--text-primary)',
-                  whiteSpace: 'nowrap',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis'
-                }}
-              >
+              <div title={audioFile.name} className={styles.fileName}>
                 {audioFile.name}
               </div>
-              <div style={{ 
-                fontSize: '11.5px', 
-                color: 'var(--text-secondary)', 
-                marginTop: '3px',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px'
-              }}>
-                <span style={{ 
-                  fontWeight: 700, 
-                  color: 'var(--status-completed)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '3px'
-                }}>
-                  <CheckCircle2 size={12} />
+              <div className={styles.fileMetaRow}>
+                <span className={styles.verifiedBadge}>
+                  <CheckCircle2 size={13} />
                   Audio Verified
                 </span>
-                <span>•</span>
+                <span className={styles.metaDot}>•</span>
                 <span>{formatFileSize(audioFile.size)}</span>
               </div>
             </div>

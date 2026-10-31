@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { BarChart2, MapPin, Volume2, X, Loader2 } from 'lucide-react';
-import { generateChartAsset, generateMapAsset, fetchSfxCatalog } from '../../services/api';
+import { BarChart2, MapPin, Volume2, X, Loader2, CloudDownload } from 'lucide-react';
+import { generateChartAsset, generateMapAsset, fetchSfxCatalog, syncDriveAssets } from '../../services/api';
 import styles from './AssetGeneratorsBar.module.css';
 
 interface AssetGeneratorsBarProps {
@@ -14,7 +14,23 @@ export const AssetGeneratorsBar: React.FC<AssetGeneratorsBarProps> = ({
 }) => {
   const [activeModal, setActiveModal] = useState<'chart' | 'map' | 'sfx' | null>(null);
   const [loading, setLoading] = useState(false);
+  const [syncing, setSyncing] = useState(false);
   const [statusMsg, setStatusMsg] = useState<string | null>(null);
+
+  const handleSyncDrive = async () => {
+    if (!projectId) return;
+    setSyncing(true);
+    setStatusMsg('Syncing Google Drive assets...');
+    const res = await syncDriveAssets(projectId);
+    setSyncing(false);
+    if (res.ok) {
+      setStatusMsg(`Synced ${res.synced_images} images & ${res.synced_videos} videos from Drive!`);
+      if (onAssetCreated) onAssetCreated();
+      setTimeout(() => setStatusMsg(null), 4000);
+    } else {
+      setStatusMsg(res.message || 'Failed to sync Drive assets');
+    }
+  };
 
   // Chart form state
   const [chartType, setChartType] = useState('bar');
@@ -134,6 +150,17 @@ export const AssetGeneratorsBar: React.FC<AssetGeneratorsBarProps> = ({
           >
             <Volume2 size={14} color="#FBBF24" />
             <span>Browse SFX</span>
+          </button>
+
+          <button
+            type="button"
+            className={styles.actionButton}
+            data-testid="sync-drive-assets-btn"
+            onClick={handleSyncDrive}
+            disabled={syncing}
+          >
+            {syncing ? <Loader2 size={14} className={styles.spinner} /> : <CloudDownload size={14} color="var(--accent-cyan)" />}
+            <span style={{ color: 'var(--accent-cyan)', fontWeight: 600 }}>{syncing ? 'Syncing...' : 'Sync from Drive'}</span>
           </button>
         </div>
       </div>
