@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_timeline_validation",
-  "updated_at": "2026-10-31T02:58:53.711323+00:00",
-  "total_experiences": 93,
+  "updated_at": "2026-10-31T07:03:06.997009+00:00",
+  "total_experiences": 95,
   "experiences": {
     "exp-motion_timeline_validation-03f91fab64": {
       "experience_id": "exp-motion_timeline_validation-03f91fab64",
@@ -369,6 +369,33 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-27T01:13:44.102507+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_timeline_validation-20e80ac833": {
+      "experience_id": "exp-motion_timeline_validation-20e80ac833",
+      "agent_id": "motion_timeline_validation",
+      "task_type": "motion_timeline_validation",
+      "task_id": "task-c5681277f6",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "blocked",
+      "error_category": null,
+      "metrics": {
+        "overall_score": 61.0,
+        "technical_score": 65.0,
+        "visual_score": 10.0,
+        "semantic_score": 82.9,
+        "runtime_score": 100.0,
+        "total_findings": 18,
+        "repaired_count": 0,
+        "readiness": "blocked"
+      },
+      "reflection": "Motion Validation evaluated with overall quality 61.0 (Tech: 65.0, Visual: 10.0, Semantic: 82.9, Runtime: 100.0). Readiness: blocked. Repaired 0 defects.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T06:09:35.081473+00:00",
       "schema_version": 1
     },
     "exp-motion_timeline_validation-211e02bca1": {
@@ -2085,6 +2112,33 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-19T06:32:57.571044+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_timeline_validation-cda714a022": {
+      "experience_id": "exp-motion_timeline_validation-cda714a022",
+      "agent_id": "motion_timeline_validation",
+      "task_type": "motion_timeline_validation",
+      "task_id": "task-60b0d12a22",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "blocked",
+      "error_category": null,
+      "metrics": {
+        "overall_score": 61.0,
+        "technical_score": 65.0,
+        "visual_score": 10.0,
+        "semantic_score": 82.9,
+        "runtime_score": 100.0,
+        "total_findings": 18,
+        "repaired_count": 0,
+        "readiness": "blocked"
+      },
+      "reflection": "Motion Validation evaluated with overall quality 61.0 (Tech: 65.0, Visual: 10.0, Semantic: 82.9, Runtime: 100.0). Readiness: blocked. Repaired 0 defects.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T07:03:06.988685+00:00",
       "schema_version": 1
     },
     "exp-motion_timeline_validation-da2967522e": {

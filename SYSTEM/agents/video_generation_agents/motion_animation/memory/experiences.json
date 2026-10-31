@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "agent_id": "motion_animation",
-  "updated_at": "2026-10-31T02:58:31.752764+00:00",
-  "total_experiences": 112,
+  "updated_at": "2026-10-31T06:07:24.919916+00:00",
+  "total_experiences": 115,
   "experiences": {
     "exp-motion_animation-01c5a04119": {
       "experience_id": "exp-motion_animation-01c5a04119",
@@ -1074,6 +1074,31 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-23T12:47:17.126118+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-6467c18885": {
+      "experience_id": "exp-motion_animation-6467c18885",
+      "agent_id": "motion_animation",
+      "task_type": "motion_animation_codegen",
+      "task_id": "task-02f32f48cc",
+      "project_id": "01-16cd",
+      "context": {},
+      "outcome": "succeeded",
+      "error_category": null,
+      "metrics": {
+        "total_scenes": 6,
+        "elements_generated": 18,
+        "fallbacks_applied": 1,
+        "elements_skipped": 0,
+        "retries_prevented": 0,
+        "downstream_readiness_pct": 100.0
+      },
+      "reflection": "Motion Animation completed with 1 3D fallbacks and 0 retries prevented.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T06:07:24.872559+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-6703179726": {
@@ -2260,6 +2285,92 @@
       "confidence": 0.5,
       "evaluation_status": "unreviewed",
       "timestamp": "2026-10-26T04:38:22.799109+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-cdaf31f664": {
+      "experience_id": "exp-motion_animation-cdaf31f664",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_d95a26e3",
+      "project_id": "01-16cd",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-16cd",
+            "task_id": "run_d95a26e3",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Scene 2: the compile errors cannot be repaired, the LLM is unavailable: Circuit for 'claude_cli:claude-sonnet-5-5' is OPEN (6 consecutive failures). Cooldown: 15.1s remaining. (details in projects/01-16cd/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-31T05:37:24.940707+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T05:37:25.028558+00:00",
+      "schema_version": 1
+    },
+    "exp-motion_animation-ce7efab23a": {
+      "experience_id": "exp-motion_animation-ce7efab23a",
+      "agent_id": "motion_animation",
+      "task_type": "recovery_motion_gen",
+      "task_id": "run_dddec67e",
+      "project_id": "01-16cd",
+      "context": {
+        "stage_id": "motion_gen",
+        "attempt": 3,
+        "details": {
+          "diagnostic": {
+            "project_id": "01-16cd",
+            "task_id": "run_dddec67e",
+            "agent_id": "motion_animation",
+            "stage_id": "motion_gen",
+            "category": "UNKNOWN",
+            "code": "unclassified_error",
+            "message": "motion-build failed: Scene 2: the compile errors cannot be repaired, the LLM is unavailable: You've hit your session limit \u00b7 resets 12:30pm (Asia/Kolkata) (details in projects/01-16cd/log.txt; fix and re-run, finished steps are kept)",
+            "timestamp": "2026-10-31T05:44:05.413977+00:00",
+            "recovery_permitted": false,
+            "attempt": 3,
+            "retry_limit": 3,
+            "checkpoint_ref": "checkpoint_motion_gen",
+            "current_task_state": "failed",
+            "recovery_outcome": null,
+            "blocker_reason": "Retry attempt limit reached (3/3).",
+            "details": {}
+          }
+        }
+      },
+      "outcome": "failed",
+      "error_category": "UNKNOWN",
+      "metrics": {
+        "attempt": 3
+      },
+      "reflection": "Recovery execution for motion_gen resulted in failed on attempt 3.",
+      "proposed_lesson": null,
+      "evidence": [],
+      "confidence": 0.5,
+      "evaluation_status": "unreviewed",
+      "timestamp": "2026-10-31T05:44:05.489129+00:00",
       "schema_version": 1
     },
     "exp-motion_animation-cfe9520fdc": {
