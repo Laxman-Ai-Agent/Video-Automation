@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updated_at": "2026-10-31T06:07:24.940803+00:00",
+  "updated_at": "2026-10-31T08:14:06.517247+00:00",
   "memories": {
     "mem-00c78e5fc968": {
       "memory_id": "mem-00c78e5fc968",
@@ -3638,6 +3638,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-43c6f4c58878": {
+      "memory_id": "mem-43c6f4c58878",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 18, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c899395eae1f75aa0e23f4f63dbfd87bb25a6046a6ab9afa59cfa31d9bc7e24a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T07:05:04.027398+00:00",
+      "updated_at": "2026-10-31T07:05:04.027398+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
       }
     },
     "mem-43d2167a1d1b": {
@@ -8523,6 +8549,32 @@
         "project_id": "test_reorg"
       }
     },
+    "mem-9bbf62e63829": {
+      "memory_id": "mem-9bbf62e63829",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 18, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c899395eae1f75aa0e23f4f63dbfd87bb25a6046a6ab9afa59cfa31d9bc7e24a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T07:32:08.267218+00:00",
+      "updated_at": "2026-10-31T07:32:08.267218+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
+      }
+    },
     "mem-9c1254f6561d": {
       "memory_id": "mem-9c1254f6561d",
       "title": "Unverified Fast Pace Fact",
@@ -9455,6 +9507,32 @@
       "review_by": null,
       "metadata": {
         "project_id": "test_reorg"
+      }
+    },
+    "mem-a9f2a8a6fb9e": {
+      "memory_id": "mem-a9f2a8a6fb9e",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 18, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c899395eae1f75aa0e23f4f63dbfd87bb25a6046a6ab9afa59cfa31d9bc7e24a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T07:55:17.231501+00:00",
+      "updated_at": "2026-10-31T07:55:17.231501+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
       }
     },
     "mem-a9ff6ac23e5f": {
@@ -14363,6 +14441,58 @@
       "review_by": null,
       "metadata": {
         "project_id": "01-2f64"
+      }
+    },
+    "mem-f7402b5b0f8e": {
+      "memory_id": "mem-f7402b5b0f8e",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 18, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c899395eae1f75aa0e23f4f63dbfd87bb25a6046a6ab9afa59cfa31d9bc7e24a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T07:34:36.611303+00:00",
+      "updated_at": "2026-10-31T07:34:36.611303+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
+      }
+    },
+    "mem-f76af2ac8990": {
+      "memory_id": "mem-f76af2ac8990",
+      "title": "Motion Animation Execution - 01-16cd",
+      "content": "{\"project_id\": \"01-16cd\", \"aspect\": \"16:9\", \"status\": \"succeeded\", \"total_scenes\": 6, \"elements_generated\": 18, \"fallbacks_applied\": 1, \"elements_skipped\": 0, \"retries_prevented\": 0, \"downstream_readiness_pct\": 100.0}",
+      "kind": "reflection",
+      "scope": "agent",
+      "owner": "motion_animation",
+      "status": "proposed",
+      "evidence": [],
+      "confidence": 0.8,
+      "schema_version": 1,
+      "version": 1,
+      "content_hash": "c899395eae1f75aa0e23f4f63dbfd87bb25a6046a6ab9afa59cfa31d9bc7e24a",
+      "supersedes": null,
+      "superseded_by": null,
+      "permitted_readers": [
+        "motion_animation"
+      ],
+      "created_at": "2026-10-31T08:14:06.517247+00:00",
+      "updated_at": "2026-10-31T08:14:06.517247+00:00",
+      "verified_at": null,
+      "review_by": null,
+      "metadata": {
+        "project_id": "01-16cd"
       }
     },
     "mem-f8460844f6c7": {

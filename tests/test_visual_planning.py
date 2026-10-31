@@ -697,3 +697,17 @@ def test_run_refuses_a_scene_plan_that_does_not_follow_scene_segmentation_withou
     seg_project(tmp_path, bounds=b)
     with pytest.raises(promptgen.GenError, match="does not follow Scene Segmentation"):
         vp.run(tmp_path, ask=lambda *a, **k: pytest.fail("the planner must not be asked"))
+
+
+def test_with_captions_on_a_subtitle_text_is_asked_against_and_reported(tmp_path):
+    """Real case: the plan drew its own subtitle in the lower area, the caption layer drew the narration on top of it and the Final QC found two overlapping caption lines."""
+    assert "CAPTIONS ARE ON" not in vp.spec(mk.normalise(None)) and "CAPTIONS ARE ON" in vp.spec(mk.normalise(None), True)
+    d, sp = project(tmp_path)
+    info = json.loads((d / "project.json").read_text(encoding="utf-8"))
+    (d / "project.json").write_text(json.dumps({**info, "captions": True}), encoding="utf-8")
+    sub = lambda r: next(e for e in r["scenes"][0]["elements"] if e["type"] == "text").update(text_purpose="subtitle")
+    plan, _ = vp.assemble(d, sp, raw_for(sp, mutate=sub))
+    assert any("caption layer already shows it" in w for w in plan["validation"]["warnings"])
+    (d / "project.json").write_text(json.dumps({**info, "captions": False}), encoding="utf-8")
+    plan, _ = vp.assemble(d, sp, raw_for(sp, mutate=sub))
+    assert not any("caption layer already shows it" in w for w in plan["validation"]["warnings"])

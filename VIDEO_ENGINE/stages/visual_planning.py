@@ -268,11 +268,16 @@ def media_rules(opts: dict) -> str:
     return "\n   ".join(lines)
 
 
-def spec(opts: dict) -> str:
-    layout = "; ".join(f"{r} = x {b[0]:.0%}-{b[2]:.0%}, y {b[1]:.0%}-{b[3]:.0%}" for r, b in REGION_BOX.items() if b and r != "full_frame")
+CAPTIONS_RULE = ("\n\nCAPTIONS ARE ON for this video: a caption layer draws the spoken words on a plate at the bottom of every frame. So NO element has text_purpose subtitle or short_caption "
+                 "(the narration is never drawn a second time by a scene), and no text, card or graphic sits in the bottom 22% of the frame (lower_safe_area is reserved for the captions).")
+
+
+def spec(opts: dict, captions: bool = False) -> str:
+    layout ="; ".join(f"{r} = x {b[0]:.0%}-{b[2]:.0%}, y {b[1]:.0%}-{b[3]:.0%}" for r, b in REGION_BOX.items() if b and r != "full_frame")
     kinds = "\n   ".join(f"- {k.name} ({k.family}): {k.about}" for k in mk.KINDS.values())
-    return SPEC.format(schema=json.dumps(LlmVisualPlan.model_json_schema()), regions=", ".join(REGIONS), relations=", ".join(RELATIONS), kinds=kinds, media=media_rules(opts),
+    text = SPEC.format(schema=json.dumps(LlmVisualPlan.model_json_schema()), regions=", ".join(REGIONS), relations=", ".join(RELATIONS), kinds=kinds, media=media_rules(opts),
                        layout=layout + "; full_frame = a background or a backdrop picture only; around_primary_visual / over_primary_visual follow the primary element", policy=SAFE_AREA_POLICY)
+    return text + CAPTIONS_RULE if captions else text
 
 
 # ---------- context ----------
@@ -349,7 +354,7 @@ def context(pdir: Path, sp: dict) -> dict:
         words, segments = [], []
     opts = store.media(pdir)
     seg = scene_segmentation.load_fresh(pdir)
-    return {"plan": plan, "sp": sp, "opts": opts, "aspect": store.read_info(pdir).get("aspect") or "16:9", "en": en, "words": words, "segments": segments,
+    return {"plan": plan, "sp": sp, "opts": opts, "captions": store.captions(pdir), "aspect": store.read_info(pdir).get("aspect") or "16:9", "en": en, "words": words, "segments": segments,
             "seg": seg, "canonical": canonical(seg), "mapping_errors": mapping_errors, "icons": quality.icon_names(), "pascal": quality.pascal, "pdir": pdir}
 
 
@@ -572,7 +577,7 @@ def _ask_text(ctx: dict, only: list[int] | None = None, note: str = "") -> str:
         if s.id in hints:
             row_dict["cinematic_visual_hint"] = hints[s.id]
         rows.append(row_dict)
-    return (f"{spec(ctx['opts'])}\n\nstyle of the scene plan: {json.dumps(ctx['plan'].style.model_dump(), ensure_ascii=False)}\nscenes of the scene plan:\n"
+    return (f"{spec(ctx['opts'], ctx.get('captions', False))}\n\nstyle of the scene plan: {json.dumps(ctx['plan'].style.model_dump(), ensure_ascii=False)}\nscenes of the scene plan:\n"
             + json.dumps(rows, ensure_ascii=False, indent=1) + (f"\n\n{note}" if note else ""))
 
 

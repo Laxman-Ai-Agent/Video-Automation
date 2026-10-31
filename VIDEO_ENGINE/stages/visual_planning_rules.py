@@ -369,6 +369,8 @@ def check(plan: dict, ctx: dict, iss: Issues, llm: bool) -> dict:
         rule("no_placeholders", sid, any(PLACEHOLDER.search(f"{e['placement']['region']} {e['element_id']} {e.get('content') or ''}") or UNFINISHED.search(e["visual_description"]) for e in els), 3, "error", "placeholder",
              f"{sid}: an element still holds a placeholder value (placement, id, text or description)")
         rule("text_safe_area", sid, any(e["placement"]["region"] in EDGE_REGIONS for e in texts), 6, "warning", "text_outside_safe_area", f"{sid}: text is placed over the whole frame instead of a safe area")
+        dup = [e["element_id"] for e in texts if e.get("text_purpose") in ("subtitle", "short_caption")]
+        rule("captions_own_the_bottom", sid, bool(ctx.get("captions") and dup), 6, "warning", "caption_duplicated", f"{sid}: {dup} draw the narration as a subtitle, but the caption layer already shows it at the bottom of the frame (the two overlap)")
         clash = clashes(els, s["element_relationships"], ctx["aspect"])
         over = [(a, b) for a, b in clash if mk.is_text(a["type"]) != mk.is_text(b["type"]) and "primary" in (a["role"], b["role"])]
         rule("text_over_primary", sid, bool(over), 6, "warning", "text_over_primary", f"{sid}: the text {next((x for p in over for x in p if mk.is_text(x['type'])), {}).get('element_id')} shares its area of the frame with the primary visual")

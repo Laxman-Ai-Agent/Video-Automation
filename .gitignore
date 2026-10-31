@@ -44,3 +44,6 @@ config/history/*.jsonl
 
 # the assistant's live work log (shown on the Work Log page)
 work_log.jsonl
+
+# service-account secret of the Drive sync: never committed
+config/google_drive_credentials.json
